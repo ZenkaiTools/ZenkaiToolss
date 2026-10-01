@@ -164,7 +164,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         <h2 class="font-title text-2xl text-white">📖 PERPUSTAKAAN KITAB & IBADAH</h2>
       </div>
 
-      <!-- Sub Menu Kitab -->
+      <!-- Sub Menu Pilihan Kitab -->
       <div class="grid grid-cols-3 gap-1.5">
         <button @click="kitabSubTab = 'sholat'" :class="kitabSubTab === 'sholat' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs cursor-pointer">Jadwal Sholat</button>
         <button @click="kitabSubTab = 'quran'; if(surahList.length === 0) fetchSurahs();" :class="kitabSubTab === 'quran' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs cursor-pointer">Al-Quran</button>
@@ -212,7 +212,6 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
             <div class="text-center border-b-2 border-black pb-2">
               <h3 class="font-title text-xl" x-text="activeSurah.namaLatin + ' (' + activeSurah.nama + ')'"></h3>
               <p class="text-xs font-bold" x-text="activeSurah.arti + ' - Turun di ' + activeSurah.tempatTurun"></p>
-              <!-- Audio Full Surah -->
               <div class="mt-2">
                 <audio controls class="w-full h-8" :src="activeSurah.audioFull['05']"></audio>
               </div>
@@ -285,7 +284,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       </div>
     </div>
 
-    <!-- TAB OWNER PANEL (Hanya muncul jika isOwner true setelah lolos PIN & Email) -->
+    <!-- TAB OWNER PANEL -->
     <template x-if="isOwner">
       <div x-show="activeTab === 'owner'" class="sec-gap fade-in">
         <div class="comic-panel bg-purple-600 p-4 text-white">
