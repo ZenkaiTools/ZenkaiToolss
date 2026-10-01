@@ -41,13 +41,13 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   <div class="mt-2 text-xs font-bold" x-text="splashText"></div>
 </div>
 
-<!-- MODAL PIN KHUSUS OWNER -->
+<!-- MODAL PIN KEAMANAN OWNER (PIN: 763097) -->
 <div x-show="ownerPinModalOpen" class="fixed inset-0 bg-black/90 z-[100002] flex items-center justify-center p-4 backdrop-blur-sm">
   <div class="comic-panel bg-purple-600 p-6 w-full max-w-sm text-center space-y-4 text-white">
     <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-white inline-block rotate-[-2deg]">VERIFIKASI OWNER</div>
     <p class="txt-xs font-bold">Masukkan PIN Keamanan Owner (6 Digit)</p>
     <input type="password" x-model="enteredPin" maxlength="6" placeholder="******" class="w-full border-2 border-black p-3 rounded-xl font-bold text-lg bg-white text-black text-center tracking-widest focus:outline-none">
-    <button @click="verifyOwnerPin()" class="w-full bg-yellow-300 text-black hover:bg-yellow-400 border-2 border-black py-3 rounded-xl font-title text-xl">KONFIRMASI PIN</button>
+    <button @click="verifyOwnerPin()" class="w-full bg-yellow-300 text-black hover:bg-yellow-400 border-2 border-black py-3 rounded-xl font-title text-xl cursor-pointer">KONFIRMASI PIN</button>
   </div>
 </div>
 
@@ -56,11 +56,11 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   <div class="comic-panel bg-white w-full max-w-sm p-5 space-y-4 rounded-2xl border-4 border-black text-center">
     <h3 class="font-title text-2xl text-purple-900" x-text="sheetTitle"></h3>
     <p class="txt-sm font-bold text-gray-800" x-text="sheetMessage"></p>
-    <button @click="sheetOpen = false" class="w-full bg-yellow-300 border-2 border-black py-2.5 rounded-xl font-title text-lg">MENGERTI</button>
+    <button @click="sheetOpen = false" class="w-full bg-yellow-300 border-2 border-black py-2.5 rounded-xl font-title text-lg cursor-pointer">MENGERTI</button>
   </div>
 </div>
 
-<!-- AUTH MODAL (Hanya Email & Password) -->
+<!-- AUTH MODAL (LOGIN & REGISTER EMAIL) -->
 <div x-show="!isAuthenticated" class="fixed inset-0 bg-black/85 z-[9997] flex items-center justify-center p-4 backdrop-blur-sm">
   <div class="comic-panel bg-yellow-300 p-6 w-full max-w-sm text-center space-y-4">
     <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-black inline-block rotate-[-2deg]">CLOUD PORTAL</div>
@@ -74,7 +74,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       <input type="text" x-model="authUsername" placeholder="Nama Tampilan (Unik)..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none" autocomplete="off">
     </template>
     
-    <button @click="handleEmailAuth()" class="w-full bg-cyan-400 hover:bg-cyan-500 border-2 border-black py-3 rounded-xl font-title text-xl">
+    <button @click="handleEmailAuth()" class="w-full bg-cyan-400 hover:bg-cyan-500 border-2 border-black py-3 rounded-xl font-title text-xl cursor-pointer">
       <span x-text="authMode === 'login' ? 'MASUK SEKARANG' : 'DAFTAR AKUN'"></span>
     </button>
 
@@ -98,7 +98,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     </div>
     <div class="flex items-center space-x-1.5">
       <div class="bg-white text-black border-2 border-black px-2 py-1 rounded-lg font-bold text-[10px]" x-text="currentTime"></div>
-      <button @click="logout()" class="bg-red-400 hover:bg-red-500 border-2 border-black px-2 py-1 rounded-lg font-bold text-xs">🚪</button>
+      <button @click="logout()" class="bg-red-400 hover:bg-red-500 border-2 border-black px-2 py-1 rounded-lg font-bold text-xs cursor-pointer">🚪</button>
     </div>
   </header>
 
@@ -138,8 +138,8 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         <input type="text" x-model="txCategory" placeholder="Kategori (Gaji/Makan)..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50">
         <input type="number" x-model="txAmount" placeholder="Nominal (Rp)..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50">
         <div class="grid grid-cols-2 gap-2">
-          <button @click="addTransaction('income')" class="bg-green-400 border-2 border-black py-2 rounded-xl font-title text-sm">+ Pemasukan</button>
-          <button @click="addTransaction('expense')" class="bg-red-400 text-white border-2 border-black py-2 rounded-xl font-title text-sm">- Pengeluaran</button>
+          <button @click="addTransaction('income')" class="bg-green-400 border-2 border-black py-2 rounded-xl font-title text-sm cursor-pointer">+ Pemasukan</button>
+          <button @click="addTransaction('expense')" class="bg-red-400 text-white border-2 border-black py-2 rounded-xl font-title text-sm cursor-pointer">- Pengeluaran</button>
         </div>
       </div>
       <div class="comic-panel bg-white p-3.5 sec-gap">
@@ -186,21 +186,21 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
              @click="handleReflexTap()">
           <span x-text="reflexMessage"></span>
         </div>
-        <button @click="startReflexGame()" class="w-full bg-cyan-400 border-2 border-black py-2 rounded-xl font-title text-sm">Mulai Game</button>
+        <button @click="startReflexGame()" class="w-full bg-cyan-400 border-2 border-black py-2 rounded-xl font-title text-sm cursor-pointer">Mulai Game</button>
       </div>
     </div>
 
-    <!-- TAB OWNER PANEL (Hanya muncul jika isOwner true setelah lolos PIN) -->
+    <!-- TAB OWNER PANEL (Hanya muncul jika isOwner true setelah lolos PIN & Email) -->
     <template x-if="isOwner">
       <div x-show="activeTab === 'owner'" class="sec-gap fade-in">
         <div class="comic-panel bg-purple-600 p-4 text-white">
           <h2 class="font-title text-2xl">👑 OWNER CONTROL PANEL</h2>
-          <p class="text-xs font-bold opacity-90">Akses Eksklusif Terverifikasi PIN & Email</p>
+          <p class="text-xs font-bold opacity-90">Akses Eksklusif Terverifikasi PIN & Email (andikaatka@gmail.com)</p>
         </div>
         <div class="comic-panel bg-purple-50 p-3 sec-gap">
           <h3 class="font-title text-base border-b-2 border-black pb-1">Broadcast Global</h3>
           <textarea rows="2" placeholder="Pesan pengumuman untuk seluruh user..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-white"></textarea>
-          <button @click="showAlert('Berhasil', 'Broadcast berhasil dikirim ke sistem cloud!')" class="w-full bg-yellow-300 border-2 border-black py-2 rounded-xl font-title text-xs">Kirim Broadcast</button>
+          <button @click="showAlert('Berhasil', 'Broadcast berhasil dikirim ke sistem cloud!')" class="w-full bg-yellow-300 border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">Kirim Broadcast</button>
         </div>
       </div>
     </template>
@@ -209,24 +209,24 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
 
   <!-- BOTTOM NAVIGATION -->
   <nav class="absolute bottom-0 left-0 right-0 w-full border-t-4 border-black bg-yellow-300 flex justify-between items-center py-2 px-1 z-35">
-    <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'active' : ''" class="bottom-nav-btn">
+    <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
       <svg class="svg-icon-lg"><use href="#i-home"/></svg>
       <span class="bottom-nav-label">HOME</span>
     </button>
-    <button @click="activeTab = 'kitab'" :class="activeTab === 'kitab' ? 'active' : ''" class="bottom-nav-btn">
+    <button @click="activeTab = 'kitab'" :class="activeTab === 'kitab' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
       <svg class="svg-icon-lg"><use href="#i-book"/></svg>
       <span class="bottom-nav-label">KITAB</span>
     </button>
-    <button @click="activeTab = 'keuangan'" :class="activeTab === 'keuangan' ? 'active' : ''" class="bottom-nav-btn">
+    <button @click="activeTab = 'keuangan'" :class="activeTab === 'keuangan' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
       <svg class="svg-icon-lg"><use href="#i-wallet"/></svg>
       <span class="bottom-nav-label">DOMPET</span>
     </button>
-    <button @click="activeTab = 'arcade'" :class="activeTab === 'arcade' ? 'active' : ''" class="bottom-nav-btn">
+    <button @click="activeTab = 'arcade'" :class="activeTab === 'arcade' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
       <svg class="svg-icon-lg"><use href="#i-gamepad"/></svg>
       <span class="bottom-nav-label">GAME</span>
     </button>
     <template x-if="isOwner">
-      <button @click="activeTab = 'owner'" :class="activeTab === 'owner' ? 'active' : ''" class="bottom-nav-btn bg-purple-200 text-purple-900">
+      <button @click="activeTab = 'owner'" :class="activeTab === 'owner' ? 'active' : ''" class="bottom-nav-btn bg-purple-200 text-purple-900 cursor-pointer">
         <svg class="svg-icon-lg"><use href="#i-crown"/></svg>
         <span class="bottom-nav-label">OWNER</span>
       </button>
@@ -337,7 +337,7 @@ function zenkaiCloudApp(){
             return;
           }
 
-          // Validasi ketersediaan nama di database
+          // Validasi unik nama di database profiles
           const { data: existingUser } = await supabaseWindow
             .from('profiles')
             .select('username')
@@ -381,7 +381,7 @@ function zenkaiCloudApp(){
       }
     },
 
-    // Validasi Akses dan PIN Keamanan Owner
+    // Validasi Akses dan PIN Keamanan Owner (763097)
     async checkUserAccessOnLogin(user){
       const email = user.email || '';
       
@@ -506,5 +506,4 @@ function zenkaiCloudApp(){
 }
 </script>
 </body>
-            </html>
-        
+</html>
