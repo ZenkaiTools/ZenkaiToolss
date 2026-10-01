@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#fbbf24">
-<title>Zenkai Tools - Supabase Cloud Edition</title>
+<title>Zenkai Tools - Secure Cloud Edition</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -41,6 +41,16 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   <div class="mt-2 text-xs font-bold" x-text="splashText"></div>
 </div>
 
+<!-- MODAL PIN KHUSUS OWNER -->
+<div x-show="ownerPinModalOpen" class="fixed inset-0 bg-black/90 z-[100002] flex items-center justify-center p-4 backdrop-blur-sm">
+  <div class="comic-panel bg-purple-600 p-6 w-full max-w-sm text-center space-y-4 text-white">
+    <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-white inline-block rotate-[-2deg]">VERIFIKASI OWNER</div>
+    <p class="txt-xs font-bold">Masukkan PIN Keamanan Owner (6 Digit)</p>
+    <input type="password" x-model="enteredPin" maxlength="6" placeholder="******" class="w-full border-2 border-black p-3 rounded-xl font-bold text-lg bg-white text-black text-center tracking-widest focus:outline-none">
+    <button @click="verifyOwnerPin()" class="w-full bg-yellow-300 text-black hover:bg-yellow-400 border-2 border-black py-3 rounded-xl font-title text-xl">KONFIRMASI PIN</button>
+  </div>
+</div>
+
 <!-- CUSTOM MODAL NOTIFIKASI -->
 <div x-show="sheetOpen" class="fixed inset-0 bg-black/80 z-[100000] flex items-center justify-center p-4 backdrop-blur-xs">
   <div class="comic-panel bg-white w-full max-w-sm p-5 space-y-4 rounded-2xl border-4 border-black text-center">
@@ -50,36 +60,25 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   </div>
 </div>
 
-<!-- AUTH MODAL (GMAIL/PASSWORD & GOOGLE OAUTH) -->
+<!-- AUTH MODAL (Hanya Email & Password) -->
 <div x-show="!isAuthenticated" class="fixed inset-0 bg-black/85 z-[9997] flex items-center justify-center p-4 backdrop-blur-sm">
   <div class="comic-panel bg-yellow-300 p-6 w-full max-w-sm text-center space-y-4">
     <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-black inline-block rotate-[-2deg]">CLOUD PORTAL</div>
     <h2 class="font-title text-2xl text-black" x-text="authMode === 'login' ? 'MASUK AKUN' : 'DAFTAR AKUN'"></h2>
-    <p class="txt-xs font-bold">Gunakan Gmail & Password atau Login Instan Google</p>
+    <p class="txt-xs font-bold">Masuk menggunakan Gmail & Password terdaftar</p>
     
     <input type="email" x-model="authEmail" placeholder="Email / Gmail..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none" autocomplete="off">
     <input type="password" x-model="authPassword" placeholder="Password..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none">
     
     <template x-if="authMode === 'register'">
-      <input type="text" x-model="authUsername" placeholder="Nama Tampilan (Bebas)..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none" autocomplete="off">
+      <input type="text" x-model="authUsername" placeholder="Nama Tampilan (Unik)..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none" autocomplete="off">
     </template>
     
     <button @click="handleEmailAuth()" class="w-full bg-cyan-400 hover:bg-cyan-500 border-2 border-black py-3 rounded-xl font-title text-xl">
-      <span x-text="authMode === 'login' ? 'MASUK DENGAN EMAIL' : 'DAFTAR SEKARANG'"></span>
+      <span x-text="authMode === 'login' ? 'MASUK SEKARANG' : 'DAFTAR AKUN'"></span>
     </button>
 
-    <div class="relative flex py-1 items-center">
-      <div class="flex-grow border-t-2 border-black"></div>
-      <span class="flex-shrink mx-3 text-xs font-bold">ATAU</span>
-      <div class="flex-grow border-t-2 border-black"></div>
-    </div>
-
-    <!-- TOMBOL LOGIN GOOGLE OAUTH -->
-    <button @click="loginWithGoogle()" class="w-full bg-white hover:bg-gray-100 border-2 border-black py-3 rounded-xl font-title text-sm flex items-center justify-center gap-2">
-      <span>🌐 MASUK INSTAN DENGAN GOOGLE</span>
-    </button>
-
-    <button @click="authMode = authMode === 'login' ? 'register' : 'login'" class="text-xs font-bold underline cursor-pointer bg-transparent border-none text-blue-900 mt-1">
+    <button @click="authMode = authMode === 'login' ? 'register' : 'login'" class="text-xs font-bold underline cursor-pointer bg-transparent border-none text-blue-900 mt-2">
       <span x-text="authMode === 'login' ? 'Belum punya akun? Daftar' : 'Sudah punya akun? Login'"></span>
     </button>
   </div>
@@ -91,10 +90,10 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   <!-- HEADER -->
   <header class="bg-yellow-400 text-black border-b-4 border-black p-3 shrink-0 z-40 flex justify-between items-center">
     <div class="flex items-center space-x-2">
-      <div class="bg-black text-yellow-300 font-title text-lg px-2 py-0.5 rounded-xl border-2 border-black rotate-[-3deg]" x-text="userEmail ? userEmail.substring(0,2).toUpperCase() : 'ZK'"></div>
+      <div class="bg-black text-yellow-300 font-title text-lg px-2 py-0.5 rounded-xl border-2 border-black rotate-[-3deg]" x-text="userName ? userName.substring(0,2).toUpperCase() : 'ZK'"></div>
       <div>
         <h1 class="font-title text-xl leading-none">ZENKAI TOOLS</h1>
-        <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black" :class="isOwner ? 'bg-purple-600 text-white' : 'bg-white text-black'" x-text="isOwner ? '👑 Master Owner (Andika)' : '☁️ Cloud User'"></span>
+        <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black" :class="isOwner ? 'bg-purple-600 text-white' : 'bg-white text-black'" x-text="isOwner ? 'status: owner' : 'status: user'"></span>
       </div>
     </div>
     <div class="flex items-center space-x-1.5">
@@ -109,17 +108,17 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     <!-- TAB HOME -->
     <div x-show="activeTab === 'home'" class="sec-gap fade-in">
       <div class="comic-panel bg-cyan-300 text-black p-3 flex items-center space-x-3">
-        <div class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl flex items-center justify-center font-title text-xl" x-text="userEmail ? userEmail.substring(0,1).toUpperCase() : 'U'"></div>
+        <div class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl flex items-center justify-center font-title text-xl" x-text="userName ? userName.substring(0,1).toUpperCase() : 'U'"></div>
         <div>
-          <div class="font-title text-purple-900 text-sm">Login sebagai:</div>
+          <div class="font-title text-purple-900 text-sm">Nama: <span x-text="userName"></span></div>
           <div class="text-xs font-bold break-all" x-text="userEmail"></div>
-          <span class="text-[10px] font-extrabold mt-1 inline-block px-2 py-0.5 rounded border border-black bg-white" x-text="isOwner ? 'Status: Pemilik Sistem (Akses Panel Terbuka)' : 'Status: Pengguna Umum (Panel Owner Dikunci)'"></span>
+          <span class="text-[10px] font-extrabold mt-1 inline-block px-2 py-0.5 rounded border border-black bg-white" x-text="isOwner ? 'status: owner (Akses Panel Terbuka)' : 'status: user (Akses Standar)'"></span>
         </div>
       </div>
       
       <div class="comic-panel bg-white p-3 sec-gap">
         <h3 class="font-title text-sm">📝 CATATAN KILAT CLOUD</h3>
-        <textarea x-model="quickNote" @input="saveQuickNoteCloud()" rows="3" placeholder="Tulis ide atau catatan rahasia di sini..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-[12px] bg-yellow-50 focus:outline-none"></textarea>
+        <textarea x-model="quickNote" @input="saveQuickNoteCloud()" rows="3" placeholder="Tulis catatan rahasia di sini..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-[12px] bg-yellow-50 focus:outline-none"></textarea>
       </div>
     </div>
 
@@ -157,8 +156,8 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
           </template>
         </div>
       </div>
-  </div>
-      <!-- TAB KITAB & SHOLAT -->
+    </div>
+        <!-- TAB KITAB & SHOLAT -->
     <div x-show="activeTab === 'kitab'" class="sec-gap fade-in">
       <div class="comic-panel bg-emerald-400 text-black p-3">
         <h2 class="font-title text-2xl text-white">📖 KITAB & SHOLAT</h2>
@@ -191,16 +190,16 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       </div>
     </div>
 
-    <!-- TAB OWNER PANEL (DIKUNCI KETAT: HANYA MUNCUL JIKA EMAIL andikaatka@gmail.com) -->
+    <!-- TAB OWNER PANEL (Hanya muncul jika isOwner true setelah lolos PIN) -->
     <template x-if="isOwner">
       <div x-show="activeTab === 'owner'" class="sec-gap fade-in">
         <div class="comic-panel bg-purple-600 p-4 text-white">
           <h2 class="font-title text-2xl">👑 OWNER CONTROL PANEL</h2>
-          <p class="text-xs font-bold opacity-90">Akses Eksklusif Pemilik Sistem (andikaatka@gmail.com)</p>
+          <p class="text-xs font-bold opacity-90">Akses Eksklusif Terverifikasi PIN & Email</p>
         </div>
         <div class="comic-panel bg-purple-50 p-3 sec-gap">
           <h3 class="font-title text-base border-b-2 border-black pb-1">Broadcast Global</h3>
-          <textarea x-model="newBroadcast" rows="2" placeholder="Pesan pengumuman untuk seluruh user..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-white"></textarea>
+          <textarea rows="2" placeholder="Pesan pengumuman untuk seluruh user..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-white"></textarea>
           <button @click="showAlert('Berhasil', 'Broadcast berhasil dikirim ke sistem cloud!')" class="w-full bg-yellow-300 border-2 border-black py-2 rounded-xl font-title text-xs">Kirim Broadcast</button>
         </div>
       </div>
@@ -226,7 +225,6 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       <svg class="svg-icon-lg"><use href="#i-gamepad"/></svg>
       <span class="bottom-nav-label">GAME</span>
     </button>
-    <!-- Tombol Navigasi Owner Hanya Muncul Jika isOwner True -->
     <template x-if="isOwner">
       <button @click="activeTab = 'owner'" :class="activeTab === 'owner' ? 'active' : ''" class="bottom-nav-btn bg-purple-200 text-purple-900">
         <svg class="svg-icon-lg"><use href="#i-crown"/></svg>
@@ -246,11 +244,12 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   <symbol id="i-crown" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></symbol>
 </svg>
 
-<!-- JAVASCRIPT & SUPABASE CORE LOGIC -->
+<!-- JAVASCRIPT & SUPABASE LOGIC -->
 <script>
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const OWNER_EMAIL = 'andikaatka@gmail.com';
+const OWNER_PIN = '763097';
 const supabaseWindow = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function zenkaiCloudApp(){
@@ -264,27 +263,29 @@ function zenkaiCloudApp(){
     authPassword: '',
     authUsername: '',
     
-    // Bottom Sheet Notifikasi Kustom
+    // Modal PIN Owner
+    ownerPinModalOpen: false,
+    enteredPin: '',
+    pendingUser: null,
+    
     sheetOpen: false,
     sheetTitle: '',
     sheetMessage: '',
     
     userEmail: '',
+    userName: '',
     currentUser: null,
     isOwner: false,
     activeTab: 'home',
     currentTime: '',
     quickNote: '',
     
-    // Keuangan
     transactions: [],
     txCategory: '',
     txAmount: '',
     
-    // Sholat
     prayerTimes: {subuh:'04:30', dzuhur:'11:55', ashar:'15:10', maghrib:'17:55', isya:'19:05'},
     
-    // Game
     reflexState: 'yellow',
     reflexMessage: 'Tap untuk Mulai',
     reflexStart: 0,
@@ -295,13 +296,10 @@ function zenkaiCloudApp(){
       this.updateClock();
       setInterval(() => this.updateClock(), 1000);
       
-      // Cek sesi login aktif dari Supabase
       const { data: { session } } = await supabaseWindow.auth.getSession();
       if (session) {
         this.currentUser = session.user;
-        this.isAuthenticated = true;
-        this.processUserData();
-        await this.loadTransactions();
+        await this.checkUserAccessOnLogin(this.currentUser);
       }
     },
     
@@ -327,7 +325,6 @@ function zenkaiCloudApp(){
       this.sheetOpen = true;
     },
     
-    // Otentikasi Email & Password Biasa
     async handleEmailAuth(){
       if(!this.authEmail || !this.authPassword){
         this.showAlert('Perhatian', 'Isi email dan password terlebih dahulu!');
@@ -335,12 +332,39 @@ function zenkaiCloudApp(){
       }
       try {
         if(this.authMode === 'register'){
-          const { error } = await supabaseWindow.auth.signUp({
+          if(!this.authUsername){
+            this.showAlert('Perhatian', 'Isi nama tampilan terlebih dahulu!');
+            return;
+          }
+
+          // Validasi ketersediaan nama di database
+          const { data: existingUser } = await supabaseWindow
+            .from('profiles')
+            .select('username')
+            .eq('username', this.authUsername)
+            .maybeSingle();
+
+          if(existingUser){
+            this.showAlert('Peringatan Pendaftaran', 'nama sudah ada yg menggunakan');
+            return;
+          }
+
+          const { data, error } = await supabaseWindow.auth.signUp({
             email: this.authEmail,
             password: this.authPassword,
-            options: { data: { username: this.authUsername || 'User' } }
+            options: { data: { username: this.authUsername } }
           });
           if(error) throw error;
+
+          if(data.user){
+            const roleStatus = (this.authEmail.toLowerCase() === OWNER_EMAIL.toLowerCase() ? 'owner' : 'user');
+            await supabaseWindow.from('profiles').upsert({
+              id: data.user.id,
+              username: this.authUsername,
+              status: roleStatus
+            });
+          }
+
           this.showAlert('Sukses', 'Berhasil mendaftar! Silakan masuk.');
           this.authMode = 'login';
         } else {
@@ -349,49 +373,67 @@ function zenkaiCloudApp(){
             password: this.authPassword
           });
           if(error) throw error;
-          this.currentUser = data.user;
-          this.isAuthenticated = true;
-          this.processUserData();
-          await this.loadTransactions();
-          this.showAlert('Sukses', 'Berhasil masuk ke sistem cloud!');
+          
+          await this.checkUserAccessOnLogin(data.user);
         }
       } catch(e){
         this.showAlert('Gagal Otentikasi', e.message);
       }
     },
 
-    // Otentikasi Instan Google OAuth
-    async loginWithGoogle(){
-      try {
-        const { error } = await supabaseWindow.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: window.location.origin
-          }
-        });
-        if(error) throw error;
-      } catch(e){
-        this.showAlert('Gagal Google Login', e.message);
+    // Validasi Akses dan PIN Keamanan Owner
+    async checkUserAccessOnLogin(user){
+      const email = user.email || '';
+      
+      if(email.toLowerCase() === OWNER_EMAIL.toLowerCase()){
+        this.pendingUser = user;
+        this.enteredPin = '';
+        this.ownerPinModalOpen = true;
+      } else {
+        this.currentUser = user;
+        this.isOwner = false;
+        this.isAuthenticated = true;
+        await this.processUserData();
+        await this.loadTransactions();
+        this.showAlert('Sukses', 'Berhasil masuk sebagai user!');
+      }
+    },
+
+    async verifyOwnerPin(){
+      if(this.enteredPin === OWNER_PIN){
+        this.ownerPinModalOpen = false;
+        this.currentUser = this.pendingUser;
+        this.isOwner = true;
+        this.isAuthenticated = true;
+        await this.processUserData();
+        await this.loadTransactions();
+        this.showAlert('Akses Diterima', 'PIN benar! Selamat datang, Owner.');
+      } else {
+        this.showAlert('PIN Salah', 'PIN keamanan owner salah! Akses owner ditolak.');
+        this.enteredPin = '';
       }
     },
     
-    // Verifikasi Mutlak Owner Berdasarkan Email
-    processUserData(){
+    async processUserData(){
       if(!this.currentUser) return;
       this.userEmail = this.currentUser.email || '';
-      
-      // CEK OWNER KETAT: Hanya andikaatka@gmail.com yang menjadi owner
-      // Meskipun orang lain menamai dirinya "Zenkai", tidak akan pernah bisa jadi owner.
-      if (this.userEmail.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
-        this.isOwner = true;
+
+      const { data: profile } = await supabaseWindow.from('profiles').select('*').eq('id', this.currentUser.id).single();
+      if(profile){
+        this.userName = profile.username;
+        this.quickNote = profile.quick_note || '';
       } else {
-        this.isOwner = false;
+        this.userName = this.currentUser.user_metadata?.username || this.userEmail.split('@')[0] || 'User';
+        await supabaseWindow.from('profiles').upsert({
+          id: this.currentUser.id,
+          username: this.userName,
+          status: (this.isOwner ? 'owner' : 'user')
+        });
       }
     },
     
     async saveQuickNoteCloud(){
       if(!this.currentUser) return;
-      // Simpan catatan ke tabel profiles atau local state
       await supabaseWindow.from('profiles').upsert({ 
         id: this.currentUser.id, 
         quick_note: this.quickNote 
@@ -464,4 +506,5 @@ function zenkaiCloudApp(){
 }
 </script>
 </body>
-</html>
+            </html>
+        
