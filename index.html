@@ -4,49 +4,75 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Zenkai Tools - Supabase Edition</title>
-<!-- Tailwind CSS & Pustaka Pendukung -->
+<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
+<!-- Alpine.js -->
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<!-- Supabase JS SDK v2 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   body {
     font-family: 'Comic Neue', system-ui, sans-serif;
-    background: #fbbf24; margin: 0; padding: 0;
-    min-height: 100vh; display: flex; justify-content: center;
+    background: #fbbf24;
+    margin: 0; padding: 0;
+    min-height: 100vh;
+    display: flex; justify-content: center; align-items: flex-start;
     overflow-x: hidden;
   }
   .font-title { font-family: 'Bangers', cursive; letter-spacing: 1.2px; }
+  .font-arab { font-family: 'Amiri', serif; }
   .comic-panel {
     background: #fff; border: 2.5px solid #1a1a1a;
     box-shadow: 3px 3px 0 0 #1a1a1a; border-radius: 14px;
     padding: 12px; margin-bottom: 12px;
   }
+  .nav-btn {
+    flex: 1; border: 2px solid #000; border-radius: 10px;
+    margin: 0 1px; padding: 6px 2px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: white; cursor: pointer; font-family: 'Bangers', cursive; font-size: 8px; gap: 2px;
+  }
+  .nav-btn.active { background: black; color: #fde68a; }
   .input {
     width: 100%; padding: 10px; border: 2.5px solid black; border-radius: 10px;
-    font-size: 14px; margin-bottom: 10px; text-align: center;
-    background: #fef3c7; box-shadow: 2px 2px 0 0 #000;
+    font-size: 14px; margin-bottom: 10px; text-align: center; font-family: 'Comic Neue', sans-serif; background: #fef3c7;
+    box-shadow: 2px 2px 0 0 #000;
   }
   .btn {
     width: 100%; padding: 12px; border: 2.5px solid black; border-radius: 10px;
-    font-size: 15px; font-weight: bold; cursor: pointer;
-    font-family: 'Bangers', cursive; letter-spacing: 1px;
-    box-shadow: 2.5px 2.5px 0 0 #000;
+    font-size: 15px; font-weight: bold; cursor: pointer; font-family: 'Bangers', cursive; letter-spacing: 1px;
+    box-shadow: 2.5px 2.5px 0 0 #000; transition: transform 0.1s;
   }
+  .btn:active { transform: translate(2px, 2px); box-shadow: none; }
   .btn-primary { background: #22d3ee; }
+  .btn-success { background: #4ade80; }
+  .btn-danger { background: #f87171; color: white; }
   .app-container {
     width: 100%; max-width: 448px; min-height: 100vh;
     background: #fef3c7; border-left: 4px solid black; border-right: 4px solid black;
     position: relative; display: flex; flex-direction: column;
   }
   .main-content { padding: 12px; padding-bottom: 90px; flex: 1; overflow-y: auto; }
+  .bottom-nav {
+    position: fixed; bottom: 0; width: 100%; max-width: 448px;
+    background: #fbbf24; border-top: 4px solid black; padding: 8px 4px;
+    display: flex; justify-content: space-between; z-index: 50;
+  }
+  .reflex-box {
+    width: 100%; height: 220px; border: 3px solid #000; border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
+    box-shadow: 3px 3px 0 0 #000;
+  }
   .svg-icon { width: 20px; height: 20px; fill: currentColor; display: inline-block; }
+  .svg-icon-lg { width: 28px; height: 28px; fill: currentColor; display: inline-block; }
 </style>
 </head>
 <body x-data="zenkaiApp()" x-init="init()">
 
-<!-- LOGIN / REGISTER MODAL SUPABASE -->
+<!-- LOGIN / REGISTER MODAL -->
 <div x-show="!isLoggedIn" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
   <div class="comic-panel bg-yellow-300 w-full max-w-sm text-center">
     <div class="font-title text-3xl mb-1 text-black">ZENKAI CLOUD</div>
@@ -57,135 +83,163 @@
     <input type="password" x-model="inputPassword" placeholder="Password..." class="input">
     
     <button @click="submitAuth()" class="btn btn-primary mb-2" x-text="isRegister ? 'DAFTAR SEKARANG' : 'MASUK APLIKASI'"></button>
-    <button @click="isRegister = !isRegister" class="text-xs font-bold underline bg-transparent border-none text-blue-900 cursor-pointer" x-text="isRegister ? 'Sudah punya akun? Login' : 'Belum punya akun? Daftar'"></button>
+    <button @click="isRegister = !isRegister" class="text-xs font-bold underline bg-transparent border-none text-blue-900 cursor-pointer" x-text="isRegister ? 'Sudah punya akun? Masuk' : 'Belum punya akun? Daftar'"></button>
   </div>
 </div>
-  <!-- KONTINER UTAMA APLIKASI -->
-  <div class="app-container">
+
+<div class="app-container">
+  <!-- HEADER -->
+  <header class="bg-yellow-400 border-b-4 border-black p-3 sticky top-0 z-40 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <div class="bg-black text-yellow-300 font-title px-2.5 py-1 rounded-lg text-sm border-2 border-black rotate-[-2deg]" x-text="profile.username ? profile.username.substring(0,2).toUpperCase() : 'ZK'"></div>
+      <div>
+        <div class="font-title text-lg leading-none">ZENKAI TOOLS</div>
+        <span class="text-[9px] font-bold bg-white px-1.5 py-0.5 rounded border border-black" x-text="isOwner ? 'Master Owner' : (profile.is_vip ? 'VIP Member' : 'User')"></span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="bg-white border-2 border-black px-2 py-1 rounded-lg text-xs font-bold shadow-[2px_2px_0_0_#000]" x-text="currentTime"></span>
+      <button @click="logout()" class="bg-red-400 border-2 border-black p-1.5 rounded-lg text-xs font-bold cursor-pointer shadow-[2px_2px_0_0_#000]" title="Keluar">
+        <svg class="svg-icon"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="main-content">
     
-    <!-- HEADER -->
-    <header class="bg-yellow-400 border-b-4 border-black p-3 sticky top-0 z-40 flex justify-between items-center">
-      <div class="flex items-center gap-2">
-        <div class="bg-black text-yellow-300 font-title px-2 py-0.5 rounded-lg text-sm" x-text="profile.username ? profile.username.substring(0,2).toUpperCase() : 'ZK'"></div>
+    <!-- TAB HOME -->
+    <div x-show="activeTab === 'home'" class="space-y-3">
+      <div class="comic-panel bg-cyan-300 flex items-center gap-3">
+        <div class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl flex items-center justify-center font-title text-2xl shadow-[2px_2px_0_0_#000]" x-text="profile.username ? profile.username.charAt(0).toUpperCase() : 'U'"></div>
         <div>
-          <div class="font-title text-lg leading-none">ZENKAI TOOLS</div>
-          <span class="text-[9px] font-bold bg-white px-1 rounded border border-black" x-text="isOwner ? 'Master Owner' : (profile.is_vip ? 'VIP Member' : 'User')"></span>
+          <div class="font-title text-lg text-purple-900 leading-tight">Halo, <span x-text="profile.username"></span>!</div>
+          <div class="text-[11px] font-bold text-black bg-white/70 px-2 py-0.5 rounded border border-black inline-block mt-1">Supabase Cloud Aktif</div>
         </div>
       </div>
-      <div class="flex items-center gap-2">
-        <span class="bg-white border-2 border-black px-2 py-1 rounded-lg text-xs font-bold" x-text="currentTime"></span>
-        <button @click="logout()" class="bg-red-400 border-2 border-black px-2 py-1 rounded-lg text-xs font-bold cursor-pointer">🚪</button>
-      </div>
-    </header>
 
-    <!-- KONTEN UTAMA -->
-    <main class="main-content">
-      
-      <!-- TAB HOME -->
-      <div x-show="activeTab === 'home'" class="space-y-3">
-        <div class="comic-panel bg-cyan-300 flex items-center gap-3">
-          <div class="w-12 h-12 bg-yellow-300 border-2 border-black rounded-xl flex items-center justify-center font-title text-xl" x-text="profile.username ? profile.username.charAt(0).toUpperCase() : 'U'"></div>
+      <div class="grid grid-cols-3 gap-2">
+        <div class="comic-panel bg-purple-200 text-center p-2"><div class="font-title text-xl" x-text="profile.points || 0"></div><div class="text-[9px] font-bold">POIN</div></div>
+        <div class="comic-panel bg-orange-200 text-center p-2"><div class="font-title text-xl">1</div><div class="text-[9px] font-bold">STREAK</div></div>
+        <div class="comic-panel bg-emerald-200 text-center p-2"><div class="font-title text-xl">0</div><div class="text-[9px] font-bold">BADGE</div></div>
+      </div>
+
+      <div class="comic-panel bg-amber-300 flex justify-between items-center p-3">
+        <div class="flex items-center gap-2">
+          <svg class="svg-icon-lg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
           <div>
-            <div class="font-title text-base text-purple-900">Halo, <span x-text="profile.username"></span>!</div>
-            <div class="text-[11px] font-bold">Cloud Database Terhubung ☁️</div>
+            <div class="font-title text-sm">Status VIP</div>
+            <div class="text-[10px] font-bold" x-text="profile.is_vip ? 'Aktif' : 'Belum VIP'"></div>
           </div>
         </div>
+        <a href="https://wa.me/6285352831643?text=Halo%20Owner,%20saya%20mau%20order%20VIP" target="_blank" class="bg-black text-amber-300 border-2 border-black px-3 py-1.5 rounded-lg font-title text-xs shadow-[2px_2px_0_0_#000]">Order WA</a>
+      </div>
 
-        <div class="grid grid-cols-3 gap-2">
-          <div class="comic-panel bg-purple-200 text-center p-2"><div class="font-title text-xl" x-text="profile.points || 0"></div><div class="text-[9px] font-bold">POIN</div></div>
-          <div class="comic-panel bg-orange-200 text-center p-2"><div class="font-title text-xl">1</div><div class="text-[9px] font-bold">STREAK</div></div>
-          <div class="comic-panel bg-emerald-200 text-center p-2"><div class="font-title text-xl">0</div><div class="text-[9px] font-bold">BADGE</div></div>
+      <div class="comic-panel bg-white">
+        <div class="font-title text-sm mb-2 border-b-2 border-black pb-1">CATATAN KILAT CLOUD</div>
+        <textarea x-model="quickNote" @input="saveNote()" rows="3" placeholder="Tulis ide atau catatanmu di sini..." class="w-full border-2 border-black p-2 rounded-lg text-xs bg-yellow-50 focus:outline-none"></textarea>
+      </div>
+    </div>
+
+    <!-- TAB DOA -->
+    <div x-show="activeTab === 'doa'" class="space-y-3">
+      <div class="comic-panel bg-teal-400 text-white flex items-center gap-2">
+        <div class="font-title text-2xl">KITAB & DOA HARIAN</div>
+      </div>
+      <template x-for="d in doaList">
+        <div class="comic-panel bg-yellow-50">
+          <div class="font-title text-purple-900 text-base" x-text="d.nama"></div>
+          <div class="font-arab text-2xl text-right my-2 font-bold" x-text="d.arab"></div>
+          <div class="text-xs font-bold text-gray-700 border-t-2 border-black/10 pt-2" x-text="d.arti"></div>
         </div>
+      </template>
+    </div>
 
-        <div class="comic-panel bg-white">
-          <div class="font-title text-sm mb-2 border-b-2 border-black pb-1">📝 CATATAN KILAT CLOUD</div>
-          <textarea x-model="quickNote" @input="saveNote()" rows="3" placeholder="Tulis ide..." class="w-full border-2 border-black p-2 rounded-lg text-xs bg-yellow-50"></textarea>
+    <!-- TAB KEUANGAN -->
+    <div x-show="activeTab === 'keuangan'" class="space-y-3">
+      <div class="comic-panel bg-pink-400 text-white">
+        <div class="font-title text-xl">DOMPET KEUANGAN CLOUD</div>
+        <div class="text-lg font-bold mt-1 bg-black/20 p-2 rounded-lg border-2 border-black" x-text="'Saldo: Rp ' + totalBalance.toLocaleString('id-ID')"></div>
+      </div>
+      <div class="comic-panel bg-white">
+        <div class="font-title text-sm mb-2">Catat Transaksi Baru</div>
+        <input type="text" x-model="txCategory" placeholder="Kategori (Gaji / Makan / dll)..." class="input">
+        <input type="number" x-model="txAmount" placeholder="Nominal Rp..." class="input">
+        <div class="grid grid-cols-2 gap-2">
+          <button @click="addTx('income')" class="btn btn-success text-xs py-2">+ Pemasukan</button>
+          <button @click="addTx('expense')" class="btn btn-danger text-xs py-2">- Pengeluaran</button>
         </div>
       </div>
-            <!-- TAB DOA -->
-      <div x-show="activeTab === 'doa'" class="space-y-3">
-        <div class="comic-panel bg-teal-400 text-white"><div class="font-title text-xl">📖 DOA HARIAN</div></div>
-        <template x-for="d in doaList">
-          <div class="comic-panel bg-yellow-50">
-            <div class="font-title text-purple-900 text-base" x-text="d.nama"></div>
-            <div class="font-arab text-xl text-right my-2" x-text="d.arab"></div>
-            <div class="text-xs font-bold text-gray-700" x-text="d.arti"></div>
+      <div class="comic-panel bg-white">
+        <div class="font-title text-sm mb-2">Riwayat Transaksi Cloud</div>
+        <template x-for="t in transactions">
+          <div class="border-2 border-black p-2 rounded-lg mb-2 flex justify-between items-center text-xs font-bold shadow-[2px_2px_0_0_#000]" :class="t.type === 'income' ? 'bg-green-50' : 'bg-red-50'">
+            <div>
+              <span x-text="t.category"></span>
+              <span class="text-[9px] text-gray-500 block" x-text="t.date"></span>
+            </div>
+            <div :class="t.type === 'income' ? 'text-green-700' : 'text-red-700'" x-text="(t.type === 'income' ? '+' : '-') + 'Rp ' + t.amount.toLocaleString('id-ID')"></div>
           </div>
         </template>
       </div>
-
-      <!-- TAB KEUANGAN -->
-      <div x-show="activeTab === 'keuangan'" class="space-y-3">
-        <div class="comic-panel bg-pink-400 text-white">
-          <div class="font-title text-xl">💰 DOMPET KEUANGAN</div>
-          <div class="text-sm font-bold mt-1" x-text="'Saldo: Rp ' + totalBalance.toLocaleString('id-ID')"></div>
-        </div>
-        <div class="comic-panel bg-white">
-          <input type="text" x-model="txCategory" placeholder="Kategori (Gaji/Makan)..." class="input">
-          <input type="number" x-model="txAmount" placeholder="Nominal Rp..." class="input">
-          <div class="grid grid-cols-2 gap-2">
-            <button @click="addTx('income')" class="btn btn-success text-sm py-2">+ Masuk</button>
-            <button @click="addTx('expense')" class="btn btn-danger text-sm py-2">- Keluar</button>
-          </div>
-        </div>
-        <div class="comic-panel bg-white">
-          <div class="font-title text-sm mb-2">Riwayat Transaksi</div>
-          <template x-for="t in transactions">
-            <div class="border-2 border-black p-2 rounded-lg mb-2 flex justify-between text-xs font-bold" :class="t.type === 'income' ? 'bg-green-50' : 'bg-red-50'">
-              <div><span x-text="t.category"></span><span class="text-[9px] text-gray-500 block" x-text="t.date"></span></div>
-              <div :class="t.type === 'income' ? 'text-green-700' : 'text-red-700'" x-text="(t.type === 'income' ? '+' : '-') + 'Rp ' + t.amount.toLocaleString('id-ID')"></div>
-            </div>
-          </template>
-        </div>
+ </div>
+     <!-- TAB SEHAT (BMI) -->
+    <div x-show="activeTab === 'bmi'" class="space-y-3">
+      <div class="comic-panel bg-sky-300 flex items-center gap-2">
+        <div class="font-title text-2xl">KALKULATOR KESEHATAN</div>
       </div>
-            <!-- TAB SEHAT (BMI) -->
-      <div x-show="activeTab === 'bmi'" class="space-y-3">
-        <div class="comic-panel bg-sky-300"><div class="font-title text-xl">💪 KALKULATOR BMI</div></div>
-        <div class="comic-panel bg-white">
-          <input type="number" x-model="bmiW" placeholder="Berat (kg)" class="input">
-          <input type="number" x-model="bmiH" placeholder="Tinggi (cm)" class="input">
-          <button @click="calcBMI()" class="btn btn-primary text-sm py-2">HITUNG BMI</button>
-          <div class="mt-2 font-bold text-center text-xs" x-text="bmiRes"></div>
-        </div>
+      <div class="comic-panel bg-white">
+        <div class="font-title text-sm mb-2">Kalkulator BMI</div>
+        <input type="number" x-model="bmiW" placeholder="Berat Badan (kg)" class="input">
+        <input type="number" x-model="bmiH" placeholder="Tinggi Badan (cm)" class="input">
+        <button @click="calcBMI()" class="btn btn-primary text-xs py-2">HITUNG BMI</button>
+        <div class="mt-2 font-bold text-center text-xs bg-yellow-100 p-2 rounded-lg border-2 border-black" x-text="bmiRes || 'Hasil akan muncul di sini'"></div>
       </div>
+    </div>
 
-      <!-- TAB GAME -->
-      <div x-show="activeTab === 'arcade'" class="space-y-3">
-        <div class="comic-panel bg-yellow-400"><div class="font-title text-xl">🎮 ARCADE REFLEX</div></div>
-        <div class="comic-panel bg-white text-center">
-          <div class="reflex-box" :class="reflexBg" @click="tapReflex()">
-            <span class="font-title text-xl" x-text="reflexText"></span>
-          </div>
-          <button @click="startReflex()" class="btn btn-primary mt-3 text-sm py-2">MULAI GAME</button>
-        </div>
+    <!-- TAB GAME (ARCADE) -->
+    <div x-show="activeTab === 'arcade'" class="space-y-3">
+      <div class="comic-panel bg-yellow-400 flex items-center gap-2">
+        <div class="font-title text-2xl">ARCADE REFLEX GAME</div>
       </div>
-
-      <!-- TAB OWNER -->
-      <div x-show="activeTab === 'owner' && isOwner" class="space-y-3">
-        <div class="comic-panel bg-purple-600 text-white"><div class="font-title text-xl">👑 OWNER PANEL</div></div>
-        <div class="comic-panel bg-white">
-          <input type="text" x-model="targetUser" placeholder="Username target VIP..." class="input">
-          <button @click="grantVip()" class="btn btn-primary text-sm py-2">Beri VIP</button>
+      <div class="comic-panel bg-white text-center">
+        <div class="reflex-box mb-3" :class="reflexBg" @click="tapReflex()">
+          <span class="font-title text-2xl" x-text="reflexText"></span>
         </div>
+        <button @click="startReflex()" class="btn btn-primary text-sm py-2">MULAI GAME</button>
       </div>
-    </main>
+    </div>
 
-    <!-- NAVIGATION BAWAH -->
-    <nav class="bottom-nav">
-      <button @click="activeTab = 'home'" class="nav-btn" :class="{ 'active': activeTab === 'home' }"><span>🏠</span><span>HOME</span></button>
-      <button @click="activeTab = 'doa'" class="nav-btn" :class="{ 'active': activeTab === 'doa' }"><span>📖</span><span>DOA</span></button>
-      <button @click="activeTab = 'keuangan'" class="nav-btn" :class="{ 'active': activeTab === 'keuangan' }"><span>💰</span><span>DOMPET</span></button>
-      <button @click="activeTab = 'bmi'" class="nav-btn" :class="{ 'active': activeTab === 'bmi' }"><span>💪</span><span>SEHAT</span></button>
-      <button @click="activeTab = 'arcade'" class="nav-btn" :class="{ 'active': activeTab === 'arcade' }"><span>🎮</span><span>GAME</span></button>
-      <button x-show="isOwner" @click="activeTab = 'owner'" class="nav-btn" :class="{ 'active': activeTab === 'owner' }"><span>👑</span><span>OWNER</span></button>
-    </nav>
-  </div>
-  <script>
-// KONFIGURASI SUPABASE (Sesuaikan dengan project-mu)
+    <!-- TAB OWNER -->
+    <div x-show="activeTab === 'owner' && isOwner" class="space-y-3">
+      <div class="comic-panel bg-purple-600 text-white flex items-center gap-2">
+        <div class="font-title text-2xl">OWNER PANEL</div>
+      </div>
+      <div class="comic-panel bg-white">
+        <div class="font-title text-sm mb-2">Beri Akses VIP (30 Hari)</div>
+        <input type="text" x-model="targetUser" placeholder="Username target..." class="input">
+        <button @click="grantVip()" class="btn btn-primary text-xs py-2">UPDATE KE VIP</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- NAVIGATION -->
+  <nav class="bottom-nav">
+    <button @click="activeTab = 'home'" class="nav-btn" :class="{ 'active': activeTab === 'home' }"><span>🏠</span><span>HOME</span></button>
+    <button @click="activeTab = 'doa'" class="nav-btn" :class="{ 'active': activeTab === 'doa' }"><span>📖</span><span>DOA</span></button>
+    <button @click="activeTab = 'keuangan'" class="nav-btn" :class="{ 'active': activeTab === 'keuangan' }"><span>💰</span><span>DOMPET</span></button>
+    <button @click="activeTab = 'bmi'" class="nav-btn" :class="{ 'active': activeTab === 'bmi' }"><span>💪</span><span>SEHAT</span></button>
+    <button @click="activeTab = 'arcade'" class="nav-btn" :class="{ 'active': activeTab === 'arcade' }"><span>🎮</span><span>GAME</span></button>
+    <button x-show="isOwner" @click="activeTab = 'owner'" class="nav-btn" :class="{ 'active': activeTab === 'owner' }"><span>👑</span><span>OWNER</span></button>
+  </nav>
+</div>
+
+<!-- SUPABASE LOGIC & ALPINE COMPONENT -->
+<script>
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const OWNER_EMAIL = 'andikaatka@gmail.com';
-
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function zenkaiApp() {
@@ -216,17 +270,29 @@ function zenkaiApp() {
       if (sessionRes.data.session) {
         this.userId = sessionRes.data.session.user.id;
         this.isLoggedIn = true;
-        await this.loadData();
+        await this.loadData(sessionRes.data.session);
       }
     },
 
-    async loadData() {
-      const { data } = await supabase.from('profiles').select('*').eq('id', this.userId).single();
-      if (data) {
-        this.profile = data;
-        this.quickNote = data.quick_note || '';
-        this.isOwner = (data.email === OWNER_EMAIL);
+    async loadData(session) {
+      let { data, error } = await supabase.from('profiles').select('*').eq('id', this.userId).single();
+      
+      if (error || !data) {
+        const newProfile = {
+          id: this.userId,
+          username: session.user.user_metadata?.username || session.user.email.split('@')[0],
+          email: session.user.email,
+          points: 0,
+          is_vip: false,
+          quick_note: ''
+        };
+        await supabase.from('profiles').upsert(newProfile);
+        data = newProfile;
       }
+
+      this.profile = data;
+      this.quickNote = data.quick_note || '';
+      this.isOwner = (data.email === OWNER_EMAIL || session.user.email === OWNER_EMAIL);
       this.fetchTransactions();
     },
 
@@ -235,14 +301,27 @@ function zenkaiApp() {
       if (this.isRegister && !this.inputUsername) { alert('Isi username!'); return; }
 
       if (this.isRegister) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email: this.inputEmail, password: this.inputPassword,
           options: { data: { username: this.inputUsername } }
         });
-        if (error) alert(error.message);
-        else { alert('Berhasil daftar! Silakan login.'); this.isRegister = false; }
+        if (error) {
+          alert(error.message);
+        } else {
+          if (data?.user) {
+            await supabase.from('profiles').upsert({
+              id: data.user.id,
+              username: this.inputUsername,
+              email: this.inputEmail,
+              points: 0,
+              is_vip: false
+            });
+          }
+          alert('Pendaftaran berhasil! Silakan login.');
+          this.isRegister = false;
+        }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email: this.inputEmail, password: this.inputPassword });
+        const { data, error } = await supabase.auth.signInWithPassword({ email: this.inputEmail, password: this.inputPassword });
         if (error) alert(error.message);
         else location.reload();
       }
@@ -284,7 +363,8 @@ function zenkaiApp() {
       if (!this.bmiW || !this.bmiH) return;
       const hM = this.bmiH / 100;
       const bmi = this.bmiW / (hM * hM);
-      this.bmiRes = `BMI: ${bmi.toFixed(1)}`;
+      let status = bmi < 18.5 ? 'Kekurusan' : bmi < 25 ? 'Normal (Ideal)' : bmi < 30 ? 'Kelebihan Berat Badan' : 'Obesitas';
+      this.bmiRes = `BMI: ${bmi.toFixed(1)} (${status})`;
     },
 
     startReflex() {
@@ -321,8 +401,8 @@ function zenkaiApp() {
       if (!this.targetUser) return;
       const exp = new Date(Date.now() + 30 * 86400000).toISOString();
       const { error } = await supabase.from('profiles').update({ is_vip: true, vip_expiry: exp }).eq('username', this.targetUser);
-      if (error) alert('Gagal');
-      else { alert('VIP Berhasil Diberikan!'); this.targetUser = ''; }
+      if (error) alert('Gagal memperbarui VIP');
+      else { alert('VIP Berhasil Diberikan ke ' + this.targetUser); this.targetUser = ''; }
     }
   };
 }
