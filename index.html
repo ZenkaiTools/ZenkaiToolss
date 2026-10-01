@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zenkai Tools</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #fbbf24;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 400px;
+    margin: 0 auto;
+    background: white;
+    border: 3px solid black;
+    border-radius: 15px;
+    padding: 25px;
+  }
+  .title { text-align: center; font-size: 28px; font-weight: bold; margin-bottom: 15px; }
+  .subtitle { text-align: center; font-size: 20px; font-weight: bold; margin: 10px 0; }
+  .input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid black;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid black;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .btn-primary { background: #22d3ee; }
+  .btn-warning { background: #fbbf24; }
+  .btn-danger { background: #f87171; color: white; }
+  .btn-link {
+    background: none;
+    border: none;
+    color: #1e40af;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top: 10px;
+    width: 100%;
+  }
+  .box {
+    background: #e9d5ff;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    margin: 10px 0;
+  }
+  .box-gray {
+    background: #e5e7eb;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    margin: 10px 0;
+  }
+  .box-vip {
+    background: #fcd34d;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    margin: 10px 0;
+    font-weight: bold;
+  }
+  .box-owner {
+    background: #9333ea;
+    color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    margin: 10px 0;
+  }
+  .hidden { display: none; }
+  .center { text-align: center; }
+  .small { font-size: 12px; color: #666; }
+</style>
+</head>
+<body>
+
+<div id="loading" class="container center">
+  <div class="title">ZENKAI TOOLS</div>
+  <p id="status">Memuat...</p>
+</div>
+
+<div id="login-screen" class="container hidden">
+  <div class="title">ZENKAI TOOLS</div>
+  <h2 id="auth-title" class="subtitle">MASUK</h2>
+  <p id="auth-desc" class="center small">Login untuk mulai!</p>
+  
+  <input id="input-username" class="input hidden" type="text" placeholder="Username...">
+  <input id="input-email" class="input" type="email" placeholder="Email...">
+  <input id="input-password" class="input" type="password" placeholder="Password...">
+  
+  <button id="btn-submit" class="btn btn-primary" onclick="doSubmit()">MASUK</button>
+  <button id="btn-toggle" class="btn-link" onclick="toggleMode()">Belum punya akun? Daftar</button>
+</div>
+
+<div id="home-screen" class="container hidden">
+  <div class="title">ZENKAI TOOLS</div>
+  <p id="home-role" class="center small"></p>
+  <p class="center">Halo, <strong id="home-name"></strong>!</p>
+  <p id="home-email" class="center small"></p>
+  
+  <div class="box">
+    <div class="small">POIN KAMU</div>
+    <div id="home-points" style="font-size:32px; font-weight:bold;">0</div>
+  </div>
+  
+  <div id="home-vip-box" class="box-gray">
+    <div id="home-vip-text">👤 User Biasa</div>
+  </div>
+  
+  <div id="home-vip-btn-box" class="hidden">
+    <button class="btn btn-warning" onclick="requestVip()">⭐ JADI VIP (Rp 25.000)</button>
+  </div>
+  
+  <div id="home-owner-box" class="box-owner hidden">
+    👑 OWNER
+  </div>
+  
+  <div id="home-owner-panel" class="hidden" style="margin-top:20px; padding-top:20px; border-top:2px dashed black;">
+    <h3 style="text-align:center;">👑 PANEL OWNER</h3>
+    
+    <p class="small">Kasih VIP ke user (masukkan username):</p>
+    <input id="input-vip-user" class="input" type="text" placeholder="Username target...">
+    <button class="btn btn-primary" onclick="doGrantVip()">Beri VIP</button>
+    
+    <p class="small" style="margin-top:15px;">Daftar VIP saat ini:</p>
+    <div id="vip-list-box" style="background:#fef3c7; border:2px solid black; border-radius:10px; padding:10px; font-size:12px;">
+      Memuat...
+    </div>
+    
+    <p class="small" style="margin-top:15px;">Broadcast ke semua user:</p>
+    <input id="input-broadcast" class="input" type="text" placeholder="Isi pengumuman...">
+    <button class="btn btn-primary" onclick="doBroadcast()">Kirim Broadcast</button>
+  </div>
+  
+  <button class="btn btn-danger" onclick="doLogout()" style="margin-top:20px;">KELUAR</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
+const OWNER_EMAIL = 'andikaatka@gmail.com';
+
+var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+var authMode = 'login';
+var currentUser = null;
+
+function show(id) { document.getElementById(id).classList.remove('hidden'); }
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+function setStatus(t) { document.getElementById('status').textContent = t; }
+
+// ============ INIT ============
+async function init() {
+  try {
+    setStatus('Cek session...');
+    var result = await supabase.auth.getUser();
+    currentUser = result.data.user;
+    
+    if (currentUser) {
+      await fillHome();
+      show('home-screen');
+      hide('loading');
+      hide('login-screen');
+    } else {
+      hide('loading');
+      hide('home-screen');
+      show('login-screen');
+    }
+  } catch (e) {
+    setStatus('ERROR: ' + e.message);
+    setTimeout(function() {
+      hide('loading');
+      show('login-screen');
+    }, 2000);
+  }
+}
+
+async function loadProfile() {
+  var result = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', currentUser.id)
+    .single();
+  return result.data;
+}
+
+// ============ LOGIN / DAFTAR ============
+function toggleMode() {
+  if (authMode === 'login') {
+    authMode = 'register';
+    document.getElementById('auth-title').textContent = 'DAFTAR';
+    document.getElementById('auth-desc').textContent = 'Bikin akun baru!';
+    document.getElementById('btn-submit').textContent = 'DAFTAR';
+    document.getElementById('btn-toggle').textContent = 'Sudah punya akun? Login';
+    show('input-username');
+  } else {
+    authMode = 'login';
+    document.getElementById('auth-title').textContent = 'MASUK';
+    document.getElementById('auth-desc').textContent = 'Login untuk mulai!';
+    document.getElementById('btn-submit').textContent = 'MASUK';
+    document.getElementById('btn-toggle').textContent = 'Belum punya akun? Daftar';
+    hide('input-username');
+  }
+}
+
+async function doSubmit() {
+  var email = document.getElementById('input-email').value.trim();
+  var password = document.getElementById('input-password').value.trim();
+  var username = document.getElementById('input-username').value.trim();
+  
+  if (!email || !password) { alert('Isi email dan password!'); return; }
+  
+  try {
+    if (authMode === 'register') {
+      if (!username) { alert('Isi username!'); return; }
+      var r1 = await supabase.auth.signUp({
+        email: email, password: password,
+        options: { data: { username: username } }
+      });
+      if (r1.error) throw r1.error;
+      var r2 = await supabase.auth.signInWithPassword({ email: email, password: password });
+      if (r2.error) throw r2.error;
+      alert('Berhasil daftar!');
+    } else {
+      var r3 = await supabase.auth.signInWithPassword({ email: email, password: password });
+      if (r3.error) throw r3.error;
+      alert('Berhasil login!');
+    }
+    location.reload();
+  } catch (e) {
+    alert('Gagal: ' + e.message);
+  }
+}
+
+// ============ VIP ============
+function requestVip() {
+  var wa = 'https://wa.me/6285352831643?text=Halo%20Owner,%20saya%20mau%20order%20VIP';
+  window.open(wa, '_blank');
+}
+
+async function doGrantVip() {
+  var target = document.getElementById('input-vip-user').value.trim();
+  if (!target) { alert('Isi username!'); return; }
+  
+  try {
+    var expiry = new Date(Date.now() + 30 * 86400000).toISOString();
+    var result = await supabase
+      .from('profiles')
+      .update({ is_vip: true, vip_expiry: expiry })
+      .eq('username', target);
+    if (result.error) throw result.error;
+    alert('VIP diberikan ke ' + target);
+    loadVipList();
+  } catch (e) {
+    alert('Gagal: ' + e.message);
+  }
+}
+
+async function loadVipList() {
+  var result = await supabase.from('profiles').select('username, vip_expiry').eq('is_vip', true);
+  var box = document.getElementById('vip-list-box');
+  if (!result.data || result.data.length === 0) {
+    box.innerHTML = 'Belum ada VIP.';
+  } else {
+    var html = '';
+    for (var i = 0; i < result.data.length; i++) {
+      html += '<div>⭐ ' + result.data[i].username + '</div>';
+    }
+    box.innerHTML = html;
+  }
+}
+
+// ============ BROADCAST ============
+async function doBroadcast() {
+  var msg = document.getElementById('input-broadcast').value.trim();
+  if (!msg) { alert('Isi pengumuman!'); return; }
+  
+  try {
+    var result = await supabase.from('broadcasts').insert({ message: msg, color: 'purple' });
+    if (result.error) throw result.error;
+    alert('Broadcast terkirim!');
+    document.getElementById('input-broadcast').value = '';
+  } catch (e) {
+    alert('Gagal: ' + e.message);
+  }
+}
+
+// ============ HOME ============
+async function fillHome() {
+  var profile = await loadProfile();
+  if (!profile) return;
+  
+  document.getElementById('home-name').textContent = profile.username;
+  document.getElementById('home-email').textContent = profile.email || '';
+  document.getElementById('home-points').textContent = profile.points || 0;
+  
+  var isVip = profile.is_vip && (!profile.vip_expiry || new Date(profile.vip_expiry) > new Date());
+  var isOwner = profile.email === OWNER_EMAIL;
+  
+  document.getElementById('home-role').textContent = isOwner ? 'Master Owner' : (isVip ? 'VIP Member' : 'User');
+  
+  if (isVip) {
+    document.getElementById('home-vip-box').className = 'box-vip';
+    document.getElementById('home-vip-text').textContent = '⭐ VIP Member';
+    hide('home-vip-btn-box');
+  } else {
+    show('home-vip-btn-box');
+  }
+  
+  if (isOwner) {
+    show('home-owner-box');
+    show('home-owner-panel');
+    loadVipList();
+  }
+}
+
+// ============ LOGOUT ============
+async function doLogout() {
+  if (!confirm('Yakin ingin keluar?')) return;
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+init();
+</script>
+
+</body>
+  </html>
