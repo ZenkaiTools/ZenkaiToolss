@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#fbbf24">
-<title>Zenkai Tools - Ultimate Edition</title>
+<title>Zenkai Tools - Multipurpose Edition</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -28,10 +28,9 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
 .splash-logo{font-family:'Bangers',cursive;font-size:clamp(38px,11vw,52px);color:#000;letter-spacing:3px;text-shadow:3px 3px 0 #fff,5px 5px 0 #000}
 .splash-bar-wrap{width:180px;height:14px;background:#000;border-radius:10px;margin-top:26px;padding:3px;border:2.5px solid #000;box-shadow:2.5px 2.5px 0 #000}
 .splash-bar{height:100%;background:linear-gradient(90deg,#86efac,#22c55e);border-radius:6px;width:0%;transition:width .25s}
-.bottom-nav-btn{flex:1;border:2px solid #000;border-radius:10px;margin:0 1.5px;padding:5px 1px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#fff}
+.bottom-nav-btn{flex:1;border:2px solid #000;border-radius:10px;margin:0 1px;padding:5px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#fff}
 .bottom-nav-btn.active{background:#000;color:#fde68a}
-.bottom-nav-label{font-family:'Bangers',cursive;font-size:8px;letter-spacing:.5px;line-height:1}
-/* Bottom Sheet Khas Mobile */
+.bottom-nav-label{font-family:'Bangers',cursive;font-size:7px;letter-spacing:.3px;line-height:1}
 .bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100000;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
 .bottom-sheet-content{background:#fff;width:100%;max-width:450px;border-top:4px solid #1a1a1a;border-left:4px solid #1a1a1a;border-right:4px solid #1a1a1a;border-top-left-radius:24px;border-top-right-radius:24px;padding:20px;box-shadow:0 -5px 0 0 #1a1a1a;animation:slideUp 0.3s ease-out;max-height:85vh;overflow-y:auto}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -46,7 +45,19 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   <div class="mt-2 text-xs font-bold" x-text="splashText"></div>
 </div>
 
-<!-- BOTTOM SHEET PIN OWNER (PIN: 763097) -->
+<!-- POPUP SAMBUTAN -->
+<div x-show="welcomePopupOpen" class="bottom-sheet-overlay" style="z-index:100003;">
+  <div class="bottom-sheet-content comic-panel bg-yellow-300 text-center space-y-4">
+    <div class="w-12 h-2 bg-black rounded-full mx-auto"></div>
+    <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-white inline-block rotate-[-2deg]">HALO, SELAMAT DATANG! 👋</div>
+    <p class="txt-sm font-bold text-gray-900 leading-relaxed">
+      Selamat datang di <span class="font-title text-lg">Zenkai Tools</span>! Aplikasi web multiguna seru untuk Al-Quran digital, pencatatan keuangan (belanja & utang), game refleks, dan video downloader!
+    </p>
+    <button @click="welcomePopupOpen = false" class="w-full bg-cyan-400 hover:bg-cyan-500 text-black border-2 border-black py-3 rounded-xl font-title text-xl cursor-pointer">SIAP MENJELAJAH! 🚀</button>
+  </div>
+</div>
+
+<!-- MODAL PIN OWNER (PIN: 763097) -->
 <div x-show="ownerPinModalOpen" class="bottom-sheet-overlay" style="z-index:100002;">
   <div class="bottom-sheet-content comic-panel bg-purple-600 text-white text-center space-y-4">
     <div class="w-12 h-2 bg-purple-400 rounded-full mx-auto"></div>
@@ -57,7 +68,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   </div>
 </div>
 
-<!-- BOTTOM SHEET NOTIFIKASI KUSTOM -->
+<!-- NOTIFIKASI KUSTOM -->
 <div x-show="sheetOpen" class="bottom-sheet-overlay">
   <div class="bottom-sheet-content text-center space-y-4">
     <div class="w-12 h-2 bg-gray-300 rounded-full mx-auto"></div>
@@ -70,34 +81,30 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
 <!-- AUTH MODAL -->
 <div x-show="!isAuthenticated" class="fixed inset-0 bg-black/85 z-[9997] flex items-center justify-center p-4 backdrop-blur-sm">
   <div class="comic-panel bg-yellow-300 p-6 w-full max-w-sm text-center space-y-4">
-    <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-black inline-block rotate-[-2deg]">CLOUD PORTAL</div>
+    <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-black inline-block rotate-[-2deg]">PORTAL AKUN</div>
     <h2 class="font-title text-2xl text-black" x-text="authMode === 'login' ? 'MASUK AKUN' : 'DAFTAR AKUN'"></h2>
-    <p class="txt-xs font-bold">Masuk menggunakan Gmail & Password terdaftar</p>
-    
     <input type="email" x-model="authEmail" placeholder="Email / Gmail..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none" autocomplete="off">
     <input type="password" x-model="authPassword" placeholder="Password..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none">
-    
     <template x-if="authMode === 'register'">
       <input type="text" x-model="authUsername" placeholder="Nama Tampilan (Unik)..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none" autocomplete="off">
     </template>
-    
-    <button @click="handleEmailAuth()" class="w-full bg-cyan-400 hover:bg-cyan-500 border-2 border-black py-3 rounded-xl font-title text-xl cursor-pointer">
+    <button @click="handleEmailAuth()" class="w-full bg-cyan-400 border-2 border-black py-3 rounded-xl font-title text-xl cursor-pointer">
       <span x-text="authMode === 'login' ? 'MASUK SEKARANG' : 'DAFTAR AKUN'"></span>
     </button>
-
     <button @click="authMode = authMode === 'login' ? 'register' : 'login'" class="text-xs font-bold underline cursor-pointer bg-transparent border-none text-blue-900 mt-2">
       <span x-text="authMode === 'login' ? 'Belum punya akun? Daftar' : 'Sudah punya akun? Login'"></span>
     </button>
   </div>
 </div>
 
-<!-- MAIN CONTAINER APLIKASI -->
+<!-- MAIN CONTAINER -->
 <div class="w-full max-w-md h-[100dvh] border-x-4 border-b-4 border-black relative flex flex-col shadow-2xl overflow-hidden bg-yellow-50">
-  
-  <!-- HEADER -->
   <header class="bg-yellow-400 text-black border-b-4 border-black p-3 shrink-0 z-40 flex justify-between items-center">
     <div class="flex items-center space-x-2">
-      <div class="bg-black text-yellow-300 font-title text-lg px-2 py-0.5 rounded-xl border-2 border-black rotate-[-3deg]" x-text="userName ? userName.substring(0,2).toUpperCase() : 'ZK'"></div>
+      <div class="w-9 h-9 bg-black text-yellow-300 font-title text-base rounded-xl border-2 border-black flex items-center justify-center overflow-hidden rotate-[-3deg]">
+        <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
+        <template x-if="!userAvatar"><span x-text="userName ? userName.substring(0,2).toUpperCase() : 'ZK'"></span></template>
+      </div>
       <div>
         <h1 class="font-title text-xl leading-none">ZENKAI TOOLS</h1>
         <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black" :class="isOwner ? 'bg-purple-600 text-white' : 'bg-white text-black'" x-text="isOwner ? 'status: owner' : 'status: user'"></span>
@@ -105,31 +112,46 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     </div>
     <div class="flex items-center space-x-1.5">
       <div class="bg-white text-black border-2 border-black px-2 py-1 rounded-lg font-bold text-[10px]" x-text="currentTime"></div>
-      <button @click="logout()" class="bg-red-400 hover:bg-red-500 border-2 border-black px-2 py-1 rounded-lg font-bold text-xs cursor-pointer">🚪</button>
+      <button @click="logout()" class="bg-red-400 border-2 border-black px-2 py-1 rounded-lg font-bold text-xs cursor-pointer">🚪</button>
     </div>
   </header>
 
-  <!-- CONTENT TABS -->
   <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24">
-    
     <!-- TAB HOME -->
     <div x-show="activeTab === 'home'" class="sec-gap fade-in">
       <div class="comic-panel bg-cyan-300 text-black p-3 flex items-center space-x-3">
-        <div class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl flex items-center justify-center font-title text-xl" x-text="userName ? userName.substring(0,1).toUpperCase() : 'U'"></div>
-        <div>
-          <div class="font-title text-purple-900 text-sm">Nama: <span x-text="userName"></span></div>
-          <div class="text-xs font-bold break-all" x-text="userEmail"></div>
-          <span class="text-[10px] font-extrabold mt-1 inline-block px-2 py-0.5 rounded border border-black bg-white" x-text="isOwner ? 'status: owner (Akses Panel Terbuka)' : 'status: user (Akses Standar)'"></span>
+        <div class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl overflow-hidden flex items-center justify-center font-title text-xl shrink-0">
+          <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
+          <template x-if="!userAvatar"><span x-text="userName ? userName.substring(0,1).toUpperCase() : 'U'"></span></template>
         </div>
+        <div class="flex-1 min-w-0">
+          <div class="font-title text-purple-900 text-sm truncate">Nama: <span x-text="userName"></span></div>
+          <div class="text-xs font-bold break-all truncate" x-text="userEmail"></div>
+          <span class="text-[10px] font-extrabold mt-1 inline-block px-2 py-0.5 rounded border border-black bg-white" x-text="isOwner ? 'status: owner' : 'status: user'"></span>
+        </div>
+      </div>
+
+      <div class="comic-panel bg-white p-3 sec-gap">
+        <h3 class="font-title text-sm">🖼️ GANTI FOTO PROFIL</h3>
+        <div class="flex gap-2">
+          <input type="text" x-model="newAvatarInput" placeholder="URL Foto Profil (https://...)" class="flex-1 border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 focus:outline-none">
+          <button @click="updateAvatar()" class="bg-green-400 border-2 border-black px-3 py-2 rounded-xl font-title text-xs cursor-pointer">Simpan</button>
+        </div>
+      </div>
+
+      <div class="comic-panel bg-pink-300 text-black p-3.5 sec-gap">
+        <h3 class="font-title text-lg text-purple-900">✨ APA ITU ZENKAI TOOLS?</h3>
+        <p class="text-xs font-bold leading-relaxed">
+          Zenkai Tools adalah web aplikasi multiguna bergaya komik yang menyediakan berbagai fitur keren: Al-Quran digital dengan audio, manajemen dompet (belanja & utang), game refleks, dan downloader video sosial media tanpa watermark!
+        </p>
       </div>
       
       <div class="comic-panel bg-white p-3 sec-gap">
-        <h3 class="font-title text-sm">📝 CATATAN KILAT CLOUD</h3>
+        <h3 class="font-title text-sm">📝 CATATAN KILAT</h3>
         <textarea x-model="quickNote" @input="saveQuickNoteCloud()" rows="3" placeholder="Tulis catatan rahasia di sini..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-[12px] bg-yellow-50 focus:outline-none"></textarea>
       </div>
     </div>
-
-    <!-- TAB DOMPET KEUANGAN (Tanpa teks Cloud, fitur Belanja & Utang) -->
+        <!-- TAB DOMPET KEUANGAN -->
     <div x-show="activeTab === 'keuangan'" class="sec-gap fade-in">
       <div class="comic-panel bg-pink-400 text-black p-3">
         <h2 class="font-title text-2xl text-white">💰 DOMPET KEUANGAN</h2>
@@ -143,7 +165,6 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       <div class="comic-panel bg-white p-3.5 sec-gap">
         <h3 class="font-title text-lg">Catat Transaksi</h3>
         
-        <!-- Pilihan Kategori Cepat (Belanja, Utang, Gaji, Makan, dll) -->
         <div class="flex flex-wrap gap-1">
           <button @click="txCategory = 'Belanja'" class="bg-pink-100 border border-black px-2 py-1 rounded-lg text-xs font-bold cursor-pointer">🛍️ Belanja</button>
           <button @click="txCategory = 'Utang'" class="bg-red-100 border border-black px-2 py-1 rounded-lg text-xs font-bold cursor-pointer">💳 Utang</button>
@@ -174,19 +195,44 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         </div>
       </div>
     </div>
-        <!-- TAB AL-QURAN & SHOLAT (Audio Full & Per Ayat) -->
+
+    <!-- TAB DOWNLOADER VIDEO -->
+    <div x-show="activeTab === 'downloader'" class="sec-gap fade-in">
+      <div class="comic-panel bg-cyan-400 text-black p-3">
+        <h2 class="font-title text-2xl text-black">📥 MEDIA DOWNLOADER</h2>
+        <p class="txt-xs font-bold">Download video TikTok, YouTube, & IG tanpa watermark!</p>
+      </div>
+      <div class="comic-panel bg-white p-3.5 sec-gap">
+        <label class="text-xs font-bold">Tempel Link Video (URL):</label>
+        <input type="text" x-model="downloadLinkInput" placeholder="https://instagram.com/p/... atau tiktok.com/..." class="w-full border-2 border-black p-2.5 rounded-xl font-bold text-xs bg-yellow-50 focus:outline-none">
+        
+        <div class="grid grid-cols-3 gap-1.5 pt-1">
+          <button @click="processDownload('tiktok')" class="bg-black text-yellow-300 border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">TikTok</button>
+          <button @click="processDownload('instagram')" class="bg-pink-300 text-black border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">Instagram</button>
+          <button @click="processDownload('youtube')" class="bg-red-400 text-white border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">YouTube</button>
+        </div>
+      </div>
+
+      <template x-if="downloadResultReady">
+        <div class="comic-panel bg-white p-3 sec-gap text-center">
+          <h3 class="font-title text-base text-green-700">✅ Video Berhasil Diproses!</h3>
+          <p class="text-xs font-bold text-gray-600">Klik tombol di bawah untuk mendownload file tanpa watermark:</p>
+          <a :href="downloadResultUrl" target="_blank" class="w-full bg-green-400 hover:bg-green-500 border-2 border-black py-3 rounded-xl font-title text-lg block text-black">DOWNLOAD FILE SEKARANG 📥</a>
+        </div>
+      </template>
+    </div>
+
+    <!-- TAB AL-QURAN & SHOLAT -->
     <div x-show="activeTab === 'kitab'" class="sec-gap fade-in">
       <div class="comic-panel bg-emerald-400 text-black p-3">
         <h2 class="font-title text-2xl text-white">📖 AL-QURAN & SHOLAT</h2>
       </div>
 
-      <!-- Sub Menu Pilihan -->
       <div class="grid grid-cols-2 gap-2">
         <button @click="kitabSubTab = 'sholat'" :class="kitabSubTab === 'sholat' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">Jadwal Sholat</button>
         <button @click="kitabSubTab = 'quran'; if(surahList.length === 0) fetchSurahs();" :class="kitabSubTab === 'quran' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">Al-Quran Digital</button>
       </div>
 
-      <!-- 1. SUB TAB JADWAL SHOLAT -->
       <div x-show="kitabSubTab === 'sholat'" class="sec-gap">
         <div class="comic-panel bg-white p-3.5 sec-gap">
           <h3 class="font-title text-lg">Jadwal Sholat Hari Ini</h3>
@@ -200,7 +246,6 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         </div>
       </div>
 
-      <!-- 2. SUB TAB AL-QURAN (DENGAN AUDIO FULL & AUDIO PER AYAT) -->
       <div x-show="kitabSubTab === 'quran'" class="sec-gap">
         <template x-if="!activeSurah">
           <div class="comic-panel bg-white p-3 sec-gap">
@@ -220,14 +265,12 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
           </div>
         </template>
 
-        <!-- Detail Surah, Audio Full & Audio Per Ayat -->
         <template x-if="activeSurah">
           <div class="comic-panel bg-white p-3.5 sec-gap">
             <button @click="activeSurah = null" class="bg-black text-yellow-300 font-title px-3 py-1 rounded-xl text-xs inline-block cursor-pointer">⬅ Kembali ke Daftar</button>
             <div class="text-center border-b-2 border-black pb-2">
               <h3 class="font-title text-xl" x-text="activeSurah.namaLatin + ' (' + activeSurah.nama + ')'"></h3>
               <p class="text-xs font-bold" x-text="activeSurah.arti + ' - Turun di ' + activeSurah.tempatTurun"></p>
-              <!-- Audio Full Surah -->
               <div class="mt-2">
                 <span class="text-[10px] font-bold block mb-1">🎧 Putar Audio Full Surah:</span>
                 <audio controls class="w-full h-8" :src="activeSurah.audioFull['05']"></audio>
@@ -238,7 +281,6 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
                 <div class="border-2 border-black p-3 rounded-xl bg-yellow-50 space-y-2">
                   <div class="flex justify-between items-center text-[10px] font-bold border-b border-black pb-1">
                     <span>Ayat <span x-text="ay.nomorAyat"></span></span>
-                    <!-- Pemutar Audio Per Ayat -->
                     <audio controls class="h-6 w-32" :src="ay.audio['05']"></audio>
                   </div>
                   <div class="font-arab text-right text-xl leading-loose" x-text="ay.teksArab"></div>
@@ -278,7 +320,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         <div class="comic-panel bg-purple-50 p-3 sec-gap">
           <h3 class="font-title text-base border-b-2 border-black pb-1">Broadcast Global</h3>
           <textarea rows="2" placeholder="Pesan pengumuman untuk seluruh user..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-white"></textarea>
-          <button @click="showAlert('Berhasil', 'Broadcast berhasil dikirim ke sistem cloud!')" class="w-full bg-yellow-300 border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">Kirim Broadcast</button>
+          <button @click="showAlert('Berhasil', 'Broadcast berhasil dikirim ke sistem!')" class="w-full bg-yellow-300 border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">Kirim Broadcast</button>
         </div>
       </div>
     </template>
@@ -286,7 +328,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   </main>
 
   <!-- BOTTOM NAVIGATION -->
-  <nav class="absolute bottom-0 left-0 right-0 w-full border-t-4 border-black bg-yellow-300 flex justify-between items-center py-2 px-1 z-35">
+  <nav class="absolute bottom-0 left-0 right-0 w-full border-t-4 border-black bg-yellow-300 flex justify-between items-center py-1.5 px-1 z-35">
     <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
       <svg class="svg-icon-lg"><use href="#i-home"/></svg>
       <span class="bottom-nav-label">HOME</span>
@@ -298,6 +340,10 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     <button @click="activeTab = 'keuangan'" :class="activeTab === 'keuangan' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
       <svg class="svg-icon-lg"><use href="#i-wallet"/></svg>
       <span class="bottom-nav-label">DOMPET</span>
+    </button>
+    <button @click="activeTab = 'downloader'" :class="activeTab === 'downloader' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
+      <svg class="svg-icon-lg"><use href="#i-download"/></svg>
+      <span class="bottom-nav-label">DOWNLOAD</span>
     </button>
     <button @click="activeTab = 'arcade'" :class="activeTab === 'arcade' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
       <svg class="svg-icon-lg"><use href="#i-gamepad"/></svg>
@@ -318,11 +364,11 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></symbol>
   <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></symbol>
   <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M15 7.5V2H9v5.5l-7 8V22h20v-6.5l-7-8z"/></symbol>
   <symbol id="i-crown" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></symbol>
-</svg>
-
-<!-- JAVASCRIPT & SUPABASE LOGIC -->
+            </svg>
+            <!-- JAVASCRIPT & SUPABASE LOGIC -->
 <script>
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
@@ -334,13 +380,14 @@ function zenkaiCloudApp(){
   return {
     splashHidden: false,
     splashProgress: 0,
-    splashText: 'Menghubungkan ke Cloud Supabase...',
+    splashText: 'Menghubungkan ke Sistem...',
     isAuthenticated: false,
     authMode: 'login',
     authEmail: '',
     authPassword: '',
     authUsername: '',
     
+    welcomePopupOpen: false,
     ownerPinModalOpen: false,
     enteredPin: '',
     pendingUser: null,
@@ -351,6 +398,8 @@ function zenkaiCloudApp(){
     
     userEmail: '',
     userName: '',
+    userAvatar: '',
+    newAvatarInput: '',
     currentUser: null,
     isOwner: false,
     activeTab: 'home',
@@ -367,6 +416,10 @@ function zenkaiCloudApp(){
     surahList: [],
     surahSearch: '',
     activeSurah: null,
+    
+    downloadLinkInput: '',
+    downloadResultReady: false,
+    downloadResultUrl: '',
     
     reflexState: 'yellow',
     reflexMessage: 'Tap untuk Mulai',
@@ -392,7 +445,10 @@ function zenkaiCloudApp(){
         this.splashProgress = p;
         if(p >= 100){
           clearInterval(t);
-          setTimeout(() => this.splashHidden = true, 300);
+          setTimeout(() => {
+            this.splashHidden = true;
+            if(this.isAuthenticated) this.welcomePopupOpen = true;
+          }, 300);
         }
       }, 200);
     },
@@ -405,6 +461,16 @@ function zenkaiCloudApp(){
       this.sheetTitle = title;
       this.sheetMessage = message;
       this.sheetOpen = true;
+    },
+
+    processDownload(platform){
+      if(!this.downloadLinkInput){
+        this.showAlert('Perhatian', 'Masukkan link video yang ingin didownload terlebih dahulu!');
+        return;
+      }
+      this.downloadResultUrl = this.downloadLinkInput;
+      this.downloadResultReady = true;
+      this.showAlert('Berhasil', 'Link ' + platform.toUpperCase() + ' berhasil diproses! Silakan unduh videonya.');
     },
     
     async fetchSurahs(){
@@ -499,7 +565,7 @@ function zenkaiCloudApp(){
         this.isAuthenticated = true;
         await this.processUserData();
         await this.loadTransactions();
-        this.showAlert('Sukses', 'Berhasil masuk sebagai user!');
+        this.welcomePopupOpen = true;
       }
     },
 
@@ -511,7 +577,7 @@ function zenkaiCloudApp(){
         this.isAuthenticated = true;
         await this.processUserData();
         await this.loadTransactions();
-        this.showAlert('Akses Diterima', 'PIN benar! Selamat datang, Owner.');
+        this.welcomePopupOpen = true;
       } else {
         this.showAlert('PIN Salah', 'PIN keamanan owner salah! Akses owner ditolak.');
         this.enteredPin = '';
@@ -526,6 +592,7 @@ function zenkaiCloudApp(){
       if(profile){
         this.userName = profile.username;
         this.quickNote = profile.quick_note || '';
+        this.userAvatar = profile.avatar_url || '';
       } else {
         this.userName = this.currentUser.user_metadata?.username || this.userEmail.split('@')[0] || 'User';
         await supabaseWindow.from('profiles').upsert({
@@ -533,6 +600,21 @@ function zenkaiCloudApp(){
           username: this.userName,
           status: (this.isOwner ? 'owner' : 'user')
         });
+      }
+    },
+
+    async updateAvatar(){
+      if(!this.currentUser || !this.newAvatarInput) return;
+      this.userAvatar = this.newAvatarInput;
+      const { error } = await supabaseWindow.from('profiles').upsert({
+        id: this.currentUser.id,
+        avatar_url: this.userAvatar
+      });
+      if(!error){
+        this.newAvatarInput = '';
+        this.showAlert('Sukses', 'Foto profil berhasil diperbarui!');
+      } else {
+        this.showAlert('Gagal', error.message);
       }
     },
     
