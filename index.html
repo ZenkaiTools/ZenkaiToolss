@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Zenkai Tools</title>
+<title>Zenkai Tools - Supabase Edition</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   body {
@@ -18,18 +18,20 @@
     overflow-x: hidden;
   }
   .font-title { font-family: 'Bangers', cursive; letter-spacing: 1.2px; }
+  .font-arab { font-family: 'Amiri', serif; }
   .comic-panel {
     background: #fff;
     border: 2.5px solid #1a1a1a;
     box-shadow: 3px 3px 0 0 #1a1a1a;
     border-radius: 14px;
     padding: 12px;
+    margin-bottom: 12px;
   }
   .nav-btn {
     flex: 1;
     border: 2px solid #000;
     border-radius: 10px;
-    margin: 0 1.5px;
+    margin: 0 1px;
     padding: 6px 2px;
     display: flex;
     flex-direction: column;
@@ -54,27 +56,31 @@
   }
   .input {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     border: 2px solid black;
     border-radius: 10px;
     font-size: 14px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     text-align: center;
     font-family: 'Comic Neue', sans-serif;
+    background: #fef3c7;
   }
   .btn {
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     border: 2px solid black;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     cursor: pointer;
     font-family: 'Bangers', cursive;
     letter-spacing: 1px;
+    transition: transform 0.1s;
   }
+  .btn:active { transform: scale(0.98); }
   .btn-primary { background: #22d3ee; }
   .btn-danger { background: #f87171; color: white; }
+  .btn-success { background: #4ade80; }
   .btn-link {
     background: none;
     border: none;
@@ -82,35 +88,9 @@
     text-decoration: underline;
     cursor: pointer;
     font-size: 13px;
-    margin-top: 10px;
+    margin-top: 8px;
     width: 100%;
     font-family: 'Comic Neue', sans-serif;
-  }
-  .box {
-    background: #e9d5ff;
-    border: 2px solid black;
-    border-radius: 10px;
-    padding: 12px;
-    text-align: center;
-    margin: 10px 0;
-  }
-  .box-vip {
-    background: #fcd34d;
-    border: 2px solid black;
-    border-radius: 10px;
-    padding: 12px;
-    text-align: center;
-    margin: 10px 0;
-    font-weight: bold;
-  }
-  .box-owner {
-    background: #9333ea;
-    color: white;
-    border: 2px solid black;
-    border-radius: 10px;
-    padding: 12px;
-    text-align: center;
-    margin: 10px 0;
   }
   .main-content {
     max-width: 448px;
@@ -139,33 +119,53 @@
     top: 0;
     z-index: 40;
   }
+  .doa-item, .asma-card, .tx-item {
+    background: #fef3c7;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 8px;
+    box-shadow: 2px 2px 0 #000;
+  }
+  .reflex-box {
+    width: 100%;
+    height: 220px;
+    border: 3px solid #000;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+  }
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
-<div id="loading" style="text-align:center; padding:80px 20px;">
-  <div class="font-title" style="font-size:36px;">ZENKAI TOOLS</div>
-  <p id="status" style="margin-top:20px;">Memuat...</p>
+<!-- LOADING SCREEN -->
+<div id="loading" style="text-align:center; padding:100px 20px;">
+  <div class="font-title" style="font-size:40px;">ZENKAI TOOLS</div>
+  <p id="status" style="margin-top:20px; font-weight:bold;">Menghubungkan ke Cloud Database...</p>
 </div>
 
-<!-- LOGIN SCREEN -->
-<div id="login-screen" class="hidden" style="padding:20px;">
-  <div class="comic-panel" style="max-width:400px; margin:40px auto;">
-    <div class="font-title" style="font-size:28px; text-align:center; margin-bottom:15px;">ZENKAI TOOLS</div>
-    <h2 id="auth-title" class="font-title" style="font-size:20px; text-align:center;">MASUK</h2>
-    <p id="auth-desc" style="text-align:center; font-size:12px; color:#666; margin-bottom:15px;">Login untuk mulai!</p>
+<!-- LOGIN / REGISTER SCREEN -->
+<div id="login-screen" class="hidden" style="padding:20px; max-width:400px; margin:30px auto;">
+  <div class="comic-panel" style="background: #fde68a;">
+    <div class="font-title" style="font-size:32px; text-align:center; margin-bottom:10px;">ZENKAI TOOLS</div>
+    <h2 id="auth-title" class="font-title" style="font-size:22px; text-align:center;">MASUK AKUN</h2>
+    <p id="auth-desc" style="text-align:center; font-size:12px; font-weight:bold; margin-bottom:15px;">Data aman tersimpan di Supabase!</p>
     
-    <input id="input-username" class="input hidden" type="text" placeholder="Username...">
+    <input id="input-username" class="input hidden" type="text" placeholder="Username (Nama Kamu)...">
     <input id="input-email" class="input" type="email" placeholder="Email...">
     <input id="input-password" class="input" type="password" placeholder="Password...">
     
     <button id="btn-submit" class="btn btn-primary" onclick="doSubmit()">MASUK</button>
-    <button id="btn-toggle" class="btn-link" onclick="toggleMode()">Belum punya akun? Daftar</button>
+    <button id="btn-toggle" class="btn-link" onclick="toggleMode()">Belum punya akun? Daftar di sini</button>
   </div>
 </div>
 
-<!-- MAIN APP (setelah login) -->
+<!-- MAIN APP -->
 <div id="main-app" class="hidden">
 
   <!-- HEADER -->
@@ -180,128 +180,181 @@
       </div>
       <div style="display:flex; gap:6px; align-items:center;">
         <div id="clock-display" style="background:white; border:2px solid black; padding:4px 8px; border-radius:8px; font-size:11px; font-weight:bold;">--:--</div>
-        <button onclick="doLogout()" style="background:#f87171; border:2px solid black; padding:4px 8px; border-radius:8px; font-size:14px; cursor:pointer;">🚪</button>
+        <button onclick="doLogout()" style="background:#f87171; border:2px solid black; padding:4px 8px; border-radius:8px; font-size:14px; cursor:pointer;" title="Keluar">🚪</button>
       </div>
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN CONTENT CONTAINER -->
   <div class="main-content">
 
-    <!-- TAB: HOME -->
+    <!-- 1. TAB: HOME -->
     <div id="tab-home" class="fade-in">
       <div class="comic-panel" style="background:#67e8f9; display:flex; align-items:center; gap:12px;">
         <div style="width:60px; height:60px; background:#fde68a; border:2px solid black; border-radius:12px; display:flex; align-items:center; justify-content:center; font-family:'Bangers'; font-size:28px; flex-shrink:0;" id="home-avatar">U</div>
         <div>
           <div class="font-title" style="font-size:16px; color:#581c87;">Halo, <span id="home-name">User</span>!</div>
-          <div style="font-size:11px; color:#666;" id="home-email"></div>
+          <div style="font-size:11px; color:#333; font-weight:bold;" id="home-email"></div>
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:12px;">
-        <div class="comic-panel" style="background:#e9d5ff; text-align:center; padding:10px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+        <div class="comic-panel" style="background:#e9d5ff; text-align:center; padding:10px; margin-bottom:0;">
           <div class="font-title" style="font-size:20px;" id="home-points">0</div>
-          <div style="font-size:10px; font-weight:bold;">POIN</div>
+          <div style="font-size:10px; font-weight:bold;">POIN CLOUD</div>
         </div>
-        <div class="comic-panel" style="background:#fed7aa; text-align:center; padding:10px;">
-          <div class="font-title" style="font-size:20px;">0</div>
+        <div class="comic-panel" style="background:#fed7aa; text-align:center; padding:10px; margin-bottom:0;">
+          <div class="font-title" style="font-size:20px;" id="home-streak">1</div>
           <div style="font-size:10px; font-weight:bold;">STREAK</div>
         </div>
-        <div class="comic-panel" style="background:#a7f3d0; text-align:center; padding:10px;">
-          <div class="font-title" style="font-size:20px;">0</div>
+        <div class="comic-panel" style="background:#a7f3d0; text-align:center; padding:10px; margin-bottom:0;">
+          <div class="font-title" style="font-size:20px;" id="home-badges">0</div>
           <div style="font-size:10px; font-weight:bold;">BADGE</div>
         </div>
       </div>
 
-      <div id="home-vip-box" class="box" style="background:#e5e7eb; margin-top:12px;">
+      <div id="home-vip-box" class="comic-panel" style="background:#e5e7eb; margin-top:12px; text-align:center; font-weight:bold;">
         <div id="home-vip-text">👤 User Biasa</div>
       </div>
 
       <div id="home-vip-btn-box" class="hidden" style="margin-top:12px;">
-        <button class="btn" style="background:#fbbf24;" onclick="requestVip()">⭐ JADI VIP (Rp 25.000)</button>
+        <button class="btn" style="background:#fbbf24;" onclick="requestVip()">⭐ JADI VIP (Rp 25.000 via WA)</button>
       </div>
 
-      <div id="home-owner-box" class="box-owner hidden" style="margin-top:12px;">
-        👑 OWNER
+      <div class="comic-panel" style="margin-top:12px; background:#fef08a;">
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">⚡ AKSES CEPAT FITUR</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <button class="btn btn-primary" style="font-size:13px; padding:10px;" onclick="switchTab('doa')">📖 Doa Harian</button>
+          <button class="btn" style="background:#f472b6; font-size:13px; padding:10px;" onclick="switchTab('keuangan')">💰 Keuangan</button>
+          <button class="btn" style="background:#34d399; font-size:13px; padding:10px;" onclick="switchTab('health')">💪 BMI & Usia</button>
+          <button class="btn" style="background:#c084fc; color:white; font-size:13px; padding:10px;" onclick="switchTab('game')">🎮 Arcade Game</button>
+        </div>
       </div>
 
       <div class="comic-panel" style="margin-top:12px;">
-        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">📝 CATATAN KILAT</div>
-        <textarea id="quick-note" rows="3" placeholder="Tulis ide..." style="width:100%; border:2px solid black; padding:8px; border-radius:10px; font-family:'Comic Neue'; font-size:13px;"></textarea>
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">📝 CATATAN KILAT CLOUD</div>
+        <textarea id="quick-note" rows="3" placeholder="Tulis ide atau catatanmu..." style="width:100%; border:2px solid black; padding:8px; border-radius:10px; font-family:'Comic Neue'; font-size:13px;" oninput="saveQuickNote()"></textarea>
       </div>
     </div>
 
-    <!-- TAB: KITAB -->
-    <div id="tab-kitab" class="fade-in hidden">
+    <!-- 2. TAB: DOA HARIAN -->
+    <div id="tab-doa" class="fade-in hidden">
       <div class="comic-panel" style="background:#34d399;">
-        <div class="font-title" style="font-size:24px; color:white;">📖 KITAB & IBADAH</div>
-        <div style="font-size:12px; color:white;">Segera hadir di Batch C</div>
+        <div class="font-title" style="font-size:22px;">📖 DOA HARIAN & ASMAUL HUSNA</div>
+        <div style="font-size:12px; font-weight:bold;">Kumpulan doa pilihan lengkap Arab & Artinya</div>
+      </div>
+      <div class="comic-panel">
+        <div class="font-title" style="font-size:16px; margin-bottom:8px;">Doa-Doa Pilihan</div>
+        <div id="doa-container"></div>
       </div>
     </div>
 
-    <!-- TAB: KEUANGAN -->
+    <!-- 3. TAB: KEUANGAN -->
     <div id="tab-keuangan" class="fade-in hidden">
       <div class="comic-panel" style="background:#f472b6;">
-        <div class="font-title" style="font-size:24px; color:white;">💰 KEUANGAN</div>
-        <div style="font-size:12px; color:white;">Segera hadir di Batch D</div>
+        <div class="font-title" style="font-size:22px; color:white;">💰 DOMPET KEUANGAN CLOUD</div>
+        <div style="font-size:14px; font-weight:bold; color:white; margin-top:4px;" id="wallet-balance">Saldo: Rp 0</div>
+      </div>
+      <div class="comic-panel">
+        <div class="font-title" style="font-size:16px; margin-bottom:8px;">Catat Transaksi</div>
+        <input id="tx-cat" class="input" type="text" placeholder="Kategori (cth: Gaji / Makan)">
+        <input id="tx-amount" class="input" type="number" placeholder="Jumlah Nominal (Rp)...">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <button class="btn btn-success" style="padding:10px; font-size:14px;" onclick="addTransaction('income')">+ Pemasukan</button>
+          <button class="btn btn-danger" style="padding:10px; font-size:14px;" onclick="addTransaction('expense')">- Pengeluaran</button>
+        </div>
+      </div>
+      <div class="comic-panel">
+        <div class="font-title" style="font-size:16px; margin-bottom:8px;">Riwayat Transaksi</div>
+        <div id="tx-list" style="font-size:12px; font-weight:bold;">Memuat riwayat...</div>
+      </div>
+    </div>
+        <!-- 4. TAB: KESEHATAN (BMI & USIA) -->
+    <div id="tab-health" class="fade-in hidden">
+      <div class="comic-panel" style="background:#38bdf8;">
+        <div class="font-title" style="font-size:22px;">💪 KALKULATOR KESEHATAN</div>
+      </div>
+      <div class="comic-panel">
+        <div class="font-title" style="font-size:16px; margin-bottom:8px;">Hitung BMI (Berat Badan Ideal)</div>
+        <input id="bmi-weight" class="input" type="number" placeholder="Berat Badan (kg)">
+        <input id="bmi-height" class="input" type="number" placeholder="Tinggi Badan (cm)">
+        <button class="btn btn-primary" onclick="calculateBMI()">HITUNG BMI</button>
+        <div id="bmi-result" style="margin-top:10px; font-weight:bold; font-size:13px; text-align:center;"></div>
+      </div>
+      <div class="comic-panel">
+        <div class="font-title" style="font-size:16px; margin-bottom:8px;">Penghitung Usia Detail</div>
+        <input id="birth-date" class="input" type="date">
+        <button class="btn" style="background:#c084fc;" onclick="calculateAge()">HITUNG USIA</button>
+        <div id="age-result" style="margin-top:10px; font-weight:bold; font-size:13px; text-align:center;"></div>
       </div>
     </div>
 
-    <!-- TAB: GAME -->
+    <!-- 5. TAB: ARCADE GAME -->
     <div id="tab-game" class="fade-in hidden">
       <div class="comic-panel" style="background:#fbbf24;">
-        <div class="font-title" style="font-size:24px;">🎮 ARCADE GAME</div>
-        <div style="font-size:12px;">Segera hadir di Batch E</div>
+        <div class="font-title" style="font-size:22px;">🎮 ARCADE REFLEX GAME</div>
+        <div style="font-size:12px; font-weight:bold;">Uji kecepatan reaksimu & raih poin!</div>
+      </div>
+      <div class="comic-panel" style="text-align:center;">
+        <div id="reflex-box" class="reflex-box bg-red-400 text-white" onclick="handleReflexTap()">
+          <div class="font-title" id="reflex-text" style="font-size:24px;">KLIK UNTUK MULAI</div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:10px;" onclick="startReflexGame()">MULAI GAME</button>
       </div>
     </div>
 
-    <!-- TAB: OWNER -->
+    <!-- 6. TAB: OWNER PANEL -->
     <div id="tab-owner" class="fade-in hidden">
       <div class="comic-panel" style="background:#9333ea; color:white;">
-        <div class="font-title" style="font-size:24px;">👑 OWNER PANEL</div>
+        <div class="font-title" style="font-size:24px;">👑 OWNER CONTROL PANEL</div>
+        <div style="font-size:11px;">Akses khusus pemilik aplikasi</div>
       </div>
       
-      <div class="comic-panel" style="margin-top:12px;">
-        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">⭐ KASIH VIP</div>
+      <div class="comic-panel">
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">⭐ BERI AKSES VIP</div>
         <input id="input-vip-user" class="input" type="text" placeholder="Username target...">
-        <button class="btn btn-primary" onclick="doGrantVip()">Beri VIP</button>
+        <button class="btn btn-primary" onclick="doGrantVip()">Berikan VIP (30 Hari)</button>
       </div>
 
-      <div class="comic-panel" style="margin-top:12px;">
-        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">📢 BROADCAST</div>
-        <input id="input-broadcast" class="input" type="text" placeholder="Isi pengumuman...">
-        <button class="btn btn-primary" onclick="doBroadcast()">Kirim Broadcast</button>
+      <div class="comic-panel">
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">📢 KIRIM BROADCAST</div>
+        <input id="input-broadcast" class="input" type="text" placeholder="Isi pengumuman global...">
+        <button class="btn btn-primary" onclick="doBroadcast()">Kirim Siaran</button>
       </div>
 
-      <div class="comic-panel" style="margin-top:12px;">
-        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">📋 DAFTAR VIP</div>
-        <div id="vip-list-box" style="font-size:12px;">Memuat...</div>
+      <div class="comic-panel">
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">📋 DAFTAR MEMBER VIP</div>
+        <div id="vip-list-box" style="font-size:12px; font-weight:bold;">Memuat data...</div>
       </div>
     </div>
 
   </div>
 
-  <!-- BOTTOM NAV -->
+  <!-- BOTTOM NAVIGATION -->
   <div class="bottom-nav">
     <div style="max-width:448px; margin:0 auto; width:100%; display:flex;">
       <button class="nav-btn active" data-tab="home" onclick="switchTab('home')">
-        <span style="font-size:18px;">🏠</span>
+        <span style="font-size:16px;">🏠</span>
         <span>HOME</span>
       </button>
-      <button class="nav-btn" data-tab="kitab" onclick="switchTab('kitab')">
-        <span style="font-size:18px;">📖</span>
-        <span>KITAB</span>
+      <button class="nav-btn" data-tab="doa" onclick="switchTab('doa')">
+        <span style="font-size:16px;">📖</span>
+        <span>DOA</span>
       </button>
       <button class="nav-btn" data-tab="keuangan" onclick="switchTab('keuangan')">
-        <span style="font-size:18px;">💰</span>
+        <span style="font-size:16px;">💰</span>
         <span>DOMPET</span>
       </button>
+      <button class="nav-btn" data-tab="health" onclick="switchTab('health')">
+        <span style="font-size:16px;">💪</span>
+        <span>SEHAT</span>
+      </button>
       <button class="nav-btn" data-tab="game" onclick="switchTab('game')">
-        <span style="font-size:18px;">🎮</span>
+        <span style="font-size:16px;">🎮</span>
         <span>GAME</span>
       </button>
       <button id="nav-owner" class="nav-btn hidden" data-tab="owner" onclick="switchTab('owner')">
-        <span style="font-size:18px;">👑</span>
+        <span style="font-size:16px;">👑</span>
         <span>OWNER</span>
       </button>
     </div>
@@ -311,100 +364,125 @@
 
 <script>
 // ============================================
-// KONFIGURASI
+// KONFIGURASI SUPABASE & STATE
 // ============================================
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const OWNER_EMAIL = 'andikaatka@gmail.com';
 
-var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-var authMode = 'login';
-var currentUser = null;
-var isOwnerUser = false;
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let authMode = 'login';
+let currentUser = null;
+let profileData = null;
 
 function show(id) { document.getElementById(id).classList.remove('hidden'); }
 function hide(id) { document.getElementById(id).classList.add('hidden'); }
 function setStatus(t) { document.getElementById('status').textContent = t; }
 
-// ============ INIT ============
+// ============================================
+// INISIALISASI APLIKASI & SESSION
+// ============================================
 async function init() {
   updateClock();
   setInterval(updateClock, 1000);
   
   try {
-    setStatus('Cek session...');
-    var result = await supabase.auth.getUser();
-    currentUser = result.data.user;
+    setStatus('Memeriksa sesi login...');
+    const sessionRes = await supabase.auth.getSession();
+    currentUser = sessionRes.data.session ? sessionRes.data.session.user : null;
     
     if (currentUser) {
-      await fillHome();
+      await loadUserData();
       show('main-app');
       hide('loading');
       hide('login-screen');
+      loadDoaList();
+      loadTransactions();
     } else {
       hide('loading');
       hide('main-app');
       show('login-screen');
     }
   } catch (e) {
-    setStatus('ERROR: ' + e.message);
-    setTimeout(function() {
+    setStatus('Gagal memuat: ' + e.message);
+    setTimeout(() => {
       hide('loading');
       show('login-screen');
-    }, 2000);
+    }, 1500);
   }
 }
 
 function updateClock() {
-  var el = document.getElementById('clock-display');
+  const el = document.getElementById('clock-display');
   if (el) {
-    var now = new Date();
-    var h = String(now.getHours()).padStart(2, '0');
-    var m = String(now.getMinutes()).padStart(2, '0');
-    el.textContent = h + ':' + m;
+    const now = new Date();
+    el.textContent = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
   }
 }
 
-async function loadProfile() {
-  var result = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
-  return result.data;
-}
-
-// ============ TAB ============
-function switchTab(tab) {
-  // Sembunyikan semua tab
-  var tabs = ['home', 'kitab', 'keuangan', 'game', 'owner'];
-  for (var i = 0; i < tabs.length; i++) {
-    var el = document.getElementById('tab-' + tabs[i]);
-    if (el) el.classList.add('hidden');
-  }
-  // Tampilkan tab yang dipilih
-  var target = document.getElementById('tab-' + tab);
-  if (target) target.classList.remove('hidden');
+async function loadUserData() {
+  const res = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+  profileData = res.data;
   
-  // Update nav active
-  var btns = document.querySelectorAll('.nav-btn');
-  btns.forEach(function(b) {
+  if (!profileData) return;
+  
+  document.getElementById('home-name').textContent = profileData.username;
+  document.getElementById('home-email').textContent = currentUser.email;
+  document.getElementById('home-points').textContent = profileData.points || 0;
+  document.getElementById('home-avatar').textContent = profileData.username.charAt(0).toUpperCase();
+  document.getElementById('avatar-badge').textContent = profileData.username.substring(0, 2).toUpperCase();
+  if (profileData.quick_note) {
+    document.getElementById('quick-note').value = profileData.quick_note;
+  }
+  
+  const isVip = profileData.is_vip && (!profileData.vip_expiry || new Date(profileData.vip_expiry) > new Date());
+  const isOwner = currentUser.email === OWNER_EMAIL;
+  
+  document.getElementById('header-role').textContent = isOwner ? 'Master Owner' : (isVip ? 'VIP Member' : 'User');
+  
+  if (isVip) {
+    document.getElementById('home-vip-box').style.background = '#fcd34d';
+    document.getElementById('home-vip-text').textContent = '⭐ VIP Member Aktif';
+    hide('home-vip-btn-box');
+  } else {
+    show('home-vip-btn-box');
+  }
+  
+  if (isOwner) {
+    show('nav-owner');
+  }
+}
+
+// ============================================
+// NAVIGASI TAB
+// ============================================
+function switchTab(tab) {
+  const tabs = ['home', 'doa', 'keuangan', 'health', 'game', 'owner'];
+  tabs.forEach(t => hide('tab-' + t));
+  show('tab-' + tab);
+  
+  document.querySelectorAll('.nav-btn').forEach(b => {
     b.classList.remove('active');
     if (b.dataset.tab === tab) b.classList.add('active');
   });
   
-  // Kalau owner tab, load VIP list
   if (tab === 'owner') loadVipList();
 }
 
-// ============ LOGIN / DAFTAR ============
+// ============================================
+// AUTENTIKASI (LOGIN / REGISTER)
+// ============================================
 function toggleMode() {
   if (authMode === 'login') {
     authMode = 'register';
-    document.getElementById('auth-title').textContent = 'DAFTAR';
-    document.getElementById('auth-desc').textContent = 'Bikin akun baru!';
+    document.getElementById('auth-title').textContent = 'DAFTAR AKUN';
+    document.getElementById('auth-desc').textContent = 'Buat akun Zenkai Tools baru!';
     document.getElementById('btn-submit').textContent = 'DAFTAR';
-    document.getElementById('btn-toggle').textContent = 'Sudah punya akun? Login';
+    document.getElementById('btn-toggle').textContent = 'Sudah punya akun? Masuk';
     show('input-username');
   } else {
     authMode = 'login';
-    document.getElementById('auth-title').textContent = 'MASUK';
+    document.getElementById('auth-title').textContent = 'MASUK AKUN';
     document.getElementById('auth-desc').textContent = 'Login untuk mulai!';
     document.getElementById('btn-submit').textContent = 'MASUK';
     document.getElementById('btn-toggle').textContent = 'Belum punya akun? Daftar';
@@ -413,48 +491,204 @@ function toggleMode() {
 }
 
 async function doSubmit() {
-  var email = document.getElementById('input-email').value.trim();
-  var password = document.getElementById('input-password').value.trim();
-  var username = document.getElementById('input-username').value.trim();
+  const email = document.getElementById('input-email').value.trim();
+  const password = document.getElementById('input-password').value.trim();
+  const username = document.getElementById('input-username').value.trim();
   
-  if (!email || !password) { alert('Isi email dan password!'); return; }
+  if (!email || !password) { alert('Email dan password wajib diisi!'); return; }
   
   try {
     if (authMode === 'register') {
-      if (!username) { alert('Isi username!'); return; }
-      var r1 = await supabase.auth.signUp({
-        email: email, password: password,
-        options: { data: { username: username } }
+      if (!username) { alert('Username wajib diisi!'); return; }
+      const { data, error } = await supabase.auth.signUp({
+        email, password,
+        options: { data: { username } }
       });
-      if (r1.error) throw r1.error;
-      var r2 = await supabase.auth.signInWithPassword({ email: email, password: password });
-      if (r2.error) throw r2.error;
-      alert('Berhasil daftar!');
+      if (error) throw error;
+      alert('Pendaftaran berhasil! Silakan masuk.');
+      toggleMode();
     } else {
-      var r3 = await supabase.auth.signInWithPassword({ email: email, password: password });
-      if (r3.error) throw r3.error;
-      alert('Berhasil login!');
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      location.reload();
     }
-    location.reload();
   } catch (e) {
-    alert('Gagal: ' + e.message);
+    alert('Autentikasi Gagal: ' + e.message);
   }
 }
 
-// ============ VIP ============
+async function doLogout() {
+  if (!confirm('Yakin ingin keluar?')) return;
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+// ============================================
+// FITUR: CATATAN KILAT CLOUD
+// ============================================
+let noteTimer = null;
+function saveQuickNote() {
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(async () => {
+    const note = document.getElementById('quick-note').value;
+    await supabase.from('profiles').update({ quick_note: note }).eq('id', currentUser.id);
+  }, 800);
+}
+
+// ============================================
+// FITUR: DOA HARIAN
+// ============================================
+function loadDoaList() {
+  const doaData = [
+    {nama: 'Doa Sebelum Tidur', arab: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', arti: 'Dengan nama-Mu ya Allah, aku mati dan hidup.'},
+    {nama: 'Doa Bangun Tidur', arab: 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ', arti: 'Segala puji bagi Allah yang menghidupkan kami...'},
+    {nama: 'Doa Sebelum Makan', arab: 'بِسْمِ اللَّهِ', arti: 'Dengan nama Allah (aku makan).'},
+    {nama: 'Doa Keluar Rumah', arab: 'بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ', arti: 'Dengan nama Allah aku bertawakal kepada Allah.'}
+  ];
+  let html = '';
+  doaData.forEach(d => {
+    html += `<div class="doa-item"><div class="font-title" style="color:#6b21a8;">${d.nama}</div><div class="font-arab" style="font-size:18px; text-align:right; margin:4px 0;">${d.arab}</div><div style="font-size:11px; font-weight:bold; color:#374151;">${d.arti}</div></div>`;
+  });
+  document.getElementById('doa-container').innerHTML = html;
+}
+
+// ============================================
+// FITUR: KEUANGAN (DOMPET CLOUD)
+// ============================================
+async function addTransaction(type) {
+  const cat = document.getElementById('tx-cat').value.trim();
+  const amount = parseFloat(document.getElementById('tx-amount').value);
+  
+  if (!cat || isNaN(amount) || amount <= 0) { alert('Isi kategori dan nominal dengan benar!'); return; }
+  
+  const { error } = await supabase.from('transactions').insert({
+    user_id: currentUser.id,
+    type,
+    category: cat,
+    amount,
+    date: new Date().toLocaleDateString('id-ID')
+  });
+  
+  if (error) {
+    alert('Gagal menyimpan transaksi: Pastikan tabel "transactions" sudah dibuat di Supabase.');
+  } else {
+    document.getElementById('tx-cat').value = '';
+    document.getElementById('tx-amount').value = '';
+    loadTransactions();
+  }
+}
+
+async function loadTransactions() {
+  const { data, error } = await supabase.from('transactions').select('*').eq('user_id', currentUser.id).order('id', { ascending: false });
+  const listEl = document.getElementById('tx-list');
+  
+  if (error || !data || data.length === 0) {
+    listEl.innerHTML = 'Belum ada transaksi tercatat.';
+    document.getElementById('wallet-balance').textContent = 'Saldo: Rp 0';
+    return;
+  }
+  
+  let balance = 0;
+  let html = '';
+  data.forEach(t => {
+    if (t.type === 'income') balance += t.amount;
+    else balance -= t.amount;
+    
+    const color = t.type === 'income' ? 'color:green;' : 'color:red;';
+    const sign = t.type === 'income' ? '+' : '-';
+    html += `<div class="tx-item" style="display:flex; justify-content:space-between; align-items:center;"><div><div>${t.category}</div><div style="font-size:9px; color:#666;">${t.date}</div></div><div style="font-weight:bold; ${color}">${sign}Rp ${t.amount.toLocaleString('id-ID')}</div></div>`;
+  });
+  
+  listEl.innerHTML = html;
+  document.getElementById('wallet-balance').textContent = `Saldo: Rp ${balance.toLocaleString('id-ID')}`;
+}
+
+// ============================================
+// FITUR: KESEHATAN (BMI & USIA)
+// ============================================
+function calculateBMI() {
+  const w = parseFloat(document.getElementById('bmi-weight').value);
+  const h = parseFloat(document.getElementById('bmi-height').value);
+  if (!w || !h) { alert('Isi berat dan tinggi badan!'); return; }
+  const bmi = w / ((h/100) * (h/100));
+  let cat = '';
+  if (bmi < 18.5) cat = 'Kekurusan';
+  else if (bmi < 25) cat = 'Normal (Ideal)';
+  else if (bmi < 30) cat = 'Kelebihan Berat Badan';
+  else cat = 'Obesitas';
+  
+  document.getElementById('bmi-result').innerHTML = `BMI Anda: ${bmi.toFixed(1)} (${cat})`;
+}
+
+function calculateAge() {
+  const bdate = document.getElementById('birth-date').value;
+  if (!bdate) { alert('Pilih tanggal lahir!'); return; }
+  const dob = new Date(bdate);
+  const now = new Date();
+  let years = now.getFullYear() - dob.getFullYear();
+  let months = now.getMonth() - dob.getMonth();
+  if (months < 0) { years--; months += 12; }
+  document.getElementById('age-result').innerHTML = `Usia Anda: ${years} Tahun, ${months} Bulan`;
+}
+
+// ============================================
+// FITUR: ARCADE GAME (REFLEX)
+// ============================================
+let reflexState = 'idle';
+let startTime = 0;
+let reflexTimer = null;
+
+function startReflexGame() {
+  const box = document.getElementById('reflex-box');
+  const text = document.getElementById('reflex-text');
+  box.className = 'reflex-box bg-yellow-400 text-black';
+  text.textContent = 'SIAP-SIAP MUNCUL HIJAU...';
+  reflexState = 'waiting';
+  
+  const randomTime = 1500 + Math.random() * 3000;
+  clearTimeout(reflexTimer);
+  reflexTimer = setTimeout(() => {
+    if (reflexState === 'waiting') {
+      box.className = 'reflex-box bg-green-500 text-white';
+      text.textContent = 'KLIK SEKARANG!';
+      reflexState = 'ready';
+      startTime = Date.now();
+    }
+  }, randomTime);
+}
+
+function handleReflexTap() {
+  const box = document.getElementById('reflex-box');
+  const text = document.getElementById('reflex-text');
+  
+  if (reflexState === 'waiting') {
+    clearTimeout(reflexTimer);
+    reflexState = 'idle';
+    box.className = 'reflex-box bg-red-500 text-white';
+    text.textContent = 'TERLALU CEPAT (CURANG)!';
+  } else if (reflexState === 'ready') {
+    const reactionTime = Date.now() - startTime;
+    reflexState = 'idle';
+    box.className = 'reflex-box bg-cyan-400 text-black';
+    text.textContent = `REAKSIMU: ${reactionTime} ms!`;
+  }
+}
+
+// ============================================
+// FITUR: OWNER PANEL
+// ============================================
 function requestVip() {
-  var wa = 'https://wa.me/6285352831643?text=Halo%20Owner,%20saya%20mau%20order%20VIP';
-  window.open(wa, '_blank');
+  window.open("https://wa.me/6285352831643?text=Halo%20Owner,%20saya%20mau%20order%20VIP%20Zenkai%20Tools", "_blank");
 }
 
 async function doGrantVip() {
-  var target = document.getElementById('input-vip-user').value.trim();
-  if (!target) { alert('Isi username!'); return; }
+  const target = document.getElementById('input-vip-user').value.trim();
+  if (!target) { alert('Masukkan username target!'); return; }
   try {
-    var expiry = new Date(Date.now() + 30 * 86400000).toISOString();
-    var result = await supabase.from('profiles').update({ is_vip: true, vip_expiry: expiry }).eq('username', target);
-    if (result.error) throw result.error;
-    alert('VIP diberikan ke ' + target);
+    const expiry = new Date(Date.now() + 30 * 86400000).toISOString();
+    const { error } = await supabase.from('profiles').update({ is_vip: true, vip_expiry: expiry }).eq('username', target);
+    if (error) throw error;
+    alert(`Berhasil memberikan VIP ke ${target}!`);
     loadVipList();
   } catch (e) {
     alert('Gagal: ' + e.message);
@@ -462,74 +696,29 @@ async function doGrantVip() {
 }
 
 async function loadVipList() {
-  var result = await supabase.from('profiles').select('username, vip_expiry').eq('is_vip', true);
-  var box = document.getElementById('vip-list-box');
-  if (!result.data || result.data.length === 0) {
-    box.innerHTML = 'Belum ada VIP.';
+  const { data } = await supabase.from('profiles').select('username, vip_expiry').eq('is_vip', true);
+  const box = document.getElementById('vip-list-box');
+  if (!data || data.length === 0) {
+    box.innerHTML = 'Belum ada member VIP aktif.';
   } else {
-    var html = '';
-    for (var i = 0; i < result.data.length; i++) {
-      html += '<div>⭐ ' + result.data[i].username + '</div>';
-    }
+    let html = '';
+    data.forEach(v => {
+      html += `<div>⭐ ${v.username} (Exp: ${new Date(v.vip_expiry).toLocaleDateString('id-ID')})</div>`;
+    });
     box.innerHTML = html;
   }
 }
 
-// ============ BROADCAST ============
 async function doBroadcast() {
-  var msg = document.getElementById('input-broadcast').value.trim();
-  if (!msg) { alert('Isi pengumuman!'); return; }
-  try {
-    var result = await supabase.from('broadcasts').insert({ message: msg, color: 'purple' });
-    if (result.error) throw result.error;
-    alert('Broadcast terkirim!');
-    document.getElementById('input-broadcast').value = '';
-  } catch (e) {
-    alert('Gagal: ' + e.message);
-  }
+  const msg = document.getElementById('input-broadcast').value.trim();
+  if (!msg) { alert('Isi pesan broadcast!'); return; }
+  const { error } = await supabase.from('broadcasts').insert({ message: msg, color: 'purple' });
+  if (error) alert('Gagal kirim broadcast: ' + error.message);
+  else { alert('Broadcast terkirim!'); document.getElementById('input-broadcast').value = ''; }
 }
 
-// ============ HOME ============
-async function fillHome() {
-  var profile = await loadProfile();
-  if (!profile) return;
-  
-  document.getElementById('home-name').textContent = profile.username;
-  document.getElementById('home-email').textContent = profile.email || '';
-  document.getElementById('home-points').textContent = profile.points || 0;
-  document.getElementById('home-avatar').textContent = profile.username.charAt(0).toUpperCase();
-  document.getElementById('avatar-badge').textContent = profile.username.substring(0, 2).toUpperCase();
-  
-  var isVip = profile.is_vip && (!profile.vip_expiry || new Date(profile.vip_expiry) > new Date());
-  var isOwner = profile.email === OWNER_EMAIL;
-  isOwnerUser = isOwner;
-  
-  var role = isOwner ? 'Master Owner' : (isVip ? 'VIP Member' : 'User');
-  document.getElementById('header-role').textContent = role;
-  
-  if (isVip) {
-    document.getElementById('home-vip-box').style.background = '#fcd34d';
-    document.getElementById('home-vip-text').textContent = '⭐ VIP Member';
-    hide('home-vip-btn-box');
-  } else {
-    show('home-vip-btn-box');
-  }
-  
-  if (isOwner) {
-    show('home-owner-box');
-    show('nav-owner');
-  }
-}
-
-// ============ LOGOUT ============
-async function doLogout() {
-  if (!confirm('Yakin ingin keluar?')) return;
-  await supabase.auth.signOut();
-  location.reload();
-}
-
+// Jalankan inisialisasi saat halaman dimuat
 init();
 </script>
-
 </body>
 </html>
