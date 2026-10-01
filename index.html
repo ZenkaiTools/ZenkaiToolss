@@ -3,481 +3,347 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="Zenkai Tools - Personal Super App">
-<meta name="theme-color" content="#fbbf24">
-<title>Zenkai Tools - Personal Edition</title>
+<title>Zenkai Tools - Supabase Edition</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--c-border:#1a1a1a;--c-shadow:#1a1a1a;--radius:14px;--gap:12px}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;overflow-x:hidden}
-body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1a1a;min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none;transition:background .3s}
-.font-title{font-family:'Bangers',cursive;letter-spacing:1.2px}
-.font-arab{font-family:'Amiri',serif}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-thumb{background:#000;border-radius:2px}
-.comic-panel{background:#fff;border:2.5px solid #1a1a1a;box-shadow:3px 3px 0 0 #1a1a1a;border-radius:14px;position:relative;overflow:hidden}
-.comic-bubble{background:#fef3c7;border:2.5px solid #1a1a1a;border-radius:14px;box-shadow:2.5px 2.5px 0 0 #1a1a1a;padding:10px}
-.sec-gap{display:flex;flex-direction:column;gap:12px}
-.txt-sm{font-size:.8rem;line-height:1.4}
-.txt-xs{font-size:.7rem;line-height:1.35}
-.svg-icon{display:inline-block;vertical-align:middle;width:1em;height:1em;fill:currentColor;flex-shrink:0}
-.svg-icon-lg{width:1.35em;height:1.35em}
-.svg-icon-2xl{width:2em;height:2em}
-.svg-icon-3xl{width:2.6em;height:2.6em}
-.loading-spinner{display:inline-block;width:14px;height:14px;border:2px solid #000;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.fade-in{animation:fadeIn .28s ease-out}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.toast-container{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:8000;display:flex;flex-direction:column;gap:6px;width:88%;max-width:340px;pointer-events:none}
-.toast-item{pointer-events:auto;border:2px solid #000;border-radius:10px;box-shadow:2px 2px 0 #000;padding:9px 12px;display:flex;align-items:center;gap:8px;font-weight:700;font-size:12px;line-height:1.3;animation:toastIn .25s ease-out}
-.toast-item.out{animation:toastOut .25s ease-in forwards}
-@keyframes toastIn{from{opacity:0;transform:translateY(12px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes toastOut{to{opacity:0;transform:translateY(12px) scale(.95)}}
-.toast-success{background:#86efac}.toast-error{background:#fca5a5}.toast-info{background:#93c5fd}.toast-warning{background:#fde68a}
-.toast-icon{line-height:1;display:flex}
-.toast-icon svg{width:14px;height:14px;fill:currentColor}
-.toast-close{margin-left:auto;cursor:pointer;padding:0 4px;opacity:.55;font-size:13px;font-weight:900}
-.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:100000;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(3px)}
-.sheet-overlay.active{opacity:1;pointer-events:auto}
-.sheet-panel{position:fixed;left:0;right:0;bottom:0;z-index:100001;background:#fff;border-top:3px solid #000;border-left:3px solid #000;border-right:3px solid #000;border-top-left-radius:22px;border-top-right-radius:22px;box-shadow:0 -6px 0 0 #000;transform:translateY(100%);transition:transform .32s cubic-bezier(.34,1.5,.64,1);max-height:min(86vh,86dvh);display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom)}
-.sheet-panel.active{transform:translateY(0)}
-.sheet-handle{width:44px;height:5px;background:#000;border-radius:3px;margin:11px auto 6px;cursor:grab}
-.sheet-header{padding:2px 18px 12px;border-bottom:2.5px solid #000;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.sheet-title{font-family:'Bangers',cursive;font-size:1.35rem;letter-spacing:1px;line-height:1.15;flex:1}
-.sheet-body{padding:14px 18px 20px;overflow-y:auto;flex:1}
-.sheet-footer{padding:12px 18px 20px;border-top:2.5px dashed #000;display:flex;gap:8px;flex-wrap:wrap}
-.sheet-list-item{background:#fef3c7;border:2px solid #000;border-radius:10px;padding:11px 13px;margin-bottom:7px;box-shadow:2px 2px 0 #000;font-size:13px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.sheet-list-item.active{background:#000;color:#fde68a}
-.sheet-list-item:hover{background:#fde68a}
-.sheet-list-item.active:hover{background:#000}
-.sheet-group-title{font-family:'Bangers',cursive;font-size:13px;background:#000;color:#fde68a;padding:3px 10px;border-radius:6px;display:inline-block;margin:8px 0 6px;letter-spacing:1px}
-.splash-screen{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#fbbf24,#f59e0b,#d97706);transition:opacity .5s,visibility .5s}
-.splash-screen.hide{opacity:0;visibility:hidden}
-.splash-logo{font-family:'Bangers',cursive;font-size:clamp(38px,11vw,52px);color:#000;letter-spacing:3px;text-shadow:3px 3px 0 #fff,5px 5px 0 #000;animation:splashBounce 1.3s ease-in-out infinite}
-@keyframes splashBounce{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
-.splash-bar-wrap{width:180px;height:14px;background:#000;border-radius:10px;margin-top:26px;padding:3px;border:2.5px solid #000;box-shadow:2.5px 2.5px 0 #000}
-.splash-bar{height:100%;background:linear-gradient(90deg,#86efac,#22c55e);border-radius:6px;width:0%;transition:width .25s}
-.splash-loading-text{margin-top:10px;font-size:11px;font-weight:700;color:#000}
-.sound-toggle-btn{position:fixed;bottom:84px;right:10px;z-index:7999;width:42px;height:42px;border-radius:50%;background:#000;color:#fde68a;border:2.5px solid #fde68a;box-shadow:2.5px 2.5px 0 #000;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.sound-toggle-btn.muted{background:#6b7280;color:#d1d5db;border-color:#374151}
-.reflex-box{width:100%;height:280px;border:3.5px solid #000;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;box-shadow:3.5px 3.5px 0 #000}
-.reflex-red{background:#ef4444;color:#fff}.reflex-yellow{background:#fbbf24}.reflex-green{background:#22c55e;color:#fff}
-.bottom-nav-btn{flex:1;border:2px solid #000;border-radius:10px;margin:0 1.5px;padding:5px 1px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
-.bottom-nav-label{font-family:'Bangers',cursive;font-size:8px;letter-spacing:.5px;line-height:1}
-.doa-item{background:#fef3c7;border:2.5px solid #000;border-radius:14px;padding:12px;margin-bottom:9px;box-shadow:2.5px 2.5px 0 #000}
-.doa-arab{font-family:'Amiri',serif;font-size:1.45rem;line-height:2.2;text-align:right;color:#1a1a1a;margin-bottom:8px;font-weight:700}
-.doa-latin{font-size:.85rem;font-weight:700;color:#1d4ed8;font-style:italic;line-height:1.5;margin-bottom:6px}
-.doa-arti{font-size:.85rem;font-weight:700;color:#374151;line-height:1.5}
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Comic Neue', system-ui, sans-serif;
+    background: #fbbf24;
+    margin: 0; padding: 0;
+    min-height: 100vh;
+    display: flex; justify-content: center; align-items: flex-start;
+    overflow-x: hidden;
+  }
+  .font-title { font-family: 'Bangers', cursive; letter-spacing: 1.2px; }
+  .font-arab { font-family: 'Amiri', serif; }
+  .comic-panel {
+    background: #fff; border: 2.5px solid #1a1a1a;
+    box-shadow: 3px 3px 0 0 #1a1a1a; border-radius: 14px;
+    padding: 12px; margin-bottom: 12px;
+  }
+  .nav-btn {
+    flex: 1; border: 2px solid #000; border-radius: 10px;
+    margin: 0 1px; padding: 6px 2px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: white; cursor: pointer; font-family: 'Bangers', cursive; font-size: 8px;
+  }
+  .nav-btn.active { background: black; color: #fde68a; }
+  .input {
+    width: 100%; padding: 10px; border: 2px solid black; border-radius: 10px;
+    font-size: 14px; margin-bottom: 10px; text-align: center; font-family: 'Comic Neue', sans-serif; background: #fef3c7;
+  }
+  .btn {
+    width: 100%; padding: 12px; border: 2px solid black; border-radius: 10px;
+    font-size: 15px; font-weight: bold; cursor: pointer; font-family: 'Bangers', cursive; letter-spacing: 1px;
+  }
+  .btn-primary { background: #22d3ee; }
+  .btn-success { background: #4ade80; }
+  .btn-danger { background: #f87171; color: white; }
+  .app-container {
+    width: 100%; max-width: 448px; min-height: 100vh;
+    background: #fef3c7; border-left: 4px solid black; border-right: 4px solid black;
+    position: relative; display: flex; flex-direction: column;
+  }
+  .main-content { padding: 12px; padding-bottom: 90px; flex: 1; overflow-y: auto; }
+  .bottom-nav {
+    position: fixed; bottom: 0; width: 100%; max-width: 448px;
+    background: #fbbf24; border-top: 4px solid black; padding: 8px 4px;
+    display: flex; justify-content: space-between; z-index: 50;
+  }
+  .reflex-box {
+    width: 100%; height: 220px; border: 3px solid #000; border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
+  }
 </style>
 </head>
-<body class="text-black h-[100dvh] overflow-hidden flex justify-center items-start select-none"
-:class="{
-'bg-yellow-400': currentTheme === 'yellow' && !hackerMode,
-'bg-slate-800 text-white': currentTheme === 'dark' && !hackerMode,
-'bg-emerald-300': currentTheme === 'mint' && !hackerMode,
-'bg-rose-300': currentTheme === 'pink' && !hackerMode,
-'bg-purple-400': currentTheme === 'purple' && !hackerMode,
-'bg-amber-600': currentTheme === 'gold' && !hackerMode,
-'bg-black text-green-400': hackerMode
-}"
-x-data="zenkaiApp()" x-init="init()" @keydown.escape.window="closeAllModals()">
+<body x-data="zenkaiApp()" x-init="init()">
 
-<div class="splash-screen" :class="{ 'hide': splashHidden }">
-<div class="splash-logo">ZENKAI TOOLS</div>
-<div class="splash-bar-wrap"><div class="splash-bar" :style="'width:' + splashProgress + '%'"></div></div>
-<div class="splash-loading-text" x-text="splashText + ' (' + splashProgress + '%)'"></div>
-</div>
-
-<div class="toast-container">
-<template x-for="toast in toasts" :key="toast.id">
-<div class="toast-item" :class="'toast-' + toast.type" x-show="!toast.leaving">
-<span class="toast-icon" x-html="toast.icon"></span>
-<span x-text="toast.message" class="flex-1"></span>
-<span class="toast-close" @click="removeToast(toast.id)">✕</span>
-</div>
-</template>
+<!-- LOGIN / REGISTER MODAL -->
+<div x-show="!isLoggedIn" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+  <div class="comic-panel bg-yellow-300 w-full max-w-sm text-center">
+    <div class="font-title text-3xl mb-2">ZENKAI CLOUD</div>
+    <p class="text-xs font-bold mb-4" x-text="isRegister ? 'Buat Akun Baru' : 'Login Supabase'"></p>
+    
+    <input type="text" x-show="isRegister" x-model="inputUsername" placeholder="Username..." class="input">
+    <input type="email" x-model="inputEmail" placeholder="Email..." class="input">
+    <input type="password" x-model="inputPassword" placeholder="Password..." class="input">
+    
+    <button @click="submitAuth()" class="btn btn-primary" x-text="isRegister ? 'DAFTAR' : 'MASUK'"></button>
+    <button @click="isRegister = !isRegister" class="mt-3 text-xs font-bold underline bg-transparent border-none text-blue-900 cursor-pointer" x-text="isRegister ? 'Sudah punya akun? Login' : 'Belum punya akun? Daftar'"></button>
+  </div>
 </div>
 
-<button class="sound-toggle-btn" :class="{ 'muted': !soundEnabled }" @click="toggleSound()">
-<svg class="svg-icon-lg" x-show="soundEnabled" fill="currentColor"><use href="#i-speaker"/></svg>
-<svg class="svg-icon-lg" x-show="!soundEnabled" fill="currentColor"><use href="#i-speaker-off"/></svg>
-</button>
+<div class="app-container">
+  <!-- HEADER -->
+  <header class="bg-yellow-400 border-b-4 border-black p-3 sticky top-0 z-40 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <div class="bg-black text-yellow-300 font-title px-2 py-0.5 rounded-lg text-sm" x-text="profile.username ? profile.username.substring(0,2).toUpperCase() : 'ZK'"></div>
+      <div>
+        <div class="font-title text-lg leading-none">ZENKAI TOOLS</div>
+        <span class="text-[9px] font-bold bg-white px-1 rounded border border-black" x-text="isOwner ? 'Master Owner' : (profile.is_vip ? 'VIP Member' : 'User')"></span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="bg-white border-2 border-black px-2 py-1 rounded-lg text-xs font-bold" x-text="currentTime"></span>
+      <button @click="logout()" class="bg-red-400 border-2 border-black px-2 py-1 rounded-lg text-xs font-bold cursor-pointer">🚪</button>
+    </div>
+  </header>
 
-<div class="sheet-overlay" :class="{ 'active': sheet.open }" @click="closeSheet()"></div>
-<div class="sheet-panel" :class="{ 'active': sheet.open }" @click.stop>
-<div class="sheet-handle" @click="closeSheet()"></div>
-<div class="sheet-header">
-<div class="sheet-title" x-text="sheet.title"></div>
-<button @click="closeSheet()" class="bg-red-400 border-2 border-black rounded-lg p-1.5 font-bold text-xs">✕</button>
-</div>
-<div class="sheet-body"><p class="txt-sm font-bold" x-text="sheet.message"></p></div>
-</div>
+  <!-- CONTENT -->
+  <main class="main-content">
+    
+    <!-- TAB HOME -->
+    <div x-show="activeTab === 'home'" class="space-y-3">
+      <div class="comic-panel bg-cyan-300 flex items-center gap-3">
+        <div class="w-12 h-12 bg-yellow-300 border-2 border-black rounded-xl flex items-center justify-center font-title text-xl" x-text="profile.username ? profile.username.charAt(0).toUpperCase() : 'U'"></div>
+        <div>
+          <div class="font-title text-base text-purple-900">Halo, <span x-text="profile.username"></span>!</div>
+          <div class="text-[11px] font-bold">Cloud Database Terhubung ☁️</div>
+        </div>
+      </div>
 
-<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
-<symbol id="i-home" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
-<symbol id="i-pray" viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></symbol>
-<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></symbol>
-<symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></symbol>
-<symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M15 7.5V2H9v5.5l-7 8V22h20v-6.5l-7-8zM7.5 15c-.83 0-1.5-.67-1.5-1.5S6.67 12 7.5 12s1.5.67 1.5 1.5S8.33 15 7.5 15zm3.5-4H9V9h2V7h2v2h2v2h-2v2h-2v-2zm6 4c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></symbol>
-<symbol id="i-crown" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></symbol>
-<symbol id="i-logout" viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></symbol>
-<symbol id="i-fire" viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></symbol>
-<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
-<symbol id="i-info" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></symbol>
-<symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
-<symbol id="i-warning" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></symbol>
-<symbol id="i-speaker" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></symbol>
-<symbol id="i-speaker-off" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63z"/></symbol>
-</svg>
-<div x-show="!userName" class="fixed inset-0 bg-black/85 z-[9997] flex items-center justify-center p-4 backdrop-blur-sm">
-<div class="comic-panel bg-yellow-300 p-6 w-full max-w-sm text-center space-y-4">
-<span class="bg-black text-yellow-300 font-title text-3xl px-4 py-1.5 rounded-xl border-2 border-black inline-block rotate-[-2deg]">ZENKAI CLOUD</span>
-<h2 class="font-title text-3xl text-black">MASUK / DAFTAR</h2>
-<p class="txt-xs font-bold">Masukkan Email & Password Supabase!</p>
-<input type="email" x-model="authEmail" placeholder="Email..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none">
-<input type="password" x-model="authPass" placeholder="Password..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none">
-<input type="text" x-show="isRegisterMode" x-model="authUsername" placeholder="Username (Nama Kamu)..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none">
-<button @click="handleAuth()" class="w-full bg-cyan-400 hover:bg-cyan-500 border-2 border-black py-3 rounded-xl font-title text-xl flex items-center justify-center gap-2">
-<span x-text="isRegisterMode ? 'DAFTAR AKUN' : 'MASUK APLIKASI'"></span>
-</button>
-<button @click="isRegisterMode = !isRegisterMode" class="text-xs font-bold underline cursor-pointer bg-transparent border-none text-blue-900 mt-2">
-<span x-text="isRegisterMode ? 'Sudah punya akun? Masuk' : 'Belum punya akun? Daftar'"></span>
-</button>
-</div>
-</div>
+      <div class="grid grid-cols-3 gap-2">
+        <div class="comic-panel bg-purple-200 text-center p-2"><div class="font-title text-xl" x-text="profile.points || 0"></div><div class="text-[9px] font-bold">POIN</div></div>
+        <div class="comic-panel bg-orange-200 text-center p-2"><div class="font-title text-xl">1</div><div class="text-[9px] font-bold">STREAK</div></div>
+        <div class="comic-panel bg-emerald-200 text-center p-2"><div class="font-title text-xl">0</div><div class="text-[9px] font-bold">BADGE</div></div>
+      </div>
 
-<div class="w-full max-w-md h-[100dvh] border-x-4 border-b-4 border-black relative flex flex-col shadow-2xl overflow-hidden bg-yellow-50">
+      <div class="comic-panel bg-white">
+        <div class="font-title text-sm mb-2 border-b-2 border-black pb-1">📝 CATATAN KILAT CLOUD</div>
+        <textarea x-model="quickNote" @input="saveNote()" rows="3" placeholder="Tulis ide..." class="w-full border-2 border-black p-2 rounded-lg text-xs bg-yellow-50"></textarea>
+      </div>
+    </div>
 
-<header class="border-b-4 border-black p-3 shrink-0 z-40 flex justify-between items-center bg-yellow-400 text-black">
-<div class="flex items-center space-x-2">
-<div class="bg-black text-yellow-300 font-title text-lg px-2 py-0.5 rounded-xl border-2 border-black rotate-[-3deg]" x-text="userName ? userName.substring(0,2).toUpperCase() : 'ZK'"></div>
-<div>
-<h1 class="font-title text-xl leading-none">ZENKAI TOOLS</h1>
-<span class="text-[9px] font-extrabold bg-white text-black px-1.5 py-0.5 rounded border border-black" x-text="isOwner ? 'Master Owner' : (isVipUser ? 'VIP Member' : 'User')"></span>
-</div>
-</div>
-<div class="flex items-center space-x-1.5">
-<div class="bg-white text-black border-2 border-black px-2 py-1 rounded-lg font-bold text-[10px]" x-text="currentTime"></div>
-<button @click="logout()" class="bg-red-400 hover:bg-red-500 border-2 border-black px-2 py-1 rounded-lg font-bold text-xs"><svg class="svg-icon"><use href="#i-logout"/></svg></button>
-</div>
-</header>
+    <!-- TAB DOA -->
+    <div x-show="activeTab === 'doa'" class="space-y-3">
+      <div class="comic-panel bg-teal-400 text-white"><div class="font-title text-xl">📖 DOA HARIAN</div></div>
+      <template x-for="d in doaList">
+        <div class="comic-panel bg-yellow-50">
+          <div class="font-title text-purple-900 text-base" x-text="d.nama"></div>
+          <div class="font-arab text-xl text-right my-2" x-text="d.arab"></div>
+          <div class="text-xs font-bold text-gray-700" x-text="d.arti"></div>
+        </div>
+      </template>
+    </div>
 
-<main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24">
-<div x-show="activeTab === 'home'" x-transition.opacity class="sec-gap fade-in">
-<div class="comic-panel bg-cyan-300 text-black p-3 flex items-center space-x-3">
-<div class="w-16 h-16 bg-yellow-300 border-2 border-black rounded-xl flex items-center justify-center font-title text-2xl" x-text="userName ? userName.substring(0,1).toUpperCase() : 'U'"></div>
-<div class="flex-1 overflow-hidden">
-<div class="comic-bubble text-xs font-bold">
-<span class="font-title text-purple-900 text-sm block">Halo, <span x-text="userName"></span>!</span>
-<span>Database terhubung ke Supabase Cloud ☁️</span>
-</div>
-</div>
-</div>
+    <!-- TAB KEUANGAN -->
+    <div x-show="activeTab === 'keuangan'" class="space-y-3">
+      <div class="comic-panel bg-pink-400 text-white">
+        <div class="font-title text-xl">💰 DOMPET KEUANGAN</div>
+        <div class="text-sm font-bold mt-1" x-text="'Saldo: Rp ' + totalBalance.toLocaleString('id-ID')"></div>
+      </div>
+      <div class="comic-panel bg-white">
+        <input type="text" x-model="txCategory" placeholder="Kategori (Gaji/Makan)..." class="input">
+        <input type="number" x-model="txAmount" placeholder="Nominal Rp..." class="input">
+        <div class="grid grid-cols-2 gap-2">
+          <button @click="addTx('income')" class="btn btn-success text-sm py-2">+ Masuk</button>
+          <button @click="addTx('expense')" class="btn btn-danger text-sm py-2">- Keluar</button>
+        </div>
+      </div>
+      <div class="comic-panel bg-white">
+        <div class="font-title text-sm mb-2">Riwayat Transaksi</div>
+        <template x-for="t in transactions">
+          <div class="border-2 border-black p-2 rounded-lg mb-2 flex justify-between text-xs font-bold" :class="t.type === 'income' ? 'bg-green-50' : 'bg-red-50'">
+            <div><span x-text="t.category"></span><span class="text-[9px] text-gray-500 block" x-text="t.date"></span></div>
+            <div :class="t.type === 'income' ? 'text-green-700' : 'text-red-700'" x-text="(t.type === 'income' ? '+' : '-') + 'Rp ' + t.amount.toLocaleString('id-ID')"></div>
+          </div>
+        </template>
+      </div>
+    </div>
 
-<div class="grid grid-cols-3 gap-2">
-<div class="comic-panel bg-purple-200 text-black p-2.5 text-center">
-<div class="font-title text-lg" x-text="userPoints"></div>
-<div class="text-[9px] font-bold">POIN</div>
-</div>
-<div class="comic-panel bg-orange-200 text-black p-2.5 text-center">
-<div class="font-title text-lg" x-text="streakCount"></div>
-<div class="text-[9px] font-bold">STREAK</div>
-</div>
-<div class="comic-panel bg-emerald-200 text-black p-2.5 text-center">
-<div class="font-title text-lg">0</div>
-<div class="text-[9px] font-bold">BADGE</div>
-</div>
-</div>
+    <!-- TAB SEHAT (BMI) -->
+    <div x-show="activeTab === 'bmi'" class="space-y-3">
+      <div class="comic-panel bg-sky-300"><div class="font-title text-xl">💪 KALKULATOR BMI</div></div>
+      <div class="comic-panel bg-white">
+        <input type="number" x-model="bmiW" placeholder="Berat (kg)" class="input">
+        <input type="number" x-model="bmiH" placeholder="Tinggi (cm)" class="input">
+        <button @click="calcBMI()" class="btn btn-primary text-sm py-2">HITUNG BMI</button>
+        <div class="mt-2 font-bold text-center text-xs" x-text="bmiRes"></div>
+      </div>
+    </div>
 
-<div class="comic-panel bg-amber-300 text-black p-3 flex justify-between items-center gap-2">
-<div class="flex items-center gap-2">
-<svg class="svg-icon-lg"><use href="#i-star"/></svg>
-<span class="font-title text-sm text-amber-950">VIP Rp 25.000</span>
-</div>
-<a href="https://wa.me/6285352831643?text=Halo%20Owner,%20saya%20mau%20order%20VIP" target="_blank" class="bg-black text-amber-300 border-2 border-black px-3 py-1 rounded-lg font-title text-xs">Order WA</a>
-</div>
+    <!-- TAB GAME -->
+    <div x-show="activeTab === 'arcade'" class="space-y-3">
+      <div class="comic-panel bg-yellow-400"><div class="font-title text-xl">🎮 ARCADE REFLEX</div></div>
+      <div class="comic-panel bg-white text-center">
+        <div class="reflex-box" :class="reflexBg" @click="tapReflex()">
+          <span class="font-title text-xl" x-text="reflexText"></span>
+        </div>
+        <button @click="startReflex()" class="btn btn-primary mt-3 text-sm py-2">MULAI GAME</button>
+      </div>
+    </div>
 
-<div class="comic-panel bg-yellow-100 p-3 sec-gap">
-<div class="bg-black text-yellow-300 border-2 border-black px-3 py-1 rounded-xl inline-flex items-center gap-1">
-<svg class="svg-icon"><use href="#i-fire"/></svg>
-<h3 class="font-title text-base">TOOLS ACTION HUB</h3>
-</div>
-<div class="grid grid-cols-2 gap-2.5">
-<button @click="switchTab('doa')" class="bg-teal-300 text-black border-2.5 border-black p-3 rounded-xl flex items-center space-x-2.5">
-<svg class="svg-icon-2xl shrink-0"><use href="#i-pray"/></svg>
-<div class="leading-tight overflow-hidden text-left"><span class="font-title txt-sm block">Doa Harian</span></div>
-</button>
-<button @click="switchTab('keuangan')" class="bg-pink-300 text-black border-2.5 border-black p-3 rounded-xl flex items-center space-x-2.5">
-<svg class="svg-icon-2xl shrink-0"><use href="#i-wallet"/></svg>
-<div class="leading-tight overflow-hidden text-left"><span class="font-title txt-sm block">Keuangan</span></div>
-</button>
-<button @click="switchTab('bmi')" class="bg-rose-300 text-black border-2.5 border-black p-3 rounded-xl flex items-center space-x-2.5">
-<svg class="svg-icon-2xl shrink-0"><use href="#i-scale"/></svg>
-<div class="leading-tight overflow-hidden text-left"><span class="font-title txt-sm block">BMI & Usia</span></div>
-</button>
-<button @click="switchTab('arcade')" class="bg-yellow-300 text-black border-2.5 border-black p-3 rounded-xl flex items-center space-x-2.5">
-<svg class="svg-icon-2xl shrink-0"><use href="#i-gamepad"/></svg>
-<div class="leading-tight overflow-hidden text-left"><span class="font-title txt-sm block">Arcade Game</span></div>
-</button>
-</div>
+    <!-- TAB OWNER -->
+    <div x-show="activeTab === 'owner' && isOwner" class="space-y-3">
+      <div class="comic-panel bg-purple-600 text-white"><div class="font-title text-xl">👑 OWNER PANEL</div></div>
+      <div class="comic-panel bg-white">
+        <input type="text" x-model="targetUser" placeholder="Username target VIP..." class="input">
+        <button @click="grantVip()" class="btn btn-primary text-sm py-2">Beri VIP</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- NAVIGATION -->
+  <nav class="bottom-nav">
+    <button @click="activeTab = 'home'" class="nav-btn" :class="{ 'active': activeTab === 'home' }"><span>🏠</span><span>HOME</span></button>
+    <button @click="activeTab = 'doa'" class="nav-btn" :class="{ 'active': activeTab === 'doa' }"><span>📖</span><span>DOA</span></button>
+    <button @click="activeTab = 'keuangan'" class="nav-btn" :class="{ 'active': activeTab === 'keuangan' }"><span>💰</span><span>DOMPET</span></button>
+    <button @click="activeTab = 'bmi'" class="nav-btn" :class="{ 'active': activeTab === 'bmi' }"><span>💪</span><span>SEHAT</span></button>
+    <button @click="activeTab = 'arcade'" class="nav-btn" :class="{ 'active': activeTab === 'arcade' }"><span>🎮</span><span>GAME</span></button>
+    <button x-show="isOwner" @click="activeTab = 'owner'" class="nav-btn" :class="{ 'active': activeTab === 'owner' }"><span>👑</span><span>OWNER</span></button>
+  </nav>
 </div>
 
-<div class="comic-panel bg-white text-black p-3 sec-gap">
-<h3 class="font-title txt-xs">CATATAN KILAT CLOUD</h3>
-<textarea x-model="quickNote" @input="saveQuickNote()" rows="3" placeholder="Tulis ide..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-[12px] bg-yellow-50 focus:outline-none"></textarea>
-</div>
-</div>
-
-<div x-show="activeTab === 'doa'" x-transition.opacity class="sec-gap fade-in">
-<div class="comic-panel bg-teal-400 text-black p-3"><h2 class="font-title text-2xl text-white">DOA HARIAN</h2></div>
-<div class="space-y-2">
-<template x-for="doa in doaList" :key="doa.id">
-<div class="doa-item">
-<div class="font-title text-base text-purple-900" x-text="doa.nama"></div>
-<div class="bg-white border-2 border-black p-3 rounded-xl mt-1">
-<p class="doa-arab" x-text="doa.arab"></p>
-<p class="doa-latin" x-text="doa.latin"></p>
-<p class="doa-arti" x-text="doa.arti"></p>
-</div>
-</div>
-</template>
-</div>
-</div>
-
-<div x-show="activeTab === 'keuangan'" x-transition.opacity class="sec-gap fade-in">
-<div class="comic-panel bg-pink-400 text-black p-3"><h2 class="font-title text-2xl text-white">DOMPET KEUANGAN CLOUD</h2></div>
-<div class="comic-panel bg-yellow-300 text-black p-3 flex justify-between items-center">
-<div>
-<div class="text-[10px] font-bold uppercase">Total Saldo</div>
-<div class="font-title text-2xl" x-text="'Rp ' + totalBalance.toLocaleString('id-ID')"></div>
-</div>
-</div>
-<div class="comic-panel bg-white text-black p-3.5 sec-gap">
-<h3 class="font-title text-lg">Catat Transaksi</h3>
-<input type="text" x-model="newTx.category" placeholder="Kategori (Makan, Gaji, dll)" class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 mb-2">
-<input type="number" x-model="newTx.amount" placeholder="Nominal Rp" class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 mb-2">
-<div class="grid grid-cols-2 gap-2">
-<button @click="addTx('income')" class="bg-green-400 border-2 border-black py-2 rounded-xl font-title text-sm">+ Pemasukan</button>
-<button @click="addTx('expense')" class="bg-red-400 text-white border-2 border-black py-2 rounded-xl font-title text-sm">- Pengeluaran</button>
-</div>
-</div>
-<div class="comic-panel bg-white text-black p-3.5 sec-gap">
-<h3 class="font-title text-lg">Riwayat Cloud</h3>
-<div class="max-h-40 overflow-y-auto space-y-1.5">
-<template x-for="t in transactions" :key="t.id">
-<div class="border-2 border-black p-2 rounded-xl flex justify-between items-center text-xs" :class="t.type === 'income' ? 'bg-green-50' : 'bg-red-50'">
-<div><span class="font-bold" x-text="t.category"></span><span class="text-[10px] text-gray-600 block" x-text="t.date"></span></div>
-<div class="font-bold" :class="t.type === 'income' ? 'text-green-700' : 'text-red-700'" x-text="(t.type === 'income' ? '+' : '-') + 'Rp ' + t.amount.toLocaleString('id-ID')"></div>
-</div>
-</template>
-</div>
-</div>
-</div>
-<div x-show="activeTab === 'bmi'" x-transition.opacity class="sec-gap fade-in">
-<div class="comic-panel bg-rose-400 text-black p-3"><h2 class="font-title text-2xl text-white">KALKULATOR KESEHATAN</h2></div>
-<div class="comic-panel bg-white p-3 sec-gap">
-<h3 class="font-title text-base">Hitung BMI</h3>
-<input type="number" x-model="bmiWeight" placeholder="Berat Badan (kg)" class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 mb-2">
-<input type="number" x-model="bmiHeight" placeholder="Tinggi Badan (cm)" class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 mb-2">
-<button @click="calcBMI()" class="w-full bg-cyan-400 border-2 border-black py-2 rounded-xl font-title text-sm">HITUNG BMI</button>
-<div class="mt-2 font-bold text-xs text-center" x-text="bmiResult"></div>
-</div>
-<div class="comic-panel bg-white p-3 sec-gap">
-<h3 class="font-title text-base">Hitung Usia Detail</h3>
-<input type="date" x-model="birthDateInput" class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 mb-2">
-<button @click="calcAge()" class="w-full bg-purple-400 border-2 border-black py-2 rounded-xl font-title text-sm">HITUNG USIA</button>
-<div class="mt-2 font-bold text-xs text-center" x-text="ageResult"></div>
-</div>
-</div>
-
-<div x-show="activeTab === 'arcade'" x-transition.opacity class="sec-gap fade-in">
-<div class="comic-panel bg-yellow-400 text-black p-3"><h2 class="font-title text-2xl">ARCADE REFLEX GAME</h2></div>
-<div class="comic-panel bg-white p-4 text-center sec-gap">
-<div class="reflex-box" :class="reflexBoxClass" @click="handleReflexClick()">
-<span class="font-title text-2xl" x-text="reflexText"></span>
-</div>
-<button @click="startReflexGame()" class="w-full bg-cyan-400 border-2 border-black py-2.5 rounded-xl font-title text-base">MULAI GAME</button>
-</div>
-</div>
-
-<div x-show="activeTab === 'owner' && isOwner" x-transition.opacity class="sec-gap fade-in">
-<div class="comic-panel bg-purple-600 text-white p-3"><h2 class="font-title text-2xl">OWNER CONTROL PANEL</h2></div>
-<div class="comic-panel bg-white p-3 sec-gap">
-<h3 class="font-title text-base">Beri Akses VIP</h3>
-<input type="text" x-model="ownerTargetUser" placeholder="Username target..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 mb-2">
-<button @click="grantVip()" class="w-full bg-cyan-400 border-2 border-black py-2 rounded-xl font-title text-sm">Berikan VIP (30 Hari)</button>
-</div>
-<div class="comic-panel bg-white p-3 sec-gap">
-<h3 class="font-title text-base">Kirim Broadcast Global</h3>
-<input type="text" x-model="broadcastMsg" placeholder="Isi pengumuman..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 mb-2">
-<button @click="sendBroadcast()" class="w-full bg-purple-400 text-white border-2 border-black py-2 rounded-xl font-title text-sm">Kirim Siaran</button>
-</div>
-</div>
-
-</main>
-
-<nav class="absolute bottom-0 left-0 right-0 bg-yellow-400 border-t-4 border-black p-2 flex justify-around items-center z-50">
-<button @click="switchTab('home')" class="bottom-nav-btn" :class="{ 'bg-black text-yellow-300': activeTab === 'home', 'bg-white text-black': activeTab !== 'home' }"><svg class="svg-icon"><use href="#i-home"/></svg><span class="bottom-nav-label">HOME</span></button>
-<button @click="switchTab('doa')" class="bottom-nav-btn" :class="{ 'bg-black text-yellow-300': activeTab === 'doa', 'bg-white text-black': activeTab !== 'doa' }"><svg class="svg-icon"><use href="#i-pray"/></svg><span class="bottom-nav-label">DOA</span></button>
-<button @click="switchTab('keuangan')" class="bottom-nav-btn" :class="{ 'bg-black text-yellow-300': activeTab === 'keuangan', 'bg-white text-black': activeTab !== 'keuangan' }"><svg class="svg-icon"><use href="#i-wallet"/></svg><span class="bottom-nav-label">DOMPET</span></button>
-<button @click="switchTab('bmi')" class="bottom-nav-btn" :class="{ 'bg-black text-yellow-300': activeTab === 'bmi', 'bg-white text-black': activeTab !== 'bmi' }"><svg class="svg-icon"><use href="#i-scale"/></svg><span class="bottom-nav-label">SEHAT</span></button>
-<button @click="switchTab('arcade')" class="bottom-nav-btn" :class="{ 'bg-black text-yellow-300': activeTab === 'arcade', 'bg-white text-black': activeTab !== 'arcade' }"><svg class="svg-icon"><use href="#i-gamepad"/></svg><span class="bottom-nav-label">GAME</span></button>
-<button x-show="isOwner" @click="switchTab('owner')" class="bottom-nav-btn" :class="{ 'bg-black text-yellow-300': activeTab === 'owner', 'bg-white text-black': activeTab !== 'owner' }"><svg class="svg-icon"><use href="#i-crown"/></svg><span class="bottom-nav-label">OWNER</span></button>
-</nav>
-
-</div>
-
+<!-- SUPABASE JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const OWNER_EMAIL = 'andikaatka@gmail.com';
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function zenkaiApp() {
   return {
-    splashHidden: false,
-    splashProgress: 0,
-    splashText: 'Menghubungkan Database...',
-    activeTab: 'home',
-    soundEnabled: true,
-    hackerMode: false,
-    currentTheme: 'yellow',
-    authEmail: '', authPass: '', authUsername: '', isRegisterMode: false,
-    userName: '', userId: '', userPoints: 0, streakCount: 1, isVipUser: false, isOwner: false, currentTime: '--:--',
-    toasts: [], sheet: { open: false, title: '', message: '', type: 'info' },
+    isLoggedIn: false, isRegister: false,
+    inputEmail: '', inputPassword: '', inputUsername: '',
+    activeTab: 'home', currentTime: '--:--',
+    userId: '', profile: {}, isOwner: false,
     quickNote: '', noteTimer: null,
+    
     doaList: [
-      { id: 1, nama: 'Doa Sebelum Tidur', arab: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', latin: 'Bismikallahumma amutu wa ahya', arti: 'Dengan nama-Mu ya Allah, aku mati dan hidup.' },
-      { id: 2, nama: 'Doa Bangun Tidur', arab: 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ', latin: 'Alhamdulillahilladhi ahyana ba\'da ma amatana wa ilaihin-nushur', arti: 'Segala puji bagi Allah yang menghidupkan kami kembali setelah kematian kami.' }
+      { nama: 'Doa Sebelum Tidur', arab: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', arti: 'Dengan nama-Mu ya Allah, aku mati dan hidup.' },
+      { nama: 'Doa Bangun Tidur', arab: 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ', arti: 'Segala puji bagi Allah yang menghidupkan kami kembali.' }
     ],
-    totalBalance: 0, transactions: [], newTx: { category: '', amount: '' },
-    bmiWeight: '', bmiHeight: '', bmiResult: '', birthDateInput: '', ageResult: '',
-    reflexBoxClass: 'reflex-red', reflexText: 'KLIK MULAI', reflexState: 'idle', reflexStart: 0, reflexTimer: null,
-    ownerTargetUser: '', broadcastMsg: '',
+    
+    totalBalance: 0, transactions: [], txCategory: '', txAmount: '',
+    bmiW: '', bmiH: '', bmiRes: '',
+    reflexBg: 'bg-red-400 text-white', reflexText: 'KLIK MULAI', reflexState: 'idle', reflexStart: 0, reflexTimer: null,
+    targetUser: '',
 
     async init() {
-      let p = 0;
-      let interval = setInterval(() => {
-        p += 25; this.splashProgress = p;
-        if (p >= 100) { clearInterval(interval); setTimeout(() => this.splashHidden = true, 300); }
-      }, 150);
       setInterval(() => {
         const d = new Date();
         this.currentTime = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
       }, 1000);
-      const sessionRes = await supabaseClient.auth.getSession();
+
+      const sessionRes = await supabase.auth.getSession();
       if (sessionRes.data.session) {
         this.userId = sessionRes.data.session.user.id;
-        await this.fetchProfile();
-        await this.fetchTransactions();
+        this.isLoggedIn = true;
+        await this.loadData();
       }
     },
-    async fetchProfile() {
-      const { data } = await supabaseClient.from('profiles').select('*').eq('id', this.userId).single();
+
+    async loadData() {
+      const { data } = await supabase.from('profiles').select('*').eq('id', this.userId).single();
       if (data) {
-        this.userName = data.username || 'User';
-        this.userPoints = data.points || 0;
+        this.profile = data;
         this.quickNote = data.quick_note || '';
-        this.isVipUser = data.is_vip || false;
         this.isOwner = (data.email === OWNER_EMAIL);
       }
+      this.fetchTransactions();
     },
-    async handleAuth() {
-      if (!this.authEmail || !this.authPass) { this.showToast('Email & Password wajib diisi!', 'error'); return; }
-      if (this.isRegisterMode && !this.authUsername) { this.showToast('Username wajib diisi!', 'error'); return; }
-      if (this.isRegisterMode) {
-        const { error } = await supabaseClient.auth.signUp({ email: this.authEmail, password: this.authPass, options: { data: { username: this.authUsername } } });
-        if (error) this.showToast(error.message, 'error'); else { this.showToast('Pendaftaran Berhasil! Silakan login.', 'success'); this.isRegisterMode = false; }
+
+    async submitAuth() {
+      if (!this.inputEmail || !this.inputPassword) { alert('Isi email & password!'); return; }
+      if (this.isRegister && !this.inputUsername) { alert('Isi username!'); return; }
+
+      if (this.isRegister) {
+        const { error } = await supabase.auth.signUp({
+          email: this.inputEmail, password: this.inputPassword,
+          options: { data: { username: this.inputUsername } }
+        });
+        if (error) alert(error.message);
+        else { alert('Berhasil daftar! Silakan login.'); this.isRegister = false; }
       } else {
-        const { error } = await supabaseClient.auth.signInWithPassword({ email: this.authEmail, password: this.authPass });
-        if (error) this.showToast(error.message, 'error'); else { this.showToast('Berhasil Masuk!', 'success'); location.reload(); }
+        const { error } = await supabase.auth.signInWithPassword({ email: this.inputEmail, password: this.inputPassword });
+        if (error) alert(error.message);
+        else location.reload();
       }
     },
-    async logout() { await supabaseClient.auth.signOut(); location.reload(); },
-    switchTab(tab) { this.activeTab = tab; window.scrollTo(0, 0); },
-    saveQuickNote() {
+
+    async logout() {
+      await supabase.auth.signOut();
+      location.reload();
+    },
+
+    saveNote() {
       clearTimeout(this.noteTimer);
       this.noteTimer = setTimeout(async () => {
-        await supabaseClient.from('profiles').update({ quick_note: this.quickNote }).eq('id', this.userId);
+        await supabase.from('profiles').update({ quick_note: this.quickNote }).eq('id', this.userId);
       }, 800);
     },
+
     async addTx(type) {
-      if (!this.newTx.category || !this.newTx.amount) { this.showToast('Lengkapi kategori & nominal!', 'warning'); return; }
-      const amt = parseFloat(this.newTx.amount);
-      const { error } = await supabaseClient.from('transactions').insert({ user_id: this.userId, type: type, category: this.newTx.category, amount: amt, date: new Date().toLocaleDateString('id-ID') });
-      if (error) this.showToast('Gagal simpan transaksi', 'error'); else { this.showToast('Transaksi dicatat', 'success'); this.newTx.category = ''; this.newTx.amount = ''; await this.fetchTransactions(); }
+      if (!this.txCategory || !this.txAmount) return;
+      await supabase.from('transactions').insert({
+        user_id: this.userId, type, category: this.txCategory, amount: parseFloat(this.txAmount),
+        date: new Date().toLocaleDateString('id-ID')
+      });
+      this.txCategory = ''; this.txAmount = '';
+      this.fetchTransactions();
     },
+
     async fetchTransactions() {
-      const { data } = await supabaseClient.from('transactions').select('*').eq('user_id', this.userId).order('id', { ascending: false });
+      const { data } = await supabase.from('transactions').select('*').eq('user_id', this.userId).order('id', { ascending: false });
       if (data) {
         this.transactions = data;
-        let bal = 0; data.forEach(t => { if (t.type === 'income') bal += t.amount; else bal -= t.amount; });
+        let bal = 0;
+        data.forEach(t => bal += (t.type === 'income' ? t.amount : -t.amount));
         this.totalBalance = bal;
       }
     },
+
     calcBMI() {
-      if (!this.bmiWeight || !this.bmiHeight) return;
-      const hM = this.bmiHeight / 100; const bmi = this.bmiWeight / (hM * hM);
-      let cat = bmi < 18.5 ? 'Kekurusan' : bmi < 25 ? 'Normal (Ideal)' : bmi < 30 ? 'Kelebihan Berat Badan' : 'Obesitas';
-      this.bmiResult = `BMI Anda: ${bmi.toFixed(1)} (${cat})`;
+      if (!this.bmiW || !this.bmiH) return;
+      const hM = this.bmiH / 100;
+      const bmi = this.bmiW / (hM * hM);
+      this.bmiRes = `BMI: ${bmi.toFixed(1)}`;
     },
-    calcAge() {
-      if (!this.birthDateInput) return;
-      const dob = new Date(this.birthDateInput); const now = new Date();
-      let y = now.getFullYear() - dob.getFullYear(); let m = now.getMonth() - dob.getMonth();
-      if (m < 0) { y--; m += 12; }
-      this.ageResult = `Usia Anda: ${y} Tahun, ${m} Bulan`;
-    },
-    startReflexGame() {
-      this.reflexBoxClass = 'reflex-yellow'; this.reflexText = 'SIAP-SIAP MUNCUL HIJAU...'; this.reflexState = 'waiting';
-      const delay = 1500 + Math.random() * 2500;
+
+    startReflex() {
+      this.reflexBg = 'bg-yellow-400 text-black';
+      this.reflexText = 'TUNGGU HIJAU...';
+      this.reflexState = 'wait';
+      const delay = 1500 + Math.random() * 2000;
       clearTimeout(this.reflexTimer);
       this.reflexTimer = setTimeout(() => {
-        if (this.reflexState === 'waiting') {
-          this.reflexBoxClass = 'reflex-green'; this.reflexText = 'KLIK SEKARANG!'; this.reflexState = 'ready'; this.reflexStart = Date.now();
+        if (this.reflexState === 'wait') {
+          this.reflexBg = 'bg-green-500 text-white';
+          this.reflexText = 'KLIK SEKARANG!';
+          this.reflexState = 'ready';
+          this.reflexStart = Date.now();
         }
       }, delay);
     },
-    handleReflexClick() {
-      if (this.reflexState === 'waiting') {
-        clearTimeout(this.reflexTimer); this.reflexBoxClass = 'reflex-red'; this.reflexText = 'TERLALU CEPAT! (GAGAL)'; this.reflexState = 'idle';
+
+    tapReflex() {
+      if (this.reflexState === 'wait') {
+        clearTimeout(this.reflexTimer);
+        this.reflexBg = 'bg-red-500 text-white';
+        this.reflexText = 'TERLALU CEPAT!';
+        this.reflexState = 'idle';
       } else if (this.reflexState === 'ready') {
-        const diff = Date.now() - this.reflexStart;
-        this.reflexBoxClass = 'reflex-yellow'; this.reflexText = `REAKSIMU: ${diff} ms!`; this.reflexState = 'idle';
+        const ms = Date.now() - this.reflexStart;
+        this.reflexBg = 'bg-cyan-400 text-black';
+        this.reflexText = `${ms} ms!`;
+        this.reflexState = 'idle';
       }
     },
+
     async grantVip() {
-      if (!this.ownerTargetUser) return;
+      if (!this.targetUser) return;
       const exp = new Date(Date.now() + 30 * 86400000).toISOString();
-      const { error } = await supabaseClient.from('profiles').update({ is_vip: true, vip_expiry: exp }).eq('username', this.ownerTargetUser);
-      if (error) this.showToast('Gagal memberi VIP', 'error'); else { this.showToast(`VIP diberikan ke ${this.ownerTargetUser}`, 'success'); this.ownerTargetUser = ''; }
-    },
-    async sendBroadcast() {
-      if (!this.broadcastMsg) return;
-      const { error } = await supabaseClient.from('broadcasts').insert({ message: this.broadcastMsg, color: 'purple' });
-      if (error) this.showToast('Gagal kirim broadcast', 'error'); else { this.showToast('Broadcast terkirim!', 'success'); this.broadcastMsg = ''; }
-    },
-    showToast(message, type = 'info') {
-      const id = Date.now();
-      let icon = '<svg class="svg-icon"><use href="#i-info"/></svg>';
-      if (type === 'success') icon = '<svg class="svg-icon"><use href="#i-check"/></svg>';
-      if (type === 'error') icon = '<svg class="svg-icon"><use href="#i-warning"/></svg>';
-      this.toasts.push({ id, message, type, icon, leaving: false });
-      setTimeout(() => {
-        const t = this.toasts.find(x => x.id === id); if (t) t.leaving = true;
-        setTimeout(() => { this.toasts = this.toasts.filter(x => x.id !== id); }, 250);
-      }, 3000);
-    },
-    removeToast(id) { this.toasts = this.toasts.filter(x => x.id !== id); },
-    closeSheet() { this.sheet.open = false; },
-    toggleSound() { this.soundEnabled = !this.soundEnabled; },
-    closeAllModals() { this.sheet.open = false; }
+      const { error } = await supabase.from('profiles').update({ is_vip: true, vip_expiry: exp }).eq('username', this.targetUser);
+      if (error) alert('Gagal');
+      else { alert('VIP Berhasil Diberikan!'); this.targetUser = ''; }
+    }
   };
 }
 </script>
 </body>
- </html>
- 
+</html>
