@@ -23,16 +23,17 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
 .splash-screen{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#fbbf24,#f59e0b,#d97706);transition:opacity .5s,visibility .5s}
 .splash-screen.hide{opacity:0;visibility:hidden}
 .splash-logo{font-family:'Bangers',cursive;font-size:clamp(38px,11vw,52px);color:#000;letter-spacing:3px;text-shadow:3px 3px 0 #fff,5px 5px 0 #000}
-.splash-bar-wrap{width:180px;height:14px;background:#000;border-radius:10px;margin-top:26px;padding:3px;border:2.5px solid #000;box-shadow:2.5px 2.5px 0 #000}
+.splash-bar-wrap{width:180px;height:14px;background:#000;border-radius:10px;margin-top:26px;padding:3px;border:2.5px solid #000}
 .splash-bar{height:100%;background:linear-gradient(90deg,#86efac,#22c55e);border-radius:6px;width:0%;transition:width .25s}
 .bottom-nav-btn{flex:1;border:2px solid #000;border-radius:10px;margin:0 1px;padding:5px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#fff}
 .bottom-nav-btn.active{background:#000;color:#fde68a}
-.bottom-nav-label{font-family:'Bangers',cursive;font-size:7px;letter-spacing:.3px;line-height:1}
+.bottom-nav-label{font-family:'Bangers',cursive;font-size:7px;line-height:1}
 .bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100000;display:flex;align-items:flex-end;justify-content:center}
 .bottom-sheet-content{background:#fff;width:100%;max-width:450px;border-top:4px solid #1a1a1a;border-left:4px solid #1a1a1a;border-right:4px solid #1a1a1a;border-top-left-radius:24px;border-top-right-radius:24px;padding:20px;box-shadow:0 -5px 0 0 #1a1a1a;max-height:85vh;overflow-y:auto}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid #000;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.hidden{display:none !important}
+.flag-ico{width:22px;height:16px;border:1.5px solid #000;border-radius:3px;display:inline-block;vertical-align:middle}
+[x-cloak]{display:none !important}
 </style>
 </head>
 <body x-data="zenkaiCloudApp()" x-init="init()" x-cloak>
@@ -116,9 +117,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     </div>
   </header>
 
-  <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24">
-
-    <div x-show="activeTab==='home'" class="sec-gap">
+  <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24">    <div x-show="activeTab==='home'" class="sec-gap">
       <div class="comic-panel bg-cyan-300 p-3 flex items-center space-x-3">
         <div @click="profileModalOpen=true" class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl overflow-hidden flex items-center justify-center font-title text-xl cursor-pointer">
           <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
@@ -146,24 +145,10 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         <div class="text-[10px] font-bold uppercase">Total Saldo</div>
         <div class="font-title text-2xl" x-text="'Rp '+totalBalance.toLocaleString('id-ID')"></div>
       </div>
-      <div class="comic-panel p-3.5 sec-gap">
-        <h3 class="font-title text-lg">Catat</h3>
-        <div class="flex flex-wrap gap-1">
-          <button @click="txCategory='Belanja'" class="bg-pink-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">🛒 Belanja</button>
-          <button @click="txCategory='Utang'" class="bg-red-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">💸 Utang</button>
-          <button @click="txCategory='Gaji'" class="bg-green-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">💵 Gaji</button>
-          <button @click="txCategory='Makan'" class="bg-yellow-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">🍜 Makan</button>
-        </div>
-        <input type="text" x-model="txCategory" placeholder="Kategori..." class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50">
-        <input type="number" x-model="txAmount" placeholder="Nominal..." class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50">
-        <div class="grid grid-cols-2 gap-2">
-          <button @click="addTransaction('income')" class="bg-green-400 border-2 border-black py-2 rounded-xl font-title text-sm">+ Masuk</button>
-          <button @click="addTransaction('expense')" class="bg-red-400 text-white border-2 border-black py-2 rounded-xl font-title text-sm">- Keluar</button>
-        </div>
-      </div>
+      <button @click="openTxSheet()" class="w-full bg-cyan-400 border-2 border-black py-3 rounded-xl font-title text-lg">➕ TAMBAH TRANSAKSI</button>
       <div class="comic-panel p-3.5 sec-gap">
         <h3 class="font-title text-lg">Riwayat</h3>
-        <div class="max-h-40 overflow-y-auto space-y-1.5">
+        <div class="max-h-60 overflow-y-auto space-y-1.5">
           <template x-for="t in transactions" :key="t.id">
             <div class="border-2 border-black p-2 rounded-xl flex justify-between text-xs" :class="t.type==='income'?'bg-green-50':'bg-red-50'">
               <div>
@@ -182,7 +167,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     </div>
 
     <div x-show="activeTab==='downloader'" class="sec-gap">
-      <div class="comic-panel bg-cyan-400 p-3"><h2 class="font-title text-2xl">📥 DOWNLOADER</h2><p class="txt-xs font-bold">Support TikTok</p></div>
+      <div class="comic-panel bg-cyan-400 p-3"><h2 class="font-title text-2xl">📥 DOWNLOADER</h2><p class="txt-xs font-bold">Support TikTok (langsung download)</p></div>
       <div class="comic-panel p-3.5 sec-gap">
         <input type="text" x-model="downloadLinkInput" placeholder="https://..." class="w-full border-2 border-black p-2.5 rounded-xl text-xs bg-yellow-50">
         <button @click="processMediaDownload()" class="w-full bg-black text-yellow-300 border-2 border-black py-2.5 rounded-xl font-title text-sm">
@@ -195,8 +180,11 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
           <template x-if="downloadMeta.thumbnail"><img :src="downloadMeta.thumbnail" class="max-h-40 mx-auto border-2 border-black rounded-xl"></template>
           <p class="text-xs font-bold" x-text="downloadMeta.title"></p>
           <template x-for="(link,idx) in downloadResultLinks" :key="idx">
-            <a :href="link.url" target="_blank" class="w-full bg-green-400 border-2 border-black py-3 rounded-xl font-title text-sm block" x-text="'💾 '+link.label"></a>
+            <button @click="downloadBlob(link.url, link.filename)" class="w-full bg-green-400 border-2 border-black py-3 rounded-xl font-title text-sm">
+              <span x-text="'💾 '+link.label"></span>
+            </button>
           </template>
+          <div x-show="downloadingFile" class="text-xs font-bold text-blue-700"><span class="spin"></span> Mendownload...</div>
         </div>
       </template>
     </div>
@@ -225,6 +213,21 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
             <div class="comic-panel bg-yellow-100 p-1"><div class="text-[8px] font-bold">Isya</div><div class="font-title txt-xs" x-text="prayerTimes.isya"></div></div>
           </div>
         </div>
+
+        <div class="comic-panel p-3.5 sec-gap">
+          <h3 class="font-title text-lg">📿 Niat Sholat</h3>
+          <div class="grid grid-cols-5 gap-1">
+            <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s">
+              <button @click="selectedNiat=s" :class="selectedNiat===s?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-1.5 rounded-lg font-title text-[10px] cursor-pointer" x-text="s"></button>
+            </template>
+          </div>
+          <div class="border-2 border-black p-3 rounded-xl bg-yellow-50 space-y-2 mt-1">
+            <div class="font-arab text-right text-xl leading-loose" x-text="niatSholat[selectedNiat].arab"></div>
+            <div class="text-xs italic text-blue-900" x-text="niatSholat[selectedNiat].latin"></div>
+            <div class="text-xs text-gray-700" x-text="niatSholat[selectedNiat].arti"></div>
+          </div>
+        </div>
+
         <div class="comic-panel p-3.5 sec-gap">
           <h3 class="font-title text-lg">📿 Bacaan Sholat</h3>
           <div class="space-y-2 max-h-72 overflow-y-auto">
@@ -246,12 +249,15 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
             <input type="text" x-model="surahSearch" placeholder="Cari surah..." class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50">
             <div class="max-h-64 overflow-y-auto space-y-1.5">
               <template x-for="s in filteredSurahs" :key="s.nomor">
-                <div @click="loadSurahDetail(s.nomor)" class="border-2 border-black p-2.5 rounded-xl bg-yellow-50 cursor-pointer flex justify-between">
-                  <div>
-                    <span class="font-bold text-xs" x-text="s.nomor+'. '+s.namaLatin"></span>
-                    <span class="text-[10px] text-gray-600 block" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></span>
+                <div class="border-2 border-black p-2.5 rounded-xl bg-yellow-50">
+                  <div @click="loadSurahDetail(s.nomor)" class="cursor-pointer flex justify-between items-center">
+                    <div>
+                      <span class="font-bold text-xs" x-text="s.nomor+'. '+s.namaLatin"></span>
+                      <span class="text-[10px] text-gray-600 block" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></span>
+                    </div>
+                    <span class="font-arab text-base font-bold" x-text="s.nama"></span>
                   </div>
-                  <span class="font-arab text-base font-bold" x-text="s.nama"></span>
+                  <audio x-show="s.audioFull" controls preload="none" class="w-full h-7 mt-1" :src="s.audioFull&&s.audioFull['05']"></audio>
                 </div>
               </template>
             </div>
@@ -263,11 +269,15 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
             <div class="text-center border-b-2 border-black pb-2">
               <h3 class="font-title text-xl" x-text="activeSurah.namaLatin"></h3>
               <p class="text-xs font-bold" x-text="activeSurah.arti+' - '+activeSurah.jumlahAyat+' Ayat'"></p>
+              <audio controls class="w-full h-8 mt-2" :src="activeSurah.audioFull&&activeSurah.audioFull['05']"></audio>
             </div>
             <div class="max-h-72 overflow-y-auto space-y-3 pt-2">
               <template x-for="ay in activeSurah.ayat" :key="ay.nomorAyat">
                 <div class="border-2 border-black p-3 rounded-xl bg-yellow-50 space-y-2">
-                  <div class="text-[10px] font-bold border-b border-black pb-1">Ayat <span x-text="ay.nomorAyat"></span></div>
+                  <div class="flex justify-between items-center text-[10px] font-bold border-b border-black pb-1">
+                    <span>Ayat <span x-text="ay.nomorAyat"></span></span>
+                    <audio controls preload="none" class="h-6 w-32" :src="(ay.audio&&(ay.audio['05']||ay.audio['01']))||''"></audio>
+                  </div>
                   <div class="font-arab text-right text-xl" x-text="ay.teksArab"></div>
                   <div class="text-xs italic text-blue-900" x-text="ay.teksLatin"></div>
                   <div class="text-xs text-gray-800" x-text="ay.teksIndonesia"></div>
@@ -309,11 +319,14 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       <div x-show="toolsSubTab==='jam'" class="sec-gap">
         <div class="comic-panel p-3.5">
           <h3 class="font-title text-lg">🌍 Jam Dunia</h3>
-          <div class="grid grid-cols-2 gap-2 mt-2">
+          <div class="grid grid-cols-1 gap-2 mt-2">
             <template x-for="zone in worldClocks" :key="zone.name">
-              <div class="border-2 border-black p-2 rounded-xl bg-yellow-50 text-center">
-                <div class="font-title text-xs text-purple-900" x-text="zone.name"></div>
-                <div class="font-title text-base" x-text="zone.time"></div>
+              <div class="border-2 border-black p-2 rounded-xl bg-yellow-50 flex items-center gap-2">
+                <span class="flag-ico" :style="'background:'+zone.flag"></span>
+                <div class="flex-1">
+                  <div class="font-title text-xs text-purple-900" x-text="zone.name"></div>
+                  <div class="font-title text-base" x-text="zone.time"></div>
+                </div>
               </div>
             </template>
           </div>
@@ -372,6 +385,25 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       <button @click="activeTab='owner'" :class="activeTab==='owner'?'active':''" class="bottom-nav-btn bg-purple-200"><svg class="svg-icon-lg"><use href="#i-crown"/></svg><span class="bottom-nav-label">OWNER</span></button>
     </template>
   </nav>
+</div>
+
+<div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
+  <div class="bottom-sheet-content comic-panel text-center space-y-4">
+    <h3 class="font-title text-xl text-purple-900">TAMBAH TRANSAKSI</h3>
+    <div class="flex flex-wrap gap-1 justify-center">
+      <button @click="txCategory='Belanja'" class="bg-pink-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">🛒 Belanja</button>
+      <button @click="txCategory='Utang'" class="bg-red-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">💸 Utang</button>
+      <button @click="txCategory='Gaji'" class="bg-green-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">💵 Gaji</button>
+      <button @click="txCategory='Makan'" class="bg-yellow-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">🍜 Makan</button>
+    </div>
+    <input type="text" x-model="txCategory" placeholder="Kategori..." class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50">
+    <input type="number" x-model="txAmount" placeholder="Nominal..." class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50">
+    <div class="grid grid-cols-2 gap-2">
+      <button @click="addTransaction('income')" class="bg-green-400 border-2 border-black py-2 rounded-xl font-title text-sm">+ Masuk</button>
+      <button @click="addTransaction('expense')" class="bg-red-400 text-white border-2 border-black py-2 rounded-xl font-title text-sm">- Keluar</button>
+    </div>
+    <button @click="txSheetOpen=false" class="w-full bg-gray-200 border-2 border-black py-2 rounded-xl font-title text-sm">Tutup</button>
+  </div>
 </div>
 
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
@@ -491,19 +523,25 @@ const ASMAUL_HUSNA=[
 {no:99,arab:'الصَّبُورُ',latin:'As-Sabuur',arti:'Yang Maha Sabar'}
 ];
 
+const NIAT_SHOLAT={
+Subuh:{arab:'أُصَلِّي فَرْضَ الصُّبْحِ رَكْعَتَيْنِ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhash-shubhi rak\'ataini mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Subuh 2 rakaat menghadap kiblat karena Allah Ta\'ala'},
+Dzuhur:{arab:'أُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhazh-zhuhri arba\'a raka\'aatin mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Dzuhur 4 rakaat menghadap kiblat karena Allah Ta\'ala'},
+Ashar:{arab:'أُصَلِّي فَرْضَ الْعَصْرِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhal-\'ashri arba\'a raka\'aatin mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Ashar 4 rakaat menghadap kiblat karena Allah Ta\'ala'},
+Maghrib:{arab:'أُصَلِّي فَرْضَ الْمَغْرِبِ ثَلَاثَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhal-maghribi tsalaatsa raka\'aatin mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Maghrib 3 rakaat menghadap kiblat karena Allah Ta\'ala'},
+Isya:{arab:'أُصَلِّي فَرْضَ الْعِشَاءِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhal-\'isyaa\'i arba\'a raka\'aatin mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Isya 4 rakaat menghadap kiblat karena Allah Ta\'ala'}
+};
+
 const BACAAN_SHOLAT=[
-{nama:'1. Niat Subuh',arab:'أُصَلِّي فَرْضَ الصُّبْحِ رَكْعَتَيْنِ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhash-shubhi rak\'ataini mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Subuh 2 rakaat menghadap kiblat karena Allah'},
-{nama:'2. Takbiratul Ihram',arab:'اللهُ أَكْبَرُ',latin:'Allaahu Akbar',arti:'Allah Maha Besar'},
-{nama:'3. Doa Iftitah',arab:'سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَهَ غَيْرُكَ',latin:'Subhaanakallaahumma wa bihamdika wa tabaarokasmuka wa ta\'aalaa jadduka wa laa ilaaha ghairuk',arti:'Maha Suci Engkau ya Allah, aku memujiMu, Maha Berkah namaMu, tiada Tuhan selain Engkau'},
-{nama:'4. Al-Fatihah',arab:'بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيْمِ ۞ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِيْنَ ۞ الرَّحْمَنِ الرَّحِيْمِ ۞ مَالِكِ يَوْمِ الدِّيْنِ ۞ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِيْنُ ۞ اِهْدِنَا الصِّرَاطَ الْمُسْتَقِيْمَ',latin:'Bismillaahir-rahmaanir-rahiim. Alhamdulillaahi rabbil-\'aalamiin. Ar-rahmaanir-rahiim. Maaliki yaumid-diin. Iyyaaka na\'budu wa iyyaaka nasta\'iin. Ihdinash-shiraathal-mustaqiim',arti:'Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang. Segala puji bagi Allah Tuhan semesta alam. Pemilik hari pembalasan. Hanya kepadaMu kami menyembah dan meminta pertolongan.'},
-{nama:'5. Rukuk',arab:'سُبْحَانَ رَبِّيَ الْعَظِيْمِ وَبِحَمْدِهِ (٣x)',latin:'Subhaana rabbiyal-\'azhiimi wa bihamdih (3x)',arti:'Maha Suci Tuhanku Yang Maha Agung'},
-{nama:'6. I\'tidal',arab:'سَمِعَ اللهُ لِمَنْ حَمِدَهُ ۞ رَبَّنَا لَكَ الْحَمْدُ',latin:'Sami\'allaahu liman hamidah. Rabbanaa lakaal-hamd',arti:'Allah mendengar yang memujiNya. Ya Tuhan kami, bagiMu segala pujian'},
-{nama:'7. Sujud',arab:'سُبْحَانَ رَبِّيَ الْأَعْلَى وَبِحَمْدِهِ (٣x)',latin:'Subhaana rabbiyal-a\'laa wa bihamdih (3x)',arti:'Maha Suci Tuhanku Yang Maha Tinggi'},
-{nama:'8. Duduk Antara 2 Sujud',arab:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي وَاجْبُرْنِي وَارْفَعْنِي وَارْزُقْنِي وَاهْدِنِي وَعَافِنِي',latin:'Rabbighfir lii warhamnii wajburnii warfa\'nii warzuqnii wahdinii wa \'aafinii',arti:'Ya Tuhanku, ampunilah aku, rahmatilah, cukupkanlah, angkatlah derajatku, berilah rezeki, tunjukilah, sehatkanlah'},
-{nama:'9. Tasyahud Awal',arab:'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ ۞ السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ',latin:'At-tahiyyaatu lillaahi wash-shalawaatu wath-thayyibaatu. As-salaamu \'alaika ayyuhan-nabiyyu wa rahmatullaahi wa barakaatuh',arti:'Segala kehormatan bagi Allah. Salam atasmu wahai Nabi, rahmat Allah dan berkahNya'},
-{nama:'10. Sholawat',arab:'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ',latin:'Allaahumma shalli \'alaa Muhammad wa \'alaa aali Muhammad kamaa shallaita \'alaa Ibraahiim innaka hamiidum majiid',arti:'Ya Allah, limpahkanlah rahmat kepada Nabi Muhammad dan keluarganya'},
-{nama:'11. Salam',arab:'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ',latin:'As-salaamu \'alaikum wa rahmatullaah',arti:'Semoga keselamatan dan rahmat Allah atasmu'},
-{nama:'12. Doa Setelah Sholat',arab:'اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ',latin:'Allaahumma antas-salaam wa minkas-salaam tabaarakta yaa dzal-jalaali wal-ikraam',arti:'Ya Allah, Engkau Maha Sejahtera dan dariMu kesejahteraan'}
+{nama:'Takbiratul Ihram',arab:'اللهُ أَكْبَرُ',latin:'Allaahu Akbar',arti:'Allah Maha Besar'},
+{nama:'Doa Iftitah',arab:'سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَهَ غَيْرُكَ',latin:'Subhaanakallaahumma wa bihamdika wa tabaarokasmuka wa ta\'aalaa jadduka wa laa ilaaha ghairuk',arti:'Maha Suci Engkau ya Allah, aku memujiMu, Maha Berkah namaMu, tiada Tuhan selain Engkau'},
+{nama:'Al-Fatihah',arab:'بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيْمِ ۞ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِيْنَ ۞ الرَّحْمَنِ الرَّحِيْمِ ۞ مَالِكِ يَوْمِ الدِّيْنِ ۞ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِيْنُ ۞ اِهْدِنَا الصِّرَاطَ الْمُسْتَقِيْمَ',latin:'Bismillaahir-rahmaanir-rahiim. Alhamdulillaahi rabbil-\'aalamiin...',arti:'Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang. Segala puji bagi Allah Tuhan semesta alam...'},
+{nama:'Rukuk',arab:'سُبْحَانَ رَبِّيَ الْعَظِيْمِ وَبِحَمْدِهِ (٣x)',latin:'Subhaana rabbiyal-\'azhiimi wa bihamdih (3x)',arti:'Maha Suci Tuhanku Yang Maha Agung'},
+{nama:'I\'tidal',arab:'سَمِعَ اللهُ لِمَنْ حَمِدَهُ ۞ رَبَّنَا لَكَ الْحَمْدُ',latin:'Sami\'allaahu liman hamidah. Rabbanaa lakaal-hamd',arti:'Allah mendengar yang memujiNya. Ya Tuhan kami, bagiMu pujian'},
+{nama:'Sujud',arab:'سُبْحَانَ رَبِّيَ الْأَعْلَى وَبِحَمْدِهِ (٣x)',latin:'Subhaana rabbiyal-a\'laa wa bihamdih (3x)',arti:'Maha Suci Tuhanku Yang Maha Tinggi'},
+{nama:'Duduk Antara 2 Sujud',arab:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي وَاجْبُرْنِي وَارْفَعْنِي وَارْزُقْنِي وَاهْدِنِي وَعَافِنِي',latin:'Rabbighfir lii warhamnii wajburnii warfa\'nii warzuqnii wahdinii wa \'aafinii',arti:'Ya Tuhanku, ampunilah aku, rahmatilah, cukupkanlah, angkatlah derajatku, berilah rezeki'},
+{nama:'Tasyahud Awal',arab:'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ ۞ السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ',latin:'At-tahiyyaatu lillaahi wash-shalawaatu wath-thayyibaatu...',arti:'Segala kehormatan bagi Allah. Salam atasmu wahai Nabi, rahmat Allah dan berkahNya'},
+{nama:'Sholawat',arab:'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ',latin:'Allaahumma shalli \'alaa Muhammad wa \'alaa aali Muhammad...',arti:'Ya Allah, limpahkanlah rahmat kepada Nabi Muhammad dan keluarganya'},
+{nama:'Salam',arab:'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ',latin:'As-salaamu \'alaikum wa rahmatullaah',arti:'Semoga keselamatan dan rahmat Allah atasmu'}
 ];
 
 function zenkaiCloudApp(){
@@ -512,30 +550,31 @@ splashHidden:false,splashProgress:0,splashText:'Menghubungkan...',
 isAuthenticated:false,authMode:'login',authEmail:'',authPassword:'',authUsername:'',
 currentUser:null,isOwner:false,pendingUser:null,
 userEmail:'',userName:'',userAvatar:'',quickNote:'',lastSavedNote:'',
-welcomePopupOpen:false,profileModalOpen:false,ownerPinModalOpen:false,
-enteredPin:'',verifyingPin:false,uploadingAvatar:false,noteSaving:false,
+welcomePopupOpen:false,profileModalOpen:false,ownerPinModalOpen:false,txSheetOpen:false,
+enteredPin:'',verifyingPin:false,uploadingAvatar:false,noteSaving:false,downloadingFile:false,
 sheetOpen:false,sheetTitle:'',sheetMessage:'',
 activeTab:'home',currentTime:'',
 transactions:[],txCategory:'',txAmount:'',
-kitabSubTab:'sholat',selectedCity:'Jakarta',prayerLoading:false,
+kitabSubTab:'sholat',selectedCity:'Jakarta',prayerLoading:false,selectedNiat:'Subuh',
 prayerTimes:{subuh:'--:--',dzuhur:'--:--',ashar:'--:--',maghrib:'--:--',isya:'--:--'},
+niatSholat:NIAT_SHOLAT,
 bacaanSholatList:BACAAN_SHOLAT,
 surahList:[],surahSearch:'',activeSurah:null,
 asmaulHusnaList:ASMAUL_HUSNA.map(x=>({...x,hafal:false})),
 toolsSubTab:'jam',customTtsText:'',compressedImageUrl:'',
 worldClocks:[
-{name:'WIB (Jakarta)',time:'',tz:'Asia/Jakarta'},
-{name:'WITA (Makassar)',time:'',tz:'Asia/Makassar'},
-{name:'WIT (Jayapura)',time:'',tz:'Asia/Jayapura'},
-{name:'Mekkah',time:'',tz:'Asia/Riyadh'},
-{name:'Tokyo',time:'',tz:'Asia/Tokyo'},
-{name:'Sydney',time:'',tz:'Australia/Sydney'},
-{name:'London',time:'',tz:'Europe/London'},
-{name:'Paris',time:'',tz:'Europe/Paris'},
-{name:'New York',time:'',tz:'America/New_York'},
-{name:'Dubai',time:'',tz:'Asia/Dubai'},
-{name:'Singapore',time:'',tz:'Asia/Singapore'},
-{name:'Seoul',time:'',tz:'Asia/Seoul'}
+{name:'WIB (Jakarta)',time:'',tz:'Asia/Jakarta',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},
+{name:'WITA (Makassar)',time:'',tz:'Asia/Makassar',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},
+{name:'WIT (Jayapura)',time:'',tz:'Asia/Jayapura',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},
+{name:'Mekkah (Arab Saudi)',time:'',tz:'Asia/Riyadh',flag:'linear-gradient(to bottom,#006c35 100%)'},
+{name:'Tokyo (Jepang)',time:'',tz:'Asia/Tokyo',flag:'radial-gradient(circle,#bc002d 30%,#fff 30%)'},
+{name:'Sydney (Australia)',time:'',tz:'Australia/Sydney',flag:'linear-gradient(to bottom,#000 33%,#fff 33% 66%,#000 66%)'},
+{name:'London (Inggris)',time:'',tz:'Europe/London',flag:'linear-gradient(to bottom,#012169 50%,#fff 50%)'},
+{name:'Paris (Prancis)',time:'',tz:'Europe/Paris',flag:'linear-gradient(to right,#0055a4 33%,#fff 33% 66%,#ef4135 66%)'},
+{name:'New York (USA)',time:'',tz:'America/New_York',flag:'linear-gradient(to bottom,#b22234 50%,#fff 50%)'},
+{name:'Dubai (UAE)',time:'',tz:'Asia/Dubai',flag:'linear-gradient(to bottom,#00732f 33%,#fff 33% 66%,#000 66%)'},
+{name:'Singapore',time:'',tz:'Asia/Singapore',flag:'linear-gradient(to bottom,#ed2939 50%,#fff 50%)'},
+{name:'Seoul (Korea)',time:'',tz:'Asia/Seoul',flag:'radial-gradient(circle,#cd2e3a 30%,#fff 30%)'}
 ],
 downloadLinkInput:'',downloadLoading:false,downloadResultReady:false,
 downloadResultLinks:[],downloadMeta:{},
@@ -564,6 +603,7 @@ this.worldClocks.forEach(z=>{try{z.time=now.toLocaleTimeString('id-ID',{timeZone
 },
 
 showAlert(t,m){this.sheetTitle=t;this.sheetMessage=m;this.sheetOpen=true;},
+openTxSheet(){this.txCategory='';this.txAmount='';this.txSheetOpen=true;},
 
 async handleEmailAuth(){
 if(!this.authEmail||!this.authPassword){return this.showAlert('Perhatian','Isi email dan password!');}
@@ -624,7 +664,7 @@ this.quickNote=profile.quick_note||'';
 this.lastSavedNote=this.quickNote;
 this.userAvatar=profile.avatar_url||'';
 }else{
-this.userName=this.currentUser.user_metadata&&this.currentUser.user_metadata.username||this.userEmail.split('@')[0]||'User';
+this.userName=(this.currentUser.user_metadata&&this.currentUser.user_metadata.username)||this.userEmail.split('@')[0]||'User';
 }
 },
 
@@ -670,7 +710,7 @@ async addTransaction(type){
 if(!this.currentUser||!this.txCategory||!this.txAmount){return this.showAlert('Perhatian','Isi kategori dan nominal!');}
 const amount=parseFloat(this.txAmount);
 const{error}=await sb.from('transactions').insert({user_id:this.currentUser.id,type:type,category:this.txCategory,amount:amount,date:new Date().toLocaleDateString('id-ID')});
-if(!error){this.txCategory='';this.txAmount='';await this.loadTransactions();}
+if(!error){this.txCategory='';this.txAmount='';this.txSheetOpen=false;await this.loadTransactions();}
 else{this.showAlert('Gagal',error.message);}
 },
 
@@ -776,9 +816,9 @@ const json=await res.json();
 if(json.code===0&&json.data){
 this.downloadMeta={title:json.data.title||'TikTok Video',thumbnail:json.data.cover};
 const links=[];
-if(json.data.play)links.push({label:'🎬 MP4 (No WM)',url:json.data.play});
-if(json.data.hdplay)links.push({label:'🎬 MP4 HD',url:json.data.hdplay});
-if(json.data.music)links.push({label:'🎵 MP3 Audio',url:json.data.music});
+if(json.data.play)links.push({label:'🎬 MP4 (No WM)',url:json.data.play,filename:'tiktok_'+Date.now()+'.mp4'});
+if(json.data.hdplay)links.push({label:'🎬 MP4 HD',url:json.data.hdplay,filename:'tiktok_hd_'+Date.now()+'.mp4'});
+if(json.data.music)links.push({label:'🎵 MP3 Audio',url:json.data.music,filename:'tiktok_'+Date.now()+'.mp3'});
 this.downloadResultLinks=links;
 this.downloadResultReady=true;
 }else{this.showAlert('Gagal','Tidak bisa memproses link TikTok.');}
@@ -787,6 +827,26 @@ this.showAlert('Info','Sementara hanya TikTok yang didukung.');
 }
 }catch(e){this.showAlert('Gagal','Error: '+e.message);}
 finally{this.downloadLoading=false;}
+},
+
+async downloadBlob(url,filename){
+this.downloadingFile=true;
+try{
+const res=await fetch(url);
+const blob=await res.blob();
+const blobUrl=URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=blobUrl;
+a.download=filename||'video.mp4';
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+setTimeout(()=>URL.revokeObjectURL(blobUrl),3000);
+this.showAlert('Sukses','File berhasil didownload!');
+}catch(e){
+this.showAlert('Gagal','Gagal download: '+e.message);
+}
+finally{this.downloadingFile=false;}
 },
 
 startReflexGame(){
