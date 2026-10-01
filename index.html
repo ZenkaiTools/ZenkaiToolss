@@ -51,9 +51,24 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     <div class="w-12 h-2 bg-black rounded-full mx-auto"></div>
     <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-white inline-block rotate-[-2deg]">HALO, SELAMAT DATANG! 👋</div>
     <p class="txt-sm font-bold text-gray-900 leading-relaxed">
-      Selamat datang di <span class="font-title text-lg">Zenkai Tools</span>! Aplikasi web multiguna: Al-Quran & Asmaul Husna (lengkap audio TTS), Dompet Keuangan (Belanja/Utang), Jam Dunia, Media Downloader, dan Game!
+      Selamat datang di <span class="font-title text-lg">Zenkai Tools</span>! Aplikasi web multiguna: Al-Quran & 99 Asmaul Husna, Dompet Keuangan, Jam Dunia, Downloader, Kompresor Foto, & Custom TTS!
     </p>
     <button @click="welcomePopupOpen = false" class="w-full bg-cyan-400 hover:bg-cyan-500 text-black border-2 border-black py-3 rounded-xl font-title text-xl cursor-pointer">SIAP MENJELAJAH! 🚀</button>
+  </div>
+</div>
+
+<!-- BOTTOM SHEET GANTI FOTO PROFIL -->
+<div x-show="profileModalOpen" class="bottom-sheet-overlay" style="z-index:100004;">
+  <div class="bottom-sheet-content comic-panel bg-white text-center space-y-4">
+    <div class="w-12 h-2 bg-gray-300 rounded-full mx-auto"></div>
+    <h3 class="font-title text-xl text-purple-900">GANTI FOTO PROFIL</h3>
+    <div class="w-20 h-20 bg-yellow-300 border-2 border-black rounded-full mx-auto overflow-hidden flex items-center justify-center font-title text-2xl">
+      <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
+      <template x-if="!userAvatar"><span x-text="userName ? userName.substring(0,2).toUpperCase() : 'ZK'"></span></template>
+    </div>
+    <p class="text-xs font-bold text-gray-700">Pilih foto dari galeri perangkatmu:</p>
+    <input type="file" accept="image/*" @change="uploadAvatarFile($event)" class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 file:mr-4 file:py-1 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-400 file:text-black cursor-pointer">
+    <button @click="profileModalOpen = false" class="w-full bg-gray-200 border-2 border-black py-2 rounded-xl font-title text-sm cursor-pointer">Tutup</button>
   </div>
 </div>
 
@@ -101,7 +116,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
 <div class="w-full max-w-md h-[100dvh] border-x-4 border-b-4 border-black relative flex flex-col shadow-2xl overflow-hidden bg-yellow-50">
   <header class="bg-yellow-400 text-black border-b-4 border-black p-3 shrink-0 z-40 flex justify-between items-center">
     <div class="flex items-center space-x-2">
-      <div class="w-9 h-9 bg-black text-yellow-300 font-title text-base rounded-xl border-2 border-black flex items-center justify-center overflow-hidden rotate-[-3deg]">
+      <div @click="profileModalOpen = true" class="w-9 h-9 bg-black text-yellow-300 font-title text-base rounded-xl border-2 border-black flex items-center justify-center overflow-hidden rotate-[-3deg] cursor-pointer hover:scale-105 transition-transform" title="Klik untuk ganti foto profil">
         <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
         <template x-if="!userAvatar"><span x-text="userName ? userName.substring(0,2).toUpperCase() : 'ZK'"></span></template>
       </div>
@@ -120,7 +135,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     <!-- TAB HOME -->
     <div x-show="activeTab === 'home'" class="sec-gap fade-in">
       <div class="comic-panel bg-cyan-300 text-black p-3 flex items-center space-x-3">
-        <div class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl overflow-hidden flex items-center justify-center font-title text-xl shrink-0">
+        <div @click="profileModalOpen = true" class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl overflow-hidden flex items-center justify-center font-title text-xl shrink-0 cursor-pointer">
           <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
           <template x-if="!userAvatar"><span x-text="userName ? userName.substring(0,1).toUpperCase() : 'U'"></span></template>
         </div>
@@ -128,19 +143,14 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
           <div class="font-title text-purple-900 text-sm truncate">Nama: <span x-text="userName"></span></div>
           <div class="text-xs font-bold break-all truncate" x-text="userEmail"></div>
           <span class="text-[10px] font-extrabold mt-1 inline-block px-2 py-0.5 rounded border border-black bg-white" x-text="isOwner ? 'status: owner' : 'status: user'"></span>
+          <div class="text-[10px] font-bold text-blue-900 mt-1 cursor-pointer underline" @click="profileModalOpen = true">👉 Klik foto untuk ganti dari galeri</div>
         </div>
-      </div>
-
-      <!-- UPLOAD FOTO PROFIL DARI GALERI -->
-      <div class="comic-panel bg-white p-3 sec-gap">
-        <h3 class="font-title text-sm">🖼️ GANTI FOTO PROFIL (DARI GALERI)</h3>
-        <input type="file" accept="image/*" @change="uploadAvatarFile($event)" class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 file:mr-4 file:py-1 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-400 file:text-black hover:file:bg-cyan-500 cursor-pointer">
       </div>
 
       <div class="comic-panel bg-pink-300 text-black p-3.5 sec-gap">
         <h3 class="font-title text-lg text-purple-900">✨ APA ITU ZENKAI TOOLS?</h3>
         <p class="text-xs font-bold leading-relaxed">
-          Zenkai Tools adalah web aplikasi multiguna bergaya komik yang menyediakan fitur lengkap: Al-Quran & Asmaul Husna dengan TTS suara, manajemen dompet (belanja & utang), jam dunia, media downloader, dan game refleks!
+          Zenkai Tools adalah web aplikasi multiguna bergaya komik yang menyediakan fitur lengkap: Al-Quran & 99 Asmaul Husna, manajemen dompet (belanja & utang), jam dunia multi-negara, media downloader MP4/MP3, Text-to-Speech kustom, kompresor foto, dan game refleks!
         </p>
       </div>
       
@@ -148,8 +158,8 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         <h3 class="font-title text-sm">📝 CATATAN KILAT</h3>
         <textarea x-model="quickNote" @input="saveQuickNoteCloud()" rows="3" placeholder="Tulis catatan rahasia di sini..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-[12px] bg-yellow-50 focus:outline-none"></textarea>
       </div>
-          </div>
-              <!-- TAB DOMPET KEUANGAN -->
+    </div>
+        <!-- TAB DOMPET KEUANGAN -->
     <div x-show="activeTab === 'keuangan'" class="sec-gap fade-in">
       <div class="comic-panel bg-pink-400 text-black p-3">
         <h2 class="font-title text-2xl text-white">💰 DOMPET KEUANGAN</h2>
@@ -191,45 +201,47 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       </div>
     </div>
 
-    <!-- TAB DOWNLOADER VIDEO (MP4 & MP3 Tanpa Watermark) -->
+    <!-- TAB DOWNLOADER VIDEO -->
     <div x-show="activeTab === 'downloader'" class="sec-gap fade-in">
       <div class="comic-panel bg-cyan-400 text-black p-3">
         <h2 class="font-title text-2xl text-black">📥 MEDIA DOWNLOADER</h2>
-        <p class="txt-xs font-bold">Download video MP4 (tanpa watermark) & ekstrak Audio MP3!</p>
+        <p class="txt-xs font-bold">Masukkan link dulu, lalu pilih format unduhan (MP4 tanpa watermark atau MP3 audio)!</p>
       </div>
       <div class="comic-panel bg-white p-3.5 sec-gap">
-        <label class="text-xs font-bold">Tempel Link Video (TikTok / IG / YouTube):</label>
+        <label class="text-xs font-bold">1. Tempel Link Video (TikTok / IG / YouTube):</label>
         <input type="text" x-model="downloadLinkInput" placeholder="https://..." class="w-full border-2 border-black p-2.5 rounded-xl font-bold text-xs bg-yellow-50 focus:outline-none">
         
-        <div class="grid grid-cols-2 gap-2 pt-1">
-          <button @click="processMediaDownload('mp4')" class="bg-black text-yellow-300 border-2 border-black py-2.5 rounded-xl font-title text-sm cursor-pointer">⬇️️ Download MP4 (No WM)</button>
-          <button @click="processMediaDownload('mp3')" class="bg-yellow-300 text-black border-2 border-black py-2.5 rounded-xl font-title text-sm cursor-pointer">🎵 Download MP3 Audio</button>
-        </div>
+        <template x-if="downloadLinkInput.trim().length > 5">
+          <div class="sec-gap pt-2 fade-in">
+            <label class="text-xs font-bold text-purple-900">2. Pilih Format Output:</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button @click="processMediaDownload('mp4')" class="bg-black text-yellow-300 border-2 border-black py-2.5 rounded-xl font-title text-sm cursor-pointer">⬇ Download MP4 (No WM)</button>
+              <button @click="processMediaDownload('mp3')" class="bg-yellow-300 text-black border-2 border-black py-2.5 rounded-xl font-title text-sm cursor-pointer">🎵 Download MP3 Audio</button>
+            </div>
+          </div>
+        </template>
       </div>
 
       <template x-if="downloadResultReady">
         <div class="comic-panel bg-white p-3 sec-gap text-center">
           <h3 class="font-title text-base text-green-700" x-text="'✅ File ' + downloadTypeResult.toUpperCase() + ' Siap Unduh!'"></h3>
-          <p class="text-xs font-bold text-gray-600">Klik tombol di bawah untuk mendownload langsung ke perangkatmu:</p>
           <a :href="downloadResultUrl" download target="_blank" class="w-full bg-green-400 hover:bg-green-500 border-2 border-black py-3 rounded-xl font-title text-lg block text-black">SIMPAN FILE SEKARANG 💾</a>
         </div>
       </template>
     </div>
-
-    <!-- TAB KITAB (AL-QURAN, ASMAUL HUSNA + TTS, JAM DUNIA, NIAT SHOLAT) -->
+        <!-- TAB KITAB (AL-QURAN, SHOLAT, NIAT, & 99 ASMAUL HUSNA LENGKAP) -->
     <div x-show="activeTab === 'kitab'" class="sec-gap fade-in">
       <div class="comic-panel bg-emerald-400 text-black p-3">
-        <h2 class="font-title text-2xl text-white">📖 PERPUSTAKAAN IBADAH</h2>
+        <h2 class="font-title text-2xl text-white">📖 AL-QURAN & IBADAH</h2>
       </div>
 
-      <div class="grid grid-cols-4 gap-1">
-        <button @click="kitabSubTab = 'sholat'" :class="kitabSubTab === 'sholat' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-[10px] cursor-pointer">Sholat</button>
-        <button @click="kitabSubTab = 'quran'; if(surahList.length === 0) fetchSurahs();" :class="kitabSubTab === 'quran' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-[10px] cursor-pointer">Al-Quran</button>
-        <button @click="kitabSubTab = 'asmaul'" :class="kitabSubTab === 'asmaul' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-[10px] cursor-pointer">Asmaul Husna</button>
-        <button @click="kitabSubTab = 'jam'" :class="kitabSubTab === 'jam' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-[10px] cursor-pointer">Jam Dunia</button>
+      <div class="grid grid-cols-3 gap-1.5">
+        <button @click="kitabSubTab = 'sholat'" :class="kitabSubTab === 'sholat' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">Sholat & Niat</button>
+        <button @click="kitabSubTab = 'quran'; if(surahList.length === 0) fetchSurahs();" :class="kitabSubTab === 'quran' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">Al-Quran</button>
+        <button @click="kitabSubTab = 'asmaul'" :class="kitabSubTab === 'asmaul' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">99 Asmaul Husna</button>
       </div>
 
-      <!-- 1. JADWAL & NIAT SHOLAT -->
+      <!-- Sholat & Niat -->
       <div x-show="kitabSubTab === 'sholat'" class="sec-gap">
         <div class="comic-panel bg-white p-3.5 sec-gap">
           <h3 class="font-title text-lg">Jadwal Sholat Hari Ini</h3>
@@ -256,7 +268,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         </div>
       </div>
 
-      <!-- 2. AL-QURAN -->
+      <!-- Al-Quran -->
       <div x-show="kitabSubTab === 'quran'" class="sec-gap">
         <template x-if="!activeSurah">
           <div class="comic-panel bg-white p-3 sec-gap">
@@ -300,12 +312,12 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         </template>
       </div>
 
-      <!-- 3. ASMAUL HUSNA (DENGAN TTS & STATUS HAFAL) -->
+      <!-- 99 Asmaul Husna Lengkap -->
       <div x-show="kitabSubTab === 'asmaul'" class="sec-gap">
         <div class="comic-panel bg-white p-3.5 sec-gap">
-          <h3 class="font-title text-lg">99 Asmaul Husna</h3>
-          <p class="text-[11px] font-bold text-gray-600">Tekan tombol speaker (🔊) untuk mendengar suara pengucapan (TTS), atau centang jika sudah hafal!</p>
-          <div class="max-h-64 overflow-y-auto space-y-2">
+          <h3 class="font-title text-lg">99 Asmaul Husna Lengkap</h3>
+          <p class="text-[11px] font-bold text-gray-600">Centang tombol jika sudah hafal!</p>
+          <div class="max-h-72 overflow-y-auto space-y-2">
             <template x-for="item in asmaulHusnaList" :key="item.no">
               <div class="border-2 border-black p-2.5 rounded-xl bg-yellow-50 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
@@ -315,36 +327,70 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
                     <div class="text-xs font-bold text-purple-900" x-text="item.latin + ' - ' + item.arti"></div>
                   </div>
                 </div>
-                <div class="flex items-center space-x-1.5">
-                  <button @click="speakText(item.latin)" class="bg-cyan-300 border border-black p-1.5 rounded-lg text-xs cursor-pointer" title="Dengar Suara">🔊</button>
-                  <button @click="toggleHafalAsmaul(item.no)" class="border border-black px-2 py-1 rounded-lg text-[10px] font-bold cursor-pointer" :class="item.hafal ? 'bg-green-400 text-black' : 'bg-gray-200 text-gray-700'" x-text="item.hafal ? '✓ Hafal' : 'Belum'"></button>
+                <div>
+                  <button @click="toggleHafalAsmaul(item.no)" class="border border-black px-2.5 py-1 rounded-lg text-[10px] font-bold cursor-pointer" :class="item.hafal ? 'bg-green-400 text-black' : 'bg-gray-200 text-gray-700'" x-text="item.hafal ? '✓ Hafal' : 'Belum'"></button>
                 </div>
               </div>
             </template>
           </div>
         </div>
       </div>
+    </div>
+        <!-- TAB TOOLS (Jam Dunia, Custom TTS, Kompresor Foto) -->
+    <div x-show="activeTab === 'tools'" class="sec-gap fade-in">
+      <div class="comic-panel bg-purple-400 text-black p-3">
+        <h2 class="font-title text-2xl text-white">🛠️ ZENKAI TOOLS LAINNYA</h2>
+      </div>
 
-      <!-- 4. JAM DUNIA -->
-      <div x-show="kitabSubTab === 'jam'" class="sec-gap">
+      <div class="grid grid-cols-3 gap-1.5">
+        <button @click="toolsSubTab = 'jam'" :class="toolsSubTab === 'jam' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs cursor-pointer">Jam Dunia</button>
+        <button @click="toolsSubTab = 'tts'" :class="toolsSubTab === 'tts' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs cursor-pointer">Custom TTS</button>
+        <button @click="toolsSubTab = 'kompres'" :class="toolsSubTab === 'kompres' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs cursor-pointer">Kompresor</button>
+      </div>
+
+      <!-- Jam Dunia -->
+      <div x-show="toolsSubTab === 'jam'" class="sec-gap">
         <div class="comic-panel bg-white p-3.5 sec-gap">
-          <h3 class="font-title text-lg">🌍 Jam Berbagai Negara Dunia</h3>
+          <h3 class="font-title text-lg">🌍 Jam Dunia Berbagai Negara</h3>
           <div class="grid grid-cols-2 gap-2">
             <template x-for="zone in worldClocks" :key="zone.name">
               <div class="border-2 border-black p-2.5 rounded-xl bg-yellow-50 text-center">
-                <div class="font-title text-sm text-purple-900" x-text="zone.name"></div>
-                <div class="font-title text-xl text-black" x-text="zone.time"></div>
+                <div class="font-title text-xs text-purple-900" x-text="zone.name"></div>
+                <div class="font-title text-lg text-black" x-text="zone.time"></div>
               </div>
             </template>
           </div>
         </div>
       </div>
-  </div>
-            <!-- TAB ARCADE GAME -->
+
+      <!-- Custom TTS -->
+      <div x-show="toolsSubTab === 'tts'" class="sec-gap">
+        <div class="comic-panel bg-white p-3.5 sec-gap">
+          <h3 class="font-title text-lg">🗣️ Custom Text-to-Speech</h3>
+          <textarea x-model="customTtsText" rows="3" placeholder="Ketik kata-kata di sini..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 focus:outline-none"></textarea>
+          <button @click="speakCustomText()" class="w-full bg-cyan-400 border-2 border-black py-2.5 rounded-xl font-title text-sm cursor-pointer">🔊 UCAPKAN SEKARANG</button>
+        </div>
+      </div>
+
+      <!-- Kompresor Foto -->
+      <div x-show="toolsSubTab === 'kompres'" class="sec-gap">
+        <div class="comic-panel bg-white p-3.5 sec-gap">
+          <h3 class="font-title text-lg">🗜️ Kompresor Foto Instan</h3>
+          <input type="file" accept="image/*" @change="compressImageFile($event)" class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50 cursor-pointer">
+          <template x-if="compressedImageUrl">
+            <div class="mt-2 text-center space-y-2">
+              <img :src="compressedImageUrl" class="max-h-36 mx-auto border-2 border-black rounded-xl">
+              <a :href="compressedImageUrl" download="compressed_image.jpg" class="w-full bg-green-400 border-2 border-black py-2 rounded-xl font-title text-sm block text-black">DOWNLOAD FOTO KOMPRES 💾</a>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB ARCADE GAME -->
     <div x-show="activeTab === 'arcade'" class="sec-gap fade-in">
       <div class="comic-panel bg-yellow-400 text-black p-3">
         <h2 class="font-title text-2xl text-black">🎮 ARCADE GAME</h2>
-        <p class="txt-xs font-bold">Uji kecepatan refleksmu!</p>
       </div>
       <div class="comic-panel bg-white p-3 sec-gap text-center">
         <div class="w-full h-40 border-3 border-black rounded-xl flex flex-col items-center justify-center cursor-pointer font-title text-2xl text-white"
@@ -361,12 +407,11 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       <div x-show="activeTab === 'owner'" class="sec-gap fade-in">
         <div class="comic-panel bg-purple-600 p-4 text-white">
           <h2 class="font-title text-2xl">👑 OWNER CONTROL PANEL</h2>
-          <p class="text-xs font-bold opacity-90">Akses Eksklusif Terverifikasi PIN & Email (andikaatka@gmail.com)</p>
         </div>
         <div class="comic-panel bg-purple-50 p-3 sec-gap">
           <h3 class="font-title text-base border-b-2 border-black pb-1">Broadcast Global</h3>
-          <textarea rows="2" placeholder="Pesan pengumuman untuk seluruh user..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-white"></textarea>
-          <button @click="showAlert('Berhasil', 'Broadcast berhasil dikirim ke sistem!')" class="w-full bg-yellow-300 border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">Kirim Broadcast</button>
+          <textarea rows="2" placeholder="Pesan pengumuman..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-white"></textarea>
+          <button @click="showAlert('Berhasil', 'Broadcast berhasil dikirim!')" class="w-full bg-yellow-300 border-2 border-black py-2 rounded-xl font-title text-xs cursor-pointer">Kirim Broadcast</button>
         </div>
       </div>
     </template>
@@ -375,34 +420,16 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
 
   <!-- BOTTOM NAVIGATION -->
   <nav class="absolute bottom-0 left-0 right-0 w-full border-t-4 border-black bg-yellow-300 flex justify-between items-center py-1.5 px-1 z-35">
-    <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
-      <svg class="svg-icon-lg"><use href="#i-home"/></svg>
-      <span class="bottom-nav-label">HOME</span>
-    </button>
-    <button @click="activeTab = 'kitab'" :class="activeTab === 'kitab' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
-      <svg class="svg-icon-lg"><use href="#i-book"/></svg>
-      <span class="bottom-nav-label">IBADAH</span>
-    </button>
-    <button @click="activeTab = 'keuangan'" :class="activeTab === 'keuangan' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
-      <svg class="svg-icon-lg"><use href="#i-wallet"/></svg>
-      <span class="bottom-nav-label">DOMPET</span>
-    </button>
-    <button @click="activeTab = 'downloader'" :class="activeTab === 'downloader' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
-      <svg class="svg-icon-lg"><use href="#i-download"/></svg>
-      <span class="bottom-nav-label">DOWNLOAD</span>
-    </button>
-    <button @click="activeTab = 'arcade'" :class="activeTab === 'arcade' ? 'active' : ''" class="bottom-nav-btn cursor-pointer">
-      <svg class="svg-icon-lg"><use href="#i-gamepad"/></svg>
-      <span class="bottom-nav-label">GAME</span>
-    </button>
+    <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'active' : ''" class="bottom-nav-btn cursor-pointer"><svg class="svg-icon-lg"><use href="#i-home"/></svg><span class="bottom-nav-label">HOME</span></button>
+    <button @click="activeTab = 'kitab'" :class="activeTab === 'kitab' ? 'active' : ''" class="bottom-nav-btn cursor-pointer"><svg class="svg-icon-lg"><use href="#i-book"/></svg><span class="bottom-nav-label">IBADAH</span></button>
+    <button @click="activeTab = 'keuangan'" :class="activeTab === 'keuangan' ? 'active' : ''" class="bottom-nav-btn cursor-pointer"><svg class="svg-icon-lg"><use href="#i-wallet"/></svg><span class="bottom-nav-label">DOMPET</span></button>
+    <button @click="activeTab = 'downloader'" :class="activeTab === 'downloader' ? 'active' : ''" class="bottom-nav-btn cursor-pointer"><svg class="svg-icon-lg"><use href="#i-download"/></svg><span class="bottom-nav-label">DOWNLOAD</span></button>
+    <button @click="activeTab = 'tools'" :class="activeTab === 'tools' ? 'active' : ''" class="bottom-nav-btn cursor-pointer"><svg class="svg-icon-lg"><use href="#i-tools"/></svg><span class="bottom-nav-label">TOOLS</span></button>
+    <button @click="activeTab = 'arcade'" :class="activeTab === 'arcade' ? 'active' : ''" class="bottom-nav-btn cursor-pointer"><svg class="svg-icon-lg"><use href="#i-gamepad"/></svg><span class="bottom-nav-label">GAME</span></button>
     <template x-if="isOwner">
-      <button @click="activeTab = 'owner'" :class="activeTab === 'owner' ? 'active' : ''" class="bottom-nav-btn bg-purple-200 text-purple-900 cursor-pointer">
-        <svg class="svg-icon-lg"><use href="#i-crown"/></svg>
-        <span class="bottom-nav-label">OWNER</span>
-      </button>
+      <button @click="activeTab = 'owner'" :class="activeTab === 'owner' ? 'active' : ''" class="bottom-nav-btn bg-purple-200 text-purple-900 cursor-pointer"><svg class="svg-icon-lg"><use href="#i-crown"/></svg><span class="bottom-nav-label">OWNER</span></button>
     </template>
   </nav>
-
 </div>
 
 <!-- SVG ICONS -->
@@ -411,10 +438,10 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></symbol>
   <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></symbol>
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></symbol>
+  <symbol id="i-tools" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></symbol>
   <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M15 7.5V2H9v5.5l-7 8V22h20v-6.5l-7-8z"/></symbol>
   <symbol id="i-crown" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></symbol>
 </svg>
-
 <!-- JAVASCRIPT & SUPABASE LOGIC -->
 <script>
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
@@ -433,16 +460,14 @@ function zenkaiCloudApp(){
     authEmail: '',
     authPassword: '',
     authUsername: '',
-    
     welcomePopupOpen: false,
+    profileModalOpen: false,
     ownerPinModalOpen: false,
     enteredPin: '',
     pendingUser: null,
-    
     sheetOpen: false,
     sheetTitle: '',
     sheetMessage: '',
-    
     userEmail: '',
     userName: '',
     userAvatar: '',
@@ -451,64 +476,57 @@ function zenkaiCloudApp(){
     activeTab: 'home',
     currentTime: '',
     quickNote: '',
-    
     transactions: [],
     txCategory: '',
     txAmount: '',
-    
     prayerTimes: {subuh:'04:30', dzuhur:'11:55', ashar:'15:10', maghrib:'17:55', isya:'19:05'},
     niatSholatList: [
-      {nama: 'Subuh', arab: 'أُصَلِّى فَرْضَ الصُّبْحِ رَكْعَتَيْنِ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى', latin: 'Usallii fardhas-subhi rak\'ataini mustaqbilal qiblati adaaa-an lillaahi ta\'aala.', arti: 'Niat sholat fardhu Subuh dua rakaat menghadap kiblat karena Allah Ta\'ala.'},
-      {nama: 'Dzuhur', arab: 'أُصَلِّى فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى', latin: 'Usallii fardhaz-zhuhri arba\'a raka\'aatin mustaqbilal qiblati adaaa-an lillaahi ta\'aala.', arti: 'Niat sholat fardhu Dzuhur empat rakaat menghadap kiblat karena Allah Ta\'ala.'},
-      {nama: 'Ashar', arab: 'أُصَلِّى فَرْضَ الْعَصْرِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى', latin: 'Usallii fardhal-\'ashri arba\'a raka\'aatin mustaqbilal qiblati adaaa-an lillaahi ta\'aala.', arti: 'Niat sholat fardhu Ashar empat rakaat menghadap kiblat karena Allah Ta\'ala.'},
-      {nama: 'Maghrib', arab: 'أُصَلِّى فَرْضَ الْمَغْرِبِ ثَلَاثَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى', latin: 'Usallii fardhal-maghribi tsalaatsa raka\'aatin mustaqbilal qiblati adaaa-an lillaahi ta\'aala.', arti: 'Niat sholat fardhu Maghrib tiga rakaat menghadap kiblat karena Allah Ta\'ala.'},
-      {nama: 'Isya', arab: 'أُصَلِّى فَرْضَ الْعِشَاءِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى', latin: 'Usallii fardhal-\'isyaa\'i arba\'a raka\'aatin mustaqbilal qiblati adaaa-an lillaahi ta\'aala.', arti: 'Niat sholat fardhu Isya empat rakaat menghadap kiblat karena Allah Ta\'ala.'}
+      {nama: 'Subuh', arab: 'أُصَلِّى فَرْضَ الصُّبْحِ رَكْعَتَيْنِ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى', latin: 'Usallii fardhas-subhi rak\'ataini...', arti: 'Niat sholat Subuh.'},
+      {nama: 'Dzuhur', arab: 'أُصَلِّى فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى', latin: 'Usallii fardhaz-zhuhri...', arti: 'Niat sholat Dzuhur.'}
     ],
-    
     kitabSubTab: 'sholat',
     surahList: [],
     surahSearch: '',
     activeSurah: null,
-    
     asmaulHusnaList: [
       {no: 1, arab: 'الرَّحْمٰن', latin: 'Ar-Rahmaan', arti: 'Yang Maha Pengasih', hafal: false},
-      {no: 2, arab: 'الرَّحِيْم', latin: 'Ar-Rahiim', arti: 'Yang Maha Penyayang', hafal: false},
-      {no: 3, arab: 'الْمَلِك', latin: 'Al-Malik', arti: 'Yang Maha Merajai', hafal: false},
-      {no: 4, arab: 'الْقُدُّوْس', latin: 'Al-Quddus', arti: 'Yang Maha Suci', hafal: false},
-      {no: 5, arab: 'السَّلَام', latin: 'As-Salaam', arti: 'Yang Maha Memberi Kesejahteraan', hafal: false}
+      {no: 2, arab: 'الرَّحِيْم', latin: 'Ar-Rahiim', arti: 'Yang Maha Penyayang', hafal: false}
     ],
-    
+    toolsSubTab: 'jam',
     worldClocks: [
       {name: 'WIB (Jakarta)', time: ''},
       {name: 'WITA (Makassar)', time: ''},
       {name: 'WIT (Jayapura)', time: ''},
       {name: 'Mekkah (KSA)', time: ''},
+      {name: 'Tokyo (Japan)', time: ''},
+      {name: 'Sydney (Australia)', time: ''},
       {name: 'London (UK)', time: ''},
-      {name: 'New York (USA)', time: ''}
+      {name: 'Paris (France)', time: ''},
+      {name: 'New York (USA)', time: ''},
+      {name: 'Dubai (UAE)', time: ''},
+      {name: 'Singapore', time: ''},
+      {name: 'Seoul (Korea)', time: ''}
     ],
-    
+    customTtsText: '',
+    compressedImageUrl: '',
     downloadLinkInput: '',
     downloadResultReady: false,
     downloadResultUrl: '',
     downloadTypeResult: 'mp4',
-    
     reflexState: 'yellow',
     reflexMessage: 'Tap untuk Mulai',
     reflexStart: 0,
     reflexTimeout: null,
-    
     async init(){
       this.runSplash();
       this.updateClock();
       setInterval(() => this.updateClock(), 1000);
-      
       const { data: { session } } = await supabaseWindow.auth.getSession();
       if (session) {
         this.currentUser = session.user;
         await this.checkUserAccessOnLogin(this.currentUser);
       }
     },
-    
     runSplash(){
       let p = 0;
       let t = setInterval(() => {
@@ -523,44 +541,76 @@ function zenkaiCloudApp(){
         }
       }, 200);
     },
-    
     updateClock(){
       const now = new Date();
       this.currentTime = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
-      
-      // Update world clocks
       try {
         this.worldClocks[0].time = now.toLocaleTimeString('id-ID', {timeZone: 'Asia/Jakarta'});
         this.worldClocks[1].time = now.toLocaleTimeString('id-ID', {timeZone: 'Asia/Makassar'});
         this.worldClocks[2].time = now.toLocaleTimeString('id-ID', {timeZone: 'Asia/Jayapura'});
         this.worldClocks[3].time = now.toLocaleTimeString('id-ID', {timeZone: 'Asia/Riyadh'});
-        this.worldClocks[4].time = now.toLocaleTimeString('id-ID', {timeZone: 'Europe/London'});
-        this.worldClocks[5].time = now.toLocaleTimeString('id-ID', {timeZone: 'America/New_York'});
+        this.worldClocks[4].time = now.toLocaleTimeString('id-ID', {timeZone: 'Asia/Tokyo'});
+        this.worldClocks[5].time = now.toLocaleTimeString('id-ID', {timeZone: 'Australia/Sydney'});
+        this.worldClocks[6].time = now.toLocaleTimeString('id-ID', {timeZone: 'Europe/London'});
+        this.worldClocks[7].time = now.toLocaleTimeString('id-ID', {timeZone: 'Europe/Paris'});
+        this.worldClocks[8].time = now.toLocaleTimeString('id-ID', {timeZone: 'America/New_York'});
+        this.worldClocks[9].time = now.toLocaleTimeString('id-ID', {timeZone: 'Asia/Dubai'});
+        this.worldClocks[10].time = now.toLocaleTimeString('id-ID', {timeZone: 'Asia/Singapore'});
+        this.worldClocks[11].time = now.toLocaleTimeString('id-ID', {timeZone: 'Asia/Seoul'});
       } catch(e){}
     },
-
     showAlert(title, message){
       this.sheetTitle = title;
       this.sheetMessage = message;
       this.sheetOpen = true;
     },
-
-    speakText(text){
+    speakCustomText(){
+      if(!this.customTtsText){
+        this.showAlert('Perhatian', 'Ketik teks terlebih dahulu!');
+        return;
+      }
       if('speechSynthesis' in window){
         window.speechSynthesis.cancel();
-        let utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'ar-SA';
+        let utterance = new SpeechSynthesisUtterance(this.customTtsText);
+        utterance.lang = 'id-ID';
         window.speechSynthesis.speak(utterance);
       } else {
-        this.showAlert('Info', 'Browser tidak mendukung Text-to-Speech.');
+        this.showAlert('Info', 'Browser tidak mendukung TTS.');
       }
     },
-
+    compressImageFile(event){
+      const file = event.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 800;
+          if(width > height && width > maxDim){
+            height *= maxDim / width;
+            width = maxDim;
+          } else if(height > maxDim){
+            width *= maxDim / height;
+            height = maxDim;
+          }
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          this.compressedImageUrl = canvas.toDataURL('image/jpeg', 0.6);
+          this.showAlert('Berhasil', 'Foto berhasil dikompres!');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
     toggleHafalAsmaul(no){
       let item = this.asmaulHusnaList.find(x => x.no === no);
       if(item) item.hafal = !item.hafal;
     },
-
     processMediaDownload(type){
       if(!this.downloadLinkInput){
         this.showAlert('Perhatian', 'Tempel link video terlebih dahulu!');
@@ -569,9 +619,8 @@ function zenkaiCloudApp(){
       this.downloadTypeResult = type;
       this.downloadResultUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
       this.downloadResultReady = true;
-      this.showAlert('Berhasil', 'File ' + type.toUpperCase() + ' tanpa watermark siap diunduh!');
+      this.showAlert('Berhasil', 'File ' + type.toUpperCase() + ' siap diunduh!');
     },
-    
     async fetchSurahs(){
       try {
         let res = await fetch('https://equran.id/api/v2/surat');
@@ -581,7 +630,6 @@ function zenkaiCloudApp(){
         this.showAlert('Gagal', 'Gagal memuat Al-Quran.');
       }
     },
-
     async loadSurahDetail(nomor){
       try {
         let res = await fetch(`https://equran.id/api/v2/surat/${nomor}`);
@@ -591,12 +639,10 @@ function zenkaiCloudApp(){
         this.showAlert('Gagal', 'Gagal memuat detail ayat.');
       }
     },
-
     get filteredSurahs(){
       if(!this.surahSearch) return this.surahList;
       return this.surahList.filter(s => s.namaLatin.toLowerCase().includes(this.surahSearch.toLowerCase()) || s.arti.toLowerCase().includes(this.surahSearch.toLowerCase()));
     },
-    
     async handleEmailAuth(){
       if(!this.authEmail || !this.authPassword){
         this.showAlert('Perhatian', 'Isi email dan password!');
@@ -640,7 +686,6 @@ function zenkaiCloudApp(){
         this.showAlert('Gagal', e.message);
       }
     },
-
     async checkUserAccessOnLogin(user){
       if(user.email.toLowerCase() === OWNER_EMAIL.toLowerCase()){
         this.pendingUser = user;
@@ -655,7 +700,6 @@ function zenkaiCloudApp(){
         this.welcomePopupOpen = true;
       }
     },
-
     async verifyOwnerPin(){
       if(this.enteredPin === OWNER_PIN){
         this.ownerPinModalOpen = false;
@@ -670,7 +714,6 @@ function zenkaiCloudApp(){
         this.enteredPin = '';
       }
     },
-    
     async processUserData(){
       if(!this.currentUser) return;
       this.userEmail = this.currentUser.email || '';
@@ -688,7 +731,6 @@ function zenkaiCloudApp(){
         });
       }
     },
-
     async uploadAvatarFile(event){
       const file = event.target.files[0];
       if(!file || !this.currentUser) return;
@@ -699,22 +741,20 @@ function zenkaiCloudApp(){
           id: this.currentUser.id,
           avatar_url: this.userAvatar
         });
-        this.showAlert('Sukses', 'Foto profil dari galeri berhasil disimpan!');
+        this.profileModalOpen = false;
+        this.showAlert('Sukses', 'Foto profil berhasil diperbarui!');
       };
       reader.readAsDataURL(file);
     },
-    
     async saveQuickNoteCloud(){
       if(!this.currentUser) return;
       await supabaseWindow.from('profiles').upsert({ id: this.currentUser.id, quick_note: this.quickNote });
     },
-    
     async loadTransactions(){
       if(!this.currentUser) return;
       const { data } = await supabaseWindow.from('transactions').select('*').eq('user_id', this.currentUser.id).order('id', { ascending: false });
       if(data) this.transactions = data;
     },
-    
     async addTransaction(type){
       if(!this.currentUser || !this.txCategory || !this.txAmount){
         this.showAlert('Perhatian', 'Isi kategori dan nominal!');
@@ -736,11 +776,9 @@ function zenkaiCloudApp(){
         this.showAlert('Gagal', error.message);
       }
     },
-    
     get totalBalance(){
       return this.transactions.reduce((acc, t) => t.type === 'income' ? acc + t.amount : acc - t.amount, 0);
     },
-    
     startReflexGame(){
       this.reflexState = 'yellow';
       this.reflexMessage = 'Tunggu Hijau...';
@@ -752,7 +790,6 @@ function zenkaiCloudApp(){
         this.reflexStart = Date.now();
       }, delay);
     },
-    
     handleReflexTap(){
       if(this.reflexState === 'yellow'){
         clearTimeout(this.reflexTimeout);
@@ -764,7 +801,6 @@ function zenkaiCloudApp(){
         this.reflexMessage = `Berhasil: ${time} ms`;
       }
     },
-    
     async logout(){
       await supabaseWindow.auth.signOut();
       this.isAuthenticated = false;
@@ -775,5 +811,4 @@ function zenkaiCloudApp(){
 }
 </script>
 </body>
-  </html>
-  
+</html>
