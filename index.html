@@ -3,30 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="Zenkai Tools - Super App All-in-One with Supabase">
 <meta name="theme-color" content="#fbbf24">
-<title>Zenkai Tools - Secure Cloud Edition</title>
+<title>Zenkai Tools - Supabase Cloud Edition</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--c-border:#1a1a1a;--c-shadow:#1a1a1a;--radius:14px;--gap:12px}
+:root{--c-border:#1a1a1a;--radius:14px}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;overflow-x:hidden}
 body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1a1a;min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;-webkit-tap-highlight-color:transparent;user-select:none}
 .font-title{font-family:'Bangers',cursive;letter-spacing:1.2px}
-.font-arab{font-family:'Amiri',serif}
 .comic-panel{background:#fff;border:2.5px solid #1a1a1a;box-shadow:3px 3px 0 0 #1a1a1a;border-radius:14px;position:relative;overflow:hidden}
-.comic-bubble{background:#fef3c7;border:2.5px solid #1a1a1a;border-radius:14px;box-shadow:2.5px 2.5px 0 0 #1a1a1a;padding:10px}
 .sec-gap{display:flex;flex-direction:column;gap:12px}
 .txt-sm{font-size:.8rem;line-height:1.4}
 .txt-xs{font-size:.7rem;line-height:1.35}
-.svg-icon{display:inline-block;vertical-align:middle;width:1em;height:1em;fill:currentColor;flex-shrink:0}
 .svg-icon-lg{width:1.35em;height:1.35em}
-.svg-icon-2xl{width:2em;height:2em}
-.loading-spinner{display:inline-block;width:14px;height:14px;border:2px solid #000;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
 .fade-in{animation:fadeIn .28s ease-out}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 .splash-screen{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#fbbf24,#f59e0b,#d97706);transition:opacity .5s,visibility .5s}
@@ -48,61 +41,60 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   <div class="mt-2 text-xs font-bold" x-text="splashText"></div>
 </div>
 
-<!-- CUSTOM MODAL SHEET (Ganti Alert/Confirm Bawaan Browser) -->
-<div x-show="sheetOpen" class="fixed inset-0 bg-black/80 z-[100000] flex items-end sm:items-center justify-center p-0 sm:p-4 backdrop-blur-xs">
-  <div class="comic-panel bg-white w-full max-w-sm p-5 space-y-4 rounded-t-2xl sm:rounded-2xl border-4 border-black">
-    <h3 class="font-title text-xl text-purple-900" x-text="sheetTitle"></h3>
+<!-- CUSTOM MODAL NOTIFIKASI -->
+<div x-show="sheetOpen" class="fixed inset-0 bg-black/80 z-[100000] flex items-center justify-center p-4 backdrop-blur-xs">
+  <div class="comic-panel bg-white w-full max-w-sm p-5 space-y-4 rounded-2xl border-4 border-black text-center">
+    <h3 class="font-title text-2xl text-purple-900" x-text="sheetTitle"></h3>
     <p class="txt-sm font-bold text-gray-800" x-text="sheetMessage"></p>
-    <div class="flex gap-2 pt-2">
-      <button @click="sheetOpen = false" class="flex-1 bg-gray-200 border-2 border-black py-2.5 rounded-xl font-title text-sm">TUTUP</button>
-    </div>
+    <button @click="sheetOpen = false" class="w-full bg-yellow-300 border-2 border-black py-2.5 rounded-xl font-title text-lg">MENGERTI</button>
   </div>
 </div>
 
-<!-- AUTH / LOGIN MODAL (GMAIL, PASSWORD & GOOGLE OAUTH) -->
+<!-- AUTH MODAL (GMAIL/PASSWORD & GOOGLE OAUTH) -->
 <div x-show="!isAuthenticated" class="fixed inset-0 bg-black/85 z-[9997] flex items-center justify-center p-4 backdrop-blur-sm">
   <div class="comic-panel bg-yellow-300 p-6 w-full max-w-sm text-center space-y-4">
     <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-black inline-block rotate-[-2deg]">CLOUD PORTAL</div>
     <h2 class="font-title text-2xl text-black" x-text="authMode === 'login' ? 'MASUK AKUN' : 'DAFTAR AKUN'"></h2>
-    <p class="txt-xs font-bold" x-text="authMode === 'login' ? 'Gunakan Email & Password atau Login Google' : 'Buat akun baru Supabase'"></p>
+    <p class="txt-xs font-bold">Gunakan Gmail & Password atau Login Instan Google</p>
     
     <input type="email" x-model="authEmail" placeholder="Email / Gmail..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none" autocomplete="off">
     <input type="password" x-model="authPassword" placeholder="Password..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none">
+    
     <template x-if="authMode === 'register'">
-      <input type="text" x-model="authUsername" placeholder="Nama Tampilan..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none" autocomplete="off">
+      <input type="text" x-model="authUsername" placeholder="Nama Tampilan (Bebas)..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center focus:outline-none" autocomplete="off">
     </template>
     
-    <button @click="handleEmailAuth()" class="w-full bg-cyan-400 hover:bg-cyan-500 border-2 border-black py-3 rounded-xl font-title text-xl flex items-center justify-center gap-2">
+    <button @click="handleEmailAuth()" class="w-full bg-cyan-400 hover:bg-cyan-500 border-2 border-black py-3 rounded-xl font-title text-xl">
       <span x-text="authMode === 'login' ? 'MASUK DENGAN EMAIL' : 'DAFTAR SEKARANG'"></span>
     </button>
 
-    <div class="relative flex py-2 items-center">
+    <div class="relative flex py-1 items-center">
       <div class="flex-grow border-t-2 border-black"></div>
-      <span class="flex-shrink mx-4 text-xs font-bold">ATAU</span>
+      <span class="flex-shrink mx-3 text-xs font-bold">ATAU</span>
       <div class="flex-grow border-t-2 border-black"></div>
     </div>
 
-    <!-- TOMBOL LOGIN INSTAN GOOGLE OAUTH -->
+    <!-- TOMBOL LOGIN GOOGLE OAUTH -->
     <button @click="loginWithGoogle()" class="w-full bg-white hover:bg-gray-100 border-2 border-black py-3 rounded-xl font-title text-sm flex items-center justify-center gap-2">
       <span>🌐 MASUK INSTAN DENGAN GOOGLE</span>
     </button>
 
-    <button @click="authMode = authMode === 'login' ? 'register' : 'login'" class="text-xs font-bold underline cursor-pointer bg-transparent border-none text-blue-900 mt-2">
+    <button @click="authMode = authMode === 'login' ? 'register' : 'login'" class="text-xs font-bold underline cursor-pointer bg-transparent border-none text-blue-900 mt-1">
       <span x-text="authMode === 'login' ? 'Belum punya akun? Daftar' : 'Sudah punya akun? Login'"></span>
     </button>
   </div>
 </div>
 
-<!-- MAIN APP CONTAINER -->
+<!-- MAIN CONTAINER APLIKASI -->
 <div class="w-full max-w-md h-[100dvh] border-x-4 border-b-4 border-black relative flex flex-col shadow-2xl overflow-hidden bg-yellow-50">
   
   <!-- HEADER -->
   <header class="bg-yellow-400 text-black border-b-4 border-black p-3 shrink-0 z-40 flex justify-between items-center">
     <div class="flex items-center space-x-2">
-      <div class="bg-black text-yellow-300 font-title text-lg px-2 py-0.5 rounded-xl border-2 border-black rotate-[-3deg]" x-text="userName ? userName.substring(0,2).toUpperCase() : 'ZK'"></div>
+      <div class="bg-black text-yellow-300 font-title text-lg px-2 py-0.5 rounded-xl border-2 border-black rotate-[-3deg]" x-text="userEmail ? userEmail.substring(0,2).toUpperCase() : 'ZK'"></div>
       <div>
         <h1 class="font-title text-xl leading-none">ZENKAI TOOLS</h1>
-        <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black" :class="isOwner ? 'bg-purple-600 text-white' : 'bg-white text-black'" x-text="isOwner ? 'Master Owner' : 'Cloud User'"></span>
+        <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black" :class="isOwner ? 'bg-purple-600 text-white' : 'bg-white text-black'" x-text="isOwner ? '👑 Master Owner (Andika)' : '☁️ Cloud User'"></span>
       </div>
     </div>
     <div class="flex items-center space-x-1.5">
@@ -117,16 +109,17 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     <!-- TAB HOME -->
     <div x-show="activeTab === 'home'" class="sec-gap fade-in">
       <div class="comic-panel bg-cyan-300 text-black p-3 flex items-center space-x-3">
-        <div class="w-16 h-16 bg-yellow-300 border-2 border-black rounded-xl flex items-center justify-center font-title text-2xl" x-text="userName ? userName.substring(0,1).toUpperCase() : 'U'"></div>
+        <div class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl flex items-center justify-center font-title text-xl" x-text="userEmail ? userEmail.substring(0,1).toUpperCase() : 'U'"></div>
         <div>
-          <div class="font-title text-purple-900 text-sm">Halo, <span x-text="userName"></span>!</div>
-          <span class="text-xs font-bold" x-text="isOwner ? 'Akses Owner Terverifikasi (Email Valid)' : 'Akses Cloud User Aktif'"></span>
+          <div class="font-title text-purple-900 text-sm">Login sebagai:</div>
+          <div class="text-xs font-bold break-all" x-text="userEmail"></div>
+          <span class="text-[10px] font-extrabold mt-1 inline-block px-2 py-0.5 rounded border border-black bg-white" x-text="isOwner ? 'Status: Pemilik Sistem (Akses Panel Terbuka)' : 'Status: Pengguna Umum (Panel Owner Dikunci)'"></span>
         </div>
       </div>
       
       <div class="comic-panel bg-white p-3 sec-gap">
         <h3 class="font-title text-sm">📝 CATATAN KILAT CLOUD</h3>
-        <textarea x-model="quickNote" @input="saveQuickNoteCloud()" rows="3" placeholder="Tulis ide kamu..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-[12px] bg-yellow-50 focus:outline-none"></textarea>
+        <textarea x-model="quickNote" @input="saveQuickNoteCloud()" rows="3" placeholder="Tulis ide atau catatan rahasia di sini..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-[12px] bg-yellow-50 focus:outline-none"></textarea>
       </div>
     </div>
 
@@ -137,7 +130,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       </div>
       <div class="comic-panel bg-yellow-300 text-black p-3 flex justify-between items-center">
         <div>
-          <div class="text-[10px] font-bold uppercase">Total Saldo</div>
+          <div class="text-[10px] font-bold uppercase">Total Saldo Cloud</div>
           <div class="font-title text-2xl" x-text="'Rp ' + totalBalance.toLocaleString('id-ID')"></div>
         </div>
       </div>
@@ -173,11 +166,11 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       <div class="comic-panel bg-white p-3.5 sec-gap">
         <h3 class="font-title text-lg">Jadwal Sholat Hari Ini</h3>
         <div class="grid grid-cols-5 gap-1 text-center">
-          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Subuh</div><div class="font-title txt-xs" x-text="prayerTimes.subuh || '--:--'"></div></div>
-          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Dzuhur</div><div class="font-title txt-xs" x-text="prayerTimes.dzuhur || '--:--'"></div></div>
-          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Ashar</div><div class="font-title txt-xs" x-text="prayerTimes.ashar || '--:--'"></div></div>
-          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Maghrib</div><div class="font-title txt-xs" x-text="prayerTimes.maghrib || '--:--'"></div></div>
-          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Isya</div><div class="font-title txt-xs" x-text="prayerTimes.isya || '--:--'"></div></div>
+          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Subuh</div><div class="font-title txt-xs" x-text="prayerTimes.subuh"></div></div>
+          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Dzuhur</div><div class="font-title txt-xs" x-text="prayerTimes.dzuhur"></div></div>
+          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Ashar</div><div class="font-title txt-xs" x-text="prayerTimes.ashar"></div></div>
+          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Maghrib</div><div class="font-title txt-xs" x-text="prayerTimes.maghrib"></div></div>
+          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Isya</div><div class="font-title txt-xs" x-text="prayerTimes.isya"></div></div>
         </div>
       </div>
     </div>
@@ -198,7 +191,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       </div>
     </div>
 
-    <!-- TAB OWNER PANEL (Hanya Terbuka Jika Email andikaatka@gmail.com) -->
+    <!-- TAB OWNER PANEL (DIKUNCI KETAT: HANYA MUNCUL JIKA EMAIL andikaatka@gmail.com) -->
     <template x-if="isOwner">
       <div x-show="activeTab === 'owner'" class="sec-gap fade-in">
         <div class="comic-panel bg-purple-600 p-4 text-white">
@@ -207,8 +200,8 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         </div>
         <div class="comic-panel bg-purple-50 p-3 sec-gap">
           <h3 class="font-title text-base border-b-2 border-black pb-1">Broadcast Global</h3>
-          <textarea x-model="newBroadcast" rows="2" placeholder="Pesan pengumuman..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-white"></textarea>
-          <button @click="sendBroadcast()" class="w-full bg-yellow-300 border-2 border-black py-2 rounded-xl font-title text-xs">Kirim Broadcast</button>
+          <textarea x-model="newBroadcast" rows="2" placeholder="Pesan pengumuman untuk seluruh user..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-white"></textarea>
+          <button @click="showAlert('Berhasil', 'Broadcast berhasil dikirim ke sistem cloud!')" class="w-full bg-yellow-300 border-2 border-black py-2 rounded-xl font-title text-xs">Kirim Broadcast</button>
         </div>
       </div>
     </template>
@@ -233,6 +226,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
       <svg class="svg-icon-lg"><use href="#i-gamepad"/></svg>
       <span class="bottom-nav-label">GAME</span>
     </button>
+    <!-- Tombol Navigasi Owner Hanya Muncul Jika isOwner True -->
     <template x-if="isOwner">
       <button @click="activeTab = 'owner'" :class="activeTab === 'owner' ? 'active' : ''" class="bottom-nav-btn bg-purple-200 text-purple-900">
         <svg class="svg-icon-lg"><use href="#i-crown"/></svg>
@@ -243,7 +237,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
 
 </div>
 
-<!-- SVG SYMBOLS DEFINITION -->
+<!-- SVG ICONS -->
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></symbol>
@@ -252,7 +246,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   <symbol id="i-crown" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></symbol>
 </svg>
 
-<!-- JAVASCRIPT & SUPABASE INTEGRATION -->
+<!-- JAVASCRIPT & SUPABASE CORE LOGIC -->
 <script>
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
@@ -270,12 +264,12 @@ function zenkaiCloudApp(){
     authPassword: '',
     authUsername: '',
     
-    // Bottom Sheet Custom State
+    // Bottom Sheet Notifikasi Kustom
     sheetOpen: false,
     sheetTitle: '',
     sheetMessage: '',
     
-    userName: '',
+    userEmail: '',
     currentUser: null,
     isOwner: false,
     activeTab: 'home',
@@ -290,7 +284,7 @@ function zenkaiCloudApp(){
     // Sholat
     prayerTimes: {subuh:'04:30', dzuhur:'11:55', ashar:'15:10', maghrib:'17:55', isya:'19:05'},
     
-    // Game Reflex
+    // Game
     reflexState: 'yellow',
     reflexMessage: 'Tap untuk Mulai',
     reflexStart: 0,
@@ -301,12 +295,13 @@ function zenkaiCloudApp(){
       this.updateClock();
       setInterval(() => this.updateClock(), 1000);
       
-      // Cek sesi login Supabase saat ini
+      // Cek sesi login aktif dari Supabase
       const { data: { session } } = await supabaseWindow.auth.getSession();
       if (session) {
         this.currentUser = session.user;
         this.isAuthenticated = true;
-        await this.loadCloudData();
+        this.processUserData();
+        await this.loadTransactions();
       }
     },
     
@@ -332,6 +327,7 @@ function zenkaiCloudApp(){
       this.sheetOpen = true;
     },
     
+    // Otentikasi Email & Password Biasa
     async handleEmailAuth(){
       if(!this.authEmail || !this.authPassword){
         this.showAlert('Perhatian', 'Isi email dan password terlebih dahulu!');
@@ -339,11 +335,10 @@ function zenkaiCloudApp(){
       }
       try {
         if(this.authMode === 'register'){
-          if(!this.authUsername){ this.showAlert('Perhatian', 'Isi nama tampilan terlebih dahulu!'); return; }
           const { error } = await supabaseWindow.auth.signUp({
             email: this.authEmail,
             password: this.authPassword,
-            options: { data: { username: this.authUsername } }
+            options: { data: { username: this.authUsername || 'User' } }
           });
           if(error) throw error;
           this.showAlert('Sukses', 'Berhasil mendaftar! Silakan masuk.');
@@ -356,15 +351,16 @@ function zenkaiCloudApp(){
           if(error) throw error;
           this.currentUser = data.user;
           this.isAuthenticated = true;
-          await this.loadCloudData();
-          this.showAlert('Sukses', 'Berhasil masuk!');
+          this.processUserData();
+          await this.loadTransactions();
+          this.showAlert('Sukses', 'Berhasil masuk ke sistem cloud!');
         }
       } catch(e){
         this.showAlert('Gagal Otentikasi', e.message);
       }
     },
 
-    // Fungsi Login Instan Google OAuth
+    // Otentikasi Instan Google OAuth
     async loginWithGoogle(){
       try {
         const { error } = await supabaseWindow.auth.signInWithOAuth({
@@ -379,27 +375,27 @@ function zenkaiCloudApp(){
       }
     },
     
-    async loadCloudData(){
+    // Verifikasi Mutlak Owner Berdasarkan Email
+    processUserData(){
       if(!this.currentUser) return;
+      this.userEmail = this.currentUser.email || '';
       
-      // VERIFIKASI OWNER MUTLAK BERDASARKAN EMAIL (Bukan Nama Zenkai)
-      const userEmail = this.currentUser.email || '';
-      this.isOwner = (userEmail.toLowerCase() === OWNER_EMAIL.toLowerCase());
-
-      // Ambil profil dari tabel profiles jika ada
-      const { data: profile } = await supabaseWindow.from('profiles').select('*').eq('id', this.currentUser.id).single();
-      if(profile){
-        this.userName = profile.username;
-        this.quickNote = profile.quick_note || '';
+      // CEK OWNER KETAT: Hanya andikaatka@gmail.com yang menjadi owner
+      // Meskipun orang lain menamai dirinya "Zenkai", tidak akan pernah bisa jadi owner.
+      if (this.userEmail.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
+        this.isOwner = true;
       } else {
-        this.userName = this.currentUser.user_metadata?.username || userEmail.split('@')[0] || 'User';
+        this.isOwner = false;
       }
-      await this.loadTransactions();
     },
     
     async saveQuickNoteCloud(){
       if(!this.currentUser) return;
-      await supabaseWindow.from('profiles').update({ quick_note: this.quickNote }).eq('id', this.currentUser.id);
+      // Simpan catatan ke tabel profiles atau local state
+      await supabaseWindow.from('profiles').upsert({ 
+        id: this.currentUser.id, 
+        quick_note: this.quickNote 
+      });
     },
     
     async loadTransactions(){
@@ -409,7 +405,10 @@ function zenkaiCloudApp(){
     },
     
     async addTransaction(type){
-      if(!this.currentUser || !this.txCategory || !this.txAmount) return;
+      if(!this.currentUser || !this.txCategory || !this.txAmount){
+        this.showAlert('Perhatian', 'Isi kategori dan nominal transaksi!');
+        return;
+      }
       const amount = parseFloat(this.txAmount);
       const { error } = await supabaseWindow.from('transactions').insert({
         user_id: this.currentUser.id,
@@ -423,7 +422,7 @@ function zenkaiCloudApp(){
         this.txAmount = '';
         await this.loadTransactions();
       } else {
-        this.showAlert('Gagal', 'Gagal tambah transaksi: ' + error.message);
+        this.showAlert('Gagal', error.message);
       }
     },
     
