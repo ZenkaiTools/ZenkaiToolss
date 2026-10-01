@@ -3,14 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Zenkai Tools - Supabase Edition</title>
-<!-- Tailwind CSS -->
+<title>Zenkai Tools</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- Alpine.js -->
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-<!-- Supabase JS SDK v2 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
@@ -18,394 +13,614 @@
     font-family: 'Comic Neue', system-ui, sans-serif;
     background: #fbbf24;
     margin: 0; padding: 0;
-    min-height: 100vh;
-    display: flex; justify-content: center; align-items: flex-start;
-    overflow-x: hidden;
+    min-height: 100vh; overflow-x: hidden;
   }
   .font-title { font-family: 'Bangers', cursive; letter-spacing: 1.2px; }
   .font-arab { font-family: 'Amiri', serif; }
   .comic-panel {
     background: #fff; border: 2.5px solid #1a1a1a;
-    box-shadow: 3px 3px 0 0 #1a1a1a; border-radius: 14px;
-    padding: 12px; margin-bottom: 12px;
+    box-shadow: 3px 3px 0 0 #1a1a1a; border-radius: 14px; padding: 12px;
   }
   .nav-btn {
-    flex: 1; border: 2px solid #000; border-radius: 10px;
-    margin: 0 1px; padding: 6px 2px;
+    flex: 1; border: 2px solid black; border-radius: 10px;
+    margin: 0 1.5px; padding: 6px 2px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: white; cursor: pointer; font-family: 'Bangers', cursive; font-size: 8px; gap: 2px;
+    gap: 2px; background: white; cursor: pointer;
+    font-family: 'Bangers', cursive; font-size: 8px; letter-spacing: 0.5px;
   }
   .nav-btn.active { background: black; color: #fde68a; }
+  .hidden { display: none !important; }
+  .fade-in { animation: fadeIn 0.3s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   .input {
-    width: 100%; padding: 10px; border: 2.5px solid black; border-radius: 10px;
-    font-size: 14px; margin-bottom: 10px; text-align: center; font-family: 'Comic Neue', sans-serif; background: #fef3c7;
-    box-shadow: 2px 2px 0 0 #000;
+    width: 100%; padding: 12px; border: 2px solid black; border-radius: 10px;
+    font-size: 14px; margin-bottom: 12px; text-align: center; font-family: 'Comic Neue', sans-serif;
   }
   .btn {
-    width: 100%; padding: 12px; border: 2.5px solid black; border-radius: 10px;
-    font-size: 15px; font-weight: bold; cursor: pointer; font-family: 'Bangers', cursive; letter-spacing: 1px;
-    box-shadow: 2.5px 2.5px 0 0 #000; transition: transform 0.1s;
+    width: 100%; padding: 14px; border: 2px solid black; border-radius: 10px;
+    font-size: 16px; font-weight: bold; cursor: pointer; font-family: 'Bangers', cursive; letter-spacing: 1px;
   }
-  .btn:active { transform: translate(2px, 2px); box-shadow: none; }
   .btn-primary { background: #22d3ee; }
   .btn-success { background: #4ade80; }
   .btn-danger { background: #f87171; color: white; }
-  .app-container {
-    width: 100%; max-width: 448px; min-height: 100vh;
-    background: #fef3c7; border-left: 4px solid black; border-right: 4px solid black;
-    position: relative; display: flex; flex-direction: column;
+  .btn-link {
+    background: none; border: none; color: #1e40af; text-decoration: underline;
+    cursor: pointer; font-size: 13px; margin-top: 10px; width: 100%; font-family: 'Comic Neue', sans-serif;
   }
-  .main-content { padding: 12px; padding-bottom: 90px; flex: 1; overflow-y: auto; }
+  .box { background: #e9d5ff; border: 2px solid black; border-radius: 10px; padding: 12px; text-align: center; margin: 10px 0; }
+  .box-vip { background: #fcd34d; border: 2px solid black; border-radius: 10px; padding: 12px; text-align: center; margin: 10px 0; font-weight: bold; }
+  .box-owner { background: #9333ea; color: white; border: 2px solid black; border-radius: 10px; padding: 12px; text-align: center; margin: 10px 0; }
+  .main-content { max-width: 448px; margin: 0 auto; padding: 12px; padding-bottom: 90px; }
   .bottom-nav {
-    position: fixed; bottom: 0; width: 100%; max-width: 448px;
-    background: #fbbf24; border-top: 4px solid black; padding: 8px 4px;
-    display: flex; justify-content: space-between; z-index: 50;
+    position: fixed; bottom: 0; left: 0; right: 0; background: #fbbf24;
+    border-top: 4px solid black; display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 4px; z-index: 40;
   }
+  .header { background: #fbbf24; border-bottom: 4px solid black; padding: 12px; position: sticky; top: 0; z-index: 40; }
   .reflex-box {
-    width: 100%; height: 220px; border: 3px solid #000; border-radius: 12px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
-    box-shadow: 3px 3px 0 0 #000;
+    width: 100%; height: 200px; border: 2.5px solid black; border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; font-family: 'Bangers', cursive; font-size: 24px;
   }
-  .svg-icon { width: 20px; height: 20px; fill: currentColor; display: inline-block; }
-  .svg-icon-lg { width: 28px; height: 28px; fill: currentColor; display: inline-block; }
+  .reflex-red { background: #f87171; color: white; }
+  .reflex-yellow { background: #facc15; color: black; }
+  .reflex-green { background: #4ade80; color: white; }
 </style>
 </head>
-<body x-data="zenkaiApp()" x-init="init()">
+<body>
 
-<!-- LOGIN / REGISTER MODAL -->
-<div x-show="!isLoggedIn" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-  <div class="comic-panel bg-yellow-300 w-full max-w-sm text-center">
-    <div class="font-title text-3xl mb-1 text-black">ZENKAI CLOUD</div>
-    <p class="text-xs font-bold mb-4" x-text="isRegister ? 'Buat Akun Baru' : 'Masuk Supabase Auth'"></p>
+<!-- LOADING -->
+<div id="loading" style="text-align:center; padding:80px 20px;">
+  <div class="font-title" style="font-size:36px;">ZENKAI TOOLS</div>
+  <p id="status" style="margin-top:20px;">Memuat...</p>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" class="hidden" style="padding:20px;">
+  <div class="comic-panel" style="max-width:400px; margin:40px auto;">
+    <div class="font-title" style="font-size:28px; text-align:center; margin-bottom:15px;">ZENKAI TOOLS</div>
+    <h2 id="auth-title" class="font-title" style="font-size:20px; text-align:center;">MASUK</h2>
+    <p id="auth-desc" style="text-align:center; font-size:12px; color:#666; margin-bottom:15px;">Login untuk mulai!</p>
     
-    <input type="text" x-show="isRegister" x-model="inputUsername" placeholder="Username..." class="input">
-    <input type="email" x-model="inputEmail" placeholder="Email Gmail..." class="input">
-    <input type="password" x-model="inputPassword" placeholder="Password..." class="input">
+    <input id="input-username" class="input hidden" type="text" placeholder="Username...">
+    <input id="input-email" class="input" type="email" placeholder="Email...">
+    <input id="input-password" class="input" type="password" placeholder="Password...">
     
-    <button @click="submitAuth()" class="btn btn-primary mb-2" x-text="isRegister ? 'DAFTAR SEKARANG' : 'MASUK APLIKASI'"></button>
-    <button @click="isRegister = !isRegister" class="text-xs font-bold underline bg-transparent border-none text-blue-900 cursor-pointer" x-text="isRegister ? 'Sudah punya akun? Masuk' : 'Belum punya akun? Daftar'"></button>
+    <button id="btn-submit" class="btn btn-primary" onclick="doSubmit()">MASUK</button>
+    <button id="btn-toggle" class="btn-link" onclick="toggleMode()">Belum punya akun? Daftar</button>
   </div>
 </div>
 
-<div class="app-container">
-  <!-- HEADER -->
-  <header class="bg-yellow-400 border-b-4 border-black p-3 sticky top-0 z-40 flex justify-between items-center">
-    <div class="flex items-center gap-2">
-      <div class="bg-black text-yellow-300 font-title px-2.5 py-1 rounded-lg text-sm border-2 border-black rotate-[-2deg]" x-text="profile.username ? profile.username.substring(0,2).toUpperCase() : 'ZK'"></div>
-      <div>
-        <div class="font-title text-lg leading-none">ZENKAI TOOLS</div>
-        <span class="text-[9px] font-bold bg-white px-1.5 py-0.5 rounded border border-black" x-text="isOwner ? 'Master Owner' : (profile.is_vip ? 'VIP Member' : 'User')"></span>
-      </div>
-    </div>
-    <div class="flex items-center gap-2">
-      <span class="bg-white border-2 border-black px-2 py-1 rounded-lg text-xs font-bold shadow-[2px_2px_0_0_#000]" x-text="currentTime"></span>
-      <button @click="logout()" class="bg-red-400 border-2 border-black p-1.5 rounded-lg text-xs font-bold cursor-pointer shadow-[2px_2px_0_0_#000]" title="Keluar">
-        <svg class="svg-icon"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- CONTENT -->
-  <main class="main-content">
-    
-    <!-- TAB HOME -->
-    <div x-show="activeTab === 'home'" class="space-y-3">
-      <div class="comic-panel bg-cyan-300 flex items-center gap-3">
-        <div class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl flex items-center justify-center font-title text-2xl shadow-[2px_2px_0_0_#000]" x-text="profile.username ? profile.username.charAt(0).toUpperCase() : 'U'"></div>
+<!-- MAIN APP -->
+<div id="main-app" class="hidden">
+  <div class="header">
+    <div style="max-width:448px; margin:0 auto; display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div class="font-title" style="background:black; color:#fde68a; padding:4px 10px; border-radius:10px; font-size:18px; transform:rotate(-3deg);" id="avatar-badge">ZK</div>
         <div>
-          <div class="font-title text-lg text-purple-900 leading-tight">Halo, <span x-text="profile.username"></span>!</div>
-          <div class="text-[11px] font-bold text-black bg-white/70 px-2 py-0.5 rounded border border-black inline-block mt-1">Supabase Cloud Aktif</div>
+          <div class="font-title" style="font-size:20px; line-height:1;">ZENKAI TOOLS</div>
+          <div id="header-role" style="font-size:10px; font-weight:bold; background:white; border:1px solid black; padding:1px 6px; border-radius:4px; display:inline-block;">User</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <div id="clock-display" style="background:white; border:2px solid black; padding:4px 8px; border-radius:8px; font-size:11px; font-weight:bold;">--:--</div>
+        <button onclick="doLogout()" style="background:#f87171; border:2px solid black; padding:4px 8px; border-radius:8px; font-size:14px; cursor:pointer;">🚪</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <!-- TAB: HOME -->
+    <div id="tab-home" class="fade-in">
+      <div class="comic-panel" style="background:#67e8f9; display:flex; align-items:center; gap:12px;">
+        <div style="width:60px; height:60px; background:#fde68a; border:2px solid black; border-radius:12px; display:flex; align-items:center; justify-content:center; font-family:'Bangers'; font-size:28px; flex-shrink:0;" id="home-avatar">U</div>
+        <div>
+          <div class="font-title" style="font-size:16px; color:#581c87;">Halo, <span id="home-name">User</span>!</div>
+          <div style="font-size:11px; color:#666;" id="home-email"></div>
         </div>
       </div>
 
-      <div class="grid grid-cols-3 gap-2">
-        <div class="comic-panel bg-purple-200 text-center p-2"><div class="font-title text-xl" x-text="profile.points || 0"></div><div class="text-[9px] font-bold">POIN</div></div>
-        <div class="comic-panel bg-orange-200 text-center p-2"><div class="font-title text-xl">1</div><div class="text-[9px] font-bold">STREAK</div></div>
-        <div class="comic-panel bg-emerald-200 text-center p-2"><div class="font-title text-xl">0</div><div class="text-[9px] font-bold">BADGE</div></div>
-      </div>
-
-      <div class="comic-panel bg-amber-300 flex justify-between items-center p-3">
-        <div class="flex items-center gap-2">
-          <svg class="svg-icon-lg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-          <div>
-            <div class="font-title text-sm">Status VIP</div>
-            <div class="text-[10px] font-bold" x-text="profile.is_vip ? 'Aktif' : 'Belum VIP'"></div>
-          </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:12px;">
+        <div class="comic-panel" style="background:#e9d5ff; text-align:center; padding:10px;">
+          <div class="font-title" style="font-size:20px;" id="home-points">0</div>
+          <div style="font-size:10px; font-weight:bold;">POIN</div>
         </div>
-        <a href="https://wa.me/6285352831643?text=Halo%20Owner,%20saya%20mau%20order%20VIP" target="_blank" class="bg-black text-amber-300 border-2 border-black px-3 py-1.5 rounded-lg font-title text-xs shadow-[2px_2px_0_0_#000]">Order WA</a>
+        <div class="comic-panel" style="background:#fed7aa; text-align:center; padding:10px;">
+          <div class="font-title" style="font-size:20px;">1</div>
+          <div style="font-size:10px; font-weight:bold;">STREAK</div>
+        </div>
+        <div class="comic-panel" style="background:#a7f3d0; text-align:center; padding:10px;">
+          <div class="font-title" style="font-size:20px;">0</div>
+          <div style="font-size:10px; font-weight:bold;">BADGE</div>
+        </div>
       </div>
 
-      <div class="comic-panel bg-white">
-        <div class="font-title text-sm mb-2 border-b-2 border-black pb-1">CATATAN KILAT CLOUD</div>
-        <textarea x-model="quickNote" @input="saveNote()" rows="3" placeholder="Tulis ide atau catatanmu di sini..." class="w-full border-2 border-black p-2 rounded-lg text-xs bg-yellow-50 focus:outline-none"></textarea>
+      <div id="home-vip-box" class="box" style="background:#e5e7eb; margin-top:12px;">
+        <div id="home-vip-text">👤 User Biasa</div>
+      </div>
+
+      <div id="home-vip-btn-box" class="hidden" style="margin-top:12px;">
+        <button class="btn" style="background:#fbbf24;" onclick="requestVip()">⭐ JADI VIP (Rp 25.000)</button>
+      </div>
+
+      <div id="home-owner-box" class="box-owner hidden" style="margin-top:12px;">👑 OWNER</div>
+
+      <div class="comic-panel" style="margin-top:12px;">
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">📝 CATATAN KILAT</div>
+        <textarea id="quick-note" rows="3" placeholder="Tulis ide..." oninput="saveQuickNote()" style="width:100%; border:2px solid black; padding:8px; border-radius:10px; font-family:'Comic Neue'; font-size:13px;"></textarea>
       </div>
     </div>
 
-    <!-- TAB DOA -->
-    <div x-show="activeTab === 'doa'" class="space-y-3">
-      <div class="comic-panel bg-teal-400 text-white flex items-center gap-2">
-        <div class="font-title text-2xl">KITAB & DOA HARIAN</div>
+    <!-- TAB: KITAB -->
+    <div id="tab-kitab" class="fade-in hidden">
+      <div class="comic-panel" style="background:#34d399; margin-bottom:12px;">
+        <div class="font-title" style="font-size:24px; color:white;">📖 DOA & KITAB HARIAN</div>
       </div>
-      <template x-for="d in doaList">
-        <div class="comic-panel bg-yellow-50">
-          <div class="font-title text-purple-900 text-base" x-text="d.nama"></div>
-          <div class="font-arab text-2xl text-right my-2 font-bold" x-text="d.arab"></div>
-          <div class="text-xs font-bold text-gray-700 border-t-2 border-black/10 pt-2" x-text="d.arti"></div>
-        </div>
-      </template>
+      <div id="doa-list-container" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
 
-    <!-- TAB KEUANGAN -->
-    <div x-show="activeTab === 'keuangan'" class="space-y-3">
-      <div class="comic-panel bg-pink-400 text-white">
-        <div class="font-title text-xl">DOMPET KEUANGAN CLOUD</div>
-        <div class="text-lg font-bold mt-1 bg-black/20 p-2 rounded-lg border-2 border-black" x-text="'Saldo: Rp ' + totalBalance.toLocaleString('id-ID')"></div>
+    <!-- TAB: KEUANGAN -->
+    <div id="tab-keuangan" class="fade-in hidden">
+      <div class="comic-panel" style="background:#f472b6; margin-bottom:12px;">
+        <div class="font-title" style="font-size:24px; color:white;">💰 DOMPET KEUANGAN</div>
+        <div id="wallet-balance" style="font-size:16px; font-weight:bold; color:white; margin-top:4px;">Total Saldo: Rp 0</div>
       </div>
-      <div class="comic-panel bg-white">
-        <div class="font-title text-sm mb-2">Catat Transaksi Baru</div>
-        <input type="text" x-model="txCategory" placeholder="Kategori (Gaji / Makan / dll)..." class="input">
-        <input type="number" x-model="txAmount" placeholder="Nominal Rp..." class="input">
-        <div class="grid grid-cols-2 gap-2">
-          <button @click="addTx('income')" class="btn btn-success text-xs py-2">+ Pemasukan</button>
-          <button @click="addTx('expense')" class="btn btn-danger text-xs py-2">- Pengeluaran</button>
+      <div class="comic-panel" style="margin-bottom:12px;">
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">Catat Transaksi</div>
+        <input id="tx-category" class="input" type="text" placeholder="Kategori (Gaji / Makan)...">
+        <input id="tx-amount" class="input" type="number" placeholder="Nominal (Rp)...">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <button class="btn btn-success" onclick="addTransaction('income')" style="font-size:14px; padding:10px;">+ Pemasukan</button>
+          <button class="btn btn-danger" onclick="addTransaction('expense')" style="font-size:14px; padding:10px;">- Pengeluaran</button>
         </div>
       </div>
-      <div class="comic-panel bg-white">
-        <div class="font-title text-sm mb-2">Riwayat Transaksi Cloud</div>
-        <template x-for="t in transactions">
-          <div class="border-2 border-black p-2 rounded-lg mb-2 flex justify-between items-center text-xs font-bold shadow-[2px_2px_0_0_#000]" :class="t.type === 'income' ? 'bg-green-50' : 'bg-red-50'">
-            <div>
-              <span x-text="t.category"></span>
-              <span class="text-[9px] text-gray-500 block" x-text="t.date"></span>
-            </div>
-            <div :class="t.type === 'income' ? 'text-green-700' : 'text-red-700'" x-text="(t.type === 'income' ? '+' : '-') + 'Rp ' + t.amount.toLocaleString('id-ID')"></div>
-          </div>
-        </template>
+      <div class="comic-panel">
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">Riwayat Transaksi</div>
+        <div id="transaction-list" style="font-size:12px; display:flex; flex-direction:column; gap:6px;">Memuat riwayat...</div>
       </div>
+    </div>
+
+    <!-- TAB: SEHAT & GAME -->
+    <div id="tab-game" class="fade-in hidden">
+      <div class="comic-panel" style="background:#38bdf8; margin-bottom:12px;">
+        <div class="font-title" style="font-size:22px; color:white;">💪 KALKULATOR KESEHATAN</div>
+      </div>
+      <div class="comic-panel" style="margin-bottom:12px;">
+        <div class="font-title" style="font-size:14px; margin-bottom:8px;">Hitung BMI</div>
+        <input id="bmi-weight" class="input" type="number" placeholder="Berat Badan (kg)">
+        <input id="bmi-height" class="input" type="number" placeholder="Tinggi Badan (cm)">
+        <button class="btn btn-primary" onclick="calcBMI()" style="font-size:14px; padding:10px;">HITUNG BMI</button>
+        <div id="bmi-result" style="margin-top:8px; font-weight:bold; font-size:13px; text-align:center;"></div>
+      </div>
+      <div class="comic-panel" style="margin-bottom:12px;">
+        <div class="font-title" style="font-size:14px; margin-bottom:8px;">Hitung Usia Detail</div>
+        <input id="birth-date" class="input" type="date">
+        <button class="btn btn-primary" onclick="calcAge()" style="font-size:14px; padding:10px; background:#c084fc;">HITUNG USIA</button>
+        <div id="age-result" style="margin-top:8px; font-weight:bold; font-size:13px; text-align:center;"></div>
+      </div>
+      <div class="comic-panel" style="background:#fbbf24; margin-bottom:12px;">
+        <div class="font-title" style="font-size:22px;">🎮 ARCADE REFLEX GAME</div>
+      </div>
+      <div class="comic-panel text-center">
+        <div id="reflex-box" class="reflex-box reflex-red" onclick="handleReflexClick()">
+          <span id="reflex-text">KLIK MULAI</span>
+        </div>
+        <button class="btn btn-primary" onclick="startReflexGame()" style="margin-top:10px; font-size:14px; padding:10px;">MULAI GAME</button>
+      </div>
+    </div>
+
+    <!-- TAB: OWNER -->
+    <div id="tab-owner" class="fade-in hidden">
+      <div class="comic-panel" style="background:#9333ea; color:white;">
+        <div class="font-title" style="font-size:24px;">👑 OWNER PANEL</div>
+      </div>
+      <div class="comic-panel" style="margin-top:12px;">
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">⭐ KASIH VIP</div>
+        <input id="input-vip-user" class="input" type="text" placeholder="Username target...">
+        <button class="btn btn-primary" onclick="doGrantVip()">Beri VIP</button>
+      </div>
+      <div class="comic-panel" style="margin-top:12px;">
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">📢 BROADCAST</div>
+        <input id="input-broadcast" class="input" type="text" placeholder="Isi pengumuman...">
+        <button class="btn btn-primary" onclick="doBroadcast()">Kirim Broadcast</button>
+      </div>
+      <div class="comic-panel" style="margin-top:12px;">
+        <div class="font-title" style="font-size:14px; border-bottom:2px solid black; padding-bottom:6px; margin-bottom:10px;">📋 DAFTAR VIP</div>
+        <div id="vip-list-box" style="font-size:12px;">Memuat...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div style="max-width:448px; margin:0 auto; width:100%; display:flex;">
+      <button class="nav-btn active" data-tab="home" onclick="switchTab('home')"><span>🏠</span><span>HOME</span></button>
+      <button class="nav-btn" data-tab="kitab" onclick="switchTab('kitab')"><span>📖</span><span>KITAB</span></button>
+      <button class="nav-btn" data-tab="keuangan" onclick="switchTab('keuangan')"><span>💰</span><span>DOMPET</span></button>
+      <button class="nav-btn" data-tab="game" onclick="switchTab('game')"><span>🎮</span><span>SEHAT/GAME</span></button>
+      <button id="nav-owner" class="nav-btn hidden" data-tab="owner" onclick="switchTab('owner')"><span>👑</span><span>OWNER</span></button>
+    </div>
+  </div>
  </div>
-     <!-- TAB SEHAT (BMI) -->
-    <div x-show="activeTab === 'bmi'" class="space-y-3">
-      <div class="comic-panel bg-sky-300 flex items-center gap-2">
-        <div class="font-title text-2xl">KALKULATOR KESEHATAN</div>
-      </div>
-      <div class="comic-panel bg-white">
-        <div class="font-title text-sm mb-2">Kalkulator BMI</div>
-        <input type="number" x-model="bmiW" placeholder="Berat Badan (kg)" class="input">
-        <input type="number" x-model="bmiH" placeholder="Tinggi Badan (cm)" class="input">
-        <button @click="calcBMI()" class="btn btn-primary text-xs py-2">HITUNG BMI</button>
-        <div class="mt-2 font-bold text-center text-xs bg-yellow-100 p-2 rounded-lg border-2 border-black" x-text="bmiRes || 'Hasil akan muncul di sini'"></div>
-      </div>
-    </div>
-
-    <!-- TAB GAME (ARCADE) -->
-    <div x-show="activeTab === 'arcade'" class="space-y-3">
-      <div class="comic-panel bg-yellow-400 flex items-center gap-2">
-        <div class="font-title text-2xl">ARCADE REFLEX GAME</div>
-      </div>
-      <div class="comic-panel bg-white text-center">
-        <div class="reflex-box mb-3" :class="reflexBg" @click="tapReflex()">
-          <span class="font-title text-2xl" x-text="reflexText"></span>
-        </div>
-        <button @click="startReflex()" class="btn btn-primary text-sm py-2">MULAI GAME</button>
-      </div>
-    </div>
-
-    <!-- TAB OWNER -->
-    <div x-show="activeTab === 'owner' && isOwner" class="space-y-3">
-      <div class="comic-panel bg-purple-600 text-white flex items-center gap-2">
-        <div class="font-title text-2xl">OWNER PANEL</div>
-      </div>
-      <div class="comic-panel bg-white">
-        <div class="font-title text-sm mb-2">Beri Akses VIP (30 Hari)</div>
-        <input type="text" x-model="targetUser" placeholder="Username target..." class="input">
-        <button @click="grantVip()" class="btn btn-primary text-xs py-2">UPDATE KE VIP</button>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- NAVIGATION -->
-  <nav class="bottom-nav">
-    <button @click="activeTab = 'home'" class="nav-btn" :class="{ 'active': activeTab === 'home' }"><span>🏠</span><span>HOME</span></button>
-    <button @click="activeTab = 'doa'" class="nav-btn" :class="{ 'active': activeTab === 'doa' }"><span>📖</span><span>DOA</span></button>
-    <button @click="activeTab = 'keuangan'" class="nav-btn" :class="{ 'active': activeTab === 'keuangan' }"><span>💰</span><span>DOMPET</span></button>
-    <button @click="activeTab = 'bmi'" class="nav-btn" :class="{ 'active': activeTab === 'bmi' }"><span>💪</span><span>SEHAT</span></button>
-    <button @click="activeTab = 'arcade'" class="nav-btn" :class="{ 'active': activeTab === 'arcade' }"><span>🎮</span><span>GAME</span></button>
-    <button x-show="isOwner" @click="activeTab = 'owner'" class="nav-btn" :class="{ 'active': activeTab === 'owner' }"><span>👑</span><span>OWNER</span></button>
-  </nav>
-</div>
-
-<!-- SUPABASE LOGIC & ALPINE COMPONENT -->
-<script>
+       <script>
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const OWNER_EMAIL = 'andikaatka@gmail.com';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function zenkaiApp() {
-  return {
-    isLoggedIn: false, isRegister: false,
-    inputEmail: '', inputPassword: '', inputUsername: '',
-    activeTab: 'home', currentTime: '--:--',
-    userId: '', profile: {}, isOwner: false,
-    quickNote: '', noteTimer: null,
+var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+var authMode = 'login';
+var currentUser = null;
+var isOwnerUser = false;
+var noteTimer = null;
+
+function show(id) { document.getElementById(id).classList.remove('hidden'); }
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+function setStatus(t) { document.getElementById('status').textContent = t; }
+
+async function init() {
+  updateClock();
+  setInterval(updateClock, 1000);
+  renderDoaList();
+  
+  try {
+    setStatus('Cek session...');
+    var result = await supabase.auth.getUser();
+    currentUser = result.data.user;
     
-    doaList: [
-      { nama: 'Doa Sebelum Tidur', arab: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', arti: 'Dengan nama-Mu ya Allah, aku mati dan hidup.' },
-      { nama: 'Doa Bangun Tidur', arab: 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ', arti: 'Segala puji bagi Allah yang menghidupkan kami kembali.' }
-    ],
-    
-    totalBalance: 0, transactions: [], txCategory: '', txAmount: '',
-    bmiW: '', bmiH: '', bmiRes: '',
-    reflexBg: 'bg-red-400 text-white', reflexText: 'KLIK MULAI', reflexState: 'idle', reflexStart: 0, reflexTimer: null,
-    targetUser: '',
-
-    async init() {
-      setInterval(() => {
-        const d = new Date();
-        this.currentTime = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
-      }, 1000);
-
-      const sessionRes = await supabase.auth.getSession();
-      if (sessionRes.data.session) {
-        this.userId = sessionRes.data.session.user.id;
-        this.isLoggedIn = true;
-        await this.loadData(sessionRes.data.session);
-      }
-    },
-
-    async loadData(session) {
-      let { data, error } = await supabase.from('profiles').select('*').eq('id', this.userId).single();
-      
-      if (error || !data) {
-        const newProfile = {
-          id: this.userId,
-          username: session.user.user_metadata?.username || session.user.email.split('@')[0],
-          email: session.user.email,
-          points: 0,
-          is_vip: false,
-          quick_note: ''
-        };
-        await supabase.from('profiles').upsert(newProfile);
-        data = newProfile;
-      }
-
-      this.profile = data;
-      this.quickNote = data.quick_note || '';
-      this.isOwner = (data.email === OWNER_EMAIL || session.user.email === OWNER_EMAIL);
-      this.fetchTransactions();
-    },
-
-    async submitAuth() {
-      if (!this.inputEmail || !this.inputPassword) { alert('Isi email & password!'); return; }
-      if (this.isRegister && !this.inputUsername) { alert('Isi username!'); return; }
-
-      if (this.isRegister) {
-        const { data, error } = await supabase.auth.signUp({
-          email: this.inputEmail, password: this.inputPassword,
-          options: { data: { username: this.inputUsername } }
-        });
-        if (error) {
-          alert(error.message);
-        } else {
-          if (data?.user) {
-            await supabase.from('profiles').upsert({
-              id: data.user.id,
-              username: this.inputUsername,
-              email: this.inputEmail,
-              points: 0,
-              is_vip: false
-            });
-          }
-          alert('Pendaftaran berhasil! Silakan login.');
-          this.isRegister = false;
-        }
-      } else {
-        const { data, error } = await supabase.auth.signInWithPassword({ email: this.inputEmail, password: this.inputPassword });
-        if (error) alert(error.message);
-        else location.reload();
-      }
-    },
-
-    async logout() {
-      await supabase.auth.signOut();
-      location.reload();
-    },
-
-    saveNote() {
-      clearTimeout(this.noteTimer);
-      this.noteTimer = setTimeout(async () => {
-        await supabase.from('profiles').update({ quick_note: this.quickNote }).eq('id', this.userId);
-      }, 800);
-    },
-
-    async addTx(type) {
-      if (!this.txCategory || !this.txAmount) return;
-      await supabase.from('transactions').insert({
-        user_id: this.userId, type, category: this.txCategory, amount: parseFloat(this.txAmount),
-        date: new Date().toLocaleDateString('id-ID')
-      });
-      this.txCategory = ''; this.txAmount = '';
-      this.fetchTransactions();
-    },
-
-    async fetchTransactions() {
-      const { data } = await supabase.from('transactions').select('*').eq('user_id', this.userId).order('id', { ascending: false });
-      if (data) {
-        this.transactions = data;
-        let bal = 0;
-        data.forEach(t => bal += (t.type === 'income' ? t.amount : -t.amount));
-        this.totalBalance = bal;
-      }
-    },
-
-    calcBMI() {
-      if (!this.bmiW || !this.bmiH) return;
-      const hM = this.bmiH / 100;
-      const bmi = this.bmiW / (hM * hM);
-      let status = bmi < 18.5 ? 'Kekurusan' : bmi < 25 ? 'Normal (Ideal)' : bmi < 30 ? 'Kelebihan Berat Badan' : 'Obesitas';
-      this.bmiRes = `BMI: ${bmi.toFixed(1)} (${status})`;
-    },
-
-    startReflex() {
-      this.reflexBg = 'bg-yellow-400 text-black';
-      this.reflexText = 'TUNGGU HIJAU...';
-      this.reflexState = 'wait';
-      const delay = 1500 + Math.random() * 2000;
-      clearTimeout(this.reflexTimer);
-      this.reflexTimer = setTimeout(() => {
-        if (this.reflexState === 'wait') {
-          this.reflexBg = 'bg-green-500 text-white';
-          this.reflexText = 'KLIK SEKARANG!';
-          this.reflexState = 'ready';
-          this.reflexStart = Date.now();
-        }
-      }, delay);
-    },
-
-    tapReflex() {
-      if (this.reflexState === 'wait') {
-        clearTimeout(this.reflexTimer);
-        this.reflexBg = 'bg-red-500 text-white';
-        this.reflexText = 'TERLALU CEPAT!';
-        this.reflexState = 'idle';
-      } else if (this.reflexState === 'ready') {
-        const ms = Date.now() - this.reflexStart;
-        this.reflexBg = 'bg-cyan-400 text-black';
-        this.reflexText = `${ms} ms!`;
-        this.reflexState = 'idle';
-      }
-    },
-
-    async grantVip() {
-      if (!this.targetUser) return;
-      const exp = new Date(Date.now() + 30 * 86400000).toISOString();
-      const { error } = await supabase.from('profiles').update({ is_vip: true, vip_expiry: exp }).eq('username', this.targetUser);
-      if (error) alert('Gagal memperbarui VIP');
-      else { alert('VIP Berhasil Diberikan ke ' + this.targetUser); this.targetUser = ''; }
+    if (currentUser) {
+      await fillHome();
+      await loadTransactions();
+      show('main-app');
+      hide('loading');
+      hide('login-screen');
+    } else {
+      hide('loading');
+      hide('main-app');
+      show('login-screen');
     }
-  };
+  } catch (e) {
+    setStatus('ERROR: ' + e.message);
+    setTimeout(function() {
+      hide('loading');
+      show('login-screen');
+    }, 2000);
+  }
 }
+
+function updateClock() {
+  var el = document.getElementById('clock-display');
+  if (el) {
+    var now = new Date();
+    var h = String(now.getHours()).padStart(2, '0');
+    var m = String(now.getMinutes()).padStart(2, '0');
+    el.textContent = h + ':' + m;
+  }
+}
+
+async function loadProfile() {
+  var result = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+  return result.data;
+}
+
+function switchTab(tab) {
+  var tabs = ['home', 'kitab', 'keuangan', 'game', 'owner'];
+  for (var i = 0; i < tabs.length; i++) {
+    var el = document.getElementById('tab-' + tabs[i]);
+    if (el) el.classList.add('hidden');
+  }
+  var target = document.getElementById('tab-' + tab);
+  if (target) target.classList.remove('hidden');
+  
+  var btns = document.querySelectorAll('.nav-btn');
+  btns.forEach(function(b) {
+    b.classList.remove('active');
+    if (b.dataset.tab === tab) b.classList.add('active');
+  });
+  
+  if (tab === 'owner') loadVipList();
+  if (tab === 'keuangan') loadTransactions();
+}
+
+function toggleMode() {
+  if (authMode === 'login') {
+    authMode = 'register';
+    document.getElementById('auth-title').textContent = 'DAFTAR';
+    document.getElementById('auth-desc').textContent = 'Bikin akun baru!';
+    document.getElementById('btn-submit').textContent = 'DAFTAR';
+    document.getElementById('btn-toggle').textContent = 'Sudah punya akun? Login';
+    show('input-username');
+  } else {
+    authMode = 'login';
+    document.getElementById('auth-title').textContent = 'MASUK';
+    document.getElementById('auth-desc').textContent = 'Login untuk mulai!';
+    document.getElementById('btn-submit').textContent = 'MASUK';
+    document.getElementById('btn-toggle').textContent = 'Belum punya akun? Daftar';
+    hide('input-username');
+  }
+}
+
+async function doSubmit() {
+  var email = document.getElementById('input-email').value.trim();
+  var password = document.getElementById('input-password').value.trim();
+  var username = document.getElementById('input-username').value.trim();
+  
+  if (!email || !password) { alert('Isi email dan password!'); return; }
+  
+  try {
+    if (authMode === 'register') {
+      if (!username) { alert('Isi username!'); return; }
+      var r1 = await supabase.auth.signUp({
+        email: email, password: password,
+        options: { data: { username: username } }
+      });
+      if (r1.error) throw r1.error;
+      var r2 = await supabase.auth.signInWithPassword({ email: email, password: password });
+      if (r2.error) throw r2.error;
+      alert('Berhasil daftar!');
+    } else {
+      var r3 = await supabase.auth.signInWithPassword({ email: email, password: password });
+      if (r3.error) throw r3.error;
+      alert('Berhasil login!');
+    }
+    location.reload();
+  } catch (e) {
+    alert('Gagal: ' + e.message);
+  }
+}
+
+async function fillHome() {
+  var profile = await loadProfile();
+  if (!profile) return;
+  
+  document.getElementById('home-name').textContent = profile.username;
+  document.getElementById('home-email').textContent = profile.email || '';
+  document.getElementById('home-points').textContent = profile.points || 0;
+  document.getElementById('home-avatar').textContent = profile.username.charAt(0).toUpperCase();
+  document.getElementById('avatar-badge').textContent = profile.username.substring(0, 2).toUpperCase();
+  document.getElementById('quick-note').value = profile.quick_note || '';
+  
+  var isVip = profile.is_vip && (!profile.vip_expiry || new Date(profile.vip_expiry) > new Date());
+  var isOwner = profile.email === OWNER_EMAIL;
+  isOwnerUser = isOwner;
+  
+  var role = isOwner ? 'Master Owner' : (isVip ? 'VIP Member' : 'User');
+  document.getElementById('header-role').textContent = role;
+  
+  if (isVip) {
+    document.getElementById('home-vip-box').style.background = '#fcd34d';
+    document.getElementById('home-vip-text').textContent = '⭐ VIP Member';
+    hide('home-vip-btn-box');
+  } else {
+    show('home-vip-btn-box');
+  }
+  
+  if (isOwner) {
+    show('home-owner-box');
+    show('nav-owner');
+  }
+}
+
+function saveQuickNote() {
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(async function() {
+    var note = document.getElementById('quick-note').value;
+    await supabase.from('profiles').update({ quick_note: note }).eq('id', currentUser.id);
+  }, 800);
+}
+
+const doaList = [
+  { nama: 'Doa Sebelum Tidur', arab: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', latin: 'Bismikallahumma amutu wa ahya', arti: 'Dengan nama-Mu ya Allah, aku mati dan hidup.' },
+  { nama: 'Doa Bangun Tidur', arab: 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ', latin: 'Alhamdulillahilladhi ahyana ba\'da ma amatana wa ilaihin-nushur', arti: 'Segala puji bagi Allah yang menghidupkan kami kembali setelah kematian kami.' },
+  { nama: 'Doa Sebelum Makan', arab: 'بِسْمِ اللَّهِ', latin: 'Bismillah', arti: 'Dengan nama Allah.' }
+];
+
+function renderDoaList() {
+  var container = document.getElementById('doa-list-container');
+  if (!container) return;
+  var html = '';
+  for (var i = 0; i < doaList.length; i++) {
+    html += '<div class="comic-panel" style="background:#fef3c7;">' +
+      '<div class="font-title" style="font-size:16px; color:#581c87;">' + doaList[i].nama + '</div>' +
+      '<div class="font-arab" style="font-size:22px; text-align:right; margin:8px 0; font-weight:bold;">' + doaList[i].arab + '</div>' +
+      '<div style="font-size:12px; font-style:italic; color:#1d4ed8; margin-bottom:4px;">' + doaList[i].latin + '</div>' +
+      '<div style="font-size:12px; color:#374151;">' + doaList[i].arti + '</div>' +
+    '</div>';
+  }
+  container.innerHTML = html;
+}
+
+async function addTransaction(type) {
+  var category = document.getElementById('tx-category').value.trim();
+  var amount = parseFloat(document.getElementById('tx-amount').value);
+  
+  if (!category || isNaN(amount) || amount <= 0) {
+    alert('Masukkan kategori dan nominal yang valid!');
+    return;
+  }
+  
+  try {
+    var dateStr = new Date().toLocaleDateString('id-ID');
+    var { error } = await supabase.from('transactions').insert({
+      user_id: currentUser.id, type: type, category: category, amount: amount, date: dateStr
+    });
+    if (error) throw error;
+    
+    document.getElementById('tx-category').value = '';
+    document.getElementById('tx-amount').value = '';
+    loadTransactions();
+  } catch (e) {
+    alert('Gagal simpan transaksi: ' + e.message);
+  }
+}
+
+async function loadTransactions() {
+  try {
+    var { data, error } = await supabase.from('transactions').select('*').eq('user_id', currentUser.id).order('id', { ascending: false });
+    if (error) throw error;
+    
+    var listEl = document.getElementById('transaction-list');
+    var balanceEl = document.getElementById('wallet-balance');
+    if (!data || data.length === 0) {
+      listEl.innerHTML = 'Belum ada transaksi.';
+      balanceEl.textContent = 'Total Saldo: Rp 0';
+      return;
+    }
+    
+    var balance = 0;
+    var html = '';
+    for (var i = 0; i < data.length; i++) {
+      var t = data[i];
+      if (t.type === 'income') balance += t.amount;
+      else balance -= t.amount;
+      
+      var colorClass = t.type === 'income' ? 'background:#d1fae5; color:#065f46;' : 'background:#fee2e2; color:#991b1b;';
+      var sign = t.type === 'income' ? '+' : '-';
+      
+      html += '<div style="border:2px solid black; padding:8px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;' + colorClass + '">' +
+        '<div><strong>' + t.category + '</strong><br><span style="font-size:10px; opacity:0.8;">' + t.date + '</span></div>' +
+        '<div style="font-weight:bold;">' + sign + 'Rp ' + t.amount.toLocaleString('id-ID') + '</div>' +
+      '</div>';
+    }
+    listEl.innerHTML = html;
+    balanceEl.textContent = 'Total Saldo: Rp ' + balance.toLocaleString('id-ID');
+  } catch (e) {
+    console.error('Error load transactions:', e);
+  }
+}
+
+function calcBMI() {
+  var w = parseFloat(document.getElementById('bmi-weight').value);
+  var h = parseFloat(document.getElementById('bmi-height').value);
+  var resEl = document.getElementById('bmi-result');
+  
+  if (!w || !h || w <= 0 || h <= 0) {
+    resEl.textContent = 'Masukkan berat dan tinggi yang valid!';
+    return;
+  }
+  
+  var hM = h / 100;
+  var bmi = w / (hM * hM);
+  var status = '';
+  if (bmi < 18.5) status = 'Kekurusan';
+  else if (bmi < 25) status = 'Normal (Ideal)';
+  else if (bmi < 30) status = 'Kelebihan Berat Badan';
+  else status = 'Obesitas';
+  
+  resEl.textContent = 'BMI Anda: ' + bmi.toFixed(1) + ' (' + status + ')';
+}
+
+function calcAge() {
+  var bDate = document.getElementById('birth-date').value;
+  var resEl = document.getElementById('age-result');
+  if (!bDate) {
+    resEl.textContent = 'Pilih tanggal lahir terlebih dahulu!';
+    return;
+  }
+  
+  var dob = new Date(bDate);
+  var now = new Date();
+  var y = now.getFullYear() - dob.getFullYear();
+  var m = now.getMonth() - dob.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) {
+    y--; m += 12;
+  }
+  resEl.textContent = 'Usia Anda: ' + y + ' Tahun, ' + m + ' Bulan';
+}
+
+var reflexState = 'idle';
+var reflexTimer = null;
+var reflexStartTime = 0;
+
+function startReflexGame() {
+  var box = document.getElementById('reflex-box');
+  var text = document.getElementById('reflex-text');
+  
+  box.className = 'reflex-box reflex-yellow';
+  text.textContent = 'TUNGGU SAMPAI HIJAU...';
+  reflexState = 'waiting';
+  
+  var delay = 1500 + Math.random() * 2500;
+  clearTimeout(reflexTimer);
+  reflexTimer = setTimeout(function() {
+    if (reflexState === 'waiting') {
+      box.className = 'reflex-box reflex-green';
+      text.textContent = 'KLIK SEKARANG!';
+      reflexState = 'ready';
+      reflexStartTime = Date.now();
+    }
+  }, delay);
+}
+
+function handleReflexClick() {
+  var box = document.getElementById('reflex-box');
+  var text = document.getElementById('reflex-text');
+  
+  if (reflexState === 'waiting') {
+    clearTimeout(reflexTimer);
+    box.className = 'reflex-box reflex-red';
+    text.textContent = 'TERLALU CEPAT! (GAGAL)';
+    reflexState = 'idle';
+  } else if (reflexState === 'ready') {
+    var diff = Date.now() - reflexStartTime;
+    box.className = 'reflex-box reflex-yellow';
+    text.textContent = 'REAKSIMU: ' + diff + ' ms!';
+    reflexState = 'idle';
+  }
+}
+
+function requestVip() {
+  var wa = 'https://wa.me/6285352831643?text=Halo%20Owner,%20saya%20mau%20order%20VIP';
+  window.open(wa, '_blank');
+}
+
+async function doGrantVip() {
+  var target = document.getElementById('input-vip-user').value.trim();
+  if (!target) { alert('Isi username!'); return; }
+  try {
+    var expiry = new Date(Date.now() + 30 * 86400000).toISOString();
+    var result = await supabase.from('profiles').update({ is_vip: true, vip_expiry: expiry }).eq('username', target);
+    if (result.error) throw result.error;
+    alert('VIP diberikan ke ' + target);
+    loadVipList();
+  } catch (e) {
+    alert('Gagal: ' + e.message);
+  }
+}
+
+async function loadVipList() {
+  var result = await supabase.from('profiles').select('username, vip_expiry').eq('is_vip', true);
+  var box = document.getElementById('vip-list-box');
+  if (!result.data || result.data.length === 0) {
+    box.innerHTML = 'Belum ada VIP.';
+  } else {
+    var html = '';
+    for (var i = 0; i < result.data.length; i++) {
+      html += '<div>⭐ ' + result.data[i].username + '</div>';
+    }
+    box.innerHTML = html;
+  }
+}
+
+async function doBroadcast() {
+  var msg = document.getElementById('input-broadcast').value.trim();
+  if (!msg) { alert('Isi pengumuman!'); return; }
+  try {
+    var result = await supabase.from('broadcasts').insert({ message: msg, color: 'purple' });
+    if (result.error) throw result.error;
+    alert('Broadcast terkirim!');
+    document.getElementById('input-broadcast').value = '';
+  } catch (e) {
+    alert('Gagal: ' + e.message);
+  }
+}
+
+async function doLogout() {
+  if (!confirm('Yakin ingin keluar?')) return;
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+init();
 </script>
 </body>
 </html>
