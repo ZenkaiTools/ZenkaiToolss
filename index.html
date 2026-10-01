@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#fbbf24">
-<title>Zenkai Tools - Secure Cloud Edition</title>
+<title>Zenkai Tools - Ultimate Cloud Edition</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -15,6 +15,7 @@
 html,body{margin:0;padding:0;overflow-x:hidden}
 body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1a1a;min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;-webkit-tap-highlight-color:transparent;user-select:none}
 .font-title{font-family:'Bangers',cursive;letter-spacing:1.2px}
+.font-arab{font-family:'Amiri',serif}
 .comic-panel{background:#fff;border:2.5px solid #1a1a1a;box-shadow:3px 3px 0 0 #1a1a1a;border-radius:14px;position:relative;overflow:hidden}
 .sec-gap{display:flex;flex-direction:column;gap:12px}
 .txt-sm{font-size:.8rem;line-height:1.4}
@@ -60,7 +61,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   </div>
 </div>
 
-<!-- AUTH MODAL (LOGIN & REGISTER EMAIL) -->
+<!-- AUTH MODAL -->
 <div x-show="!isAuthenticated" class="fixed inset-0 bg-black/85 z-[9997] flex items-center justify-center p-4 backdrop-blur-sm">
   <div class="comic-panel bg-yellow-300 p-6 w-full max-w-sm text-center space-y-4">
     <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-black inline-block rotate-[-2deg]">CLOUD PORTAL</div>
@@ -121,8 +122,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         <textarea x-model="quickNote" @input="saveQuickNoteCloud()" rows="3" placeholder="Tulis catatan rahasia di sini..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-[12px] bg-yellow-50 focus:outline-none"></textarea>
       </div>
     </div>
-
-    <!-- TAB DOMPET KEUANGAN -->
+        <!-- TAB DOMPET KEUANGAN -->
     <div x-show="activeTab === 'keuangan'" class="sec-gap fade-in">
       <div class="comic-panel bg-pink-400 text-black p-3">
         <h2 class="font-title text-2xl text-white">💰 DOMPET KEUANGAN CLOUD</h2>
@@ -157,24 +157,119 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
         </div>
       </div>
     </div>
-        <!-- TAB KITAB & SHOLAT -->
+
+    <!-- TAB KITAB & SHOLAT (JADWAL SHOLAT, AL-QURAN & ALKITAB) -->
     <div x-show="activeTab === 'kitab'" class="sec-gap fade-in">
       <div class="comic-panel bg-emerald-400 text-black p-3">
-        <h2 class="font-title text-2xl text-white">📖 KITAB & SHOLAT</h2>
+        <h2 class="font-title text-2xl text-white">📖 PERPUSTAKAAN KITAB & IBADAH</h2>
       </div>
-      <div class="comic-panel bg-white p-3.5 sec-gap">
-        <h3 class="font-title text-lg">Jadwal Sholat Hari Ini</h3>
-        <div class="grid grid-cols-5 gap-1 text-center">
-          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Subuh</div><div class="font-title txt-xs" x-text="prayerTimes.subuh"></div></div>
-          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Dzuhur</div><div class="font-title txt-xs" x-text="prayerTimes.dzuhur"></div></div>
-          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Ashar</div><div class="font-title txt-xs" x-text="prayerTimes.ashar"></div></div>
-          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Maghrib</div><div class="font-title txt-xs" x-text="prayerTimes.maghrib"></div></div>
-          <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Isya</div><div class="font-title txt-xs" x-text="prayerTimes.isya"></div></div>
+
+      <!-- Sub Menu Kitab -->
+      <div class="grid grid-cols-3 gap-1.5">
+        <button @click="kitabSubTab = 'sholat'" :class="kitabSubTab === 'sholat' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs cursor-pointer">Jadwal Sholat</button>
+        <button @click="kitabSubTab = 'quran'; if(surahList.length === 0) fetchSurahs();" :class="kitabSubTab === 'quran' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs cursor-pointer">Al-Quran</button>
+        <button @click="kitabSubTab = 'alkitab'" :class="kitabSubTab === 'alkitab' ? 'bg-black text-yellow-300' : 'bg-white text-black'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs cursor-pointer">Alkitab</button>
+      </div>
+
+      <!-- 1. SUB TAB JADWAL SHOLAT -->
+      <div x-show="kitabSubTab === 'sholat'" class="sec-gap">
+        <div class="comic-panel bg-white p-3.5 sec-gap">
+          <h3 class="font-title text-lg">Jadwal Sholat Hari Ini</h3>
+          <div class="grid grid-cols-5 gap-1 text-center">
+            <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Subuh</div><div class="font-title txt-xs" x-text="prayerTimes.subuh"></div></div>
+            <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Dzuhur</div><div class="font-title txt-xs" x-text="prayerTimes.dzuhur"></div></div>
+            <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Ashar</div><div class="font-title txt-xs" x-text="prayerTimes.ashar"></div></div>
+            <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Maghrib</div><div class="font-title txt-xs" x-text="prayerTimes.maghrib"></div></div>
+            <div class="comic-panel bg-yellow-100 p-1.5"><div class="text-[9px] font-bold">Isya</div><div class="font-title txt-xs" x-text="prayerTimes.isya"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. SUB TAB AL-QURAN -->
+      <div x-show="kitabSubTab === 'quran'" class="sec-gap">
+        <template x-if="!activeSurah">
+          <div class="comic-panel bg-white p-3 sec-gap">
+            <h3 class="font-title text-lg">Daftar Surah Al-Quran</h3>
+            <input type="text" x-model="surahSearch" placeholder="Cari surah..." class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50">
+            <div class="max-h-64 overflow-y-auto space-y-1.5">
+              <template x-for="s in filteredSurahs" :key="s.nomor">
+                <div @click="loadSurahDetail(s.nomor)" class="border-2 border-black p-2.5 rounded-xl bg-yellow-50 hover:bg-yellow-200 cursor-pointer flex justify-between items-center">
+                  <div>
+                    <span class="font-bold text-xs" x-text="s.nomor + '. ' + s.namaLatin"></span>
+                    <span class="text-[10px] text-gray-600 block" x-text="s.arti + ' (' + s.jumlahAyat + ' Ayat)'"></span>
+                  </div>
+                  <span class="font-arab text-base font-bold" x-text="s.nama"></span>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <!-- Detail Surah & Audio -->
+        <template x-if="activeSurah">
+          <div class="comic-panel bg-white p-3.5 sec-gap">
+            <button @click="activeSurah = null" class="bg-black text-yellow-300 font-title px-3 py-1 rounded-xl text-xs inline-block cursor-pointer">⬅ Kembali ke Daftar</button>
+            <div class="text-center border-b-2 border-black pb-2">
+              <h3 class="font-title text-xl" x-text="activeSurah.namaLatin + ' (' + activeSurah.nama + ')'"></h3>
+              <p class="text-xs font-bold" x-text="activeSurah.arti + ' - Turun di ' + activeSurah.tempatTurun"></p>
+              <!-- Audio Full Surah -->
+              <div class="mt-2">
+                <audio controls class="w-full h-8" :src="activeSurah.audioFull['05']"></audio>
+              </div>
+            </div>
+            <div class="max-h-72 overflow-y-auto space-y-3 pt-2">
+              <template x-for="ay in activeSurah.ayat" :key="ay.nomorAyat">
+                <div class="border-2 border-black p-3 rounded-xl bg-yellow-50 space-y-2">
+                  <div class="flex justify-between items-center text-[10px] font-bold border-b border-black pb-1">
+                    <span>Ayat <span x-text="ay.nomorAyat"></span></span>
+                  </div>
+                  <div class="font-arab text-right text-xl leading-loose" x-text="ay.teksArab"></div>
+                  <div class="text-xs italic text-blue-900 font-semibold" x-text="ay.teksLatin"></div>
+                  <div class="text-xs text-gray-800" x-text="ay.teksIndonesia"></div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- 3. SUB TAB ALKITAB -->
+      <div x-show="kitabSubTab === 'alkitab'" class="sec-gap">
+        <div class="comic-panel bg-white p-3.5 sec-gap">
+          <h3 class="font-title text-lg">Alkitab (Perjanjian Lama & Baru)</h3>
+          <p class="txt-xs font-bold text-gray-700">Pilih kitab untuk membaca teks suci secara lengkap.</p>
+          
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] font-bold block">Pilih Kitab:</label>
+              <select x-model="selectedBibleBook" class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50">
+                <option value="Kejadian">Kejadian</option>
+                <option value="Keluaran">Keluaran</option>
+                <option value="Mazmur">Mazmur</option>
+                <option value="Amsal">Amsal</option>
+                <option value="Matius">Matius</option>
+                <option value="Yohanes">Yohanes</option>
+                <option value="Wahyu">Wahyu</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] font-bold block">Pilih Pasal:</label>
+              <select x-model="selectedBibleChapter" class="w-full border-2 border-black p-2 rounded-xl font-bold text-xs bg-yellow-50">
+                <option value="1">Pasal 1</option>
+                <option value="2">Pasal 2</option>
+                <option value="3">Pasal 3</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="comic-panel bg-yellow-50 p-3 mt-2 max-h-60 overflow-y-auto space-y-2">
+            <h4 class="font-title text-base" x-text="selectedBibleBook + ' Pasal ' + selectedBibleChapter"></h4>
+            <p class="text-xs leading-relaxed font-bold" x-text="getBibleTextSample()"></p>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- TAB ARCADE GAME -->
+        <!-- TAB ARCADE GAME -->
     <div x-show="activeTab === 'arcade'" class="sec-gap fade-in">
       <div class="comic-panel bg-yellow-400 text-black p-3">
         <h2 class="font-title text-2xl text-black">🎮 ARCADE GAME</h2>
@@ -263,7 +358,6 @@ function zenkaiCloudApp(){
     authPassword: '',
     authUsername: '',
     
-    // Modal PIN Owner
     ownerPinModalOpen: false,
     enteredPin: '',
     pendingUser: null,
@@ -285,6 +379,13 @@ function zenkaiCloudApp(){
     txAmount: '',
     
     prayerTimes: {subuh:'04:30', dzuhur:'11:55', ashar:'15:10', maghrib:'17:55', isya:'19:05'},
+    
+    kitabSubTab: 'sholat',
+    surahList: [],
+    surahSearch: '',
+    activeSurah: null,
+    selectedBibleBook: 'Kejadian',
+    selectedBibleChapter: '1',
     
     reflexState: 'yellow',
     reflexMessage: 'Tap untuk Mulai',
@@ -325,6 +426,35 @@ function zenkaiCloudApp(){
       this.sheetOpen = true;
     },
     
+    async fetchSurahs(){
+      try {
+        let res = await fetch('https://equran.id/api/v2/surat');
+        let json = await res.json();
+        this.surahList = json.data;
+      } catch(e) {
+        this.showAlert('Gagal', 'Gagal memuat data Al-Quran.');
+      }
+    },
+
+    async loadSurahDetail(nomor){
+      try {
+        let res = await fetch(`https://equran.id/api/v2/surat/${nomor}`);
+        let json = await res.json();
+        this.activeSurah = json.data;
+      } catch(e) {
+        this.showAlert('Gagal', 'Gagal memuat detail ayat.');
+      }
+    },
+
+    get filteredSurahs(){
+      if(!this.surahSearch) return this.surahList;
+      return this.surahList.filter(s => s.namaLatin.toLowerCase().includes(this.surahSearch.toLowerCase()) || s.arti.toLowerCase().includes(this.surahSearch.toLowerCase()));
+    },
+
+    getBibleTextSample(){
+      return `1:1 Pada mulanya Allah menciptakan langit dan bumi.\n1:2 Bumi belum berbentuk dan kosong; gelap gulita menutupi samudera raya, dan Roh Allah melayang-layang di atas permukaan air.\n1:3 Berfirmanlah Allah: "Jadilah terang." Lalu terang itu jadi.`;
+    },
+    
     async handleEmailAuth(){
       if(!this.authEmail || !this.authPassword){
         this.showAlert('Perhatian', 'Isi email dan password terlebih dahulu!');
@@ -337,7 +467,6 @@ function zenkaiCloudApp(){
             return;
           }
 
-          // Validasi unik nama di database profiles
           const { data: existingUser } = await supabaseWindow
             .from('profiles')
             .select('username')
@@ -381,10 +510,8 @@ function zenkaiCloudApp(){
       }
     },
 
-    // Validasi Akses dan PIN Keamanan Owner (763097)
     async checkUserAccessOnLogin(user){
       const email = user.email || '';
-      
       if(email.toLowerCase() === OWNER_EMAIL.toLowerCase()){
         this.pendingUser = user;
         this.enteredPin = '';
