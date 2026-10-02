@@ -1690,11 +1690,18 @@ async processMediaDownload(){
       }
     }
 
-    const r = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/cobalt-proxy', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ url: url })
-    });
+    const { data: sessionData } = await sb.auth.getSession();
+const token = sessionData?.session?.access_token || '';
+const r = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/cobalt-proxy', {
+  method: 'POST',
+  headers: { 
+    'Content-Type': 'application/json', 
+    'Accept': 'application/json',
+    'Authorization': 'Bearer ' + token,
+    'apikey': SUPABASE_ANON_KEY
+  },
+  body: JSON.stringify({ url: url })
+});
     const d = await r.json();
     if(d.status === 'redirect' || d.status === 'tunnel'){
       this.downloadMeta = { title: isIG ? 'Instagram Media' : 'TikTok Video', thumbnail: '' };
