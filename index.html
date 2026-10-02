@@ -8,64 +8,67 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Amiri&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Amiri&display=swap" rel="stylesheet">
 <style>
 :root{
   --primary:#a855f7;
   --primary-dark:#7e22ce;
-  --primary-light:#c084fc;
+  --primary-soft:#f3e8ff;
   --bg-soft:#faf5ff;
-  --bg-card:#ffffff;
   --text:#1f2937;
-  --accent:#ec4899;
+  --text-soft:#6b7280;
+  --card-bg:#ffffff;
+  --border:#f0e6ff;
 }
-[data-theme="pink"]{--primary:#ec4899;--primary-dark:#be185d;--primary-light:#f9a8d4;--bg-soft:#fdf2f8;--accent:#a855f7}
-[data-theme="emerald"]{--primary:#10b981;--primary-dark:#047857;--primary-light:#6ee7b7;--bg-soft:#ecfdf5;--accent:#f59e0b}
-[data-theme="ocean"]{--primary:#0ea5e9;--primary-dark:#0369a1;--primary-light:#7dd3fc;--bg-soft:#f0f9ff;--accent:#8b5cf6}
-[data-theme="sunset"]{--primary:#f97316;--primary-dark:#c2410c;--primary-light:#fdba74;--bg-soft:#fff7ed;--accent:#ec4899}
-[data-theme="midnight"]{--primary:#6366f1;--primary-dark:#4338ca;--primary-light:#a5b4fc;--bg-soft:#eef2ff;--accent:#f43f5e}
+[data-theme="pink"]{--primary:#ec4899;--primary-dark:#be185d;--primary-soft:#fce7f3;--bg-soft:#fdf2f8;--border:#fce7f3}
+[data-theme="emerald"]{--primary:#10b981;--primary-dark:#047857;--primary-soft:#d1fae5;--bg-soft:#ecfdf5;--border:#d1fae5}
+[data-theme="ocean"]{--primary:#0ea5e9;--primary-dark:#0369a1;--primary-soft:#e0f2fe;--bg-soft:#f0f9ff;--border:#e0f2fe}
+[data-theme="sunset"]{--primary:#f97316;--primary-dark:#c2410c;--primary-soft:#ffedd5;--bg-soft:#fff7ed;--border:#ffedd5}
+[data-theme="midnight"]{--primary:#6366f1;--primary-dark:#4338ca;--primary-soft:#e0e7ff;--bg-soft:#eef2ff;--border:#e0e7ff}
 
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;overflow-x:hidden}
-body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;-webkit-tap-highlight-color:transparent;transition:background .3s}
-.font-title{font-family:'Bangers',cursive;letter-spacing:1.2px}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;font-size:14px;line-height:1.5;transition:background .3s}
 .font-arab{font-family:'Amiri',serif}
-.card{background:var(--bg-card);border:2px solid rgba(0,0,0,0.08);border-radius:18px;box-shadow:0 4px 16px rgba(168,85,247,0.08);position:relative;overflow:hidden;transition:all .2s}
-.card:hover{box-shadow:0 6px 24px rgba(168,85,247,0.15)}
-.card-soft{background:var(--bg-soft);border:2px solid rgba(168,85,247,0.15);border-radius:16px}
-.btn-primary{background:var(--primary);color:#fff;border-radius:14px;padding:12px;font-family:'Bangers',cursive;letter-spacing:1px;border:none;transition:all .2s;box-shadow:0 3px 0 var(--primary-dark)}
-.btn-primary:active{transform:translateY(2px);box-shadow:0 1px 0 var(--primary-dark)}
-.btn-soft{background:var(--bg-soft);color:var(--primary-dark);border:2px solid var(--primary-light);border-radius:14px;padding:10px;font-family:'Bangers',cursive}
+.card{background:var(--card-bg);border-radius:20px;padding:16px;box-shadow:0 2px 12px rgba(168,85,247,0.06);transition:all .2s}
+.card-hover:hover{box-shadow:0 4px 20px rgba(168,85,247,0.12);transform:translateY(-1px)}
 .sec-gap{display:flex;flex-direction:column;gap:12px}
-.txt-sm{font-size:.8rem;line-height:1.4}
-.txt-xs{font-size:.7rem;line-height:1.35}
-.svg-icon-lg{width:1.35em;height:1.35em}
-.splash-screen{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary-light),var(--primary),var(--primary-dark));transition:opacity .5s,visibility .5s}
+.txt-sm{font-size:13px}
+.txt-xs{font-size:11px}
+.svg-icon-lg{width:22px;height:22px}
+.splash-screen{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary-soft),var(--primary));transition:opacity .5s,visibility .5s}
 .splash-screen.hide{opacity:0;visibility:hidden}
-.splash-logo{font-family:'Bangers',cursive;font-size:clamp(38px,11vw,52px);color:#fff;letter-spacing:3px;text-shadow:3px 3px 0 rgba(0,0,0,0.2)}
-.splash-bar-wrap{width:180px;height:14px;background:rgba(255,255,255,0.3);border-radius:10px;margin-top:26px;padding:3px}
-.splash-bar{height:100%;background:#fff;border-radius:6px;width:0%;transition:width .25s}
-.bottom-nav-btn{flex:1;border:none;border-radius:12px;margin:0 1px;padding:5px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;color:var(--text);opacity:0.6;transition:all .2s}
-.bottom-nav-btn.active{background:var(--primary);color:#fff;opacity:1;box-shadow:0 3px 8px rgba(168,85,247,0.3)}
-.bottom-nav-label{font-family:'Bangers',cursive;font-size:7.5px;line-height:1;letter-spacing:.3px}
-.bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
-.bottom-sheet-content{background:#fff;width:100%;max-width:450px;border-top-left-radius:28px;border-top-right-radius:28px;padding:20px;animation:slideUp .3s ease-out;max-height:88vh;overflow-y:auto}
+.splash-logo{font-family:'Poppins',sans-serif;font-weight:800;font-size:clamp(32px,9vw,44px);color:#fff;letter-spacing:2px;text-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.splash-bar-wrap{width:180px;height:8px;background:rgba(255,255,255,0.25);border-radius:8px;margin-top:26px;overflow:hidden}
+.splash-bar{height:100%;background:#fff;border-radius:8px;width:0%;transition:width .25s}
+.bottom-nav-btn{flex:1;border:none;border-radius:12px;padding:6px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;color:var(--text-soft);opacity:.7;transition:all .2s;cursor:pointer;font-family:'Poppins',sans-serif}
+.bottom-nav-btn.active{background:var(--primary);color:#fff;opacity:1;box-shadow:0 4px 12px rgba(168,85,247,0.3)}
+.bottom-nav-label{font-size:8px;font-weight:600;line-height:1;letter-spacing:.3px}
+.bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100000;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
+.bottom-sheet-content{background:#fff;width:100%;max-width:450px;border-top-left-radius:28px;border-top-right-radius:28px;padding:20px;animation:slideUp .3s cubic-bezier(0.32,0.72,0,1);max-height:88vh;overflow-y:auto;box-shadow:0 -8px 32px rgba(0,0,0,0.12)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.flag-ico{width:22px;height:16px;border:1.5px solid rgba(0,0,0,0.15);border-radius:3px;display:inline-block;vertical-align:middle}
 .avatar-wrap{position:relative;display:inline-block}
-.theme-dot{width:36px;height:36px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all .2s}
-.theme-dot.active{border-color:#1a1a1a;transform:scale(1.1)}
-.quote-card{background:linear-gradient(135deg,var(--primary-light),var(--primary));border-radius:18px;padding:18px;color:#fff;position:relative;box-shadow:0 6px 20px rgba(168,85,247,0.25)}
-.quote-card::before{content:'❝';position:absolute;top:-10px;left:14px;font-size:44px;color:rgba(255,255,255,0.5);font-family:serif;line-height:1}
-.menu-list-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;background:var(--bg-soft);cursor:pointer;transition:all .2s;border:2px solid transparent}
-.menu-list-item:active{background:var(--primary-light);border-color:var(--primary)}
-.icon-circle{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.theme-dot{width:40px;height:40px;border-radius:50%;cursor:pointer;transition:all .2s;border:3px solid transparent}
+.theme-dot.active{border-color:#fff;box-shadow:0 0 0 2px var(--primary);transform:scale(1.1)}
+.quote-card{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:20px;padding:20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(168,85,247,0.2)}
+.quote-card::before{content:'"';position:absolute;top:-30px;left:10px;font-size:120px;color:rgba(255,255,255,0.15);font-family:serif;line-height:1;font-weight:bold}
+.quote-card::after{content:'"';position:absolute;bottom:-70px;right:10px;font-size:120px;color:rgba(255,255,255,0.15);font-family:serif;line-height:1;font-weight:bold}
+.sheet-picker-item{padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .15s;border-radius:12px;margin-bottom:4px}
+.sheet-picker-item:hover{background:var(--primary-soft)}
+.sheet-picker-item:active{background:var(--primary-soft)}
+.stat-box{background:var(--bg-soft);border-radius:14px;padding:12px;text-align:center}
+.divider{height:1px;background:var(--border);margin:12px 0}
 [x-cloak]{display:none !important}
-.sheet-picker-item{padding:14px;border-bottom:1px solid #f3f4f6;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .15s}
-.sheet-picker-item:hover{background:var(--bg-soft)}
-.sheet-picker-item:last-child{border-bottom:none}
+.btn-primary{width:100%;background:var(--primary);color:#fff;border:none;border-radius:14px;padding:14px;font-family:'Poppins',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(168,85,247,0.25)}
+.btn-primary:active{transform:scale(0.98);box-shadow:0 2px 8px rgba(168,85,247,0.2)}
+.btn-soft{background:var(--primary-soft);color:var(--primary-dark);border:none;border-radius:12px;padding:10px 16px;font-family:'Poppins',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s}
+.btn-soft:active{background:var(--primary);color:#fff}
+.input-field{width:100%;background:var(--bg-soft);border:2px solid var(--border);border-radius:14px;padding:12px 16px;font-family:'Poppins',sans-serif;font-size:13px;color:var(--text);outline:none;transition:all .2s}
+.input-field:focus{border-color:var(--primary);background:#fff}
+.tab-pill{padding:8px 12px;border-radius:12px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;border:none;background:var(--bg-soft);color:var(--primary-dark);font-family:'Poppins',sans-serif}
+.tab-pill.active{background:var(--primary);color:#fff;box-shadow:0 3px 10px rgba(168,85,247,0.25)}
 </style>
 </head>
 <body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme">
@@ -73,242 +76,288 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);col
 <div class="splash-screen" :class="{'hide':splashHidden}">
   <div class="splash-logo">ZENKAI TOOLS</div>
   <div class="splash-bar-wrap"><div class="splash-bar" :style="'width:'+splashProgress+'%'"></div></div>
-  <div class="mt-2 text-xs font-bold text-white" x-text="splashText"></div>
+  <div class="mt-3 text-xs font-semibold text-white/90" x-text="splashText"></div>
 </div>
 
 <div x-show="welcomePopupOpen" class="bottom-sheet-overlay" style="z-index:100003;">
   <div class="bottom-sheet-content text-center space-y-4">
-    <div class="text-5xl">👋</div>
-    <h3 class="font-title text-3xl" style="color:var(--primary)">HALO!</h3>
-    <p class="txt-sm font-bold">Selamat datang di Zenkai Tools!</p>
-    <button @click="welcomePopupOpen=false" class="btn-primary w-full">MULAI</button>
+    <div class="text-6xl">👋</div>
+    <h3 class="font-bold text-2xl" style="color:var(--primary-dark)">Halo, <span x-text="userName"></span>!</h3>
+    <p class="txt-sm text-gray-600">Selamat datang di Zenkai Tools</p>
+    <button @click="welcomePopupOpen=false" class="btn-primary">MULAI JELAJAH</button>
   </div>
 </div>
 
+<!-- PROFIL SHEET - FULL -->
 <div x-show="profileModalOpen" class="bottom-sheet-overlay" style="z-index:100004;">
-  <div class="bottom-sheet-content text-center space-y-4">
-    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto"></div>
-    <h3 class="font-title text-2xl" style="color:var(--primary-dark)">📸 GANTI FOTO PROFIL</h3>
-    <div class="avatar-wrap mx-auto">
-      <div class="w-32 h-32 rounded-full overflow-hidden flex items-center justify-center font-title text-4xl" style="background:var(--primary-light);color:var(--primary-dark)">
-        <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
-        <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
+  <div class="bottom-sheet-content">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
+    <div class="text-center space-y-3">
+      <div class="avatar-wrap">
+        <div class="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center text-3xl font-bold mx-auto" style="background:var(--primary-soft);color:var(--primary-dark)">
+          <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
+          <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
+        </div>
+      </div>
+      <div>
+        <h3 class="font-bold text-xl" style="color:var(--primary-dark)">Halo, <span x-text="userName"></span>! 👋</h3>
+        <p class="txt-xs text-gray-500" x-text="userEmail"></p>
+        <span class="inline-block mt-2 text-[10px] font-bold px-3 py-1 rounded-full" :style="isOwner?'background:var(--primary);color:#fff':'background:var(--primary-soft);color:var(--primary-dark)'" x-text="isOwner?'👑 OWNER':'USER'"></span>
       </div>
     </div>
-    <p class="txt-xs font-bold text-gray-600">Max 2MB • Format JPG/PNG</p>
-    <input id="avatarInput" type="file" accept="image/*" @change="uploadAvatarFile($event)" class="hidden">
-    <label for="avatarInput" class="btn-primary block cursor-pointer w-full">📁 PILIH DARI GALERI</label>
-    <div x-show="uploadingAvatar" class="text-xs font-bold flex items-center justify-center gap-2" style="color:var(--primary)"><span class="spin"></span> Mengunggah...</div>
-    <button @click="profileModalOpen=false" class="btn-soft w-full">Tutup</button>
+    <div class="divider"></div>
+    <div class="grid grid-cols-3 gap-2">
+      <div class="stat-box">
+        <div class="text-xl font-bold" style="color:var(--primary)" x-text="transactions.length"></div>
+        <div class="txt-xs text-gray-500">Transaksi</div>
+      </div>
+      <div class="stat-box">
+        <div class="text-xl font-bold" style="color:var(--primary)" x-text="'Rp '+(totalBalance/1000).toFixed(0)+'k'"></div>
+        <div class="txt-xs text-gray-500">Saldo</div>
+      </div>
+      <div class="stat-box">
+        <div class="text-xl font-bold" style="color:var(--primary)" x-text="quickNote?quickNote.length:0"></div>
+        <div class="txt-xs text-gray-500">Catatan</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="space-y-2">
+      <input id="avatarInput" type="file" accept="image/*" @change="uploadAvatarFile($event)" class="hidden">
+      <label for="avatarInput" class="flex items-center gap-3 p-3 rounded-2xl cursor-pointer" style="background:var(--bg-soft)">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style="background:var(--primary-soft)">📸</div>
+        <div class="flex-1">
+          <div class="font-semibold text-sm">Ganti Foto Profil</div>
+          <div class="txt-xs text-gray-500">Max 2MB</div>
+        </div>
+        <span class="text-gray-400">›</span>
+      </label>
+      <div x-show="uploadingAvatar" class="txt-xs font-semibold text-center" style="color:var(--primary)"><span class="spin"></span> Mengunggah...</div>
+      <div @click="profileModalOpen=false;activeTab='tema'" class="flex items-center gap-3 p-3 rounded-2xl cursor-pointer" style="background:var(--bg-soft)">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style="background:var(--primary-soft)">🎨</div>
+        <div class="flex-1">
+          <div class="font-semibold text-sm">Ganti Tema</div>
+          <div class="txt-xs text-gray-500">Tema saat ini: <span class="font-bold" x-text="theme.charAt(0).toUpperCase()+theme.slice(1)"></span></div>
+        </div>
+        <span class="text-gray-400">›</span>
+      </div>
+      <div @click="logout()" class="flex items-center gap-3 p-3 rounded-2xl cursor-pointer" style="background:#fee2e2">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-white">🚪</div>
+        <div class="flex-1">
+          <div class="font-semibold text-sm text-red-600">Keluar Akun</div>
+          <div class="txt-xs text-red-400">Logout dari perangkat ini</div>
+        </div>
+        <span class="text-red-400">›</span>
+      </div>
+    </div>
+    <button @click="profileModalOpen=false" class="btn-soft w-full mt-4">Tutup</button>
   </div>
 </div>
 
 <div x-show="ownerPinModalOpen" class="bottom-sheet-overlay" style="z-index:100002;">
   <div class="bottom-sheet-content text-center space-y-4">
-    <div class="text-4xl">👑</div>
-    <h3 class="font-title text-2xl" style="color:var(--primary-dark)">VERIFIKASI OWNER</h3>
-    <p class="txt-xs font-bold text-gray-600">Masukkan PIN 6 digit</p>
-    <input type="password" x-model="enteredPin" maxlength="6" placeholder="••••••" class="w-full p-4 rounded-2xl font-bold text-2xl text-center tracking-widest border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
-    <button @click="verifyOwnerPin()" class="btn-primary w-full">
+    <div class="text-5xl">👑</div>
+    <h3 class="font-bold text-xl" style="color:var(--primary-dark)">Verifikasi Owner</h3>
+    <p class="txt-xs text-gray-500">Masukkan PIN 6 digit</p>
+    <input type="password" x-model="enteredPin" maxlength="6" placeholder="••••••" class="input-field text-center text-2xl font-bold tracking-widest">
+    <button @click="verifyOwnerPin()" class="btn-primary">
       <span x-show="!verifyingPin">KONFIRMASI</span>
       <span x-show="verifyingPin"><span class="spin"></span> Cek...</span>
     </button>
-    <button @click="ownerPinModalOpen=false;logout()" class="text-xs underline text-gray-600">Batal</button>
+    <button @click="ownerPinModalOpen=false;logout()" class="txt-xs underline text-gray-500">Batal</button>
   </div>
 </div>
 
 <div x-show="sheetOpen" class="bottom-sheet-overlay">
   <div class="bottom-sheet-content text-center space-y-4">
-    <h3 class="font-title text-2xl" style="color:var(--primary-dark)" x-text="sheetTitle"></h3>
-    <p class="txt-sm font-bold text-gray-700" x-text="sheetMessage"></p>
-    <button @click="sheetOpen=false" class="btn-primary w-full">OK</button>
+    <h3 class="font-bold text-xl" style="color:var(--primary-dark)" x-text="sheetTitle"></h3>
+    <p class="txt-sm text-gray-600" x-text="sheetMessage"></p>
+    <button @click="sheetOpen=false" class="btn-primary">OK</button>
   </div>
 </div>
 
-<div x-show="!isAuthenticated" class="fixed inset-0 z-[9997] flex items-center justify-center p-4" style="background:linear-gradient(135deg,var(--primary-light),var(--primary))">
+<div x-show="!isAuthenticated" class="fixed inset-0 z-[9997] flex items-center justify-center p-4" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
   <div class="bg-white rounded-3xl p-6 w-full max-w-sm text-center space-y-4 shadow-2xl">
-    <div class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl" style="background:var(--primary);color:#fff">🎯</div>
-    <h1 class="font-title text-3xl" style="color:var(--primary-dark)">ZENKAI TOOLS</h1>
-    <h2 class="font-title text-xl text-gray-700" x-text="authMode==='login'?'MASUK AKUN':'DAFTAR AKUN'"></h2>
-    <input type="email" x-model="authEmail" placeholder="Email..." class="w-full p-3 rounded-xl font-bold text-sm text-center border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
-    <input type="password" x-model="authPassword" placeholder="Password..." class="w-full p-3 rounded-xl font-bold text-sm text-center border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
+    <div class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl text-white font-bold" style="background:var(--primary)">Z</div>
+    <h1 class="font-bold text-2xl" style="color:var(--primary-dark)">ZENKAI TOOLS</h1>
+    <h2 class="font-semibold text-base text-gray-600" x-text="authMode==='login'?'Masuk Akun':'Daftar Akun'"></h2>
+    <input type="email" x-model="authEmail" placeholder="Email" class="input-field text-center">
+    <input type="password" x-model="authPassword" placeholder="Password" class="input-field text-center">
     <template x-if="authMode==='register'">
-      <input type="text" x-model="authUsername" placeholder="Nama Tampilan..." class="w-full p-3 rounded-xl font-bold text-sm text-center border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
+      <input type="text" x-model="authUsername" placeholder="Nama Tampilan" class="input-field text-center">
     </template>
-    <button @click="handleEmailAuth()" class="btn-primary w-full" x-text="authMode==='login'?'MASUK':'DAFTAR'"></button>
-    <button @click="authMode=authMode==='login'?'register':'login'" class="text-xs font-bold underline" style="color:var(--primary-dark)" x-text="authMode==='login'?'Belum punya akun? Daftar':'Sudah punya? Login'"></button>
+    <button @click="handleEmailAuth()" class="btn-primary" x-text="authMode==='login'?'MASUK':'DAFTAR'"></button>
+    <button @click="authMode=authMode==='login'?'register':'login'" class="txt-xs font-semibold underline" style="color:var(--primary-dark)" x-text="authMode==='login'?'Belum punya akun? Daftar':'Sudah punya? Masuk'"></button>
   </div>
 </div>
 
-<div class="w-full max-w-md h-[100dvh] relative flex flex-col overflow-hidden bg-white shadow-xl">
+<div class="w-full max-w-md h-[100dvh] relative flex flex-col overflow-hidden bg-white">
   <header class="p-4 flex justify-between items-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
     <div class="flex items-center space-x-3">
-      <div @click="profileModalOpen=true" class="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center font-title text-lg cursor-pointer border-2 border-white/30" style="background:rgba(255,255,255,0.2);color:#fff">
+      <div @click="profileModalOpen=true" class="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center text-base font-bold cursor-pointer bg-white/20 text-white">
         <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
         <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
       </div>
       <div>
-        <h1 class="font-title text-xl text-white leading-none">ZENKAI TOOLS</h1>
-        <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background:rgba(255,255,255,0.25);color:#fff" x-text="isOwner?'👑 OWNER':'USER'"></span>
+        <h1 class="font-bold text-lg text-white leading-tight">Zenkai Tools</h1>
+        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white" x-text="isOwner?'👑 Owner':'User'"></span>
       </div>
     </div>
-    <div class="flex items-center space-x-2">
-      <div class="text-white font-bold text-[10px] px-2 py-1 rounded-lg" style="background:rgba(255,255,255,0.2)" x-text="currentTime"></div>
-      <button @click="logout()" class="text-white text-base px-2 py-1 rounded-lg" style="background:rgba(255,255,255,0.2)">🚪</button>
-    </div>
+    <div class="text-white font-semibold text-xs px-3 py-1.5 rounded-full bg-white/20" x-text="currentTime"></div>
   </header>
 
   <main class="p-4 flex-1 overflow-y-auto space-y-3 pb-24"><div x-show="activeTab==='home'" class="sec-gap">
-  <div class="card p-4 flex items-center space-x-3" style="background:linear-gradient(135deg,var(--primary-light),var(--primary))">
-    <div @click="profileModalOpen=true" class="w-14 h-14 rounded-2xl overflow-hidden flex items-center justify-center font-title text-xl cursor-pointer bg-white/20 border-2 border-white/30" style="color:#fff">
-      <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
-      <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,1).toUpperCase():'U'"></span></template>
-    </div>
-    <div class="flex-1 min-w-0">
-      <div class="font-title text-white text-base truncate" x-text="userName"></div>
-      <div class="text-xs font-bold text-white/80 truncate" x-text="userEmail"></div>
-      <div class="text-[10px] text-white/90 mt-1 cursor-pointer underline" @click="profileModalOpen=true">📸 Ketuk foto untuk ganti</div>
+  <div @click="profileModalOpen=true" class="card cursor-pointer" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff">
+    <div class="flex items-center gap-3">
+      <div class="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center font-bold text-lg bg-white/20">
+        <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
+        <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,1).toUpperCase():'U'"></span></template>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="font-bold text-base">Halo, <span x-text="userName"></span>! 👋</div>
+        <div class="txt-xs opacity-80 truncate" x-text="userEmail"></div>
+      </div>
+      <span class="text-white/70 text-xl">›</span>
     </div>
   </div>
 
   <div class="quote-card">
-    <div class="flex justify-between items-start">
-      <h3 class="font-title text-lg">💬 QUOTE HARI INI</h3>
-      <button @click="randomQuote()" class="text-xs bg-white/20 px-2 py-1 rounded-lg">🔄</button>
+    <div class="flex justify-between items-start mb-2 relative z-10">
+      <div class="txt-xs font-bold opacity-90">💬 QUOTE HARI INI</div>
+      <button @click="randomQuote()" class="text-xs bg-white/20 px-2 py-1 rounded-lg">🔄 Ganti</button>
     </div>
-    <p class="text-sm italic font-bold mt-3 pr-2" x-text="quoteLoading?'Memuat quote...':('\"'+dailyQuote.text+'\"')"></p>
-    <p class="text-[10px] font-bold text-right mt-2 opacity-90" x-text="'— '+dailyQuote.author"></p>
+    <p class="text-sm font-medium italic relative z-10 leading-relaxed" x-text="'"'+dailyQuote.text+'"'"></p>
+    <p class="txt-xs font-semibold mt-3 text-right opacity-90 relative z-10" x-text="'— '+dailyQuote.author"></p>
   </div>
 
   <div class="grid grid-cols-2 gap-3">
-    <button @click="openNews()" class="card p-4 text-left">
-      <div class="text-3xl mb-1">📰</div>
-      <div class="font-title text-sm" style="color:var(--primary-dark)">BERITA</div>
-      <div class="text-[10px] text-gray-500">Terkini Indonesia</div>
-    </button>
-    <button @click="openWeatherSheet()" class="card p-4 text-left">
-      <div class="text-3xl mb-1">🌤️</div>
-      <div class="font-title text-sm" style="color:var(--primary-dark)">CUACA</div>
-      <div class="text-[10px] text-gray-500">Seluruh Indonesia</div>
-    </button>
+    <div @click="openNews()" class="card card-hover cursor-pointer">
+      <div class="text-3xl mb-2">📰</div>
+      <div class="font-bold text-sm" style="color:var(--primary-dark)">Berita</div>
+      <div class="txt-xs text-gray-500">Terkini Indonesia</div>
+    </div>
+    <div @click="openWeatherSheet()" class="card card-hover cursor-pointer">
+      <div class="text-3xl mb-2">🌤️</div>
+      <div class="font-bold text-sm" style="color:var(--primary-dark)">Cuaca</div>
+      <div class="txt-xs text-gray-500">Seluruh Indonesia</div>
+    </div>
   </div>
 
-  <div class="card p-4 sec-gap">
+  <div class="card sec-gap">
     <div class="flex items-center gap-2">
-      <span class="text-2xl">📝</span>
-      <h3 class="font-title text-base" style="color:var(--primary-dark)">CATATAN KILAT</h3>
+      <span class="text-xl">📝</span>
+      <h3 class="font-bold text-sm" style="color:var(--primary-dark)">Catatan Kilat</h3>
     </div>
-    <textarea x-model="quickNote" @input="debouncedSaveNote()" rows="3" placeholder="Tulis catatan..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)"></textarea>
-    <div x-show="noteSaving" class="text-[10px] font-bold" style="color:var(--primary)">💾 Menyimpan...</div>
+    <textarea x-model="quickNote" @input="debouncedSaveNote()" rows="3" placeholder="Tulis catatan..." class="input-field"></textarea>
+    <div x-show="noteSaving" class="txt-xs font-semibold" style="color:var(--primary)">💾 Menyimpan...</div>
   </div>
 </div>
 
 <div x-show="activeTab==='keuangan'" class="sec-gap">
-  <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
-    <div class="text-xs font-bold text-white/80 uppercase">💰 TOTAL SALDO</div>
-    <div class="font-title text-3xl text-white mt-1" x-text="'Rp '+totalBalance.toLocaleString('id-ID')"></div>
+  <div class="card text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff">
+    <div class="txt-xs font-semibold opacity-90">TOTAL SALDO</div>
+    <div class="font-bold text-3xl mt-1" x-text="'Rp '+totalBalance.toLocaleString('id-ID')"></div>
   </div>
-  <button @click="openTxSheet()" class="btn-primary w-full text-lg">➕ TAMBAH TRANSAKSI</button>
-  <div class="card p-4 sec-gap">
-    <h3 class="font-title text-base" style="color:var(--primary-dark)">📋 Riwayat Transaksi</h3>
+  <button @click="openTxSheet()" class="btn-primary">➕ Tambah Transaksi</button>
+  <div class="card sec-gap">
+    <h3 class="font-bold text-sm" style="color:var(--primary-dark)">📋 Riwayat</h3>
     <div class="max-h-72 overflow-y-auto space-y-2">
       <template x-for="t in transactions" :key="t.id">
-        <div class="p-3 rounded-xl flex justify-between items-center" :style="t.type==='income'?'background:#dcfce7':'background:#fee2e2'">
+        <div class="p-3 rounded-2xl flex justify-between items-center" :style="t.type==='income'?'background:#dcfce7':'background:#fee2e2'">
           <div>
-            <div class="font-bold text-sm" x-text="t.category"></div>
-            <div class="text-[10px] text-gray-600" x-text="t.date"></div>
+            <div class="font-semibold text-sm" x-text="t.category"></div>
+            <div class="txt-xs text-gray-500" x-text="t.date"></div>
           </div>
           <div class="flex items-center gap-2">
             <span class="font-bold text-sm" :style="t.type==='income'?'color:#15803d':'color:#b91c1c'" x-text="(t.type==='income'?'+':'-')+'Rp '+Number(t.amount).toLocaleString('id-ID')"></span>
-            <button @click="deleteTransaction(t.id)" class="text-red-500 font-bold text-base">✕</button>
+            <button @click="deleteTransaction(t.id)" class="text-red-500 font-bold text-lg">×</button>
           </div>
         </div>
       </template>
       <template x-if="transactions.length===0">
-        <div class="text-sm text-center text-gray-400 py-6">Belum ada transaksi</div>
+        <div class="txt-sm text-center text-gray-400 py-6">Belum ada transaksi</div>
       </template>
     </div>
   </div>
 </div>
 
 <div x-show="activeTab==='downloader'" class="sec-gap">
-  <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
-    <div class="text-3xl">📥</div>
-    <h2 class="font-title text-2xl text-white">DOWNLOADER</h2>
-    <p class="text-xs text-white/80">TikTok • Langsung simpan</p>
+  <div class="card text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff">
+    <div class="text-4xl mb-1">📥</div>
+    <h2 class="font-bold text-xl">Media Downloader</h2>
+    <p class="txt-xs opacity-80">TikTok • Langsung simpan</p>
   </div>
-  <div class="card p-4 sec-gap">
-    <input type="text" x-model="downloadLinkInput" placeholder="Tempel link TikTok..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
-    <button @click="processMediaDownload()" class="btn-primary w-full">
-      <span x-show="!downloadLoading">🔍 PROSES LINK</span>
+  <div class="card sec-gap">
+    <input type="text" x-model="downloadLinkInput" placeholder="Tempel link TikTok..." class="input-field">
+    <button @click="processMediaDownload()" class="btn-primary">
+      <span x-show="!downloadLoading">🔍 Proses Link</span>
       <span x-show="downloadLoading"><span class="spin"></span> Memproses...</span>
     </button>
   </div>
   <template x-if="downloadResultReady">
-    <div class="card p-4 sec-gap text-center">
-      <template x-if="downloadMeta.thumbnail"><img :src="downloadMeta.thumbnail" class="max-h-40 mx-auto rounded-xl"></template>
-      <p class="text-sm font-bold" x-text="downloadMeta.title"></p>
+    <div class="card sec-gap text-center">
+      <template x-if="downloadMeta.thumbnail"><img :src="downloadMeta.thumbnail" class="max-h-40 mx-auto rounded-2xl"></template>
+      <p class="txt-sm font-semibold" x-text="downloadMeta.title"></p>
       <template x-for="(link,idx) in downloadResultLinks" :key="idx">
-        <button @click="downloadBlob(link.url,link.filename)" class="btn-primary w-full text-sm" x-text="'💾 '+link.label"></button>
+        <button @click="downloadBlob(link.url,link.filename)" class="btn-primary" x-text="'💾 '+link.label"></button>
       </template>
-      <div x-show="downloadingFile" class="text-xs font-bold" style="color:var(--primary)"><span class="spin"></span> Mendownload...</div>
+      <div x-show="downloadingFile" class="txt-xs font-semibold" style="color:var(--primary)"><span class="spin"></span> Mendownload...</div>
     </div>
   </template>
 </div><div x-show="activeTab==='kitab'" class="sec-gap">
-  <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
-    <div class="text-3xl">📖</div>
-    <h2 class="font-title text-2xl text-white">IBADAH & DOA</h2>
-    <p class="text-xs text-white/80">Lengkapi ibadah harianmu</p>
+  <div class="card text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff">
+    <div class="text-4xl mb-1">📖</div>
+    <h2 class="font-bold text-xl">Ibadah & Doa</h2>
+    <p class="txt-xs opacity-80">Lengkapi ibadah harianmu</p>
   </div>
   <div class="grid grid-cols-3 gap-2">
-    <button @click="kitabSubTab='sholat'" :style="kitabSubTab==='sholat'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">🕌 Sholat</button>
-    <button @click="kitabSubTab='quran';if(surahList.length===0)fetchSurahs()" :style="kitabSubTab==='quran'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">📖 Quran</button>
-    <button @click="kitabSubTab='asmaul'" :style="kitabSubTab==='asmaul'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">✨ Asmaul</button>
-    <button @click="kitabSubTab='kisah'" :style="kitabSubTab==='kisah'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">🕋 Kisah</button>
-    <button @click="kitabSubTab='hadits'" :style="kitabSubTab==='hadits'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">📚 Hadits</button>
-    <button @click="kitabSubTab='doa'" :style="kitabSubTab==='doa'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">🤲 Doa</button>
+    <button @click="kitabSubTab='sholat'" :class="kitabSubTab==='sholat'?'active':''" class="tab-pill">🕌 Sholat</button>
+    <button @click="kitabSubTab='quran';if(surahList.length===0)fetchSurahs()" :class="kitabSubTab==='quran'?'active':''" class="tab-pill">📖 Quran</button>
+    <button @click="kitabSubTab='asmaul'" :class="kitabSubTab==='asmaul'?'active':''" class="tab-pill">✨ Asmaul</button>
+    <button @click="kitabSubTab='kisah'" :class="kitabSubTab==='kisah'?'active':''" class="tab-pill">🕋 Kisah</button>
+    <button @click="kitabSubTab='hadits'" :class="kitabSubTab==='hadits'?'active':''" class="tab-pill">📚 Hadits</button>
+    <button @click="kitabSubTab='doa'" :class="kitabSubTab==='doa'?'active':''" class="tab-pill">🤲 Doa</button>
   </div>
 
   <div x-show="kitabSubTab==='sholat'" class="sec-gap">
-    <div class="card p-4 sec-gap">
+    <div class="card sec-gap">
       <div class="flex justify-between items-center">
-        <h3 class="font-title text-lg" style="color:var(--primary-dark)">🕌 Waktu Sholat</h3>
-        <button @click="openPrayerCityPicker()" class="text-xs btn-soft px-3 py-1.5">🔄 Ganti</button>
+        <h3 class="font-bold text-sm" style="color:var(--primary-dark)">🕌 Waktu Sholat</h3>
+        <button @click="openPrayerCityPicker()" class="btn-soft">🔄 Ganti</button>
       </div>
-      <p class="text-xs font-bold text-gray-600" x-text="'📍 '+prayerCity+', '+prayerProvince"></p>
-      <div x-show="prayerLoading" class="text-center text-xs"><span class="spin"></span> Memuat...</div>
-      <div class="grid grid-cols-5 gap-1 text-center mt-2">
-        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[8px] font-bold" style="color:var(--primary-dark)">Subuh</div><div class="font-title text-xs" x-text="prayerTimes.subuh"></div></div>
-        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[8px] font-bold" style="color:var(--primary-dark)">Dzuhur</div><div class="font-title text-xs" x-text="prayerTimes.dzuhur"></div></div>
-        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[8px] font-bold" style="color:var(--primary-dark)">Ashar</div><div class="font-title text-xs" x-text="prayerTimes.ashar"></div></div>
-        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[8px] font-bold" style="color:var(--primary-dark)">Maghrib</div><div class="font-title text-xs" x-text="prayerTimes.maghrib"></div></div>
-        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[8px] font-bold" style="color:var(--primary-dark)">Isya</div><div class="font-title text-xs" x-text="prayerTimes.isya"></div></div>
+      <p class="txt-xs text-gray-500" x-text="'📍 '+prayerCity+', '+prayerProvince"></p>
+      <div x-show="prayerLoading" class="text-center py-2 txt-xs"><span class="spin"></span></div>
+      <div class="grid grid-cols-5 gap-1 text-center">
+        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[9px] font-semibold" style="color:var(--primary-dark)">Subuh</div><div class="font-bold text-xs" x-text="prayerTimes.subuh"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[9px] font-semibold" style="color:var(--primary-dark)">Dzuhur</div><div class="font-bold text-xs" x-text="prayerTimes.dzuhur"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[9px] font-semibold" style="color:var(--primary-dark)">Ashar</div><div class="font-bold text-xs" x-text="prayerTimes.ashar"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[9px] font-semibold" style="color:var(--primary-dark)">Maghrib</div><div class="font-bold text-xs" x-text="prayerTimes.maghrib"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[9px] font-semibold" style="color:var(--primary-dark)">Isya</div><div class="font-bold text-xs" x-text="prayerTimes.isya"></div></div>
       </div>
     </div>
 
-    <div class="card p-4 sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--primary-dark)">📿 Niat Sholat</h3>
+    <div class="card sec-gap">
+      <h3 class="font-bold text-sm" style="color:var(--primary-dark)">📿 Niat Sholat</h3>
       <div class="grid grid-cols-5 gap-1">
         <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s">
-          <button @click="selectedNiat=s" :style="selectedNiat===s?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="py-1.5 rounded-lg font-title text-[10px] transition-all" x-text="s"></button>
+          <button @click="selectedNiat=s" :class="selectedNiat===s?'active':''" class="tab-pill" x-text="s"></button>
         </template>
       </div>
-      <div class="p-3 rounded-xl space-y-2" style="background:var(--bg-soft)">
+      <div class="p-4 rounded-2xl" style="background:var(--bg-soft)">
         <div class="font-arab text-right text-xl leading-loose" x-text="niatSholat[selectedNiat].arab"></div>
-        <div class="text-xs italic" style="color:var(--primary-dark)" x-text="niatSholat[selectedNiat].latin"></div>
-        <div class="text-xs text-gray-700" x-text="niatSholat[selectedNiat].arti"></div>
+        <div class="txt-xs italic mt-2" style="color:var(--primary-dark)" x-text="niatSholat[selectedNiat].latin"></div>
+        <div class="txt-xs text-gray-600 mt-1" x-text="niatSholat[selectedNiat].arti"></div>
       </div>
     </div>
 
-    <div class="card p-4 sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--primary-dark)">📿 Bacaan Sholat</h3>
-      <div class="space-y-2 max-h-72 overflow-y-auto">
+    <div class="card sec-gap">
+      <h3 class="font-bold text-sm" style="color:var(--primary-dark)">📿 Bacaan Sholat</h3>
+      <div class="space-y-2 max-h-80 overflow-y-auto">
         <template x-for="(step,idx) in bacaanSholatList" :key="idx">
-          <div class="p-3 rounded-xl space-y-1" style="background:var(--bg-soft)">
-            <div class="font-title text-sm" style="color:var(--primary-dark)" x-text="step.nama"></div>
+          <div class="p-3 rounded-2xl space-y-1" style="background:var(--bg-soft)">
+            <div class="font-semibold text-sm" style="color:var(--primary-dark)" x-text="step.nama"></div>
             <div class="font-arab text-right text-lg" x-text="step.arab"></div>
-            <div class="text-[11px] italic" style="color:var(--primary)" x-text="step.latin"></div>
-            <div class="text-[11px] text-gray-700" x-text="step.arti"></div>
+            <div class="txt-xs italic" style="color:var(--primary)" x-text="step.latin"></div>
+            <div class="txt-xs text-gray-600" x-text="step.arti"></div>
           </div>
         </template>
       </div>
@@ -317,16 +366,16 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);col
 
   <div x-show="kitabSubTab==='quran'" class="sec-gap">
     <template x-if="!activeSurah">
-      <div class="card p-4 sec-gap">
-        <h3 class="font-title text-lg" style="color:var(--primary-dark)">📖 Daftar Surah</h3>
-        <input type="text" x-model="surahSearch" placeholder="Cari surah..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
-        <div class="max-h-72 overflow-y-auto space-y-2">
+      <div class="card sec-gap">
+        <h3 class="font-bold text-sm" style="color:var(--primary-dark)">📖 Daftar Surah</h3>
+        <input type="text" x-model="surahSearch" placeholder="Cari surah..." class="input-field">
+        <div class="max-h-80 overflow-y-auto space-y-2">
           <template x-for="s in filteredSurahs" :key="s.nomor">
-            <div class="p-3 rounded-xl" style="background:var(--bg-soft)">
+            <div class="p-3 rounded-2xl" style="background:var(--bg-soft)">
               <div @click="loadSurahDetail(s.nomor)" class="cursor-pointer flex justify-between items-center">
                 <div>
-                  <div class="font-bold text-sm" x-text="s.nomor+'. '+s.namaLatin"></div>
-                  <div class="text-[10px] text-gray-600" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></div>
+                  <div class="font-semibold text-sm" x-text="s.nomor+'. '+s.namaLatin"></div>
+                  <div class="txt-xs text-gray-500" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></div>
                 </div>
                 <span class="font-arab text-base font-bold" style="color:var(--primary)" x-text="s.nama"></span>
               </div>
@@ -337,23 +386,23 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);col
       </div>
     </template>
     <template x-if="activeSurah">
-      <div class="card p-4 sec-gap">
-        <button @click="activeSurah=null" class="btn-soft self-start px-3 py-1.5 text-xs">← Kembali</button>
-        <div class="text-center border-b-2 pb-3" style="border-color:var(--primary-light)">
-          <h3 class="font-title text-xl" style="color:var(--primary-dark)" x-text="activeSurah.namaLatin"></h3>
-          <p class="text-xs font-bold text-gray-600" x-text="activeSurah.arti+' - '+activeSurah.jumlahAyat+' Ayat'"></p>
-          <audio controls class="w-full h-8 mt-2" :src="activeSurah.audioFull&&activeSurah.audioFull['05']"></audio>
+      <div class="card sec-gap">
+        <button @click="activeSurah=null" class="btn-soft self-start">← Kembali</button>
+        <div class="text-center pb-3" style="border-bottom:1px solid var(--border)">
+          <h3 class="font-bold text-lg" style="color:var(--primary-dark)" x-text="activeSurah.namaLatin"></h3>
+          <p class="txt-xs text-gray-500" x-text="activeSurah.arti+' • '+activeSurah.jumlahAyat+' Ayat'"></p>
+          <audio controls class="w-full h-9 mt-3" :src="activeSurah.audioFull&&activeSurah.audioFull['05']"></audio>
         </div>
-        <div class="max-h-80 overflow-y-auto space-y-3 pt-2">
+        <div class="max-h-96 overflow-y-auto space-y-3 pt-2">
           <template x-for="ay in activeSurah.ayat" :key="ay.nomorAyat">
-            <div class="p-3 rounded-xl space-y-2" style="background:var(--bg-soft)">
-              <div class="flex justify-between items-center text-[10px] font-bold border-b pb-1" style="border-color:var(--primary-light)">
+            <div class="p-4 rounded-2xl space-y-2" style="background:var(--bg-soft)">
+              <div class="flex justify-between items-center txt-xs font-bold pb-2" style="border-bottom:1px solid var(--border)">
                 <span>Ayat <span x-text="ay.nomorAyat"></span></span>
                 <audio controls preload="none" class="h-6 w-32" :src="(ay.audio&&(ay.audio['05']||ay.audio['01']))||''"></audio>
               </div>
-              <div class="font-arab text-right text-xl" x-text="ay.teksArab"></div>
-              <div class="text-xs italic" style="color:var(--primary)" x-text="ay.teksLatin"></div>
-              <div class="text-xs text-gray-700" x-text="ay.teksIndonesia"></div>
+              <div class="font-arab text-right text-xl leading-loose" x-text="ay.teksArab"></div>
+              <div class="txt-xs italic" style="color:var(--primary)" x-text="ay.teksLatin"></div>
+              <div class="txt-xs text-gray-600" x-text="ay.teksIndonesia"></div>
             </div>
           </template>
         </div>
@@ -361,155 +410,156 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);col
     </template>
   </div>
 
-  <div x-show="kitabSubTab==='asmaul'" class="sec-gap">
-    <div class="card p-4 sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--primary-dark)">✨ 99 Asmaul Husna</h3>
-      <div class="max-h-80 overflow-y-auto space-y-2">
-        <template x-for="item in asmaulHusnaList" :key="item.no">
-          <div class="p-3 rounded-xl flex items-center justify-between" style="background:var(--bg-soft)">
-            <div class="flex items-center space-x-3 flex-1 min-w-0">
-              <span class="w-7 h-7 rounded-lg flex items-center justify-center font-title text-xs shrink-0" style="background:var(--primary);color:#fff" x-text="item.no"></span>
-              <div class="min-w-0">
-                <div class="font-arab text-lg font-bold" x-text="item.arab"></div>
-                <div class="text-xs font-bold" style="color:var(--primary-dark)" x-text="item.latin+' - '+item.arti"></div>
-              </div>
+  <div x-show="kitabSubTab==='asmaul'" class="card sec-gap">
+    <h3 class="font-bold text-sm" style="color:var(--primary-dark)">✨ 99 Asmaul Husna</h3>
+    <div class="max-h-96 overflow-y-auto space-y-2">
+      <template x-for="item in asmaulHusnaList" :key="item.no">
+        <div class="p-3 rounded-2xl flex items-center justify-between" style="background:var(--bg-soft)">
+          <div class="flex items-center space-x-3 flex-1 min-w-0">
+            <span class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0" style="background:var(--primary);color:#fff" x-text="item.no"></span>
+            <div class="min-w-0">
+              <div class="font-arab text-lg font-bold" x-text="item.arab"></div>
+              <div class="txt-xs font-semibold" style="color:var(--primary-dark)" x-text="item.latin+' • '+item.arti"></div>
             </div>
-            <button @click="toggleHafalAsmaul(item.no)" class="w-9 h-9 rounded-lg text-sm font-bold shrink-0" :style="item.hafal?'background:#22c55e;color:#fff':'background:#e5e7eb'" x-text="item.hafal?'✅':'○'"></button>
           </div>
-        </template>
-      </div>
+          <button @click="toggleHafalAsmaul(item.no)" class="w-9 h-9 rounded-lg text-sm shrink-0" :style="item.hafal?'background:#22c55e;color:#fff':'background:#e5e7eb'" x-text="item.hafal?'✓':'○'"></button>
+        </div>
+      </template>
     </div>
   </div>
 
-  <div x-show="kitabSubTab==='kisah'" class="sec-gap">
-    <div class="card p-4 sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--primary-dark)">🕋 Kisah Nabi & Sahabat</h3>
-      <div class="max-h-80 overflow-y-auto space-y-2">
-        <template x-for="(k,idx) in kisahList" :key="idx">
-          <div class="p-3 rounded-xl cursor-pointer" style="background:var(--bg-soft)" @click="openKisahDetail(idx)">
-            <div class="font-title text-sm" style="color:var(--primary-dark)" x-text="k.judul"></div>
-            <div class="text-[10px] text-gray-600" x-text="k.kategori"></div>
-          </div>
-        </template>
-      </div>
+  <div x-show="kitabSubTab==='kisah'" class="card sec-gap">
+    <h3 class="font-bold text-sm" style="color:var(--primary-dark)">🕋 Kisah Nabi & Sahabat</h3>
+    <div class="max-h-96 overflow-y-auto space-y-2">
+      <template x-for="(k,idx) in kisahList" :key="idx">
+        <div class="p-3 rounded-2xl cursor-pointer card-hover" style="background:var(--bg-soft)" @click="openKisahDetail(idx)">
+          <div class="font-semibold text-sm" style="color:var(--primary-dark)" x-text="k.judul"></div>
+          <div class="txt-xs text-gray-500" x-text="k.kategori"></div>
+        </div>
+      </template>
     </div>
   </div>
 
-  <div x-show="kitabSubTab==='hadits'" class="sec-gap">
-    <div class="card p-4 sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--primary-dark)">📚 Kumpulan Hadits</h3>
-      <div class="flex flex-wrap gap-1">
-        <template x-for="k in haditsKategori" :key="k">
-          <button @click="filterHadits=k" :style="filterHadits===k?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="px-3 py-1 rounded-full text-[10px] font-bold" x-text="k"></button>
-        </template>
-      </div>
-      <div class="max-h-80 overflow-y-auto space-y-2">
-        <template x-for="(h,idx) in filteredHadits" :key="idx">
-          <div class="p-3 rounded-xl space-y-1" style="background:var(--bg-soft)">
-            <div class="font-title text-[10px]" style="color:var(--primary)" x-text="'#'+h.kategori"></div>
-            <div class="font-arab text-right text-base" x-text="h.arab"></div>
-            <div class="text-[11px] italic" style="color:var(--primary-dark)" x-text="h.latin"></div>
-            <div class="text-[11px] text-gray-700" x-text="h.arti"></div>
-            <div class="text-[9px] text-gray-500 font-bold" x-text="'('+h.perawi+')'"></div>
-          </div>
-        </template>
-      </div>
+  <div x-show="kitabSubTab==='hadits'" class="card sec-gap">
+    <h3 class="font-bold text-sm" style="color:var(--primary-dark)">📚 Kumpulan Hadits</h3>
+    <div class="flex flex-wrap gap-1">
+      <template x-for="k in haditsKategori" :key="k">
+        <button @click="filterHadits=k" :class="filterHadits===k?'active':''" class="tab-pill" x-text="k"></button>
+      </template>
+    </div>
+    <div class="max-h-96 overflow-y-auto space-y-2">
+      <template x-for="(h,idx) in filteredHadits" :key="idx">
+        <div class="p-4 rounded-2xl space-y-2" style="background:var(--bg-soft)">
+          <div class="txt-xs font-bold" style="color:var(--primary)" x-text="'#'+h.kategori"></div>
+          <div class="font-arab text-right text-base" x-text="h.arab"></div>
+          <div class="txt-xs italic" style="color:var(--primary-dark)" x-text="h.latin"></div>
+          <div class="txt-xs text-gray-600" x-text="h.arti"></div>
+          <div class="text-[10px] text-gray-400 font-semibold" x-text="'('+h.perawi+')'"></div>
+        </div>
+      </template>
     </div>
   </div>
 
-  <div x-show="kitabSubTab==='doa'" class="sec-gap">
-    <div class="card p-4 sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--primary-dark)">🤲 Doa Harian</h3>
-      <div class="max-h-80 overflow-y-auto space-y-2">
-        <template x-for="(d,idx) in doaHarian" :key="idx">
-          <div class="p-3 rounded-xl space-y-1" style="background:var(--bg-soft)">
-            <div class="font-title text-sm" style="color:var(--primary-dark)" x-text="d.nama"></div>
-            <div class="font-arab text-right text-base" x-text="d.arab"></div>
-            <div class="text-[11px] italic" style="color:var(--primary)" x-text="d.latin"></div>
-            <div class="text-[11px] text-gray-700" x-text="d.arti"></div>
-          </div>
-        </template>
-      </div>
+  <div x-show="kitabSubTab==='doa'" class="card sec-gap">
+    <h3 class="font-bold text-sm" style="color:var(--primary-dark)">🤲 Doa Harian</h3>
+    <div class="max-h-96 overflow-y-auto space-y-2">
+      <template x-for="(d,idx) in doaHarian" :key="idx">
+        <div class="p-4 rounded-2xl space-y-2" style="background:var(--bg-soft)">
+          <div class="font-semibold text-sm" style="color:var(--primary-dark)" x-text="d.nama"></div>
+          <div class="font-arab text-right text-base" x-text="d.arab"></div>
+          <div class="txt-xs italic" style="color:var(--primary)" x-text="d.latin"></div>
+          <div class="txt-xs text-gray-600" x-text="d.arti"></div>
+        </div>
+      </template>
     </div>
   </div>
 </div>    <div x-show="activeTab==='tools'" class="sec-gap">
-      <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
-        <div class="text-3xl">🛠️</div>
-        <h2 class="font-title text-2xl text-white">TOOLS</h2>
+      <div class="card text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff">
+        <div class="text-4xl mb-1">🛠️</div>
+        <h2 class="font-bold text-xl">Tools</h2>
       </div>
       <div class="grid grid-cols-3 gap-2">
-        <button @click="toolsSubTab='jam'" :style="toolsSubTab==='jam'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-xs">🌍 Jam</button>
-        <button @click="toolsSubTab='tts'" :style="toolsSubTab==='tts'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-xs">🗣️ TTS</button>
-        <button @click="toolsSubTab='kompres'" :style="toolsSubTab==='kompres'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-xs">🖼️ Kompres</button>
+        <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="tab-pill">🌍 Jam</button>
+        <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="tab-pill">🗣️ TTS</button>
+        <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'active':''" class="tab-pill">🖼️ Kompres</button>
       </div>
-      <div x-show="toolsSubTab==='jam'" class="card p-4 sec-gap">
-        <h3 class="font-title text-lg" style="color:var(--primary-dark)">🌍 Jam Dunia</h3>
-        <div class="grid grid-cols-1 gap-2">
+      <div x-show="toolsSubTab==='jam'" class="card sec-gap">
+        <h3 class="font-bold text-sm" style="color:var(--primary-dark)">🌍 Jam Dunia</h3>
+        <div class="space-y-2">
           <template x-for="zone in worldClocks" :key="zone.name">
-            <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--bg-soft)">
+            <div class="p-3 rounded-2xl flex items-center gap-3" style="background:var(--bg-soft)">
               <span class="flag-ico" :style="'background:'+zone.flag"></span>
               <div class="flex-1">
-                <div class="font-title text-xs" style="color:var(--primary-dark)" x-text="zone.name"></div>
-                <div class="font-title text-base" x-text="zone.time"></div>
+                <div class="txt-xs font-semibold" style="color:var(--primary-dark)" x-text="zone.name"></div>
+                <div class="font-bold text-base" x-text="zone.time"></div>
               </div>
             </div>
           </template>
         </div>
       </div>
-      <div x-show="toolsSubTab==='tts'" class="card p-4 sec-gap">
-        <h3 class="font-title text-lg" style="color:var(--primary-dark)">🗣️ Text to Speech</h3>
-        <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)"></textarea>
-        <button @click="speakCustomText()" class="btn-primary w-full">🔊 UCAPKAN</button>
+      <div x-show="toolsSubTab==='tts'" class="card sec-gap">
+        <h3 class="font-bold text-sm" style="color:var(--primary-dark)">🗣️ Text to Speech</h3>
+        <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="input-field"></textarea>
+        <button @click="speakCustomText()" class="btn-primary">🔊 Ucapkan</button>
       </div>
-      <div x-show="toolsSubTab==='kompres'" class="card p-4 sec-gap">
-        <h3 class="font-title text-lg" style="color:var(--primary-dark)">🖼️ Kompres Foto</h3>
-        <input type="file" accept="image/*" @change="compressImageFile($event)" class="w-full p-3 rounded-xl text-xs border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
+      <div x-show="toolsSubTab==='kompres'" class="card sec-gap">
+        <h3 class="font-bold text-sm" style="color:var(--primary-dark)">🖼️ Kompres Foto</h3>
+        <input type="file" accept="image/*" @change="compressImageFile($event)" class="input-field">
         <template x-if="compressedImageUrl">
           <div class="text-center space-y-2">
-            <img :src="compressedImageUrl" class="max-h-40 mx-auto rounded-xl">
-            <a :href="compressedImageUrl" download="compressed.jpg" class="btn-primary block w-full">💾 DOWNLOAD</a>
+            <img :src="compressedImageUrl" class="max-h-40 mx-auto rounded-2xl">
+            <a :href="compressedImageUrl" download="compressed.jpg" class="btn-primary block text-center">💾 Download</a>
           </div>
         </template>
       </div>
     </div>
 
     <div x-show="activeTab==='tema'" class="sec-gap">
-      <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
-        <div class="text-3xl">🎨</div>
-        <h2 class="font-title text-2xl text-white">TEMA</h2>
-        <p class="text-xs text-white/80">Pilih tema favoritmu</p>
+      <div class="card text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff">
+        <div class="text-4xl mb-1">🎨</div>
+        <h2 class="font-bold text-xl">Tema</h2>
+        <p class="txt-xs opacity-80">Pilih tema favoritmu</p>
       </div>
-      <div class="card p-4 sec-gap">
-        <h3 class="font-title text-lg" style="color:var(--primary-dark)">Warna Tema</h3>
-        <div class="grid grid-cols-3 gap-3">
+      <div class="card sec-gap">
+        <h3 class="font-bold text-sm" style="color:var(--primary-dark)">Warna Tema</h3>
+        <div class="grid grid-cols-3 gap-4">
           <template x-for="t in themes" :key="t.id">
             <div @click="setTheme(t.id)" class="cursor-pointer text-center">
               <div class="theme-dot mx-auto" :class="theme===t.id?'active':''" :style="'background:'+t.color"></div>
-              <div class="text-[10px] font-bold mt-1" x-text="t.name"></div>
+              <div class="txt-xs font-semibold mt-2" x-text="t.name"></div>
             </div>
           </template>
+        </div>
+        <div class="divider"></div>
+        <div class="p-4 rounded-2xl" style="background:var(--bg-soft)">
+          <div class="txt-xs text-gray-500 mb-2">Preview:</div>
+          <div class="flex gap-2">
+            <div class="w-12 h-12 rounded-2xl" style="background:var(--primary)"></div>
+            <div class="w-12 h-12 rounded-2xl" style="background:var(--primary-soft)"></div>
+            <div class="flex-1 flex items-center justify-center rounded-2xl font-bold text-sm text-white" style="background:var(--primary-dark)">Tombol</div>
+          </div>
         </div>
       </div>
     </div>
 
     <div x-show="activeTab==='arcade'" class="sec-gap">
-      <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
-        <div class="text-3xl">🎮</div>
-        <h2 class="font-title text-2xl text-white">ARCADE GAME</h2>
+      <div class="card text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff">
+        <div class="text-4xl mb-1">🎮</div>
+        <h2 class="font-bold text-xl">Arcade Game</h2>
       </div>
-      <div class="card p-4 sec-gap text-center">
-        <div class="w-full h-40 rounded-2xl flex items-center justify-center cursor-pointer font-title text-2xl text-white transition-all"
+      <div class="card sec-gap text-center">
+        <div class="w-full h-40 rounded-2xl flex items-center justify-center cursor-pointer font-bold text-xl text-white transition-all"
              :style="reflexState==='red'?'background:#ef4444':(reflexState==='yellow'?'background:#eab308':'background:#22c55e')"
              @click="handleReflexTap()">
           <span x-text="reflexMessage"></span>
         </div>
-        <button @click="startReflexGame()" class="btn-primary w-full">▶️ MULAI GAME</button>
+        <button @click="startReflexGame()" class="btn-primary">▶️ Mulai Game</button>
       </div>
     </div>
 
   </main>
 
-  <nav class="absolute bottom-0 left-0 right-0 flex p-2 gap-1" style="background:#fff;box-shadow:0 -2px 12px rgba(0,0,0,0.08)">
+  <nav class="absolute bottom-0 left-0 right-0 flex p-2 gap-1" style="background:#fff;box-shadow:0 -2px 12px rgba(0,0,0,0.06)">
     <button @click="activeTab='home'" :class="activeTab==='home'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-home"/></svg><span class="bottom-nav-label">HOME</span></button>
     <button @click="activeTab='kitab'" :class="activeTab==='kitab'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-book"/></svg><span class="bottom-nav-label">IBADAH</span></button>
     <button @click="activeTab='keuangan'" :class="activeTab==='keuangan'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-wallet"/></svg><span class="bottom-nav-label">DOMPET</span></button>
@@ -520,67 +570,64 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);col
   </nav>
 </div>
 
-<!-- BOTTOM SHEET: TRANSAKSI -->
 <div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content text-center space-y-4">
     <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto"></div>
-    <h3 class="font-title text-2xl" style="color:var(--primary-dark)">💰 TRANSAKSI BARU</h3>
+    <h3 class="font-bold text-xl" style="color:var(--primary-dark)">💰 Transaksi Baru</h3>
     <div class="flex flex-wrap gap-2 justify-center">
-      <button @click="txCategory='Belanja'" class="px-3 py-2 rounded-full text-xs font-bold" style="background:var(--bg-soft)">🛒 Belanja</button>
-      <button @click="txCategory='Utang'" class="px-3 py-2 rounded-full text-xs font-bold" style="background:var(--bg-soft)">💸 Utang</button>
-      <button @click="txCategory='Gaji'" class="px-3 py-2 rounded-full text-xs font-bold" style="background:var(--bg-soft)">💵 Gaji</button>
-      <button @click="txCategory='Makan'" class="px-3 py-2 rounded-full text-xs font-bold" style="background:var(--bg-soft)">🍜 Makan</button>
+      <button @click="txCategory='Belanja'" class="btn-soft">🛒 Belanja</button>
+      <button @click="txCategory='Utang'" class="btn-soft">💸 Utang</button>
+      <button @click="txCategory='Gaji'" class="btn-soft">💵 Gaji</button>
+      <button @click="txCategory='Makan'" class="btn-soft">🍜 Makan</button>
     </div>
-    <input type="text" x-model="txCategory" placeholder="Kategori..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
-    <input type="number" x-model="txAmount" placeholder="Nominal (Rp)..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
+    <input type="text" x-model="txCategory" placeholder="Kategori..." class="input-field">
+    <input type="number" x-model="txAmount" placeholder="Nominal (Rp)..." class="input-field">
     <div class="grid grid-cols-2 gap-2">
-      <button @click="addTransaction('income')" class="btn-primary text-sm" style="background:#22c55e;box-shadow:0 3px 0 #15803d">+ Masuk</button>
-      <button @click="addTransaction('expense')" class="btn-primary text-sm" style="background:#ef4444;box-shadow:0 3px 0 #b91c1c">- Keluar</button>
+      <button @click="addTransaction('income')" class="btn-primary" style="background:#22c55e;box-shadow:0 4px 14px rgba(34,197,94,0.25)">+ Masuk</button>
+      <button @click="addTransaction('expense')" class="btn-primary" style="background:#ef4444;box-shadow:0 4px 14px rgba(239,68,68,0.25)">- Keluar</button>
     </div>
     <button @click="txSheetOpen=false" class="btn-soft w-full">Tutup</button>
   </div>
 </div>
 
-<!-- BOTTOM SHEET: BERITA -->
 <div x-show="newsSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content">
-    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
-    <h3 class="font-title text-2xl text-center" style="color:var(--primary-dark)">📰 BERITA INDONESIA</h3>
-    <div x-show="newsLoading" class="text-center py-3"><span class="spin"></span></div>
-    <div x-show="!newsLoading && !selectedNews" class="space-y-2 mt-3 max-h-[60vh] overflow-y-auto">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
+    <h3 class="font-bold text-xl text-center" style="color:var(--primary-dark)">📰 Berita Indonesia</h3>
+    <div x-show="newsLoading" class="text-center py-4"><span class="spin"></span></div>
+    <div x-show="!newsLoading && !selectedNews" class="space-y-2 mt-4 max-h-[60vh] overflow-y-auto">
       <template x-for="(n,idx) in newsList" :key="idx">
-        <div @click="selectedNews=n" class="p-3 rounded-xl cursor-pointer flex gap-3" style="background:var(--bg-soft)">
+        <div @click="selectedNews=n" class="p-3 rounded-2xl cursor-pointer flex gap-3 card-hover" style="background:var(--bg-soft)">
           <template x-if="n.thumbnail"><img :src="n.thumbnail" class="w-20 h-20 object-cover rounded-xl shrink-0" @error="$event.target.style.display='none'"></template>
           <div class="flex-1 min-w-0">
-            <div class="font-bold text-xs line-clamp-2" x-text="n.title"></div>
-            <div class="text-[10px] text-gray-500 mt-1" x-text="n.pubDate"></div>
-            <div class="text-[10px] font-bold" style="color:var(--primary)" x-text="n.source"></div>
+            <div class="font-semibold text-xs line-clamp-2" x-text="n.title"></div>
+            <div class="txt-xs text-gray-400 mt-1" x-text="n.pubDate"></div>
+            <div class="txt-xs font-semibold" style="color:var(--primary)" x-text="n.source"></div>
           </div>
         </div>
       </template>
     </div>
     <template x-if="selectedNews">
-      <div class="mt-3 space-y-3">
-        <button @click="selectedNews=null" class="btn-soft px-3 py-1.5 text-xs">← Kembali</button>
-        <h4 class="font-title text-lg" style="color:var(--primary-dark)" x-text="selectedNews.title"></h4>
-        <p class="text-[10px] text-gray-500" x-text="selectedNews.source+' • '+selectedNews.pubDate"></p>
-        <p class="text-xs leading-relaxed" x-text="selectedNews.description"></p>
-        <a :href="selectedNews.link" target="_blank" class="btn-primary block text-center text-sm">🔗 BACA SELENGKAPNYA</a>
+      <div class="mt-4 space-y-3">
+        <button @click="selectedNews=null" class="btn-soft">← Kembali</button>
+        <h4 class="font-bold text-base" style="color:var(--primary-dark)" x-text="selectedNews.title"></h4>
+        <p class="txt-xs text-gray-400" x-text="selectedNews.source+' • '+selectedNews.pubDate"></p>
+        <p class="txt-sm leading-relaxed text-gray-700" x-text="selectedNews.description"></p>
+        <a :href="selectedNews.link" target="_blank" class="btn-primary block text-center">🔗 Baca Selengkapnya</a>
       </div>
     </template>
-    <button @click="newsSheetOpen=false" class="btn-soft w-full mt-3">Tutup</button>
+    <button @click="newsSheetOpen=false" class="btn-soft w-full mt-4">Tutup</button>
   </div>
 </div>
 
-<!-- BOTTOM SHEET: CUACA - PILIH PROVINSI -->
 <div x-show="weatherProvinceSheet" class="bottom-sheet-overlay" style="z-index:100006;">
   <div class="bottom-sheet-content">
-    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
-    <h3 class="font-title text-2xl text-center" style="color:var(--primary-dark)">🌤️ PILIH PROVINSI</h3>
-    <div class="mt-3 max-h-[65vh] overflow-y-auto rounded-xl">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
+    <h3 class="font-bold text-xl text-center" style="color:var(--primary-dark)">🌤️ Pilih Provinsi</h3>
+    <div class="mt-4 max-h-[65vh] overflow-y-auto">
       <template x-for="p in provinces" :key="p">
         <div @click="selectWeatherProvince(p)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="p"></span>
+          <span class="font-semibold text-sm" x-text="p"></span>
           <span style="color:var(--primary)">›</span>
         </div>
       </template>
@@ -589,16 +636,15 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);col
   </div>
 </div>
 
-<!-- BOTTOM SHEET: CUACA - PILIH KOTA -->
 <div x-show="weatherCitySheet" class="bottom-sheet-overlay" style="z-index:100007;">
   <div class="bottom-sheet-content">
-    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
-    <h3 class="font-title text-xl text-center" style="color:var(--primary-dark)">PILIH KOTA</h3>
-    <p class="text-xs text-center text-gray-600" x-text="'Provinsi: '+weatherProvince"></p>
-    <div class="mt-3 max-h-[65vh] overflow-y-auto rounded-xl">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
+    <h3 class="font-bold text-lg text-center" style="color:var(--primary-dark)">Pilih Kota</h3>
+    <p class="txt-xs text-center text-gray-500" x-text="'Provinsi: '+weatherProvince"></p>
+    <div class="mt-4 max-h-[65vh] overflow-y-auto">
       <template x-for="c in cities" :key="c">
         <div @click="selectWeatherCity(c)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="c"></span>
+          <span class="font-semibold text-sm" x-text="c"></span>
           <span style="color:var(--primary)">›</span>
         </div>
       </template>
@@ -607,35 +653,34 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);col
   </div>
 </div>
 
-<!-- BOTTOM SHEET: CUACA - HASIL -->
 <div x-show="weatherSheetOpen" class="bottom-sheet-overlay" style="z-index:100008;">
   <div class="bottom-sheet-content">
-    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
     <div class="flex justify-between items-center">
-      <h3 class="font-title text-xl" style="color:var(--primary-dark)">🌤️ CUACA</h3>
-      <button @click="openWeatherProvincePicker()" class="btn-soft px-3 py-1.5 text-xs">🔄 Ganti Kota</button>
+      <h3 class="font-bold text-lg" style="color:var(--primary-dark)">🌤️ Cuaca</h3>
+      <button @click="openWeatherProvincePicker()" class="btn-soft">🔄 Ganti</button>
     </div>
-    <div x-show="weatherLoading" class="text-center py-3"><span class="spin"></span></div>
+    <div x-show="weatherLoading" class="text-center py-4"><span class="spin"></span></div>
     <template x-if="weatherData && !weatherLoading">
-      <div class="mt-3 space-y-3">
-        <div class="p-4 text-center rounded-2xl" style="background:linear-gradient(135deg,var(--primary-light),var(--primary));color:#fff">
-          <div class="text-sm font-bold" x-text="weatherData.city"></div>
+      <div class="mt-4 space-y-4">
+        <div class="p-5 text-center rounded-3xl" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff">
+          <div class="font-semibold text-sm opacity-90" x-text="weatherData.city"></div>
           <div class="text-6xl my-2" x-text="weatherData.emoji"></div>
-          <div class="font-title text-5xl" x-text="weatherData.temp+'°C'"></div>
-          <div class="text-sm" x-text="weatherData.desc"></div>
-          <div class="grid grid-cols-2 gap-2 mt-3 text-xs">
-            <div class="bg-white/20 rounded-xl p-2">💧 <span x-text="weatherData.humidity+'%'"></span></div>
-            <div class="bg-white/20 rounded-xl p-2">🌬️ <span x-text="weatherData.wind+' km/j'"></span></div>
+          <div class="font-bold text-4xl" x-text="weatherData.temp+'°C'"></div>
+          <div class="text-sm opacity-90" x-text="weatherData.desc"></div>
+          <div class="grid grid-cols-2 gap-2 mt-4">
+            <div class="rounded-xl p-3 bg-white/20">💧 <span class="font-bold" x-text="weatherData.humidity+'%'"></span></div>
+            <div class="rounded-xl p-3 bg-white/20">🌬️ <span class="font-bold" x-text="weatherData.wind+' km/j'"></span></div>
           </div>
         </div>
-        <h4 class="font-title text-sm" style="color:var(--primary-dark)">📅 PRAKIRAAN 7 HARI</h4>
+        <h4 class="font-bold text-sm" style="color:var(--primary-dark)">📅 Prakiraan 7 Hari</h4>
         <div class="space-y-2">
           <template x-for="(d,idx) in weatherData.forecast" :key="idx">
-            <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--bg-soft)">
+            <div class="p-3 rounded-2xl flex items-center gap-3" style="background:var(--bg-soft)">
               <span class="text-3xl" x-text="d.emoji"></span>
               <div class="flex-1">
-                <div class="font-bold text-xs" x-text="d.date"></div>
-                <div class="text-[10px] text-gray-600" x-text="d.desc"></div>
+                <div class="font-semibold text-xs" x-text="d.date"></div>
+                <div class="txt-xs text-gray-500" x-text="d.desc"></div>
               </div>
               <div class="text-right">
                 <div class="font-bold text-red-500 text-sm" x-text="d.max+'°'"></div>
@@ -646,19 +691,18 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);col
         </div>
       </div>
     </template>
-    <button @click="weatherSheetOpen=false" class="btn-soft w-full mt-3">Tutup</button>
+    <button @click="weatherSheetOpen=false" class="btn-soft w-full mt-4">Tutup</button>
   </div>
 </div>
 
-<!-- BOTTOM SHEET: SHOLAT - PILIH PROVINSI -->
 <div x-show="prayerProvinceSheet" class="bottom-sheet-overlay" style="z-index:100006;">
   <div class="bottom-sheet-content">
-    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
-    <h3 class="font-title text-2xl text-center" style="color:var(--primary-dark)">🕌 PILIH PROVINSI</h3>
-    <div class="mt-3 max-h-[65vh] overflow-y-auto rounded-xl">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
+    <h3 class="font-bold text-xl text-center" style="color:var(--primary-dark)">🕌 Pilih Provinsi</h3>
+    <div class="mt-4 max-h-[65vh] overflow-y-auto">
       <template x-for="p in provinces" :key="p">
         <div @click="selectPrayerProvince(p)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="p"></span>
+          <span class="font-semibold text-sm" x-text="p"></span>
           <span style="color:var(--primary)">›</span>
         </div>
       </template>
@@ -667,16 +711,15 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);col
   </div>
 </div>
 
-<!-- BOTTOM SHEET: SHOLAT - PILIH KOTA -->
 <div x-show="prayerCitySheet" class="bottom-sheet-overlay" style="z-index:100007;">
   <div class="bottom-sheet-content">
-    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
-    <h3 class="font-title text-xl text-center" style="color:var(--primary-dark)">PILIH KOTA</h3>
-    <p class="text-xs text-center text-gray-600" x-text="'Provinsi: '+prayerProvince"></p>
-    <div class="mt-3 max-h-[65vh] overflow-y-auto rounded-xl">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
+    <h3 class="font-bold text-lg text-center" style="color:var(--primary-dark)">Pilih Kota</h3>
+    <p class="txt-xs text-center text-gray-500" x-text="'Provinsi: '+prayerProvince"></p>
+    <div class="mt-4 max-h-[65vh] overflow-y-auto">
       <template x-for="c in prayerCities" :key="c">
         <div @click="selectPrayerCity(c)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="c"></span>
+          <span class="font-semibold text-sm" x-text="c"></span>
           <span style="color:var(--primary)">›</span>
         </div>
       </template>
@@ -685,16 +728,17 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);col
   </div>
 </div>
 
-<!-- BOTTOM SHEET: KISAH DETAIL -->
 <div x-show="kisahSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content">
-    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"></div>
     <template x-if="selectedKisah">
       <div class="space-y-3">
-        <h3 class="font-title text-2xl text-center" style="color:var(--primary-dark)" x-text="selectedKisah.judul"></h3>
-        <div class="text-[10px] text-center text-gray-500 font-bold" x-text="selectedKisah.kategori"></div>
-        <div class="p-4 rounded-xl max-h-[55vh] overflow-y-auto" style="background:var(--bg-soft)">
-          <p class="text-xs leading-relaxed whitespace-pre-line" x-text="selectedKisah.isi"></p>
+        <h3 class="font-bold text-xl text-center" style="color:var(--primary-dark)" x-text="selectedKisah.judul"></h3>
+        <div class="text-center">
+          <span class="txt-xs font-semibold px-3 py-1 rounded-full inline-block" style="background:var(--primary-soft);color:var(--primary-dark)" x-text="selectedKisah.kategori"></span>
+        </div>
+        <div class="p-4 rounded-2xl max-h-[55vh] overflow-y-auto" style="background:var(--bg-soft)">
+          <p class="txt-sm leading-relaxed whitespace-pre-line text-gray-700" x-text="selectedKisah.isi"></p>
         </div>
         <button @click="kisahSheetOpen=false" class="btn-soft w-full">Tutup</button>
       </div>
@@ -717,19 +761,7 @@ const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const OWNER_EMAIL='andikaatka@gmail.com';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-const ASMAUL_HUSNA=[
-{no:1,arab:'الرَّحْمَنُ',latin:'Ar-Rahmaan',arti:'Yang Maha Pengasih'},{no:2,arab:'الرَّحِيمُ',latin:'Ar-Rahiim',arti:'Yang Maha Penyayang'},{no:3,arab:'الْمَلِكُ',latin:'Al-Malik',arti:'Yang Maha Merajai'},{no:4,arab:'الْقُدُّوسُ',latin:'Al-Quddus',arti:'Yang Maha Suci'},{no:5,arab:'السَّلَامُ',latin:'As-Salaam',arti:'Yang Maha Sejahtera'},{no:6,arab:'الْمُؤْمِنُ',latin:'Al-Mu\'min',arti:'Yang Maha Memberi Keamanan'},{no:7,arab:'الْمُهَيْمِنُ',latin:'Al-Muhaimin',arti:'Yang Maha Pemelihara'},{no:8,arab:'الْعَزِيزُ',latin:'Al-Aziiz',arti:'Yang Maha Perkasa'},{no:9,arab:'الْجَبَّارُ',latin:'Al-Jabbar',arti:'Yang Maha Kuasa'},{no:10,arab:'الْمُتَكَبِّرُ',latin:'Al-Mutakabbir',arti:'Yang Maha Megah'},
-{no:11,arab:'الْخَالِقُ',latin:'Al-Khaaliq',arti:'Yang Maha Pencipta'},{no:12,arab:'الْبَارِئُ',latin:'Al-Baari\'',arti:'Yang Maha Mengadakan'},{no:13,arab:'الْمُصَوِّرُ',latin:'Al-Mushawwir',arti:'Yang Maha Membentuk'},{no:14,arab:'الْغَفَّارُ',latin:'Al-Ghaffaar',arti:'Yang Maha Pengampun'},{no:15,arab:'الْقَهَّارُ',latin:'Al-Qahhaar',arti:'Yang Maha Menundukkan'},{no:16,arab:'الْوَهَّابُ',latin:'Al-Wahhaab',arti:'Yang Maha Pemberi'},{no:17,arab:'الرَّزَّاقُ',latin:'Ar-Razzaq',arti:'Yang Maha Pemberi Rezeki'},{no:18,arab:'الْفَتَّاحُ',latin:'Al-Fattaah',arti:'Yang Maha Pembuka'},{no:19,arab:'الْعَلِيمُ',latin:'Al-\'Aliim',arti:'Yang Maha Mengetahui'},{no:20,arab:'الْقَابِضُ',latin:'Al-Qaabidh',arti:'Yang Maha Menyempitkan'},
-{no:21,arab:'الْبَاسِطُ',latin:'Al-Baasith',arti:'Yang Maha Melapangkan'},{no:22,arab:'الْخَافِضُ',latin:'Al-Khaafidh',arti:'Yang Maha Merendahkan'},{no:23,arab:'الرَّافِعُ',latin:'Ar-Raafi\'',arti:'Yang Maha Meninggikan'},{no:24,arab:'الْمُعِزُّ',latin:'Al-Mu\'izz',arti:'Yang Maha Memuliakan'},{no:25,arab:'الْمُذِلُّ',latin:'Al-Mudzil',arti:'Yang Maha Menghinakan'},{no:26,arab:'السَّمِيعُ',latin:'As-Sami\'',arti:'Yang Maha Mendengar'},{no:27,arab:'الْبَصِيرُ',latin:'Al-Bashiir',arti:'Yang Maha Melihat'},{no:28,arab:'الْحَكَمُ',latin:'Al-Hakam',arti:'Yang Maha Menetapkan'},{no:29,arab:'الْعَدْلُ',latin:'Al-\'Adl',arti:'Yang Maha Adil'},{no:30,arab:'اللَّطِيفُ',latin:'Al-Lathiif',arti:'Yang Maha Lembut'},
-{no:31,arab:'الْخَبِيرُ',latin:'Al-Khabiir',arti:'Yang Maha Mengenal'},{no:32,arab:'الْحَلِيمُ',latin:'Al-Haliim',arti:'Yang Maha Penyantun'},{no:33,arab:'الْعَظِيمُ',latin:'Al-\'Azhiim',arti:'Yang Maha Agung'},{no:34,arab:'الْغَفُورُ',latin:'Al-Ghafuur',arti:'Yang Maha Pengampun'},{no:35,arab:'الشَّكُورُ',latin:'Ash-Shakuur',arti:'Yang Maha Pembalas'},{no:36,arab:'الْعَلِيُّ',latin:'Al-\'Aliy',arti:'Yang Maha Tinggi'},{no:37,arab:'الْكَبِيرُ',latin:'Al-Kabiir',arti:'Yang Maha Besar'},{no:38,arab:'الْحَفِيظُ',latin:'Al-Hafiizh',arti:'Yang Maha Memelihara'},{no:39,arab:'الْمُقِيتُ',latin:'Al-Muqiit',arti:'Yang Maha Pemberi Kecukupan'},{no:40,arab:'الْحَسِيبُ',latin:'Al-Hasiib',arti:'Yang Maha Membuat Perhitungan'},
-{no:41,arab:'الْجَلِيلُ',latin:'Al-Jaliil',arti:'Yang Maha Luhur'},{no:42,arab:'الْكَرِيمُ',latin:'Al-Kariim',arti:'Yang Maha Pemurah'},{no:43,arab:'الرَّقِيبُ',latin:'Ar-Raqiib',arti:'Yang Maha Mengawasi'},{no:44,arab:'الْمُجِيبُ',latin:'Al-Mujiib',arti:'Yang Maha Mengabulkan'},{no:45,arab:'الْوَاسِعُ',latin:'Al-Waasi\'',arti:'Yang Maha Luas'},{no:46,arab:'الْحَكِيمُ',latin:'Al-Hakiim',arti:'Yang Maha Bijaksana'},{no:47,arab:'الْوَدُودُ',latin:'Al-Waduud',arti:'Yang Maha Mengasihi'},{no:48,arab:'الْمَجِيدُ',latin:'Al-Majiid',arti:'Yang Maha Mulia'},{no:49,arab:'الْبَاعِثُ',latin:'Al-Baa\'its',arti:'Yang Maha Membangkitkan'},{no:50,arab:'الشَّهِيدُ',latin:'Ash-Shahiid',arti:'Yang Maha Menyaksikan'},
-{no:51,arab:'الْحَقُّ',latin:'Al-Haqq',arti:'Yang Maha Benar'},{no:52,arab:'الْوَكِيلُ',latin:'Al-Wakiil',arti:'Yang Maha Memelihara'},{no:53,arab:'الْقَوِيُّ',latin:'Al-Qawiyyu',arti:'Yang Maha Kuat'},{no:54,arab:'الْمَتِينُ',latin:'Al-Matiin',arti:'Yang Maha Kokoh'},{no:55,arab:'الْوَلِيُّ',latin:'Al-Waliyy',arti:'Yang Maha Melindungi'},{no:56,arab:'الْحَمِيدُ',latin:'Al-Hamiid',arti:'Yang Maha Terpuji'},{no:57,arab:'الْمُحْصِي',latin:'Al-Muhshii',arti:'Yang Maha Menghitung'},{no:58,arab:'الْمُبْدِئُ',latin:'Al-Mubdi\'',arti:'Yang Maha Memulai'},{no:59,arab:'الْمُعِيدُ',latin:'Al-Muiid',arti:'Yang Maha Mengembalikan'},{no:60,arab:'الْمُحْيِي',latin:'Al-Muhyii',arti:'Yang Maha Menghidupkan'},
-{no:61,arab:'الْمُمِيتُ',latin:'Al-Mumiit',arti:'Yang Maha Mematikan'},{no:62,arab:'الْحَيُّ',latin:'Al-Hayyu',arti:'Yang Maha Hidup'},{no:63,arab:'الْقَيُّومُ',latin:'Al-Qayyuum',arti:'Yang Maha Mandiri'},{no:64,arab:'الْوَاجِدُ',latin:'Al-Waajid',arti:'Yang Maha Penemu'},{no:65,arab:'الْمَاجِدُ',latin:'Al-Maajid',arti:'Yang Maha Mulia'},{no:66,arab:'الْوَاحِدُ',latin:'Al-Waahid',arti:'Yang Maha Tunggal'},{no:67,arab:'الْأَحَدُ',latin:'Al-Ahad',arti:'Yang Maha Esa'},{no:68,arab:'الصَّمَدُ',latin:'As-Samad',arti:'Yang Maha Dibutuhkan'},{no:69,arab:'الْقَادِرُ',latin:'Al-Qaadir',arti:'Yang Maha Menentukan'},{no:70,arab:'الْمُقْتَدِرُ',latin:'Al-Muqtadir',arti:'Yang Maha Berkuasa'},
-{no:71,arab:'الْمُقَدِّمُ',latin:'Al-Muqaddim',arti:'Yang Maha Mendahulukan'},{no:72,arab:'الْمُؤَخِّرُ',latin:'Al-Mu\'akhkhir',arti:'Yang Maha Mengakhirkan'},{no:73,arab:'الْأَوَّلُ',latin:'Al-Awwal',arti:'Yang Maha Awal'},{no:74,arab:'الْآخِرُ',latin:'Al-Aakhir',arti:'Yang Maha Akhir'},{no:75,arab:'الظَّاهِرُ',latin:'Az-Zhaahir',arti:'Yang Maha Nyata'},{no:76,arab:'الْبَاطِنُ',latin:'Al-Baathin',arti:'Yang Maha Ghaib'},{no:77,arab:'الْوَالِي',latin:'Al-Waali',arti:'Yang Maha Memerintah'},{no:78,arab:'الْمُتَعَالِي',latin:'Al-Muta\'aali',arti:'Yang Maha Tinggi'},{no:79,arab:'الْبَرُّ',latin:'Al-Barr',arti:'Yang Maha Dermawan'},{no:80,arab:'التَّوَّابُ',latin:'At-Tawwaab',arti:'Yang Maha Penerima Taubat'},
-{no:81,arab:'الْمُنْتَقِمُ',latin:'Al-Muntaqim',arti:'Yang Maha Pemberi Balasan'},{no:82,arab:'الْعَفُوُّ',latin:'Al-\'Afuww',arti:'Yang Maha Pemaaf'},{no:83,arab:'الرَّءُوفُ',latin:'Ar-Ra\'uuf',arti:'Yang Maha Pengasuh'},{no:84,arab:'مَالِكُ الْمُلْكِ',latin:'Malikul Mulk',arti:'Yang Maha Penguasa'},{no:85,arab:'ذُو الْجَلَالِ وَالْإِكْرَامِ',latin:'Dzul Jalaali Wal Ikraam',arti:'Yang Maha Pemilik Kebesaran'},{no:86,arab:'الْمُقْسِطُ',latin:'Al-Muqsith',arti:'Yang Maha Adil'},{no:87,arab:'الْجَامِعُ',latin:'Al-Jaami\'',arti:'Yang Maha Pengumpul'},{no:88,arab:'الْغَنِيُّ',latin:'Al-Ghaniyy',arti:'Yang Maha Kaya'},{no:89,arab:'الْمُغْنِي',latin:'Al-Mughni',arti:'Yang Maha Pemberi Kekayaan'},{no:90,arab:'الْمَانِعُ',latin:'Al-Mani\'',arti:'Yang Maha Pencegah'},
-{no:91,arab:'الضَّارُّ',latin:'Ad-Dhaar',arti:'Yang Maha Penimpa'},{no:92,arab:'النَّافِعُ',latin:'An-Naafi\'',arti:'Yang Maha Memberi Manfaat'},{no:93,arab:'النُّورُ',latin:'An-Nuur',arti:'Yang Maha Bercahaya'},{no:94,arab:'الْهَادِي',latin:'Al-Haadi',arti:'Yang Maha Pemberi Petunjuk'},{no:95,arab:'الْبَدِيعُ',latin:'Al-Badii\'',arti:'Yang Maha Pencipta'},{no:96,arab:'الْبَاقِي',latin:'Al-Baqii',arti:'Yang Maha Kekal'},{no:97,arab:'الْوَارِثُ',latin:'Al-Waarith',arti:'Yang Maha Pewaris'},{no:98,arab:'الرَّشِيدُ',latin:'Ar-Rasyiid',arti:'Yang Maha Pandai'},{no:99,arab:'الصَّبُورُ',latin:'As-Sabuur',arti:'Yang Maha Sabar'}
-];
-
+// QUOTE STATIS - PASTI MUNCUL
 const QUOTES=[
 {text:'Sesungguhnya bersama kesulitan ada kemudahan.',author:'QS. Al-Insyirah: 6'},
 {text:'Janganlah kamu berputus asa dari rahmat Allah.',author:'QS. Az-Zumar: 53'},
@@ -741,8 +773,24 @@ const QUOTES=[
 {text:'Sebaik-baik kamu adalah yang mempelajari Al-Quran dan mengajarkannya.',author:'HR. Bukhari'},
 {text:'Kebersihan adalah sebagian dari iman.',author:'HR. Muslim'},
 {text:'Waktu itu lebih berharga daripada emas.',author:'Imam Syafi\'i'},
+{text:'Jadikanlah sabar dan sholat sebagai penolongmu.',author:'QS. Al-Baqarah: 45'},
+{text:'Diam itu hikmah, tapi sedikit yang mengamalkannya.',author:'Umar bin Khattab'},
 {text:'Barangsiapa menempuh jalan mencari ilmu, Allah mudahkan jalannya ke surga.',author:'HR. Muslim'},
-{text:'Jadikanlah sabar dan sholat sebagai penolongmu.',author:'QS. Al-Baqarah: 45'}
+{text:'Tidak sempurna iman seseorang hingga dia mencintai saudaranya seperti mencintai dirinya.',author:'HR. Bukhari'},
+{text:'Tangan di atas lebih baik daripada tangan di bawah.',author:'HR. Bukhari'}
+];
+
+const ASMAUL_HUSNA=[
+{no:1,arab:'الرَّحْمَنُ',latin:'Ar-Rahmaan',arti:'Yang Maha Pengasih'},{no:2,arab:'الرَّحِيمُ',latin:'Ar-Rahiim',arti:'Yang Maha Penyayang'},{no:3,arab:'الْمَلِكُ',latin:'Al-Malik',arti:'Yang Maha Merajai'},{no:4,arab:'الْقُدُّوسُ',latin:'Al-Quddus',arti:'Yang Maha Suci'},{no:5,arab:'السَّلَامُ',latin:'As-Salaam',arti:'Yang Maha Sejahtera'},{no:6,arab:'الْمُؤْمِنُ',latin:'Al-Mu\'min',arti:'Yang Maha Memberi Keamanan'},{no:7,arab:'الْمُهَيْمِنُ',latin:'Al-Muhaimin',arti:'Yang Maha Pemelihara'},{no:8,arab:'الْعَزِيزُ',latin:'Al-Aziiz',arti:'Yang Maha Perkasa'},{no:9,arab:'الْجَبَّارُ',latin:'Al-Jabbar',arti:'Yang Maha Kuasa'},{no:10,arab:'الْمُتَكَبِّرُ',latin:'Al-Mutakabbir',arti:'Yang Maha Megah'},
+{no:11,arab:'الْخَالِقُ',latin:'Al-Khaaliq',arti:'Yang Maha Pencipta'},{no:12,arab:'الْبَارِئُ',latin:'Al-Baari\'',arti:'Yang Maha Mengadakan'},{no:13,arab:'الْمُصَوِّرُ',latin:'Al-Mushawwir',arti:'Yang Maha Membentuk'},{no:14,arab:'الْغَفَّارُ',latin:'Al-Ghaffaar',arti:'Yang Maha Pengampun'},{no:15,arab:'الْقَهَّارُ',latin:'Al-Qahhaar',arti:'Yang Maha Menundukkan'},{no:16,arab:'الْوَهَّابُ',latin:'Al-Wahhaab',arti:'Yang Maha Pemberi'},{no:17,arab:'الرَّزَّاقُ',latin:'Ar-Razzaq',arti:'Yang Maha Pemberi Rezeki'},{no:18,arab:'الْفَتَّاحُ',latin:'Al-Fattaah',arti:'Yang Maha Pembuka'},{no:19,arab:'الْعَلِيمُ',latin:'Al-\'Aliim',arti:'Yang Maha Mengetahui'},{no:20,arab:'الْقَابِضُ',latin:'Al-Qaabidh',arti:'Yang Maha Menyempitkan'},
+{no:21,arab:'الْبَاسِطُ',latin:'Al-Baasith',arti:'Yang Maha Melapangkan'},{no:22,arab:'الْخَافِضُ',latin:'Al-Khaafidh',arti:'Yang Maha Merendahkan'},{no:23,arab:'الرَّافِعُ',latin:'Ar-Raafi\'',arti:'Yang Maha Meninggikan'},{no:24,arab:'الْمُعِزُّ',latin:'Al-Mu\'izz',arti:'Yang Maha Memuliakan'},{no:25,arab:'الْمُذِلُّ',latin:'Al-Mudzil',arti:'Yang Maha Menghinakan'},{no:26,arab:'السَّمِيعُ',latin:'As-Sami\'',arti:'Yang Maha Mendengar'},{no:27,arab:'الْبَصِيرُ',latin:'Al-Bashiir',arti:'Yang Maha Melihat'},{no:28,arab:'الْحَكَمُ',latin:'Al-Hakam',arti:'Yang Maha Menetapkan'},{no:29,arab:'الْعَدْلُ',latin:'Al-\'Adl',arti:'Yang Maha Adil'},{no:30,arab:'اللَّطِيفُ',latin:'Al-Lathiif',arti:'Yang Maha Lembut'},
+{no:31,arab:'الْخَبِيرُ',latin:'Al-Khabiir',arti:'Yang Maha Mengenal'},{no:32,arab:'الْحَلِيمُ',latin:'Al-Haliim',arti:'Yang Maha Penyantun'},{no:33,arab:'الْعَظِيمُ',latin:'Al-\'Azhiim',arti:'Yang Maha Agung'},{no:34,arab:'الْغَفُورُ',latin:'Al-Ghafuur',arti:'Yang Maha Pengampun'},{no:35,arab:'الشَّكُورُ',latin:'Ash-Shakuur',arti:'Yang Maha Pembalas'},{no:36,arab:'الْعَلِيُّ',latin:'Al-\'Aliy',arti:'Yang Maha Tinggi'},{no:37,arab:'الْكَبِيرُ',latin:'Al-Kabiir',arti:'Yang Maha Besar'},{no:38,arab:'الْحَفِيظُ',latin:'Al-Hafiizh',arti:'Yang Maha Memelihara'},{no:39,arab:'الْمُقِيتُ',latin:'Al-Muqiit',arti:'Yang Maha Pemberi Kecukupan'},{no:40,arab:'الْحَسِيبُ',latin:'Al-Hasiib',arti:'Yang Maha Membuat Perhitungan'},
+{no:41,arab:'الْجَلِيلُ',latin:'Al-Jaliil',arti:'Yang Maha Luhur'},{no:42,arab:'الْكَرِيمُ',latin:'Al-Kariim',arti:'Yang Maha Pemurah'},{no:43,arab:'الرَّقِيبُ',latin:'Ar-Raqiib',arti:'Yang Maha Mengawasi'},{no:44,arab:'الْمُجِيبُ',latin:'Al-Mujiib',arti:'Yang Maha Mengabulkan'},{no:45,arab:'الْوَاسِعُ',latin:'Al-Waasi\'',arti:'Yang Maha Luas'},{no:46,arab:'الْحَكِيمُ',latin:'Al-Hakiim',arti:'Yang Maha Bijaksana'},{no:47,arab:'الْوَدُودُ',latin:'Al-Waduud',arti:'Yang Maha Mengasihi'},{no:48,arab:'الْمَجِيدُ',latin:'Al-Majiid',arti:'Yang Maha Mulia'},{no:49,arab:'الْبَاعِثُ',latin:'Al-Baa\'its',arti:'Yang Maha Membangkitkan'},{no:50,arab:'الشَّهِيدُ',latin:'Ash-Shahiid',arti:'Yang Maha Menyaksikan'},
+{no:51,arab:'الْحَقُّ',latin:'Al-Haqq',arti:'Yang Maha Benar'},{no:52,arab:'الْوَكِيلُ',latin:'Al-Wakiil',arti:'Yang Maha Memelihara'},{no:53,arab:'الْقَوِيُّ',latin:'Al-Qawiyyu',arti:'Yang Maha Kuat'},{no:54,arab:'الْمَتِينُ',latin:'Al-Matiin',arti:'Yang Maha Kokoh'},{no:55,arab:'الْوَلِيُّ',latin:'Al-Waliyy',arti:'Yang Maha Melindungi'},{no:56,arab:'الْحَمِيدُ',latin:'Al-Hamiid',arti:'Yang Maha Terpuji'},{no:57,arab:'الْمُحْصِي',latin:'Al-Muhshii',arti:'Yang Maha Menghitung'},{no:58,arab:'الْمُبْدِئُ',latin:'Al-Mubdi\'',arti:'Yang Maha Memulai'},{no:59,arab:'الْمُعِيدُ',latin:'Al-Muiid',arti:'Yang Maha Mengembalikan'},{no:60,arab:'الْمُحْيِي',latin:'Al-Muhyii',arti:'Yang Maha Menghidupkan'},
+{no:61,arab:'الْمُمِيتُ',latin:'Al-Mumiit',arti:'Yang Maha Mematikan'},{no:62,arab:'الْحَيُّ',latin:'Al-Hayyu',arti:'Yang Maha Hidup'},{no:63,arab:'الْقَيُّومُ',latin:'Al-Qayyuum',arti:'Yang Maha Mandiri'},{no:64,arab:'الْوَاجِدُ',latin:'Al-Waajid',arti:'Yang Maha Penemu'},{no:65,arab:'الْمَاجِدُ',latin:'Al-Maajid',arti:'Yang Maha Mulia'},{no:66,arab:'الْوَاحِدُ',latin:'Al-Waahid',arti:'Yang Maha Tunggal'},{no:67,arab:'الْأَحَدُ',latin:'Al-Ahad',arti:'Yang Maha Esa'},{no:68,arab:'الصَّمَدُ',latin:'As-Samad',arti:'Yang Maha Dibutuhkan'},{no:69,arab:'الْقَادِرُ',latin:'Al-Qaadir',arti:'Yang Maha Menentukan'},{no:70,arab:'الْمُقْتَدِرُ',latin:'Al-Muqtadir',arti:'Yang Maha Berkuasa'},
+{no:71,arab:'الْمُقَدِّمُ',latin:'Al-Muqaddim',arti:'Yang Maha Mendahulukan'},{no:72,arab:'الْمُؤَخِّرُ',latin:'Al-Mu\'akhkhir',arti:'Yang Maha Mengakhirkan'},{no:73,arab:'الْأَوَّلُ',latin:'Al-Awwal',arti:'Yang Maha Awal'},{no:74,arab:'الْآخِرُ',latin:'Al-Aakhir',arti:'Yang Maha Akhir'},{no:75,arab:'الظَّاهِرُ',latin:'Az-Zhaahir',arti:'Yang Maha Nyata'},{no:76,arab:'الْبَاطِنُ',latin:'Al-Baathin',arti:'Yang Maha Ghaib'},{no:77,arab:'الْوَالِي',latin:'Al-Waali',arti:'Yang Maha Memerintah'},{no:78,arab:'الْمُتَعَالِي',latin:'Al-Muta\'aali',arti:'Yang Maha Tinggi'},{no:79,arab:'الْبَرُّ',latin:'Al-Barr',arti:'Yang Maha Dermawan'},{no:80,arab:'التَّوَّابُ',latin:'At-Tawwaab',arti:'Yang Maha Penerima Taubat'},
+{no:81,arab:'الْمُنْتَقِمُ',latin:'Al-Muntaqim',arti:'Yang Maha Pemberi Balasan'},{no:82,arab:'الْعَفُوُّ',latin:'Al-\'Afuww',arti:'Yang Maha Pemaaf'},{no:83,arab:'الرَّءُوفُ',latin:'Ar-Ra\'uuf',arti:'Yang Maha Pengasuh'},{no:84,arab:'مَالِكُ الْمُلْكِ',latin:'Malikul Mulk',arti:'Yang Maha Penguasa'},{no:85,arab:'ذُو الْجَلَالِ وَالْإِكْرَامِ',latin:'Dzul Jalaali Wal Ikraam',arti:'Yang Maha Pemilik Kebesaran'},{no:86,arab:'الْمُقْسِطُ',latin:'Al-Muqsith',arti:'Yang Maha Adil'},{no:87,arab:'الْجَامِعُ',latin:'Al-Jaami\'',arti:'Yang Maha Pengumpul'},{no:88,arab:'الْغَنِيُّ',latin:'Al-Ghaniyy',arti:'Yang Maha Kaya'},{no:89,arab:'الْمُغْنِي',latin:'Al-Mughni',arti:'Yang Maha Pemberi Kekayaan'},{no:90,arab:'الْمَانِعُ',latin:'Al-Mani\'',arti:'Yang Maha Pencegahan'},
+{no:91,arab:'الضَّارُّ',latin:'Ad-Dhaar',arti:'Yang Maha Penimpa'},{no:92,arab:'النَّافِعُ',latin:'An-Naafi\'',arti:'Yang Maha Memberi Manfaat'},{no:93,arab:'النُّورُ',latin:'An-Nuur',arti:'Yang Maha Bercahaya'},{no:94,arab:'الْهَادِي',latin:'Al-Haadi',arti:'Yang Maha Pemberi Petunjuk'},{no:95,arab:'الْبَدِيعُ',latin:'Al-Badii\'',arti:'Yang Maha Pencipta'},{no:96,arab:'الْبَاقِي',latin:'Al-Baqii',arti:'Yang Maha Kekal'},{no:97,arab:'الْوَارِثُ',latin:'Al-Waarith',arti:'Yang Maha Pewaris'},{no:98,arab:'الرَّشِيدُ',latin:'Ar-Rasyiid',arti:'Yang Maha Pandai'},{no:99,arab:'الصَّبُورُ',latin:'As-Sabuur',arti:'Yang Maha Sabar'}
 ];
 
 const KISAH=[
@@ -815,7 +863,7 @@ const BACAAN_SHOLAT=[
 
 function zenkaiCloudApp(){
 return {
-splashHidden:false,splashProgress:0,splashText:'Menghubungkan...',
+splashHidden:false,splashProgress:0,splashText:'Memuat...',
 isAuthenticated:false,authMode:'login',authEmail:'',authPassword:'',authUsername:'',
 currentUser:null,isOwner:false,pendingUser:null,
 userEmail:'',userName:'',userAvatar:'',quickNote:'',lastSavedNote:'',
@@ -869,7 +917,6 @@ newsList:[],newsLoading:false,selectedNews:null,
 provinces:[],cities:[],weatherProvince:'',weatherCity:'',weatherData:null,weatherLoading:false,
 
 async init(){
-// Load theme dari localStorage
 const savedTheme=localStorage.getItem('zenkai_theme');
 if(savedTheme)this.theme=savedTheme;
 this.splashProgress=100;
@@ -877,7 +924,8 @@ setTimeout(()=>{this.splashHidden=true;},800);
 this.updateClock();
 setInterval(()=>this.updateClock(),1000);
 this.asmaulHusnaList=ASMAUL_HUSNA.map(x=>({...x,hafal:false}));
-this.randomQuote();
+// Set quote langsung
+this.dailyQuote=QUOTES[Math.floor(Math.random()*QUOTES.length)];
 try{
 const{data:{session}}=await sb.auth.getSession();
 if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}
@@ -897,18 +945,7 @@ this.worldClocks.forEach(z=>{try{z.time=now.toLocaleTimeString('id-ID',{timeZone
 showAlert(t,m){this.sheetTitle=t;this.sheetMessage=m;this.sheetOpen=true;},
 openTxSheet(){this.txCategory='';this.txAmount='';this.txSheetOpen=true;},
 openKisahDetail(idx){this.selectedKisah=this.kisahList[idx];this.kisahSheetOpen=true;},
-
-async randomQuote(){
-this.quoteLoading=true;
-try{
-const res=await fetch('https://api.quotable.io/random?maxLength=120');
-const data=await res.json();
-if(data.content){this.dailyQuote={text:data.content,author:data.author};this.quoteLoading=false;return;}
-}catch(e){}
-// Fallback ke statis
-this.dailyQuote=QUOTES[Math.floor(Math.random()*QUOTES.length)];
-this.quoteLoading=false;
-},
+randomQuote(){this.dailyQuote=QUOTES[Math.floor(Math.random()*QUOTES.length)];},
 
 async handleEmailAuth(){
 if(!this.authEmail||!this.authPassword){return this.showAlert('Perhatian','Isi email dan password!');}
@@ -987,8 +1024,8 @@ const{data:pub}=sb.storage.from('avatars').getPublicUrl(path);
 const url=pub.publicUrl;
 const{error:dbErr}=await sb.from('profiles').upsert({id:this.currentUser.id,username:this.userName,avatar_url:url});
 if(dbErr)throw dbErr;
-this.userAvatar=url;this.profileModalOpen=false;
-this.showAlert('Sukses','Foto diperbarui!');
+this.userAvatar=url;
+this.showAlert('Sukses','Foto profil berhasil diperbarui!');
 }catch(e){this.showAlert('Gagal',e.message);}
 finally{this.uploadingAvatar=false;}
 },
@@ -1067,18 +1104,8 @@ this.weatherCity='Jakarta';
 this.fetchWeather();
 },
 openWeatherSheet(){this.weatherProvinceSheet=true;},
-selectWeatherProvince(p){
-this.weatherProvince=p;
-this.cities=this.getCityMap()[p]||['Jakarta'];
-this.weatherProvinceSheet=false;
-this.weatherCitySheet=true;
-},
-selectWeatherCity(c){
-this.weatherCity=c;
-this.weatherCitySheet=false;
-this.weatherSheetOpen=true;
-this.fetchWeather();
-},
+selectWeatherProvince(p){this.weatherProvince=p;this.cities=this.getCityMap()[p]||['Jakarta'];this.weatherProvinceSheet=false;this.weatherCitySheet=true;},
+selectWeatherCity(c){this.weatherCity=c;this.weatherCitySheet=false;this.weatherSheetOpen=true;this.fetchWeather();},
 openWeatherProvincePicker(){this.weatherProvinceSheet=true;},
 
 initPrayerProvinces(){
@@ -1088,17 +1115,8 @@ this.prayerCity='Jakarta';
 this.fetchPrayerTimes();
 },
 openPrayerCityPicker(){this.prayerProvinceSheet=true;},
-selectPrayerProvince(p){
-this.prayerProvince=p;
-this.prayerCities=this.getCityMap()[p]||['Jakarta'];
-this.prayerProvinceSheet=false;
-this.prayerCitySheet=true;
-},
-selectPrayerCity(c){
-this.prayerCity=c;
-this.prayerCitySheet=false;
-this.fetchPrayerTimes();
-},
+selectPrayerProvince(p){this.prayerProvince=p;this.prayerCities=this.getCityMap()[p]||['Jakarta'];this.prayerProvinceSheet=false;this.prayerCitySheet=true;},
+selectPrayerCity(c){this.prayerCity=c;this.prayerCitySheet=false;this.fetchPrayerTimes();},
 
 async fetchPrayerTimes(){
 this.prayerLoading=true;
