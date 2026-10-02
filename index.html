@@ -1151,7 +1151,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <template x-for="(msg,idx) in chatMessages" :key="idx">
       <div><div :class="msg.role==='user'?'chat-bubble-user':'chat-bubble-ai'" x-text="msg.content"></div></div>
     </template>
-    <div x-show="aiThinking" class="chat-bubble-ai"><span class="chat-typing">Zenkai AI sedang mengetik</span></div>
+    <div x-show="aiThinking" class="chat-bubble-ai"><span x-text="aiThinkingText"></span></div>
   </div>
   <div class="p-3 flex gap-2" style="background:var(--card-bg);border-top:3px solid var(--border)">
     <button @click="startVoiceInput()" class="btn-soft" style="padding:12px" x-show="voiceSupported">🎤</button>
@@ -1237,7 +1237,7 @@ movieList:[],movieLoading:false,
 speedTesting:false,speedResult:null,
 appStats:{totalUsers:0,totalTx:0,owners:0,savings:0,activeToday:0,banned:0},topUsers:[],allUsers:[],userSearch:'',
 welcomeText:DEFAULT_WELCOME,welcomeTextEdit:'',
-chatMessages:[],chatInput:'',aiThinking:false,aiMode:'umum',chatCount:0,chatDate:'',chatBonus:0,chatFullscreen:false,
+chatMessages:[],chatInput:'',aiThinking:false,aiThinkingText:'',aiThinkingTimer:null,aiMode:'umum',chatCount:0,chatDate:'',chatBonus:0,chatFullscreen:false,
 voiceSupported:false,aiModeDesc:'',
 
 getLevelName(lv){
@@ -1349,6 +1349,30 @@ async openChatAI(){
   }
 },
 openMenuSheet(){this.menuSheetOpen=true;},
+
+startThinkingMessages(){
+  const messages=[
+    '🤔 Zenkai AI lagi mikir...',
+    '☕ Sabar ya, otaknya lagi loading...',
+    '🐢 Dikit lagi, jangan kemana-mana ya!',
+    '😅 Server lagi rame nih, bentar ya...',
+    '🙏 Mohon sabar, Zenkai AI berusaha maksimal!'
+  ];
+  let i=0;
+  this.aiThinkingText=messages[0];
+  clearInterval(this.aiThinkingTimer);
+  this.aiThinkingTimer=setInterval(()=>{
+    i++;
+    if(i<messages.length){
+      this.aiThinkingText=messages[i];
+    }
+  },3000);
+},
+stopThinkingMessages(){
+  clearInterval(this.aiThinkingTimer);
+  this.aiThinkingTimer=null;
+  this.aiThinkingText='';
+},
 
 async handleEmailAuth(){
 if(!this.authEmail||!this.authPassword){return this.showAlert('Perhatian','Isi email dan password!');}
@@ -1674,7 +1698,6 @@ async sendChat(){
   if(!this.chatInput.trim()||this.aiThinking)return;
   if(!this.currentUser)return this.showAlert('Perhatian','Login dulu!');
   if(!this.isOwner&&!this.isVip){
-    // AMBIL DATA FRESH DARI SERVER
     try{
       const{data:freshData}=await sb.from('profiles').select('chat_count,chat_bonus,chat_date,is_vip').eq('id',this.currentUser.id).maybeSingle();
       if(freshData){
@@ -1684,16 +1707,12 @@ async sendChat(){
         this.isVip=freshData.is_vip||false;
       }
     }catch(e){console.error('Fresh data:',e);}
-    
-    // CEK TANGGAL RESET
     const today=new Date().toISOString().slice(0,10);
     if(this.chatDate!==today){
       this.chatCount=0;
       this.chatDate=today;
-      // Simpan reset ke server
       await sb.from('profiles').update({chat_count:0,chat_date:today}).eq('id',this.currentUser.id);
     }
-    
     const maxChat=DAILY_LIMIT+this.chatBonus;
     if(this.chatCount>=maxChat){return this.showAlert('Limit','Chat harian habis ('+maxChat+'). Upgrade VIP atau minta owner tambah bonus!');}
   }
@@ -1701,6 +1720,7 @@ async sendChat(){
   this.chatMessages.push({role:'user',content:userMsg});
   this.chatInput='';
   this.aiThinking=true;
+  this.startThinkingMessages();
 
   const ctrl=new AbortController();
   const tid=setTimeout(()=>ctrl.abort(),45000);
@@ -1790,12 +1810,10 @@ Zenkai AI: "Sama-sama! 😊"`
 
     this.chatMessages.push({role:'assistant',content:reply});
     
-    // ⬇️ DETEKSI PESAN SIBUK - POPUP MUNCUL 1X SAJA ⬇️
     if((reply.includes('Zenkai AI sedang sibuk') || reply.includes('sedang sibuk')) && !this.aiBusyPopupShown){
       this.aiBusyPopupShown = true;
       this.aiBusyPopupOpen = true;
     }
-    // ⬆️ END DETEKSI ⬆️
     
     await this.addPoints(1,'Chat AI');
 
@@ -1809,6 +1827,7 @@ Zenkai AI: "Sama-sama! 😊"`
     const msg = e.name === 'AbortError' ? 'Timeout (server tidak merespon)' : e.message;
     this.chatMessages.push({role:'assistant',content:'❌ Error: ' + msg});
   }finally{
+    this.stopThinkingMessages();
     clearTimeout(tid);
     this.aiThinking=false;
   }
