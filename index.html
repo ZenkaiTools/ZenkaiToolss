@@ -162,6 +162,29 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   </div>
 </div>
 
+<div x-show="aiBusyPopupOpen" class="bottom-sheet-overlay" style="z-index:100040;">
+  <div class="bottom-sheet-content text-center space-y-4" style="padding:24px">
+    <div class="text-7xl">⚠️</div>
+    <h3 class="font-title text-2xl" style="color:var(--accent-dark)">ZENKAI AI SEDANG SIBUK</h3>
+    <div class="p-4 rounded-xl text-left space-y-3" style="background:var(--primary-soft);border:2.5px solid var(--border)">
+      <p class="txt-sm font-bold" style="color:var(--accent-dark)">ℹ️ TENANG, INI NORMAL!</p>
+      <p class="txt-sm">Zenkai AI kadang sibuk karena:</p>
+      <ul class="txt-sm pl-4 list-disc space-y-1">
+        <li>Banyak user pakai bersamaan</li>
+        <li>Server AI-nya ramai</li>
+      </ul>
+      <p class="txt-sm font-bold" style="color:var(--accent-dark)">💡 TIPS:</p>
+      <ul class="txt-sm pl-4 list-disc space-y-1">
+        <li>Tunggu 1-2 menit</li>
+        <li>Coba kirim pesan lagi</li>
+        <li>Kalau masih sibuk, tunggu 5 menit</li>
+      </ul>
+      <p class="txt-sm italic">Pesan ini cuma muncul 1x. Kalau masih sibuk, langsung coba lagi aja ya! 💪</p>
+    </div>
+    <button @click="aiBusyPopupOpen=false" class="btn-primary">OK, SAYA MENGERTI 👍</button>
+  </div>
+</div>
+
 <div x-show="!isAuthenticated" class="fixed inset-0 z-[9997] flex items-center justify-center p-4" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
   <div class="card w-full max-w-sm text-center space-y-4" style="padding:24px">
     <div class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center font-title text-3xl" style="background:var(--accent);color:#fff;border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border)">Z</div>
@@ -207,7 +230,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       </label>
     </div>
 
-    <!-- Section Poin & Level -->
     <div class="p-4 rounded-xl space-y-3" style="background:var(--accent-soft);border:2.5px solid var(--border);box-shadow:3px 3px 0 0 var(--border)">
       <div class="text-center">
         <div class="font-title text-xl" style="color:var(--accent-dark)" x-text="'🏆 LEVEL '+userLevel+' - '+getLevelName(userLevel)"></div>
@@ -1147,7 +1169,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M15 7.5V2H9v5.5l-7 8V22h20v-6.5l-7-8z"/></symbol>
 <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></symbol>
 <symbol id="i-crown" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></symbol>
-<symbol id="i-robot" viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 2-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></symbol>
+<symbol id="i-robot" viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></symbol>
 </svg>
 
 <script>
@@ -1178,7 +1200,7 @@ splashHidden:false,splashProgress:0,splashText:'Memuat...',
 isAuthenticated:false,authMode:'login',authEmail:'',authPassword:'',authUsername:'',
 currentUser:null,isOwner:false,isVip:false,pendingUser:null,
 userEmail:'',userName:'',userAvatar:'',quickNote:'',lastSavedNote:'',
-userPoints:0,userLevel:1,levelUpOpen:false,lastKnownLevel:1,
+userPoints:0,userLevel:1,levelUpOpen:false,lastKnownLevel:1,aiBusyPopupShown:false,aiBusyPopupOpen:false,
 welcomePopupOpen:false,aboutModalOpen:false,profileModalOpen:false,ownerPinModalOpen:false,txSheetOpen:false,
 newsSheetOpen:false,weatherSheetOpen:false,weatherProvinceSheet:false,weatherCitySheet:false,
 prayerProvinceSheet:false,prayerCitySheet:false,kisahSheetOpen:false,menuSheetOpen:false,
@@ -1218,7 +1240,6 @@ welcomeText:DEFAULT_WELCOME,welcomeTextEdit:'',
 chatMessages:[],chatInput:'',aiThinking:false,aiMode:'umum',chatCount:0,chatDate:'',chatBonus:0,chatFullscreen:false,
 voiceSupported:false,aiModeDesc:'',
 
-// Helper level
 getLevelName(lv){
   const names={1:'Pemula 🌱',2:'Rajin 📚',3:'Aktif ⚡',4:'Ahli 🎓',5:'Master 👑',6:'Legenda 🌟'};
   return names[lv]||'Pemula 🌱';
@@ -1281,14 +1302,13 @@ showPrompt(title,message,arg3,arg4){
 
 async addPoints(amount,reason){
   if(!this.currentUser)return;
-  if(this.isOwner)return; // Owner tidak dapat poin
+  if(this.isOwner)return;
   try{
     const newTotal=this.userPoints+amount;
     const{error}=await sb.from('user_points').update({total_points:newTotal}).eq('user_id',this.currentUser.id);
     if(!error){
       this.userPoints=newTotal;
       await sb.from('point_history').insert({user_id:this.currentUser.id,amount,reason});
-      // Cek level up
       const oldLevel=this.userLevel;
       const newLevel=this.calcLevelFromPoints(newTotal);
       if(newLevel>oldLevel){
@@ -1361,7 +1381,6 @@ this.currentUser=user;this.isOwner=false;this.isAuthenticated=true;
 if(prof){this.isVip=prof.is_vip||false;this.chatCount=prof.chat_count||0;this.chatDate=prof.chat_date||'';this.chatBonus=prof.chat_bonus||0;}
 await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',user.id);
 await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();
-// Daily bonus login
 const today=new Date().toISOString().slice(0,10);
 const lastLogin=localStorage.getItem('zenkai_last_bonus');
 if(lastLogin!==today){
@@ -1429,7 +1448,6 @@ this.chatBonus=profile.chat_bonus||0;
 }else{
 this.userName=(this.currentUser.user_metadata&&this.currentUser.user_metadata.username)||this.userEmail.split('@')[0]||'User';
 }
-// Ambil data poin user
 try{
   const{data:pts}=await sb.from('user_points').select('*').eq('user_id',this.currentUser.id).maybeSingle();
   if(pts){
@@ -1753,6 +1771,14 @@ Zenkai AI: "Sama-sama! 😊"`
     if(!reply) reply = '⚠️ Format tidak dikenal: ' + JSON.stringify(data).substring(0,200);
 
     this.chatMessages.push({role:'assistant',content:reply});
+    
+    // ⬇️ DETEKSI PESAN SIBUK - POPUP MUNCUL 1X SAJA ⬇️
+    if((reply.includes('Zenkai AI sedang sibuk') || reply.includes('sedang sibuk')) && !this.aiBusyPopupShown){
+      this.aiBusyPopupShown = true;
+      this.aiBusyPopupOpen = true;
+    }
+    // ⬆️ END DETEKSI ⬆️
+    
     await this.addPoints(1,'Chat AI');
 
     if(!this.isOwner&&!this.isVip&&this.currentUser){
