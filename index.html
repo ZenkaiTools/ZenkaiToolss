@@ -1280,26 +1280,54 @@ if(showWelcome)this.welcomePopupOpen=true;
 },
 
 async verifyOwnerPin(){
-if(!this.pendingUser)return;
-if(this.enteredPin.length!==6){return this.showAlert('Perhatian','PIN 6 digit!');}
-this.verifyingPin=true;
-try{
-this.currentUser=this.pendingUser;
-const{data:profile}=await sb.from('profiles').select('owner_pin,status').eq('id',this.pendingUser.id).maybeSingle();
-if(!profile){
-await sb.from('profiles').upsert({id:this.pendingUser.id,username:this.pendingUser.email.split('@')[0],status:'owner',owner_pin:'763097',is_vip:true,is_banned:false,chat_bonus:0});
-if(this.enteredPin!=='763097'){this.verifyingPin=false;this.enteredPin='';return this.showAlert('PIN Salah','PIN salah!');}
-}else{
-if(profile.status!=='owner'){this.verifyingPin=false;return this.showAlert('Gagal','Bukan owner.');}
-if(profile.owner_pin!==this.enteredPin){this.verifyingPin=false;this.enteredPin='';return this.showAlert('PIN Salah','PIN salah!');}
-}
-this.ownerPinModalOpen=false;this.isOwner=true;this.isVip=true;this.isAuthenticated=true;
-await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',this.pendingUser.id);
-await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();
-this.loadAppStats();
-this.welcomePopupOpen=true;
-}catch(e){this.showAlert('Gagal',e.message);}
-finally{this.verifyingPin=false;}
+  if(!this.pendingUser)return;
+  if(this.enteredPin.length!==6){return this.showAlert('Perhatian','PIN 6 digit!');}
+  this.verifyingPin=true;
+  try{
+    this.currentUser=this.pendingUser;
+
+    // Ambil token login user
+    const { data: sessionData } = await sb.auth.getSession();
+    const token = sessionData?.session?.access_token || '';
+
+    // Panggil Edge Function verify-owner-pin
+    const res = await fetch(SUPABASE_URL + '/functions/v1/verify-owner-pin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+        'apikey': SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({ pin: this.enteredPin })
+    });
+
+    const data = await res.json();
+
+    if(!data.success){
+      this.verifyingPin = false;
+      this.enteredPin = '';
+      return this.showAlert('PIN Salah', data.error || 'PIN salah!');
+    }
+
+    // PIN benar
+    this.ownerPinModalOpen = false;
+    this.isOwner = true;
+    this.isVip = true;
+    this.isAuthenticated = true;
+
+    await sb.from('profiles').update({last_login: new Date().toISOString()}).eq('id', this.pendingUser.id);
+    await this.processUserData();
+    await this.loadTransactions();
+    await this.loadSavings();
+    await this.loadBudgets();
+    this.loadAppStats();
+    this.welcomePopupOpen = true;
+
+  }catch(e){
+    this.showAlert('Gagal', e.message);
+  }finally{
+    this.verifyingPin = false;
+  }
 },
 
 async processUserData(){
