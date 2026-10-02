@@ -1674,8 +1674,26 @@ async sendChat(){
   if(!this.chatInput.trim()||this.aiThinking)return;
   if(!this.currentUser)return this.showAlert('Perhatian','Login dulu!');
   if(!this.isOwner&&!this.isVip){
+    // AMBIL DATA FRESH DARI SERVER
+    try{
+      const{data:freshData}=await sb.from('profiles').select('chat_count,chat_bonus,chat_date,is_vip').eq('id',this.currentUser.id).maybeSingle();
+      if(freshData){
+        this.chatCount=freshData.chat_count||0;
+        this.chatBonus=freshData.chat_bonus||0;
+        this.chatDate=freshData.chat_date||'';
+        this.isVip=freshData.is_vip||false;
+      }
+    }catch(e){console.error('Fresh data:',e);}
+    
+    // CEK TANGGAL RESET
     const today=new Date().toISOString().slice(0,10);
-    if(this.chatDate!==today){this.chatCount=0;this.chatDate=today;}
+    if(this.chatDate!==today){
+      this.chatCount=0;
+      this.chatDate=today;
+      // Simpan reset ke server
+      await sb.from('profiles').update({chat_count:0,chat_date:today}).eq('id',this.currentUser.id);
+    }
+    
     const maxChat=DAILY_LIMIT+this.chatBonus;
     if(this.chatCount>=maxChat){return this.showAlert('Limit','Chat harian habis ('+maxChat+'). Upgrade VIP atau minta owner tambah bonus!');}
   }
