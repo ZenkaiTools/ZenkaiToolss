@@ -1545,49 +1545,48 @@ async sendChat(){
   const tid=setTimeout(()=>ctrl.abort(),45000);
 
   try{
-    const res=await fetch(AI_URL,{
+    const { data: sessionData } = await sb.auth.getSession();
+    const token = sessionData?.session?.access_token || '';
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_ANON_KEY
+    };
+    if(token) headers['Authorization'] = 'Bearer ' + token;
+
+    const res = await fetch(AI_URL,{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({messages:this.chatMessages.slice(-10),mode:this.aiMode}),
+      headers: headers,
+      body: JSON.stringify({messages:this.chatMessages.slice(-10),mode:this.aiMode}),
       signal:ctrl.signal
     });
 
-    console.log('🔍 AI HTTP Status:',res.status);
-
-    const rawText=await res.text();
-    console.log('🔍 AI Raw Response:',rawText.substring(0,500));
-
+    const rawText = await res.text();
     let data;
-    try{data=JSON.parse(rawText);}catch(e){
-      throw new Error('Server balikin non-JSON: '+rawText.substring(0,120));
-    }
+    try{ data = JSON.parse(rawText); }
+    catch(e){ throw new Error('Server balikin: ' + rawText.substring(0,150)); }
 
-    let reply='';
-
-    if(data.reply)reply=data.reply;
-    else if(data.error)reply='❌ '+data.error;
-    else if(typeof data.message==='string')reply=data.message;
-    else if(typeof data.text==='string')reply=data.text;
-    else if(typeof data.output==='string')reply=data.output;
-    else if(typeof data.content==='string')reply=data.content;
-    else if(data.candidates?.[0]?.content?.parts?.[0]?.text)reply=data.candidates[0].content.parts[0].text;
+    let reply = '';
+    if(data.reply) reply = data.reply;
+    else if(data.error) reply = '❌ ' + data.error;
+    else if(typeof data.message === 'string') reply = data.message;
+    else if(typeof data.text === 'string') reply = data.text;
+    else if(data.candidates?.[0]?.content?.parts?.[0]?.text) reply = data.candidates[0].content.parts[0].text;
     else if(data.steps){
       for(const step of data.steps){
-        if(step.type==='model_output'&&step.content){
+        if(step.type === 'model_output' && step.content){
           for(const c of step.content){
-            if(c.type==='text'&&c.text){reply=c.text;break;}
+            if(c.type === 'text' && c.text){ reply = c.text; break; }
           }
         }
-        if(reply)break;
+        if(reply) break;
       }
     }
-    else if(data.choices?.[0]?.message?.content)reply=data.choices[0].message.content;
-    else if(data.data?.reply)reply=data.data.reply;
-    else if(data.data?.text)reply=data.data.text;
+    else if(data.choices?.[0]?.message?.content) reply = data.choices[0].message.content;
+    else if(data.data?.reply) reply = data.data.reply;
+    else if(data.data?.text) reply = data.data.text;
 
-    if(!reply){
-      reply='⚠️ AI balikin format tidak dikenal.\n\nIsi response:\n'+JSON.stringify(data).substring(0,300);
-    }
+    if(!reply) reply = '⚠️ Format tidak dikenal: ' + JSON.stringify(data).substring(0,200);
 
     this.chatMessages.push({role:'assistant',content:reply});
 
@@ -1598,9 +1597,8 @@ async sendChat(){
         .eq('id',this.currentUser.id);
     }
   }catch(e){
-    const msg=e.name==='AbortError'?'Timeout (server tidak merespon dalam 45 detik)':e.message;
-    console.error('❌ Chat error:',e);
-    this.chatMessages.push({role:'assistant',content:'❌ Error: '+msg});
+    const msg = e.name === 'AbortError' ? 'Timeout (server tidak merespon)' : e.message;
+    this.chatMessages.push({role:'assistant',content:'❌ Error: ' + msg});
   }finally{
     clearTimeout(tid);
     this.aiThinking=false;
