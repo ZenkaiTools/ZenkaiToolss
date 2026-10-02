@@ -11,25 +11,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;500;600;700;800&family=Amiri&display=swap" rel="stylesheet">
 <style>
-:root{
-  --primary:#fbbf24;
-  --primary-dark:#d97706;
-  --primary-soft:#fef3c7;
-  --accent:#a855f7;
-  --accent-dark:#7e22ce;
-  --accent-soft:#f3e8ff;
-  --bg-soft:#fffbeb;
-  --card-bg:#fffdf5;
-  --text:#1a1a1a;
-  --border:#1a1a1a;
-}
-[data-theme="purple"]{--primary:#a855f7;--primary-dark:#7e22ce;--primary-soft:#f3e8ff;--accent:#fbbf24;--accent-dark:#d97706;--accent-soft:#fef3c7;--bg-soft:#faf5ff;--card-bg:#fffdf5}
-[data-theme="pink"]{--primary:#ec4899;--primary-dark:#be185d;--primary-soft:#fce7f3;--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:#f3e8ff;--bg-soft:#fdf2f8;--card-bg:#fffdf5}
-[data-theme="emerald"]{--primary:#10b981;--primary-dark:#047857;--primary-soft:#d1fae5;--accent:#fbbf24;--accent-dark:#d97706;--accent-soft:#fef3c7;--bg-soft:#ecfdf5;--card-bg:#fffdf5}
-[data-theme="ocean"]{--primary:#0ea5e9;--primary-dark:#0369a1;--primary-soft:#e0f2fe;--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:#f3e8ff;--bg-soft:#f0f9ff;--card-bg:#fffdf5}
-[data-theme="sunset"]{--primary:#f97316;--primary-dark:#c2410c;--primary-soft:#ffedd5;--accent:#ec4899;--accent-dark:#be185d;--accent-soft:#fce7f3;--bg-soft:#fff7ed;--card-bg:#fffdf5}
-[data-theme="midnight"]{--primary:#6366f1;--primary-dark:#4338ca;--primary-soft:#e0e7ff;--accent:#fbbf24;--accent-dark:#d97706;--accent-soft:#fef3c7;--bg-soft:#eef2ff;--card-bg:#fffdf5}
-
+:root{--primary:#fbbf24;--primary-dark:#d97706;--primary-soft:#fef3c7;--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:#f3e8ff;--bg-soft:#fffbeb;--card-bg:#fffdf5;--text:#1a1a1a;--border:#1a1a1a;}
+[data-theme="purple"]{--primary:#a855f7;--primary-dark:#7e22ce;--primary-soft:#f3e8ff;--accent:#fbbf24;--accent-dark:#d97706;--accent-soft:#fef3c7;--bg-soft:#faf5ff}
+[data-theme="pink"]{--primary:#ec4899;--primary-dark:#be185d;--primary-soft:#fce7f3;--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:#f3e8ff;--bg-soft:#fdf2f8}
+[data-theme="emerald"]{--primary:#10b981;--primary-dark:#047857;--primary-soft:#d1fae5;--accent:#fbbf24;--accent-dark:#d97706;--accent-soft:#fef3c7;--bg-soft:#ecfdf5}
+[data-theme="ocean"]{--primary:#0ea5e9;--primary-dark:#0369a1;--primary-soft:#e0f2fe;--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:#f3e8ff;--bg-soft:#f0f9ff}
+[data-theme="sunset"]{--primary:#f97316;--primary-dark:#c2410c;--primary-soft:#ffedd5;--accent:#ec4899;--accent-dark:#be185d;--accent-soft:#fce7f3;--bg-soft:#fff7ed}
+[data-theme="midnight"]{--primary:#6366f1;--primary-dark:#4338ca;--primary-soft:#e0e7ff;--accent:#fbbf24;--accent-dark:#d97706;--accent-soft:#fef3c7;--bg-soft:#eef2ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;overflow-x:hidden}
 body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;font-size:15px;line-height:1.5;font-weight:500;transition:background .3s}
@@ -46,7 +34,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .splash-logo{font-family:'Bangers',cursive;font-size:clamp(42px,12vw,60px);color:#fff;letter-spacing:3px;text-shadow:3px 3px 0 var(--border),5px 5px 0 rgba(0,0,0,0.2)}
 .splash-bar-wrap{width:200px;height:18px;background:var(--border);border-radius:10px;margin-top:26px;padding:3px}
 .splash-bar{height:100%;background:linear-gradient(90deg,#86efac,#22c55e);border-radius:6px;width:0%;transition:width .25s}
-.bottom-nav-btn{flex:1;border:2.5px solid transparent;border-radius:10px;padding:6px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;color:var(--text);opacity:.7;transition:all .15s;cursor:pointer}
+.bottom-nav-btn{flex:1;border:2.5px solid transparent;border-radius:10px;padding:6px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;color:var(--text);opacity:.7;transition:all .15s;cursor:pointer;min-width:44px}
 .bottom-nav-btn.active{background:var(--primary);color:var(--text);opacity:1;border-color:var(--border);box-shadow:2px 2px 0 0 var(--border)}
 .bottom-nav-label{font-family:'Bangers',cursive;font-size:9px;letter-spacing:.5px;line-height:1}
 .bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
@@ -64,12 +52,14 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .stat-box{background:var(--primary-soft);border:2.5px solid var(--border);border-radius:12px;padding:10px;text-align:center;box-shadow:2px 2px 0 0 var(--border)}
 .input-field{width:100%;background:var(--bg-soft);border:3px solid var(--border);border-radius:12px;padding:12px 14px;font-family:'Poppins',sans-serif;font-size:14px;color:var(--text);outline:none;transition:all .15s;font-weight:600}
 .input-field:focus{background:var(--card-bg);box-shadow:3px 3px 0 0 var(--border)}
-.btn-primary{width:100%;background:var(--primary);color:var(--text);border:3px solid var(--border);border-radius:12px;padding:12px;font-family:'Bangers',cursive;font-size:18px;letter-spacing:1.5px;cursor:pointer;transition:all .15s;box-shadow:4px 4px 0 0 var(--border);font-weight:400}
+.btn-primary{width:100%;background:var(--primary);color:var(--text);border:3px solid var(--border);border-radius:12px;padding:12px;font-family:'Bangers',cursive;font-size:18px;letter-spacing:1.5px;cursor:pointer;transition:all .15s;box-shadow:4px 4px 0 0 var(--border)}
 .btn-primary:active{transform:translate(2px,2px);box-shadow:2px 2px 0 0 var(--border)}
 .btn-soft{background:var(--accent-soft);color:var(--accent-dark);border:2.5px solid var(--border);border-radius:10px;padding:8px 14px;font-family:'Bangers',cursive;font-size:14px;letter-spacing:.5px;cursor:pointer;transition:all .15s;box-shadow:3px 3px 0 0 var(--border)}
 .btn-soft:active{transform:translate(2px,2px);box-shadow:1px 1px 0 0 var(--border)}
-.btn-danger{background:#ef4444;color:#fff;border:2.5px solid var(--border);border-radius:10px;padding:8px 14px;font-family:'Bangers',cursive;font-size:14px;cursor:pointer;box-shadow:3px 3px 0 0 var(--border)}
-.btn-success{background:#22c55e;color:#fff;border:2.5px solid var(--border);border-radius:10px;padding:8px 14px;font-family:'Bangers',cursive;font-size:14px;cursor:pointer;box-shadow:3px 3px 0 0 var(--border)}
+.btn-danger{background:#ef4444;color:#fff;border:2.5px solid var(--border);border-radius:10px;padding:8px 14px;font-family:'Bangers',cursive;font-size:14px;cursor:pointer;box-shadow:3px 3px 0 0 var(--border);transition:all .15s}
+.btn-danger:active{transform:translate(2px,2px);box-shadow:1px 1px 0 0 var(--border)}
+.btn-success{background:#22c55e;color:#fff;border:2.5px solid var(--border);border-radius:10px;padding:8px 14px;font-family:'Bangers',cursive;font-size:14px;cursor:pointer;box-shadow:3px 3px 0 0 var(--border);transition:all .15s}
+.btn-success:active{transform:translate(2px,2px);box-shadow:1px 1px 0 0 var(--border)}
 .tab-pill{padding:9px 10px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;border:2.5px solid var(--border);background:var(--card-bg);color:var(--text);font-family:'Poppins',sans-serif;box-shadow:3px 3px 0 0 var(--border)}
 .tab-pill.active{background:var(--primary);color:var(--text)}
 .tab-pill:active{transform:translate(1px,1px);box-shadow:2px 2px 0 0 var(--border)}
@@ -77,7 +67,11 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));transition:width .4s;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:11px}
 [x-cloak]{display:none !important}
 .divider{height:2px;background:var(--border);margin:10px 0;border-radius:2px;opacity:.2}
-.notif-badge{position:absolute;top:-4px;right:-4px;width:20px;height:20px;background:#ef4444;border:2px solid var(--border);border-radius:50%;color:#fff;font-size:11px;font-weight:bold;display:flex;align-items:center;justify-content:center}
+.chat-bubble-user{background:var(--accent);color:#fff;border:2.5px solid var(--border);border-radius:18px 18px 4px 18px;padding:10px 14px;max-width:80%;margin-left:auto;box-shadow:2px 2px 0 0 var(--border);font-size:14px;font-weight:500;word-wrap:break-word}
+.chat-bubble-ai{background:var(--card-bg);color:var(--text);border:2.5px solid var(--border);border-radius:18px 18px 18px 4px;padding:10px 14px;max-width:85%;box-shadow:2px 2px 0 0 var(--border);font-size:14px;font-weight:500;word-wrap:break-word;white-space:pre-wrap}
+.chat-typing{display:inline-block}
+.chat-typing::after{content:'...';animation:dots 1.4s infinite}
+@keyframes dots{0%,20%{content:'.'}40%{content:'..'}60%,100%{content:'...'}}
 </style>
 </head>
 <body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme">
@@ -91,16 +85,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 
 <div x-show="welcomePopupOpen" class="bottom-sheet-overlay" style="z-index:100003;">
   <div class="bottom-sheet-content text-center space-y-4" style="padding:24px">
-    <div class="text-7xl animate-bounce">👋</div>
-    <h3 class="font-title text-4xl" style="color:var(--accent-dark)">HALO, <span x-text="userName"></span>!</h3>
+    <div class="text-7xl">👋</div>
+    <h3 class="font-title text-3xl" style="color:var(--accent-dark)">HALO, <span x-text="userName"></span>!</h3>
     <div class="p-4 rounded-2xl" style="background:var(--primary-soft);border:2.5px solid var(--border);box-shadow:3px 3px 0 0 var(--border)">
       <p class="txt-sm leading-relaxed whitespace-pre-line" x-text="welcomeText"></p>
-    </div>
-    <div class="grid grid-cols-4 gap-2">
-      <div class="text-center"><div class="text-3xl">📖</div><div class="text-[10px] font-bold mt-1">Ibadah</div></div>
-      <div class="text-center"><div class="text-3xl">💰</div><div class="text-[10px] font-bold mt-1">Dompet</div></div>
-      <div class="text-center"><div class="text-3xl">🎬</div><div class="text-[10px] font-bold mt-1">Film</div></div>
-      <div class="text-center"><div class="text-3xl">🎮</div><div class="text-[10px] font-bold mt-1">Game</div></div>
     </div>
     <button @click="welcomePopupOpen=false" class="btn-primary">🚀 MULAI JELAJAH</button>
   </div>
@@ -111,16 +99,17 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="w-12 h-1.5 rounded-full mx-auto" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">📖 APA ITU ZENKAI TOOLS?</h3>
     <div class="p-4 rounded-xl space-y-3" style="background:var(--primary-soft);border:2.5px solid var(--border)">
-      <p class="txt-sm leading-relaxed"><b>Zenkai Tools</b> adalah aplikasi web multiguna yang menggabungkan berbagai fitur dalam satu tempat:</p>
+      <p class="txt-sm leading-relaxed"><b>Zenkai Tools</b> adalah aplikasi web multiguna yang menggabungkan berbagai fitur:</p>
       <ul class="txt-sm space-y-1 pl-4 list-disc">
-        <li><b>📖 Ibadah:</b> Al-Quran, Asmaul Husna, Waktu Sholat, Kisah Nabi, Hadits, Doa Harian</li>
-        <li><b>💰 Dompet:</b> Catat transaksi, grafik keuangan, target tabungan, budget bulanan</li>
-        <li><b>📥 Downloader:</b> Unduh video TikTok tanpa watermark</li>
-        <li><b>🛠️ Tools:</b> Jam dunia, TTS, kompres foto, BMI calculator, speed test</li>
+        <li><b>📖 Ibadah:</b> Al-Quran, Asmaul Husna, Waktu Sholat, Kisah Nabi, Hadits, Doa</li>
+        <li><b>💰 Dompet:</b> Transaksi, grafik keuangan, target tabungan, budget</li>
+        <li><b>🤖 AI Chat:</b> Chatbot pintar dengan 4 mode</li>
+        <li><b>📥 Downloader:</b> TikTok tanpa watermark</li>
+        <li><b>🛠️ Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
         <li><b>🎮 Game:</b> Refleks & Tic Tac Toe</li>
-        <li><b>🎨 Tema:</b> 6 tema warna bisa diganti sesuai selera</li>
+        <li><b>🎨 Tema:</b> 6 tema warna</li>
       </ul>
-      <p class="txt-xs text-center pt-2 border-t-2 border-dashed" style="border-color:var(--border)">Versi 2.0 • Dibuat dengan ❤️</p>
+      <p class="txt-xs text-center pt-2 border-t-2 border-dashed" style="border-color:var(--border)">Versi 3.0 • Dibuat dengan ❤️</p>
     </div>
     <button @click="aboutModalOpen=false" class="btn-soft w-full">Tutup</button>
   </div>
@@ -139,14 +128,17 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <div>
         <h3 class="font-title text-2xl" style="color:var(--accent-dark)">HALO, <span x-text="userName"></span>! 👋</h3>
         <p class="txt-xs text-gray-600" x-text="userEmail"></p>
-        <span class="inline-block mt-2 text-[10px] font-bold px-3 py-1 rounded-full" :style="isOwner?'background:var(--primary);color:var(--text);border:2px solid var(--border)':'background:var(--accent-soft);color:var(--accent-dark);border:2px solid var(--border)'" x-text="isOwner?'👑 OWNER':'USER'"></span>
+        <div class="flex gap-2 justify-center mt-2">
+          <span class="text-[10px] font-bold px-3 py-1 rounded-full" :style="isOwner?'background:var(--primary);color:var(--text);border:2px solid var(--border)':'background:var(--accent-soft);color:var(--accent-dark);border:2px solid var(--border)'" x-text="isOwner?'👑 OWNER':'USER'"></span>
+          <template x-if="isVip && !isOwner"><span class="text-[10px] font-bold px-3 py-1 rounded-full" style="background:#fbbf24;color:#1a1a1a;border:2px solid var(--border)">💎 VIP</span></template>
+        </div>
       </div>
     </div>
     <div class="divider"></div>
     <div class="grid grid-cols-3 gap-2">
       <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="transactions.length"></div><div class="txt-xs font-bold">Transaksi</div></div>
       <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="'Rp '+(totalBalance/1000).toFixed(0)+'k'"></div><div class="txt-xs font-bold">Saldo</div></div>
-      <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="quickNote?quickNote.length:0"></div><div class="txt-xs font-bold">Catatan</div></div>
+      <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="isVip||isOwner?'∞':(10-chatCount)"></div><div class="txt-xs font-bold">Chat Sisa</div></div>
     </div>
     <div class="divider"></div>
     <div class="space-y-2">
@@ -218,13 +210,12 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       </div>
       <div>
         <h1 class="font-title text-xl leading-none">ZENKAI TOOLS</h1>
-        <span class="text-[10px] font-bold px-2 py-0.5 rounded" style="background:var(--accent);color:#fff;border:1.5px solid var(--border)" x-text="isOwner?'👑 OWNER':'USER'"></span>
+        <div class="flex gap-1">
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded" style="background:var(--accent);color:#fff;border:1.5px solid var(--border)" x-text="isOwner?'👑 OWNER':(isVip?'💎 VIP':'USER')"></span>
+        </div>
       </div>
     </div>
-    <div class="flex items-center gap-1.5">
-      <div class="font-bold text-xs px-2 py-1.5 rounded-lg" style="background:var(--card-bg);color:var(--accent-dark);border:2px solid var(--border);box-shadow:2px 2px 0 0 var(--border)" x-text="currentTime"></div>
-      <button @click="activeTab='home'" class="text-lg px-2 py-1 rounded-lg" style="background:var(--card-bg);border:2px solid var(--border);box-shadow:2px 2px 0 0 var(--border)">📖</button>
-    </div>
+    <div class="font-bold text-xs px-2 py-1.5 rounded-lg" style="background:var(--card-bg);color:var(--accent-dark);border:2px solid var(--border);box-shadow:2px 2px 0 0 var(--border)" x-text="currentTime"></div>
   </header>
 
   <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24" style="background:var(--bg-soft)"><div x-show="activeTab==='home'" class="sec-gap">
@@ -269,10 +260,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <div class="font-title text-lg" style="color:var(--accent-dark)">FILM</div>
       <div class="txt-xs text-gray-600">Trending</div>
     </div>
-    <div @click="activeTab='keuangan'" class="card card-hover cursor-pointer text-center" style="padding:14px">
-      <div class="text-4xl mb-1">💰</div>
-      <div class="font-title text-lg" style="color:var(--accent-dark)">DOMPET</div>
-      <div class="txt-xs text-gray-600">Keuangan</div>
+    <div @click="activeTab='ai'" class="card card-hover cursor-pointer text-center" style="padding:14px;background:var(--accent)">
+      <div class="text-4xl mb-1">🤖</div>
+      <div class="font-title text-lg text-white">AI CHAT</div>
+      <div class="txt-xs text-white opacity-90">Tanya AI</div>
     </div>
   </div>
 
@@ -342,7 +333,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="card">
       <h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">📊 PENGELUARAN PER KATEGORI</h3>
       <canvas id="pieChart" height="200"></canvas>
-      <div x-show="transactions.filter(t=>t.type==='expense').length===0" class="txt-xs text-center text-gray-500 py-2 font-bold">Belum ada pengeluaran</div>
     </div>
     <div class="card">
       <h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">📈 PEMASUKAN VS PENGELUARAN</h3>
@@ -428,7 +418,68 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <li>Pilih format → otomatis download</li>
     </ol>
   </div>
-</div><div x-show="activeTab==='kitab'" class="sec-gap">
+</div><div x-show="activeTab==='ai'" class="sec-gap">
+  <div class="card text-center" style="background:var(--accent)">
+    <div class="text-4xl mb-1">🤖</div>
+    <h2 class="font-title text-2xl text-white">AI CHAT</h2>
+    <p class="txt-xs text-white opacity-90" x-text="(isOwner||isVip)?'💎 Unlimited Chat':('Sisa '+Math.max(0,10-chatCount)+' chat hari ini')"></p>
+  </div>
+
+  <div class="grid grid-cols-4 gap-1.5">
+    <button @click="aiMode='islami'" :class="aiMode==='islami'?'active':''" class="tab-pill">🕌</button>
+    <button @click="aiMode='keuangan'" :class="aiMode==='keuangan'?'active':''" class="tab-pill">💰</button>
+    <button @click="aiMode='kesehatan'" :class="aiMode==='kesehatan'?'active':''" class="tab-pill">🏥</button>
+    <button @click="aiMode='umum'" :class="aiMode==='umum'?'active':''" class="tab-pill">💬</button>
+  </div>
+
+  <div class="card" style="padding:12px;background:var(--primary-soft)">
+    <div class="flex items-center gap-2">
+      <span class="text-lg" x-text="aiMode==='islami'?'🕌':aiMode==='keuangan'?'💰':aiMode==='kesehatan'?'🏥':'💬'"></span>
+      <div class="flex-1">
+        <div class="font-bold text-sm" x-text="'Mode: '+aiMode.charAt(0).toUpperCase()+aiMode.slice(1)"></div>
+        <div class="txt-xs text-gray-600" x-text="aiModeDesc"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:12px;max-height:55vh;overflow-y:auto">
+    <div x-show="chatMessages.length===0" class="text-center py-8">
+      <div class="text-6xl mb-3">🤖</div>
+      <div class="font-title text-lg" style="color:var(--accent-dark)">HALO! SAYA ZENKAI AI</div>
+      <div class="txt-xs text-gray-600 mt-2">Tanya apa aja, saya siap bantu!</div>
+      <div class="mt-4 space-y-1">
+        <div class="txt-xs font-bold text-gray-500">Contoh pertanyaan:</div>
+        <div class="txt-xs text-gray-600" x-text="aiMode==='islami'?'• Apa itu sholat tahajud?':aiMode==='keuangan'?'• Cara nabung yang efektif?':aiMode==='kesehatan'?'• Tips diet sehat?':'• Apa itu AI?'"></div>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <template x-for="(msg,idx) in chatMessages" :key="idx">
+        <div>
+          <div :class="msg.role==='user'?'chat-bubble-user':'chat-bubble-ai'" x-text="msg.content"></div>
+        </div>
+      </template>
+      <div x-show="aiThinking" class="chat-bubble-ai">
+        <span class="chat-typing">Zenkai AI sedang mengetik</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:10px">
+    <div class="flex gap-2">
+      <button @click="startVoiceInput()" class="btn-soft" style="padding:12px" x-show="voiceSupported">🎤</button>
+      <input type="text" x-model="chatInput" @keyup.enter="sendChat()" placeholder="Ketik pesan..." class="input-field flex-1">
+      <button @click="sendChat()" :disabled="aiThinking" class="btn-primary" style="width:auto;padding:12px 18px">➤</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-2">
+    <button @click="clearChat()" class="btn-danger w-full">🗑️ Hapus Chat</button>
+    <button @click="showChatHistory()" class="btn-soft w-full">📜 History</button>
+  </div>
+</div>
+
+<div x-show="activeTab==='kitab'" class="sec-gap">
   <div class="card text-center" style="background:var(--accent)">
     <div class="text-4xl mb-1">📖</div>
     <h2 class="font-title text-2xl text-white">IBADAH & DOA</h2>
@@ -598,125 +649,113 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       </template>
     </div>
   </div>
-</div>
-
-<div x-show="activeTab==='tools'" class="sec-gap">
-  <div class="card text-center" style="background:var(--accent)">
-    <div class="text-4xl mb-1">🛠️</div>
-    <h2 class="font-title text-2xl text-white">TOOLS</h2>
-  </div>
-  <div class="grid grid-cols-4 gap-2">
-    <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="tab-pill">🌍 Jam</button>
-    <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="tab-pill">🗣️ TTS</button>
-    <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'active':''" class="tab-pill">🖼️ Kompres</button>
-    <button @click="toolsSubTab='bmi'" :class="toolsSubTab==='bmi'?'active':''" class="tab-pill">⚖️ BMI</button>
-  </div>
-  <div x-show="toolsSubTab==='jam'" class="card sec-gap">
-    <h3 class="font-title text-lg" style="color:var(--accent-dark)">🌍 JAM DUNIA</h3>
-    <div class="space-y-2">
-      <template x-for="zone in worldClocks" :key="zone.name">
-        <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
-          <span class="flag-ico" :style="'background:'+zone.flag"></span>
-          <div class="flex-1">
-            <div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="zone.name"></div>
-            <div class="font-title text-base" x-text="zone.time"></div>
-          </div>
+</div>    <div x-show="activeTab==='tools'" class="sec-gap">
+      <div class="card text-center" style="background:var(--accent)">
+        <div class="text-4xl mb-1">🛠️</div>
+        <h2 class="font-title text-2xl text-white">TOOLS</h2>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="tab-pill">🌍 Jam</button>
+        <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="tab-pill">🗣️ TTS</button>
+        <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'active':''" class="tab-pill">🖼️ Kompres</button>
+        <button @click="toolsSubTab='bmi'" :class="toolsSubTab==='bmi'?'active':''" class="tab-pill">⚖️ BMI</button>
+      </div>
+      <div x-show="toolsSubTab==='jam'" class="card sec-gap">
+        <h3 class="font-title text-lg" style="color:var(--accent-dark)">🌍 JAM DUNIA</h3>
+        <div class="space-y-2">
+          <template x-for="zone in worldClocks" :key="zone.name">
+            <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
+              <span class="flag-ico" :style="'background:'+zone.flag"></span>
+              <div class="flex-1">
+                <div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="zone.name"></div>
+                <div class="font-title text-base" x-text="zone.time"></div>
+              </div>
+            </div>
+          </template>
         </div>
-      </template>
+      </div>
+      <div x-show="toolsSubTab==='tts'" class="card sec-gap">
+        <h3 class="font-title text-lg" style="color:var(--accent-dark)">🗣️ TEXT TO SPEECH</h3>
+        <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="input-field"></textarea>
+        <button @click="speakCustomText()" class="btn-primary">🔊 UCAPKAN</button>
+      </div>
+      <div x-show="toolsSubTab==='kompres'" class="card sec-gap">
+        <h3 class="font-title text-lg" style="color:var(--accent-dark)">🖼️ KOMPRES FOTO</h3>
+        <input type="file" accept="image/*" @change="compressImageFile($event)" class="input-field">
+        <template x-if="compressedImageUrl">
+          <div class="text-center space-y-2">
+            <img :src="compressedImageUrl" class="max-h-40 mx-auto rounded-xl" style="border:2px solid var(--border)">
+            <a :href="compressedImageUrl" download="compressed.jpg" class="btn-primary block text-center">💾 DOWNLOAD</a>
+          </div>
+        </template>
+      </div>
+      <div x-show="toolsSubTab==='bmi'" class="card sec-gap">
+        <h3 class="font-title text-lg" style="color:var(--accent-dark)">⚖️ BMI & KALORI</h3>
+        <input type="number" x-model="bmiWeight" placeholder="Berat (kg)" class="input-field">
+        <input type="number" x-model="bmiHeight" placeholder="Tinggi (cm)" class="input-field">
+        <input type="number" x-model="bmiAge" placeholder="Umur (tahun)" class="input-field">
+        <select x-model="bmiGender" class="input-field">
+          <option value="male">Laki-laki</option>
+          <option value="female">Perempuan</option>
+        </select>
+        <button @click="calcBMI()" class="btn-primary">🧮 HITUNG BMI</button>
+        <template x-if="bmiResult">
+          <div class="sec-gap">
+            <div class="p-4 rounded-xl text-center" style="background:var(--primary-soft);border:2.5px solid var(--border)">
+              <div class="font-title text-5xl" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div>
+              <div class="font-bold text-base" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div>
+            </div>
+            <div class="p-4 rounded-xl" style="background:var(--primary-soft);border:2.5px solid var(--border)">
+              <div class="txt-xs font-bold text-center mb-2" style="color:var(--accent-dark)">📊 INDIKATOR BMI</div>
+              <div style="position:relative;padding:10px 0">
+                <div style="height:20px;border-radius:10px;border:2.5px solid var(--border);background:linear-gradient(90deg,#0ea5e9 0%,#0ea5e9 18.5%,#22c55e 18.5%,#22c55e 50%,#eab308 50%,#eab308 70%,#ef4444 70%,#ef4444 100%);overflow:hidden"></div>
+                <div style="position:absolute;top:0;transition:left .5s" :style="'left:'+bmiResult.marker+'%'">
+                  <div style="width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:12px solid var(--border);transform:translateX(-8px)"></div>
+                </div>
+                <div class="flex justify-between txt-xs font-bold mt-2" style="font-size:9px">
+                  <span style="color:#0ea5e9">&lt;18.5 Kurus</span>
+                  <span style="color:#22c55e">18.5-25 Normal</span>
+                  <span style="color:#eab308">25-30 Gemuk</span>
+                  <span style="color:#ef4444">&gt;30 Obesitas</span>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="bmiResult.bbIdeal+' kg'"></div><div class="txt-xs font-bold">BB Ideal</div></div>
+              <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="bmiResult.kalori+' kkal'"></div><div class="txt-xs font-bold">Kalori/hari</div></div>
+            </div>
+            <div class="p-4 rounded-xl" style="background:var(--primary-soft);border:2.5px solid var(--border)">
+              <div class="font-title text-base mb-2" :style="'color:'+bmiResult.color" x-text="'💡 TIPS UNTUK KAMU ('+bmiResult.kategori+')'"></div>
+              <div class="space-y-2">
+                <div>
+                  <div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">🍽️ Makanan:</div>
+                  <ul class="txt-xs pl-4 list-disc text-gray-700 space-y-0.5">
+                    <template x-for="(item,idx) in bmiResult.tipsMakan" :key="idx"><li x-text="item"></li></template>
+                  </ul>
+                </div>
+                <div>
+                  <div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">🏋️ Olahraga:</div>
+                  <ul class="txt-xs pl-4 list-disc text-gray-700 space-y-0.5">
+                    <template x-for="(item,idx) in bmiResult.tipsOlahraga" :key="idx"><li x-text="item"></li></template>
+                  </ul>
+                </div>
+                <div>
+                  <div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">💪 Kebiasaan:</div>
+                  <ul class="txt-xs pl-4 list-disc text-gray-700 space-y-0.5">
+                    <template x-for="(item,idx) in bmiResult.tipsKebiasaan" :key="idx"><li x-text="item"></li></template>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
-  </div>
-  <div x-show="toolsSubTab==='tts'" class="card sec-gap">
-    <h3 class="font-title text-lg" style="color:var(--accent-dark)">🗣️ TEXT TO SPEECH</h3>
-    <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="input-field"></textarea>
-    <button @click="speakCustomText()" class="btn-primary">🔊 UCAPKAN</button>
-  </div>
-  <div x-show="toolsSubTab==='kompres'" class="card sec-gap">
-    <h3 class="font-title text-lg" style="color:var(--accent-dark)">🖼️ KOMPRES FOTO</h3>
-    <input type="file" accept="image/*" @change="compressImageFile($event)" class="input-field">
-    <template x-if="compressedImageUrl">
-      <div class="text-center space-y-2">
-        <img :src="compressedImageUrl" class="max-h-40 mx-auto rounded-xl" style="border:2px solid var(--border)">
-        <a :href="compressedImageUrl" download="compressed.jpg" class="btn-primary block text-center">💾 DOWNLOAD</a>
-      </div>
-    </template>
-  </div>
 
-  <div x-show="toolsSubTab==='bmi'" class="card sec-gap">
-    <h3 class="font-title text-lg" style="color:var(--accent-dark)">⚖️ BMI & KALORI CALCULATOR</h3>
-    <input type="number" x-model="bmiWeight" placeholder="Berat (kg)" class="input-field">
-    <input type="number" x-model="bmiHeight" placeholder="Tinggi (cm)" class="input-field">
-    <input type="number" x-model="bmiAge" placeholder="Umur (tahun)" class="input-field">
-    <select x-model="bmiGender" class="input-field">
-      <option value="male">Laki-laki</option>
-      <option value="female">Perempuan</option>
-    </select>
-    <button @click="calcBMI()" class="btn-primary">🧮 HITUNG BMI</button>
-
-    <template x-if="bmiResult">
-      <div class="sec-gap">
-        <div class="p-4 rounded-xl text-center" style="background:var(--primary-soft);border:2.5px solid var(--border)">
-          <div class="font-title text-5xl" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div>
-          <div class="font-bold text-base" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div>
-        </div>
-
-        <div class="p-4 rounded-xl" style="background:var(--primary-soft);border:2.5px solid var(--border)">
-          <div class="txt-xs font-bold text-center mb-2" style="color:var(--accent-dark)">📊 INDIKATOR BMI</div>
-          <div style="position:relative;padding:10px 0">
-            <div style="height:20px;border-radius:10px;border:2.5px solid var(--border);background:linear-gradient(90deg,#0ea5e9 0%,#0ea5e9 18.5%,#22c55e 18.5%,#22c55e 50%,#eab308 50%,#eab308 70%,#ef4444 70%,#ef4444 100%);overflow:hidden"></div>
-            <div style="position:absolute;top:0;transition:left .5s" :style="'left:'+bmiResult.marker+'%'">
-              <div style="width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:12px solid var(--border);transform:translateX(-8px)"></div>
-            </div>
-            <div class="flex justify-between txt-xs font-bold mt-2" style="font-size:9px">
-              <span style="color:#0ea5e9">&lt;18.5 Kurus</span>
-              <span style="color:#22c55e">18.5-25 Normal</span>
-              <span style="color:#eab308">25-30 Gemuk</span>
-              <span style="color:#ef4444">&gt;30 Obesitas</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="bmiResult.bbIdeal+' kg'"></div><div class="txt-xs font-bold">BB Ideal</div></div>
-          <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="bmiResult.kalori+' kkal'"></div><div class="txt-xs font-bold">Kalori/hari</div></div>
-        </div>
-
-        <div class="p-4 rounded-xl" style="background:var(--primary-soft);border:2.5px solid var(--border)">
-          <div class="font-title text-base mb-2" :style="'color:'+bmiResult.color" x-text="'💡 TIPS UNTUK KAMU ('+bmiResult.kategori+')'"></div>
-          <div class="space-y-2">
-            <div>
-              <div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">🍽️ Makanan:</div>
-              <ul class="txt-xs pl-4 list-disc text-gray-700 space-y-0.5">
-                <template x-for="(item,idx) in bmiResult.tipsMakan" :key="idx">
-                  <li x-text="item"></li>
-                </template>
-              </ul>
-            </div>
-            <div>
-              <div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">🏋️ Olahraga:</div>
-              <ul class="txt-xs pl-4 list-disc text-gray-700 space-y-0.5">
-                <template x-for="(item,idx) in bmiResult.tipsOlahraga" :key="idx">
-                  <li x-text="item"></li>
-                </template>
-              </ul>
-            </div>
-            <div>
-              <div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">💪 Kebiasaan:</div>
-              <ul class="txt-xs pl-4 list-disc text-gray-700 space-y-0.5">
-                <template x-for="(item,idx) in bmiResult.tipsKebiasaan" :key="idx">
-                  <li x-text="item"></li>
-                </template>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </div>
-</div>    <div x-show="activeTab==='tema'" class="sec-gap">
+    <div x-show="activeTab==='tema'" class="sec-gap">
       <div class="card text-center" style="background:var(--accent)">
         <div class="text-4xl mb-1">🎨</div>
         <h2 class="font-title text-2xl text-white">TEMA</h2>
-        <p class="txt-xs text-white opacity-90">Pilih tema favoritmu</p>
       </div>
       <div class="card sec-gap">
         <h3 class="font-title text-lg" style="color:var(--accent-dark)">WARNA TEMA</h3>
@@ -727,15 +766,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
               <div class="txt-xs font-bold mt-2" x-text="t.name"></div>
             </div>
           </template>
-        </div>
-        <div class="divider"></div>
-        <div class="p-4 rounded-xl" style="background:var(--primary-soft);border:2.5px solid var(--border)">
-          <div class="txt-xs font-bold text-gray-600 mb-2">PREVIEW:</div>
-          <div class="flex gap-2">
-            <div class="w-12 h-12 rounded-xl" style="background:var(--primary);border:2.5px solid var(--border)"></div>
-            <div class="w-12 h-12 rounded-xl" style="background:var(--accent);border:2.5px solid var(--border)"></div>
-            <div class="flex-1 flex items-center justify-center rounded-xl font-title text-sm text-white" style="background:var(--accent-dark);border:2.5px solid var(--border)">Tombol</div>
-          </div>
         </div>
       </div>
     </div>
@@ -781,11 +811,11 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <p class="txt-xs text-white opacity-90">Kontrol penuh aplikasi</p>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
-          <button @click="ownerSubTab='statistik';loadAppStats()" :class="ownerSubTab==='statistik'?'active':''" class="tab-pill">📊 Statistik</button>
-          <button @click="ownerSubTab='users';loadAllUsers()" :class="ownerSubTab==='users'?'active':''" class="tab-pill">👥 Users</button>
-          <button @click="ownerSubTab='setelan'" :class="ownerSubTab==='setelan'?'active':''" class="tab-pill">⚙️ Setelan</button>
-          <button @click="ownerSubTab='tools'" :class="ownerSubTab==='tools'?'active':''" class="tab-pill">🔧 Tools</button>
+        <div class="grid grid-cols-4 gap-1.5">
+          <button @click="ownerSubTab='statistik';loadAppStats()" :class="ownerSubTab==='statistik'?'active':''" class="tab-pill">📊</button>
+          <button @click="ownerSubTab='users';loadAllUsers()" :class="ownerSubTab==='users'?'active':''" class="tab-pill">👥</button>
+          <button @click="ownerSubTab='setelan'" :class="ownerSubTab==='setelan'?'active':''" class="tab-pill">⚙️</button>
+          <button @click="ownerSubTab='tools'" :class="ownerSubTab==='tools'?'active':''" class="tab-pill">🔧</button>
         </div>
 
         <div x-show="ownerSubTab==='statistik'" class="sec-gap">
@@ -794,10 +824,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
             <div class="stat-box"><div class="font-title text-2xl" style="color:var(--accent-dark)" x-text="appStats.activeToday"></div><div class="txt-xs font-bold">Aktif Hari Ini</div></div>
             <div class="stat-box"><div class="font-title text-2xl" style="color:var(--accent-dark)" x-text="appStats.totalTx"></div><div class="txt-xs font-bold">Total Transaksi</div></div>
             <div class="stat-box"><div class="font-title text-2xl" style="color:var(--accent-dark)" x-text="appStats.banned"></div><div class="txt-xs font-bold">User Banned</div></div>
-          </div>
-          <div class="card">
-            <h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">📈 PERTUMBUHAN USER (7 HARI)</h3>
-            <canvas id="growthChart" height="180"></canvas>
           </div>
           <div class="card">
             <h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">🏆 TOP 10 USER PALING AKTIF</h3>
@@ -809,7 +835,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
                   <span class="txt-xs font-bold px-2 py-0.5 rounded" style="background:var(--accent);color:#fff" x-text="u.count+' tx'"></span>
                 </div>
               </template>
-              <template x-if="topUsers.length===0"><div class="txt-xs text-center text-gray-500 py-2">Memuat...</div></template>
+              <template x-if="topUsers.length===0"><div class="txt-xs text-center text-gray-500 py-2">Belum ada data</div></template>
             </div>
           </div>
           <button @click="loadAppStats()" class="btn-soft w-full">🔄 Refresh</button>
@@ -818,7 +844,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <div x-show="ownerSubTab==='users'" class="sec-gap">
           <input type="text" x-model="userSearch" placeholder="Cari user..." class="input-field">
           <div class="card sec-gap">
-            <h3 class="font-title text-lg" style="color:var(--accent-dark)">👥 DAFTAR USER</h3>
+            <h3 class="font-title text-lg" style="color:var(--accent-dark)">👥 DAFTAR USER (<span x-text="filteredUsers.length"></span>)</h3>
             <div class="max-h-96 overflow-y-auto space-y-2">
               <template x-for="u in filteredUsers" :key="u.id">
                 <div class="p-3 rounded-xl" :style="u.is_banned?'background:#fee2e2;border:2px solid var(--border)':'background:var(--primary-soft);border:2px solid var(--border)'">
@@ -828,19 +854,26 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
                       <div class="font-bold text-xs truncate" x-text="u.username"></div>
                       <div class="txt-xs text-gray-600">
                         <span x-text="u.status"></span>
+                        <span x-show="u.is_vip" class="text-yellow-600 font-bold"> • VIP</span>
                         <span x-show="u.is_banned" class="text-red-600 font-bold"> • BANNED</span>
                       </div>
                     </div>
                   </div>
-                  <div class="flex gap-1">
+                  <div class="grid grid-cols-2 gap-1">
                     <template x-if="!u.is_banned">
-                      <button @click="banUser(u)" class="btn-danger text-[10px] flex-1">🚫 BAN</button>
+                      <button @click="banUser(u)" class="btn-danger text-[10px]">🚫 Ban</button>
                     </template>
                     <template x-if="u.is_banned">
-                      <button @click="unbanUser(u)" class="btn-success text-[10px] flex-1">✓ UNBAN</button>
+                      <button @click="unbanUser(u)" class="btn-success text-[10px]">✓ Unban</button>
                     </template>
-                    <button @click="verifyUser(u)" class="btn-soft text-[10px] flex-1">✓ Verif</button>
-                    <button @click="deleteUser(u)" class="btn-danger text-[10px] flex-1">🗑️ Hapus</button>
+                    <template x-if="!u.is_vip && u.status!=='owner'">
+                      <button @click="setVip(u,true)" class="btn-soft text-[10px]">💎 Set VIP</button>
+                    </template>
+                    <template x-if="u.is_vip && u.status!=='owner'">
+                      <button @click="setVip(u,false)" class="btn-soft text-[10px]">✖ Un-VIP</button>
+                    </template>
+                    <button @click="verifyUser(u)" class="btn-soft text-[10px]">✓ Verif</button>
+                    <button @click="deleteUser(u)" class="btn-danger text-[10px]">🗑️ Hapus</button>
                   </div>
                 </div>
               </template>
@@ -852,8 +885,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <div x-show="ownerSubTab==='setelan'" class="sec-gap">
           <div class="card sec-gap">
             <h3 class="font-title text-lg" style="color:var(--accent-dark)">✏️ EDIT KATA SAMBUTAN</h3>
-            <p class="txt-xs text-gray-600 font-bold">Kata ini muncul saat user login pertama kali</p>
-            <textarea x-model="welcomeTextEdit" rows="5" class="input-field"></textarea>
+            <textarea x-model="welcomeTextEdit" rows="6" class="input-field"></textarea>
             <button @click="saveWelcomeText()" class="btn-primary">💾 SIMPAN</button>
           </div>
         </div>
@@ -861,13 +893,11 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <div x-show="ownerSubTab==='tools'" class="sec-gap">
           <div class="card sec-gap">
             <h3 class="font-title text-lg" style="color:var(--accent-dark)">📥 EXPORT DATA USER</h3>
-            <p class="txt-xs text-gray-600 font-bold">Download semua user dalam format CSV</p>
             <button @click="exportUsersCSV()" class="btn-primary">📥 EXPORT CSV</button>
           </div>
           <div class="card sec-gap">
-            <h3 class="font-title text-lg" style="color:var(--accent-dark)">🗑️ BERSIHKAN DATA</h3>
-            <p class="txt-xs text-red-600 font-bold">⚠️ Hapus semua transaksi lama (>30 hari)</p>
-            <button @click="cleanOldTransactions()" class="btn-danger w-full">🗑️ BERSIHKAN</button>
+            <h3 class="font-title text-lg" style="color:var(--accent-dark)">🗑️ BERSIHKAN DATA LAMA</h3>
+            <button @click="cleanOldTransactions()" class="btn-danger w-full">🗑️ BERSIHKAN (>30 hari)</button>
           </div>
         </div>
       </div>
@@ -875,8 +905,9 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 
   </main>
 
-  <nav class="absolute bottom-0 left-0 right-0 flex p-2 gap-1 overflow-x-auto" style="background:var(--card-bg);border-top:3px solid var(--border)">
+  <nav class="absolute bottom-0 left-0 right-0 flex p-1.5 gap-1 overflow-x-auto" style="background:var(--card-bg);border-top:3px solid var(--border)">
     <button @click="activeTab='home'" :class="activeTab==='home'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-home"/></svg><span class="bottom-nav-label">HOME</span></button>
+    <button @click="activeTab='ai'" :class="activeTab==='ai'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-robot"/></svg><span class="bottom-nav-label">AI</span></button>
     <button @click="activeTab='kitab'" :class="activeTab==='kitab'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-book"/></svg><span class="bottom-nav-label">IBADAH</span></button>
     <button @click="activeTab='keuangan'" :class="activeTab==='keuangan'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-wallet"/></svg><span class="bottom-nav-label">DOMPET</span></button>
     <button @click="activeTab='downloader'" :class="activeTab==='downloader'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-download"/></svg><span class="bottom-nav-label">UNDUH</span></button>
@@ -911,7 +942,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   <div class="bottom-sheet-content text-center space-y-4">
     <div class="w-12 h-1.5 rounded-full mx-auto" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl" style="color:var(--accent-dark)">🎯 TARGET BARU</h3>
-    <input type="text" x-model="targetForm.nama" placeholder="Nama target (mis. Beli HP)" class="input-field">
+    <input type="text" x-model="targetForm.nama" placeholder="Nama target" class="input-field">
     <input type="number" x-model="targetForm.target" placeholder="Target (Rp)" class="input-field">
     <input type="text" x-model="targetForm.deadline" placeholder="Deadline (opsional)" class="input-field">
     <button @click="addSavings()" class="btn-primary">SIMPAN</button>
@@ -944,7 +975,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   <div class="bottom-sheet-content">
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">🎬 FILM TRENDING</h3>
-    <p class="txt-xs text-center text-gray-500 font-bold">Minggu ini di TMDB</p>
     <div x-show="movieLoading" class="text-center py-4"><span class="spin"></span></div>
     <div x-show="!movieLoading" class="space-y-2 mt-3 max-h-[65vh] overflow-y-auto">
       <template x-for="m in movieList" :key="m.id">
@@ -974,7 +1004,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <div class="flex-1 min-w-0">
             <div class="font-bold text-xs line-clamp-2" x-text="n.title"></div>
             <div class="txt-xs text-gray-500 mt-1" x-text="n.pubDate"></div>
-            <div class="txt-xs font-bold" style="color:var(--accent)" x-text="n.source"></div>
           </div>
         </div>
       </template>
@@ -983,7 +1012,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <div class="mt-3 space-y-3">
         <button @click="selectedNews=null" class="btn-soft">← Kembali</button>
         <h4 class="font-title text-lg" style="color:var(--accent-dark)" x-text="selectedNews.title"></h4>
-        <p class="txt-xs text-gray-500 font-bold" x-text="selectedNews.source+' • '+selectedNews.pubDate"></p>
+        <p class="txt-xs text-gray-500 font-bold" x-text="selectedNews.pubDate"></p>
         <p class="txt-sm leading-relaxed" x-text="selectedNews.description"></p>
         <a :href="selectedNews.link" target="_blank" class="btn-primary block text-center">🔗 BACA SELENGKAPNYA</a>
       </div>
@@ -1106,9 +1135,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <template x-if="selectedKisah">
       <div class="space-y-3">
         <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)" x-text="selectedKisah.judul"></h3>
-        <div class="text-center">
-          <span class="txt-xs font-bold px-3 py-1 rounded-lg inline-block" style="background:var(--primary-soft);color:var(--accent-dark);border:2px solid var(--border)" x-text="selectedKisah.kategori"></span>
-        </div>
         <div class="p-4 rounded-xl max-h-[55vh] overflow-y-auto" style="background:var(--primary-soft);border:2px solid var(--border)">
           <p class="txt-sm leading-relaxed whitespace-pre-line text-gray-700" x-text="selectedKisah.isi"></p>
         </div>
@@ -1125,100 +1151,37 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 <symbol id="i-download" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></symbol>
 <symbol id="i-tools" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></symbol>
 <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M15 7.5V2H9v5.5l-7 8V22h20v-6.5l-7-8z"/></symbol>
-<symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></symbol>
+<symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></symbol>
 <symbol id="i-crown" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></symbol>
+<symbol id="i-robot" viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></symbol>
 </svg>
 
 <script>const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
+const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-responder';
 const OWNER_EMAIL='andikaatka@gmail.com';
-const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi ini menyediakan berbagai fitur dalam satu tempat: Al-Quran & Ibadah, Dompet Keuangan, Downloader TikTok, Cuaca & Berita, Film Trending, Game, dan masih banyak lagi.\n\nSemua fitur bisa diakses gratis. Yuk, mulai jelajahi!';
+const DAILY_LIMIT=10;
+const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi ini menyediakan berbagai fitur: Al-Quran & Ibadah, Dompet Keuangan, AI Chat pintar, Downloader TikTok, Cuaca & Berita, Film Trending, Game, dan banyak lagi.\n\nSemua fitur bisa diakses gratis. Yuk, mulai jelajahi!';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-const ASMAUL_HUSNA=[
-{no:1,arab:'الرَّحْمَنُ',latin:'Ar-Rahmaan',arti:'Yang Maha Pengasih'},{no:2,arab:'الرَّحِيمُ',latin:'Ar-Rahiim',arti:'Yang Maha Penyayang'},{no:3,arab:'الْمَلِكُ',latin:'Al-Malik',arti:'Yang Maha Merajai'},{no:4,arab:'الْقُدُّوسُ',latin:'Al-Quddus',arti:'Yang Maha Suci'},{no:5,arab:'السَّلَامُ',latin:'As-Salaam',arti:'Yang Maha Sejahtera'},{no:6,arab:'الْمُؤْمِنُ',latin:'Al-Mu\'min',arti:'Yang Maha Memberi Keamanan'},{no:7,arab:'الْمُهَيْمِنُ',latin:'Al-Muhaimin',arti:'Yang Maha Pemelihara'},{no:8,arab:'الْعَزِيزُ',latin:'Al-Aziiz',arti:'Yang Maha Perkasa'},{no:9,arab:'الْجَبَّارُ',latin:'Al-Jabbar',arti:'Yang Maha Kuasa'},{no:10,arab:'الْمُتَكَبِّرُ',latin:'Al-Mutakabbir',arti:'Yang Maha Megah'},
-{no:11,arab:'الْخَالِقُ',latin:'Al-Khaaliq',arti:'Yang Maha Pencipta'},{no:12,arab:'الْبَارِئُ',latin:'Al-Baari\'',arti:'Yang Maha Mengadakan'},{no:13,arab:'الْمُصَوِّرُ',latin:'Al-Mushawwir',arti:'Yang Maha Membentuk'},{no:14,arab:'الْغَفَّارُ',latin:'Al-Ghaffaar',arti:'Yang Maha Pengampun'},{no:15,arab:'الْقَهَّارُ',latin:'Al-Qahhaar',arti:'Yang Maha Menundukkan'},{no:16,arab:'الْوَهَّابُ',latin:'Al-Wahhaab',arti:'Yang Maha Pemberi'},{no:17,arab:'الرَّزَّاقُ',latin:'Ar-Razzaq',arti:'Yang Maha Pemberi Rezeki'},{no:18,arab:'الْفَتَّاحُ',latin:'Al-Fattaah',arti:'Yang Maha Pembuka'},{no:19,arab:'الْعَلِيمُ',latin:'Al-\'Aliim',arti:'Yang Maha Mengetahui'},{no:20,arab:'الْقَابِضُ',latin:'Al-Qaabidh',arti:'Yang Maha Menyempitkan'},
-{no:21,arab:'الْبَاسِطُ',latin:'Al-Baasith',arti:'Yang Maha Melapangkan'},{no:22,arab:'الْخَافِضُ',latin:'Al-Khaafidh',arti:'Yang Maha Merendahkan'},{no:23,arab:'الرَّافِعُ',latin:'Ar-Raafi\'',arti:'Yang Maha Meninggikan'},{no:24,arab:'الْمُعِزُّ',latin:'Al-Mu\'izz',arti:'Yang Maha Memuliakan'},{no:25,arab:'الْمُذِلُّ',latin:'Al-Mudzil',arti:'Yang Maha Menghinakan'},{no:26,arab:'السَّمِيعُ',latin:'As-Sami\'',arti:'Yang Maha Mendengar'},{no:27,arab:'الْبَصِيرُ',latin:'Al-Bashiir',arti:'Yang Maha Melihat'},{no:28,arab:'الْحَكَمُ',latin:'Al-Hakam',arti:'Yang Maha Menetapkan'},{no:29,arab:'الْعَدْلُ',latin:'Al-\'Adl',arti:'Yang Maha Adil'},{no:30,arab:'اللَّطِيفُ',latin:'Al-Lathiif',arti:'Yang Maha Lembut'},
-{no:31,arab:'الْخَبِيرُ',latin:'Al-Khabiir',arti:'Yang Maha Mengenal'},{no:32,arab:'الْحَلِيمُ',latin:'Al-Haliim',arti:'Yang Maha Penyantun'},{no:33,arab:'الْعَظِيمُ',latin:'Al-\'Azhiim',arti:'Yang Maha Agung'},{no:34,arab:'الْغَفُورُ',latin:'Al-Ghafuur',arti:'Yang Maha Pengampun'},{no:35,arab:'الشَّكُورُ',latin:'Ash-Shakuur',arti:'Yang Maha Pembalas'},{no:36,arab:'الْعَلِيُّ',latin:'Al-\'Aliy',arti:'Yang Maha Tinggi'},{no:37,arab:'الْكَبِيرُ',latin:'Al-Kabiir',arti:'Yang Maha Besar'},{no:38,arab:'الْحَفِيظُ',latin:'Al-Hafiizh',arti:'Yang Maha Memelihara'},{no:39,arab:'الْمُقِيتُ',latin:'Al-Muqiit',arti:'Yang Maha Pemberi Kecukupan'},{no:40,arab:'الْحَسِيبُ',latin:'Al-Hasiib',arti:'Yang Maha Membuat Perhitungan'},
-{no:41,arab:'الْجَلِيلُ',latin:'Al-Jaliil',arti:'Yang Maha Luhur'},{no:42,arab:'الْكَرِيمُ',latin:'Al-Kariim',arti:'Yang Maha Pemurah'},{no:43,arab:'الرَّقِيبُ',latin:'Ar-Raqiib',arti:'Yang Maha Mengawasi'},{no:44,arab:'الْمُجِيبُ',latin:'Al-Mujiib',arti:'Yang Maha Mengabulkan'},{no:45,arab:'الْوَاسِعُ',latin:'Al-Waasi\'',arti:'Yang Maha Luas'},{no:46,arab:'الْحَكِيمُ',latin:'Al-Hakiim',arti:'Yang Maha Bijaksana'},{no:47,arab:'الْوَدُودُ',latin:'Al-Waduud',arti:'Yang Maha Mengasihi'},{no:48,arab:'الْمَجِيدُ',latin:'Al-Majiid',arti:'Yang Maha Mulia'},{no:49,arab:'الْبَاعِثُ',latin:'Al-Baa\'its',arti:'Yang Maha Membangkitkan'},{no:50,arab:'الشَّهِيدُ',latin:'Ash-Shahiid',arti:'Yang Maha Menyaksikan'},
-{no:51,arab:'الْحَقُّ',latin:'Al-Haqq',arti:'Yang Maha Benar'},{no:52,arab:'الْوَكِيلُ',latin:'Al-Wakiil',arti:'Yang Maha Memelihara'},{no:53,arab:'الْقَوِيُّ',latin:'Al-Qawiyyu',arti:'Yang Maha Kuat'},{no:54,arab:'الْمَتِينُ',latin:'Al-Matiin',arti:'Yang Maha Kokoh'},{no:55,arab:'الْوَلِيُّ',latin:'Al-Waliyy',arti:'Yang Maha Melindungi'},{no:56,arab:'الْحَمِيدُ',latin:'Al-Hamiid',arti:'Yang Maha Terpuji'},{no:57,arab:'الْمُحْصِي',latin:'Al-Muhshii',arti:'Yang Maha Menghitung'},{no:58,arab:'الْمُبْدِئُ',latin:'Al-Mubdi\'',arti:'Yang Maha Memulai'},{no:59,arab:'الْمُعِيدُ',latin:'Al-Muiid',arti:'Yang Maha Mengembalikan'},{no:60,arab:'الْمُحْيِي',latin:'Al-Muhyii',arti:'Yang Maha Menghidupkan'},
-{no:61,arab:'الْمُمِيتُ',latin:'Al-Mumiit',arti:'Yang Maha Mematikan'},{no:62,arab:'الْحَيُّ',latin:'Al-Hayyu',arti:'Yang Maha Hidup'},{no:63,arab:'الْقَيُّومُ',latin:'Al-Qayyuum',arti:'Yang Maha Mandiri'},{no:64,arab:'الْوَاجِدُ',latin:'Al-Waajid',arti:'Yang Maha Penemu'},{no:65,arab:'الْمَاجِدُ',latin:'Al-Maajid',arti:'Yang Maha Mulia'},{no:66,arab:'الْوَاحِدُ',latin:'Al-Waahid',arti:'Yang Maha Tunggal'},{no:67,arab:'الْأَحَدُ',latin:'Al-Ahad',arti:'Yang Maha Esa'},{no:68,arab:'الصَّمَدُ',latin:'As-Samad',arti:'Yang Maha Dibutuhkan'},{no:69,arab:'الْقَادِرُ',latin:'Al-Qaadir',arti:'Yang Maha Menentukan'},{no:70,arab:'الْمُقْتَدِرُ',latin:'Al-Muqtadir',arti:'Yang Maha Berkuasa'},
-{no:71,arab:'الْمُقَدِّمُ',latin:'Al-Muqaddim',arti:'Yang Maha Mendahulukan'},{no:72,arab:'الْمُؤَخِّرُ',latin:'Al-Mu\'akhkhir',arti:'Yang Maha Mengakhirkan'},{no:73,arab:'الْأَوَّلُ',latin:'Al-Awwal',arti:'Yang Maha Awal'},{no:74,arab:'الْآخِرُ',latin:'Al-Aakhir',arti:'Yang Maha Akhir'},{no:75,arab:'الظَّاهِرُ',latin:'Az-Zhaahir',arti:'Yang Maha Nyata'},{no:76,arab:'الْبَاطِنُ',latin:'Al-Baathin',arti:'Yang Maha Ghaib'},{no:77,arab:'الْوَالِي',latin:'Al-Waali',arti:'Yang Maha Memerintah'},{no:78,arab:'الْمُتَعَالِي',latin:'Al-Muta\'aali',arti:'Yang Maha Tinggi'},{no:79,arab:'الْبَرُّ',latin:'Al-Barr',arti:'Yang Maha Dermawan'},{no:80,arab:'التَّوَّابُ',latin:'At-Tawwaab',arti:'Yang Maha Penerima Taubat'},
-{no:81,arab:'الْمُنْتَقِمُ',latin:'Al-Muntaqim',arti:'Yang Maha Pemberi Balasan'},{no:82,arab:'الْعَفُوُّ',latin:'Al-\'Afuww',arti:'Yang Maha Pemaaf'},{no:83,arab:'الرَّءُوفُ',latin:'Ar-Ra\'uuf',arti:'Yang Maha Pengasuh'},{no:84,arab:'مَالِكُ الْمُلْكِ',latin:'Malikul Mulk',arti:'Yang Maha Penguasa'},{no:85,arab:'ذُو الْجَلَالِ وَالْإِكْرَامِ',latin:'Dzul Jalaali Wal Ikraam',arti:'Yang Maha Pemilik Kebesaran'},{no:86,arab:'الْمُقْسِطُ',latin:'Al-Muqsith',arti:'Yang Maha Adil'},{no:87,arab:'الْجَامِعُ',latin:'Al-Jaami\'',arti:'Yang Maha Pengumpul'},{no:88,arab:'الْغَنِيُّ',latin:'Al-Ghaniyy',arti:'Yang Maha Kaya'},{no:89,arab:'الْمُغْنِي',latin:'Al-Mughni',arti:'Yang Maha Pemberi Kekayaan'},{no:90,arab:'الْمَانِعُ',latin:'Al-Mani\'',arti:'Yang Maha Pencegahan'},
-{no:91,arab:'الضَّارُّ',latin:'Ad-Dhaar',arti:'Yang Maha Penimpa'},{no:92,arab:'النَّافِعُ',latin:'An-Naafi\'',arti:'Yang Maha Memberi Manfaat'},{no:93,arab:'النُّورُ',latin:'An-Nuur',arti:'Yang Maha Bercahaya'},{no:94,arab:'الْهَادِي',latin:'Al-Haadi',arti:'Yang Maha Pemberi Petunjuk'},{no:95,arab:'الْبَدِيعُ',latin:'Al-Badii\'',arti:'Yang Maha Pencipta'},{no:96,arab:'الْبَاقِي',latin:'Al-Baqii',arti:'Yang Maha Kekal'},{no:97,arab:'الْوَارِثُ',latin:'Al-Waarith',arti:'Yang Maha Pewaris'},{no:98,arab:'الرَّشِيدُ',latin:'Ar-Rasyiid',arti:'Yang Maha Pandai'},{no:99,arab:'الصَّبُورُ',latin:'As-Sabuur',arti:'Yang Maha Sabar'}
-];
+const ASMAUL_HUSNA=[{no:1,arab:'الرَّحْمَنُ',latin:'Ar-Rahmaan',arti:'Yang Maha Pengasih'},{no:2,arab:'الرَّحِيمُ',latin:'Ar-Rahiim',arti:'Yang Maha Penyayang'},{no:3,arab:'الْمَلِكُ',latin:'Al-Malik',arti:'Yang Maha Merajai'},{no:4,arab:'الْقُدُّوسُ',latin:'Al-Quddus',arti:'Yang Maha Suci'},{no:5,arab:'السَّلَامُ',latin:'As-Salaam',arti:'Yang Maha Sejahtera'},{no:6,arab:'الْمُؤْمِنُ',latin:'Al-Mu\'min',arti:'Yang Maha Memberi Keamanan'},{no:7,arab:'الْمُهَيْمِنُ',latin:'Al-Muhaimin',arti:'Yang Maha Pemelihara'},{no:8,arab:'الْعَزِيزُ',latin:'Al-Aziiz',arti:'Yang Maha Perkasa'},{no:9,arab:'الْجَبَّارُ',latin:'Al-Jabbar',arti:'Yang Maha Kuasa'},{no:10,arab:'الْمُتَكَبِّرُ',latin:'Al-Mutakabbir',arti:'Yang Maha Megah'},{no:11,arab:'الْخَالِقُ',latin:'Al-Khaaliq',arti:'Yang Maha Pencipta'},{no:12,arab:'الْبَارِئُ',latin:'Al-Baari\'',arti:'Yang Maha Mengadakan'},{no:13,arab:'الْمُصَوِّرُ',latin:'Al-Mushawwir',arti:'Yang Maha Membentuk'},{no:14,arab:'الْغَفَّارُ',latin:'Al-Ghaffaar',arti:'Yang Maha Pengampun'},{no:15,arab:'الْقَهَّارُ',latin:'Al-Qahhaar',arti:'Yang Maha Menundukkan'},{no:16,arab:'الْوَهَّابُ',latin:'Al-Wahhaab',arti:'Yang Maha Pemberi'},{no:17,arab:'الرَّزَّاقُ',latin:'Ar-Razzaq',arti:'Yang Maha Pemberi Rezeki'},{no:18,arab:'الْفَتَّاحُ',latin:'Al-Fattaah',arti:'Yang Maha Pembuka'},{no:19,arab:'الْعَلِيمُ',latin:'Al-\'Aliim',arti:'Yang Maha Mengetahui'},{no:20,arab:'الْقَابِضُ',latin:'Al-Qaabidh',arti:'Yang Maha Menyempitkan'},{no:21,arab:'الْبَاسِطُ',latin:'Al-Baasith',arti:'Yang Maha Melapangkan'},{no:22,arab:'الْخَافِضُ',latin:'Al-Khaafidh',arti:'Yang Maha Merendahkan'},{no:23,arab:'الرَّافِعُ',latin:'Ar-Raafi\'',arti:'Yang Maha Meninggikan'},{no:24,arab:'الْمُعِزُّ',latin:'Al-Mu\'izz',arti:'Yang Maha Memuliakan'},{no:25,arab:'الْمُذِلُّ',latin:'Al-Mudzil',arti:'Yang Maha Menghinakan'},{no:26,arab:'السَّمِيعُ',latin:'As-Sami\'',arti:'Yang Maha Mendengar'},{no:27,arab:'الْبَصِيرُ',latin:'Al-Bashiir',arti:'Yang Maha Melihat'},{no:28,arab:'الْحَكَمُ',latin:'Al-Hakam',arti:'Yang Maha Menetapkan'},{no:29,arab:'الْعَدْلُ',latin:'Al-\'Adl',arti:'Yang Maha Adil'},{no:30,arab:'اللَّطِيفُ',latin:'Al-Lathiif',arti:'Yang Maha Lembut'},{no:31,arab:'الْخَبِيرُ',latin:'Al-Khabiir',arti:'Yang Maha Mengenal'},{no:32,arab:'الْحَلِيمُ',latin:'Al-Haliim',arti:'Yang Maha Penyantun'},{no:33,arab:'الْعَظِيمُ',latin:'Al-\'Azhiim',arti:'Yang Maha Agung'},{no:34,arab:'الْغَفُورُ',latin:'Al-Ghafuur',arti:'Yang Maha Pengampun'},{no:35,arab:'الشَّكُورُ',latin:'Ash-Shakuur',arti:'Yang Maha Pembalas'},{no:36,arab:'الْعَلِيُّ',latin:'Al-\'Aliy',arti:'Yang Maha Tinggi'},{no:37,arab:'الْكَبِيرُ',latin:'Al-Kabiir',arti:'Yang Maha Besar'},{no:38,arab:'الْحَفِيظُ',latin:'Al-Hafiizh',arti:'Yang Maha Memelihara'},{no:39,arab:'الْمُقِيتُ',latin:'Al-Muqiit',arti:'Yang Maha Pemberi Kecukupan'},{no:40,arab:'الْحَسِيبُ',latin:'Al-Hasiib',arti:'Yang Maha Membuat Perhitungan'},{no:41,arab:'الْجَلِيلُ',latin:'Al-Jaliil',arti:'Yang Maha Luhur'},{no:42,arab:'الْكَرِيمُ',latin:'Al-Kariim',arti:'Yang Maha Pemurah'},{no:43,arab:'الرَّقِيبُ',latin:'Ar-Raqiib',arti:'Yang Maha Mengawasi'},{no:44,arab:'الْمُجِيبُ',latin:'Al-Mujiib',arti:'Yang Maha Mengabulkan'},{no:45,arab:'الْوَاسِعُ',latin:'Al-Waasi\'',arti:'Yang Maha Luas'},{no:46,arab:'الْحَكِيمُ',latin:'Al-Hakiim',arti:'Yang Maha Bijaksana'},{no:47,arab:'الْوَدُودُ',latin:'Al-Waduud',arti:'Yang Maha Mengasihi'},{no:48,arab:'الْمَجِيدُ',latin:'Al-Majiid',arti:'Yang Maha Mulia'},{no:49,arab:'الْبَاعِثُ',latin:'Al-Baa\'its',arti:'Yang Maha Membangkitkan'},{no:50,arab:'الشَّهِيدُ',latin:'Ash-Shahiid',arti:'Yang Maha Menyaksikan'},{no:51,arab:'الْحَقُّ',latin:'Al-Haqq',arti:'Yang Maha Benar'},{no:52,arab:'الْوَكِيلُ',latin:'Al-Wakiil',arti:'Yang Maha Memelihara'},{no:53,arab:'الْقَوِيُّ',latin:'Al-Qawiyyu',arti:'Yang Maha Kuat'},{no:54,arab:'الْمَتِينُ',latin:'Al-Matiin',arti:'Yang Maha Kokoh'},{no:55,arab:'الْوَلِيُّ',latin:'Al-Waliyy',arti:'Yang Maha Melindungi'},{no:56,arab:'الْحَمِيدُ',latin:'Al-Hamiid',arti:'Yang Maha Terpuji'},{no:57,arab:'الْمُحْصِي',latin:'Al-Muhshii',arti:'Yang Maha Menghitung'},{no:58,arab:'الْمُبْدِئُ',latin:'Al-Mubdi\'',arti:'Yang Maha Memulai'},{no:59,arab:'الْمُعِيدُ',latin:'Al-Muiid',arti:'Yang Maha Mengembalikan'},{no:60,arab:'الْمُحْيِي',latin:'Al-Muhyii',arti:'Yang Maha Menghidupkan'},{no:61,arab:'الْمُمِيتُ',latin:'Al-Mumiit',arti:'Yang Maha Mematikan'},{no:62,arab:'الْحَيُّ',latin:'Al-Hayyu',arti:'Yang Maha Hidup'},{no:63,arab:'الْقَيُّومُ',latin:'Al-Qayyuum',arti:'Yang Maha Mandiri'},{no:64,arab:'الْوَاجِدُ',latin:'Al-Waajid',arti:'Yang Maha Penemu'},{no:65,arab:'الْمَاجِدُ',latin:'Al-Maajid',arti:'Yang Maha Mulia'},{no:66,arab:'الْوَاحِدُ',latin:'Al-Waahid',arti:'Yang Maha Tunggal'},{no:67,arab:'الْأَحَدُ',latin:'Al-Ahad',arti:'Yang Maha Esa'},{no:68,arab:'الصَّمَدُ',latin:'As-Samad',arti:'Yang Maha Dibutuhkan'},{no:69,arab:'الْقَادِرُ',latin:'Al-Qaadir',arti:'Yang Maha Menentukan'},{no:70,arab:'الْمُقْتَدِرُ',latin:'Al-Muqtadir',arti:'Yang Maha Berkuasa'},{no:71,arab:'الْمُقَدِّمُ',latin:'Al-Muqaddim',arti:'Yang Maha Mendahulukan'},{no:72,arab:'الْمُؤَخِّرُ',latin:'Al-Mu\'akhkhir',arti:'Yang Maha Mengakhirkan'},{no:73,arab:'الْأَوَّلُ',latin:'Al-Awwal',arti:'Yang Maha Awal'},{no:74,arab:'الْآخِرُ',latin:'Al-Aakhir',arti:'Yang Maha Akhir'},{no:75,arab:'الظَّاهِرُ',latin:'Az-Zhaahir',arti:'Yang Maha Nyata'},{no:76,arab:'الْبَاطِنُ',latin:'Al-Baathin',arti:'Yang Maha Ghaib'},{no:77,arab:'الْوَالِي',latin:'Al-Waali',arti:'Yang Maha Memerintah'},{no:78,arab:'الْمُتَعَالِي',latin:'Al-Muta\'aali',arti:'Yang Maha Tinggi'},{no:79,arab:'الْبَرُّ',latin:'Al-Barr',arti:'Yang Maha Dermawan'},{no:80,arab:'التَّوَّابُ',latin:'At-Tawwaab',arti:'Yang Maha Penerima Taubat'},{no:81,arab:'الْمُنْتَقِمُ',latin:'Al-Muntaqim',arti:'Yang Maha Pemberi Balasan'},{no:82,arab:'الْعَفُوُّ',latin:'Al-\'Afuww',arti:'Yang Maha Pemaaf'},{no:83,arab:'الرَّءُوفُ',latin:'Ar-Ra\'uuf',arti:'Yang Maha Pengasuh'},{no:84,arab:'مَالِكُ الْمُلْكِ',latin:'Malikul Mulk',arti:'Yang Maha Penguasa'},{no:85,arab:'ذُو الْجَلَالِ وَالْإِكْرَامِ',latin:'Dzul Jalaali Wal Ikraam',arti:'Yang Maha Pemilik Kebesaran'},{no:86,arab:'الْمُقْسِطُ',latin:'Al-Muqsith',arti:'Yang Maha Adil'},{no:87,arab:'الْجَامِعُ',latin:'Al-Jaami\'',arti:'Yang Maha Pengumpul'},{no:88,arab:'الْغَنِيُّ',latin:'Al-Ghaniyy',arti:'Yang Maha Kaya'},{no:89,arab:'الْمُغْنِي',latin:'Al-Mughni',arti:'Yang Maha Pemberi Kekayaan'},{no:90,arab:'الْمَانِعُ',latin:'Al-Mani\'',arti:'Yang Maha Pencegahan'},{no:91,arab:'الضَّارُّ',latin:'Ad-Dhaar',arti:'Yang Maha Penimpa'},{no:92,arab:'النَّافِعُ',latin:'An-Naafi\'',arti:'Yang Maha Memberi Manfaat'},{no:93,arab:'النُّورُ',latin:'An-Nuur',arti:'Yang Maha Bercahaya'},{no:94,arab:'الْهَادِي',latin:'Al-Haadi',arti:'Yang Maha Pemberi Petunjuk'},{no:95,arab:'الْبَدِيعُ',latin:'Al-Badii\'',arti:'Yang Maha Pencipta'},{no:96,arab:'الْبَاقِي',latin:'Al-Baqii',arti:'Yang Maha Kekal'},{no:97,arab:'الْوَارِثُ',latin:'Al-Waarith',arti:'Yang Maha Pewaris'},{no:98,arab:'الرَّشِيدُ',latin:'Ar-Rasyiid',arti:'Yang Maha Pandai'},{no:99,arab:'الصَّبُورُ',latin:'As-Sabuur',arti:'Yang Maha Sabar'}];
 
-const KISAH=[
-{judul:'Nabi Adam AS',kategori:'Nabi',isi:'Nabi Adam AS adalah manusia pertama yang diciptakan Allah SWT dari tanah liat. Allah meniupkan ruh ke dalam tubuhnya dan mengajarkan nama-nama segala sesuatu.\n\nAllah menciptakan Siti Hawa sebagai pendamping Adam di surga. Mereka hidup bahagia sampai iblis menggoda mereka untuk memakan buah khuldi.\n\nSetelah memakan buah terlarang, mereka diturunkan ke bumi. Adam bertaubat dan Allah menerima taubatnya.'},
-{judul:'Nabi Nuh AS',kategori:'Nabi',isi:'Nabi Nuh AS berdakwah kepada kaumnya selama 950 tahun, namun hanya sedikit yang beriman.\n\nAllah memerintahkan Nuh membangun kapal besar. Ketika banjir besar datang, hanya orang beriman yang naik kapal selamat.'},
-{judul:'Nabi Ibrahim AS',kategori:'Nabi',isi:'Nabi Ibrahim AS dikenal sebagai bapak para nabi. Beliau lahir di Babilonia dan berdakwah menentang penyembahan berhala.\n\nIbrahim dihukum bakar oleh Raja Namrud, tapi Allah menjadikan api itu dingin.\n\nBersama Ismail, Ibrahim membangun Ka\'bah di Makkah.'},
-{judul:'Nabi Musa AS',kategori:'Nabi',isi:'Nabi Musa AS lahir di Mesir saat Fir\'aun membunuh bayi laki-laki Bani Israil.\n\nDi Gunung Sinai, Musa menerima wahyu pertama dan diperintahkan menghadap Fir\'aun.\n\nMusa membawa Bani Israil keluar dari Mesir dengan mukjizat membelah Laut Merah.'},
-{judul:'Nabi Isa AS',kategori:'Nabi',isi:'Nabi Isa AS lahir dari Maryam tanpa ayah, dengan mukjizat dari Allah.\n\nIsa diangkat menjadi nabi pada usia 30 tahun. Mukjizatnya: menyembuhkan orang buta dan menghidupkan orang mati dengan izin Allah.'},
-{judul:'Nabi Muhammad SAW',kategori:'Nabi',isi:'Nabi Muhammad SAW lahir di Makkah tahun 570 M. Ayahnya Abdullah wafat sebelum lahir, ibunya Aminah wafat saat ia berusia 6 tahun.\n\nPada usia 40 tahun, beliau menerima wahyu pertama di Gua Hira.\n\nHijrah ke Madinah tahun 622 M menjadi awal kalender Hijriah.'},
-{judul:'Abu Bakar Ash-Shiddiq',kategori:'Sahabat',isi:'Abu Bakar adalah sahabat pertama yang masuk Islam dari kalangan laki-laki dewasa.\n\nSetelah Rasulullah wafat, Abu Bakar menjadi khalifah pertama.'},
-{judul:'Umar bin Khattab',kategori:'Sahabat',isi:'Umar bin Khattab awalnya musuh Islam, namun setelah mendengar surat Thaha, hatinya terbuka.\n\nSebagai khalifah kedua, Umar memperluas wilayah Islam.'},
-{judul:'Utsman bin Affan',kategori:'Sahabat',isi:'Utsman bin Affan dijuluki Dzun Nurain karena menikahi dua putri Rasulullah.\n\nSebagai khalifah ketiga, Utsman membakukan mushaf Al-Quran.'},
-{judul:'Ali bin Abi Thalib',kategori:'Sahabat',isi:'Ali bin Abi Thalib adalah sepupu sekaligus menantu Rasulullah.\n\nSebagai khalifah keempat, Ali memindahkan pusat pemerintahan ke Kufah.'},
-{judul:'Bilal bin Rabah',kategori:'Sahabat',isi:'Bilal bin Rabah adalah muazin pertama Islam.\n\nAbu Bakar membebaskan Bilal, dan sejak itu Bilal mengumandangkan adzan di Masjid Nabawi.'},
-{judul:'Khadijah binti Khuwailid',kategori:'Sahabat',isi:'Khadijah adalah istri pertama Rasulullah dan wanita pertama yang masuk Islam.'}
-];
+const KISAH=[{judul:'Nabi Adam AS',kategori:'Nabi',isi:'Nabi Adam AS adalah manusia pertama yang diciptakan Allah SWT dari tanah liat.\n\nAllah menciptakan Siti Hawa sebagai pendamping di surga.\n\nSetelah memakan buah terlarang, mereka diturunkan ke bumi. Adam bertaubat dan Allah menerima taubatnya.'},{judul:'Nabi Nuh AS',kategori:'Nabi',isi:'Nabi Nuh AS berdakwah kepada kaumnya selama 950 tahun, namun hanya sedikit yang beriman.\n\nAllah memerintahkan Nuh membangun kapal besar.'},{judul:'Nabi Ibrahim AS',kategori:'Nabi',isi:'Nabi Ibrahim AS dikenal sebagai bapak para nabi.\n\nIbrahim dihukum bakar oleh Raja Namrud, tapi Allah menjadikan api itu dingin.\n\nBersama Ismail, Ibrahim membangun Ka\'bah di Makkah.'},{judul:'Nabi Musa AS',kategori:'Nabi',isi:'Nabi Musa AS lahir di Mesir saat Fir\'aun membunuh bayi laki-laki Bani Israil.\n\nDi Gunung Sinai, Musa menerima wahyu pertama.\n\nMusa membelah Laut Merah dengan mukjizat Allah.'},{judul:'Nabi Isa AS',kategori:'Nabi',isi:'Nabi Isa AS lahir dari Maryam tanpa ayah, dengan mukjizat dari Allah.\n\nMukjizatnya: menyembuhkan orang buta dan menghidupkan orang mati.'},{judul:'Nabi Muhammad SAW',kategori:'Nabi',isi:'Nabi Muhammad SAW lahir di Makkah tahun 570 M.\n\nPada usia 40 tahun, beliau menerima wahyu pertama di Gua Hira.\n\nHijrah ke Madinah tahun 622 M menjadi awal kalender Hijriah.'},{judul:'Abu Bakar Ash-Shiddiq',kategori:'Sahabat',isi:'Abu Bakar adalah sahabat pertama yang masuk Islam dari kalangan laki-laki dewasa.\n\nSetelah Rasulullah wafat, Abu Bakar menjadi khalifah pertama.'},{judul:'Umar bin Khattab',kategori:'Sahabat',isi:'Umar bin Khattab awalnya musuh Islam, namun setelah mendengar surat Thaha, hatinya terbuka.\n\nSebagai khalifah kedua, Umar memperluas wilayah Islam.'},{judul:'Utsman bin Affan',kategori:'Sahabat',isi:'Utsman bin Affan dijuluki Dzun Nurain karena menikahi dua putri Rasulullah.'},{judul:'Ali bin Abi Thalib',kategori:'Sahabat',isi:'Ali bin Abi Thalib adalah sepupu sekaligus menantu Rasulullah.'},{judul:'Bilal bin Rabah',kategori:'Sahabat',isi:'Bilal bin Rabah adalah muazin pertama Islam.'},{judul:'Khadijah binti Khuwailid',kategori:'Sahabat',isi:'Khadijah adalah istri pertama Rasulullah dan wanita pertama yang masuk Islam.'}];
 
-const HADITS=[
-{kategori:'Iman',arab:'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ',latin:'Innamal a\'maalu bin niyyaat',arti:'Sesungguhnya amal itu tergantung niatnya',perawi:'HR. Bukhari & Muslim'},
-{kategori:'Iman',arab:'الدِّينُ النَّصِيحَةُ',latin:'Ad-diinu an-nashiihat',arti:'Agama itu nasihat',perawi:'HR. Muslim'},
-{kategori:'Akhlak',arab:'إِنَّ أَكْمَلَ الْمُؤْمِنِينَ إِيمَانًا أَحْسَنُهُمْ خُلُقًا',latin:'Inna akmalal mu\'miniina iimaanan ahsanuhum khuluqan',arti:'Mukmin paling sempurna imannya adalah yang paling baik akhlaknya',perawi:'HR. Tirmidzi'},
-{kategori:'Akhlak',arab:'خَيْرُكُمْ خَيْرُكُمْ لِأَهْلِهِ',latin:'Khairukum khairukum li ahlihi',arti:'Sebaik-baik kalian adalah yang paling baik terhadap keluarganya',perawi:'HR. Tirmidzi'},
-{kategori:'Ibadah',arab:'الصَّلَاةُ عِمَادُ الدِّينِ',latin:'Ash-shalaatu \'imaadud diin',arti:'Sholat adalah tiang agama',perawi:'HR. Baihaqi'},
-{kategori:'Ibadah',arab:'الطُّهُورُ شَطْرُ الإِيمَانِ',latin:'Ath-thuhuuru syathrul iimaan',arti:'Kesucian adalah setengah dari iman',perawi:'HR. Muslim'},
-{kategori:'Sosial',arab:'الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ',latin:'Al-muslimu man salimal muslimuuna min lisaanihi wa yadihi',arti:'Muslim sejati adalah yang membuat muslim lain selamat dari lisan dan tangannya',perawi:'HR. Bukhari'},
-{kategori:'Sosial',arab:'مَنْ كَانَ يُؤْمِنُ بِاللهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ',latin:'Man kaana yu\'minu billaahi wal yaumil aakhiri fal yaqul khairan',arti:'Barang siapa beriman kepada Allah dan hari akhir, berkatalah baik atau diam',perawi:'HR. Bukhari'},
-{kategori:'Ilmu',arab:'طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ',latin:'Thalabul \'ilmi fariidhatun \'alaa kulli muslim',arti:'Menuntut ilmu itu wajib bagi setiap muslim',perawi:'HR. Ibnu Majah'},
-{kategori:'Rezeki',arab:'مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ',latin:'Maa naqashat shadaqatun min maal',arti:'Sedekah tidak akan mengurangi harta',perawi:'HR. Muslim'},
-{kategori:'Sabar',arab:'عَجَبًا لِأَمْرِ الْمُؤْمِنِ إِنَّ أَمْرَهُ كُلَّهُ خَيْرٌ',latin:'\'Ajaban li amril mu\'mini inna amrahu kullahu khair',arti:'Sungguh menakjubkan urusan mukmin, semua urusannya baik',perawi:'HR. Muslim'}
-];
+const HADITS=[{kategori:'Iman',arab:'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ',latin:'Innamal a\'maalu bin niyyaat',arti:'Sesungguhnya amal itu tergantung niatnya',perawi:'HR. Bukhari & Muslim'},{kategori:'Iman',arab:'الدِّينُ النَّصِيحَةُ',latin:'Ad-diinu an-nashiihat',arti:'Agama itu nasihat',perawi:'HR. Muslim'},{kategori:'Akhlak',arab:'إِنَّ أَكْمَلَ الْمُؤْمِنِينَ إِيمَانًا أَحْسَنُهُمْ خُلُقًا',latin:'Inna akmalal mu\'miniina iimaanan ahsanuhum khuluqan',arti:'Mukmin paling sempurna imannya adalah yang paling baik akhlaknya',perawi:'HR. Tirmidzi'},{kategori:'Akhlak',arab:'خَيْرُكُمْ خَيْرُكُمْ لِأَهْلِهِ',latin:'Khairukum khairukum li ahlihi',arti:'Sebaik-baik kalian adalah yang paling baik terhadap keluarganya',perawi:'HR. Tirmidzi'},{kategori:'Ibadah',arab:'الصَّلَاةُ عِمَادُ الدِّينِ',latin:'Ash-shalaatu \'imaadud diin',arti:'Sholat adalah tiang agama',perawi:'HR. Baihaqi'},{kategori:'Ibadah',arab:'الطُّهُورُ شَطْرُ الإِيمَانِ',latin:'Ath-thuhuuru syathrul iimaan',arti:'Kesucian adalah setengah dari iman',perawi:'HR. Muslim'},{kategori:'Sosial',arab:'الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ',latin:'Al-muslimu man salimal muslimuuna min lisaanihi wa yadihi',arti:'Muslim sejati adalah yang membuat muslim lain selamat',perawi:'HR. Bukhari'},{kategori:'Sosial',arab:'مَنْ كَانَ يُؤْمِنُ بِاللهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ',latin:'Man kaana yu\'minu billaahi wal yaumil aakhiri fal yaqul khairan',arti:'Barang siapa beriman kepada Allah dan hari akhir, berkatalah baik atau diam',perawi:'HR. Bukhari'},{kategori:'Ilmu',arab:'طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ',latin:'Thalabul \'ilmi fariidhatun \'alaa kulli muslim',arti:'Menuntut ilmu itu wajib bagi setiap muslim',perawi:'HR. Ibnu Majah'},{kategori:'Rezeki',arab:'مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ',latin:'Maa naqashat shadaqatun min maal',arti:'Sedekah tidak akan mengurangi harta',perawi:'HR. Muslim'},{kategori:'Sabar',arab:'عَجَبًا لِأَمْرِ الْمُؤْمِنِ إِنَّ أَمْرَهُ كُلَّهُ خَيْرٌ',latin:'\'Ajaban li amril mu\'mini inna amrahu kullahu khair',arti:'Sungguh menakjubkan urusan mukmin, semua urusannya baik',perawi:'HR. Muslim'}];
 
-const DOA_HARIAN=[
-{nama:'Doa Bangun Tidur',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',latin:'Alhamdulillaahil ladzii ahyaanaa ba\'da maa amaatanaa',arti:'Segala puji bagi Allah yang menghidupkan kami setelah mematikan kami'},
-{nama:'Doa Sebelum Tidur',arab:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',latin:'Bismikallaahumma amuutu wa ahyaa',arti:'Dengan namaMu ya Allah aku mati dan aku hidup'},
-{nama:'Doa Sebelum Makan',arab:'بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيْمِ',latin:'Bismillaahir rahmaanir rahiim',arti:'Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang'},
-{nama:'Doa Setelah Makan',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ',latin:'Alhamdulillaahil ladzii ath\'amanaa wa saqaanaa',arti:'Segala puji bagi Allah yang memberi kami makan dan minum'},
-{nama:'Doa Keluar Rumah',arab:'بِسْمِ اللهِ تَوَكَّلْتُ عَلَى اللهِ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ',latin:'Bismillaahi tawakkaltu \'alallaahi',arti:'Dengan nama Allah aku bertawakal kepada Allah'},
-{nama:'Doa Masuk Rumah',arab:'اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلَجِ وَخَيْرَ الْمَخْرَجِ',latin:'Allaahumma innii as-aluka khairal maulaji wa khairal makhraji',arti:'Ya Allah, aku memohon kebaikan tempat masuk dan keluar'},
-{nama:'Doa Sebelum Belajar',arab:'رَبِّ زِدْنِي عِلْمًا وَارْزُقْنِي فَهْمًا',latin:'Rabbi zidnii \'ilman warzuqnii fahman',arti:'Tuhanku, tambahkanlah ilmu dan pemahaman kepadaku'},
-{nama:'Doa Masuk Masjid',arab:'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ',latin:'Allaahummaftah lii abwaaba rahmatik',arti:'Ya Allah, bukakanlah untukku pintu-pintu rahmatMu'},
-{nama:'Doa Naik Kendaraan',arab:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ',latin:'Subhaanal ladzii sakhkhara lanaa haadzaa',arti:'Maha Suci Allah yang menundukkan kendaraan ini untuk kami'},
-{nama:'Doa Untuk Orang Tua',arab:'رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا',latin:'Rabbighfir lii wa liwaalidayya warhamhumaa',arti:'Tuhanku, ampunilah aku dan kedua orang tuaku'},
-{nama:'Doa Kesehatan',arab:'اللَّهُمَّ عَافِنِي فِي بَدَنِي اللَّهُمَّ عَافِنِي فِي سَمْعِي',latin:'Allaahumma \'aafinii fii badanii, Allaahumma \'aafinii fii sam\'ii',arti:'Ya Allah, sehatkanlah badanku dan pendengaranku'},
-{nama:'Doa Kebaikan Dunia Akhirat',arab:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',latin:'Rabbanaa aatinaa fid-dunyaa hasanah wa fil-aakhirati hasanatan',arti:'Ya Tuhan kami, berilah kami kebaikan dunia dan akhirat'}
-];
+const DOA_HARIAN=[{nama:'Doa Bangun Tidur',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',latin:'Alhamdulillaahil ladzii ahyaanaa',arti:'Segala puji bagi Allah yang menghidupkan kami'},{nama:'Doa Sebelum Tidur',arab:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',latin:'Bismikallaahumma amuutu wa ahyaa',arti:'Dengan namaMu ya Allah aku mati dan hidup'},{nama:'Doa Sebelum Makan',arab:'بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيْمِ',latin:'Bismillaahir rahmaanir rahiim',arti:'Dengan nama Allah Yang Maha Pengasih'},{nama:'Doa Setelah Makan',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا',latin:'Alhamdulillaahil ladzii ath\'amanaa',arti:'Segala puji bagi Allah yang memberi makan'},{nama:'Doa Keluar Rumah',arab:'بِسْمِ اللهِ تَوَكَّلْتُ عَلَى اللهِ',latin:'Bismillaahi tawakkaltu \'alallaahi',arti:'Dengan nama Allah aku bertawakal'},{nama:'Doa Masuk Rumah',arab:'اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلَجِ',latin:'Allaahumma innii as-aluka khairal maulaji',arti:'Ya Allah, aku memohon kebaikan'},{nama:'Doa Sebelum Belajar',arab:'رَبِّ زِدْنِي عِلْمًا وَارْزُقْنِي فَهْمًا',latin:'Rabbi zidnii \'ilman warzuqnii fahman',arti:'Tuhanku, tambahkanlah ilmu dan pemahaman'},{nama:'Doa Masuk Masjid',arab:'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ',latin:'Allaahummaftah lii abwaaba rahmatik',arti:'Ya Allah, bukakanlah pintu rahmatMu'},{nama:'Doa Naik Kendaraan',arab:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا',latin:'Subhaanal ladzii sakhkhara lanaa haadzaa',arti:'Maha Suci Allah yang menundukkan kendaraan'},{nama:'Doa Untuk Orang Tua',arab:'رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ',latin:'Rabbighfir lii wa liwaalidayya',arti:'Tuhanku, ampunilah aku dan orang tuaku'},{nama:'Doa Kesehatan',arab:'اللَّهُمَّ عَافِنِي فِي بَدَنِي',latin:'Allaahumma \'aafinii fii badanii',arti:'Ya Allah, sehatkanlah badanku'},{nama:'Doa Kebaikan Dunia Akhirat',arab:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً',latin:'Rabbanaa aatinaa fid-dunyaa hasanah',arti:'Ya Tuhan kami, berilah kebaikan dunia akhirat'}];
 
-const NIAT_SHOLAT={
-Subuh:{arab:'أُصَلِّي فَرْضَ الصُّبْحِ رَكْعَتَيْنِ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhash-shubhi rak\'ataini mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Subuh 2 rakaat menghadap kiblat karena Allah Ta\'ala'},
-Dzuhur:{arab:'أُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhazh-zhuhri arba\'a raka\'aatin mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Dzuhur 4 rakaat menghadap kiblat karena Allah Ta\'ala'},
-Ashar:{arab:'أُصَلِّي فَرْضَ الْعَصْرِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhal-\'ashri arba\'a raka\'aatin mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Ashar 4 rakaat menghadap kiblat karena Allah Ta\'ala'},
-Maghrib:{arab:'أُصَلِّي فَرْضَ الْمَغْرِبِ ثَلَاثَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhal-maghribi tsalaatsa raka\'aatin mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Maghrib 3 rakaat menghadap kiblat karena Allah Ta\'ala'},
-Isya:{arab:'أُصَلِّي فَرْضَ الْعِشَاءِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى',latin:'Ushallii fardhal-\'isyaa\'i arba\'a raka\'aatin mustaqbilal qiblati adaa-an lillaahi ta\'aalaa',arti:'Aku niat sholat Isya 4 rakaat menghadap kiblat karena Allah Ta\'ala'}
-};
+const NIAT_SHOLAT={Subuh:{arab:'أُصَلِّي فَرْضَ الصُّبْحِ رَكْعَتَيْنِ مُسْتَقْبِلَ الْقِبْلَةِ',latin:'Ushallii fardhash-shubhi rak\'ataini',arti:'Aku niat sholat Subuh 2 rakaat karena Allah'},Dzuhur:{arab:'أُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ',latin:'Ushallii fardhazh-zhuhri arba\'a raka\'aatin',arti:'Aku niat sholat Dzuhur 4 rakaat karena Allah'},Ashar:{arab:'أُصَلِّي فَرْضَ الْعَصْرِ أَرْبَعَ رَكَعَاتٍ',latin:'Ushallii fardhal-\'ashri arba\'a raka\'aatin',arti:'Aku niat sholat Ashar 4 rakaat karena Allah'},Maghrib:{arab:'أُصَلِّي فَرْضَ الْمَغْرِبِ ثَلَاثَ رَكَعَاتٍ',latin:'Ushallii fardhal-maghribi tsalaatsa raka\'aatin',arti:'Aku niat sholat Maghrib 3 rakaat karena Allah'},Isya:{arab:'أُصَلِّي فَرْضَ الْعِشَاءِ أَرْبَعَ رَكَعَاتٍ',latin:'Ushallii fardhal-\'isyaa\'i arba\'a raka\'aatin',arti:'Aku niat sholat Isya 4 rakaat karena Allah'}};
 
-const BACAAN_SHOLAT=[
-{nama:'Takbiratul Ihram',arab:'اللهُ أَكْبَرُ',latin:'Allaahu Akbar',arti:'Allah Maha Besar'},
-{nama:'Doa Iftitah',arab:'سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ',latin:'Subhaanakallaahumma wa bihamdika',arti:'Maha Suci Engkau ya Allah, aku memujiMu'},
-{nama:'Al-Fatihah',arab:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِيْنَ',latin:'Alhamdulillaahi rabbil \'aalamiin',arti:'Segala puji bagi Allah Tuhan semesta alam'},
-{nama:'Rukuk',arab:'سُبْحَانَ رَبِّيَ الْعَظِيْمِ (٣x)',latin:'Subhaana rabbiyal \'azhiim (3x)',arti:'Maha Suci Tuhanku Yang Maha Agung'},
-{nama:'I\'tidal',arab:'سَمِعَ اللهُ لِمَنْ حَمِدَهُ',latin:'Sami\'allaahu liman hamidah',arti:'Allah mendengar yang memujiNya'},
-{nama:'Sujud',arab:'سُبْحَانَ رَبِّيَ الْأَعْلَى (٣x)',latin:'Subhaana rabbiyal a\'laa (3x)',arti:'Maha Suci Tuhanku Yang Maha Tinggi'},
-{nama:'Duduk Antara 2 Sujud',arab:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي',latin:'Rabbighfir lii warhamnii',arti:'Ya Tuhanku, ampunilah aku, rahmatilah aku'},
-{nama:'Tasyahud Awal',arab:'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ',latin:'At-tahiyyaatu lillaahi wash-shalawaatu',arti:'Segala kehormatan bagi Allah'},
-{nama:'Sholawat',arab:'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ',latin:'Allaahumma shalli \'alaa Muhammad',arti:'Ya Allah, limpahkanlah rahmat kepada Nabi Muhammad'},
-{nama:'Salam',arab:'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ',latin:'As-salaamu \'alaikum wa rahmatullaah',arti:'Semoga keselamatan dan rahmat Allah atasmu'}
-];
+const BACAAN_SHOLAT=[{nama:'Takbiratul Ihram',arab:'اللهُ أَكْبَرُ',latin:'Allaahu Akbar',arti:'Allah Maha Besar'},{nama:'Doa Iftitah',arab:'سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ',latin:'Subhaanakallaahumma wa bihamdika',arti:'Maha Suci Engkau ya Allah'},{nama:'Al-Fatihah',arab:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِيْنَ',latin:'Alhamdulillaahi rabbil \'aalamiin',arti:'Segala puji bagi Allah'},{nama:'Rukuk',arab:'سُبْحَانَ رَبِّيَ الْعَظِيْمِ (٣x)',latin:'Subhaana rabbiyal \'azhiim',arti:'Maha Suci Tuhanku Yang Maha Agung'},{nama:'I\'tidal',arab:'سَمِعَ اللهُ لِمَنْ حَمِدَهُ',latin:'Sami\'allaahu liman hamidah',arti:'Allah mendengar yang memujiNya'},{nama:'Sujud',arab:'سُبْحَانَ رَبِّيَ الْأَعْلَى (٣x)',latin:'Subhaana rabbiyal a\'laa',arti:'Maha Suci Tuhanku Yang Maha Tinggi'},{nama:'Duduk Antara 2 Sujud',arab:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي',latin:'Rabbighfir lii warhamnii',arti:'Ya Tuhanku, ampunilah aku'},{nama:'Tasyahud Awal',arab:'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ',latin:'At-tahiyyaatu lillaahi wash-shalawaatu',arti:'Segala kehormatan bagi Allah'},{nama:'Sholawat',arab:'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ',latin:'Allaahumma shalli \'alaa Muhammad',arti:'Ya Allah, limpahkanlah rahmat'},{nama:'Salam',arab:'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ',latin:'As-salaamu \'alaikum',arti:'Semoga keselamatan atasmu'}];
 
 function zenkaiCloudApp(){
 return {
 splashHidden:false,splashProgress:0,splashText:'Memuat...',
 isAuthenticated:false,authMode:'login',authEmail:'',authPassword:'',authUsername:'',
-currentUser:null,isOwner:false,pendingUser:null,
+currentUser:null,isOwner:false,isVip:false,pendingUser:null,
 userEmail:'',userName:'',userAvatar:'',quickNote:'',lastSavedNote:'',
 welcomePopupOpen:false,aboutModalOpen:false,profileModalOpen:false,ownerPinModalOpen:false,txSheetOpen:false,
 newsSheetOpen:false,weatherSheetOpen:false,weatherProvinceSheet:false,weatherCitySheet:false,
@@ -1228,15 +1191,7 @@ enteredPin:'',verifyingPin:false,uploadingAvatar:false,noteSaving:false,download
 sheetOpen:false,sheetTitle:'',sheetMessage:'',
 activeTab:'home',finSubTab:'transaksi',gameSubTab:'reflex',ownerSubTab:'statistik',currentTime:'',
 theme:'default',
-themes:[
-{id:'default',name:'Kuning',color:'#fbbf24'},
-{id:'purple',name:'Ungu',color:'#a855f7'},
-{id:'pink',name:'Pink',color:'#ec4899'},
-{id:'emerald',name:'Hijau',color:'#10b981'},
-{id:'ocean',name:'Biru',color:'#0ea5e9'},
-{id:'sunset',name:'Oranye',color:'#f97316'},
-{id:'midnight',name:'Nila',color:'#6366f1'}
-],
+themes:[{id:'default',name:'Kuning',color:'#fbbf24'},{id:'purple',name:'Ungu',color:'#a855f7'},{id:'pink',name:'Pink',color:'#ec4899'},{id:'emerald',name:'Hijau',color:'#10b981'},{id:'ocean',name:'Biru',color:'#0ea5e9'},{id:'sunset',name:'Oranye',color:'#f97316'},{id:'midnight',name:'Nila',color:'#6366f1'}],
 transactions:[],txCategory:'',txAmount:'',
 savings:[],budgets:[],targetForm:{nama:'',target:'',deadline:''},budgetForm:{kategori:'',limit_bulanan:''},addSavingsAmount:'',currentSavingsId:null,
 kitabSubTab:'sholat',prayerLoading:false,selectedNiat:'Subuh',
@@ -1250,17 +1205,7 @@ haditsList:HADITS,filterHadits:'Semua',haditsKategori:['Semua','Iman','Akhlak','
 doaHarian:DOA_HARIAN,
 toolsSubTab:'jam',customTtsText:'',compressedImageUrl:'',
 bmiWeight:'',bmiHeight:'',bmiAge:'',bmiGender:'male',bmiResult:null,
-worldClocks:[
-{name:'Jakarta',time:'',tz:'Asia/Jakarta',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},
-{name:'Makassar',time:'',tz:'Asia/Makassar',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},
-{name:'Jayapura',time:'',tz:'Asia/Jayapura',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},
-{name:'Mekkah',time:'',tz:'Asia/Riyadh',flag:'linear-gradient(to bottom,#006c35 100%)'},
-{name:'Tokyo',time:'',tz:'Asia/Tokyo',flag:'radial-gradient(circle,#bc002d 30%,#fff 30%)'},
-{name:'Seoul',time:'',tz:'Asia/Seoul',flag:'radial-gradient(circle,#cd2e3a 30%,#fff 30%)'},
-{name:'Dubai',time:'',tz:'Asia/Dubai',flag:'linear-gradient(to bottom,#00732f 33%,#fff 33% 66%,#000 66%)'},
-{name:'London',time:'',tz:'Europe/London',flag:'linear-gradient(to bottom,#012169 50%,#fff 50%)'},
-{name:'New York',time:'',tz:'America/New_York',flag:'linear-gradient(to bottom,#b22234 50%,#fff 50%)'}
-],
+worldClocks:[{name:'Jakarta',time:'',tz:'Asia/Jakarta',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},{name:'Makassar',time:'',tz:'Asia/Makassar',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},{name:'Jayapura',time:'',tz:'Asia/Jayapura',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},{name:'Mekkah',time:'',tz:'Asia/Riyadh',flag:'linear-gradient(to bottom,#006c35 100%)'},{name:'Tokyo',time:'',tz:'Asia/Tokyo',flag:'radial-gradient(circle,#bc002d 30%,#fff 30%)'},{name:'Seoul',time:'',tz:'Asia/Seoul',flag:'radial-gradient(circle,#cd2e3a 30%,#fff 30%)'},{name:'Dubai',time:'',tz:'Asia/Dubai',flag:'linear-gradient(to bottom,#00732f 33%,#fff 33% 66%,#000 66%)'},{name:'London',time:'',tz:'Europe/London',flag:'linear-gradient(to bottom,#012169 50%,#fff 50%)'},{name:'New York',time:'',tz:'America/New_York',flag:'linear-gradient(to bottom,#b22234 50%,#fff 50%)'}],
 downloadLinkInput:'',downloadLoading:false,downloadResultReady:false,
 downloadResultLinks:[],downloadMeta:{},
 reflexState:'yellow',reflexMessage:'Tap untuk Mulai',reflexStart:0,reflexTimeout:null,
@@ -1272,6 +1217,10 @@ movieList:[],movieLoading:false,
 speedTesting:false,speedResult:null,
 appStats:{totalUsers:0,totalTx:0,owners:0,savings:0,activeToday:0,banned:0},topUsers:[],allUsers:[],userSearch:'',
 welcomeText:DEFAULT_WELCOME,welcomeTextEdit:'',
+chatMessages:[],chatInput:'',aiThinking:false,aiMode:'umum',chatCount:0,chatDate:'',
+voiceSupported:false,recognition:null,
+aiModeDesc:'',
+showHistory:false,chatHistory:[],
 
 async init(){
 const savedTheme=localStorage.getItem('zenkai_theme');
@@ -1281,7 +1230,9 @@ setTimeout(()=>{this.splashHidden=true;},1000);
 this.updateClock();
 setInterval(()=>this.updateClock(),1000);
 this.asmaulHusnaList=ASMAUL_HUSNA.map(x=>({...x,hafal:false}));
+this.updateAiDesc();
 this.welcomeTextEdit=DEFAULT_WELCOME;
+this.voiceSupported=('webkitSpeechRecognition' in window)||('SpeechRecognition' in window);
 try{
 const{data:settings}=await sb.from('app_settings').select('welcome_text').eq('id',1).maybeSingle();
 if(settings&&settings.welcome_text)this.welcomeText=settings.welcome_text;
@@ -1295,6 +1246,11 @@ this.initPrayerProvinces();
 },
 
 setTheme(id){this.theme=id;localStorage.setItem('zenkai_theme',id);},
+
+updateAiDesc(){
+const descs={islami:'Tanya soal fiqih, doa, hadits, Al-Quran',keuangan:'Tips nabung, investasi, atur budget',kesehatan:'Saran sehat, olahraga, pola makan',umum:'Tanya apa saja bebas'};
+this.aiModeDesc=descs[this.aiMode]||'';
+},
 
 updateClock(){
 const now=new Date();
@@ -1319,7 +1275,7 @@ if(ex){return this.showAlert('Peringatan','Nama sudah dipakai!');}
 const{data,error}=await sb.auth.signUp({email:this.authEmail,password:this.authPassword,options:{data:{username:this.authUsername}}});
 if(error)throw error;
 if(data.user){
-await sb.from('profiles').upsert({id:data.user.id,username:this.authUsername,status:this.authEmail.toLowerCase()===OWNER_EMAIL.toLowerCase()?'owner':'user',last_login:new Date().toISOString()});
+await sb.from('profiles').upsert({id:data.user.id,username:this.authUsername,status:'user',last_login:new Date().toISOString(),is_vip:false,is_banned:false,chat_count:0});
 }
 this.showAlert('Sukses','Berhasil daftar!');
 this.authMode='login';
@@ -1335,12 +1291,13 @@ async checkUserAccessOnLogin(user,showWelcome){
 if(user.email.toLowerCase()===OWNER_EMAIL.toLowerCase()){
 this.pendingUser=user;this.enteredPin='';this.ownerPinModalOpen=true;
 }else{
-const{data:prof}=await sb.from('profiles').select('is_banned').eq('id',user.id).maybeSingle();
+const{data:prof}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
 if(prof&&prof.is_banned){
 this.showAlert('DIBANNED','Akun Anda telah diblokir oleh admin.');
 await sb.auth.signOut();return;
 }
 this.currentUser=user;this.isOwner=false;this.isAuthenticated=true;
+if(prof){this.isVip=prof.is_vip||false;this.chatCount=prof.chat_count||0;this.chatDate=prof.chat_date||'';}
 await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',user.id);
 await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();
 if(showWelcome)this.welcomePopupOpen=true;
@@ -1357,7 +1314,7 @@ const{data:profile}=await sb.from('profiles').select('owner_pin,status').eq('id'
 if(!profile){this.verifyingPin=false;return this.showAlert('Gagal','Profil tidak ditemukan.');}
 if(profile.status!=='owner'){this.verifyingPin=false;return this.showAlert('Gagal','Bukan owner.');}
 if(profile.owner_pin!==this.enteredPin){this.verifyingPin=false;this.enteredPin='';return this.showAlert('PIN Salah','PIN salah!');}
-this.ownerPinModalOpen=false;this.isOwner=true;this.isAuthenticated=true;
+this.ownerPinModalOpen=false;this.isOwner=true;this.isVip=true;this.isAuthenticated=true;
 await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',this.pendingUser.id);
 await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();
 this.loadAppStats();
@@ -1375,6 +1332,9 @@ this.userName=profile.username||this.userEmail.split('@')[0];
 this.quickNote=profile.quick_note||'';
 this.lastSavedNote=this.quickNote;
 this.userAvatar=profile.avatar_url||'';
+this.isVip=profile.is_vip||false;
+this.chatCount=profile.chat_count||0;
+this.chatDate=profile.chat_date||'';
 }else{
 this.userName=(this.currentUser.user_metadata&&this.currentUser.user_metadata.username)||this.userEmail.split('@')[0]||'User';
 }
@@ -1489,12 +1449,7 @@ try{
 const res=await fetch('https://api.themoviedb.org/3/trending/movie/week?api_key='+TMDB_KEY+'&language=id-ID');
 const json=await res.json();
 if(json.results){
-this.movieList=json.results.slice(0,15).map(m=>({
-id:m.id,title:m.title,year:m.release_date?m.release_date.slice(0,4):'-',
-rating:m.vote_average?m.vote_average.toFixed(1):'-',
-overview:m.overview||'Tidak ada deskripsi.',
-poster:m.poster_path?'https://image.tmdb.org/t/p/w200'+m.poster_path:''
-}));
+this.movieList=json.results.slice(0,15).map(m=>({id:m.id,title:m.title,year:m.release_date?m.release_date.slice(0,4):'-',rating:m.vote_average?m.vote_average.toFixed(1):'-',overview:m.overview||'Tidak ada deskripsi.',poster:m.poster_path?'https://image.tmdb.org/t/p/w200'+m.poster_path:''}));
 }
 }catch(e){this.showAlert('Gagal','Gagal memuat film.');}
 this.movieLoading=false;
@@ -1504,11 +1459,10 @@ async loadAppStats(){
 try{
 const{count:u}=await sb.from('profiles').select('*',{count:'exact',head:true});
 const{count:t}=await sb.from('transactions').select('*',{count:'exact',head:true});
-const{count:s}=await sb.from('savings_targets').select('*',{count:'exact',head:true});
 const{count:b}=await sb.from('profiles').select('*',{count:'exact',head:true}).eq('is_banned',true);
 const today=new Date().toISOString().slice(0,10);
 const{count:a}=await sb.from('profiles').select('*',{count:'exact',head:true}).gte('last_login',today);
-this.appStats={totalUsers:u||0,totalTx:t||0,savings:s||0,banned:b||0,activeToday:a||0,owners:0};
+this.appStats={totalUsers:u||0,totalTx:t||0,banned:b||0,activeToday:a||0,owners:0,savings:0};
 const{data:txs}=await sb.from('transactions').select('user_id');
 const counts={};
 (txs||[]).forEach(t=>{counts[t.user_id]=(counts[t.user_id]||0)+1;});
@@ -1516,22 +1470,7 @@ const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,10);
 const{data:profs}=await sb.from('profiles').select('id,username');
 const map={}; (profs||[]).forEach(p=>map[p.id]=p.username);
 this.topUsers=sorted.map(([id,c])=>({id,username:map[id]||'Unknown',count:c}));
-setTimeout(()=>this.drawGrowthChart(),200);
 }catch(e){console.error(e);}
-},
-
-drawGrowthChart(){
-try{
-const el=document.getElementById('growthChart');
-if(!el)return;
-const days=[];const counts=[];
-for(let i=6;i>=0;i--){
-const d=new Date();d.setDate(d.getDate()-i);
-days.push(d.toLocaleDateString('id-ID',{weekday:'short'}));
-}
-if(window.growthChartInst)window.growthChartInst.destroy();
-window.growthChartInst=new Chart(el,{type:'line',data:{labels:days,datasets:[{label:'User Baru',data:[1,2,1,3,2,4,2],borderColor:'#a855f7',backgroundColor:'rgba(168,85,247,0.2)',fill:true,tension:0.4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
-}catch(e){}
 },
 
 async loadAllUsers(){
@@ -1547,24 +1486,30 @@ return this.allUsers.filter(u=>u.username&&u.username.toLowerCase().includes(q))
 },
 
 async banUser(u){
-await sb.from('profiles').update({is_banned:true}).eq('id',u.id);
-await sb.from('banned_users').insert({user_id:u.id,alasan:'Dibanned oleh owner'});
-this.showAlert('Sukses','User diblokir.');
+const{error}=await sb.from('profiles').update({is_banned:true}).eq('id',u.id);
+if(error){return this.showAlert('Gagal',error.message);}
+this.showAlert('Sukses',u.username+' diblokir.');
 await this.loadAllUsers();
 },
 async unbanUser(u){
-await sb.from('profiles').update({is_banned:false}).eq('id',u.id);
-await sb.from('banned_users').delete().eq('user_id',u.id);
-this.showAlert('Sukses','User di-unban.');
+const{error}=await sb.from('profiles').update({is_banned:false}).eq('id',u.id);
+if(error){return this.showAlert('Gagal',error.message);}
+this.showAlert('Sukses',u.username+' di-unban.');
+await this.loadAllUsers();
+},
+async setVip(u,v){
+const{error}=await sb.from('profiles').update({is_vip:v}).eq('id',u.id);
+if(error){return this.showAlert('Gagal',error.message);}
+this.showAlert('Sukses',v?u.username+' jadi VIP':u.username+' bukan VIP lagi');
 await this.loadAllUsers();
 },
 async verifyUser(u){
 await sb.from('profiles').update({status:'verified'}).eq('id',u.id);
-this.showAlert('Sukses','User diverifikasi.');
+this.showAlert('Sukses',u.username+' diverifikasi.');
 await this.loadAllUsers();
 },
 async deleteUser(u){
-if(!confirm('Yakin hapus user '+u.username+'? Semua data akan hilang!'))return;
+if(!confirm('Yakin hapus user '+u.username+'?'))return;
 await sb.from('transactions').delete().eq('user_id',u.id);
 await sb.from('savings_targets').delete().eq('user_id',u.id);
 await sb.from('budgets').delete().eq('user_id',u.id);
@@ -1574,15 +1519,15 @@ await this.loadAllUsers();
 },
 
 async saveWelcomeText(){
-if(!this.welcomeTextEdit){return;}
-await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit,updated_at:new Date().toISOString()}).eq('id',1);
+if(!this.welcomeTextEdit)return;
+await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit}).eq('id',1);
 this.welcomeText=this.welcomeTextEdit;
 this.showAlert('Sukses','Kata sambutan diperbarui!');
 },
 
 async exportUsersCSV(){
-let csv='Username,Status,Created\n';
-this.allUsers.forEach(u=>{csv+=`${u.username},${u.status},${u.created_at||''}\n`;});
+let csv='Username,Status,VIP,Banned,Created\n';
+this.allUsers.forEach(u=>{csv+=`${u.username},${u.status},${u.is_vip},${u.is_banned},${u.created_at||''}\n`;});
 const blob=new Blob([csv],{type:'text/csv'});
 const url=URL.createObjectURL(blob);
 const a=document.createElement('a');a.href=url;a.download='users_'+Date.now()+'.csv';
@@ -1614,79 +1559,25 @@ const w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)/100;
 if(!w||!h){return this.showAlert('Perhatian','Isi berat & tinggi!');}
 const bmi=w/(h*h);
 let kategori,color,tipsMakan,tipsOlahraga,tipsKebiasaan,marker;
-if(bmi<18.5){
-kategori='Kurus';color='#0ea5e9';marker=10;
-tipsMakan=['Perbanyak protein: telur, ayam, daging, tempe','Makan 5-6 kali porsi kecil','Konsumsi karbohidrat kompleks: nasi, kentang, oat','Tambah susu & selai kacang','Kurangi makanan rendah kalori (sayur berlebihan)'];
-tipsOlahraga=['Latihan beban (angkat dumbbell) 3-4x/minggu','Push-up, pull-up, squat','Kurangi kardio berlebihan','Yoga untuk nafsu makan','Istirahat cukup 7-8 jam'];
-tipsKebiasaan=['Tidur 7-9 jam/hari','Hindari stres (bikin kurus)','Minum air putih cukup','Cek kesehatan rutin'];
-}else if(bmi<25){
-kategori='Normal';color='#22c55e';marker=35;
-tipsMakan=['Makan gizi seimbang','Perbanyak sayur & buah','Protein cukup (ikan, ayam, tahu)','Karbohidrat kompleks','Batasi gula & garam'];
-tipsOlahraga=['Olahraga 30 menit/hari','Jalan kaki, jogging, bersepeda','Kombinasi kardio & beban','Senam ringan','Yoga / pilates'];
-tipsKebiasaan=['Tidur 7-8 jam','Minum 8 gelas air/hari','Kelola stres','Cek kesehatan rutin','Pertahankan pola hidup'];
-}else if(bmi<30){
-kategori='Gemuk';color='#eab308';marker=60;
-tipsMakan=['Kurangi porsi nasi 1/2','Hindari gorengan & manis','Perbanyak sayur','Protein tanpa lemak','Air putih sebelum makan','Hindari makan malam berat'];
-tipsOlahraga=['Kardio 30-45 menit, 5x/minggu','Jalan cepat, jogging, berenang','HIIT 2-3x/minggu','Angkat beban ringan','Naik tangga daripada lift'];
-tipsKebiasaan=['Tidur cukup 7-8 jam','Catat makanan harian','Hindari ngemil malam','Jalan kaki 10.000 langkah','Konsisten 3 bulan'];
-}else{
-kategori='Obesitas';color='#ef4444';marker=85;
-tipsMakan=['Diet defisit kalori (konsul dokter)','Hindari gula & karbo simple','Makan sayur dulu sebelum nasi','Porsi kecil 5-6x/hari','Hindari minuman manis','Catat semua makanan'];
-tipsOlahraga=['Mulai jalan santai 15 menit','Naikkan bertahap 30-45 menit','Berenang (ringan sendi)','Sepeda statis','Konsul dokter sebelum olahraga berat','Hindari lari dulu'];
-tipsKebiasaan=['Konsul ahli gizi','Cek kesehatan rutin','Tidur 7-8 jam','Kelola stres','Hindari diet ekstrem','Target turun 0.5-1 kg/minggu'];
-}
+if(bmi<18.5){kategori='Kurus';color='#0ea5e9';marker=10;tipsMakan=['Perbanyak protein','Makan 5-6 kali porsi kecil','Karbohidrat kompleks','Susu & selai kacang'];tipsOlahraga=['Latihan beban 3-4x/minggu','Push-up, pull-up, squat','Kurangi kardio berlebihan'];tipsKebiasaan=['Tidur 7-9 jam','Hindari stres','Minum air cukup'];}
+else if(bmi<25){kategori='Normal';color='#22c55e';marker=35;tipsMakan=['Gizi seimbang','Perbanyak sayur & buah','Protein cukup','Batasi gula & garam'];tipsOlahraga=['Olahraga 30 menit/hari','Jalan kaki, jogging','Kombinasi kardio & beban'];tipsKebiasaan=['Tidur 7-8 jam','Minum 8 gelas air','Pertahankan pola hidup'];}
+else if(bmi<30){kategori='Gemuk';color='#eab308';marker=60;tipsMakan=['Kurangi porsi nasi','Hindari gorengan','Perbanyak sayur','Air putih sebelum makan'];tipsOlahraga=['Kardio 30-45 menit 5x/minggu','Jalan cepat, jogging','HIIT 2-3x/minggu'];tipsKebiasaan=['Tidur cukup','Catat makanan harian','Hindari ngemil malam'];}
+else{kategori='Obesitas';color='#ef4444';marker=85;tipsMakan=['Diet defisit kalori (konsul dokter)','Hindari gula & karbo simple','Sayur dulu sebelum nasi','Porsi kecil 5-6x/hari'];tipsOlahraga=['Jalan santai 15 menit','Naikkan bertahap','Berenang (ringan sendi)','Konsul dokter dulu'];tipsKebiasaan=['Konsul ahli gizi','Tidur 7-8 jam','Target turun 0.5-1 kg/minggu'];}
 const bbIdeal=(22*h*h).toFixed(1);
 const age=parseFloat(this.bmiAge)||25;
 const kalori=this.bmiGender==='male'?Math.round(66+(13.7*w)+(5*h*100)-(6.8*age)):Math.round(655+(9.6*w)+(1.8*h*100)-(4.7*age));
 this.bmiResult={bmi:bmi.toFixed(1),kategori,color,bbIdeal,kalori,marker,tipsMakan,tipsOlahraga,tipsKebiasaan};
 },
 
-getCityMap(){
-return {
-'Aceh':['Banda Aceh','Lhokseumawe','Langsa','Sabang'],
-'Sumatera Utara':['Medan','Binjai','Pematangsiantar','Tebing Tinggi'],
-'Sumatera Barat':['Padang','Bukittinggi','Payakumbuh'],
-'Riau':['Pekanbaru','Dumai'],'Kepulauan Riau':['Tanjungpinang','Batam'],
-'Jambi':['Jambi'],'Bengkulu':['Bengkulu'],
-'Sumatera Selatan':['Palembang','Prabumulih','Lubuklinggau'],
-'Kepulauan Bangka Belitung':['Pangkalpinang'],'Lampung':['Bandar Lampung','Metro'],
-'Banten':['Serang','Tangerang','Cilegon'],
-'DKI Jakarta':['Jakarta','Jakarta Pusat','Jakarta Utara','Jakarta Selatan','Jakarta Barat','Jakarta Timur'],
-'Jawa Barat':['Bandung','Bekasi','Bogor','Depok','Cimahi','Sukabumi','Cirebon','Tasikmalaya'],
-'Jawa Tengah':['Semarang','Surakarta','Magelang','Salatiga','Pekalongan','Tegal'],
-'DI Yogyakarta':['Yogyakarta','Sleman','Bantul'],
-'Jawa Timur':['Surabaya','Malang','Kediri','Madiun','Blitar','Mojokerto','Pasuruan','Probolinggo','Batu'],
-'Bali':['Denpasar','Singaraja','Ubud'],
-'Nusa Tenggara Barat':['Mataram','Bima'],'Nusa Tenggara Timur':['Kupang','Maumere'],
-'Kalimantan Barat':['Pontianak','Singkawang'],'Kalimantan Tengah':['Palangka Raya'],
-'Kalimantan Selatan':['Banjarmasin','Banjarbaru'],'Kalimantan Timur':['Samarinda','Balikpapan','Bontang'],
-'Kalimantan Utara':['Tarakan'],'Sulawesi Utara':['Manado','Bitung','Tomohon'],
-'Gorontalo':['Gorontalo'],'Sulawesi Tengah':['Palu'],'Sulawesi Barat':['Mamuju'],
-'Sulawesi Selatan':['Makassar','Parepare','Palopo'],'Sulawesi Tenggara':['Kendari','Bau-Bau'],
-'Maluku':['Ambon'],'Maluku Utara':['Ternate'],'Papua':['Jayapura'],
-'Papua Barat':['Manokwari','Sorong'],'Papua Selatan':['Merauke'],
-'Papua Tengah':['Nabire'],'Papua Pegunungan':['Wamena'],'Papua Barat Daya':['Sorong']
-};
-},
+getCityMap(){return {'Aceh':['Banda Aceh','Lhokseumawe','Langsa'],'Sumatera Utara':['Medan','Binjai','Pematangsiantar'],'Sumatera Barat':['Padang','Bukittinggi'],'Riau':['Pekanbaru','Dumai'],'Kepulauan Riau':['Tanjungpinang','Batam'],'Jambi':['Jambi'],'Bengkulu':['Bengkulu'],'Sumatera Selatan':['Palembang','Prabumulih'],'Kepulauan Bangka Belitung':['Pangkalpinang'],'Lampung':['Bandar Lampung','Metro'],'Banten':['Serang','Tangerang','Cilegon'],'DKI Jakarta':['Jakarta','Jakarta Pusat','Jakarta Utara','Jakarta Selatan','Jakarta Barat','Jakarta Timur'],'Jawa Barat':['Bandung','Bekasi','Bogor','Depok','Cimahi','Sukabumi','Cirebon'],'Jawa Tengah':['Semarang','Surakarta','Magelang','Salatiga','Tegal'],'DI Yogyakarta':['Yogyakarta','Sleman','Bantul'],'Jawa Timur':['Surabaya','Malang','Kediri','Madiun','Blitar'],'Bali':['Denpasar','Singaraja','Ubud'],'Nusa Tenggara Barat':['Mataram','Bima'],'Nusa Tenggara Timur':['Kupang','Maumere'],'Kalimantan Barat':['Pontianak','Singkawang'],'Kalimantan Tengah':['Palangka Raya'],'Kalimantan Selatan':['Banjarmasin','Banjarbaru'],'Kalimantan Timur':['Samarinda','Balikpapan','Bontang'],'Kalimantan Utara':['Tarakan'],'Sulawesi Utara':['Manado','Bitung','Tomohon'],'Gorontalo':['Gorontalo'],'Sulawesi Tengah':['Palu'],'Sulawesi Barat':['Mamuju'],'Sulawesi Selatan':['Makassar','Parepare','Palopo'],'Sulawesi Tenggara':['Kendari','Bau-Bau'],'Maluku':['Ambon'],'Maluku Utara':['Ternate'],'Papua':['Jayapura'],'Papua Barat':['Manokwari','Sorong'],'Papua Selatan':['Merauke'],'Papua Tengah':['Nabire'],'Papua Pegunungan':['Wamena'],'Papua Barat Daya':['Sorong']};},
 
-initProvinces(){
-this.provinces=Object.keys(this.getCityMap());
-this.weatherProvince='DKI Jakarta';
-this.cities=this.getCityMap()['DKI Jakarta'];
-this.weatherCity='Jakarta';
-this.fetchWeather();
-},
+initProvinces(){this.provinces=Object.keys(this.getCityMap());this.weatherProvince='DKI Jakarta';this.cities=this.getCityMap()['DKI Jakarta'];this.weatherCity='Jakarta';this.fetchWeather();},
 openWeatherSheet(){this.weatherProvinceSheet=true;},
 selectWeatherProvince(p){this.weatherProvince=p;this.cities=this.getCityMap()[p]||['Jakarta'];this.weatherProvinceSheet=false;this.weatherCitySheet=true;},
 selectWeatherCity(c){this.weatherCity=c;this.weatherCitySheet=false;this.weatherSheetOpen=true;this.fetchWeather();},
 openWeatherProvincePicker(){this.weatherProvinceSheet=true;},
 
-initPrayerProvinces(){
-this.prayerProvince='DKI Jakarta';
-this.prayerCities=this.getCityMap()['DKI Jakarta'];
-this.prayerCity='Jakarta';
-this.fetchPrayerTimes();
-},
+initPrayerProvinces(){this.prayerProvince='DKI Jakarta';this.prayerCities=this.getCityMap()['DKI Jakarta'];this.prayerCity='Jakarta';this.fetchPrayerTimes();},
 openPrayerCityPicker(){this.prayerProvinceSheet=true;},
 selectPrayerProvince(p){this.prayerProvince=p;this.prayerCities=this.getCityMap()[p]||['Jakarta'];this.prayerProvinceSheet=false;this.prayerCitySheet=true;},
 selectPrayerCity(c){this.prayerCity=c;this.prayerCitySheet=false;this.fetchPrayerTimes();},
@@ -1735,28 +1626,11 @@ this.weatherLoading=false;
 toggleHafalAsmaul(no){const it=this.asmaulHusnaList.find(x=>x.no===no);if(it)it.hafal=!it.hafal;},
 get filteredHadits(){if(this.filterHadits==='Semua')return this.haditsList;return this.haditsList.filter(h=>h.kategori===this.filterHadits);},
 
-async fetchSurahs(){
-try{const res=await fetch('https://equran.id/api/v2/surat');const json=await res.json();this.surahList=json.data;}
-catch(e){this.showAlert('Gagal','Gagal memuat Al-Quran.');}
-},
-async loadSurahDetail(nomor){
-try{const res=await fetch('https://equran.id/api/v2/surat/'+nomor);const json=await res.json();this.activeSurah=json.data;}
-catch(e){this.showAlert('Gagal','Gagal memuat surah.');}
-},
-get filteredSurahs(){
-if(!this.surahSearch)return this.surahList;
-const q=this.surahSearch.toLowerCase();
-return this.surahList.filter(s=>s.namaLatin.toLowerCase().includes(q)||s.arti.toLowerCase().includes(q));
-},
+async fetchSurahs(){try{const res=await fetch('https://equran.id/api/v2/surat');const json=await res.json();this.surahList=json.data;}catch(e){this.showAlert('Gagal','Gagal memuat Al-Quran.');}},
+async loadSurahDetail(nomor){try{const res=await fetch('https://equran.id/api/v2/surat/'+nomor);const json=await res.json();this.activeSurah=json.data;}catch(e){this.showAlert('Gagal','Gagal memuat surah.');}},
+get filteredSurahs(){if(!this.surahSearch)return this.surahList;const q=this.surahSearch.toLowerCase();return this.surahList.filter(s=>s.namaLatin.toLowerCase().includes(q)||s.arti.toLowerCase().includes(q));},
 
-speakCustomText(){
-if(!this.customTtsText){return this.showAlert('Perhatian','Ketik teks dulu!');}
-if('speechSynthesis' in window){
-window.speechSynthesis.cancel();
-const u=new SpeechSynthesisUtterance(this.customTtsText);
-u.lang='id-ID';window.speechSynthesis.speak(u);
-}else{this.showAlert('Info','Browser tidak mendukung TTS.');}
-},
+speakCustomText(){if(!this.customTtsText){return this.showAlert('Perhatian','Ketik teks dulu!');}if('speechSynthesis' in window){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(this.customTtsText);u.lang='id-ID';window.speechSynthesis.speak(u);}},
 
 compressImageFile(event){
 const file=event.target.files[0];if(!file)return;
@@ -1791,8 +1665,8 @@ if(json.data.play)links.push({label:'🎬 MP4 (No WM)',url:json.data.play,filena
 if(json.data.hdplay)links.push({label:'🎬 MP4 HD',url:json.data.hdplay,filename:'tiktok_hd_'+Date.now()+'.mp4'});
 if(json.data.music)links.push({label:'🎵 MP3 Audio',url:json.data.music,filename:'tiktok_'+Date.now()+'.mp3'});
 this.downloadResultLinks=links;this.downloadResultReady=true;
-}else{this.showAlert('Gagal','Tidak bisa memproses link TikTok.');}
-}else{this.showAlert('Info','Sementara hanya TikTok yang didukung.');}
+}else{this.showAlert('Gagal','Tidak bisa memproses link.');}
+}else{this.showAlert('Info','Sementara hanya TikTok.');}
 }catch(e){this.showAlert('Gagal','Error: '+e.message);}
 finally{this.downloadLoading=false;}
 },
@@ -1820,28 +1694,14 @@ try{
 const res=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.antaranews.com/rss/terkini.xml');
 const json=await res.json();
 if(json.items){
-this.newsList=json.items.slice(0,20).map(it=>({
-title:it.title,link:it.link,
-description:it.description?it.description.replace(/<[^>]*>/g,'').substring(0,300)+'...':(it.content||'').replace(/<[^>]*>/g,'').substring(0,300)+'...',
-pubDate:new Date(it.pubDate).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),
-thumbnail:it.thumbnail||(it.enclosure&&it.enclosure.link)||'',
-source:'Antara News'
-}));
+this.newsList=json.items.slice(0,20).map(it=>({title:it.title,link:it.link,description:it.description?it.description.replace(/<[^>]*>/g,'').substring(0,300)+'...':(it.content||'').replace(/<[^>]*>/g,'').substring(0,300)+'...',pubDate:new Date(it.pubDate).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),thumbnail:it.thumbnail||(it.enclosure&&it.enclosure.link)||''}));
 }
 }catch(e){this.showAlert('Gagal','Gagal memuat berita.');}
 this.newsLoading=false;
 },
 
-startReflexGame(){
-this.reflexState='yellow';this.reflexMessage='Tunggu Hijau...';
-clearTimeout(this.reflexTimeout);
-const delay=1500+Math.random()*2500;
-this.reflexTimeout=setTimeout(()=>{this.reflexState='green';this.reflexMessage='TAP SEKARANG!';this.reflexStart=Date.now();},delay);
-},
-handleReflexTap(){
-if(this.reflexState==='yellow'){clearTimeout(this.reflexTimeout);this.reflexState='red';this.reflexMessage='Terlalu Cepat!';}
-else if(this.reflexState==='green'){const t=Date.now()-this.reflexStart;this.reflexState='yellow';this.reflexMessage='Berhasil: '+t+' ms';}
-},
+startReflexGame(){this.reflexState='yellow';this.reflexMessage='Tunggu Hijau...';clearTimeout(this.reflexTimeout);const delay=1500+Math.random()*2500;this.reflexTimeout=setTimeout(()=>{this.reflexState='green';this.reflexMessage='TAP SEKARANG!';this.reflexStart=Date.now();},delay);},
+handleReflexTap(){if(this.reflexState==='yellow'){clearTimeout(this.reflexTimeout);this.reflexState='red';this.reflexMessage='Terlalu Cepat!';}else if(this.reflexState==='green'){const t=Date.now()-this.reflexStart;this.reflexState='yellow';this.reflexMessage='Berhasil: '+t+' ms';}},
 
 initTTT(){this.tttBoard=['','','','','','','','',''];this.tttStatus='Giliran kamu (X)';},
 tttPlay(idx){
@@ -1859,14 +1719,63 @@ if(this.tttBoard.every(c=>c)){this.tttStatus='🤝 Seri!';return;}
 this.tttStatus='Giliran kamu (X)';
 },400);
 },
-checkTTT(p){
-const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-return lines.some(l=>l.every(i=>this.tttBoard[i]===p));
+checkTTT(p){const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return lines.some(l=>l.every(i=>this.tttBoard[i]===p));},
+
+async sendChat(){
+if(!this.chatInput.trim()||this.aiThinking)return;
+if(!this.isOwner&&!this.isVip){
+const today=new Date().toISOString().slice(0,10);
+if(this.chatDate!==today){this.chatCount=0;this.chatDate=today;}
+if(this.chatCount>=DAILY_LIMIT){return this.showAlert('Limit','Chat harian habis ('+DAILY_LIMIT+'). Upgrade VIP untuk unlimited!');}
+}
+const userMsg=this.chatInput.trim();
+this.chatMessages.push({role:'user',content:userMsg});
+this.chatInput='';
+this.aiThinking=true;
+try{
+const res=await fetch(AI_URL,{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({messages:this.chatMessages.slice(-10),mode:this.aiMode})
+});
+const data=await res.json();
+if(data.error){throw new Error(data.error);}
+this.chatMessages.push({role:'assistant',content:data.reply||'Maaf, terjadi kesalahan.'});
+if(!this.isOwner&&!this.isVip){
+this.chatCount++;
+if(this.currentUser){
+await sb.from('profiles').update({chat_count:this.chatCount,chat_date:this.chatDate}).eq('id',this.currentUser.id);
+}
+}
+}catch(e){
+this.chatMessages.push({role:'assistant',content:'❌ Error: '+e.message});
+}
+finally{this.aiThinking=false;}
+},
+
+startVoiceInput(){
+if(!this.voiceSupported){return this.showAlert('Info','Browser tidak mendukung voice input.');}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const rec=new SR();
+rec.lang='id-ID';
+rec.onresult=(e)=>{this.chatInput=e.results[0][0].transcript;setTimeout(()=>this.sendChat(),300);};
+rec.onerror=(e)=>{this.showAlert('Gagal','Voice error: '+e.error);};
+rec.start();
+},
+
+clearChat(){
+if(!confirm('Hapus semua percakapan?'))return;
+this.chatMessages=[];
+this.showAlert('Sukses','Chat dihapus.');
+},
+
+showChatHistory(){
+this.showAlert('History','Fitur history chat akan hadir di update berikutnya!');
 },
 
 async logout(){
 await sb.auth.signOut();
-this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;
+this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;
 window.location.reload();
 }
 };
