@@ -564,6 +564,43 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   <div class="card text-center" style="background:var(--accent)">
     <div class="text-4xl mb-1">📥</div>
     <h2 class="font-title text-2xl text-white">TIKTOK DOWNLOADER</h2>
+    <div x-show="activeTab==='komik'" class="sec-gap">
+  <div class="card text-center" style="background:var(--accent)">
+    <div class="text-4xl mb-1">📚</div>
+    <h2 class="font-title text-2xl text-white">BACA KOMIK</h2>
+    <p class="txt-xs text-white opacity-90">Manga • Manhwa • Manhua</p>
+  </div>
+
+  <div class="card sec-gap">
+    <input type="text" x-model="komikSearch" @keyup.enter="cariKomik()" placeholder="Cari judul komik..." class="input-field">
+    <button @click="cariKomik()" class="btn-primary" :disabled="komikLoading">
+      <span x-show="!komikLoading">🔍 CARI</span>
+      <span x-show="komikLoading"><span class="spin"></span> Mencari...</span>
+    </button>
+  </div>
+
+  <div x-show="komikLoading" class="text-center py-4"><span class="spin"></span></div>
+
+  <div x-show="!komikLoading && komikList.length > 0" class="grid grid-cols-2 gap-3">
+    <template x-for="m in komikList" :key="m.id">
+      <div @click="bukaKomikDetail(m.id)" class="card card-hover cursor-pointer" style="padding:8px">
+        <template x-if="m.cover">
+          <img :src="m.cover" class="w-full h-40 object-cover rounded-lg mb-2" style="border:2px solid var(--border)">
+        </template>
+        <div class="font-bold text-xs line-clamp-2" x-text="m.title"></div>
+        <div class="txt-xs text-gray-500 mt-1" x-text="m.status"></div>
+      </div>
+    </template>
+  </div>
+
+  <template x-if="!komikLoading && komikList.length === 0 && komikSearched">
+    <div class="card text-center py-6">
+      <div class="text-4xl mb-2">🔍</div>
+      <div class="txt-sm font-bold text-gray-500">Komik nggak ketemu</div>
+      <div class="txt-xs text-gray-400 mt-1">Coba kata kunci lain</div>
+    </div>
+  </template>
+</div>
     <p class="txt-xs text-white opacity-90">Tanpa Watermark • HD</p>
   </div>
   <div class="card sec-gap">
@@ -1144,6 +1181,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <span class="drawer-badge" x-text="isOwner?'👑 OWNER':(isVip?'💎 VIP':'USER')"></span>
     </div>
     <div class="drawer-menu">
+    <div class="drawer-item" @click="drawerOpen=false;activeTab='komik';cariKomik()"><span class="drawer-item-icon">📚</span><span class="drawer-item-label">Baca Komik</span><span>›</span></div>
       <div class="drawer-item" @click="drawerOpen=false;profileModalOpen=true"><span class="drawer-item-icon">👤</span><span class="drawer-item-label">Profil Saya</span><span>›</span></div>
       <div class="drawer-item" @click="drawerOpen=false;activeTab='tema'"><span class="drawer-item-icon">🎨</span><span class="drawer-item-label">Ganti Tema</span><span>›</span></div>
       <div class="drawer-item" @click="drawerOpen=false;openNotif()"><span class="drawer-item-icon">🔔</span><span class="drawer-item-label">Notifikasi</span><span>›</span></div>
@@ -1254,6 +1292,7 @@ sheetOpen:false,sheetTitle:'',sheetMessage:'',
 confirmModal:{open:false,title:'',message:'',icon:'⚠️',onConfirm:()=>{}},
 promptModal:{open:false,title:'',message:'',value:'',onConfirm:()=>{}},
 activeTab:'home',finSubTab:'transaksi',gameSubTab:'reflex',ownerSubTab:'statistik',currentTime:'',
+komikSearch:'', komikList:[], komikLoading:false, komikSearched:false, komikDetail:null,
 theme:'default',styleMode:'comic',
 kategoriAktif:'semua',
 tipsHarian:'Rajin catat transaksi bikin keuangan lebih terkontrol! 💰',
@@ -1287,6 +1326,9 @@ fiturList:[
   {id:'refleks',nama:'Game Refleks',desc:'Uji kecepatan tangan',icon:'⚡',kategori:'hiburan',tab:'arcade',sub:'reflex'},
   {id:'tictactoe',nama:'Tic Tac Toe',desc:'Main lawan komputer',icon:'❌',kategori:'hiburan',tab:'arcade',sub:'tictactoe'},
   {id:'tema',nama:'Ganti Tema',desc:'6 warna + 2 gaya',icon:'🎨',kategori:'tools',tab:'tema'}
+  {id:'tema',nama:'Ganti Tema',desc:'6 warna + 2 gaya',icon:'🎨',kategori:'tools',tab:'tema'},
+{id:'komik',nama:'Baca Komik',desc:'Manga • Manhwa • Manhua',icon:'📚',kategori:'hiburan',tab:'komik'}
+],
 ],
 deviceInfo:{os:'Unknown',browser:'Unknown',online:true,battery:'—'},
 themes:[{id:'default',name:'Kuning',color:'#fbbf24'},{id:'purple',name:'Ungu',color:'#a855f7'},{id:'pink',name:'Pink',color:'#ec4899'},{id:'emerald',name:'Hijau',color:'#10b981'},{id:'ocean',name:'Biru',color:'#0ea5e9'},{id:'sunset',name:'Oranye',color:'#f97316'},{id:'midnight',name:'Nila',color:'#6366f1'}],
@@ -1336,6 +1378,42 @@ bukaFitur(f){
   else if(f.tab==='downloader'||f.tab==='tema'){this.activeTab=f.tab;}
 },
 openNotif(){this.notifPanelOpen=true;},
+async cariKomik(){
+  this.komikLoading = true;
+  this.komikSearched = true;
+  this.komikList = [];
+  try {
+    const q = this.komikSearch.trim();
+    const path = q 
+      ? '/manga?title=' + encodeURIComponent(q) + '&limit=20&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive'
+      : '/manga?limit=20&order[followedCount]=desc&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive';
+    
+    const url = 'https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/mangadex-proxy?path=' + encodeURIComponent(path);
+    const res = await fetch(url);
+    const json = await res.json();
+    
+    if (json.data) {
+      this.komikList = json.data.map(m => {
+        const coverRel = m.relationships?.find(r => r.type === 'cover_art');
+        const fileName = coverRel?.attributes?.fileName;
+        return {
+          id: m.id,
+          title: m.attributes?.title?.id || m.attributes?.title?.en || 'Tanpa Judul',
+          status: m.attributes?.status || '-',
+          cover: fileName ? 'https://uploads.mangadex.org/covers/' + m.id + '/' + fileName + '.256.jpg' : ''
+        };
+      });
+    }
+  } catch(e) {
+    this.showAlert('Gagal', 'Error: ' + e.message);
+  } finally {
+    this.komikLoading = false;
+  }
+},
+
+async bukaKomikDetail(mangaId){
+  this.showAlert('Info', 'Fitur baca chapter akan segera hadir!');
+},
 detectDevice(){
   const ua=navigator.userAgent;
   let os='Unknown';
