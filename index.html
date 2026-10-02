@@ -275,9 +275,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="font-bold text-xs px-2 py-1.5 rounded-lg" style="background:var(--card-bg);color:var(--accent-dark);border:2px solid var(--border);box-shadow:2px 2px 0 0 var(--border)" x-text="currentTime"></div>
   </header>
 
-  <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24" style="background:var(--bg-soft)">
-
-  <div x-show="activeTab==='home'" class="sec-gap">
+  <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24" style="background:var(--bg-soft)">  <div x-show="activeTab==='home'" class="sec-gap">
     <div @click="profileModalOpen=true" class="card card-hover cursor-pointer" style="background:var(--accent);padding:16px">
       <div class="flex items-center gap-3">
         <div class="w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center font-title text-xl" style="background:var(--card-bg);color:var(--accent-dark);border:3px solid var(--border)">
@@ -874,9 +872,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   <div class="floating-chat-btn" @click="openChatAI()" x-show="isAuthenticated&&!chatFullscreen">
     <span>🤖</span>
   </div>
-</div>
-
-<div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
+</div><div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content text-center space-y-4">
     <div class="w-12 h-1.5 rounded-full mx-auto" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl" style="color:var(--accent-dark)">💰 TRANSAKSI BARU</h3>
@@ -1168,8 +1164,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 <symbol id="i-robot" viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></symbol>
 </svg>
 
-<script>
-const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
+<script>const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
 const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-responder';
@@ -1236,26 +1231,10 @@ welcomeText:DEFAULT_WELCOME,welcomeTextEdit:'',
 chatMessages:[],chatInput:'',aiThinking:false,aiThinkingText:'',aiThinkingTimer:null,aiMode:'umum',chatCount:0,chatDate:'',chatBonus:0,chatFullscreen:false,
 voiceSupported:false,aiModeDesc:'',
 
-getLevelName(lv){
-  const names={1:'Pemula 🌱',2:'Rajin 📚',3:'Aktif ⚡',4:'Ahli 🎓',5:'Master 👑',6:'Legenda 🌟'};
-  return names[lv]||'Pemula 🌱';
-},
-getNextLevelPoints(){
-  const thresholds={1:100,2:300,3:600,4:1000,5:2000,6:0};
-  return thresholds[this.userLevel]||0;
-},
-getCurrentLevelMin(){
-  const thresholds={1:0,2:100,3:300,4:600,5:1000,6:2000};
-  return thresholds[this.userLevel]||0;
-},
-getProgressPercent(){
-  const min=this.getCurrentLevelMin();
-  const max=this.getNextLevelPoints();
-  if(max===0)return 100;
-  const range=max-min;
-  const progress=this.userPoints-min;
-  return Math.min(100, Math.round((progress/range)*100));
-},
+getLevelName(lv){const names={1:'Pemula 🌱',2:'Rajin 📚',3:'Aktif ⚡',4:'Ahli 🎓',5:'Master 👑',6:'Legenda 🌟'};return names[lv]||'Pemula 🌱';},
+getNextLevelPoints(){const thresholds={1:100,2:300,3:600,4:1000,5:2000,6:0};return thresholds[this.userLevel]||0;},
+getCurrentLevelMin(){const thresholds={1:0,2:100,3:300,4:600,5:1000,6:2000};return thresholds[this.userLevel]||0;},
+getProgressPercent(){const min=this.getCurrentLevelMin();const max=this.getNextLevelPoints();if(max===0)return 100;const range=max-min;const progress=this.userPoints-min;return Math.min(100,Math.round((progress/range)*100));},
 
 async init(){
 const savedTheme=localStorage.getItem('zenkai_theme');
@@ -1595,12 +1574,7 @@ this.bmiResult={bmi:bmi.toFixed(1),kategori,color,bbIdeal,kalori,marker,tipsMaka
 
 getCityMap(){return {'Aceh':['Banda Aceh','Lhokseumawe','Langsa'],'Sumatera Utara':['Medan','Binjai','Pematangsiantar'],'Sumatera Barat':['Padang','Bukittinggi'],'Riau':['Pekanbaru','Dumai'],'Kepulauan Riau':['Tanjungpinang','Batam'],'Jambi':['Jambi'],'Bengkulu':['Bengkulu'],'Sumatera Selatan':['Palembang','Prabumulih'],'Kepulauan Bangka Belitung':['Pangkalpinang'],'Lampung':['Bandar Lampung','Metro'],'Banten':['Serang','Tangerang','Cilegon'],'DKI Jakarta':['Jakarta','Jakarta Pusat','Jakarta Utara','Jakarta Selatan','Jakarta Barat','Jakarta Timur'],'Jawa Barat':['Bandung','Bekasi','Bogor','Depok','Cimahi','Sukabumi','Cirebon'],'Jawa Tengah':['Semarang','Surakarta','Magelang','Salatiga','Tegal'],'DI Yogyakarta':['Yogyakarta','Sleman','Bantul'],'Jawa Timur':['Surabaya','Malang','Kediri','Madiun','Blitar'],'Bali':['Denpasar','Singaraja','Ubud'],'Nusa Tenggara Barat':['Mataram','Bima'],'Nusa Tenggara Timur':['Kupang','Maumere'],'Kalimantan Barat':['Pontianak','Singkawang'],'Kalimantan Tengah':['Palangka Raya'],'Kalimantan Selatan':['Banjarmasin','Banjarbaru'],'Kalimantan Timur':['Samarinda','Balikpapan','Bontang'],'Kalimantan Utara':['Tarakan'],'Sulawesi Utara':['Manado','Bitung','Tomohon'],'Gorontalo':['Gorontalo'],'Sulawesi Tengah':['Palu'],'Sulawesi Barat':['Mamuju'],'Sulawesi Selatan':['Makassar','Parepare','Palopo'],'Sulawesi Tenggara':['Kendari','Bau-Bau'],'Maluku':['Ambon'],'Maluku Utara':['Ternate'],'Papua':['Jayapura'],'Papua Barat':['Manokwari','Sorong'],'Papua Selatan':['Merauke'],'Papua Tengah':['Nabire'],'Papua Pegunungan':['Wamena'],'Papua Barat Daya':['Sorong']};},
 
-initProvinces(){
-this.provinces=Object.keys(this.getCityMap());
-this.weatherProvince='DKI Jakarta';
-this.cities=this.getCityMap()['DKI Jakarta'];
-this.weatherCity='Jakarta';
-},
+initProvinces(){this.provinces=Object.keys(this.getCityMap());this.weatherProvince='DKI Jakarta';this.cities=this.getCityMap()['DKI Jakarta'];this.weatherCity='Jakarta';},
 openWeatherSheet(){this.weatherProvinceSheet=true;},
 selectWeatherProvince(p){this.weatherProvince=p;this.cities=this.getCityMap()[p]||['Jakarta'];this.weatherProvinceSheet=false;this.weatherCitySheet=true;},
 selectWeatherCity(c){this.weatherCity=c;this.weatherCitySheet=false;this.weatherSheetOpen=true;this.fetchWeather();},
@@ -1787,18 +1761,7 @@ ATURAN PENTING:
 - JANGAN sebut "Andika" di setiap chat — hanya kalau relevan
 - Jangan sebut nama AI lain (Gemini, GPT, dll)
 - Kalau tidak tahu → bilang jujur
-- Tetap ramah dan membantu
-
-CONTOH:
-
-User: "Hai"
-Zenkai AI: "Hai! 👋 Ada yang bisa saya bantu hari ini?"
-
-User: "Kamu siapa?"
-Zenkai AI: "Saya Zenkai AI, asisten pintar dari Zenkai Tools, dibuat oleh Andika 😊"
-
-User: "Terima kasih"
-Zenkai AI: "Sama-sama! 😊"`
+- Tetap ramah dan membantu`
           },
           ...this.chatMessages.slice(-10)
         ],
