@@ -3,273 +3,311 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#fbbf24">
+<meta name="theme-color" content="#a855f7">
 <title>Zenkai Tools</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Amiri&display=swap" rel="stylesheet">
 <style>
+:root{
+  --primary:#a855f7;
+  --primary-dark:#7e22ce;
+  --primary-light:#c084fc;
+  --bg-soft:#faf5ff;
+  --bg-card:#ffffff;
+  --text:#1f2937;
+  --accent:#ec4899;
+}
+[data-theme="pink"]{--primary:#ec4899;--primary-dark:#be185d;--primary-light:#f9a8d4;--bg-soft:#fdf2f8;--accent:#a855f7}
+[data-theme="emerald"]{--primary:#10b981;--primary-dark:#047857;--primary-light:#6ee7b7;--bg-soft:#ecfdf5;--accent:#f59e0b}
+[data-theme="ocean"]{--primary:#0ea5e9;--primary-dark:#0369a1;--primary-light:#7dd3fc;--bg-soft:#f0f9ff;--accent:#8b5cf6}
+[data-theme="sunset"]{--primary:#f97316;--primary-dark:#c2410c;--primary-light:#fdba74;--bg-soft:#fff7ed;--accent:#ec4899}
+[data-theme="midnight"]{--primary:#6366f1;--primary-dark:#4338ca;--primary-light:#a5b4fc;--bg-soft:#eef2ff;--accent:#f43f5e}
+
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;overflow-x:hidden}
-body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1a1a;min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;-webkit-tap-highlight-color:transparent}
+body{font-family:'Comic Neue',system-ui,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;-webkit-tap-highlight-color:transparent;transition:background .3s}
 .font-title{font-family:'Bangers',cursive;letter-spacing:1.2px}
 .font-arab{font-family:'Amiri',serif}
-.comic-panel{background:#fff;border:2.5px solid #1a1a1a;box-shadow:3px 3px 0 0 #1a1a1a;border-radius:14px;position:relative;overflow:hidden}
+.card{background:var(--bg-card);border:2px solid rgba(0,0,0,0.08);border-radius:18px;box-shadow:0 4px 16px rgba(168,85,247,0.08);position:relative;overflow:hidden;transition:all .2s}
+.card:hover{box-shadow:0 6px 24px rgba(168,85,247,0.15)}
+.card-soft{background:var(--bg-soft);border:2px solid rgba(168,85,247,0.15);border-radius:16px}
+.btn-primary{background:var(--primary);color:#fff;border-radius:14px;padding:12px;font-family:'Bangers',cursive;letter-spacing:1px;border:none;transition:all .2s;box-shadow:0 3px 0 var(--primary-dark)}
+.btn-primary:active{transform:translateY(2px);box-shadow:0 1px 0 var(--primary-dark)}
+.btn-soft{background:var(--bg-soft);color:var(--primary-dark);border:2px solid var(--primary-light);border-radius:14px;padding:10px;font-family:'Bangers',cursive}
 .sec-gap{display:flex;flex-direction:column;gap:12px}
 .txt-sm{font-size:.8rem;line-height:1.4}
 .txt-xs{font-size:.7rem;line-height:1.35}
 .svg-icon-lg{width:1.35em;height:1.35em}
-.splash-screen{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#fbbf24,#f59e0b,#d97706);transition:opacity .5s,visibility .5s}
+.splash-screen{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary-light),var(--primary),var(--primary-dark));transition:opacity .5s,visibility .5s}
 .splash-screen.hide{opacity:0;visibility:hidden}
-.splash-logo{font-family:'Bangers',cursive;font-size:clamp(38px,11vw,52px);color:#000;letter-spacing:3px;text-shadow:3px 3px 0 #fff,5px 5px 0 #000}
-.splash-bar-wrap{width:180px;height:14px;background:#000;border-radius:10px;margin-top:26px;padding:3px;border:2.5px solid #000}
-.splash-bar{height:100%;background:linear-gradient(90deg,#86efac,#22c55e);border-radius:6px;width:0%;transition:width .25s}
-.bottom-nav-btn{flex:1;border:2px solid #000;border-radius:10px;margin:0 1px;padding:5px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#fff}
-.bottom-nav-btn.active{background:#000;color:#fde68a}
-.bottom-nav-label{font-family:'Bangers',cursive;font-size:7px;line-height:1}
-.bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100000;display:flex;align-items:flex-end;justify-content:center}
-.bottom-sheet-content{background:#fff;width:100%;max-width:450px;border-top:4px solid #1a1a1a;border-left:4px solid #1a1a1a;border-right:4px solid #1a1a1a;border-top-left-radius:24px;border-top-right-radius:24px;padding:20px;box-shadow:0 -5px 0 0 #1a1a1a;max-height:85vh;overflow-y:auto}
-.spin{display:inline-block;width:14px;height:14px;border:2px solid #000;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}
+.splash-logo{font-family:'Bangers',cursive;font-size:clamp(38px,11vw,52px);color:#fff;letter-spacing:3px;text-shadow:3px 3px 0 rgba(0,0,0,0.2)}
+.splash-bar-wrap{width:180px;height:14px;background:rgba(255,255,255,0.3);border-radius:10px;margin-top:26px;padding:3px}
+.splash-bar{height:100%;background:#fff;border-radius:6px;width:0%;transition:width .25s}
+.bottom-nav-btn{flex:1;border:none;border-radius:12px;margin:0 1px;padding:5px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;color:var(--text);opacity:0.6;transition:all .2s}
+.bottom-nav-btn.active{background:var(--primary);color:#fff;opacity:1;box-shadow:0 3px 8px rgba(168,85,247,0.3)}
+.bottom-nav-label{font-family:'Bangers',cursive;font-size:7.5px;line-height:1;letter-spacing:.3px}
+.bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.bottom-sheet-content{background:#fff;width:100%;max-width:450px;border-top-left-radius:28px;border-top-right-radius:28px;padding:20px;animation:slideUp .3s ease-out;max-height:88vh;overflow-y:auto}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.flag-ico{width:22px;height:16px;border:1.5px solid #000;border-radius:3px;display:inline-block;vertical-align:middle}
-.avatar-edit-badge{position:absolute;bottom:-4px;right:-4px;width:24px;height:24px;background:#06b6d4;border:2px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;box-shadow:2px 2px 0 #000}
+.flag-ico{width:22px;height:16px;border:1.5px solid rgba(0,0,0,0.15);border-radius:3px;display:inline-block;vertical-align:middle}
 .avatar-wrap{position:relative;display:inline-block}
+.theme-dot{width:36px;height:36px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all .2s}
+.theme-dot.active{border-color:#1a1a1a;transform:scale(1.1)}
+.quote-card{background:linear-gradient(135deg,var(--primary-light),var(--primary));border-radius:18px;padding:18px;color:#fff;position:relative;box-shadow:0 6px 20px rgba(168,85,247,0.25)}
+.quote-card::before{content:'❝';position:absolute;top:-10px;left:14px;font-size:44px;color:rgba(255,255,255,0.5);font-family:serif;line-height:1}
+.menu-list-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;background:var(--bg-soft);cursor:pointer;transition:all .2s;border:2px solid transparent}
+.menu-list-item:active{background:var(--primary-light);border-color:var(--primary)}
+.icon-circle{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 [x-cloak]{display:none !important}
-.quote-card{background:linear-gradient(135deg,#fde68a,#fbbf24);border:2.5px solid #000;box-shadow:3px 3px 0 0 #000;border-radius:14px;padding:16px;position:relative}
-.quote-card::before{content:'❝';position:absolute;top:-8px;left:8px;font-size:36px;color:#000;font-family:serif;line-height:1}
+.sheet-picker-item{padding:14px;border-bottom:1px solid #f3f4f6;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .15s}
+.sheet-picker-item:hover{background:var(--bg-soft)}
+.sheet-picker-item:last-child{border-bottom:none}
 </style>
 </head>
-<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak>
+<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme">
 
 <div class="splash-screen" :class="{'hide':splashHidden}">
   <div class="splash-logo">ZENKAI TOOLS</div>
   <div class="splash-bar-wrap"><div class="splash-bar" :style="'width:'+splashProgress+'%'"></div></div>
-  <div class="mt-2 text-xs font-bold" x-text="splashText"></div>
+  <div class="mt-2 text-xs font-bold text-white" x-text="splashText"></div>
 </div>
 
 <div x-show="welcomePopupOpen" class="bottom-sheet-overlay" style="z-index:100003;">
-  <div class="bottom-sheet-content comic-panel bg-yellow-300 text-center space-y-4">
-    <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-white inline-block">HALO!</div>
+  <div class="bottom-sheet-content text-center space-y-4">
+    <div class="text-5xl">👋</div>
+    <h3 class="font-title text-3xl" style="color:var(--primary)">HALO!</h3>
     <p class="txt-sm font-bold">Selamat datang di Zenkai Tools!</p>
-    <button @click="welcomePopupOpen=false" class="w-full bg-cyan-400 border-2 border-black py-3 rounded-xl font-title text-xl">OK</button>
+    <button @click="welcomePopupOpen=false" class="btn-primary w-full">MULAI</button>
   </div>
 </div>
 
 <div x-show="profileModalOpen" class="bottom-sheet-overlay" style="z-index:100004;">
-  <div class="bottom-sheet-content comic-panel text-center space-y-4">
-    <div class="w-12 h-2 bg-gray-300 rounded-full mx-auto"></div>
-    <h3 class="font-title text-xl text-purple-900">📸 GANTI FOTO PROFIL</h3>
+  <div class="bottom-sheet-content text-center space-y-4">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto"></div>
+    <h3 class="font-title text-2xl" style="color:var(--primary-dark)">📸 GANTI FOTO PROFIL</h3>
     <div class="avatar-wrap mx-auto">
-      <div class="w-28 h-28 bg-yellow-300 border-3 border-black rounded-full overflow-hidden flex items-center justify-center font-title text-3xl">
+      <div class="w-32 h-32 rounded-full overflow-hidden flex items-center justify-center font-title text-4xl" style="background:var(--primary-light);color:var(--primary-dark)">
         <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
         <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
       </div>
-      <label for="avatarInput" class="avatar-edit-badge">📷</label>
     </div>
-    <p class="txt-xs font-bold text-gray-700">Ketuk ikon kamera atau tombol di bawah (max 2MB)</p>
+    <p class="txt-xs font-bold text-gray-600">Max 2MB • Format JPG/PNG</p>
     <input id="avatarInput" type="file" accept="image/*" @change="uploadAvatarFile($event)" class="hidden">
-    <label for="avatarInput" class="w-full bg-cyan-400 border-2 border-black py-3 rounded-xl font-title text-base cursor-pointer block">📁 PILIH DARI GALERI</label>
-    <div x-show="uploadingAvatar" class="text-xs font-bold text-blue-700"><span class="spin"></span> Mengunggah...</div>
-    <button @click="profileModalOpen=false" class="w-full bg-gray-200 border-2 border-black py-2 rounded-xl font-title text-sm">Tutup</button>
+    <label for="avatarInput" class="btn-primary block cursor-pointer w-full">📁 PILIH DARI GALERI</label>
+    <div x-show="uploadingAvatar" class="text-xs font-bold flex items-center justify-center gap-2" style="color:var(--primary)"><span class="spin"></span> Mengunggah...</div>
+    <button @click="profileModalOpen=false" class="btn-soft w-full">Tutup</button>
   </div>
 </div>
 
 <div x-show="ownerPinModalOpen" class="bottom-sheet-overlay" style="z-index:100002;">
-  <div class="bottom-sheet-content comic-panel bg-purple-600 text-white text-center space-y-4">
-    <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-white inline-block">VERIFIKASI OWNER</div>
-    <input type="password" x-model="enteredPin" maxlength="6" placeholder="******" class="w-full border-2 border-black p-3 rounded-xl font-bold text-lg bg-white text-black text-center tracking-widest">
-    <button @click="verifyOwnerPin()" class="w-full bg-yellow-300 text-black border-2 border-black py-3 rounded-xl font-title text-xl">
+  <div class="bottom-sheet-content text-center space-y-4">
+    <div class="text-4xl">👑</div>
+    <h3 class="font-title text-2xl" style="color:var(--primary-dark)">VERIFIKASI OWNER</h3>
+    <p class="txt-xs font-bold text-gray-600">Masukkan PIN 6 digit</p>
+    <input type="password" x-model="enteredPin" maxlength="6" placeholder="••••••" class="w-full p-4 rounded-2xl font-bold text-2xl text-center tracking-widest border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
+    <button @click="verifyOwnerPin()" class="btn-primary w-full">
       <span x-show="!verifyingPin">KONFIRMASI</span>
       <span x-show="verifyingPin"><span class="spin"></span> Cek...</span>
     </button>
-    <button @click="ownerPinModalOpen=false;logout()" class="text-xs underline text-white">Batal</button>
+    <button @click="ownerPinModalOpen=false;logout()" class="text-xs underline text-gray-600">Batal</button>
   </div>
 </div>
 
 <div x-show="sheetOpen" class="bottom-sheet-overlay">
   <div class="bottom-sheet-content text-center space-y-4">
-    <h3 class="font-title text-2xl text-purple-900" x-text="sheetTitle"></h3>
-    <p class="txt-sm font-bold" x-text="sheetMessage"></p>
-    <button @click="sheetOpen=false" class="w-full bg-yellow-300 border-2 border-black py-3 rounded-xl font-title text-lg">OK</button>
+    <h3 class="font-title text-2xl" style="color:var(--primary-dark)" x-text="sheetTitle"></h3>
+    <p class="txt-sm font-bold text-gray-700" x-text="sheetMessage"></p>
+    <button @click="sheetOpen=false" class="btn-primary w-full">OK</button>
   </div>
 </div>
 
-<div x-show="!isAuthenticated" class="fixed inset-0 bg-black/85 z-[9997] flex items-center justify-center p-4">
-  <div class="comic-panel bg-yellow-300 p-6 w-full max-w-sm text-center space-y-4">
-    <div class="bg-black text-yellow-300 font-title text-2xl px-3 py-1 rounded-xl border-2 border-black inline-block">PORTAL AKUN</div>
-    <h2 class="font-title text-2xl" x-text="authMode==='login'?'MASUK':'DAFTAR'"></h2>
-    <input type="email" x-model="authEmail" placeholder="Email..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center">
-    <input type="password" x-model="authPassword" placeholder="Password..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center">
+<div x-show="!isAuthenticated" class="fixed inset-0 z-[9997] flex items-center justify-center p-4" style="background:linear-gradient(135deg,var(--primary-light),var(--primary))">
+  <div class="bg-white rounded-3xl p-6 w-full max-w-sm text-center space-y-4 shadow-2xl">
+    <div class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl" style="background:var(--primary);color:#fff">🎯</div>
+    <h1 class="font-title text-3xl" style="color:var(--primary-dark)">ZENKAI TOOLS</h1>
+    <h2 class="font-title text-xl text-gray-700" x-text="authMode==='login'?'MASUK AKUN':'DAFTAR AKUN'"></h2>
+    <input type="email" x-model="authEmail" placeholder="Email..." class="w-full p-3 rounded-xl font-bold text-sm text-center border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
+    <input type="password" x-model="authPassword" placeholder="Password..." class="w-full p-3 rounded-xl font-bold text-sm text-center border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
     <template x-if="authMode==='register'">
-      <input type="text" x-model="authUsername" placeholder="Nama Tampilan..." class="w-full border-2 border-black p-3 rounded-xl font-bold text-sm bg-white text-center">
+      <input type="text" x-model="authUsername" placeholder="Nama Tampilan..." class="w-full p-3 rounded-xl font-bold text-sm text-center border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
     </template>
-    <button @click="handleEmailAuth()" class="w-full bg-cyan-400 border-2 border-black py-3 rounded-xl font-title text-xl" x-text="authMode==='login'?'MASUK':'DAFTAR'"></button>
-    <button @click="authMode=authMode==='login'?'register':'login'" class="text-xs font-bold underline text-blue-900" x-text="authMode==='login'?'Belum punya akun? Daftar':'Sudah punya? Login'"></button>
+    <button @click="handleEmailAuth()" class="btn-primary w-full" x-text="authMode==='login'?'MASUK':'DAFTAR'"></button>
+    <button @click="authMode=authMode==='login'?'register':'login'" class="text-xs font-bold underline" style="color:var(--primary-dark)" x-text="authMode==='login'?'Belum punya akun? Daftar':'Sudah punya? Login'"></button>
   </div>
 </div>
 
-<div class="w-full max-w-md h-[100dvh] border-x-4 border-b-4 border-black relative flex flex-col overflow-hidden bg-yellow-50">
-  <header class="bg-yellow-400 border-b-4 border-black p-3 flex justify-between items-center">
-    <div class="flex items-center space-x-2">
-      <div class="avatar-wrap" @click="profileModalOpen=true">
-        <div class="w-10 h-10 bg-black text-yellow-300 font-title rounded-xl border-2 border-black flex items-center justify-center overflow-hidden cursor-pointer">
-          <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
-          <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
-        </div>
-        <span class="avatar-edit-badge" style="width:18px;height:18px;font-size:9px;">📷</span>
+<div class="w-full max-w-md h-[100dvh] relative flex flex-col overflow-hidden bg-white shadow-xl">
+  <header class="p-4 flex justify-between items-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+    <div class="flex items-center space-x-3">
+      <div @click="profileModalOpen=true" class="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center font-title text-lg cursor-pointer border-2 border-white/30" style="background:rgba(255,255,255,0.2);color:#fff">
+        <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
+        <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
       </div>
       <div>
-        <h1 class="font-title text-xl leading-none">ZENKAI TOOLS</h1>
-        <span class="text-[9px] font-extrabold px-1.5 rounded border border-black" :class="isOwner?'bg-purple-600 text-white':'bg-white'" x-text="isOwner?'owner':'user'"></span>
+        <h1 class="font-title text-xl text-white leading-none">ZENKAI TOOLS</h1>
+        <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background:rgba(255,255,255,0.25);color:#fff" x-text="isOwner?'👑 OWNER':'USER'"></span>
       </div>
     </div>
-    <div class="flex items-center space-x-1">
-      <div class="bg-white border-2 border-black px-2 py-1 rounded-lg font-bold text-[10px]" x-text="currentTime"></div>
-      <button @click="logout()" class="bg-red-400 border-2 border-black px-2 py-1 rounded-lg font-bold text-xs">🚪</button>
+    <div class="flex items-center space-x-2">
+      <div class="text-white font-bold text-[10px] px-2 py-1 rounded-lg" style="background:rgba(255,255,255,0.2)" x-text="currentTime"></div>
+      <button @click="logout()" class="text-white text-base px-2 py-1 rounded-lg" style="background:rgba(255,255,255,0.2)">🚪</button>
     </div>
   </header>
 
-  <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24"><div x-show="activeTab==='home'" class="sec-gap">
-  <div class="comic-panel bg-cyan-300 p-3 flex items-center space-x-3">
-    <div class="avatar-wrap" @click="profileModalOpen=true">
-      <div class="w-14 h-14 bg-yellow-300 border-2 border-black rounded-xl overflow-hidden flex items-center justify-center font-title text-xl cursor-pointer">
-        <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
-        <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,1).toUpperCase():'U'"></span></template>
-      </div>
-      <span class="avatar-edit-badge">📷</span>
+  <main class="p-4 flex-1 overflow-y-auto space-y-3 pb-24"><div x-show="activeTab==='home'" class="sec-gap">
+  <div class="card p-4 flex items-center space-x-3" style="background:linear-gradient(135deg,var(--primary-light),var(--primary))">
+    <div @click="profileModalOpen=true" class="w-14 h-14 rounded-2xl overflow-hidden flex items-center justify-center font-title text-xl cursor-pointer bg-white/20 border-2 border-white/30" style="color:#fff">
+      <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
+      <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,1).toUpperCase():'U'"></span></template>
     </div>
     <div class="flex-1 min-w-0">
-      <div class="font-title text-purple-900 text-sm truncate" x-text="'Nama: '+userName"></div>
-      <div class="text-xs font-bold truncate" x-text="userEmail"></div>
-      <div class="text-[10px] text-blue-900 underline cursor-pointer mt-1" @click="profileModalOpen=true">📸 Ketuk foto untuk ganti</div>
+      <div class="font-title text-white text-base truncate" x-text="userName"></div>
+      <div class="text-xs font-bold text-white/80 truncate" x-text="userEmail"></div>
+      <div class="text-[10px] text-white/90 mt-1 cursor-pointer underline" @click="profileModalOpen=true">📸 Ketuk foto untuk ganti</div>
     </div>
   </div>
 
-  <div class="comic-panel bg-gradient-to-r from-pink-300 to-purple-300 p-3">
-    <h3 class="font-title text-lg text-purple-900">💬 QUOTE HARI INI</h3>
-    <div class="quote-card mt-2">
-      <p class="text-xs italic font-bold pr-6" x-text="dailyQuote&&dailyQuote.text?'"'+dailyQuote.text+'"':'Memuat quote...'"></p>
-      <p class="text-[10px] font-bold text-right mt-2" x-text="'— '+(dailyQuote?dailyQuote.author:'')"></p>
+  <div class="quote-card">
+    <div class="flex justify-between items-start">
+      <h3 class="font-title text-lg">💬 QUOTE HARI INI</h3>
+      <button @click="randomQuote()" class="text-xs bg-white/20 px-2 py-1 rounded-lg">🔄</button>
     </div>
-    <button @click="randomQuote()" class="w-full bg-cyan-400 border-2 border-black py-2 rounded-xl font-title text-xs mt-2">🔄 GANTI QUOTE</button>
+    <p class="text-sm italic font-bold mt-3 pr-2" x-text="quoteLoading?'Memuat quote...':('\"'+dailyQuote.text+'\"')"></p>
+    <p class="text-[10px] font-bold text-right mt-2 opacity-90" x-text="'— '+dailyQuote.author"></p>
   </div>
 
-  <div class="comic-panel bg-orange-200 p-3">
-    <h3 class="font-title text-sm">📰 BERITA TERKINI</h3>
-    <button @click="openNews()" class="w-full bg-orange-400 border-2 border-black py-2 rounded-xl font-title text-sm mt-2">📰 LIHAT BERITA</button>
+  <div class="grid grid-cols-2 gap-3">
+    <button @click="openNews()" class="card p-4 text-left">
+      <div class="text-3xl mb-1">📰</div>
+      <div class="font-title text-sm" style="color:var(--primary-dark)">BERITA</div>
+      <div class="text-[10px] text-gray-500">Terkini Indonesia</div>
+    </button>
+    <button @click="openWeatherSheet()" class="card p-4 text-left">
+      <div class="text-3xl mb-1">🌤️</div>
+      <div class="font-title text-sm" style="color:var(--primary-dark)">CUACA</div>
+      <div class="text-[10px] text-gray-500">Seluruh Indonesia</div>
+    </button>
   </div>
 
-  <div class="comic-panel bg-sky-200 p-3">
-    <h3 class="font-title text-sm">🌤️ CUACA</h3>
-    <button @click="openWeather()" class="w-full bg-cyan-400 border-2 border-black py-2 rounded-xl font-title text-sm mt-2">🌤️ LIHAT CUACA</button>
-  </div>
-
-  <div class="comic-panel bg-pink-200 p-3 sec-gap">
-    <h3 class="font-title text-sm">📝 CATATAN KILAT</h3>
-    <textarea x-model="quickNote" @input="debouncedSaveNote()" rows="3" placeholder="Tulis catatan..." class="w-full border-2 border-black p-2 rounded-xl text-[12px] bg-white"></textarea>
-    <div x-show="noteSaving" class="text-[10px] font-bold text-blue-700">💾 Menyimpan...</div>
+  <div class="card p-4 sec-gap">
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">📝</span>
+      <h3 class="font-title text-base" style="color:var(--primary-dark)">CATATAN KILAT</h3>
+    </div>
+    <textarea x-model="quickNote" @input="debouncedSaveNote()" rows="3" placeholder="Tulis catatan..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)"></textarea>
+    <div x-show="noteSaving" class="text-[10px] font-bold" style="color:var(--primary)">💾 Menyimpan...</div>
   </div>
 </div>
 
 <div x-show="activeTab==='keuangan'" class="sec-gap">
-  <div class="comic-panel bg-pink-400 p-3"><h2 class="font-title text-2xl text-white">💰 DOMPET</h2></div>
-  <div class="comic-panel bg-yellow-300 p-3">
-    <div class="text-[10px] font-bold uppercase">Total Saldo</div>
-    <div class="font-title text-2xl" x-text="'Rp '+totalBalance.toLocaleString('id-ID')"></div>
+  <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+    <div class="text-xs font-bold text-white/80 uppercase">💰 TOTAL SALDO</div>
+    <div class="font-title text-3xl text-white mt-1" x-text="'Rp '+totalBalance.toLocaleString('id-ID')"></div>
   </div>
-  <button @click="openTxSheet()" class="w-full bg-cyan-400 border-2 border-black py-3 rounded-xl font-title text-lg">➕ TAMBAH TRANSAKSI</button>
-  <div class="comic-panel p-3.5 sec-gap">
-    <h3 class="font-title text-lg">Riwayat</h3>
-    <div class="max-h-60 overflow-y-auto space-y-1.5">
+  <button @click="openTxSheet()" class="btn-primary w-full text-lg">➕ TAMBAH TRANSAKSI</button>
+  <div class="card p-4 sec-gap">
+    <h3 class="font-title text-base" style="color:var(--primary-dark)">📋 Riwayat Transaksi</h3>
+    <div class="max-h-72 overflow-y-auto space-y-2">
       <template x-for="t in transactions" :key="t.id">
-        <div class="border-2 border-black p-2 rounded-xl flex justify-between text-xs" :class="t.type==='income'?'bg-green-50':'bg-red-50'">
+        <div class="p-3 rounded-xl flex justify-between items-center" :style="t.type==='income'?'background:#dcfce7':'background:#fee2e2'">
           <div>
-            <span class="font-bold" x-text="t.category"></span>
-            <span class="text-[10px] text-gray-600 block" x-text="t.date"></span>
+            <div class="font-bold text-sm" x-text="t.category"></div>
+            <div class="text-[10px] text-gray-600" x-text="t.date"></div>
           </div>
-          <div class="flex items-center gap-1">
-            <span class="font-bold" :class="t.type==='income'?'text-green-700':'text-red-700'" x-text="(t.type==='income'?'+':'-')+'Rp '+Number(t.amount).toLocaleString('id-ID')"></span>
-            <button @click="deleteTransaction(t.id)" class="text-red-600 font-bold">✕</button>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-sm" :style="t.type==='income'?'color:#15803d':'color:#b91c1c'" x-text="(t.type==='income'?'+':'-')+'Rp '+Number(t.amount).toLocaleString('id-ID')"></span>
+            <button @click="deleteTransaction(t.id)" class="text-red-500 font-bold text-base">✕</button>
           </div>
         </div>
       </template>
-      <template x-if="transactions.length===0"><div class="text-xs text-center text-gray-500 font-bold py-3">Belum ada</div></template>
+      <template x-if="transactions.length===0">
+        <div class="text-sm text-center text-gray-400 py-6">Belum ada transaksi</div>
+      </template>
     </div>
   </div>
 </div>
 
 <div x-show="activeTab==='downloader'" class="sec-gap">
-  <div class="comic-panel bg-cyan-400 p-3"><h2 class="font-title text-2xl">📥 DOWNLOADER</h2><p class="txt-xs font-bold">TikTok langsung download</p></div>
-  <div class="comic-panel p-3.5 sec-gap">
-    <input type="text" x-model="downloadLinkInput" placeholder="https://..." class="w-full border-2 border-black p-2.5 rounded-xl text-xs bg-yellow-50">
-    <button @click="processMediaDownload()" class="w-full bg-black text-yellow-300 border-2 border-black py-2.5 rounded-xl font-title text-sm">
-      <span x-show="!downloadLoading">🔍 PROSES</span>
-      <span x-show="downloadLoading"><span class="spin"></span> Proses...</span>
+  <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+    <div class="text-3xl">📥</div>
+    <h2 class="font-title text-2xl text-white">DOWNLOADER</h2>
+    <p class="text-xs text-white/80">TikTok • Langsung simpan</p>
+  </div>
+  <div class="card p-4 sec-gap">
+    <input type="text" x-model="downloadLinkInput" placeholder="Tempel link TikTok..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
+    <button @click="processMediaDownload()" class="btn-primary w-full">
+      <span x-show="!downloadLoading">🔍 PROSES LINK</span>
+      <span x-show="downloadLoading"><span class="spin"></span> Memproses...</span>
     </button>
   </div>
   <template x-if="downloadResultReady">
-    <div class="comic-panel p-3 sec-gap text-center">
-      <template x-if="downloadMeta.thumbnail"><img :src="downloadMeta.thumbnail" class="max-h-40 mx-auto border-2 border-black rounded-xl"></template>
-      <p class="text-xs font-bold" x-text="downloadMeta.title"></p>
+    <div class="card p-4 sec-gap text-center">
+      <template x-if="downloadMeta.thumbnail"><img :src="downloadMeta.thumbnail" class="max-h-40 mx-auto rounded-xl"></template>
+      <p class="text-sm font-bold" x-text="downloadMeta.title"></p>
       <template x-for="(link,idx) in downloadResultLinks" :key="idx">
-        <button @click="downloadBlob(link.url,link.filename)" class="w-full bg-green-400 border-2 border-black py-3 rounded-xl font-title text-sm">
-          <span x-text="'💾 '+link.label"></span>
-        </button>
+        <button @click="downloadBlob(link.url,link.filename)" class="btn-primary w-full text-sm" x-text="'💾 '+link.label"></button>
       </template>
-      <div x-show="downloadingFile" class="text-xs font-bold text-blue-700"><span class="spin"></span> Mendownload...</div>
+      <div x-show="downloadingFile" class="text-xs font-bold" style="color:var(--primary)"><span class="spin"></span> Mendownload...</div>
     </div>
   </template>
-</div>
-
-<div x-show="activeTab==='kitab'" class="sec-gap">
-  <div class="comic-panel bg-emerald-400 p-3"><h2 class="font-title text-2xl text-white">📖 IBADAH</h2></div>
-  <div class="grid grid-cols-3 gap-1.5">
-    <button @click="kitabSubTab='sholat'" :class="kitabSubTab==='sholat'?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-2 rounded-xl font-title text-[10px]">Sholat</button>
-    <button @click="kitabSubTab='quran';if(surahList.length===0)fetchSurahs()" :class="kitabSubTab==='quran'?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-2 rounded-xl font-title text-[10px]">Quran</button>
-    <button @click="kitabSubTab='asmaul'" :class="kitabSubTab==='asmaul'?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-2 rounded-xl font-title text-[10px]">Asmaul</button>
-    <button @click="kitabSubTab='kisah'" :class="kitabSubTab==='kisah'?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-2 rounded-xl font-title text-[10px]">Kisah</button>
-    <button @click="kitabSubTab='hadits'" :class="kitabSubTab==='hadits'?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-2 rounded-xl font-title text-[10px]">Hadits</button>
-    <button @click="kitabSubTab='doa'" :class="kitabSubTab==='doa'?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-2 rounded-xl font-title text-[10px]">Doa</button>
+</div><div x-show="activeTab==='kitab'" class="sec-gap">
+  <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+    <div class="text-3xl">📖</div>
+    <h2 class="font-title text-2xl text-white">IBADAH & DOA</h2>
+    <p class="text-xs text-white/80">Lengkapi ibadah harianmu</p>
+  </div>
+  <div class="grid grid-cols-3 gap-2">
+    <button @click="kitabSubTab='sholat'" :style="kitabSubTab==='sholat'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">🕌 Sholat</button>
+    <button @click="kitabSubTab='quran';if(surahList.length===0)fetchSurahs()" :style="kitabSubTab==='quran'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">📖 Quran</button>
+    <button @click="kitabSubTab='asmaul'" :style="kitabSubTab==='asmaul'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">✨ Asmaul</button>
+    <button @click="kitabSubTab='kisah'" :style="kitabSubTab==='kisah'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">🕋 Kisah</button>
+    <button @click="kitabSubTab='hadits'" :style="kitabSubTab==='hadits'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">📚 Hadits</button>
+    <button @click="kitabSubTab='doa'" :style="kitabSubTab==='doa'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-[10px] transition-all">🤲 Doa</button>
   </div>
 
   <div x-show="kitabSubTab==='sholat'" class="sec-gap">
-    <div class="comic-panel p-3.5 sec-gap">
-      <h3 class="font-title text-lg">🕌 Jadwal Sholat</h3>
-      <p class="text-xs font-bold" x-text="'📍 '+prayerCity+', '+prayerProvince"></p>
-      <button @click="showPrayerSheet=true" class="w-full bg-cyan-400 border-2 border-black py-2 rounded-xl font-title text-sm">🔄 GANTI LOKASI</button>
-      <div x-show="prayerLoading" class="text-center text-xs font-bold">⏳ Memuat...</div>
-      <div class="grid grid-cols-5 gap-1 text-center">
-        <div class="comic-panel bg-yellow-100 p-1"><div class="text-[8px] font-bold">Subuh</div><div class="font-title txt-xs" x-text="prayerTimes.subuh"></div></div>
-        <div class="comic-panel bg-yellow-100 p-1"><div class="text-[8px] font-bold">Dzuhur</div><div class="font-title txt-xs" x-text="prayerTimes.dzuhur"></div></div>
-        <div class="comic-panel bg-yellow-100 p-1"><div class="text-[8px] font-bold">Ashar</div><div class="font-title txt-xs" x-text="prayerTimes.ashar"></div></div>
-        <div class="comic-panel bg-yellow-100 p-1"><div class="text-[8px] font-bold">Maghrib</div><div class="font-title txt-xs" x-text="prayerTimes.maghrib"></div></div>
-        <div class="comic-panel bg-yellow-100 p-1"><div class="text-[8px] font-bold">Isya</div><div class="font-title txt-xs" x-text="prayerTimes.isya"></div></div>
+    <div class="card p-4 sec-gap">
+      <div class="flex justify-between items-center">
+        <h3 class="font-title text-lg" style="color:var(--primary-dark)">🕌 Waktu Sholat</h3>
+        <button @click="openPrayerCityPicker()" class="text-xs btn-soft px-3 py-1.5">🔄 Ganti</button>
+      </div>
+      <p class="text-xs font-bold text-gray-600" x-text="'📍 '+prayerCity+', '+prayerProvince"></p>
+      <div x-show="prayerLoading" class="text-center text-xs"><span class="spin"></span> Memuat...</div>
+      <div class="grid grid-cols-5 gap-1 text-center mt-2">
+        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[8px] font-bold" style="color:var(--primary-dark)">Subuh</div><div class="font-title text-xs" x-text="prayerTimes.subuh"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[8px] font-bold" style="color:var(--primary-dark)">Dzuhur</div><div class="font-title text-xs" x-text="prayerTimes.dzuhur"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[8px] font-bold" style="color:var(--primary-dark)">Ashar</div><div class="font-title text-xs" x-text="prayerTimes.ashar"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[8px] font-bold" style="color:var(--primary-dark)">Maghrib</div><div class="font-title text-xs" x-text="prayerTimes.maghrib"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--bg-soft)"><div class="text-[8px] font-bold" style="color:var(--primary-dark)">Isya</div><div class="font-title text-xs" x-text="prayerTimes.isya"></div></div>
       </div>
     </div>
 
-    <div class="comic-panel p-3.5 sec-gap">
-      <h3 class="font-title text-lg">📿 Niat Sholat</h3>
+    <div class="card p-4 sec-gap">
+      <h3 class="font-title text-lg" style="color:var(--primary-dark)">📿 Niat Sholat</h3>
       <div class="grid grid-cols-5 gap-1">
         <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s">
-          <button @click="selectedNiat=s" :class="selectedNiat===s?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-1.5 rounded-lg font-title text-[10px]" x-text="s"></button>
+          <button @click="selectedNiat=s" :style="selectedNiat===s?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="py-1.5 rounded-lg font-title text-[10px] transition-all" x-text="s"></button>
         </template>
       </div>
-      <div class="border-2 border-black p-3 rounded-xl bg-yellow-50 space-y-2 mt-1">
+      <div class="p-3 rounded-xl space-y-2" style="background:var(--bg-soft)">
         <div class="font-arab text-right text-xl leading-loose" x-text="niatSholat[selectedNiat].arab"></div>
-        <div class="text-xs italic text-blue-900" x-text="niatSholat[selectedNiat].latin"></div>
+        <div class="text-xs italic" style="color:var(--primary-dark)" x-text="niatSholat[selectedNiat].latin"></div>
         <div class="text-xs text-gray-700" x-text="niatSholat[selectedNiat].arti"></div>
       </div>
     </div>
 
-    <div class="comic-panel p-3.5 sec-gap">
-      <h3 class="font-title text-lg">📿 Bacaan Sholat</h3>
+    <div class="card p-4 sec-gap">
+      <h3 class="font-title text-lg" style="color:var(--primary-dark)">📿 Bacaan Sholat</h3>
       <div class="space-y-2 max-h-72 overflow-y-auto">
         <template x-for="(step,idx) in bacaanSholatList" :key="idx">
-          <div class="border-2 border-black p-2.5 rounded-xl bg-yellow-50 space-y-1">
-            <div class="font-title text-sm text-purple-900" x-text="step.nama"></div>
+          <div class="p-3 rounded-xl space-y-1" style="background:var(--bg-soft)">
+            <div class="font-title text-sm" style="color:var(--primary-dark)" x-text="step.nama"></div>
             <div class="font-arab text-right text-lg" x-text="step.arab"></div>
-            <div class="text-[11px] italic text-blue-900" x-text="step.latin"></div>
+            <div class="text-[11px] italic" style="color:var(--primary)" x-text="step.latin"></div>
             <div class="text-[11px] text-gray-700" x-text="step.arti"></div>
           </div>
         </template>
@@ -279,42 +317,43 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
 
   <div x-show="kitabSubTab==='quran'" class="sec-gap">
     <template x-if="!activeSurah">
-      <div class="comic-panel p-3 sec-gap">
-        <input type="text" x-model="surahSearch" placeholder="Cari surah..." class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50">
-        <div class="max-h-64 overflow-y-auto space-y-1.5">
+      <div class="card p-4 sec-gap">
+        <h3 class="font-title text-lg" style="color:var(--primary-dark)">📖 Daftar Surah</h3>
+        <input type="text" x-model="surahSearch" placeholder="Cari surah..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
+        <div class="max-h-72 overflow-y-auto space-y-2">
           <template x-for="s in filteredSurahs" :key="s.nomor">
-            <div class="border-2 border-black p-2.5 rounded-xl bg-yellow-50">
+            <div class="p-3 rounded-xl" style="background:var(--bg-soft)">
               <div @click="loadSurahDetail(s.nomor)" class="cursor-pointer flex justify-between items-center">
                 <div>
-                  <span class="font-bold text-xs" x-text="s.nomor+'. '+s.namaLatin"></span>
-                  <span class="text-[10px] text-gray-600 block" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></span>
+                  <div class="font-bold text-sm" x-text="s.nomor+'. '+s.namaLatin"></div>
+                  <div class="text-[10px] text-gray-600" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></div>
                 </div>
-                <span class="font-arab text-base font-bold" x-text="s.nama"></span>
+                <span class="font-arab text-base font-bold" style="color:var(--primary)" x-text="s.nama"></span>
               </div>
-              <audio x-show="s.audioFull" controls preload="none" class="w-full h-7 mt-1" :src="s.audioFull&&s.audioFull['05']"></audio>
+              <audio x-show="s.audioFull" controls preload="none" class="w-full h-7 mt-2" :src="s.audioFull&&s.audioFull['05']"></audio>
             </div>
           </template>
         </div>
       </div>
     </template>
     <template x-if="activeSurah">
-      <div class="comic-panel p-3.5 sec-gap">
-        <button @click="activeSurah=null" class="bg-black text-yellow-300 font-title px-3 py-1 rounded-xl text-xs self-start">← Kembali</button>
-        <div class="text-center border-b-2 border-black pb-2">
-          <h3 class="font-title text-xl" x-text="activeSurah.namaLatin"></h3>
-          <p class="text-xs font-bold" x-text="activeSurah.arti+' - '+activeSurah.jumlahAyat+' Ayat'"></p>
+      <div class="card p-4 sec-gap">
+        <button @click="activeSurah=null" class="btn-soft self-start px-3 py-1.5 text-xs">← Kembali</button>
+        <div class="text-center border-b-2 pb-3" style="border-color:var(--primary-light)">
+          <h3 class="font-title text-xl" style="color:var(--primary-dark)" x-text="activeSurah.namaLatin"></h3>
+          <p class="text-xs font-bold text-gray-600" x-text="activeSurah.arti+' - '+activeSurah.jumlahAyat+' Ayat'"></p>
           <audio controls class="w-full h-8 mt-2" :src="activeSurah.audioFull&&activeSurah.audioFull['05']"></audio>
         </div>
-        <div class="max-h-72 overflow-y-auto space-y-3 pt-2">
+        <div class="max-h-80 overflow-y-auto space-y-3 pt-2">
           <template x-for="ay in activeSurah.ayat" :key="ay.nomorAyat">
-            <div class="border-2 border-black p-3 rounded-xl bg-yellow-50 space-y-2">
-              <div class="flex justify-between items-center text-[10px] font-bold border-b border-black pb-1">
+            <div class="p-3 rounded-xl space-y-2" style="background:var(--bg-soft)">
+              <div class="flex justify-between items-center text-[10px] font-bold border-b pb-1" style="border-color:var(--primary-light)">
                 <span>Ayat <span x-text="ay.nomorAyat"></span></span>
                 <audio controls preload="none" class="h-6 w-32" :src="(ay.audio&&(ay.audio['05']||ay.audio['01']))||''"></audio>
               </div>
               <div class="font-arab text-right text-xl" x-text="ay.teksArab"></div>
-              <div class="text-xs italic text-blue-900" x-text="ay.teksLatin"></div>
-              <div class="text-xs text-gray-800" x-text="ay.teksIndonesia"></div>
+              <div class="text-xs italic" style="color:var(--primary)" x-text="ay.teksLatin"></div>
+              <div class="text-xs text-gray-700" x-text="ay.teksIndonesia"></div>
             </div>
           </template>
         </div>
@@ -323,19 +362,19 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   </div>
 
   <div x-show="kitabSubTab==='asmaul'" class="sec-gap">
-    <div class="comic-panel p-3.5 sec-gap">
-      <h3 class="font-title text-lg">99 Asmaul Husna</h3>
-      <div class="max-h-72 overflow-y-auto space-y-2">
+    <div class="card p-4 sec-gap">
+      <h3 class="font-title text-lg" style="color:var(--primary-dark)">✨ 99 Asmaul Husna</h3>
+      <div class="max-h-80 overflow-y-auto space-y-2">
         <template x-for="item in asmaulHusnaList" :key="item.no">
-          <div class="border-2 border-black p-2.5 rounded-xl bg-yellow-50 flex items-center justify-between">
-            <div class="flex items-center space-x-2 flex-1 min-w-0">
-              <span class="w-6 h-6 bg-black text-yellow-300 font-title text-xs rounded-lg flex items-center justify-center shrink-0" x-text="item.no"></span>
+          <div class="p-3 rounded-xl flex items-center justify-between" style="background:var(--bg-soft)">
+            <div class="flex items-center space-x-3 flex-1 min-w-0">
+              <span class="w-7 h-7 rounded-lg flex items-center justify-center font-title text-xs shrink-0" style="background:var(--primary);color:#fff" x-text="item.no"></span>
               <div class="min-w-0">
                 <div class="font-arab text-lg font-bold" x-text="item.arab"></div>
-                <div class="text-xs font-bold text-purple-900" x-text="item.latin+' - '+item.arti"></div>
+                <div class="text-xs font-bold" style="color:var(--primary-dark)" x-text="item.latin+' - '+item.arti"></div>
               </div>
             </div>
-            <button @click="toggleHafalAsmaul(item.no)" class="border border-black px-2 py-1 rounded-lg text-[10px] font-bold" :class="item.hafal?'bg-green-400':'bg-gray-200'" x-text="item.hafal?'✅':'○'"></button>
+            <button @click="toggleHafalAsmaul(item.no)" class="w-9 h-9 rounded-lg text-sm font-bold shrink-0" :style="item.hafal?'background:#22c55e;color:#fff':'background:#e5e7eb'" x-text="item.hafal?'✅':'○'"></button>
           </div>
         </template>
       </div>
@@ -343,12 +382,12 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   </div>
 
   <div x-show="kitabSubTab==='kisah'" class="sec-gap">
-    <div class="comic-panel p-3.5 sec-gap">
-      <h3 class="font-title text-lg">🕋 Kisah Nabi & Sahabat</h3>
-      <div class="max-h-72 overflow-y-auto space-y-2">
+    <div class="card p-4 sec-gap">
+      <h3 class="font-title text-lg" style="color:var(--primary-dark)">🕋 Kisah Nabi & Sahabat</h3>
+      <div class="max-h-80 overflow-y-auto space-y-2">
         <template x-for="(k,idx) in kisahList" :key="idx">
-          <div class="border-2 border-black p-2.5 rounded-xl bg-yellow-50 cursor-pointer" @click="openKisahDetail(idx)">
-            <div class="font-title text-sm text-purple-900" x-text="k.judul"></div>
+          <div class="p-3 rounded-xl cursor-pointer" style="background:var(--bg-soft)" @click="openKisahDetail(idx)">
+            <div class="font-title text-sm" style="color:var(--primary-dark)" x-text="k.judul"></div>
             <div class="text-[10px] text-gray-600" x-text="k.kategori"></div>
           </div>
         </template>
@@ -357,21 +396,21 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   </div>
 
   <div x-show="kitabSubTab==='hadits'" class="sec-gap">
-    <div class="comic-panel p-3.5 sec-gap">
-      <h3 class="font-title text-lg">📚 Kumpulan Hadits</h3>
+    <div class="card p-4 sec-gap">
+      <h3 class="font-title text-lg" style="color:var(--primary-dark)">📚 Kumpulan Hadits</h3>
       <div class="flex flex-wrap gap-1">
         <template x-for="k in haditsKategori" :key="k">
-          <button @click="filterHadits=k" :class="filterHadits===k?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black px-2 py-1 rounded-lg text-[10px] font-bold" x-text="k"></button>
+          <button @click="filterHadits=k" :style="filterHadits===k?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="px-3 py-1 rounded-full text-[10px] font-bold" x-text="k"></button>
         </template>
       </div>
-      <div class="max-h-72 overflow-y-auto space-y-2">
+      <div class="max-h-80 overflow-y-auto space-y-2">
         <template x-for="(h,idx) in filteredHadits" :key="idx">
-          <div class="border-2 border-black p-2.5 rounded-xl bg-yellow-50 space-y-1">
-            <div class="font-title text-[10px] text-purple-900" x-text="h.kategori"></div>
+          <div class="p-3 rounded-xl space-y-1" style="background:var(--bg-soft)">
+            <div class="font-title text-[10px]" style="color:var(--primary)" x-text="'#'+h.kategori"></div>
             <div class="font-arab text-right text-base" x-text="h.arab"></div>
-            <div class="text-[11px] italic text-blue-900" x-text="h.latin"></div>
+            <div class="text-[11px] italic" style="color:var(--primary-dark)" x-text="h.latin"></div>
             <div class="text-[11px] text-gray-700" x-text="h.arti"></div>
-            <div class="text-[9px] text-gray-500" x-text="'('+h.perawi+')'"></div>
+            <div class="text-[9px] text-gray-500 font-bold" x-text="'('+h.perawi+')'"></div>
           </div>
         </template>
       </div>
@@ -379,14 +418,14 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
   </div>
 
   <div x-show="kitabSubTab==='doa'" class="sec-gap">
-    <div class="comic-panel p-3.5 sec-gap">
-      <h3 class="font-title text-lg">🤲 Doa Harian</h3>
-      <div class="max-h-72 overflow-y-auto space-y-2">
+    <div class="card p-4 sec-gap">
+      <h3 class="font-title text-lg" style="color:var(--primary-dark)">🤲 Doa Harian</h3>
+      <div class="max-h-80 overflow-y-auto space-y-2">
         <template x-for="(d,idx) in doaHarian" :key="idx">
-          <div class="border-2 border-black p-2.5 rounded-xl bg-yellow-50 space-y-1">
-            <div class="font-title text-sm text-purple-900" x-text="d.nama"></div>
+          <div class="p-3 rounded-xl space-y-1" style="background:var(--bg-soft)">
+            <div class="font-title text-sm" style="color:var(--primary-dark)" x-text="d.nama"></div>
             <div class="font-arab text-right text-base" x-text="d.arab"></div>
-            <div class="text-[11px] italic text-blue-900" x-text="d.latin"></div>
+            <div class="text-[11px] italic" style="color:var(--primary)" x-text="d.latin"></div>
             <div class="text-[11px] text-gray-700" x-text="d.arti"></div>
           </div>
         </template>
@@ -394,43 +433,59 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     </div>
   </div>
 </div>    <div x-show="activeTab==='tools'" class="sec-gap">
-      <div class="comic-panel bg-purple-400 p-3"><h2 class="font-title text-2xl text-white">🛠️ TOOLS</h2></div>
-      <div class="grid grid-cols-3 gap-1.5">
-        <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs">Jam</button>
-        <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs">TTS</button>
-        <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'bg-black text-yellow-300':'bg-white'" class="border-2 border-black py-1.5 rounded-xl font-title text-xs">Kompres</button>
+      <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+        <div class="text-3xl">🛠️</div>
+        <h2 class="font-title text-2xl text-white">TOOLS</h2>
       </div>
-      <div x-show="toolsSubTab==='jam'" class="sec-gap">
-        <div class="comic-panel p-3.5">
-          <h3 class="font-title text-lg">🌍 Jam Dunia</h3>
-          <div class="grid grid-cols-1 gap-2 mt-2">
-            <template x-for="zone in worldClocks" :key="zone.name">
-              <div class="border-2 border-black p-2 rounded-xl bg-yellow-50 flex items-center gap-2">
-                <span class="flag-ico" :style="'background:'+zone.flag"></span>
-                <div class="flex-1">
-                  <div class="font-title text-xs text-purple-900" x-text="zone.name"></div>
-                  <div class="font-title text-base" x-text="zone.time"></div>
-                </div>
+      <div class="grid grid-cols-3 gap-2">
+        <button @click="toolsSubTab='jam'" :style="toolsSubTab==='jam'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-xs">🌍 Jam</button>
+        <button @click="toolsSubTab='tts'" :style="toolsSubTab==='tts'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-xs">🗣️ TTS</button>
+        <button @click="toolsSubTab='kompres'" :style="toolsSubTab==='kompres'?'background:var(--primary);color:#fff':'background:var(--bg-soft);color:var(--primary-dark)'" class="p-2 rounded-xl font-title text-xs">🖼️ Kompres</button>
+      </div>
+      <div x-show="toolsSubTab==='jam'" class="card p-4 sec-gap">
+        <h3 class="font-title text-lg" style="color:var(--primary-dark)">🌍 Jam Dunia</h3>
+        <div class="grid grid-cols-1 gap-2">
+          <template x-for="zone in worldClocks" :key="zone.name">
+            <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--bg-soft)">
+              <span class="flag-ico" :style="'background:'+zone.flag"></span>
+              <div class="flex-1">
+                <div class="font-title text-xs" style="color:var(--primary-dark)" x-text="zone.name"></div>
+                <div class="font-title text-base" x-text="zone.time"></div>
               </div>
-            </template>
+            </div>
+          </template>
+        </div>
+      </div>
+      <div x-show="toolsSubTab==='tts'" class="card p-4 sec-gap">
+        <h3 class="font-title text-lg" style="color:var(--primary-dark)">🗣️ Text to Speech</h3>
+        <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)"></textarea>
+        <button @click="speakCustomText()" class="btn-primary w-full">🔊 UCAPKAN</button>
+      </div>
+      <div x-show="toolsSubTab==='kompres'" class="card p-4 sec-gap">
+        <h3 class="font-title text-lg" style="color:var(--primary-dark)">🖼️ Kompres Foto</h3>
+        <input type="file" accept="image/*" @change="compressImageFile($event)" class="w-full p-3 rounded-xl text-xs border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
+        <template x-if="compressedImageUrl">
+          <div class="text-center space-y-2">
+            <img :src="compressedImageUrl" class="max-h-40 mx-auto rounded-xl">
+            <a :href="compressedImageUrl" download="compressed.jpg" class="btn-primary block w-full">💾 DOWNLOAD</a>
           </div>
-        </div>
+        </template>
       </div>
-      <div x-show="toolsSubTab==='tts'" class="sec-gap">
-        <div class="comic-panel p-3.5 sec-gap">
-          <h3 class="font-title text-lg">🗣️ TTS</h3>
-          <textarea x-model="customTtsText" rows="3" placeholder="Ketik..." class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50"></textarea>
-          <button @click="speakCustomText()" class="w-full bg-cyan-400 border-2 border-black py-2.5 rounded-xl font-title text-sm">🔊 UCAPKAN</button>
-        </div>
+    </div>
+
+    <div x-show="activeTab==='tema'" class="sec-gap">
+      <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+        <div class="text-3xl">🎨</div>
+        <h2 class="font-title text-2xl text-white">TEMA</h2>
+        <p class="text-xs text-white/80">Pilih tema favoritmu</p>
       </div>
-      <div x-show="toolsSubTab==='kompres'" class="sec-gap">
-        <div class="comic-panel p-3.5 sec-gap">
-          <h3 class="font-title text-lg">🖼️ Kompres Foto</h3>
-          <input type="file" accept="image/*" @change="compressImageFile($event)" class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50">
-          <template x-if="compressedImageUrl">
-            <div class="text-center space-y-2">
-              <img :src="compressedImageUrl" class="max-h-36 mx-auto border-2 border-black rounded-xl">
-              <a :href="compressedImageUrl" download="compressed.jpg" class="w-full bg-green-400 border-2 border-black py-2 rounded-xl font-title text-sm block">💾 DOWNLOAD</a>
+      <div class="card p-4 sec-gap">
+        <h3 class="font-title text-lg" style="color:var(--primary-dark)">Warna Tema</h3>
+        <div class="grid grid-cols-3 gap-3">
+          <template x-for="t in themes" :key="t.id">
+            <div @click="setTheme(t.id)" class="cursor-pointer text-center">
+              <div class="theme-dot mx-auto" :class="theme===t.id?'active':''" :style="'background:'+t.color"></div>
+              <div class="text-[10px] font-bold mt-1" x-text="t.name"></div>
             </div>
           </template>
         </div>
@@ -438,159 +493,210 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
     </div>
 
     <div x-show="activeTab==='arcade'" class="sec-gap">
-      <div class="comic-panel bg-yellow-400 p-3"><h2 class="font-title text-2xl">🎮 GAME</h2></div>
-      <div class="comic-panel p-3 sec-gap text-center">
-        <div class="w-full h-40 border-2 border-black rounded-xl flex items-center justify-center cursor-pointer font-title text-2xl text-white"
-             :class="reflexState==='red'?'bg-red-500':(reflexState==='yellow'?'bg-yellow-500 text-black':'bg-green-500')"
+      <div class="card p-4 text-center" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+        <div class="text-3xl">🎮</div>
+        <h2 class="font-title text-2xl text-white">ARCADE GAME</h2>
+      </div>
+      <div class="card p-4 sec-gap text-center">
+        <div class="w-full h-40 rounded-2xl flex items-center justify-center cursor-pointer font-title text-2xl text-white transition-all"
+             :style="reflexState==='red'?'background:#ef4444':(reflexState==='yellow'?'background:#eab308':'background:#22c55e')"
              @click="handleReflexTap()">
           <span x-text="reflexMessage"></span>
         </div>
-        <button @click="startReflexGame()" class="w-full bg-cyan-400 border-2 border-black py-2 rounded-xl font-title text-sm">Mulai</button>
+        <button @click="startReflexGame()" class="btn-primary w-full">▶️ MULAI GAME</button>
       </div>
     </div>
 
   </main>
 
-  <nav class="absolute bottom-0 left-0 right-0 border-t-4 border-black bg-yellow-300 flex py-1.5 px-1">
+  <nav class="absolute bottom-0 left-0 right-0 flex p-2 gap-1" style="background:#fff;box-shadow:0 -2px 12px rgba(0,0,0,0.08)">
     <button @click="activeTab='home'" :class="activeTab==='home'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-home"/></svg><span class="bottom-nav-label">HOME</span></button>
     <button @click="activeTab='kitab'" :class="activeTab==='kitab'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-book"/></svg><span class="bottom-nav-label">IBADAH</span></button>
     <button @click="activeTab='keuangan'" :class="activeTab==='keuangan'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-wallet"/></svg><span class="bottom-nav-label">DOMPET</span></button>
-    <button @click="activeTab='downloader'" :class="activeTab==='downloader'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-download"/></svg><span class="bottom-nav-label">DL</span></button>
+    <button @click="activeTab='downloader'" :class="activeTab==='downloader'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-download"/></svg><span class="bottom-nav-label">UNDUH</span></button>
     <button @click="activeTab='tools'" :class="activeTab==='tools'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-tools"/></svg><span class="bottom-nav-label">TOOLS</span></button>
+    <button @click="activeTab='tema'" :class="activeTab==='tema'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-palette"/></svg><span class="bottom-nav-label">TEMA</span></button>
     <button @click="activeTab='arcade'" :class="activeTab==='arcade'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-gamepad"/></svg><span class="bottom-nav-label">GAME</span></button>
   </nav>
 </div>
 
 <!-- BOTTOM SHEET: TRANSAKSI -->
 <div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
-  <div class="bottom-sheet-content comic-panel text-center space-y-4">
-    <div class="w-12 h-2 bg-gray-300 rounded-full mx-auto"></div>
-    <h3 class="font-title text-xl text-purple-900">💰 TAMBAH TRANSAKSI</h3>
-    <div class="flex flex-wrap gap-1 justify-center">
-      <button @click="txCategory='Belanja'" class="bg-pink-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">🛒 Belanja</button>
-      <button @click="txCategory='Utang'" class="bg-red-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">💸 Utang</button>
-      <button @click="txCategory='Gaji'" class="bg-green-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">💵 Gaji</button>
-      <button @click="txCategory='Makan'" class="bg-yellow-100 border border-black px-2 py-1 rounded-lg text-xs font-bold">🍜 Makan</button>
+  <div class="bottom-sheet-content text-center space-y-4">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto"></div>
+    <h3 class="font-title text-2xl" style="color:var(--primary-dark)">💰 TRANSAKSI BARU</h3>
+    <div class="flex flex-wrap gap-2 justify-center">
+      <button @click="txCategory='Belanja'" class="px-3 py-2 rounded-full text-xs font-bold" style="background:var(--bg-soft)">🛒 Belanja</button>
+      <button @click="txCategory='Utang'" class="px-3 py-2 rounded-full text-xs font-bold" style="background:var(--bg-soft)">💸 Utang</button>
+      <button @click="txCategory='Gaji'" class="px-3 py-2 rounded-full text-xs font-bold" style="background:var(--bg-soft)">💵 Gaji</button>
+      <button @click="txCategory='Makan'" class="px-3 py-2 rounded-full text-xs font-bold" style="background:var(--bg-soft)">🍜 Makan</button>
     </div>
-    <input type="text" x-model="txCategory" placeholder="Kategori..." class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50">
-    <input type="number" x-model="txAmount" placeholder="Nominal..." class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50">
+    <input type="text" x-model="txCategory" placeholder="Kategori..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
+    <input type="number" x-model="txAmount" placeholder="Nominal (Rp)..." class="w-full p-3 rounded-xl text-sm border-2" style="border-color:var(--primary-light);background:var(--bg-soft)">
     <div class="grid grid-cols-2 gap-2">
-      <button @click="addTransaction('income')" class="bg-green-400 border-2 border-black py-2 rounded-xl font-title text-sm">+ Masuk</button>
-      <button @click="addTransaction('expense')" class="bg-red-400 text-white border-2 border-black py-2 rounded-xl font-title text-sm">- Keluar</button>
+      <button @click="addTransaction('income')" class="btn-primary text-sm" style="background:#22c55e;box-shadow:0 3px 0 #15803d">+ Masuk</button>
+      <button @click="addTransaction('expense')" class="btn-primary text-sm" style="background:#ef4444;box-shadow:0 3px 0 #b91c1c">- Keluar</button>
     </div>
-    <button @click="txSheetOpen=false" class="w-full bg-gray-200 border-2 border-black py-2 rounded-xl font-title text-sm">Tutup</button>
+    <button @click="txSheetOpen=false" class="btn-soft w-full">Tutup</button>
   </div>
 </div>
 
 <!-- BOTTOM SHEET: BERITA -->
 <div x-show="newsSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content">
-    <div class="w-12 h-2 bg-gray-300 rounded-full mx-auto mb-3"></div>
-    <h3 class="font-title text-2xl text-orange-700 text-center">📰 BERITA INDONESIA</h3>
-    <div x-show="newsLoading" class="text-center text-xs font-bold py-3"><span class="spin"></span> Memuat berita...</div>
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
+    <h3 class="font-title text-2xl text-center" style="color:var(--primary-dark)">📰 BERITA INDONESIA</h3>
+    <div x-show="newsLoading" class="text-center py-3"><span class="spin"></span></div>
     <div x-show="!newsLoading && !selectedNews" class="space-y-2 mt-3 max-h-[60vh] overflow-y-auto">
       <template x-for="(n,idx) in newsList" :key="idx">
-        <div @click="selectedNews=n" class="border-2 border-black rounded-xl bg-yellow-50 p-2 cursor-pointer flex gap-2">
-          <template x-if="n.thumbnail"><img :src="n.thumbnail" class="w-20 h-20 object-cover border-2 border-black rounded-lg shrink-0" @error="$event.target.style.display='none'"></template>
+        <div @click="selectedNews=n" class="p-3 rounded-xl cursor-pointer flex gap-3" style="background:var(--bg-soft)">
+          <template x-if="n.thumbnail"><img :src="n.thumbnail" class="w-20 h-20 object-cover rounded-xl shrink-0" @error="$event.target.style.display='none'"></template>
           <div class="flex-1 min-w-0">
-            <div class="font-title text-xs text-orange-800 line-clamp-2" x-text="n.title"></div>
-            <div class="text-[10px] text-gray-600 mt-1" x-text="n.pubDate"></div>
-            <div class="text-[10px] text-blue-700 underline" x-text="n.source"></div>
+            <div class="font-bold text-xs line-clamp-2" x-text="n.title"></div>
+            <div class="text-[10px] text-gray-500 mt-1" x-text="n.pubDate"></div>
+            <div class="text-[10px] font-bold" style="color:var(--primary)" x-text="n.source"></div>
           </div>
         </div>
       </template>
     </div>
     <template x-if="selectedNews">
-      <div class="mt-3 space-y-2">
-        <button @click="selectedNews=null" class="bg-black text-yellow-300 font-title px-3 py-1 rounded-xl text-xs">← Kembali</button>
-        <h4 class="font-title text-lg text-orange-800" x-text="selectedNews.title"></h4>
-        <p class="text-[11px] text-gray-500" x-text="'Sumber: '+selectedNews.source+' • '+selectedNews.pubDate"></p>
+      <div class="mt-3 space-y-3">
+        <button @click="selectedNews=null" class="btn-soft px-3 py-1.5 text-xs">← Kembali</button>
+        <h4 class="font-title text-lg" style="color:var(--primary-dark)" x-text="selectedNews.title"></h4>
+        <p class="text-[10px] text-gray-500" x-text="selectedNews.source+' • '+selectedNews.pubDate"></p>
         <p class="text-xs leading-relaxed" x-text="selectedNews.description"></p>
-        <a :href="selectedNews.link" target="_blank" class="w-full bg-orange-400 border-2 border-black py-2 rounded-xl font-title text-sm block text-center">🔗 BACA SELENGKAPNYA</a>
+        <a :href="selectedNews.link" target="_blank" class="btn-primary block text-center text-sm">🔗 BACA SELENGKAPNYA</a>
       </div>
     </template>
-    <button @click="newsSheetOpen=false" class="w-full bg-gray-200 border-2 border-black py-2 rounded-xl font-title text-sm mt-3">Tutup</button>
+    <button @click="newsSheetOpen=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
 </div>
 
-<!-- BOTTOM SHEET: CUACA -->
-<div x-show="weatherSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
+<!-- BOTTOM SHEET: CUACA - PILIH PROVINSI -->
+<div x-show="weatherProvinceSheet" class="bottom-sheet-overlay" style="z-index:100006;">
   <div class="bottom-sheet-content">
-    <div class="w-12 h-2 bg-gray-300 rounded-full mx-auto mb-3"></div>
-    <h3 class="font-title text-2xl text-sky-700 text-center">🌤️ CUACA INDONESIA</h3>
-    <label class="text-xs font-bold mt-3 block">Provinsi:</label>
-    <select x-model="weatherProvince" @change="onProvinceChange()" class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50 mt-1">
-      <template x-for="p in provinces" :key="p"><option :value="p" x-text="p"></option></template>
-    </select>
-    <label class="text-xs font-bold mt-3 block">Kota/Kabupaten:</label>
-    <select x-model="weatherCity" @change="fetchWeather()" class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50 mt-1">
-      <template x-for="c in cities" :key="c"><option :value="c" x-text="c"></option></template>
-    </select>
-    <div x-show="weatherLoading" class="text-center text-xs font-bold py-3"><span class="spin"></span> Memuat cuaca...</div>
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
+    <h3 class="font-title text-2xl text-center" style="color:var(--primary-dark)">🌤️ PILIH PROVINSI</h3>
+    <div class="mt-3 max-h-[65vh] overflow-y-auto rounded-xl">
+      <template x-for="p in provinces" :key="p">
+        <div @click="selectWeatherProvince(p)" class="sheet-picker-item">
+          <span class="font-bold text-sm" x-text="p"></span>
+          <span style="color:var(--primary)">›</span>
+        </div>
+      </template>
+    </div>
+    <button @click="weatherProvinceSheet=false" class="btn-soft w-full mt-3">Tutup</button>
+  </div>
+</div>
+
+<!-- BOTTOM SHEET: CUACA - PILIH KOTA -->
+<div x-show="weatherCitySheet" class="bottom-sheet-overlay" style="z-index:100007;">
+  <div class="bottom-sheet-content">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
+    <h3 class="font-title text-xl text-center" style="color:var(--primary-dark)">PILIH KOTA</h3>
+    <p class="text-xs text-center text-gray-600" x-text="'Provinsi: '+weatherProvince"></p>
+    <div class="mt-3 max-h-[65vh] overflow-y-auto rounded-xl">
+      <template x-for="c in cities" :key="c">
+        <div @click="selectWeatherCity(c)" class="sheet-picker-item">
+          <span class="font-bold text-sm" x-text="c"></span>
+          <span style="color:var(--primary)">›</span>
+        </div>
+      </template>
+    </div>
+    <button @click="weatherCitySheet=false" class="btn-soft w-full mt-3">Tutup</button>
+  </div>
+</div>
+
+<!-- BOTTOM SHEET: CUACA - HASIL -->
+<div x-show="weatherSheetOpen" class="bottom-sheet-overlay" style="z-index:100008;">
+  <div class="bottom-sheet-content">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
+    <div class="flex justify-between items-center">
+      <h3 class="font-title text-xl" style="color:var(--primary-dark)">🌤️ CUACA</h3>
+      <button @click="openWeatherProvincePicker()" class="btn-soft px-3 py-1.5 text-xs">🔄 Ganti Kota</button>
+    </div>
+    <div x-show="weatherLoading" class="text-center py-3"><span class="spin"></span></div>
     <template x-if="weatherData && !weatherLoading">
       <div class="mt-3 space-y-3">
-        <div class="comic-panel bg-gradient-to-br from-sky-300 to-cyan-400 p-4 text-center">
-          <div class="text-xs font-bold" x-text="weatherData.city"></div>
-          <div class="text-5xl my-1" x-text="weatherData.emoji"></div>
-          <div class="font-title text-4xl" x-text="weatherData.temp+'°C'"></div>
-          <div class="text-xs font-bold" x-text="weatherData.desc"></div>
-          <div class="grid grid-cols-2 gap-2 mt-2 text-[10px] font-bold">
-            <div>💧 Lembap: <span x-text="weatherData.humidity+'%'"></span></div>
-            <div>🌬️ Angin: <span x-text="weatherData.wind+' km/j'"></span></div>
+        <div class="p-4 text-center rounded-2xl" style="background:linear-gradient(135deg,var(--primary-light),var(--primary));color:#fff">
+          <div class="text-sm font-bold" x-text="weatherData.city"></div>
+          <div class="text-6xl my-2" x-text="weatherData.emoji"></div>
+          <div class="font-title text-5xl" x-text="weatherData.temp+'°C'"></div>
+          <div class="text-sm" x-text="weatherData.desc"></div>
+          <div class="grid grid-cols-2 gap-2 mt-3 text-xs">
+            <div class="bg-white/20 rounded-xl p-2">💧 <span x-text="weatherData.humidity+'%'"></span></div>
+            <div class="bg-white/20 rounded-xl p-2">🌬️ <span x-text="weatherData.wind+' km/j'"></span></div>
           </div>
         </div>
-        <h4 class="font-title text-sm">📅 Prakiraan 7 Hari</h4>
-        <div class="space-y-1">
+        <h4 class="font-title text-sm" style="color:var(--primary-dark)">📅 PRAKIRAAN 7 HARI</h4>
+        <div class="space-y-2">
           <template x-for="(d,idx) in weatherData.forecast" :key="idx">
-            <div class="border-2 border-black rounded-xl p-2 bg-yellow-50 flex items-center gap-2 text-xs">
-              <span class="text-2xl" x-text="d.emoji"></span>
+            <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--bg-soft)">
+              <span class="text-3xl" x-text="d.emoji"></span>
               <div class="flex-1">
-                <div class="font-bold" x-text="d.date"></div>
+                <div class="font-bold text-xs" x-text="d.date"></div>
                 <div class="text-[10px] text-gray-600" x-text="d.desc"></div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-red-600" x-text="d.max+'°'"></div>
-                <div class="font-bold text-blue-600" x-text="d.min+'°'"></div>
+                <div class="font-bold text-red-500 text-sm" x-text="d.max+'°'"></div>
+                <div class="font-bold text-blue-500 text-sm" x-text="d.min+'°'"></div>
               </div>
             </div>
           </template>
         </div>
       </div>
     </template>
-    <button @click="weatherSheetOpen=false" class="w-full bg-gray-200 border-2 border-black py-2 rounded-xl font-title text-sm mt-3">Tutup</button>
+    <button @click="weatherSheetOpen=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
 </div>
 
-<!-- BOTTOM SHEET: JADWAL SHOLAT -->
-<div x-show="showPrayerSheet" class="bottom-sheet-overlay" style="z-index:100005;">
-  <div class="bottom-sheet-content comic-panel">
-    <div class="w-12 h-2 bg-gray-300 rounded-full mx-auto mb-3"></div>
-    <h3 class="font-title text-2xl text-emerald-700 text-center">🕌 JADWAL SHOLAT</h3>
-    <p class="text-xs text-center text-gray-600 font-bold mt-1">Pilih Provinsi & Kota</p>
-    <label class="text-xs font-bold mt-3 block">Provinsi:</label>
-    <select x-model="prayerProvince" @change="onPrayerProvinceChange()" class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50 mt-1">
-      <template x-for="p in provinces" :key="p"><option :value="p" x-text="p"></option></template>
-    </select>
-    <label class="text-xs font-bold mt-3 block">Kota/Kabupaten:</label>
-    <select x-model="prayerCity" @change="fetchPrayerTimes()" class="w-full border-2 border-black p-2 rounded-xl text-xs bg-yellow-50 mt-1">
-      <template x-for="c in prayerCities" :key="c"><option :value="c" x-text="c"></option></template>
-    </select>
-    <button @click="showPrayerSheet=false" class="w-full bg-gray-200 border-2 border-black py-2 rounded-xl font-title text-sm mt-4">Tutup</button>
+<!-- BOTTOM SHEET: SHOLAT - PILIH PROVINSI -->
+<div x-show="prayerProvinceSheet" class="bottom-sheet-overlay" style="z-index:100006;">
+  <div class="bottom-sheet-content">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
+    <h3 class="font-title text-2xl text-center" style="color:var(--primary-dark)">🕌 PILIH PROVINSI</h3>
+    <div class="mt-3 max-h-[65vh] overflow-y-auto rounded-xl">
+      <template x-for="p in provinces" :key="p">
+        <div @click="selectPrayerProvince(p)" class="sheet-picker-item">
+          <span class="font-bold text-sm" x-text="p"></span>
+          <span style="color:var(--primary)">›</span>
+        </div>
+      </template>
+    </div>
+    <button @click="prayerProvinceSheet=false" class="btn-soft w-full mt-3">Tutup</button>
+  </div>
+</div>
+
+<!-- BOTTOM SHEET: SHOLAT - PILIH KOTA -->
+<div x-show="prayerCitySheet" class="bottom-sheet-overlay" style="z-index:100007;">
+  <div class="bottom-sheet-content">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
+    <h3 class="font-title text-xl text-center" style="color:var(--primary-dark)">PILIH KOTA</h3>
+    <p class="text-xs text-center text-gray-600" x-text="'Provinsi: '+prayerProvince"></p>
+    <div class="mt-3 max-h-[65vh] overflow-y-auto rounded-xl">
+      <template x-for="c in prayerCities" :key="c">
+        <div @click="selectPrayerCity(c)" class="sheet-picker-item">
+          <span class="font-bold text-sm" x-text="c"></span>
+          <span style="color:var(--primary)">›</span>
+        </div>
+      </template>
+    </div>
+    <button @click="prayerCitySheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
 </div>
 
 <!-- BOTTOM SHEET: KISAH DETAIL -->
 <div x-show="kisahSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content">
-    <div class="w-12 h-2 bg-gray-300 rounded-full mx-auto mb-3"></div>
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
     <template x-if="selectedKisah">
       <div class="space-y-3">
-        <h3 class="font-title text-2xl text-purple-800 text-center" x-text="selectedKisah.judul"></h3>
-        <div class="text-[10px] text-center text-gray-600 font-bold" x-text="selectedKisah.kategori"></div>
-        <div class="border-2 border-black rounded-xl bg-yellow-50 p-3 max-h-[55vh] overflow-y-auto">
+        <h3 class="font-title text-2xl text-center" style="color:var(--primary-dark)" x-text="selectedKisah.judul"></h3>
+        <div class="text-[10px] text-center text-gray-500 font-bold" x-text="selectedKisah.kategori"></div>
+        <div class="p-4 rounded-xl max-h-[55vh] overflow-y-auto" style="background:var(--bg-soft)">
           <p class="text-xs leading-relaxed whitespace-pre-line" x-text="selectedKisah.isi"></p>
         </div>
-        <button @click="kisahSheetOpen=false" class="w-full bg-gray-200 border-2 border-black py-2 rounded-xl font-title text-sm">Tutup</button>
+        <button @click="kisahSheetOpen=false" class="btn-soft w-full">Tutup</button>
       </div>
     </template>
   </div>
@@ -603,6 +709,7 @@ body{font-family:'Comic Neue',system-ui,sans-serif;background:#fbbf24;color:#1a1
 <symbol id="i-download" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></symbol>
 <symbol id="i-tools" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></symbol>
 <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M15 7.5V2H9v5.5l-7 8V22h20v-6.5l-7-8z"/></symbol>
+<symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></symbol>
 </svg>
 
 <script>const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
@@ -633,60 +740,56 @@ const QUOTES=[
 {text:'Sesungguhnya Allah bersama orang-orang yang sabar.',author:'QS. Al-Baqarah: 153'},
 {text:'Sebaik-baik kamu adalah yang mempelajari Al-Quran dan mengajarkannya.',author:'HR. Bukhari'},
 {text:'Kebersihan adalah sebagian dari iman.',author:'HR. Muslim'},
-{text:'Tidak sempurna iman seseorang hingga dia mencintai saudaranya seperti mencintai dirinya.',author:'HR. Bukhari'},
 {text:'Waktu itu lebih berharga daripada emas.',author:'Imam Syafi\'i'},
-{text:'Diam itu hikmah, tapi sedikit yang mengamalkannya.',author:'Umar bin Khattab'},
-{text:'Barang siapa yang beriman kepada Allah dan hari akhir, hendaklah ia berkata baik atau diam.',author:'HR. Bukhari'},
-{text:'Jadikanlah sabar dan sholat sebagai penolongmu.',author:'QS. Al-Baqarah: 45'},
-{text:'Barangsiapa menempuh jalan untuk mencari ilmu, Allah akan memudahkan jalannya ke surga.',author:'HR. Muslim'}
+{text:'Barangsiapa menempuh jalan mencari ilmu, Allah mudahkan jalannya ke surga.',author:'HR. Muslim'},
+{text:'Jadikanlah sabar dan sholat sebagai penolongmu.',author:'QS. Al-Baqarah: 45'}
 ];
 
 const KISAH=[
-{judul:'Nabi Adam AS',kategori:'Nabi',isi:'Nabi Adam AS adalah manusia pertama yang diciptakan Allah SWT dari tanah liat. Allah meniupkan ruh ke dalam tubuhnya dan mengajarkan nama-nama segala sesuatu.\n\nAllah menciptakan Siti Hawa sebagai pendamping Adam di surga. Mereka hidup bahagia sampai iblis menggoda mereka untuk memakan buah khuldi yang dilarang.\n\nSetelah memakan buah terlarang, mereka diturunkan ke bumi. Adam bertaubat dan Allah menerima taubatnya. Adam diangkat menjadi khalifah pertama di muka bumi.'},
-{judul:'Nabi Nuh AS',kategori:'Nabi',isi:'Nabi Nuh AS berdakwah kepada kaumnya selama 950 tahun, namun hanya sedikit yang beriman. Kaumnya menyembah berhala dan menolak ajaran tauhid.\n\nAllah memerintahkan Nuh membangun kapal besar. Ketika banjir besar datang, hanya orang beriman yang naik kapal selamat.\n\nAnak Nuh sendiri yang kafir ikut tenggelam. Kapal Nuh berlabuh di Gunung Judi setelah banjir surut.'},
-{judul:'Nabi Ibrahim AS',kategori:'Nabi',isi:'Nabi Ibrahim AS dikenal sebagai bapak para nabi (Abul Anbiya). Beliau lahir di Babilonia (Irak) dan berdakwah menentang penyembahan berhala.\n\nIbrahim dihukum bakar oleh Raja Namrud, tapi Allah menjadikan api itu dingin dan tidak membahayakan.\n\nIbrahim hijrah ke Palestina, lalu ke Mesir. Dari Hajar lahir Nabi Ismail, dari Sarah lahir Nabi Ishaq. Bersama Ismail, Ibrahim membangun Ka\'bah di Makkah.'},
-{judul:'Nabi Musa AS',kategori:'Nabi',isi:'Nabi Musa AS lahir di Mesir saat Fir\'aun memerintahkan membunuh bayi laki-laki Bani Israil. Ibunya menghanyutkan Musa di sungai Nil, dan ia ditemukan oleh keluarga Fir\'aun.\n\nSetelah dewasa, Musa melarikan diri ke Madyan. Di Gunung Sinai, Musa menerima wahyu pertama dan diperintahkan menghadap Fir\'aun.\n\nMusa membawa Bani Israil keluar dari Mesir dengan mukjizat membelah Laut Merah. Fir\'aun dan tentaranya tenggelam.'},
-{judul:'Nabi Isa AS',kategori:'Nabi',isi:'Nabi Isa AS lahir dari Maryam tanpa ayah, dengan mukjizat dari Allah. Beliau sudah bisa berbicara saat masih bayi.\n\nIsa diangkat menjadi nabi pada usia 30 tahun dan berdakwah kepada Bani Israil. Mukjizatnya: menyembuhkan orang buta dan sakit kusta, menghidupkan orang mati dengan izin Allah.\n\nKaumnya berencana membunuh Isa, namun Allah mengangkatnya ke langit. Isa akan turun kembali di akhir zaman.'},
-{judul:'Nabi Muhammad SAW',kategori:'Nabi',isi:'Nabi Muhammad SAW lahir di Makkah tahun 570 M (Tahun Gajah). Ayahnya Abdullah wafat sebelum lahir, ibunya Aminah wafat saat ia berusia 6 tahun.\n\nBeliau diasuh kakeknya Abdul Muthalib, lalu pamannya Abu Thalib. Muhammad dikenal jujur sehingga dijuluki Al-Amin.\n\nPada usia 40 tahun, beliau menerima wahyu pertama di Gua Hira. Dakwahnya di Makkah selama 13 tahun penuh rintangan. Hijrah ke Madinah tahun 622 M menjadi awal kalender Hijriah. Beliau wafat tahun 632 M.'},
-{judul:'Abu Bakar Ash-Shiddiq',kategori:'Sahabat',isi:'Abu Bakar adalah sahabat pertama yang masuk Islam dari kalangan laki-laki dewasa. Beliau menemani Rasulullah hijrah ke Madinah.\n\nSetelah Rasulullah wafat, Abu Bakar menjadi khalifah pertama. Beliau memerangi orang-orang murtad dan nabi palsu.\n\nAbu Bakar memerintahkan pengumpulan Al-Quran dalam satu mushaf. Beliau wafat tahun 634 M setelah memimpin 2 tahun.'},
-{judul:'Umar bin Khattab',kategori:'Sahabat',isi:'Umar bin Khattab awalnya musuh Islam, namun setelah mendengar surat Thaha, hatinya terbuka dan masuk Islam.\n\nSebagai khalifah kedua, Umar memperluas wilayah Islam hingga Persia, Syam, dan Mesir. Beliau dikenal adil dan tegas.\n\nUmar menetapkan kalender Hijriah dan mendirikan lembaga-lembaga pemerintahan. Beliau wafat dibunuh oleh Abu Lu\'luah tahun 644 M.'},
-{judul:'Utsman bin Affan',kategori:'Sahabat',isi:'Utsman bin Affan dijuluki Dzun Nurain (pemilik dua cahaya) karena menikahi dua putri Rasulullah.\n\nSebagai khalifah ketiga, Utsman membakukan mushaf Al-Quran dan menyebarkannya ke seluruh wilayah Islam.\n\nUtsman membangun angkatan laut Islam dan memperluas Masjid Nabawi. Beliau wafat syahid tahun 656 M.'},
-{judul:'Ali bin Abi Thalib',kategori:'Sahabat',isi:'Ali bin Abi Thalib adalah sepupu sekaligus menantu Rasulullah. Beliau anak pertama yang masuk Islam.\n\nAli dikenal sebagai pemuda pemberani, pernah menggantikan Rasulullah di tempat tidur saat hijrah.\n\nSebagai khalifah keempat, Ali memindahkan pusat pemerintahan ke Kufah. Beliau wafat tahun 661 M.'},
-{judul:'Bilal bin Rabah',kategori:'Sahabat',isi:'Bilal bin Rabah adalah muazin pertama Islam. Beliau awalnya budak yang disiksa karena masuk Islam.\n\nAbu Bakar membebaskan Bilal, dan sejak itu Bilal mengumandangkan adzan di Masjid Nabawi.\n\nBilal ikut dalam berbagai perang bersama Rasulullah. Setelah Rasulullah wafat, Bilal berhenti adzan karena sedih.'},
-{judul:'Salman Al-Farisi',kategori:'Sahabat',isi:'Salman Al-Farisi berasal dari Persia. Beliau mencari agama yang benar hingga bertemu Rasulullah.\n\nSalman mengusulkan strategi parit (khandaq) saat Perang Ahzab, yang menyelamatkan Madinah.\n\nRasulullah menyebut Salman sebagai bagian dari Ahlul Bait. Beliau menjadi gubernur Madain.'},
-{judul:'Khadijah binti Khuwailid',kategori:'Sahabat',isi:'Khadijah adalah istri pertama Rasulullah dan wanita pertama yang masuk Islam.\n\nBeliau pengusaha kaya yang mempercayakan dagangnya kepada Muhammad sebelum menikah.\n\nKhadijah mendukung dakwah Rasulullah dengan harta dan jiwanya. Beliau wafat tahun 619 M.'},
-{judul:'Aisyah binti Abu Bakar',kategori:'Sahabat',isi:'Aisyah adalah istri Rasulullah yang paling banyak meriwayatkan hadits, mencapai 2.210 hadits.\n\nBeliau dikenal cerdas dalam ilmu agama, tafsir, dan fikih. Banyak sahabat belajar kepada Aisyah.\n\nAisyah wafat tahun 678 M dan dimakamkan di Baqi\'.'}
+{judul:'Nabi Adam AS',kategori:'Nabi',isi:'Nabi Adam AS adalah manusia pertama yang diciptakan Allah SWT dari tanah liat. Allah meniupkan ruh ke dalam tubuhnya dan mengajarkan nama-nama segala sesuatu.\n\nAllah menciptakan Siti Hawa sebagai pendamping Adam di surga. Mereka hidup bahagia sampai iblis menggoda mereka untuk memakan buah khuldi.\n\nSetelah memakan buah terlarang, mereka diturunkan ke bumi. Adam bertaubat dan Allah menerima taubatnya.'},
+{judul:'Nabi Nuh AS',kategori:'Nabi',isi:'Nabi Nuh AS berdakwah kepada kaumnya selama 950 tahun, namun hanya sedikit yang beriman.\n\nAllah memerintahkan Nuh membangun kapal besar. Ketika banjir besar datang, hanya orang beriman yang naik kapal selamat.'},
+{judul:'Nabi Ibrahim AS',kategori:'Nabi',isi:'Nabi Ibrahim AS dikenal sebagai bapak para nabi. Beliau lahir di Babilonia dan berdakwah menentang penyembahan berhala.\n\nIbrahim dihukum bakar oleh Raja Namrud, tapi Allah menjadikan api itu dingin.\n\nBersama Ismail, Ibrahim membangun Ka\'bah di Makkah.'},
+{judul:'Nabi Musa AS',kategori:'Nabi',isi:'Nabi Musa AS lahir di Mesir saat Fir\'aun membunuh bayi laki-laki Bani Israil.\n\nDi Gunung Sinai, Musa menerima wahyu pertama dan diperintahkan menghadap Fir\'aun.\n\nMusa membawa Bani Israil keluar dari Mesir dengan mukjizat membelah Laut Merah.'},
+{judul:'Nabi Isa AS',kategori:'Nabi',isi:'Nabi Isa AS lahir dari Maryam tanpa ayah, dengan mukjizat dari Allah.\n\nIsa diangkat menjadi nabi pada usia 30 tahun. Mukjizatnya: menyembuhkan orang buta dan menghidupkan orang mati dengan izin Allah.\n\nAllah mengangkatnya ke langit. Isa akan turun kembali di akhir zaman.'},
+{judul:'Nabi Muhammad SAW',kategori:'Nabi',isi:'Nabi Muhammad SAW lahir di Makkah tahun 570 M. Ayahnya Abdullah wafat sebelum lahir, ibunya Aminah wafat saat ia berusia 6 tahun.\n\nPada usia 40 tahun, beliau menerima wahyu pertama di Gua Hira.\n\nHijrah ke Madinah tahun 622 M menjadi awal kalender Hijriah. Beliau wafat tahun 632 M.'},
+{judul:'Abu Bakar Ash-Shiddiq',kategori:'Sahabat',isi:'Abu Bakar adalah sahabat pertama yang masuk Islam dari kalangan laki-laki dewasa.\n\nSetelah Rasulullah wafat, Abu Bakar menjadi khalifah pertama.\n\nBeliau memerintahkan pengumpulan Al-Quran dalam satu mushaf. Wafat tahun 634 M.'},
+{judul:'Umar bin Khattab',kategori:'Sahabat',isi:'Umar bin Khattab awalnya musuh Islam, namun setelah mendengar surat Thaha, hatinya terbuka.\n\nSebagai khalifah kedua, Umar memperluas wilayah Islam. Beliau dikenal adil dan tegas.\n\nWafat dibunuh tahun 644 M.'},
+{judul:'Utsman bin Affan',kategori:'Sahabat',isi:'Utsman bin Affan dijuluki Dzun Nurain karena menikahi dua putri Rasulullah.\n\nSebagai khalifah ketiga, Utsman membakukan mushaf Al-Quran.\n\nWafat syahid tahun 656 M.'},
+{judul:'Ali bin Abi Thalib',kategori:'Sahabat',isi:'Ali bin Abi Thalib adalah sepupu sekaligus menantu Rasulullah.\n\nSebagai khalifah keempat, Ali memindahkan pusat pemerintahan ke Kufah. Wafat tahun 661 M.'},
+{judul:'Bilal bin Rabah',kategori:'Sahabat',isi:'Bilal bin Rabah adalah muazin pertama Islam.\n\nAbu Bakar membebaskan Bilal, dan sejak itu Bilal mengumandangkan adzan di Masjid Nabawi.'},
+{judul:'Salman Al-Farisi',kategori:'Sahabat',isi:'Salman Al-Farisi berasal dari Persia. Beliau mencari agama yang benar hingga bertemu Rasulullah.\n\nSalman mengusulkan strategi parit saat Perang Ahzab.'},
+{judul:'Khadijah binti Khuwailid',kategori:'Sahabat',isi:'Khadijah adalah istri pertama Rasulullah dan wanita pertama yang masuk Islam.\n\nBeliau mendukung dakwah Rasulullah dengan harta dan jiwanya.'},
+{judul:'Aisyah binti Abu Bakar',kategori:'Sahabat',isi:'Aisyah adalah istri Rasulullah yang paling banyak meriwayatkan hadits, mencapai 2.210 hadits.\n\nBeliau dikenal cerdas dalam ilmu agama, tafsir, dan fikih.'}
 ];
 
 const HADITS=[
 {kategori:'Iman',arab:'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ',latin:'Innamal a\'maalu bin niyyaat',arti:'Sesungguhnya amal itu tergantung niatnya',perawi:'HR. Bukhari & Muslim'},
 {kategori:'Iman',arab:'الدِّينُ النَّصِيحَةُ',latin:'Ad-diinu an-nashiihat',arti:'Agama itu nasihat',perawi:'HR. Muslim'},
-{kategori:'Akhlak',arab:'إِنَّ أَكْمَلَ الْمُؤْمِنِينَ إِيمَانًا أَحْسَنُهُمْ خُلُقًا',latin:'Inna akmalal mu\'miniina iimaanan ahsanuhum khuluqan',arti:'Sesungguhnya mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya',perawi:'HR. Tirmidzi'},
+{kategori:'Akhlak',arab:'إِنَّ أَكْمَلَ الْمُؤْمِنِينَ إِيمَانًا أَحْسَنُهُمْ خُلُقًا',latin:'Inna akmalal mu\'miniina iimaanan ahsanuhum khuluqan',arti:'Mukmin paling sempurna imannya adalah yang paling baik akhlaknya',perawi:'HR. Tirmidzi'},
 {kategori:'Akhlak',arab:'خَيْرُكُمْ خَيْرُكُمْ لِأَهْلِهِ',latin:'Khairukum khairukum li ahlihi',arti:'Sebaik-baik kalian adalah yang paling baik terhadap keluarganya',perawi:'HR. Tirmidzi'},
 {kategori:'Ibadah',arab:'الصَّلَاةُ عِمَادُ الدِّينِ',latin:'Ash-shalaatu \'imaadud diin',arti:'Sholat adalah tiang agama',perawi:'HR. Baihaqi'},
 {kategori:'Ibadah',arab:'الطُّهُورُ شَطْرُ الإِيمَانِ',latin:'Ath-thuhuuru syathrul iimaan',arti:'Kesucian adalah setengah dari iman',perawi:'HR. Muslim'},
 {kategori:'Sosial',arab:'الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ',latin:'Al-muslimu man salimal muslimuuna min lisaanihi wa yadihi',arti:'Muslim sejati adalah yang membuat muslim lain selamat dari lisan dan tangannya',perawi:'HR. Bukhari'},
-{kategori:'Sosial',arab:'مَنْ كَانَ يُؤْمِنُ بِاللهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ',latin:'Man kaana yu\'minu billaahi wal yaumil aakhiri fal yaqul khairan au liyashmut',arti:'Barang siapa beriman kepada Allah dan hari akhir, hendaklah berkata baik atau diam',perawi:'HR. Bukhari'},
+{kategori:'Sosial',arab:'مَنْ كَانَ يُؤْمِنُ بِاللهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ',latin:'Man kaana yu\'minu billaahi wal yaumil aakhiri fal yaqul khairan',arti:'Barang siapa beriman kepada Allah dan hari akhir, berkatalah baik atau diam',perawi:'HR. Bukhari'},
 {kategori:'Ilmu',arab:'طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ',latin:'Thalabul \'ilmi fariidhatun \'alaa kulli muslim',arti:'Menuntut ilmu itu wajib bagi setiap muslim',perawi:'HR. Ibnu Majah'},
 {kategori:'Ilmu',arab:'مَنْ سَلَكَ طَرِيقًا يَطْلُبُ فِيهِ عِلْمًا سَلَكَ اللهُ بِهِ طَرِيقًا مِنْ طُرُقِ الْجَنَّةِ',latin:'Man salaka thariiqan yathlubu fiihi \'ilman salakallaahu bihi thariiqan min thuruqil jannah',arti:'Barang siapa menempuh jalan mencari ilmu, Allah akan memudahkan jalannya ke surga',perawi:'HR. Muslim'},
-{kategori:'Rezeki',arab:'لَوْ تَوَكَّلْتُمْ عَلَى اللهِ حَقَّ تَوَكُّلِهِ لَرَزَقَكُمْ كَمَا يَرْزُقُ الطَّيْرَ',latin:'Lau tawakkaltum \'alallaahi haqqa tawakkulihi larazaqakum kamaa yarzuquth thair',arti:'Jika kalian bertawakal kepada Allah dengan sebenar-benarnya, Allah akan memberi rezeki seperti burung',perawi:'HR. Tirmidzi'},
 {kategori:'Rezeki',arab:'مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ',latin:'Maa naqashat shadaqatun min maal',arti:'Sedekah tidak akan mengurangi harta',perawi:'HR. Muslim'},
 {kategori:'Sabar',arab:'عَجَبًا لِأَمْرِ الْمُؤْمِنِ إِنَّ أَمْرَهُ كُلَّهُ خَيْرٌ',latin:'\'Ajaban li amril mu\'mini inna amrahu kullahu khair',arti:'Sungguh menakjubkan urusan mukmin, semua urusannya baik',perawi:'HR. Muslim'}
 ];
 
 const DOA_HARIAN=[
-{nama:'Doa Bangun Tidur',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',latin:'Alhamdulillaahil ladzii ahyaanaa ba\'da maa amaatanaa wa ilaihin nusyuur',arti:'Segala puji bagi Allah yang menghidupkan kami setelah mematikan kami'},
+{nama:'Doa Bangun Tidur',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',latin:'Alhamdulillaahil ladzii ahyaanaa ba\'da maa amaatanaa',arti:'Segala puji bagi Allah yang menghidupkan kami setelah mematikan kami'},
 {nama:'Doa Sebelum Tidur',arab:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',latin:'Bismikallaahumma amuutu wa ahyaa',arti:'Dengan namaMu ya Allah aku mati dan aku hidup'},
 {nama:'Doa Sebelum Makan',arab:'بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيْمِ',latin:'Bismillaahir rahmaanir rahiim',arti:'Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang'},
-{nama:'Doa Setelah Makan',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ',latin:'Alhamdulillaahil ladzii ath\'amanaa wa saqaanaa wa ja\'alanaa muslimiin',arti:'Segala puji bagi Allah yang memberi kami makan dan minum'},
-{nama:'Doa Keluar Rumah',arab:'بِسْمِ اللهِ تَوَكَّلْتُ عَلَى اللهِ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ',latin:'Bismillaahi tawakkaltu \'alallaahi laa haula wa laa quwwata illaa billaah',arti:'Dengan nama Allah aku bertawakal kepada Allah'},
+{nama:'Doa Setelah Makan',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ',latin:'Alhamdulillaahil ladzii ath\'amanaa wa saqaanaa',arti:'Segala puji bagi Allah yang memberi kami makan dan minum'},
+{nama:'Doa Keluar Rumah',arab:'بِسْمِ اللهِ تَوَكَّلْتُ عَلَى اللهِ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ',latin:'Bismillaahi tawakkaltu \'alallaahi',arti:'Dengan nama Allah aku bertawakal kepada Allah'},
 {nama:'Doa Masuk Rumah',arab:'اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلَجِ وَخَيْرَ الْمَخْرَجِ',latin:'Allaahumma innii as-aluka khairal maulaji wa khairal makhraji',arti:'Ya Allah, aku memohon kebaikan tempat masuk dan keluar'},
 {nama:'Doa Sebelum Belajar',arab:'رَبِّ زِدْنِي عِلْمًا وَارْزُقْنِي فَهْمًا',latin:'Rabbi zidnii \'ilman warzuqnii fahman',arti:'Tuhanku, tambahkanlah ilmu dan pemahaman kepadaku'},
 {nama:'Doa Masuk Masjid',arab:'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ',latin:'Allaahummaftah lii abwaaba rahmatik',arti:'Ya Allah, bukakanlah untukku pintu-pintu rahmatMu'},
-{nama:'Doa Naik Kendaraan',arab:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ',latin:'Subhaanal ladzii sakhkhara lanaa haadzaa wa maa kunnaa lahu muqriniin',arti:'Maha Suci Allah yang menundukkan kendaraan ini untuk kami'},
-{nama:'Doa Untuk Orang Tua',arab:'رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا',latin:'Rabbighfir lii wa liwaalidayya warhamhumaa kamaa rabbayaanii shaghiiraa',arti:'Tuhanku, ampunilah aku dan kedua orang tuaku'},
-{nama:'Doa Kesehatan',arab:'اللَّهُمَّ عَافِنِي فِي بَدَنِي اللَّهُمَّ عَافِنِي فِي سَمْعِي اللَّهُمَّ عَافِنِي فِي بَصَرِي',latin:'Allaahumma \'aafinii fii badanii, Allaahumma \'aafinii fii sam\'ii, Allaahumma \'aafinii fii basharii',arti:'Ya Allah, sehatkanlah badanku, pendengaranku, dan penglihatanku'},
-{nama:'Doa Kebaikan Dunia Akhirat',arab:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',latin:'Rabbanaa aatinaa fid-dunyaa hasanah wa fil-aakhirati hasanatan wa qinaa \'adzaaban-naar',arti:'Ya Tuhan kami, berilah kami kebaikan di dunia dan akhirat'}
+{nama:'Doa Naik Kendaraan',arab:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ',latin:'Subhaanal ladzii sakhkhara lanaa haadzaa',arti:'Maha Suci Allah yang menundukkan kendaraan ini untuk kami'},
+{nama:'Doa Untuk Orang Tua',arab:'رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا',latin:'Rabbighfir lii wa liwaalidayya warhamhumaa',arti:'Tuhanku, ampunilah aku dan kedua orang tuaku'},
+{nama:'Doa Kesehatan',arab:'اللَّهُمَّ عَافِنِي فِي بَدَنِي اللَّهُمَّ عَافِنِي فِي سَمْعِي',latin:'Allaahumma \'aafinii fii badanii, Allaahumma \'aafinii fii sam\'ii',arti:'Ya Allah, sehatkanlah badanku dan pendengaranku'},
+{nama:'Doa Kebaikan Dunia Akhirat',arab:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',latin:'Rabbanaa aatinaa fid-dunyaa hasanah wa fil-aakhirati hasanatan',arti:'Ya Tuhan kami, berilah kami kebaikan dunia dan akhirat'}
 ];
 
 const NIAT_SHOLAT={
@@ -699,13 +802,13 @@ Isya:{arab:'أُصَلِّي فَرْضَ الْعِشَاءِ أَرْبَعَ 
 
 const BACAAN_SHOLAT=[
 {nama:'Takbiratul Ihram',arab:'اللهُ أَكْبَرُ',latin:'Allaahu Akbar',arti:'Allah Maha Besar'},
-{nama:'Doa Iftitah',arab:'سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَهَ غَيْرُكَ',latin:'Subhaanakallaahumma wa bihamdika wa tabaarokasmuka wa ta\'aalaa jadduka wa laa ilaaha ghairuk',arti:'Maha Suci Engkau ya Allah, aku memujiMu'},
-{nama:'Al-Fatihah',arab:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِيْنَ',latin:'Alhamdulillaahi rabbil \'aalamiin...',arti:'Segala puji bagi Allah Tuhan semesta alam...'},
-{nama:'Rukuk',arab:'سُبْحَانَ رَبِّيَ الْعَظِيْمِ وَبِحَمْدِهِ (٣x)',latin:'Subhaana rabbiyal \'azhiimi wa bihamdih (3x)',arti:'Maha Suci Tuhanku Yang Maha Agung'},
-{nama:'I\'tidal',arab:'سَمِعَ اللهُ لِمَنْ حَمِدَهُ ۞ رَبَّنَا لَكَ الْحَمْدُ',latin:'Sami\'allaahu liman hamidah. Rabbanaa lakaal-hamd',arti:'Allah mendengar yang memujiNya. Ya Tuhan kami, bagiMu pujian'},
-{nama:'Sujud',arab:'سُبْحَانَ رَبِّيَ الْأَعْلَى وَبِحَمْدِهِ (٣x)',latin:'Subhaana rabbiyal a\'laa wa bihamdih (3x)',arti:'Maha Suci Tuhanku Yang Maha Tinggi'},
-{nama:'Duduk Antara 2 Sujud',arab:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي وَاجْبُرْنِي وَارْفَعْنِي',latin:'Rabbighfir lii warhamnii wajburnii warfa\'nii',arti:'Ya Tuhanku, ampunilah aku, rahmatilah, cukupkanlah, angkatlah derajatku'},
-{nama:'Tasyahud Awal',arab:'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ',latin:'At-tahiyyaatu lillaahi wash-shalawaatu wath-thayyibaatu',arti:'Segala kehormatan bagi Allah'},
+{nama:'Doa Iftitah',arab:'سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ',latin:'Subhaanakallaahumma wa bihamdika',arti:'Maha Suci Engkau ya Allah, aku memujiMu'},
+{nama:'Al-Fatihah',arab:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِيْنَ',latin:'Alhamdulillaahi rabbil \'aalamiin',arti:'Segala puji bagi Allah Tuhan semesta alam'},
+{nama:'Rukuk',arab:'سُبْحَانَ رَبِّيَ الْعَظِيْمِ (٣x)',latin:'Subhaana rabbiyal \'azhiim (3x)',arti:'Maha Suci Tuhanku Yang Maha Agung'},
+{nama:'I\'tidal',arab:'سَمِعَ اللهُ لِمَنْ حَمِدَهُ',latin:'Sami\'allaahu liman hamidah',arti:'Allah mendengar yang memujiNya'},
+{nama:'Sujud',arab:'سُبْحَانَ رَبِّيَ الْأَعْلَى (٣x)',latin:'Subhaana rabbiyal a\'laa (3x)',arti:'Maha Suci Tuhanku Yang Maha Tinggi'},
+{nama:'Duduk Antara 2 Sujud',arab:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي',latin:'Rabbighfir lii warhamnii',arti:'Ya Tuhanku, ampunilah aku, rahmatilah aku'},
+{nama:'Tasyahud Awal',arab:'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ',latin:'At-tahiyyaatu lillaahi wash-shalawaatu',arti:'Segala kehormatan bagi Allah'},
 {nama:'Sholawat',arab:'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ',latin:'Allaahumma shalli \'alaa Muhammad',arti:'Ya Allah, limpahkanlah rahmat kepada Nabi Muhammad'},
 {nama:'Salam',arab:'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ',latin:'As-salaamu \'alaikum wa rahmatullaah',arti:'Semoga keselamatan dan rahmat Allah atasmu'}
 ];
@@ -717,12 +820,22 @@ isAuthenticated:false,authMode:'login',authEmail:'',authPassword:'',authUsername
 currentUser:null,isOwner:false,pendingUser:null,
 userEmail:'',userName:'',userAvatar:'',quickNote:'',lastSavedNote:'',
 welcomePopupOpen:false,profileModalOpen:false,ownerPinModalOpen:false,txSheetOpen:false,
-newsSheetOpen:false,weatherSheetOpen:false,kisahSheetOpen:false,showPrayerSheet:false,
+newsSheetOpen:false,weatherSheetOpen:false,weatherProvinceSheet:false,weatherCitySheet:false,
+prayerProvinceSheet:false,prayerCitySheet:false,kisahSheetOpen:false,
 enteredPin:'',verifyingPin:false,uploadingAvatar:false,noteSaving:false,downloadingFile:false,
 sheetOpen:false,sheetTitle:'',sheetMessage:'',
 activeTab:'home',currentTime:'',
+theme:'purple',
+themes:[
+{id:'purple',name:'Ungu',color:'#a855f7'},
+{id:'pink',name:'Pink',color:'#ec4899'},
+{id:'emerald',name:'Hijau',color:'#10b981'},
+{id:'ocean',name:'Biru',color:'#0ea5e9'},
+{id:'sunset',name:'Oranye',color:'#f97316'},
+{id:'midnight',name:'Nila',color:'#6366f1'}
+],
 transactions:[],txCategory:'',txAmount:'',
-kitabSubTab:'sholat',selectedCity:'Jakarta',prayerLoading:false,selectedNiat:'Subuh',
+kitabSubTab:'sholat',prayerLoading:false,selectedNiat:'Subuh',
 prayerTimes:{subuh:'--:--',dzuhur:'--:--',ashar:'--:--',maghrib:'--:--',isya:'--:--'},
 prayerProvince:'DKI Jakarta',prayerCity:'Jakarta',prayerCities:['Jakarta'],
 niatSholat:NIAT_SHOLAT,bacaanSholatList:BACAAN_SHOLAT,
@@ -750,17 +863,21 @@ downloadLinkInput:'',downloadLoading:false,downloadResultReady:false,
 downloadResultLinks:[],downloadMeta:{},
 reflexState:'yellow',reflexMessage:'Tap untuk Mulai',reflexStart:0,reflexTimeout:null,
 noteSaveTimer:null,
-dailyQuote:{text:'Memuat...',author:'Zenkai Tools'},
+dailyQuote:{text:'Sebaik-baik manusia adalah yang paling bermanfaat bagi orang lain.',author:'HR. Ahmad'},
+quoteLoading:false,
 newsList:[],newsLoading:false,selectedNews:null,
 provinces:[],cities:[],weatherProvince:'',weatherCity:'',weatherData:null,weatherLoading:false,
 
 async init(){
+// Load theme dari localStorage
+const savedTheme=localStorage.getItem('zenkai_theme');
+if(savedTheme)this.theme=savedTheme;
 this.splashProgress=100;
 setTimeout(()=>{this.splashHidden=true;},800);
 this.updateClock();
 setInterval(()=>this.updateClock(),1000);
-this.dailyQuote=QUOTES[Math.floor(Math.random()*QUOTES.length)];
 this.asmaulHusnaList=ASMAUL_HUSNA.map(x=>({...x,hafal:false}));
+this.randomQuote();
 try{
 const{data:{session}}=await sb.auth.getSession();
 if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}
@@ -768,6 +885,8 @@ if(session&&session.user){this.currentUser=session.user;await this.checkUserAcce
 this.initProvinces();
 this.initPrayerProvinces();
 },
+
+setTheme(id){this.theme=id;localStorage.setItem('zenkai_theme',id);},
 
 updateClock(){
 const now=new Date();
@@ -777,8 +896,19 @@ this.worldClocks.forEach(z=>{try{z.time=now.toLocaleTimeString('id-ID',{timeZone
 
 showAlert(t,m){this.sheetTitle=t;this.sheetMessage=m;this.sheetOpen=true;},
 openTxSheet(){this.txCategory='';this.txAmount='';this.txSheetOpen=true;},
-randomQuote(){this.dailyQuote=QUOTES[Math.floor(Math.random()*QUOTES.length)];},
 openKisahDetail(idx){this.selectedKisah=this.kisahList[idx];this.kisahSheetOpen=true;},
+
+async randomQuote(){
+this.quoteLoading=true;
+try{
+const res=await fetch('https://api.quotable.io/random?maxLength=120');
+const data=await res.json();
+if(data.content){this.dailyQuote={text:data.content,author:data.author};this.quoteLoading=false;return;}
+}catch(e){}
+// Fallback ke statis
+this.dailyQuote=QUOTES[Math.floor(Math.random()*QUOTES.length)];
+this.quoteLoading=false;
+},
 
 async handleEmailAuth(){
 if(!this.authEmail||!this.authPassword){return this.showAlert('Perhatian','Isi email dan password!');}
@@ -932,25 +1062,41 @@ return {
 initProvinces(){
 this.provinces=Object.keys(this.getCityMap());
 this.weatherProvince='DKI Jakarta';
-this.onProvinceChange();
-},
-onProvinceChange(){
-const m=this.getCityMap();
-this.cities=m[this.weatherProvince]||['Jakarta'];
-this.weatherCity=this.cities[0];
+this.cities=this.getCityMap()['DKI Jakarta'];
+this.weatherCity='Jakarta';
 this.fetchWeather();
 },
+openWeatherSheet(){this.weatherProvinceSheet=true;},
+selectWeatherProvince(p){
+this.weatherProvince=p;
+this.cities=this.getCityMap()[p]||['Jakarta'];
+this.weatherProvinceSheet=false;
+this.weatherCitySheet=true;
+},
+selectWeatherCity(c){
+this.weatherCity=c;
+this.weatherCitySheet=false;
+this.weatherSheetOpen=true;
+this.fetchWeather();
+},
+openWeatherProvincePicker(){this.weatherProvinceSheet=true;},
 
 initPrayerProvinces(){
-const m=this.getCityMap();
-this.prayerCities=m[this.prayerProvince]||['Jakarta'];
-this.prayerCity=this.prayerCities[0];
+this.prayerProvince='DKI Jakarta';
+this.prayerCities=this.getCityMap()['DKI Jakarta'];
+this.prayerCity='Jakarta';
 this.fetchPrayerTimes();
 },
-onPrayerProvinceChange(){
-const m=this.getCityMap();
-this.prayerCities=m[this.prayerProvince]||['Jakarta'];
-this.prayerCity=this.prayerCities[0];
+openPrayerCityPicker(){this.prayerProvinceSheet=true;},
+selectPrayerProvince(p){
+this.prayerProvince=p;
+this.prayerCities=this.getCityMap()[p]||['Jakarta'];
+this.prayerProvinceSheet=false;
+this.prayerCitySheet=true;
+},
+selectPrayerCity(c){
+this.prayerCity=c;
+this.prayerCitySheet=false;
 this.fetchPrayerTimes();
 },
 
@@ -989,7 +1135,7 @@ const{latitude,longitude,name}=geoJ.results[0];
 const w=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+latitude+'&longitude='+longitude+'&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia/Jakarta&forecast_days=7');
 const wj=await w.json();
 const cur=wj.current;
-const codes={0:['☀️','Cerah'],1:['🌤️','Cerah Berawan'],2:['⛅','Berawan'],3:['☁️','Mendung'],45:['🌫️','Berkabut'],48:['🌫️','Berkabut'],51:['🌦️','Gerimis'],53:['🌦️','Gerimis'],55:['🌧️','Hujan Ringan'],61:['🌧️','Hujan'],63:['🌧️','Hujan Sedang'],65:['⛈️','Hujan Lebat'],71:['❄️','Salju'],80:['🌧️','Hujan Lokal'],95:['⛈️','Badai Petir']};
+const codes={0:['☀️','Cerah'],1:['🌤️','Cerah Berawan'],2:['⛅','Berawan'],3:['☁️','Mendung'],45:['🌫️','Berkabut'],48:['🌫️','Berkabut'],51:['🌦️','Gerimis'],53:['🌦️','Gerimis'],55:['🌧️','Hujan Ringan'],61:['🌧️','Hujan'],63:['🌧️','Hujan Sedang'],65:['⛈️','Hujan Lebat'],80:['🌧️','Hujan Lokal'],95:['⛈️','Badai Petir']};
 const c=codes[cur.weather_code]||['🌡️','Cerah'];
 const forecast=wj.daily.time.map((t,i)=>{
 const cc=codes[wj.daily.weather_code[i]]||['🌡️','-'];
@@ -1006,8 +1152,6 @@ this.showAlert('Gagal','Gagal memuat cuaca: '+e.message);
 }
 this.weatherLoading=false;
 },
-
-openWeather(){this.weatherSheetOpen=true;if(!this.weatherData)this.fetchWeather();},
 
 toggleHafalAsmaul(no){const it=this.asmaulHusnaList.find(x=>x.no===no);if(it)it.hafal=!it.hafal;},
 get filteredHadits(){if(this.filterHadits==='Semua')return this.haditsList;return this.haditsList.filter(h=>h.kategori===this.filterHadits);},
