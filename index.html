@@ -1291,7 +1291,7 @@ async verifyOwnerPin(){
     const token = sessionData?.session?.access_token || '';
 
     // Panggil Edge Function verify-owner-pin
-    const res = await fetch(SUPABASE_URL + '/functions/v1/verify-owner-pin', {
+    const res = await fetch(SUPABASE_URL + '/functions/v1/dynamic-action', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
