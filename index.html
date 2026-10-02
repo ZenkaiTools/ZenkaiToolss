@@ -111,6 +111,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <li><b>🛠️ Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
         <li><b>🎮 Game:</b> Refleks & Tic Tac Toe</li>
         <li><b>🎨 Tema:</b> 6 tema warna</li>
+        <li><b>🏆 Poin & Level:</b> Kumpulkan poin, naik level!</li>
       </ul>
     </div>
     <button @click="aboutModalOpen=false" class="btn-soft w-full">Tutup</button>
@@ -147,6 +148,17 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <h3 class="font-title text-2xl" style="color:var(--accent-dark)" x-text="sheetTitle"></h3>
     <p class="txt-sm font-bold text-gray-700" x-text="sheetMessage"></p>
     <button @click="sheetOpen=false" class="btn-primary">OK</button>
+  </div>
+</div>
+
+<div x-show="levelUpOpen" class="bottom-sheet-overlay" style="z-index:100030;">
+  <div class="bottom-sheet-content text-center space-y-4" style="padding:24px">
+    <div class="text-7xl">🎉</div>
+    <h3 class="font-title text-3xl" style="color:var(--accent-dark)">SELAMAT!</h3>
+    <p class="txt-sm font-bold text-gray-700">Kamu naik ke:</p>
+    <div class="font-title text-4xl" style="color:var(--primary-dark)" x-text="'🏆 LEVEL '+userLevel"></div>
+    <div class="font-title text-2xl" style="color:var(--accent-dark)" x-text="getLevelName(userLevel)"></div>
+    <button @click="levelUpOpen=false" class="btn-primary">Lanjut Semangat! 💪</button>
   </div>
 </div>
 
@@ -194,6 +206,26 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <input type="file" accept="image/*" @change="uploadAvatarFile($event)" class="hidden">
       </label>
     </div>
+
+    <!-- Section Poin & Level -->
+    <div class="p-4 rounded-xl space-y-3" style="background:var(--accent-soft);border:2.5px solid var(--border);box-shadow:3px 3px 0 0 var(--border)">
+      <div class="text-center">
+        <div class="font-title text-xl" style="color:var(--accent-dark)" x-text="'🏆 LEVEL '+userLevel+' - '+getLevelName(userLevel)"></div>
+        <div class="font-title text-3xl" style="color:var(--primary-dark)" x-text="userPoints+' ⭐'"></div>
+      </div>
+      <div class="progress-bar" style="height:22px">
+        <div class="progress-fill" 
+             :style="'width:'+getProgressPercent()+'%'"
+             x-text="getProgressPercent()+'%'">
+        </div>
+      </div>
+      <div class="txt-xs text-center font-bold text-gray-600">
+        <span x-text="userPoints"></span> poin terkumpul
+        <span x-show="getNextLevelPoints() > 0"> • <span x-text="getNextLevelPoints() - userPoints"></span> poin lagi ke Level <span x-text="userLevel + 1"></span></span>
+        <span x-show="getNextLevelPoints() === 0"> • Level Maksimal! 👑</span>
+      </div>
+    </div>
+
     <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2.5px solid var(--border)">
       <div class="txt-xs font-bold text-gray-600">Nama</div>
       <div class="font-bold text-sm" x-text="userName"></div>
@@ -239,7 +271,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <div class="font-title text-xl text-white">HALO, <span x-text="userName"></span>! 👋</div>
           <div class="txt-xs opacity-90 truncate text-white font-bold" x-text="userEmail"></div>
         </div>
-        <span class="text-2xl text-white">›</span>
+        <div class="text-right">
+          <div class="font-title text-2xl text-white" x-text="'⭐ '+userPoints"></div>
+          <div class="txt-xs text-white font-bold" x-text="'🏆 Lv.'+userLevel"></div>
+        </div>
       </div>
     </div>
 
@@ -1112,7 +1147,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 <symbol id="i-gamepad" viewBox="0 0 24 24"><path d="M15 7.5V2H9v5.5l-7 8V22h20v-6.5l-7-8z"/></symbol>
 <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></symbol>
 <symbol id="i-crown" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></symbol>
-<symbol id="i-robot" viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></symbol>
+<symbol id="i-robot" viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 2-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></symbol>
 </svg>
 
 <script>
@@ -1143,6 +1178,7 @@ splashHidden:false,splashProgress:0,splashText:'Memuat...',
 isAuthenticated:false,authMode:'login',authEmail:'',authPassword:'',authUsername:'',
 currentUser:null,isOwner:false,isVip:false,pendingUser:null,
 userEmail:'',userName:'',userAvatar:'',quickNote:'',lastSavedNote:'',
+userPoints:0,userLevel:1,levelUpOpen:false,lastKnownLevel:1,
 welcomePopupOpen:false,aboutModalOpen:false,profileModalOpen:false,ownerPinModalOpen:false,txSheetOpen:false,
 newsSheetOpen:false,weatherSheetOpen:false,weatherProvinceSheet:false,weatherCitySheet:false,
 prayerProvinceSheet:false,prayerCitySheet:false,kisahSheetOpen:false,menuSheetOpen:false,
@@ -1182,6 +1218,28 @@ welcomeText:DEFAULT_WELCOME,welcomeTextEdit:'',
 chatMessages:[],chatInput:'',aiThinking:false,aiMode:'umum',chatCount:0,chatDate:'',chatBonus:0,chatFullscreen:false,
 voiceSupported:false,aiModeDesc:'',
 
+// Helper level
+getLevelName(lv){
+  const names={1:'Pemula 🌱',2:'Rajin 📚',3:'Aktif ⚡',4:'Ahli 🎓',5:'Master 👑',6:'Legenda 🌟'};
+  return names[lv]||'Pemula 🌱';
+},
+getNextLevelPoints(){
+  const thresholds={1:100,2:300,3:600,4:1000,5:2000,6:0};
+  return thresholds[this.userLevel]||0;
+},
+getCurrentLevelMin(){
+  const thresholds={1:0,2:100,3:300,4:600,5:1000,6:2000};
+  return thresholds[this.userLevel]||0;
+},
+getProgressPercent(){
+  const min=this.getCurrentLevelMin();
+  const max=this.getNextLevelPoints();
+  if(max===0)return 100;
+  const range=max-min;
+  const progress=this.userPoints-min;
+  return Math.min(100, Math.round((progress/range)*100));
+},
+
 async init(){
 const savedTheme=localStorage.getItem('zenkai_theme');
 if(savedTheme)this.theme=savedTheme;
@@ -1206,7 +1264,6 @@ updateClock(){const now=new Date();this.currentTime=now.toLocaleTimeString('id-I
 
 showAlert(t,m){this.sheetTitle=t;this.sheetMessage=m;this.sheetOpen=true;},
 
-// AUTO-DETECT: (title, message, onConfirm) ATAU (title, message, icon, onConfirm)
 showConfirm(title,message,arg3,arg4){
   let onConfirm=()=>{},icon='⚠️';
   if(typeof arg3==='function'){onConfirm=arg3;icon=arg4||'⚠️';}
@@ -1220,6 +1277,35 @@ showPrompt(title,message,arg3,arg4){
   if(typeof arg3==='function'){onConfirm=arg3;}
   else{defaultValue=arg3||'';onConfirm=arg4||(()=>{});}
   this.promptModal={open:true,title,message,value:defaultValue,onConfirm:(val)=>{try{onConfirm(val);}catch(e){console.error(e);}this.promptModal.open=false;}};
+},
+
+async addPoints(amount,reason){
+  if(!this.currentUser)return;
+  if(this.isOwner)return; // Owner tidak dapat poin
+  try{
+    const newTotal=this.userPoints+amount;
+    const{error}=await sb.from('user_points').update({total_points:newTotal}).eq('user_id',this.currentUser.id);
+    if(!error){
+      this.userPoints=newTotal;
+      await sb.from('point_history').insert({user_id:this.currentUser.id,amount,reason});
+      // Cek level up
+      const oldLevel=this.userLevel;
+      const newLevel=this.calcLevelFromPoints(newTotal);
+      if(newLevel>oldLevel){
+        this.userLevel=newLevel;
+        this.levelUpOpen=true;
+      }
+    }
+  }catch(e){console.error('addPoints:',e);}
+},
+
+calcLevelFromPoints(pts){
+  if(pts>=2000)return 6;
+  if(pts>=1000)return 5;
+  if(pts>=600)return 4;
+  if(pts>=300)return 3;
+  if(pts>=100)return 2;
+  return 1;
 },
 
 openTxSheet(){this.txCategory='';this.txAmount='';this.txSheetOpen=true;},
@@ -1275,6 +1361,13 @@ this.currentUser=user;this.isOwner=false;this.isAuthenticated=true;
 if(prof){this.isVip=prof.is_vip||false;this.chatCount=prof.chat_count||0;this.chatDate=prof.chat_date||'';this.chatBonus=prof.chat_bonus||0;}
 await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',user.id);
 await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();
+// Daily bonus login
+const today=new Date().toISOString().slice(0,10);
+const lastLogin=localStorage.getItem('zenkai_last_bonus');
+if(lastLogin!==today){
+  localStorage.setItem('zenkai_last_bonus',today);
+  await this.addPoints(10,'Login harian');
+}
 if(showWelcome)this.welcomePopupOpen=true;
 }
 },
@@ -1285,12 +1378,8 @@ async verifyOwnerPin(){
   this.verifyingPin=true;
   try{
     this.currentUser=this.pendingUser;
-
-    // Ambil token login user
     const { data: sessionData } = await sb.auth.getSession();
     const token = sessionData?.session?.access_token || '';
-
-    // Panggil Edge Function verify-owner-pin
     const res = await fetch(SUPABASE_URL + '/functions/v1/dynamic-action', {
       method: 'POST',
       headers: {
@@ -1300,21 +1389,16 @@ async verifyOwnerPin(){
       },
       body: JSON.stringify({ pin: this.enteredPin })
     });
-
     const data = await res.json();
-
     if(!data.success){
       this.verifyingPin = false;
       this.enteredPin = '';
       return this.showAlert('PIN Salah', data.error || 'PIN salah!');
     }
-
-    // PIN benar
     this.ownerPinModalOpen = false;
     this.isOwner = true;
     this.isVip = true;
     this.isAuthenticated = true;
-
     await sb.from('profiles').update({last_login: new Date().toISOString()}).eq('id', this.pendingUser.id);
     await this.processUserData();
     await this.loadTransactions();
@@ -1322,7 +1406,6 @@ async verifyOwnerPin(){
     await this.loadBudgets();
     this.loadAppStats();
     this.welcomePopupOpen = true;
-
   }catch(e){
     this.showAlert('Gagal', e.message);
   }finally{
@@ -1346,6 +1429,20 @@ this.chatBonus=profile.chat_bonus||0;
 }else{
 this.userName=(this.currentUser.user_metadata&&this.currentUser.user_metadata.username)||this.userEmail.split('@')[0]||'User';
 }
+// Ambil data poin user
+try{
+  const{data:pts}=await sb.from('user_points').select('*').eq('user_id',this.currentUser.id).maybeSingle();
+  if(pts){
+    this.userPoints=pts.total_points||0;
+    this.userLevel=pts.level||1;
+    this.lastKnownLevel=this.userLevel;
+  }else{
+    await sb.from('user_points').insert({user_id:this.currentUser.id,total_points:0,level:1});
+    this.userPoints=0;
+    this.userLevel=1;
+    this.lastKnownLevel=1;
+  }
+}catch(e){console.error('Load points:',e);}
 },
 
 async uploadAvatarFile(event){
@@ -1384,7 +1481,7 @@ const{error}=await sb.from('transactions').insert({
   date:new Date().toLocaleDateString('id-ID'),
   created_at:new Date().toISOString()
 });
-if(!error){this.txCategory='';this.txAmount='';this.txSheetOpen=false;await this.loadTransactions();}
+if(!error){this.txCategory='';this.txAmount='';this.txSheetOpen=false;await this.loadTransactions();await this.addPoints(3,'Catat transaksi');}
 else{this.showAlert('Gagal',error.message);}
 },
 
@@ -1392,13 +1489,13 @@ confirmDeleteTx(id){this.showConfirm('Hapus Transaksi?','Transaksi ini akan diha
 get totalBalance(){return this.transactions.reduce((a,t)=>t.type==='income'?a+Number(t.amount):a-Number(t.amount),0);},
 
 async loadSavings(){if(!this.currentUser)return;const{data}=await sb.from('savings_targets').select('*').eq('user_id',this.currentUser.id).order('id',{ascending:false});if(data)this.savings=data;},
-async addSavings(){if(!this.targetForm.nama||!this.targetForm.target){return this.showAlert('Perhatian','Isi nama & target!');}const{error}=await sb.from('savings_targets').insert({user_id:this.currentUser.id,nama:this.targetForm.nama,target:parseFloat(this.targetForm.target),terkumpul:0,deadline:this.targetForm.deadline});if(!error){this.targetSheetOpen=false;await this.loadSavings();}},
+async addSavings(){if(!this.targetForm.nama||!this.targetForm.target){return this.showAlert('Perhatian','Isi nama & target!');}const{error}=await sb.from('savings_targets').insert({user_id:this.currentUser.id,nama:this.targetForm.nama,target:parseFloat(this.targetForm.target),terkumpul:0,deadline:this.targetForm.deadline});if(!error){this.targetSheetOpen=false;await this.loadSavings();await this.addPoints(2,'Bikin target tabungan');}},
 confirmDeleteSavings(id){this.showConfirm('Hapus Target?','Target tabungan akan dihapus.',async()=>{await sb.from('savings_targets').delete().eq('id',id);await this.loadSavings();},'🗑️');},
 addToSavings(id){this.currentSavingsId=id;this.addSavingsAmount='';this.addSavingsSheet=true;},
-async confirmAddSavings(){const s=this.savings.find(x=>x.id===this.currentSavingsId);if(!s||!this.addSavingsAmount)return;const newVal=Number(s.terkumpul)+parseFloat(this.addSavingsAmount);await sb.from('savings_targets').update({terkumpul:newVal}).eq('id',this.currentSavingsId);this.addSavingsSheet=false;await this.loadSavings();},
+async confirmAddSavings(){const s=this.savings.find(x=>x.id===this.currentSavingsId);if(!s||!this.addSavingsAmount)return;const newVal=Number(s.terkumpul)+parseFloat(this.addSavingsAmount);await sb.from('savings_targets').update({terkumpul:newVal}).eq('id',this.currentSavingsId);this.addSavingsSheet=false;await this.loadSavings();await this.addPoints(5,'Setor tabungan');},
 
 async loadBudgets(){if(!this.currentUser)return;const bulan=new Date().toISOString().slice(0,7);const{data}=await sb.from('budgets').select('*').eq('user_id',this.currentUser.id).eq('bulan',bulan);if(data)this.budgets=data;},
-async addBudget(){if(!this.budgetForm.kategori||!this.budgetForm.limit_bulanan){return this.showAlert('Perhatian','Isi kategori & limit!');}const bulan=new Date().toISOString().slice(0,7);const{error}=await sb.from('budgets').insert({user_id:this.currentUser.id,kategori:this.budgetForm.kategori,limit_bulanan:parseFloat(this.budgetForm.limit_bulanan),bulan});if(!error){this.budgetSheetOpen=false;await this.loadBudgets();}},
+async addBudget(){if(!this.budgetForm.kategori||!this.budgetForm.limit_bulanan){return this.showAlert('Perhatian','Isi kategori & limit!');}const bulan=new Date().toISOString().slice(0,7);const{error}=await sb.from('budgets').insert({user_id:this.currentUser.id,kategori:this.budgetForm.kategori,limit_bulanan:parseFloat(this.budgetForm.limit_bulanan),bulan});if(!error){this.budgetSheetOpen=false;await this.loadBudgets();await this.addPoints(2,'Set budget');}},
 confirmDeleteBudget(id){this.showConfirm('Hapus Budget?','Budget bulanan akan dihapus.',async()=>{await sb.from('budgets').delete().eq('id',id);await this.loadBudgets();},'🗑️');},
 getBudgetUsed(kategori){return this.transactions.filter(t=>t.type==='expense'&&t.category===kategori).reduce((a,t)=>a+Number(t.amount),0);},
 
@@ -1433,7 +1530,7 @@ unbanUser(u){this.showConfirm('Unban User?',u.username+' akan diaktifkan kembali
 setVip(u,v){this.showConfirm(v?'Set VIP?':'Cabut VIP?',v?(u.username+' akan jadi VIP (unlimited chat).'):(u.username+' bukan VIP lagi.'),async()=>{await sb.from('profiles').update({is_vip:v}).eq('id',u.id);this.showAlert('Sukses',v?u.username+' jadi VIP':u.username+' bukan VIP lagi');await this.loadAllUsers();},'💎');},
 promptAddChat(u){this.showPrompt('Tambah Bonus Chat','Berapa chat tambahan untuk '+u.username+'?',async(val)=>{const n=parseInt(val)||0;if(n<=0){return;}await sb.from('profiles').update({chat_bonus:(u.chat_bonus||0)+n}).eq('id',u.id);this.showAlert('Sukses','+'+n+' chat untuk '+u.username);await this.loadAllUsers();});},
 promptResetChat(u){this.showConfirm('Reset Chat?','Reset hitungan chat '+u.username+' ke 0?',async()=>{await sb.from('profiles').update({chat_count:0,chat_bonus:0,chat_date:new Date().toISOString().slice(0,10)}).eq('id',u.id);this.showAlert('Sukses','Chat '+u.username+' di-reset.');await this.loadAllUsers();},'🔄');},
-confirmDeleteUser(u){this.showConfirm('Hapus User?','Semua data '+u.username+' akan dihapus permanen!',async()=>{await sb.from('transactions').delete().eq('user_id',u.id);await sb.from('savings_targets').delete().eq('user_id',u.id);await sb.from('budgets').delete().eq('user_id',u.id);await sb.from('profiles').delete().eq('id',u.id);this.showAlert('Sukses','User dihapus.');await this.loadAllUsers();},'🗑️');},
+confirmDeleteUser(u){this.showConfirm('Hapus User?','Semua data '+u.username+' akan dihapus permanen!',async()=>{await sb.from('transactions').delete().eq('user_id',u.id);await sb.from('savings_targets').delete().eq('user_id',u.id);await sb.from('budgets').delete().eq('user_id',u.id);await sb.from('user_points').delete().eq('user_id',u.id);await sb.from('point_history').delete().eq('user_id',u.id);await sb.from('profiles').delete().eq('id',u.id);this.showAlert('Sukses','User dihapus.');await this.loadAllUsers();},'🗑️');},
 
 async saveWelcomeText(){if(!this.welcomeTextEdit)return;await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit}).eq('id',1);this.welcomeText=this.welcomeTextEdit;this.showAlert('Sukses','Kata sambutan diperbarui!');},
 
@@ -1549,10 +1646,10 @@ this.showAlert('Info','Download langsung diblokir browser. File dibuka di tab ba
 async openNews(){this.newsSheetOpen=true;this.selectedNews=null;if(this.newsList.length>0)return;this.newsLoading=true;try{const res=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.antaranews.com/rss/terkini.xml');const json=await res.json();if(json.items){this.newsList=json.items.slice(0,20).map(it=>({title:it.title,link:it.link,description:it.description?it.description.replace(/<[^>]*>/g,'').substring(0,300)+'...':(it.content||'').replace(/<[^>]*>/g,'').substring(0,300)+'...',pubDate:new Date(it.pubDate).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),thumbnail:it.thumbnail||(it.enclosure&&it.enclosure.link)||''}));}}catch(e){this.showAlert('Gagal','Gagal memuat berita.');}this.newsLoading=false;},
 
 startReflexGame(){this.reflexState='yellow';this.reflexMessage='Tunggu Hijau...';clearTimeout(this.reflexTimeout);const delay=1500+Math.random()*2500;this.reflexTimeout=setTimeout(()=>{this.reflexState='green';this.reflexMessage='TAP SEKARANG!';this.reflexStart=Date.now();},delay);},
-handleReflexTap(){if(this.reflexState==='yellow'){clearTimeout(this.reflexTimeout);this.reflexState='red';this.reflexMessage='Terlalu Cepat!';}else if(this.reflexState==='green'){const t=Date.now()-this.reflexStart;this.reflexState='yellow';this.reflexMessage='Berhasil: '+t+' ms';}},
+handleReflexTap(){if(this.reflexState==='yellow'){clearTimeout(this.reflexTimeout);this.reflexState='red';this.reflexMessage='Terlalu Cepat!';}else if(this.reflexState==='green'){const t=Date.now()-this.reflexStart;this.reflexState='yellow';this.reflexMessage='Berhasil: '+t+' ms';this.addPoints(3,'Main game refleks');}},
 
 initTTT(){this.tttBoard=['','','','','','','','',''];this.tttStatus='Giliran kamu (X)';},
-tttPlay(idx){if(this.tttBoard[idx]||this.tttStatus.includes('Menang')||this.tttStatus.includes('Seri'))return;this.tttBoard[idx]='X';if(this.checkTTT('X')){this.tttStatus='🎉 Kamu Menang!';return;}if(this.tttBoard.every(c=>c)){this.tttStatus='🤝 Seri!';return;}setTimeout(()=>{const empty=this.tttBoard.map((v,i)=>v?'':i).filter(v=>v!=='');if(empty.length===0)return;const cpu=empty[Math.floor(Math.random()*empty.length)];this.tttBoard[cpu]='O';if(this.checkTTT('O')){this.tttStatus='😢 CPU Menang!';return;}if(this.tttBoard.every(c=>c)){this.tttStatus='🤝 Seri!';return;}this.tttStatus='Giliran kamu (X)';},400);},
+tttPlay(idx){if(this.tttBoard[idx]||this.tttStatus.includes('Menang')||this.tttStatus.includes('Seri'))return;this.tttBoard[idx]='X';if(this.checkTTT('X')){this.tttStatus='🎉 Kamu Menang!';this.addPoints(5,'Menang Tic Tac Toe');return;}if(this.tttBoard.every(c=>c)){this.tttStatus='🤝 Seri!';return;}setTimeout(()=>{const empty=this.tttBoard.map((v,i)=>v?'':i).filter(v=>v!=='');if(empty.length===0)return;const cpu=empty[Math.floor(Math.random()*empty.length)];this.tttBoard[cpu]='O';if(this.checkTTT('O')){this.tttStatus='😢 CPU Menang!';return;}if(this.tttBoard.every(c=>c)){this.tttStatus='🤝 Seri!';return;}this.tttStatus='Giliran kamu (X)';},400);},
 checkTTT(p){const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return lines.some(l=>l.every(i=>this.tttBoard[i]===p));},
 
 async sendChat(){
@@ -1656,6 +1753,7 @@ Zenkai AI: "Sama-sama! 😊"`
     if(!reply) reply = '⚠️ Format tidak dikenal: ' + JSON.stringify(data).substring(0,200);
 
     this.chatMessages.push({role:'assistant',content:reply});
+    await this.addPoints(1,'Chat AI');
 
     if(!this.isOwner&&!this.isVip&&this.currentUser){
       this.chatCount++;
