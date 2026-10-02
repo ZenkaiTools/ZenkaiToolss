@@ -76,9 +76,35 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .floating-chat-btn{position:fixed;bottom:90px;right:20px;width:60px;height:60px;border-radius:50%;background:var(--accent);border:3px solid var(--border);box-shadow:4px 4px 0 0 var(--border);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;z-index:100;transition:all .2s}
 .floating-chat-btn:active{transform:scale(0.95)}
 .ai-fullscreen{position:fixed;inset:0;z-index:99998;background:var(--bg-soft);display:flex;flex-direction:column}
+.intro-animation{position:fixed;inset:0;z-index:999999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.intro-animation.hide{opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s}
+#introCanvas{position:absolute;inset:0;width:100%;height:100%}
+.intro-content{position:relative;z-index:2;text-align:center;padding:20px}
+.intro-text-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.intro-word{font-family:'Bangers',cursive;font-size:clamp(52px,16vw,90px);letter-spacing:5px;color:#fff;display:block;line-height:1;opacity:0;text-shadow:0 0 20px currentColor,0 0 40px currentColor}
+.intro-zenkai{color:#a855f7;transform:translateX(-100px);animation:introSlideLeft .8s .2s forwards cubic-bezier(.22,1,.36,1)}
+.intro-tools{color:#fbbf24;transform:translateX(100px);animation:introSlideRight .8s .4s forwards cubic-bezier(.22,1,.36,1)}
+@keyframes introSlideLeft{to{opacity:1;transform:translateX(0)}}
+@keyframes introSlideRight{to{opacity:1;transform:translateX(0)}}
+.intro-subtitle{font-family:'Bangers',cursive;font-size:clamp(14px,4vw,20px);letter-spacing:6px;color:#fff;opacity:0;transform:translateY(20px);animation:introFadeUp .8s 1.4s forwards}
+@keyframes introFadeUp{to{opacity:.85;transform:translateY(0)}}
+.intro-bar{width:min(200px,60vw);height:6px;background:rgba(255,255,255,.15);border-radius:6px;margin:24px auto 0;overflow:hidden;opacity:0;animation:introFadeUp .5s 1.6s forwards}
+.intro-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#a855f7,#fbbf24);border-radius:6px;transition:width .1s linear}
 </style>
 </head>
 <body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme">
+
+<div id="introAnimation" class="intro-animation" style="display:none;">
+  <canvas id="introCanvas"></canvas>
+  <div class="intro-content">
+    <div class="intro-text-wrap">
+      <span class="intro-word intro-zenkai">ZENKAI</span>
+      <span class="intro-word intro-tools">TOOLS</span>
+    </div>
+    <div class="intro-subtitle" id="introSubtitle">WELCOME BACK</div>
+    <div class="intro-bar"><div class="intro-bar-fill" id="introBarFill"></div></div>
+  </div>
+</div>
 
 <div class="splash-screen" :class="{'hide':splashHidden}">
   <div class="splash-logo">ZENKAI TOOLS</div>
@@ -292,7 +318,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </div>
       </div>
     </div>
-
     <div class="card card-hover cursor-pointer" style="padding:12px;background:var(--primary-soft)" @click="aboutModalOpen=true">
       <div class="flex items-center gap-2">
         <span class="text-xl">ℹ️</span>
@@ -303,44 +328,20 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <span class="font-bold text-xl">›</span>
       </div>
     </div>
-
     <div class="grid grid-cols-2 gap-3">
-      <div @click="openNews()" class="card card-hover cursor-pointer text-center" style="padding:14px">
-        <div class="text-4xl mb-1">📰</div>
-        <div class="font-title text-lg" style="color:var(--accent-dark)">BERITA</div>
-      </div>
-      <div @click="openWeatherSheet()" class="card card-hover cursor-pointer text-center" style="padding:14px">
-        <div class="text-4xl mb-1">🌤️</div>
-        <div class="font-title text-lg" style="color:var(--accent-dark)">CUACA</div>
-      </div>
-      <div @click="openMovieSheet()" class="card card-hover cursor-pointer text-center" style="padding:14px">
-        <div class="text-4xl mb-1">🎬</div>
-        <div class="font-title text-lg" style="color:var(--accent-dark)">FILM</div>
-      </div>
-      <div @click="openChatAI()" class="card card-hover cursor-pointer text-center" style="padding:14px;background:var(--accent)">
-        <div class="text-4xl mb-1">🤖</div>
-        <div class="font-title text-lg text-white">AI CHAT</div>
-      </div>
+      <div @click="openNews()" class="card card-hover cursor-pointer text-center" style="padding:14px"><div class="text-4xl mb-1">📰</div><div class="font-title text-lg" style="color:var(--accent-dark)">BERITA</div></div>
+      <div @click="openWeatherSheet()" class="card card-hover cursor-pointer text-center" style="padding:14px"><div class="text-4xl mb-1">🌤️</div><div class="font-title text-lg" style="color:var(--accent-dark)">CUACA</div></div>
+      <div @click="openMovieSheet()" class="card card-hover cursor-pointer text-center" style="padding:14px"><div class="text-4xl mb-1">🎬</div><div class="font-title text-lg" style="color:var(--accent-dark)">FILM</div></div>
+      <div @click="openChatAI()" class="card card-hover cursor-pointer text-center" style="padding:14px;background:var(--accent)"><div class="text-4xl mb-1">🤖</div><div class="font-title text-lg text-white">AI CHAT</div></div>
     </div>
-
     <div class="card sec-gap">
-      <div class="flex items-center gap-2">
-        <span class="text-2xl">📝</span>
-        <h3 class="font-title text-lg" style="color:var(--accent-dark)">CATATAN KILAT</h3>
-      </div>
+      <div class="flex items-center gap-2"><span class="text-2xl">📝</span><h3 class="font-title text-lg" style="color:var(--accent-dark)">CATATAN KILAT</h3></div>
       <textarea x-model="quickNote" @input="debouncedSaveNote()" rows="3" placeholder="Tulis catatan..." class="input-field"></textarea>
       <div x-show="noteSaving" class="txt-xs font-bold" style="color:var(--accent)">💾 Menyimpan...</div>
     </div>
-
     <div class="card" style="background:var(--primary-soft)">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="text-2xl">🌐</span>
-        <h3 class="font-title text-lg" style="color:var(--accent-dark)">CEK KECEPATAN INTERNET</h3>
-      </div>
-      <button @click="runSpeedTest()" class="btn-primary mb-2">
-        <span x-show="!speedTesting">▶️ MULAI TES</span>
-        <span x-show="speedTesting"><span class="spin"></span> Mengukur...</span>
-      </button>
+      <div class="flex items-center gap-2 mb-2"><span class="text-2xl">🌐</span><h3 class="font-title text-lg" style="color:var(--accent-dark)">CEK KECEPATAN INTERNET</h3></div>
+      <button @click="runSpeedTest()" class="btn-primary mb-2"><span x-show="!speedTesting">▶️ MULAI TES</span><span x-show="speedTesting"><span class="spin"></span> Mengukur...</span></button>
       <div x-show="speedResult" class="grid grid-cols-3 gap-2">
         <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.download+' Mbps':''"></div><div class="txt-xs font-bold">Download</div></div>
         <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.latency+' ms':''"></div><div class="txt-xs font-bold">Ping</div></div>
@@ -366,10 +367,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <div class="max-h-80 overflow-y-auto space-y-2">
           <template x-for="t in transactions" :key="t.id">
             <div class="p-3 rounded-xl flex justify-between items-center" :style="t.type==='income'?'background:#dcfce7;border:2px solid var(--border)':'background:#fee2e2;border:2px solid var(--border)'">
-              <div>
-                <div class="font-bold text-sm" x-text="t.category"></div>
-                <div class="txt-xs text-gray-600" x-text="t.date"></div>
-              </div>
+              <div><div class="font-bold text-sm" x-text="t.category"></div><div class="txt-xs text-gray-600" x-text="t.date"></div></div>
               <div class="flex items-center gap-2">
                 <span class="font-bold text-sm" :style="t.type==='income'?'color:#15803d':'color:#b91c1c'" x-text="(t.type==='income'?'+':'-')+'Rp '+Number(t.amount).toLocaleString('id-ID')"></span>
                 <button @click="confirmDeleteTx(t.id)" class="text-red-500 font-bold text-xl">×</button>
@@ -392,10 +390,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <div class="space-y-2">
           <template x-for="b in budgets" :key="b.id">
             <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
-              <div class="flex justify-between mb-1">
-                <span class="font-bold text-sm" x-text="b.kategori"></span>
-                <button @click="confirmDeleteBudget(b.id)" class="text-red-500 font-bold text-lg">×</button>
-              </div>
+              <div class="flex justify-between mb-1"><span class="font-bold text-sm" x-text="b.kategori"></span><button @click="confirmDeleteBudget(b.id)" class="text-red-500 font-bold text-lg">×</button></div>
               <div class="txt-xs text-gray-600 mb-1 font-bold">Limit: Rp <span x-text="Number(b.limit_bulanan).toLocaleString('id-ID')"></span></div>
               <div class="progress-bar"><div class="progress-fill" :style="'width:'+Math.min(100,(getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'" x-text="Math.round((getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'"></div></div>
             </div>
@@ -408,10 +403,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <div class="space-y-2">
           <template x-for="s in savings" :key="s.id">
             <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
-              <div class="flex justify-between mb-1">
-                <span class="font-bold text-sm" x-text="s.nama"></span>
-                <button @click="confirmDeleteSavings(s.id)" class="text-red-500 font-bold text-lg">×</button>
-              </div>
+              <div class="flex justify-between mb-1"><span class="font-bold text-sm" x-text="s.nama"></span><button @click="confirmDeleteSavings(s.id)" class="text-red-500 font-bold text-lg">×</button></div>
               <div class="txt-xs text-gray-600 mb-1 font-bold">Target: Rp <span x-text="Number(s.target).toLocaleString('id-ID')"></span></div>
               <div class="progress-bar"><div class="progress-fill" :style="'width:'+Math.min(100,(s.terkumpul/s.target)*100)+'%'" x-text="Math.round((s.terkumpul/s.target)*100)+'%'"></div></div>
               <div class="txt-xs mt-1 font-bold">Terkumpul: Rp <span x-text="Number(s.terkumpul).toLocaleString('id-ID')"></span></div>
@@ -464,13 +456,9 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <button @click="kitabSubTab='hadits'" :class="kitabSubTab==='hadits'?'active':''" class="tab-pill">📚 Hadits</button>
       <button @click="kitabSubTab='doa'" :class="kitabSubTab==='doa'?'active':''" class="tab-pill">🤲 Doa</button>
     </div>
-
     <div x-show="kitabSubTab==='sholat'" class="sec-gap">
       <div class="card sec-gap">
-        <div class="flex justify-between items-center">
-          <h3 class="font-title text-lg" style="color:var(--accent-dark)">🕌 WAKTU SHOLAT</h3>
-          <button @click="openPrayerCityPicker()" class="btn-soft text-xs">🔄 Ganti</button>
-        </div>
+        <div class="flex justify-between items-center"><h3 class="font-title text-lg" style="color:var(--accent-dark)">🕌 WAKTU SHOLAT</h3><button @click="openPrayerCityPicker()" class="btn-soft text-xs">🔄 Ganti</button></div>
         <p class="txt-xs font-bold text-gray-600" x-text="'📍 '+prayerCity+', '+prayerProvince"></p>
         <div x-show="prayerLoading" class="text-center py-2 txt-xs"><span class="spin"></span></div>
         <div class="grid grid-cols-5 gap-1 text-center">
@@ -484,9 +472,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <div class="card sec-gap">
         <h3 class="font-title text-lg" style="color:var(--accent-dark)">📿 NIAT SHOLAT</h3>
         <div class="grid grid-cols-5 gap-1">
-          <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s">
-            <button @click="selectedNiat=s" :class="selectedNiat===s?'active':''" class="tab-pill" x-text="s"></button>
-          </template>
+          <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s"><button @click="selectedNiat=s" :class="selectedNiat===s?'active':''" class="tab-pill" x-text="s"></button></template>
         </div>
         <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
           <div class="font-arab text-right text-xl leading-loose" x-text="niatSholat[selectedNiat].arab"></div>
@@ -508,7 +494,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </div>
       </div>
     </div>
-
     <div x-show="kitabSubTab==='quran'" class="sec-gap">
       <template x-if="!activeSurah">
         <div class="card sec-gap">
@@ -518,10 +503,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
             <template x-for="s in filteredSurahs" :key="s.nomor">
               <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
                 <div @click="loadSurahDetail(s.nomor)" class="cursor-pointer flex justify-between items-center">
-                  <div>
-                    <div class="font-bold text-sm" x-text="s.nomor+'. '+s.namaLatin"></div>
-                    <div class="txt-xs text-gray-600" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></div>
-                  </div>
+                  <div><div class="font-bold text-sm" x-text="s.nomor+'. '+s.namaLatin"></div><div class="txt-xs text-gray-600" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></div></div>
                   <span class="font-arab text-base font-bold" style="color:var(--accent)" x-text="s.nama"></span>
                 </div>
                 <audio x-show="s.audioFull" controls preload="none" class="w-full h-8 mt-2" :src="s.audioFull&&s.audioFull['05']"></audio>
@@ -541,10 +523,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <div class="max-h-96 overflow-y-auto space-y-3 pt-2">
             <template x-for="ay in activeSurah.ayat" :key="ay.nomorAyat">
               <div class="p-4 rounded-xl space-y-2" style="background:var(--primary-soft);border:2px solid var(--border)">
-                <div class="flex justify-between items-center txt-xs font-bold pb-2" style="border-bottom:2px dashed var(--border)">
-                  <span>Ayat <span x-text="ay.nomorAyat"></span></span>
-                  <audio controls preload="none" class="h-7 w-32" :src="(ay.audio&&(ay.audio['05']||ay.audio['01']))||''"></audio>
-                </div>
+                <div class="flex justify-between items-center txt-xs font-bold pb-2" style="border-bottom:2px dashed var(--border)"><span>Ayat <span x-text="ay.nomorAyat"></span></span><audio controls preload="none" class="h-7 w-32" :src="(ay.audio&&(ay.audio['05']||ay.audio['01']))||''"></audio></div>
                 <div class="font-arab text-right text-xl leading-loose" x-text="ay.teksArab"></div>
                 <div class="txt-xs italic" style="color:var(--accent)" x-text="ay.teksLatin"></div>
                 <div class="txt-xs text-gray-700" x-text="ay.teksIndonesia"></div>
@@ -554,7 +533,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </div>
       </template>
     </div>
-
     <div x-show="kitabSubTab==='asmaul'" class="card sec-gap">
       <h3 class="font-title text-lg" style="color:var(--accent-dark)">✨ 99 ASMAUL HUSNA</h3>
       <div class="max-h-96 overflow-y-auto space-y-2">
@@ -562,17 +540,13 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <div class="p-3 rounded-xl flex items-center justify-between" style="background:var(--primary-soft);border:2px solid var(--border)">
             <div class="flex items-center space-x-3 flex-1 min-w-0">
               <span class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0" style="background:var(--accent);color:#fff;border:2px solid var(--border)" x-text="item.no"></span>
-              <div class="min-w-0">
-                <div class="font-arab text-lg font-bold" x-text="item.arab"></div>
-                <div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="item.latin+' • '+item.arti"></div>
-              </div>
+              <div class="min-w-0"><div class="font-arab text-lg font-bold" x-text="item.arab"></div><div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="item.latin+' • '+item.arti"></div></div>
             </div>
             <button @click="toggleHafalAsmaul(item.no)" class="w-9 h-9 rounded-lg text-sm font-bold shrink-0" :style="item.hafal?'background:#22c55e;color:#fff;border:2px solid var(--border)':'background:var(--card-bg);border:2px solid var(--border)'" x-text="item.hafal?'✓':'○'"></button>
           </div>
         </template>
       </div>
     </div>
-
     <div x-show="kitabSubTab==='kisah'" class="card sec-gap">
       <h3 class="font-title text-lg" style="color:var(--accent-dark)">🕋 KISAH NABI & SAHABAT</h3>
       <div class="max-h-96 overflow-y-auto space-y-2">
@@ -584,13 +558,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </template>
       </div>
     </div>
-
     <div x-show="kitabSubTab==='hadits'" class="card sec-gap">
       <h3 class="font-title text-lg" style="color:var(--accent-dark)">📚 KUMPULAN HADITS</h3>
       <div class="flex flex-wrap gap-1">
-        <template x-for="k in haditsKategori" :key="k">
-          <button @click="filterHadits=k" :class="filterHadits===k?'active':''" class="tab-pill" x-text="k"></button>
-        </template>
+        <template x-for="k in haditsKategori" :key="k"><button @click="filterHadits=k" :class="filterHadits===k?'active':''" class="tab-pill" x-text="k"></button></template>
       </div>
       <div class="max-h-96 overflow-y-auto space-y-2">
         <template x-for="(h,idx) in filteredHadits" :key="idx">
@@ -604,7 +575,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </template>
       </div>
     </div>
-
     <div x-show="kitabSubTab==='doa'" class="card sec-gap">
       <h3 class="font-title text-lg" style="color:var(--accent-dark)">🤲 DOA HARIAN</h3>
       <div class="max-h-96 overflow-y-auto space-y-2">
@@ -621,10 +591,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   </div>
 
   <div x-show="activeTab==='tools'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)">
-      <div class="text-4xl mb-1">🛠️</div>
-      <h2 class="font-title text-2xl text-white">TOOLS</h2>
-    </div>
+    <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">🛠️</div><h2 class="font-title text-2xl text-white">TOOLS</h2></div>
     <div class="grid grid-cols-4 gap-2">
       <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="tab-pill">🌍 Jam</button>
       <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="tab-pill">🗣️ TTS</button>
@@ -637,10 +604,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <template x-for="zone in worldClocks" :key="zone.name">
           <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
             <span class="flag-ico" :style="'background:'+zone.flag"></span>
-            <div class="flex-1">
-              <div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="zone.name"></div>
-              <div class="font-title text-base" x-text="zone.time"></div>
-            </div>
+            <div class="flex-1"><div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="zone.name"></div><div class="font-title text-base" x-text="zone.time"></div></div>
           </div>
         </template>
       </div>
@@ -665,30 +629,17 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <input type="number" x-model="bmiWeight" placeholder="Berat (kg)" class="input-field">
       <input type="number" x-model="bmiHeight" placeholder="Tinggi (cm)" class="input-field">
       <input type="number" x-model="bmiAge" placeholder="Umur (tahun)" class="input-field">
-      <select x-model="bmiGender" class="input-field">
-        <option value="male">Laki-laki</option>
-        <option value="female">Perempuan</option>
-      </select>
+      <select x-model="bmiGender" class="input-field"><option value="male">Laki-laki</option><option value="female">Perempuan</option></select>
       <button @click="calcBMI()" class="btn-primary">🧮 HITUNG BMI</button>
       <template x-if="bmiResult">
         <div class="sec-gap">
-          <div class="p-4 rounded-xl text-center" style="background:var(--primary-soft);border:2.5px solid var(--border)">
-            <div class="font-title text-5xl" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div>
-            <div class="font-bold text-base" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div>
-          </div>
+          <div class="p-4 rounded-xl text-center" style="background:var(--primary-soft);border:2.5px solid var(--border)"><div class="font-title text-5xl" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div><div class="font-bold text-base" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div></div>
           <div class="p-4 rounded-xl" style="background:var(--primary-soft);border:2.5px solid var(--border)">
             <div class="txt-xs font-bold text-center mb-2" style="color:var(--accent-dark)">📊 INDIKATOR BMI</div>
             <div style="position:relative;padding:10px 0">
               <div style="height:20px;border-radius:10px;border:2.5px solid var(--border);background:linear-gradient(90deg,#0ea5e9 0%,#0ea5e9 18.5%,#22c55e 18.5%,#22c55e 50%,#eab308 50%,#eab308 70%,#ef4444 70%,#ef4444 100%);overflow:hidden"></div>
-              <div style="position:absolute;top:0;transition:left .5s" :style="'left:'+bmiResult.marker+'%'">
-                <div style="width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:12px solid var(--border);transform:translateX(-8px)"></div>
-              </div>
-              <div class="flex justify-between txt-xs font-bold mt-2" style="font-size:9px">
-                <span style="color:#0ea5e9">&lt;18.5 Kurus</span>
-                <span style="color:#22c55e">18.5-25 Normal</span>
-                <span style="color:#eab308">25-30 Gemuk</span>
-                <span style="color:#ef4444">&gt;30 Obesitas</span>
-              </div>
+              <div style="position:absolute;top:0;transition:left .5s" :style="'left:'+bmiResult.marker+'%'"><div style="width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:12px solid var(--border);transform:translateX(-8px)"></div></div>
+              <div class="flex justify-between txt-xs font-bold mt-2" style="font-size:9px"><span style="color:#0ea5e9">&lt;18.5 Kurus</span><span style="color:#22c55e">18.5-25 Normal</span><span style="color:#eab308">25-30 Gemuk</span><span style="color:#ef4444">&gt;30 Obesitas</span></div>
             </div>
           </div>
           <div class="grid grid-cols-2 gap-2">
@@ -709,10 +660,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   </div>
 
   <div x-show="activeTab==='tema'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)">
-      <div class="text-4xl mb-1">🎨</div>
-      <h2 class="font-title text-2xl text-white">TEMA</h2>
-    </div>
+    <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">🎨</div><h2 class="font-title text-2xl text-white">TEMA</h2></div>
     <div class="card sec-gap">
       <h3 class="font-title text-lg" style="color:var(--accent-dark)">WARNA TEMA</h3>
       <div class="grid grid-cols-3 gap-4">
@@ -727,30 +675,20 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   </div>
 
   <div x-show="activeTab==='arcade'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)">
-      <div class="text-4xl mb-1">🎮</div>
-      <h2 class="font-title text-2xl text-white">ARCADE GAME</h2>
-    </div>
+    <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">🎮</div><h2 class="font-title text-2xl text-white">ARCADE GAME</h2></div>
     <div class="grid grid-cols-2 gap-2">
       <button @click="gameSubTab='reflex'" :class="gameSubTab==='reflex'?'active':''" class="tab-pill">⚡ Refleks</button>
       <button @click="gameSubTab='tictactoe';initTTT()" :class="gameSubTab==='tictactoe'?'active':''" class="tab-pill">❌ Tic Tac Toe</button>
     </div>
     <div x-show="gameSubTab==='reflex'" class="card sec-gap text-center">
-      <div class="w-full h-40 rounded-2xl flex items-center justify-center cursor-pointer font-title text-2xl text-white transition-all"
-           :style="reflexState==='red'?'background:#ef4444;border:3px solid var(--border)':(reflexState==='yellow'?'background:#eab308;border:3px solid var(--border)':'background:#22c55e;border:3px solid var(--border)')"
-           @click="handleReflexTap()"><span x-text="reflexMessage"></span></div>
+      <div class="w-full h-40 rounded-2xl flex items-center justify-center cursor-pointer font-title text-2xl text-white transition-all" :style="reflexState==='red'?'background:#ef4444;border:3px solid var(--border)':(reflexState==='yellow'?'background:#eab308;border:3px solid var(--border)':'background:#22c55e;border:3px solid var(--border)')" @click="handleReflexTap()"><span x-text="reflexMessage"></span></div>
       <button @click="startReflexGame()" class="btn-primary">▶️ MULAI GAME</button>
     </div>
     <div x-show="gameSubTab==='tictactoe'" class="card sec-gap">
-      <div class="flex justify-between items-center">
-        <h3 class="font-title text-lg" style="color:var(--accent-dark)">❌ TIC TAC TOE ⭕</h3>
-        <span class="txt-xs font-bold px-2 py-1 rounded-lg" style="background:var(--primary-soft);border:2px solid var(--border)" x-text="tttStatus"></span>
-      </div>
+      <div class="flex justify-between items-center"><h3 class="font-title text-lg" style="color:var(--accent-dark)">❌ TIC TAC TOE ⭕</h3><span class="txt-xs font-bold px-2 py-1 rounded-lg" style="background:var(--primary-soft);border:2px solid var(--border)" x-text="tttStatus"></span></div>
       <div class="grid grid-cols-3 gap-2 mx-auto" style="max-width:280px">
         <template x-for="(cell,idx) in tttBoard" :key="idx">
-          <button @click="tttPlay(idx)" class="aspect-square rounded-xl font-title text-3xl flex items-center justify-center"
-                  :style="'background:var(--primary-soft);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border);color:'+(cell==='X'?'#a855f7':(cell==='O'?'#ef4444':'#1a1a1a'))"
-                  x-text="cell"></button>
+          <button @click="tttPlay(idx)" class="aspect-square rounded-xl font-title text-3xl flex items-center justify-center" :style="'background:var(--primary-soft);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border);color:'+(cell==='X'?'#a855f7':(cell==='O'?'#ef4444':'#1a1a1a'))" x-text="cell"></button>
         </template>
       </div>
       <button @click="initTTT()" class="btn-soft w-full">🔄 Reset Game</button>
@@ -759,19 +697,13 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 
   <template x-if="isOwner">
     <div x-show="activeTab==='owner'" class="sec-gap">
-      <div class="card text-center" style="background:var(--accent)">
-        <div class="text-4xl mb-1">👑</div>
-        <h2 class="font-title text-2xl text-white">OWNER PANEL</h2>
-        <p class="txt-xs text-white opacity-90">Kontrol penuh aplikasi</p>
-      </div>
-
+      <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">👑</div><h2 class="font-title text-2xl text-white">OWNER PANEL</h2><p class="txt-xs text-white opacity-90">Kontrol penuh aplikasi</p></div>
       <div class="grid grid-cols-4 gap-1.5">
         <button @click="ownerSubTab='statistik';loadAppStats()" :class="ownerSubTab==='statistik'?'active':''" class="tab-pill">📊</button>
         <button @click="ownerSubTab='users';loadAllUsers()" :class="ownerSubTab==='users'?'active':''" class="tab-pill">👥</button>
         <button @click="ownerSubTab='setelan'" :class="ownerSubTab==='setelan'?'active':''" class="tab-pill">⚙️</button>
         <button @click="ownerSubTab='tools'" :class="ownerSubTab==='tools'?'active':''" class="tab-pill">🔧</button>
       </div>
-
       <div x-show="ownerSubTab==='statistik'" class="sec-gap">
         <div class="grid grid-cols-2 gap-2">
           <div class="stat-box"><div class="font-title text-2xl" style="color:var(--accent-dark)" x-text="appStats.totalUsers"></div><div class="txt-xs font-bold">Total User</div></div>
@@ -794,7 +726,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </div>
         <button @click="loadAppStats()" class="btn-soft w-full">🔄 Refresh</button>
       </div>
-
       <div x-show="ownerSubTab==='users'" class="sec-gap">
         <input type="text" x-model="userSearch" placeholder="Cari user..." class="input-field">
         <div class="card sec-gap">
@@ -804,29 +735,13 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
               <div class="p-3 rounded-xl" :style="u.is_banned?'background:#fee2e2;border:2px solid var(--border)':'background:var(--primary-soft);border:2px solid var(--border)'">
                 <div class="flex items-center gap-2 mb-2">
                   <div class="w-9 h-9 rounded-lg flex items-center justify-center font-title text-sm shrink-0" style="background:var(--accent);color:#fff;border:2px solid var(--border)" x-text="u.username?u.username.substring(0,1).toUpperCase():'?'"></div>
-                  <div class="flex-1 min-w-0">
-                    <div class="font-bold text-xs truncate" x-text="u.username"></div>
-                    <div class="txt-xs text-gray-600">
-                      <span x-text="u.status"></span>
-                      <span x-show="u.is_vip" class="text-yellow-600 font-bold"> • VIP</span>
-                      <span x-show="u.is_banned" class="text-red-600 font-bold"> • BANNED</span>
-                      <span x-show="u.chat_bonus>0" class="text-blue-600 font-bold"> • +<span x-text="u.chat_bonus"></span> chat</span>
-                    </div>
-                  </div>
+                  <div class="flex-1 min-w-0"><div class="font-bold text-xs truncate" x-text="u.username"></div><div class="txt-xs text-gray-600"><span x-text="u.status"></span><span x-show="u.is_vip" class="text-yellow-600 font-bold"> • VIP</span><span x-show="u.is_banned" class="text-red-600 font-bold"> • BANNED</span><span x-show="u.chat_bonus>0" class="text-blue-600 font-bold"> • +<span x-text="u.chat_bonus"></span> chat</span></div></div>
                 </div>
                 <div class="grid grid-cols-2 gap-1">
-                  <template x-if="!u.is_banned">
-                    <button @click="banUser(u)" class="btn-danger text-[10px]">🚫 Ban</button>
-                  </template>
-                  <template x-if="u.is_banned">
-                    <button @click="unbanUser(u)" class="btn-success text-[10px]">✓ Unban</button>
-                  </template>
-                  <template x-if="!u.is_vip && u.status!=='owner'">
-                    <button @click="setVip(u,true)" class="btn-soft text-[10px]">💎 Set VIP</button>
-                  </template>
-                  <template x-if="u.is_vip && u.status!=='owner'">
-                    <button @click="setVip(u,false)" class="btn-soft text-[10px]">✖ Un-VIP</button>
-                  </template>
+                  <template x-if="!u.is_banned"><button @click="banUser(u)" class="btn-danger text-[10px]">🚫 Ban</button></template>
+                  <template x-if="u.is_banned"><button @click="unbanUser(u)" class="btn-success text-[10px]">✓ Unban</button></template>
+                  <template x-if="!u.is_vip && u.status!=='owner'"><button @click="setVip(u,true)" class="btn-soft text-[10px]">💎 Set VIP</button></template>
+                  <template x-if="u.is_vip && u.status!=='owner'"><button @click="setVip(u,false)" class="btn-soft text-[10px]">✖ Un-VIP</button></template>
                   <button @click="promptAddChat(u)" class="btn-soft text-[10px]">💬 +Chat</button>
                   <button @click="promptResetChat(u)" class="btn-success text-[10px]">🔄 Reset Chat</button>
                   <button @click="confirmDeleteUser(u)" class="btn-danger text-[10px] col-span-2">🗑️ Hapus User</button>
@@ -837,7 +752,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           </div>
         </div>
       </div>
-
       <div x-show="ownerSubTab==='setelan'" class="sec-gap">
         <div class="card sec-gap">
           <h3 class="font-title text-lg" style="color:var(--accent-dark)">✏️ EDIT KATA SAMBUTAN</h3>
@@ -845,16 +759,9 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <button @click="saveWelcomeText()" class="btn-primary">💾 SIMPAN</button>
         </div>
       </div>
-
       <div x-show="ownerSubTab==='tools'" class="sec-gap">
-        <div class="card sec-gap">
-          <h3 class="font-title text-lg" style="color:var(--accent-dark)">📥 EXPORT DATA USER</h3>
-          <button @click="exportUsersCSV()" class="btn-primary">📥 EXPORT CSV</button>
-        </div>
-        <div class="card sec-gap">
-          <h3 class="font-title text-lg" style="color:var(--accent-dark)">🗑️ BERSIHKAN DATA LAMA</h3>
-          <button @click="confirmCleanOld()" class="btn-danger w-full">🗑️ BERSIHKAN (&gt;30 hari)</button>
-        </div>
+        <div class="card sec-gap"><h3 class="font-title text-lg" style="color:var(--accent-dark)">📥 EXPORT DATA USER</h3><button @click="exportUsersCSV()" class="btn-primary">📥 EXPORT CSV</button></div>
+        <div class="card sec-gap"><h3 class="font-title text-lg" style="color:var(--accent-dark)">🗑️ BERSIHKAN DATA LAMA</h3><button @click="confirmCleanOld()" class="btn-danger w-full">🗑️ BERSIHKAN (&gt;30 hari)</button></div>
       </div>
     </div>
   </template>
@@ -869,10 +776,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <button @click="openChatAI()" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-robot"/></svg><span class="bottom-nav-label">AI</span></button>
   </nav>
 
-  <div class="floating-chat-btn" @click="openChatAI()" x-show="isAuthenticated&&!chatFullscreen">
-    <span>🤖</span>
-  </div>
-</div><div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
+  <div class="floating-chat-btn" @click="openChatAI()" x-show="isAuthenticated&&!chatFullscreen"><span>🤖</span></div>
+</div>
+
+<div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content text-center space-y-4">
     <div class="w-12 h-1.5 rounded-full mx-auto" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl" style="color:var(--accent-dark)">💰 TRANSAKSI BARU</h3>
@@ -934,11 +841,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <template x-for="m in movieList" :key="m.id">
         <div class="p-3 rounded-xl flex gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
           <template x-if="m.poster"><img :src="m.poster" class="w-20 h-28 object-cover rounded-lg shrink-0" style="border:2px solid var(--border)"></template>
-          <div class="flex-1 min-w-0">
-            <div class="font-bold text-sm" x-text="m.title"></div>
-            <div class="txt-xs text-gray-600 mt-1 font-bold" x-text="m.year+' • ⭐ '+m.rating"></div>
-            <div class="txt-xs text-gray-500 mt-1 line-clamp-3" x-text="m.overview"></div>
-          </div>
+          <div class="flex-1 min-w-0"><div class="font-bold text-sm" x-text="m.title"></div><div class="txt-xs text-gray-600 mt-1 font-bold" x-text="m.year+' • ⭐ '+m.rating"></div><div class="txt-xs text-gray-500 mt-1 line-clamp-3" x-text="m.overview"></div></div>
         </div>
       </template>
     </div>
@@ -955,10 +858,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <template x-for="(n,idx) in newsList" :key="idx">
         <div @click="selectedNews=n" class="p-3 rounded-xl cursor-pointer flex gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
           <template x-if="n.thumbnail"><img :src="n.thumbnail" class="w-20 h-20 object-cover rounded-lg shrink-0" style="border:2px solid var(--border)" @error="$event.target.style.display='none'"></template>
-          <div class="flex-1 min-w-0">
-            <div class="font-bold text-xs line-clamp-2" x-text="n.title"></div>
-            <div class="txt-xs text-gray-500 mt-1" x-text="n.pubDate"></div>
-          </div>
+          <div class="flex-1 min-w-0"><div class="font-bold text-xs line-clamp-2" x-text="n.title"></div><div class="txt-xs text-gray-500 mt-1" x-text="n.pubDate"></div></div>
         </div>
       </template>
     </div>
@@ -980,12 +880,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">🌤️ PILIH PROVINSI</h3>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="p in provinces" :key="p">
-        <div @click="selectWeatherProvince(p)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="p"></span>
-          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
-        </div>
-      </template>
+      <template x-for="p in provinces" :key="p"><div @click="selectWeatherProvince(p)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="p"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
     </div>
     <button @click="weatherProvinceSheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -997,12 +892,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <h3 class="font-title text-xl text-center" style="color:var(--accent-dark)">PILIH KOTA</h3>
     <p class="txt-xs text-center text-gray-600 font-bold" x-text="'Provinsi: '+weatherProvince"></p>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="c in cities" :key="c">
-        <div @click="selectWeatherCity(c)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="c"></span>
-          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
-        </div>
-      </template>
+      <template x-for="c in cities" :key="c"><div @click="selectWeatherCity(c)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="c"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
     </div>
     <button @click="weatherCitySheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -1011,10 +901,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 <div x-show="weatherSheetOpen" class="bottom-sheet-overlay" style="z-index:100008;">
   <div class="bottom-sheet-content">
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
-    <div class="flex justify-between items-center">
-      <h3 class="font-title text-xl" style="color:var(--accent-dark)">🌤️ CUACA</h3>
-      <button @click="openWeatherProvincePicker()" class="btn-soft text-xs">🔄 Ganti</button>
-    </div>
+    <div class="flex justify-between items-center"><h3 class="font-title text-xl" style="color:var(--accent-dark)">🌤️ CUACA</h3><button @click="openWeatherProvincePicker()" class="btn-soft text-xs">🔄 Ganti</button></div>
     <div x-show="weatherLoading" class="text-center py-4"><span class="spin"></span></div>
     <template x-if="weatherData && !weatherLoading">
       <div class="mt-3 space-y-3">
@@ -1033,14 +920,8 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <template x-for="(d,idx) in weatherData.forecast" :key="idx">
             <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
               <span class="text-3xl" x-text="d.emoji"></span>
-              <div class="flex-1">
-                <div class="font-bold text-xs" x-text="d.date"></div>
-                <div class="txt-xs text-gray-600" x-text="d.desc"></div>
-              </div>
-              <div class="text-right">
-                <div class="font-bold text-red-500 text-sm" x-text="d.max+'°'"></div>
-                <div class="font-bold text-blue-500 text-sm" x-text="d.min+'°'"></div>
-              </div>
+              <div class="flex-1"><div class="font-bold text-xs" x-text="d.date"></div><div class="txt-xs text-gray-600" x-text="d.desc"></div></div>
+              <div class="text-right"><div class="font-bold text-red-500 text-sm" x-text="d.max+'°'"></div><div class="font-bold text-blue-500 text-sm" x-text="d.min+'°'"></div></div>
             </div>
           </template>
         </div>
@@ -1055,12 +936,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">🕌 PILIH PROVINSI</h3>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="p in provinces" :key="p">
-        <div @click="selectPrayerProvince(p)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="p"></span>
-          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
-        </div>
-      </template>
+      <template x-for="p in provinces" :key="p"><div @click="selectPrayerProvince(p)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="p"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
     </div>
     <button @click="prayerProvinceSheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -1072,12 +948,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <h3 class="font-title text-xl text-center" style="color:var(--accent-dark)">PILIH KOTA</h3>
     <p class="txt-xs text-center text-gray-600 font-bold" x-text="'Provinsi: '+prayerProvince"></p>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="c in prayerCities" :key="c">
-        <div @click="selectPrayerCity(c)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="c"></span>
-          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
-        </div>
-      </template>
+      <template x-for="c in prayerCities" :key="c"><div @click="selectPrayerCity(c)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="c"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
     </div>
     <button @click="prayerCitySheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -1089,9 +960,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <template x-if="selectedKisah">
       <div class="space-y-3">
         <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)" x-text="selectedKisah.judul"></h3>
-        <div class="p-4 rounded-xl max-h-[55vh] overflow-y-auto" style="background:var(--primary-soft);border:2px solid var(--border)">
-          <p class="txt-sm leading-relaxed whitespace-pre-line text-gray-700" x-text="selectedKisah.isi"></p>
-        </div>
+        <div class="p-4 rounded-xl max-h-[55vh] overflow-y-auto" style="background:var(--primary-soft);border:2px solid var(--border)"><p class="txt-sm leading-relaxed whitespace-pre-line text-gray-700" x-text="selectedKisah.isi"></p></div>
         <button @click="kisahSheetOpen=false" class="btn-soft w-full">Tutup</button>
       </div>
     </template>
@@ -1107,9 +976,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <div @click="menuSheetOpen=false;activeTab='tools'" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">🛠️</div><div class="font-title text-xs" style="color:var(--accent-dark)">TOOLS</div></div>
       <div @click="menuSheetOpen=false;activeTab='tema'" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">🎨</div><div class="font-title text-xs" style="color:var(--accent-dark)">TEMA</div></div>
       <div @click="menuSheetOpen=false;activeTab='arcade'" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">🎮</div><div class="font-title text-xs" style="color:var(--accent-dark)">GAME</div></div>
-      <template x-if="isOwner">
-        <div @click="menuSheetOpen=false;activeTab='owner';loadAppStats()" class="card card-hover cursor-pointer text-center" style="padding:12px;background:var(--accent)"><div class="text-3xl mb-1">👑</div><div class="font-title text-xs text-white">OWNER</div></div>
-      </template>
+      <template x-if="isOwner"><div @click="menuSheetOpen=false;activeTab='owner';loadAppStats()" class="card card-hover cursor-pointer text-center" style="padding:12px;background:var(--accent)"><div class="text-3xl mb-1">👑</div><div class="font-title text-xs text-white">OWNER</div></div></template>
       <div @click="menuSheetOpen=false;openNews()" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">📰</div><div class="font-title text-xs" style="color:var(--accent-dark)">BERITA</div></div>
       <div @click="menuSheetOpen=false;openWeatherSheet()" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">🌤️</div><div class="font-title text-xs" style="color:var(--accent-dark)">CUACA</div></div>
       <div @click="menuSheetOpen=false;openMovieSheet()" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">🎬</div><div class="font-title text-xs" style="color:var(--accent-dark)">FILM</div></div>
@@ -1140,9 +1007,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <div class="font-title text-xl" style="color:var(--accent-dark)">HALO! SAYA ZENKAI AI</div>
       <div class="txt-xs text-gray-600 mt-2" x-text="aiModeDesc"></div>
     </div>
-    <template x-for="(msg,idx) in chatMessages" :key="idx">
-      <div><div :class="msg.role==='user'?'chat-bubble-user':'chat-bubble-ai'" x-text="msg.content"></div></div>
-    </template>
+    <template x-for="(msg,idx) in chatMessages" :key="idx"><div><div :class="msg.role==='user'?'chat-bubble-user':'chat-bubble-ai'" x-text="msg.content"></div></div></template>
     <div x-show="aiThinking" class="chat-bubble-ai"><span x-text="aiThinkingText"></span></div>
   </div>
   <div class="p-3 flex gap-2" style="background:var(--card-bg);border-top:3px solid var(--border)">
@@ -1386,7 +1251,8 @@ if(lastLogin!==today){
   localStorage.setItem('zenkai_last_bonus',today);
   await this.addPoints(10,'Login harian');
 }
-if(showWelcome)this.welcomePopupOpen=true;
+if(showWelcome){playIntroAnimation(this.userName,()=>{this.welcomePopupOpen=true;});}
+else{playIntroAnimation(this.userName,()=>{});}
 }
 },
 
@@ -1423,7 +1289,7 @@ async verifyOwnerPin(){
     await this.loadSavings();
     await this.loadBudgets();
     this.loadAppStats();
-    this.welcomePopupOpen = true;
+    playIntroAnimation(this.userName,()=>{this.welcomePopupOpen = true;});
   }catch(e){
     this.showAlert('Gagal', e.message);
   }finally{
@@ -1828,6 +1694,67 @@ confirmClearChat(){this.showConfirm('Hapus Chat?','Semua percakapan akan dihapus
 
 async logout(){await sb.auth.signOut();this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;window.location.reload();}
 };
+}
+
+/* === INTRO ANIMATION === */
+function playIntroAnimation(userName, onDone){
+  const intro = document.getElementById('introAnimation');
+  const canvas = document.getElementById('introCanvas');
+  const subtitle = document.getElementById('introSubtitle');
+  const barFill = document.getElementById('introBarFill');
+  if(!intro || !canvas) { onDone && onDone(); return; }
+  subtitle.textContent = userName ? ('WELCOME BACK, ' + userName.toUpperCase()) : 'WELCOME BACK';
+  intro.style.display = 'flex';
+  intro.classList.remove('hide');
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = window.innerWidth;
+  let H = canvas.height = window.innerHeight;
+  window.addEventListener('resize', ()=>{ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; });
+  const colors = ['#a855f7','#fbbf24','#ec4899','#10b981','#0ea5e9'];
+  const particles = [];
+  for(let i=0;i<60;i++){
+    particles.push({x: W/2 + (Math.random()-0.5)*200, y: H/2 + (Math.random()-0.5)*200, vx: (Math.random()-0.5)*8, vy: (Math.random()-0.5)*8, r: Math.random()*3+1, color: colors[Math.floor(Math.random()*colors.length)], life: 1});
+  }
+  let rafId;
+  function animate(){
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.fillRect(0,0,W,H);
+    particles.forEach(p=>{
+      p.x += p.vx; p.y += p.vy; p.vx *= 0.99; p.vy *= 0.99; p.life -= 0.008;
+      if(p.life <= 0){ p.x = W/2 + (Math.random()-0.5)*100; p.y = H/2 + (Math.random()-0.5)*100; p.vx = (Math.random()-0.5)*8; p.vy = (Math.random()-0.5)*8; p.life = 1; }
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fillStyle = p.color; ctx.globalAlpha = p.life * 0.8; ctx.shadowBlur = 15; ctx.shadowColor = p.color; ctx.fill();
+    });
+    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+    rafId = requestAnimationFrame(animate);
+  }
+  animate();
+  try{
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(AudioCtx){
+      const audio = new AudioCtx();
+      const o1 = audio.createOscillator(); const g1 = audio.createGain();
+      o1.type = 'sine'; o1.frequency.setValueAtTime(120, audio.currentTime);
+      o1.frequency.exponentialRampToValueAtTime(300, audio.currentTime+1.2);
+      g1.gain.setValueAtTime(0.15, audio.currentTime);
+      g1.gain.exponentialRampToValueAtTime(0.001, audio.currentTime+1.5);
+      o1.connect(g1); g1.connect(audio.destination); o1.start(); o1.stop(audio.currentTime+1.5);
+      setTimeout(()=>{
+        const o2 = audio.createOscillator(); const g2 = audio.createGain();
+        o2.type = 'triangle'; o2.frequency.setValueAtTime(800, audio.currentTime);
+        o2.frequency.exponentialRampToValueAtTime(1400, audio.currentTime+0.3);
+        g2.gain.setValueAtTime(0.12, audio.currentTime);
+        g2.gain.exponentialRampToValueAtTime(0.001, audio.currentTime+0.6);
+        o2.connect(g2); g2.connect(audio.destination); o2.start(); o2.stop(audio.currentTime+0.6);
+      }, 1200);
+    }
+  }catch(e){ console.warn('Audio error:', e); }
+  let progress = 0;
+  const barInt = setInterval(()=>{ progress += 2.5; barFill.style.width = progress + '%'; if(progress >= 100) clearInterval(barInt); }, 100);
+  setTimeout(()=>{
+    cancelAnimationFrame(rafId);
+    intro.classList.add('hide');
+    setTimeout(()=>{ intro.style.display = 'none'; onDone && onDone(); }, 700);
+  }, 4000);
 }
 </script>
 </body>
