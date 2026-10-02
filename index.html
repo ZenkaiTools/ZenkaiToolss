@@ -78,9 +78,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .ai-fullscreen{position:fixed;inset:0;z-index:99998;background:var(--bg-soft);display:flex;flex-direction:column}
 </style>
 </head>
-<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme">
-
-<div class="splash-screen" :class="{'hide':splashHidden}">
+<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme"><div class="splash-screen" :class="{'hide':splashHidden}">
   <div class="splash-logo">ZENKAI TOOLS</div>
   <div class="splash-bar-wrap"><div class="splash-bar" :style="'width:'+splashProgress+'%'"></div></div>
   <div class="mt-3 text-sm font-bold text-white" x-text="splashText"></div>
@@ -107,7 +105,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <li><b>📖 Ibadah:</b> Al-Quran, Asmaul Husna, Waktu Sholat, Kisah Nabi, Hadits, Doa</li>
         <li><b>💰 Dompet:</b> Transaksi, grafik, target tabungan, budget</li>
         <li><b>🤖 AI Chat:</b> Chatbot pintar 4 mode</li>
-        <li><b>📥 Downloader:</b> TikTok tanpa watermark</li>
+        <li><b>📥 Downloader:</b> TikTok & Instagram tanpa watermark</li>
         <li><b>🛠️ Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
         <li><b>🎮 Game:</b> Refleks & Tic Tac Toe</li>
         <li><b>🎨 Tema:</b> 6 tema warna</li>
@@ -435,15 +433,16 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="card text-center" style="background:var(--accent)">
       <div class="text-4xl mb-1">📥</div>
       <h2 class="font-title text-2xl text-white">MEDIA DOWNLOADER</h2>
-      <p class="txt-xs text-white opacity-90">TikTok • Langsung simpan</p>
+      <p class="txt-xs text-white opacity-90">TikTok & Instagram • Tanpa Watermark</p>
     </div>
     <div class="card sec-gap">
-      <label class="font-bold text-sm">Tempel Link TikTok:</label>
-      <input type="text" x-model="downloadLinkInput" placeholder="https://tiktok.com/..." class="input-field">
+      <label class="font-bold text-sm">Tempel Link TikTok / Instagram:</label>
+      <input type="text" x-model="downloadLinkInput" placeholder="https://tiktok.com/... atau https://instagram.com/..." class="input-field">
       <button @click="processMediaDownload()" class="btn-primary" :disabled="downloadLoading">
         <span x-show="!downloadLoading">🔍 PROSES LINK</span>
         <span x-show="downloadLoading"><span class="spin"></span> Memproses...</span>
       </button>
+      <div class="txt-xs text-center text-gray-500 font-bold">💡 Support: TikTok (No WM) • Instagram (Foto/Reels/Video)</div>
     </div>
     <template x-if="downloadResultReady">
       <div class="card sec-gap text-center">
@@ -1179,7 +1178,7 @@ const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
 const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-responder';
 const OWNER_EMAIL='andikaatka@gmail.com';
 const DAILY_LIMIT=10;
-const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi ini menyediakan berbagai fitur: Al-Quran & Ibadah, Dompet Keuangan, AI Chat pintar, Downloader TikTok, Cuaca & Berita, Film Trending, Game, dan banyak lagi.\n\nSemua fitur bisa diakses gratis. Yuk, mulai jelajahi!';
+const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi ini menyediakan berbagai fitur: Al-Quran & Ibadah, Dompet Keuangan, AI Chat pintar, Downloader TikTok & Instagram, Cuaca & Berita, Film Trending, Game, dan banyak lagi.\n\nSemua fitur bisa diakses gratis. Yuk, mulai jelajahi!';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
 const ASMAUL_HUSNA=[{no:1,arab:'الرَّحْمَنُ',latin:'Ar-Rahmaan',arti:'Yang Maha Pengasih'},{no:2,arab:'الرَّحِيمُ',latin:'Ar-Rahiim',arti:'Yang Maha Penyayang'},{no:3,arab:'الْمَلِكُ',latin:'Al-Malik',arti:'Yang Maha Merajai'},{no:4,arab:'الْقُدُّوسُ',latin:'Al-Quddus',arti:'Yang Maha Suci'},{no:5,arab:'السَّلَامُ',latin:'As-Salaam',arti:'Yang Maha Sejahtera'},{no:6,arab:'الْمُؤْمِنُ',latin:'Al-Mu\'min',arti:'Yang Maha Memberi Keamanan'},{no:7,arab:'الْمُهَيْمِنُ',latin:'Al-Muhaimin',arti:'Yang Maha Pemelihara'},{no:8,arab:'الْعَزِيزُ',latin:'Al-Aziiz',arti:'Yang Maha Perkasa'},{no:9,arab:'الْجَبَّارُ',latin:'Al-Jabbar',arti:'Yang Maha Kuasa'},{no:10,arab:'الْمُتَكَبِّرُ',latin:'Al-Mutakabbir',arti:'Yang Maha Megah'},{no:11,arab:'الْخَالِقُ',latin:'Al-Khaaliq',arti:'Yang Maha Pencipta'},{no:12,arab:'الْبَارِئُ',latin:'Al-Baari\'',arti:'Yang Maha Mengadakan'},{no:13,arab:'الْمُصَوِّرُ',latin:'Al-Mushawwir',arti:'Yang Maha Membentuk'},{no:14,arab:'الْغَفَّارُ',latin:'Al-Ghaffaar',arti:'Yang Maha Pengampun'},{no:15,arab:'الْقَهَّارُ',latin:'Al-Qahhaar',arti:'Yang Maha Menundukkan'},{no:16,arab:'الْوَهَّابُ',latin:'Al-Wahhaab',arti:'Yang Maha Pemberi'},{no:17,arab:'الرَّزَّاقُ',latin:'Ar-Razzaq',arti:'Yang Maha Pemberi Rezeki'},{no:18,arab:'الْفَتَّاحُ',latin:'Al-Fattaah',arti:'Yang Maha Pembuka'},{no:19,arab:'الْعَلِيمُ',latin:'Al-\'Aliim',arti:'Yang Maha Mengetahui'},{no:20,arab:'الْقَابِضُ',latin:'Al-Qaabidh',arti:'Yang Maha Menyempitkan'},{no:21,arab:'الْبَاسِطُ',latin:'Al-Baasith',arti:'Yang Maha Melapangkan'},{no:22,arab:'الْخَافِضُ',latin:'Al-Khaafidh',arti:'Yang Maha Merendahkan'},{no:23,arab:'الرَّافِعُ',latin:'Ar-Raafi\'',arti:'Yang Maha Meninggikan'},{no:24,arab:'الْمُعِزُّ',latin:'Al-Mu\'izz',arti:'Yang Maha Memuliakan'},{no:25,arab:'الْمُذِلُّ',latin:'Al-Mudzil',arti:'Yang Maha Menghinakan'},{no:26,arab:'السَّمِيعُ',latin:'As-Sami\'',arti:'Yang Maha Mendengar'},{no:27,arab:'الْبَصِيرُ',latin:'Al-Bashiir',arti:'Yang Maha Melihat'},{no:28,arab:'الْحَكَمُ',latin:'Al-Hakam',arti:'Yang Maha Menetapkan'},{no:29,arab:'الْعَدْلُ',latin:'Al-\'Adl',arti:'Yang Maha Adil'},{no:30,arab:'اللَّطِيفُ',latin:'Al-Lathiif',arti:'Yang Maha Lembut'},{no:31,arab:'الْخَبِيرُ',latin:'Al-Khabiir',arti:'Yang Maha Mengenal'},{no:32,arab:'الْحَلِيمُ',latin:'Al-Haliim',arti:'Yang Maha Penyantun'},{no:33,arab:'الْعَظِيمُ',latin:'Al-\'Azhiim',arti:'Yang Maha Agung'},{no:34,arab:'الْغَفُورُ',latin:'Al-Ghafuur',arti:'Yang Maha Pengampun'},{no:35,arab:'الشَّكُورُ',latin:'Ash-Shakuur',arti:'Yang Maha Pembalas'},{no:36,arab:'الْعَلِيُّ',latin:'Al-\'Aliy',arti:'Yang Maha Tinggi'},{no:37,arab:'الْكَبِيرُ',latin:'Al-Kabiir',arti:'Yang Maha Besar'},{no:38,arab:'الْحَفِيظُ',latin:'Al-Hafiizh',arti:'Yang Maha Memelihara'},{no:39,arab:'الْمُقِيتُ',latin:'Al-Muqiit',arti:'Yang Maha Pemberi Kecukupan'},{no:40,arab:'الْحَسِيبُ',latin:'Al-Hasiib',arti:'Yang Maha Membuat Perhitungan'},{no:41,arab:'الْجَلِيلُ',latin:'Al-Jaliil',arti:'Yang Maha Luhur'},{no:42,arab:'الْكَرِيمُ',latin:'Al-Kariim',arti:'Yang Maha Pemurah'},{no:43,arab:'الرَّقِيبُ',latin:'Ar-Raqiib',arti:'Yang Maha Mengawasi'},{no:44,arab:'الْمُجِيبُ',latin:'Al-Mujiib',arti:'Yang Maha Mengabulkan'},{no:45,arab:'الْوَاسِعُ',latin:'Al-Waasi\'',arti:'Yang Maha Luas'},{no:46,arab:'الْحَكِيمُ',latin:'Al-Hakiim',arti:'Yang Maha Bijaksana'},{no:47,arab:'الْوَدُودُ',latin:'Al-Waduud',arti:'Yang Maha Mengasihi'},{no:48,arab:'الْمَجِيدُ',latin:'Al-Majiid',arti:'Yang Maha Mulia'},{no:49,arab:'الْبَاعِثُ',latin:'Al-Baa\'its',arti:'Yang Maha Membangkitkan'},{no:50,arab:'الشَّهِيدُ',latin:'Ash-Shahiid',arti:'Yang Maha Menyaksikan'},{no:51,arab:'الْحَقُّ',latin:'Al-Haqq',arti:'Yang Maha Benar'},{no:52,arab:'الْوَكِيلُ',latin:'Al-Wakiil',arti:'Yang Maha Memelihara'},{no:53,arab:'الْقَوِيُّ',latin:'Al-Qawiyyu',arti:'Yang Maha Kuat'},{no:54,arab:'الْمَتِينُ',latin:'Al-Matiin',arti:'Yang Maha Kokoh'},{no:55,arab:'الْوَلِيُّ',latin:'Al-Waliyy',arti:'Yang Maha Melindungi'},{no:56,arab:'الْحَمِيدُ',latin:'Al-Hamiid',arti:'Yang Maha Terpuji'},{no:57,arab:'الْمُحْصِي',latin:'Al-Muhshii',arti:'Yang Maha Menghitung'},{no:58,arab:'الْمُبْدِئُ',latin:'Al-Mubdi\'',arti:'Yang Maha Memulai'},{no:59,arab:'الْمُعِيدُ',latin:'Al-Muiid',arti:'Yang Maha Mengembalikan'},{no:60,arab:'الْمُحْيِي',latin:'Al-Muhyii',arti:'Yang Maha Menghidupkan'},{no:61,arab:'الْمُمِيتُ',latin:'Al-Mumiit',arti:'Yang Maha Mematikan'},{no:62,arab:'الْحَيُّ',latin:'Al-Hayyu',arti:'Yang Maha Hidup'},{no:63,arab:'الْقَيُّومُ',latin:'Al-Qayyuum',arti:'Yang Maha Mandiri'},{no:64,arab:'الْوَاجِدُ',latin:'Al-Waajid',arti:'Yang Maha Penemu'},{no:65,arab:'الْمَاجِدُ',latin:'Al-Maajid',arti:'Yang Maha Mulia'},{no:66,arab:'الْوَاحِدُ',latin:'Al-Waahid',arti:'Yang Maha Tunggal'},{no:67,arab:'الْأَحَدُ',latin:'Al-Ahad',arti:'Yang Maha Esa'},{no:68,arab:'الصَّمَدُ',latin:'As-Samad',arti:'Yang Maha Dibutuhkan'},{no:69,arab:'الْقَادِرُ',latin:'Al-Qaadir',arti:'Yang Maha Menentukan'},{no:70,arab:'الْمُقْتَدِرُ',latin:'Al-Muqtadir',arti:'Yang Maha Berkuasa'},{no:71,arab:'الْمُقَدِّمُ',latin:'Al-Muqaddim',arti:'Yang Maha Mendahulukan'},{no:72,arab:'الْمُؤَخِّرُ',latin:'Al-Mu\'akhkhir',arti:'Yang Maha Mengakhirkan'},{no:73,arab:'الْأَوَّلُ',latin:'Al-Awwal',arti:'Yang Maha Awal'},{no:74,arab:'الْآخِرُ',latin:'Al-Akhir',arti:'Yang Maha Akhir'},{no:75,arab:'الظَّاهِرُ',latin:'Az-Zhaahir',arti:'Yang Maha Nyata'},{no:76,arab:'الْبَاطِنُ',latin:'Al-Baathin',arti:'Yang Maha Ghaib'},{no:77,arab:'الْوَالِي',latin:'Al-Waali',arti:'Yang Maha Memerintah'},{no:78,arab:'الْمُتَعَالِي',latin:'Al-Muta\'aali',arti:'Yang Maha Tinggi'},{no:79,arab:'الْبَرُّ',latin:'Al-Barr',arti:'Yang Maha Dermawan'},{no:80,arab:'التَّوَّابُ',latin:'At-Tawwaab',arti:'Yang Maha Penerima Taubat'},{no:81,arab:'الْمُنْتَقِمُ',latin:'Al-Muntaqim',arti:'Yang Maha Pemberi Balasan'},{no:82,arab:'الْعَفُوُّ',latin:'Al-\'Afuww',arti:'Yang Maha Pemaaf'},{no:83,arab:'الرَّءُوفُ',latin:'Ar-Ra\'uuf',arti:'Yang Maha Pengasuh'},{no:84,arab:'مَالِكُ الْمُلْكِ',latin:'Malikul Mulk',arti:'Yang Maha Penguasa'},{no:85,arab:'ذُو الْجَلَالِ وَالْإِكْرَامِ',latin:'Dzul Jalaali Wal Ikraam',arti:'Yang Maha Pemilik Kebesaran'},{no:86,arab:'الْمُقْسِطُ',latin:'Al-Muqsith',arti:'Yang Maha Adil'},{no:87,arab:'الْجَامِعُ',latin:'Al-Jaami\'',arti:'Yang Maha Pengumpul'},{no:88,arab:'الْغَنِيُّ',latin:'Al-Ghaniyy',arti:'Yang Maha Kaya'},{no:89,arab:'الْمُغْنِي',latin:'Al-Mughni',arti:'Yang Maha Pemberi Kekayaan'},{no:90,arab:'الْمَانِعُ',latin:'Al-Mani\'',arti:'Yang Maha Pencegahan'},{no:91,arab:'الضَّارُّ',latin:'Ad-Dhaar',arti:'Yang Maha Penimpa'},{no:92,arab:'النَّافِعُ',latin:'An-Naafi\'',arti:'Yang Maha Memberi Manfaat'},{no:93,arab:'النُّورُ',latin:'An-Nuur',arti:'Yang Maha Bercahaya'},{no:94,arab:'الْهَادِي',latin:'Al-Haadi',arti:'Yang Maha Pemberi Petunjuk'},{no:95,arab:'الْبَدِيعُ',latin:'Al-Badii\'',arti:'Yang Maha Pencipta'},{no:96,arab:'الْبَاقِي',latin:'Al-Baqii',arti:'Yang Maha Kekal'},{no:97,arab:'الْوَارِثُ',latin:'Al-Waarith',arti:'Yang Maha Pewaris'},{no:98,arab:'الرَّشِيدُ',latin:'Ar-Rasyiid',arti:'Yang Maha Pandai'},{no:99,arab:'الصَّبُورُ',latin:'As-Sabuur',arti:'Yang Maha Sabar'}];
@@ -1682,31 +1681,31 @@ async processMediaDownload(){
       if(j.code === 0 && j.data){
         this.downloadMeta = { title: j.data.title || 'TikTok', thumbnail: j.data.cover };
         const L = [];
-        if(j.data.play) L.push({ label:'🎬 MP4', url:j.data.play, filename:'tiktok_'+Date.now()+'.mp4' });
+        if(j.data.play) L.push({ label:'🎬 MP4 (No WM)', url:j.data.play, filename:'tiktok_'+Date.now()+'.mp4' });
         if(j.data.hdplay) L.push({ label:'🎬 MP4 HD', url:j.data.hdplay, filename:'tiktok_hd_'+Date.now()+'.mp4' });
-        if(j.data.music) L.push({ label:'🎵 MP3', url:j.data.music, filename:'tiktok_'+Date.now()+'.mp3' });
+        if(j.data.music) L.push({ label:'🎵 MP3 Audio', url:j.data.music, filename:'tiktok_'+Date.now()+'.mp3' });
         this.downloadResultLinks = L;
         this.downloadResultReady = true;
         return;
       }
     }
 
-    const r = await fetch('https://cobalt.tame.gg/', {
+    const r = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/cobalt-proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({ url: url })
     });
     const d = await r.json();
     if(d.status === 'redirect' || d.status === 'tunnel'){
-      this.downloadMeta = { title: isIG ? 'Instagram' : 'TikTok', thumbnail: '' };
-      this.downloadResultLinks = [{ label:'💾 Download', url:d.url, filename:(isIG?'ig_':'tt_')+Date.now()+'.mp4' }];
+      this.downloadMeta = { title: isIG ? 'Instagram Media' : 'TikTok Video', thumbnail: '' };
+      this.downloadResultLinks = [{ label:'💾 Download Media', url:d.url, filename:(isIG?'ig_':'tt_')+Date.now()+'.mp4' }];
       this.downloadResultReady = true;
     } else if(d.status === 'picker'){
-      this.downloadMeta = { title:'Instagram', thumbnail:'' };
+      this.downloadMeta = { title:'Instagram Carousel', thumbnail:'' };
       this.downloadResultLinks = d.picker.map((v,i)=>({ label:'💾 Item '+(i+1), url:v.url, filename:'ig_'+Date.now()+'_'+i+'.mp4' }));
       this.downloadResultReady = true;
     } else {
-      this.showAlert('Gagal', d.text || d.error?.code || 'Gagal proses.');
+      this.showAlert('Gagal', d.text || d.error?.code || 'Gagal proses link.');
     }
   } catch(e){
     this.showAlert('Gagal','Error: '+e.message);
