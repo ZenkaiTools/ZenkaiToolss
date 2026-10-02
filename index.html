@@ -36,8 +36,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .splash-bar{height:100%;background:linear-gradient(90deg,#86efac,#22c55e);border-radius:6px;width:0%;transition:width .25s}
 .bottom-nav-btn{flex:1;border:2.5px solid transparent;border-radius:10px;padding:6px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;color:var(--text);opacity:.7;transition:all .15s;cursor:pointer;min-width:44px}
 .bottom-nav-btn.active{background:var(--primary);color:var(--text);opacity:1;border-color:var(--border);box-shadow:2px 2px 0 0 var(--border)}
-.bottom-nav-label{font-family:'Bangers',cursive;font-size:9px;letter-spacing:.5px;line-height:1}
-.bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.bottom-nav-label{font-family:'Bangers',cursive;font-size:9px;letter-spacing:.5px;line-height:1}.bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
 .bottom-sheet-content{background:var(--card-bg);width:100%;max-width:450px;border-top:4px solid var(--border);border-left:4px solid var(--border);border-right:4px solid var(--border);border-top-left-radius:28px;border-top-right-radius:28px;padding:20px;animation:slideUp .3s ease-out;max-height:90vh;overflow-y:auto}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}
@@ -90,7 +89,70 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 @keyframes introFadeUp{to{opacity:.85;transform:translateY(0)}}
 .intro-bar{width:min(200px,60vw);height:6px;background:rgba(255,255,255,.15);border-radius:6px;margin:24px auto 0;overflow:hidden;opacity:0;animation:introFadeUp .5s 1.6s forwards}
 .intro-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#a855f7,#fbbf24);border-radius:6px;transition:width .1s linear}
-</style>
+/* === HEADER BARU === */
+.app-header{position:relative;padding:14px 16px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-bottom:3px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.header-user{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer}
+.header-avatar{width:44px;height:44px;border-radius:12px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Bangers',cursive;font-size:18px;background:var(--card-bg);color:var(--accent-dark);border:3px solid var(--border);box-shadow:2px 2px 0 0 var(--border)}
+.header-avatar img{width:100%;height:100%;object-fit:cover}
+.header-info{flex:1;min-width:0}
+.header-name{font-family:'Bangers',cursive;font-size:18px;line-height:1;color:#fff;text-shadow:1px 1px 0 var(--border);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-badge{display:inline-block;font-size:9px;font-weight:800;padding:2px 6px;border-radius:6px;background:var(--accent);color:#fff;border:1.5px solid var(--border);letter-spacing:.5px}
+.header-actions{display:flex;gap:6px;flex-shrink:0}
+.header-btn{width:40px;height:40px;border-radius:12px;background:var(--card-bg);border:3px solid var(--border);box-shadow:2px 2px 0 0 var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .15s;color:var(--accent-dark);font-weight:bold}
+.header-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 0 var(--border)}
+/* === HERO CARD === */
+.hero-card{position:relative;border-radius:20px;padding:20px;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--accent-dark));border:3px solid var(--border);box-shadow:5px 5px 0 0 var(--border);color:#fff}
+.hero-card::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
+.hero-card::after{content:'';position:absolute;bottom:-40%;left:-15%;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
+.hero-label{position:relative;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:1.5px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.3);margin-bottom:14px;backdrop-filter:blur(4px)}
+.hero-title{position:relative;font-family:'Bangers',cursive;font-size:clamp(24px,7vw,32px);letter-spacing:2px;line-height:1.1;margin-bottom:6px;text-shadow:2px 2px 0 rgba(0,0,0,.2)}
+.hero-subtitle{position:relative;font-size:13px;font-weight:600;opacity:.9;margin-bottom:16px}
+.hero-stats{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hero-stat{background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.25);border-radius:12px;padding:8px 6px;text-align:center;backdrop-filter:blur(4px)}
+.hero-stat-val{font-family:'Bangers',cursive;font-size:16px;letter-spacing:1px;line-height:1;margin-bottom:3px}
+.hero-stat-label{font-size:9px;font-weight:700;opacity:.85;letter-spacing:.5px;text-transform:uppercase}
+/* === DEVICE CARD === */
+.device-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.device-item{background:var(--primary-soft);border:2.5px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center;box-shadow:2px 2px 0 0 var(--border);transition:all .15s}
+.device-item:active{transform:translate(1px,1px);box-shadow:1px 1px 0 0 var(--border)}
+.device-icon{font-size:20px;line-height:1;margin-bottom:4px}
+.device-label{font-size:9px;font-weight:700;opacity:.6;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px}
+.device-val{font-size:11px;font-weight:800;color:var(--accent-dark);line-height:1.2;word-break:break-word}
+/* === KATEGORI TAB === */
+.kategori-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.kategori-scroll::-webkit-scrollbar{display:none}
+.kategori-tab{flex-shrink:0;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;border:2.5px solid var(--border);background:var(--card-bg);color:var(--text);font-family:'Poppins',sans-serif;box-shadow:2px 2px 0 0 var(--border);white-space:nowrap}
+.kategori-tab.active{background:var(--primary);color:var(--text);transform:translateY(-1px)}
+.kategori-tab:active{transform:translate(1px,1px);box-shadow:1px 1px 0 0 var(--border)}
+/* === FITUR GRID === */
+.fitur-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.fitur-card{background:var(--card-bg);border:3px solid var(--border);border-radius:14px;padding:14px;box-shadow:3px 3px 0 0 var(--border);cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:6px;min-height:100px}
+.fitur-card:active{transform:translate(2px,2px);box-shadow:1px 1px 0 0 var(--border)}
+.fitur-icon{font-size:32px;line-height:1}
+.fitur-name{font-family:'Bangers',cursive;font-size:16px;letter-spacing:.5px;color:var(--accent-dark);line-height:1.1}
+.fitur-desc{font-size:10px;font-weight:600;color:#666;line-height:1.3}
+/* === QUICK ACTION BAR === */
+.quick-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.quick-btn{background:var(--card-bg);border:2.5px solid var(--border);border-radius:12px;padding:10px 4px;text-align:center;cursor:pointer;transition:all .15s;box-shadow:2px 2px 0 0 var(--border);display:flex;flex-direction:column;align-items:center;gap:3px}
+.quick-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 0 var(--border)}
+.quick-icon{font-size:22px;line-height:1}
+.quick-label{font-size:9px;font-weight:800;color:var(--accent-dark);letter-spacing:.3px;text-transform:uppercase}
+/* === DRAWER === */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100001;backdrop-filter:blur(4px)}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(300px,85vw);background:var(--card-bg);border-left:4px solid var(--border);z-index:100002;display:flex;flex-direction:column;animation:drawerIn .3s ease-out}
+@keyframes drawerIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.drawer-header{padding:20px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));border-bottom:3px solid var(--border);color:#fff;position:relative}
+.drawer-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.2);border:2px solid var(--border);color:#fff;font-size:16px;font-weight:bold;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.drawer-avatar{width:56px;height:56px;border-radius:14px;overflow:hidden;background:var(--card-bg);border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Bangers',cursive;font-size:22px;color:var(--accent-dark);margin-bottom:10px}
+.drawer-avatar img{width:100%;height:100%;object-fit:cover}
+.drawer-name{font-family:'Bangers',cursive;font-size:22px;letter-spacing:1px;line-height:1;margin-bottom:4px;text-shadow:1px 1px 0 var(--border)}
+.drawer-badge{display:inline-block;font-size:10px;font-weight:800;padding:3px 8px;border-radius:8px;background:var(--card-bg);color:var(--accent-dark);border:2px solid var(--border)}
+.drawer-menu{flex:1;overflow-y:auto;padding:8px 0}
+.drawer-item{padding:14px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .15s;border-bottom:2px solid var(--primary-soft);font-weight:600;font-size:14px}
+.drawer-item:active{background:var(--primary-soft)}
+.drawer-item-icon{font-size:20px;width:28px;text-align:center}
+.drawer-item-label{flex:1}
+.drawer-item.danger{color:#ef4444}</style>
 </head>
 <body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme">
 
@@ -139,6 +201,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <li><b>🎨 Tema:</b> 6 tema warna</li>
         <li><b>🏆 Poin & Level:</b> Kumpulkan poin, naik level!</li>
       </ul>
+      <p class="txt-xs italic text-center mt-2" style="color:var(--accent-dark)">Developer: <b>Andika</b></p>
     </div>
     <button @click="aboutModalOpen=false" class="btn-soft w-full">Tutup</button>
   </div>
@@ -209,12 +272,11 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     </div>
     <button @click="aiBusyPopupOpen=false" class="btn-primary">OK, SAYA MENGERTI 👍</button>
   </div>
-</div>
-
-<div x-show="!isAuthenticated" class="fixed inset-0 z-[9997] flex items-center justify-center p-4" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
+</div><div x-show="!isAuthenticated" class="fixed inset-0 z-[9997] flex items-center justify-center p-4" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark))">
   <div class="card w-full max-w-sm text-center space-y-4" style="padding:24px">
     <div class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center font-title text-3xl" style="background:var(--accent);color:#fff;border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border)">Z</div>
     <h1 class="font-title text-3xl">ZENKAI TOOLS</h1>
+    <p class="txt-xs font-bold text-center" style="color:var(--accent-dark)">Developer Andika</p>
     <h2 class="font-title text-xl" x-text="authMode==='login'?'MASUK AKUN':'DAFTAR AKUN'"></h2>
     <input type="email" x-model="authEmail" placeholder="Email" class="input-field text-center">
     <input type="password" x-model="authPassword" placeholder="Password" class="input-field text-center">
@@ -287,70 +349,137 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 </div>
 
 <div class="w-full max-w-md h-[100dvh] relative flex flex-col overflow-hidden" style="background:var(--card-bg)">
-  <header class="p-3 flex justify-between items-center" style="background:var(--primary);border-bottom:3px solid var(--border)">
-    <div class="flex items-center space-x-2">
-      <div @click="profileModalOpen=true" class="w-11 h-11 rounded-xl overflow-hidden flex items-center justify-center font-title text-lg cursor-pointer" style="background:var(--card-bg);color:var(--accent-dark);border:3px solid var(--border);box-shadow:2px 2px 0 0 var(--border)">
-        <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
+  <!-- HEADER BARU -->
+  <header class="app-header">
+    <div class="header-user" @click="profileModalOpen=true">
+      <div class="header-avatar">
+        <template x-if="userAvatar"><img :src="userAvatar"></template>
         <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
       </div>
-      <div>
-        <h1 class="font-title text-xl leading-none">ZENKAI TOOLS</h1>
-        <span class="text-[10px] font-bold px-2 py-0.5 rounded" style="background:var(--accent);color:#fff;border:1.5px solid var(--border)" x-text="isOwner?'👑 OWNER':(isVip?'💎 VIP':'USER')"></span>
+      <div class="header-info">
+        <div class="header-name" x-text="userName||'Zenkai User'"></div>
+        <span class="header-badge" x-text="isOwner?'👑 OWNER':(isVip?'💎 VIP':'USER')"></span>
       </div>
     </div>
-    <div class="font-bold text-xs px-2 py-1.5 rounded-lg" style="background:var(--card-bg);color:var(--accent-dark);border:2px solid var(--border);box-shadow:2px 2px 0 0 var(--border)" x-text="currentTime"></div>
+    <div class="header-actions">
+      <button class="header-btn" @click="openNotif()" title="Notifikasi">🔔</button>
+      <button class="header-btn" @click="drawerOpen=true" title="Menu">☰</button>
+    </div>
   </header>
 
-  <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24" style="background:var(--bg-soft)">  <div x-show="activeTab==='home'" class="sec-gap">
-    <div @click="profileModalOpen=true" class="card card-hover cursor-pointer" style="background:var(--accent);padding:16px">
-      <div class="flex items-center gap-3">
-        <div class="w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center font-title text-xl" style="background:var(--card-bg);color:var(--accent-dark);border:3px solid var(--border)">
-          <template x-if="userAvatar"><img :src="userAvatar" class="w-full h-full object-cover"></template>
-          <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,1).toUpperCase():'U'"></span></template>
-        </div>
-        <div class="flex-1 min-w-0">
-          <div class="font-title text-xl text-white">HALO, <span x-text="userName"></span>! 👋</div>
-          <div class="txt-xs opacity-90 truncate text-white font-bold" x-text="userEmail"></div>
-        </div>
-        <div class="text-right">
-          <div class="font-title text-2xl text-white" x-text="'⭐ '+userPoints"></div>
-          <div class="txt-xs text-white font-bold" x-text="'🏆 Lv.'+userLevel"></div>
-        </div>
+  <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24" style="background:var(--bg-soft)"><div x-show="activeTab==='home'" class="sec-gap">
+
+  <!-- HERO CARD -->
+  <div class="hero-card">
+    <div class="hero-label">🚀 ZENKAI HUB</div>
+    <div class="hero-title" x-text="'HALO, '+(userName||'USER').toUpperCase()+'! 👋'"></div>
+    <div class="hero-subtitle">Developer Andika</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val" x-text="userPoints"></div>
+        <div class="hero-stat-label">⭐ Poin</div>
       </div>
-    </div>
-    <div class="card card-hover cursor-pointer" style="padding:12px;background:var(--primary-soft)" @click="aboutModalOpen=true">
-      <div class="flex items-center gap-2">
-        <span class="text-xl">ℹ️</span>
-        <div class="flex-1">
-          <div class="font-title text-base" style="color:var(--accent-dark)">APA ITU ZENKAI TOOLS?</div>
-          <div class="txt-xs text-gray-600">Ketuk untuk baca penjelasan</div>
-        </div>
-        <span class="font-bold text-xl">›</span>
+      <div class="hero-stat">
+        <div class="hero-stat-val" x-text="'Lv.'+userLevel"></div>
+        <div class="hero-stat-label">🏆 Level</div>
       </div>
-    </div>
-    <div class="grid grid-cols-2 gap-3">
-      <div @click="openNews()" class="card card-hover cursor-pointer text-center" style="padding:14px"><div class="text-4xl mb-1">📰</div><div class="font-title text-lg" style="color:var(--accent-dark)">BERITA</div></div>
-      <div @click="openWeatherSheet()" class="card card-hover cursor-pointer text-center" style="padding:14px"><div class="text-4xl mb-1">🌤️</div><div class="font-title text-lg" style="color:var(--accent-dark)">CUACA</div></div>
-      <div @click="openMovieSheet()" class="card card-hover cursor-pointer text-center" style="padding:14px"><div class="text-4xl mb-1">🎬</div><div class="font-title text-lg" style="color:var(--accent-dark)">FILM</div></div>
-      <div @click="openChatAI()" class="card card-hover cursor-pointer text-center" style="padding:14px;background:var(--accent)"><div class="text-4xl mb-1">🤖</div><div class="font-title text-lg text-white">AI CHAT</div></div>
-    </div>
-    <div class="card sec-gap">
-      <div class="flex items-center gap-2"><span class="text-2xl">📝</span><h3 class="font-title text-lg" style="color:var(--accent-dark)">CATATAN KILAT</h3></div>
-      <textarea x-model="quickNote" @input="debouncedSaveNote()" rows="3" placeholder="Tulis catatan..." class="input-field"></textarea>
-      <div x-show="noteSaving" class="txt-xs font-bold" style="color:var(--accent)">💾 Menyimpan...</div>
-    </div>
-    <div class="card" style="background:var(--primary-soft)">
-      <div class="flex items-center gap-2 mb-2"><span class="text-2xl">🌐</span><h3 class="font-title text-lg" style="color:var(--accent-dark)">CEK KECEPATAN INTERNET</h3></div>
-      <button @click="runSpeedTest()" class="btn-primary mb-2"><span x-show="!speedTesting">▶️ MULAI TES</span><span x-show="speedTesting"><span class="spin"></span> Mengukur...</span></button>
-      <div x-show="speedResult" class="grid grid-cols-3 gap-2">
-        <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.download+' Mbps':''"></div><div class="txt-xs font-bold">Download</div></div>
-        <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.latency+' ms':''"></div><div class="txt-xs font-bold">Ping</div></div>
-        <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.quality:''"></div><div class="txt-xs font-bold">Kualitas</div></div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" x-text="(isOwner||isVip)?'∞':Math.max(0,(10+chatBonus)-chatCount)"></div>
+        <div class="hero-stat-label">💬 Chat</div>
       </div>
     </div>
   </div>
 
-  <div x-show="activeTab==='keuangan'" class="sec-gap">
+  <!-- INFO DEVICE -->
+  <div class="card" style="padding:12px">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">📡</span>
+      <h3 class="font-title text-base" style="color:var(--accent-dark)">INFO PERANGKAT</h3>
+    </div>
+    <div class="device-grid">
+      <div class="device-item">
+        <div class="device-icon">🌐</div>
+        <div class="device-label">Negara</div>
+        <div class="device-val">Indonesia</div>
+      </div>
+      <div class="device-item">
+        <div class="device-icon">📱</div>
+        <div class="device-label">Device</div>
+        <div class="device-val" x-text="deviceInfo.os"></div>
+      </div>
+      <div class="device-item">
+        <div class="device-icon">🧭</div>
+        <div class="device-label">Browser</div>
+        <div class="device-val" x-text="deviceInfo.browser"></div>
+      </div>
+      <div class="device-item">
+        <div class="device-icon">🟢</div>
+        <div class="device-label">Status</div>
+        <div class="device-val" x-text="deviceInfo.online?'Online':'Offline'"></div>
+      </div>
+      <div class="device-item">
+        <div class="device-icon">🔋</div>
+        <div class="device-label">Baterai</div>
+        <div class="device-val" x-text="deviceInfo.battery"></div>
+      </div>
+      <div class="device-item">
+        <div class="device-icon">🕐</div>
+        <div class="device-label">Jam</div>
+        <div class="device-val" x-text="currentTime"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK ACTION BAR -->
+  <div class="quick-bar">
+    <div class="quick-btn" @click="openTxSheet()">
+      <div class="quick-icon">💰</div>
+      <div class="quick-label">Catat</div>
+    </div>
+    <div class="quick-btn" @click="openChatAI()">
+      <div class="quick-icon">🤖</div>
+      <div class="quick-label">AI Chat</div>
+    </div>
+    <div class="quick-btn" @click="activeTab='kitab';kitabSubTab='quran';if(surahList.length===0)fetchSurahs()">
+      <div class="quick-icon">📖</div>
+      <div class="quick-label">Quran</div>
+    </div>
+    <div class="quick-btn" @click="activeTab='downloader'">
+      <div class="quick-icon">📥</div>
+      <div class="quick-label">Unduh</div>
+    </div>
+  </div>
+
+  <!-- KATEGORI TAB -->
+  <div class="kategori-scroll">
+    <template x-for="k in kategoriList" :key="k.id">
+      <button @click="kategoriAktif=k.id" :class="kategoriAktif===k.id?'active':''" class="kategori-tab" x-text="k.icon+' '+k.nama"></button>
+    </template>
+  </div>
+
+  <!-- GRID FITUR -->
+  <div class="fitur-grid">
+    <template x-for="f in filteredFitur" :key="f.id">
+      <div class="fitur-card" @click="bukaFitur(f)">
+        <div class="fitur-icon" x-text="f.icon"></div>
+        <div class="fitur-name" x-text="f.nama"></div>
+        <div class="fitur-desc" x-text="f.desc"></div>
+      </div>
+    </template>
+  </div>
+
+  <!-- TIPS HARIAN -->
+  <div class="card" style="padding:12px;background:var(--accent-soft)">
+    <div class="flex items-start gap-2">
+      <span class="text-xl">💡</span>
+      <div class="flex-1">
+        <div class="font-title text-sm" style="color:var(--accent-dark)">TIPS HARI INI</div>
+        <div class="txt-xs text-gray-700 mt-1" x-text="tipsHarian"></div>
+      </div>
+    </div>
+  </div>
+
+</div>  <div x-show="activeTab==='keuangan'" class="sec-gap">
     <div class="card text-center" style="background:var(--accent)">
       <div class="txt-xs font-bold text-white opacity-90">💰 TOTAL SALDO</div>
       <div class="font-title text-4xl text-white mt-1" x-text="'Rp '+totalBalance.toLocaleString('id-ID')"></div>
@@ -367,7 +496,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <div class="max-h-80 overflow-y-auto space-y-2">
           <template x-for="t in transactions" :key="t.id">
             <div class="p-3 rounded-xl flex justify-between items-center" :style="t.type==='income'?'background:#dcfce7;border:2px solid var(--border)':'background:#fee2e2;border:2px solid var(--border)'">
-              <div><div class="font-bold text-sm" x-text="t.category"></div><div class="txt-xs text-gray-600" x-text="t.date"></div></div>
+              <div>
+                <div class="font-bold text-sm" x-text="t.category"></div>
+                <div class="txt-xs text-gray-600" x-text="t.date"></div>
+              </div>
               <div class="flex items-center gap-2">
                 <span class="font-bold text-sm" :style="t.type==='income'?'color:#15803d':'color:#b91c1c'" x-text="(t.type==='income'?'+':'-')+'Rp '+Number(t.amount).toLocaleString('id-ID')"></span>
                 <button @click="confirmDeleteTx(t.id)" class="text-red-500 font-bold text-xl">×</button>
@@ -458,7 +590,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     </div>
     <div x-show="kitabSubTab==='sholat'" class="sec-gap">
       <div class="card sec-gap">
-        <div class="flex justify-between items-center"><h3 class="font-title text-lg" style="color:var(--accent-dark)">🕌 WAKTU SHOLAT</h3><button @click="openPrayerCityPicker()" class="btn-soft text-xs">🔄 Ganti</button></div>
+        <div class="flex justify-between items-center">
+          <h3 class="font-title text-lg" style="color:var(--accent-dark)">🕌 WAKTU SHOLAT</h3>
+          <button @click="openPrayerCityPicker()" class="btn-soft text-xs">🔄 Ganti</button>
+        </div>
         <p class="txt-xs font-bold text-gray-600" x-text="'📍 '+prayerCity+', '+prayerProvince"></p>
         <div x-show="prayerLoading" class="text-center py-2 txt-xs"><span class="spin"></span></div>
         <div class="grid grid-cols-5 gap-1 text-center">
@@ -472,7 +607,9 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <div class="card sec-gap">
         <h3 class="font-title text-lg" style="color:var(--accent-dark)">📿 NIAT SHOLAT</h3>
         <div class="grid grid-cols-5 gap-1">
-          <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s"><button @click="selectedNiat=s" :class="selectedNiat===s?'active':''" class="tab-pill" x-text="s"></button></template>
+          <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s">
+            <button @click="selectedNiat=s" :class="selectedNiat===s?'active':''" class="tab-pill" x-text="s"></button>
+          </template>
         </div>
         <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
           <div class="font-arab text-right text-xl leading-loose" x-text="niatSholat[selectedNiat].arab"></div>
@@ -503,7 +640,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
             <template x-for="s in filteredSurahs" :key="s.nomor">
               <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
                 <div @click="loadSurahDetail(s.nomor)" class="cursor-pointer flex justify-between items-center">
-                  <div><div class="font-bold text-sm" x-text="s.nomor+'. '+s.namaLatin"></div><div class="txt-xs text-gray-600" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></div></div>
+                  <div>
+                    <div class="font-bold text-sm" x-text="s.nomor+'. '+s.namaLatin"></div>
+                    <div class="txt-xs text-gray-600" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></div>
+                  </div>
                   <span class="font-arab text-base font-bold" style="color:var(--accent)" x-text="s.nama"></span>
                 </div>
                 <audio x-show="s.audioFull" controls preload="none" class="w-full h-8 mt-2" :src="s.audioFull&&s.audioFull['05']"></audio>
@@ -523,7 +663,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <div class="max-h-96 overflow-y-auto space-y-3 pt-2">
             <template x-for="ay in activeSurah.ayat" :key="ay.nomorAyat">
               <div class="p-4 rounded-xl space-y-2" style="background:var(--primary-soft);border:2px solid var(--border)">
-                <div class="flex justify-between items-center txt-xs font-bold pb-2" style="border-bottom:2px dashed var(--border)"><span>Ayat <span x-text="ay.nomorAyat"></span></span><audio controls preload="none" class="h-7 w-32" :src="(ay.audio&&(ay.audio['05']||ay.audio['01']))||''"></audio></div>
+                <div class="flex justify-between items-center txt-xs font-bold pb-2" style="border-bottom:2px dashed var(--border)">
+                  <span>Ayat <span x-text="ay.nomorAyat"></span></span>
+                  <audio controls preload="none" class="h-7 w-32" :src="(ay.audio&&(ay.audio['05']||ay.audio['01']))||''"></audio>
+                </div>
                 <div class="font-arab text-right text-xl leading-loose" x-text="ay.teksArab"></div>
                 <div class="txt-xs italic" style="color:var(--accent)" x-text="ay.teksLatin"></div>
                 <div class="txt-xs text-gray-700" x-text="ay.teksIndonesia"></div>
@@ -540,7 +683,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <div class="p-3 rounded-xl flex items-center justify-between" style="background:var(--primary-soft);border:2px solid var(--border)">
             <div class="flex items-center space-x-3 flex-1 min-w-0">
               <span class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0" style="background:var(--accent);color:#fff;border:2px solid var(--border)" x-text="item.no"></span>
-              <div class="min-w-0"><div class="font-arab text-lg font-bold" x-text="item.arab"></div><div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="item.latin+' • '+item.arti"></div></div>
+              <div class="min-w-0">
+                <div class="font-arab text-lg font-bold" x-text="item.arab"></div>
+                <div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="item.latin+' • '+item.arti"></div>
+              </div>
             </div>
             <button @click="toggleHafalAsmaul(item.no)" class="w-9 h-9 rounded-lg text-sm font-bold shrink-0" :style="item.hafal?'background:#22c55e;color:#fff;border:2px solid var(--border)':'background:var(--card-bg);border:2px solid var(--border)'" x-text="item.hafal?'✓':'○'"></button>
           </div>
@@ -561,7 +707,9 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div x-show="kitabSubTab==='hadits'" class="card sec-gap">
       <h3 class="font-title text-lg" style="color:var(--accent-dark)">📚 KUMPULAN HADITS</h3>
       <div class="flex flex-wrap gap-1">
-        <template x-for="k in haditsKategori" :key="k"><button @click="filterHadits=k" :class="filterHadits===k?'active':''" class="tab-pill" x-text="k"></button></template>
+        <template x-for="k in haditsKategori" :key="k">
+          <button @click="filterHadits=k" :class="filterHadits===k?'active':''" class="tab-pill" x-text="k"></button>
+        </template>
       </div>
       <div class="max-h-96 overflow-y-auto space-y-2">
         <template x-for="(h,idx) in filteredHadits" :key="idx">
@@ -591,12 +739,16 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   </div>
 
   <div x-show="activeTab==='tools'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">🛠️</div><h2 class="font-title text-2xl text-white">TOOLS</h2></div>
+    <div class="card text-center" style="background:var(--accent)">
+      <div class="text-4xl mb-1">🛠️</div>
+      <h2 class="font-title text-2xl text-white">TOOLS</h2>
+    </div>
     <div class="grid grid-cols-4 gap-2">
       <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="tab-pill">🌍 Jam</button>
       <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="tab-pill">🗣️ TTS</button>
       <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'active':''" class="tab-pill">🖼️ Kompres</button>
       <button @click="toolsSubTab='bmi'" :class="toolsSubTab==='bmi'?'active':''" class="tab-pill">⚖️ BMI</button>
+      <button @click="toolsSubTab='speed'" :class="toolsSubTab==='speed'?'active':''" class="tab-pill">🌐 Speed</button>
     </div>
     <div x-show="toolsSubTab==='jam'" class="card sec-gap">
       <h3 class="font-title text-lg" style="color:var(--accent-dark)">🌍 JAM DUNIA</h3>
@@ -604,7 +756,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <template x-for="zone in worldClocks" :key="zone.name">
           <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
             <span class="flag-ico" :style="'background:'+zone.flag"></span>
-            <div class="flex-1"><div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="zone.name"></div><div class="font-title text-base" x-text="zone.time"></div></div>
+            <div class="flex-1">
+              <div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="zone.name"></div>
+              <div class="font-title text-base" x-text="zone.time"></div>
+            </div>
           </div>
         </template>
       </div>
@@ -629,38 +784,43 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <input type="number" x-model="bmiWeight" placeholder="Berat (kg)" class="input-field">
       <input type="number" x-model="bmiHeight" placeholder="Tinggi (cm)" class="input-field">
       <input type="number" x-model="bmiAge" placeholder="Umur (tahun)" class="input-field">
-      <select x-model="bmiGender" class="input-field"><option value="male">Laki-laki</option><option value="female">Perempuan</option></select>
+      <select x-model="bmiGender" class="input-field">
+        <option value="male">Laki-laki</option>
+        <option value="female">Perempuan</option>
+      </select>
       <button @click="calcBMI()" class="btn-primary">🧮 HITUNG BMI</button>
       <template x-if="bmiResult">
         <div class="sec-gap">
-          <div class="p-4 rounded-xl text-center" style="background:var(--primary-soft);border:2.5px solid var(--border)"><div class="font-title text-5xl" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div><div class="font-bold text-base" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div></div>
-          <div class="p-4 rounded-xl" style="background:var(--primary-soft);border:2.5px solid var(--border)">
-            <div class="txt-xs font-bold text-center mb-2" style="color:var(--accent-dark)">📊 INDIKATOR BMI</div>
-            <div style="position:relative;padding:10px 0">
-              <div style="height:20px;border-radius:10px;border:2.5px solid var(--border);background:linear-gradient(90deg,#0ea5e9 0%,#0ea5e9 18.5%,#22c55e 18.5%,#22c55e 50%,#eab308 50%,#eab308 70%,#ef4444 70%,#ef4444 100%);overflow:hidden"></div>
-              <div style="position:absolute;top:0;transition:left .5s" :style="'left:'+bmiResult.marker+'%'"><div style="width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:12px solid var(--border);transform:translateX(-8px)"></div></div>
-              <div class="flex justify-between txt-xs font-bold mt-2" style="font-size:9px"><span style="color:#0ea5e9">&lt;18.5 Kurus</span><span style="color:#22c55e">18.5-25 Normal</span><span style="color:#eab308">25-30 Gemuk</span><span style="color:#ef4444">&gt;30 Obesitas</span></div>
-            </div>
+          <div class="p-4 rounded-xl text-center" style="background:var(--primary-soft);border:2.5px solid var(--border)">
+            <div class="font-title text-5xl" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div>
+            <div class="font-bold text-base" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div>
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="bmiResult.bbIdeal+' kg'"></div><div class="txt-xs font-bold">BB Ideal</div></div>
             <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="bmiResult.kalori+' kkal'"></div><div class="txt-xs font-bold">Kalori/hari</div></div>
           </div>
-          <div class="p-4 rounded-xl" style="background:var(--primary-soft);border:2.5px solid var(--border)">
-            <div class="font-title text-base mb-2" :style="'color:'+bmiResult.color" x-text="'💡 TIPS ('+bmiResult.kategori+')'"></div>
-            <div class="space-y-2">
-              <div><div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">🍽️ Makanan:</div><ul class="txt-xs pl-4 list-disc text-gray-700 space-y-0.5"><template x-for="(item,idx) in bmiResult.tipsMakan" :key="idx"><li x-text="item"></li></template></ul></div>
-              <div><div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">🏋️ Olahraga:</div><ul class="txt-xs pl-4 list-disc text-gray-700 space-y-0.5"><template x-for="(item,idx) in bmiResult.tipsOlahraga" :key="idx"><li x-text="item"></li></template></ul></div>
-              <div><div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">💪 Kebiasaan:</div><ul class="txt-xs pl-4 list-disc text-gray-700 space-y-0.5"><template x-for="(item,idx) in bmiResult.tipsKebiasaan" :key="idx"><li x-text="item"></li></template></ul></div>
-            </div>
-          </div>
         </div>
       </template>
+    </div>
+    <div x-show="toolsSubTab==='speed'" class="card sec-gap">
+      <h3 class="font-title text-lg" style="color:var(--accent-dark)">🌐 CEK KECEPATAN INTERNET</h3>
+      <button @click="runSpeedTest()" class="btn-primary">
+        <span x-show="!speedTesting">▶️ MULAI TES</span>
+        <span x-show="speedTesting"><span class="spin"></span> Mengukur...</span>
+      </button>
+      <div x-show="speedResult" class="grid grid-cols-3 gap-2">
+        <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.download+' Mbps':''"></div><div class="txt-xs font-bold">Download</div></div>
+        <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.latency+' ms':''"></div><div class="txt-xs font-bold">Ping</div></div>
+        <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.quality:''"></div><div class="txt-xs font-bold">Kualitas</div></div>
+      </div>
     </div>
   </div>
 
   <div x-show="activeTab==='tema'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">🎨</div><h2 class="font-title text-2xl text-white">TEMA</h2></div>
+    <div class="card text-center" style="background:var(--accent)">
+      <div class="text-4xl mb-1">🎨</div>
+      <h2 class="font-title text-2xl text-white">TEMA</h2>
+    </div>
     <div class="card sec-gap">
       <h3 class="font-title text-lg" style="color:var(--accent-dark)">WARNA TEMA</h3>
       <div class="grid grid-cols-3 gap-4">
@@ -675,20 +835,30 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   </div>
 
   <div x-show="activeTab==='arcade'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">🎮</div><h2 class="font-title text-2xl text-white">ARCADE GAME</h2></div>
+    <div class="card text-center" style="background:var(--accent)">
+      <div class="text-4xl mb-1">🎮</div>
+      <h2 class="font-title text-2xl text-white">ARCADE GAME</h2>
+    </div>
     <div class="grid grid-cols-2 gap-2">
       <button @click="gameSubTab='reflex'" :class="gameSubTab==='reflex'?'active':''" class="tab-pill">⚡ Refleks</button>
       <button @click="gameSubTab='tictactoe';initTTT()" :class="gameSubTab==='tictactoe'?'active':''" class="tab-pill">❌ Tic Tac Toe</button>
     </div>
     <div x-show="gameSubTab==='reflex'" class="card sec-gap text-center">
-      <div class="w-full h-40 rounded-2xl flex items-center justify-center cursor-pointer font-title text-2xl text-white transition-all" :style="reflexState==='red'?'background:#ef4444;border:3px solid var(--border)':(reflexState==='yellow'?'background:#eab308;border:3px solid var(--border)':'background:#22c55e;border:3px solid var(--border)')" @click="handleReflexTap()"><span x-text="reflexMessage"></span></div>
+      <div class="w-full h-40 rounded-2xl flex items-center justify-center cursor-pointer font-title text-2xl text-white transition-all"
+           :style="reflexState==='red'?'background:#ef4444;border:3px solid var(--border)':(reflexState==='yellow'?'background:#eab308;border:3px solid var(--border)':'background:#22c55e;border:3px solid var(--border)')"
+           @click="handleReflexTap()"><span x-text="reflexMessage"></span></div>
       <button @click="startReflexGame()" class="btn-primary">▶️ MULAI GAME</button>
     </div>
     <div x-show="gameSubTab==='tictactoe'" class="card sec-gap">
-      <div class="flex justify-between items-center"><h3 class="font-title text-lg" style="color:var(--accent-dark)">❌ TIC TAC TOE ⭕</h3><span class="txt-xs font-bold px-2 py-1 rounded-lg" style="background:var(--primary-soft);border:2px solid var(--border)" x-text="tttStatus"></span></div>
+      <div class="flex justify-between items-center">
+        <h3 class="font-title text-lg" style="color:var(--accent-dark)">❌ TIC TAC TOE ⭕</h3>
+        <span class="txt-xs font-bold px-2 py-1 rounded-lg" style="background:var(--primary-soft);border:2px solid var(--border)" x-text="tttStatus"></span>
+      </div>
       <div class="grid grid-cols-3 gap-2 mx-auto" style="max-width:280px">
         <template x-for="(cell,idx) in tttBoard" :key="idx">
-          <button @click="tttPlay(idx)" class="aspect-square rounded-xl font-title text-3xl flex items-center justify-center" :style="'background:var(--primary-soft);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border);color:'+(cell==='X'?'#a855f7':(cell==='O'?'#ef4444':'#1a1a1a'))" x-text="cell"></button>
+          <button @click="tttPlay(idx)" class="aspect-square rounded-xl font-title text-3xl flex items-center justify-center"
+                  :style="'background:var(--primary-soft);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border);color:'+(cell==='X'?'#a855f7':(cell==='O'?'#ef4444':'#1a1a1a'))"
+                  x-text="cell"></button>
         </template>
       </div>
       <button @click="initTTT()" class="btn-soft w-full">🔄 Reset Game</button>
@@ -697,7 +867,11 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 
   <template x-if="isOwner">
     <div x-show="activeTab==='owner'" class="sec-gap">
-      <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">👑</div><h2 class="font-title text-2xl text-white">OWNER PANEL</h2><p class="txt-xs text-white opacity-90">Kontrol penuh aplikasi</p></div>
+      <div class="card text-center" style="background:var(--accent)">
+        <div class="text-4xl mb-1">👑</div>
+        <h2 class="font-title text-2xl text-white">OWNER PANEL</h2>
+        <p class="txt-xs text-white opacity-90">Kontrol penuh aplikasi</p>
+      </div>
       <div class="grid grid-cols-4 gap-1.5">
         <button @click="ownerSubTab='statistik';loadAppStats()" :class="ownerSubTab==='statistik'?'active':''" class="tab-pill">📊</button>
         <button @click="ownerSubTab='users';loadAllUsers()" :class="ownerSubTab==='users'?'active':''" class="tab-pill">👥</button>
@@ -735,7 +909,15 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
               <div class="p-3 rounded-xl" :style="u.is_banned?'background:#fee2e2;border:2px solid var(--border)':'background:var(--primary-soft);border:2px solid var(--border)'">
                 <div class="flex items-center gap-2 mb-2">
                   <div class="w-9 h-9 rounded-lg flex items-center justify-center font-title text-sm shrink-0" style="background:var(--accent);color:#fff;border:2px solid var(--border)" x-text="u.username?u.username.substring(0,1).toUpperCase():'?'"></div>
-                  <div class="flex-1 min-w-0"><div class="font-bold text-xs truncate" x-text="u.username"></div><div class="txt-xs text-gray-600"><span x-text="u.status"></span><span x-show="u.is_vip" class="text-yellow-600 font-bold"> • VIP</span><span x-show="u.is_banned" class="text-red-600 font-bold"> • BANNED</span><span x-show="u.chat_bonus>0" class="text-blue-600 font-bold"> • +<span x-text="u.chat_bonus"></span> chat</span></div></div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-bold text-xs truncate" x-text="u.username"></div>
+                    <div class="txt-xs text-gray-600">
+                      <span x-text="u.status"></span>
+                      <span x-show="u.is_vip" class="text-yellow-600 font-bold"> • VIP</span>
+                      <span x-show="u.is_banned" class="text-red-600 font-bold"> • BANNED</span>
+                      <span x-show="u.chat_bonus>0" class="text-blue-600 font-bold"> • +<span x-text="u.chat_bonus"></span> chat</span>
+                    </div>
+                  </div>
                 </div>
                 <div class="grid grid-cols-2 gap-1">
                   <template x-if="!u.is_banned"><button @click="banUser(u)" class="btn-danger text-[10px]">🚫 Ban</button></template>
@@ -760,8 +942,14 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </div>
       </div>
       <div x-show="ownerSubTab==='tools'" class="sec-gap">
-        <div class="card sec-gap"><h3 class="font-title text-lg" style="color:var(--accent-dark)">📥 EXPORT DATA USER</h3><button @click="exportUsersCSV()" class="btn-primary">📥 EXPORT CSV</button></div>
-        <div class="card sec-gap"><h3 class="font-title text-lg" style="color:var(--accent-dark)">🗑️ BERSIHKAN DATA LAMA</h3><button @click="confirmCleanOld()" class="btn-danger w-full">🗑️ BERSIHKAN (&gt;30 hari)</button></div>
+        <div class="card sec-gap">
+          <h3 class="font-title text-lg" style="color:var(--accent-dark)">📥 EXPORT DATA USER</h3>
+          <button @click="exportUsersCSV()" class="btn-primary">📥 EXPORT CSV</button>
+        </div>
+        <div class="card sec-gap">
+          <h3 class="font-title text-lg" style="color:var(--accent-dark)">🗑️ BERSIHKAN DATA LAMA</h3>
+          <button @click="confirmCleanOld()" class="btn-danger w-full">🗑️ BERSIHKAN (&gt;30 hari)</button>
+        </div>
       </div>
     </div>
   </template>
@@ -772,14 +960,14 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <button @click="activeTab='home'" :class="activeTab==='home'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-home"/></svg><span class="bottom-nav-label">HOME</span></button>
     <button @click="activeTab='kitab'" :class="activeTab==='kitab'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-book"/></svg><span class="bottom-nav-label">IBADAH</span></button>
     <button @click="activeTab='keuangan'" :class="activeTab==='keuangan'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-wallet"/></svg><span class="bottom-nav-label">DOMPET</span></button>
-    <button @click="openMenuSheet()" class="bottom-nav-btn"><span style="font-size:20px">📂</span><span class="bottom-nav-label">MENU</span></button>
+    <button @click="drawerOpen=true" class="bottom-nav-btn"><span style="font-size:20px">📂</span><span class="bottom-nav-label">MENU</span></button>
     <button @click="openChatAI()" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-robot"/></svg><span class="bottom-nav-label">AI</span></button>
   </nav>
 
-  <div class="floating-chat-btn" @click="openChatAI()" x-show="isAuthenticated&&!chatFullscreen"><span>🤖</span></div>
-</div>
-
-<div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
+  <div class="floating-chat-btn" @click="openChatAI()" x-show="isAuthenticated&&!chatFullscreen">
+    <span>🤖</span>
+  </div>
+</div><div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content text-center space-y-4">
     <div class="w-12 h-1.5 rounded-full mx-auto" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl" style="color:var(--accent-dark)">💰 TRANSAKSI BARU</h3>
@@ -841,7 +1029,11 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <template x-for="m in movieList" :key="m.id">
         <div class="p-3 rounded-xl flex gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
           <template x-if="m.poster"><img :src="m.poster" class="w-20 h-28 object-cover rounded-lg shrink-0" style="border:2px solid var(--border)"></template>
-          <div class="flex-1 min-w-0"><div class="font-bold text-sm" x-text="m.title"></div><div class="txt-xs text-gray-600 mt-1 font-bold" x-text="m.year+' • ⭐ '+m.rating"></div><div class="txt-xs text-gray-500 mt-1 line-clamp-3" x-text="m.overview"></div></div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-sm" x-text="m.title"></div>
+            <div class="txt-xs text-gray-600 mt-1 font-bold" x-text="m.year+' • ⭐ '+m.rating"></div>
+            <div class="txt-xs text-gray-500 mt-1 line-clamp-3" x-text="m.overview"></div>
+          </div>
         </div>
       </template>
     </div>
@@ -858,7 +1050,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <template x-for="(n,idx) in newsList" :key="idx">
         <div @click="selectedNews=n" class="p-3 rounded-xl cursor-pointer flex gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
           <template x-if="n.thumbnail"><img :src="n.thumbnail" class="w-20 h-20 object-cover rounded-lg shrink-0" style="border:2px solid var(--border)" @error="$event.target.style.display='none'"></template>
-          <div class="flex-1 min-w-0"><div class="font-bold text-xs line-clamp-2" x-text="n.title"></div><div class="txt-xs text-gray-500 mt-1" x-text="n.pubDate"></div></div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-xs line-clamp-2" x-text="n.title"></div>
+            <div class="txt-xs text-gray-500 mt-1" x-text="n.pubDate"></div>
+          </div>
         </div>
       </template>
     </div>
@@ -880,7 +1075,12 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">🌤️ PILIH PROVINSI</h3>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="p in provinces" :key="p"><div @click="selectWeatherProvince(p)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="p"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
+      <template x-for="p in provinces" :key="p">
+        <div @click="selectWeatherProvince(p)" class="sheet-picker-item">
+          <span class="font-bold text-sm" x-text="p"></span>
+          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
+        </div>
+      </template>
     </div>
     <button @click="weatherProvinceSheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -892,7 +1092,12 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <h3 class="font-title text-xl text-center" style="color:var(--accent-dark)">PILIH KOTA</h3>
     <p class="txt-xs text-center text-gray-600 font-bold" x-text="'Provinsi: '+weatherProvince"></p>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="c in cities" :key="c"><div @click="selectWeatherCity(c)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="c"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
+      <template x-for="c in cities" :key="c">
+        <div @click="selectWeatherCity(c)" class="sheet-picker-item">
+          <span class="font-bold text-sm" x-text="c"></span>
+          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
+        </div>
+      </template>
     </div>
     <button @click="weatherCitySheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -901,7 +1106,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 <div x-show="weatherSheetOpen" class="bottom-sheet-overlay" style="z-index:100008;">
   <div class="bottom-sheet-content">
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
-    <div class="flex justify-between items-center"><h3 class="font-title text-xl" style="color:var(--accent-dark)">🌤️ CUACA</h3><button @click="openWeatherProvincePicker()" class="btn-soft text-xs">🔄 Ganti</button></div>
+    <div class="flex justify-between items-center">
+      <h3 class="font-title text-xl" style="color:var(--accent-dark)">🌤️ CUACA</h3>
+      <button @click="openWeatherProvincePicker()" class="btn-soft text-xs">🔄 Ganti</button>
+    </div>
     <div x-show="weatherLoading" class="text-center py-4"><span class="spin"></span></div>
     <template x-if="weatherData && !weatherLoading">
       <div class="mt-3 space-y-3">
@@ -920,8 +1128,14 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <template x-for="(d,idx) in weatherData.forecast" :key="idx">
             <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
               <span class="text-3xl" x-text="d.emoji"></span>
-              <div class="flex-1"><div class="font-bold text-xs" x-text="d.date"></div><div class="txt-xs text-gray-600" x-text="d.desc"></div></div>
-              <div class="text-right"><div class="font-bold text-red-500 text-sm" x-text="d.max+'°'"></div><div class="font-bold text-blue-500 text-sm" x-text="d.min+'°'"></div></div>
+              <div class="flex-1">
+                <div class="font-bold text-xs" x-text="d.date"></div>
+                <div class="txt-xs text-gray-600" x-text="d.desc"></div>
+              </div>
+              <div class="text-right">
+                <div class="font-bold text-red-500 text-sm" x-text="d.max+'°'"></div>
+                <div class="font-bold text-blue-500 text-sm" x-text="d.min+'°'"></div>
+              </div>
             </div>
           </template>
         </div>
@@ -936,7 +1150,12 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">🕌 PILIH PROVINSI</h3>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="p in provinces" :key="p"><div @click="selectPrayerProvince(p)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="p"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
+      <template x-for="p in provinces" :key="p">
+        <div @click="selectPrayerProvince(p)" class="sheet-picker-item">
+          <span class="font-bold text-sm" x-text="p"></span>
+          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
+        </div>
+      </template>
     </div>
     <button @click="prayerProvinceSheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -948,7 +1167,12 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <h3 class="font-title text-xl text-center" style="color:var(--accent-dark)">PILIH KOTA</h3>
     <p class="txt-xs text-center text-gray-600 font-bold" x-text="'Provinsi: '+prayerProvince"></p>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="c in prayerCities" :key="c"><div @click="selectPrayerCity(c)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="c"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
+      <template x-for="c in prayerCities" :key="c">
+        <div @click="selectPrayerCity(c)" class="sheet-picker-item">
+          <span class="font-bold text-sm" x-text="c"></span>
+          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
+        </div>
+      </template>
     </div>
     <button @click="prayerCitySheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -960,32 +1184,68 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <template x-if="selectedKisah">
       <div class="space-y-3">
         <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)" x-text="selectedKisah.judul"></h3>
-        <div class="p-4 rounded-xl max-h-[55vh] overflow-y-auto" style="background:var(--primary-soft);border:2px solid var(--border)"><p class="txt-sm leading-relaxed whitespace-pre-line text-gray-700" x-text="selectedKisah.isi"></p></div>
+        <div class="p-4 rounded-xl max-h-[55vh] overflow-y-auto" style="background:var(--primary-soft);border:2px solid var(--border)">
+          <p class="txt-sm leading-relaxed whitespace-pre-line text-gray-700" x-text="selectedKisah.isi"></p>
+        </div>
         <button @click="kisahSheetOpen=false" class="btn-soft w-full">Tutup</button>
       </div>
     </template>
   </div>
 </div>
 
-<div x-show="menuSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
-  <div class="bottom-sheet-content">
-    <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
-    <h3 class="font-title text-2xl text-center mb-3" style="color:var(--accent-dark)">📂 MENU LAINNYA</h3>
-    <div class="grid grid-cols-3 gap-3">
-      <div @click="menuSheetOpen=false;activeTab='downloader'" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">📥</div><div class="font-title text-xs" style="color:var(--accent-dark)">UNDUH</div></div>
-      <div @click="menuSheetOpen=false;activeTab='tools'" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">🛠️</div><div class="font-title text-xs" style="color:var(--accent-dark)">TOOLS</div></div>
-      <div @click="menuSheetOpen=false;activeTab='tema'" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">🎨</div><div class="font-title text-xs" style="color:var(--accent-dark)">TEMA</div></div>
-      <div @click="menuSheetOpen=false;activeTab='arcade'" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">🎮</div><div class="font-title text-xs" style="color:var(--accent-dark)">GAME</div></div>
-      <template x-if="isOwner"><div @click="menuSheetOpen=false;activeTab='owner';loadAppStats()" class="card card-hover cursor-pointer text-center" style="padding:12px;background:var(--accent)"><div class="text-3xl mb-1">👑</div><div class="font-title text-xs text-white">OWNER</div></div></template>
-      <div @click="menuSheetOpen=false;openNews()" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">📰</div><div class="font-title text-xs" style="color:var(--accent-dark)">BERITA</div></div>
-      <div @click="menuSheetOpen=false;openWeatherSheet()" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">🌤️</div><div class="font-title text-xs" style="color:var(--accent-dark)">CUACA</div></div>
-      <div @click="menuSheetOpen=false;openMovieSheet()" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">🎬</div><div class="font-title text-xs" style="color:var(--accent-dark)">FILM</div></div>
-      <div @click="menuSheetOpen=false;aboutModalOpen=true" class="card card-hover cursor-pointer text-center" style="padding:12px"><div class="text-3xl mb-1">ℹ️</div><div class="font-title text-xs" style="color:var(--accent-dark)">TENTANG</div></div>
+<!-- DRAWER BARU -->
+<div x-show="drawerOpen" x-cloak>
+  <div class="drawer-overlay" @click="drawerOpen=false"></div>
+  <div class="drawer">
+    <div class="drawer-header">
+      <button class="drawer-close" @click="drawerOpen=false">×</button>
+      <div class="drawer-avatar">
+        <template x-if="userAvatar"><img :src="userAvatar"></template>
+        <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
+      </div>
+      <div class="drawer-name" x-text="userName||'Zenkai User'"></div>
+      <span class="drawer-badge" x-text="isOwner?'👑 OWNER':(isVip?'💎 VIP':'USER')"></span>
     </div>
-    <button @click="menuSheetOpen=false" class="btn-soft w-full mt-4">Tutup</button>
+    <div class="drawer-menu">
+      <div class="drawer-item" @click="drawerOpen=false;profileModalOpen=true"><span class="drawer-item-icon">👤</span><span class="drawer-item-label">Profil Saya</span><span>›</span></div>
+      <div class="drawer-item" @click="drawerOpen=false;activeTab='tema'"><span class="drawer-item-icon">🎨</span><span class="drawer-item-label">Ganti Tema</span><span>›</span></div>
+      <div class="drawer-item" @click="drawerOpen=false;openNotif()"><span class="drawer-item-icon">🔔</span><span class="drawer-item-label">Notifikasi</span><span>›</span></div>
+      <div class="drawer-item" @click="drawerOpen=false;openNews()"><span class="drawer-item-icon">📰</span><span class="drawer-item-label">Berita</span><span>›</span></div>
+      <div class="drawer-item" @click="drawerOpen=false;openWeatherSheet()"><span class="drawer-item-icon">🌤️</span><span class="drawer-item-label">Cuaca</span><span>›</span></div>
+      <div class="drawer-item" @click="drawerOpen=false;openMovieSheet()"><span class="drawer-item-icon">🎬</span><span class="drawer-item-label">Film Trending</span><span>›</span></div>
+      <div class="drawer-item" @click="drawerOpen=false;aboutModalOpen=true"><span class="drawer-item-icon">ℹ️</span><span class="drawer-item-label">Tentang App</span><span>›</span></div>
+      <template x-if="isOwner">
+        <div class="drawer-item" @click="drawerOpen=false;activeTab='owner';loadAppStats()"><span class="drawer-item-icon">👑</span><span class="drawer-item-label">Owner Panel</span><span>›</span></div>
+      </template>
+      <div class="drawer-item danger" @click="drawerOpen=false;logout()"><span class="drawer-item-icon">🚪</span><span class="drawer-item-label">Keluar</span><span>›</span></div>
+    </div>
   </div>
 </div>
 
+<!-- NOTIF PANEL -->
+<div x-show="notifPanelOpen" class="bottom-sheet-overlay" style="z-index:100005;">
+  <div class="bottom-sheet-content">
+    <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
+    <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">🔔 NOTIFIKASI</h3>
+    <div class="mt-3 space-y-2 max-h-[60vh] overflow-y-auto">
+      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
+        <div class="font-bold text-sm">🎉 Selamat Datang!</div>
+        <div class="txt-xs text-gray-600 mt-1">Terima kasih sudah pakai Zenkai Tools. Semoga bermanfaat!</div>
+      </div>
+      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
+        <div class="font-bold text-sm">💡 Tips</div>
+        <div class="txt-xs text-gray-600 mt-1">Kumpulkan poin dengan login harian & catat transaksi. Naik level untuk pengalaman lebih seru!</div>
+      </div>
+      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
+        <div class="font-bold text-sm">🤖 Zenkai AI</div>
+        <div class="txt-xs text-gray-600 mt-1">Tanya apa saja ke Zenkai AI — mode Islami, Keuangan, Kesehatan, atau Umum.</div>
+      </div>
+    </div>
+    <button @click="notifPanelOpen=false" class="btn-soft w-full mt-3">Tutup</button>
+  </div>
+</div>
+
+<!-- CHAT FULLSCREEN -->
 <div x-show="chatFullscreen" class="ai-fullscreen" style="z-index:99998">
   <header class="p-3 flex items-center justify-between" style="background:var(--accent);border-bottom:3px solid var(--border)">
     <button @click="chatFullscreen=false" class="text-white text-2xl font-bold px-2">←</button>
@@ -1007,7 +1267,9 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <div class="font-title text-xl" style="color:var(--accent-dark)">HALO! SAYA ZENKAI AI</div>
       <div class="txt-xs text-gray-600 mt-2" x-text="aiModeDesc"></div>
     </div>
-    <template x-for="(msg,idx) in chatMessages" :key="idx"><div><div :class="msg.role==='user'?'chat-bubble-user':'chat-bubble-ai'" x-text="msg.content"></div></div></template>
+    <template x-for="(msg,idx) in chatMessages" :key="idx">
+      <div><div :class="msg.role==='user'?'chat-bubble-user':'chat-bubble-ai'" x-text="msg.content"></div></div>
+    </template>
     <div x-show="aiThinking" class="chat-bubble-ai"><span x-text="aiThinkingText"></span></div>
   </div>
   <div class="p-3 flex gap-2" style="background:var(--card-bg);border-top:3px solid var(--border)">
@@ -1059,7 +1321,7 @@ userEmail:'',userName:'',userAvatar:'',quickNote:'',lastSavedNote:'',
 userPoints:0,userLevel:1,levelUpOpen:false,lastKnownLevel:1,aiBusyPopupShown:false,aiBusyPopupOpen:false,
 welcomePopupOpen:false,aboutModalOpen:false,profileModalOpen:false,ownerPinModalOpen:false,txSheetOpen:false,
 newsSheetOpen:false,weatherSheetOpen:false,weatherProvinceSheet:false,weatherCitySheet:false,
-prayerProvinceSheet:false,prayerCitySheet:false,kisahSheetOpen:false,menuSheetOpen:false,
+prayerProvinceSheet:false,prayerCitySheet:false,kisahSheetOpen:false,menuSheetOpen:false,drawerOpen:false,notifPanelOpen:false,
 targetSheetOpen:false,budgetSheetOpen:false,addSavingsSheet:false,movieSheetOpen:false,
 enteredPin:'',verifyingPin:false,uploadingAvatar:false,noteSaving:false,downloadingFile:false,
 sheetOpen:false,sheetTitle:'',sheetMessage:'',
@@ -1067,6 +1329,40 @@ confirmModal:{open:false,title:'',message:'',icon:'⚠️',onConfirm:()=>{}},
 promptModal:{open:false,title:'',message:'',value:'',onConfirm:()=>{}},
 activeTab:'home',finSubTab:'transaksi',gameSubTab:'reflex',ownerSubTab:'statistik',currentTime:'',
 theme:'default',
+kategoriAktif:'semua',
+tipsHarian:'Rajin catat transaksi bikin keuangan lebih terkontrol! 💰',
+kategoriList:[
+  {id:'semua',nama:'Semua',icon:'🏠'},
+  {id:'ibadah',nama:'Ibadah',icon:'📖'},
+  {id:'keuangan',nama:'Keuangan',icon:'💰'},
+  {id:'tools',nama:'Tools',icon:'🛠️'},
+  {id:'hiburan',nama:'Hiburan',icon:'🎮'}
+],
+fiturList:[
+  {id:'quran',nama:'Al-Quran',desc:'Baca 114 surah + audio',icon:'📖',kategori:'ibadah',tab:'kitab',sub:'quran'},
+  {id:'sholat',nama:'Waktu Sholat',desc:'Jadwal + niat sholat',icon:'🕌',kategori:'ibadah',tab:'kitab',sub:'sholat'},
+  {id:'asmaul',nama:'Asmaul Husna',desc:'99 nama Allah',icon:'✨',kategori:'ibadah',tab:'kitab',sub:'asmaul'},
+  {id:'kisah',nama:'Kisah Nabi',desc:'Kisah nabi & sahabat',icon:'🕋',kategori:'ibadah',tab:'kitab',sub:'kisah'},
+  {id:'hadits',nama:'Hadits',desc:'Kumpulan hadits pilihan',icon:'📚',kategori:'ibadah',tab:'kitab',sub:'hadits'},
+  {id:'doa',nama:'Doa Harian',desc:'Doa sehari-hari',icon:'🤲',kategori:'ibadah',tab:'kitab',sub:'doa'},
+  {id:'transaksi',nama:'Transaksi',desc:'Catat masuk & keluar',icon:'💰',kategori:'keuangan',tab:'keuangan',sub:'transaksi'},
+  {id:'grafik',nama:'Grafik',desc:'Lihat statistik keuangan',icon:'📊',kategori:'keuangan',tab:'keuangan',sub:'grafik'},
+  {id:'target',nama:'Target & Budget',desc:'Rencanakan keuangan',icon:'🎯',kategori:'keuangan',tab:'keuangan',sub:'target'},
+  {id:'downloader',nama:'TikTok Downloader',desc:'Unduh video tanpa watermark',icon:'📥',kategori:'tools',tab:'downloader'},
+  {id:'tts',nama:'Text to Speech',desc:'Ubah teks jadi suara',icon:'🗣️',kategori:'tools',tab:'tools',sub:'tts'},
+  {id:'kompres',nama:'Kompres Foto',desc:'Perkecil ukuran gambar',icon:'🖼️',kategori:'tools',tab:'tools',sub:'kompres'},
+  {id:'bmi',nama:'BMI & Kalori',desc:'Hitung berat ideal',icon:'⚖️',kategori:'tools',tab:'tools',sub:'bmi'},
+  {id:'jam',nama:'Jam Dunia',desc:'Waktu di berbagai kota',icon:'🌍',kategori:'tools',tab:'tools',sub:'jam'},
+  {id:'speed',nama:'Speed Test',desc:'Cek kecepatan internet',icon:'🌐',kategori:'tools',tab:'tools',sub:'speed'},
+  {id:'cuaca',nama:'Cuaca',desc:'Prakiraan cuaca 7 hari',icon:'🌤️',kategori:'tools',tab:'cuaca'},
+  {id:'berita',nama:'Berita',desc:'Berita terkini Indonesia',icon:'📰',kategori:'hiburan',tab:'berita'},
+  {id:'film',nama:'Film Trending',desc:'Film populer minggu ini',icon:'🎬',kategori:'hiburan',tab:'film'},
+  {id:'ai',nama:'AI Chat',desc:'Tanya apa saja',icon:'🤖',kategori:'hiburan',tab:'ai'},
+  {id:'refleks',nama:'Game Refleks',desc:'Uji kecepatan tangan',icon:'⚡',kategori:'hiburan',tab:'arcade',sub:'reflex'},
+  {id:'tictactoe',nama:'Tic Tac Toe',desc:'Main lawan komputer',icon:'❌',kategori:'hiburan',tab:'arcade',sub:'tictactoe'},
+  {id:'tema',nama:'Ganti Tema',desc:'6 tema warna',icon:'🎨',kategori:'tools',tab:'tema'}
+],
+deviceInfo:{os:'Unknown',browser:'Unknown',online:true,battery:'—'},
 themes:[{id:'default',name:'Kuning',color:'#fbbf24'},{id:'purple',name:'Ungu',color:'#a855f7'},{id:'pink',name:'Pink',color:'#ec4899'},{id:'emerald',name:'Hijau',color:'#10b981'},{id:'ocean',name:'Biru',color:'#0ea5e9'},{id:'sunset',name:'Oranye',color:'#f97316'},{id:'midnight',name:'Nila',color:'#6366f1'}],
 transactions:[],txCategory:'',txAmount:'',
 savings:[],budgets:[],targetForm:{nama:'',target:'',deadline:''},budgetForm:{kategori:'',limit_bulanan:''},addSavingsAmount:'',currentSavingsId:null,
@@ -1100,6 +1396,49 @@ getLevelName(lv){const names={1:'Pemula 🌱',2:'Rajin 📚',3:'Aktif ⚡',4:'Ah
 getNextLevelPoints(){const thresholds={1:100,2:300,3:600,4:1000,5:2000,6:0};return thresholds[this.userLevel]||0;},
 getCurrentLevelMin(){const thresholds={1:0,2:100,3:300,4:600,5:1000,6:2000};return thresholds[this.userLevel]||0;},
 getProgressPercent(){const min=this.getCurrentLevelMin();const max=this.getNextLevelPoints();if(max===0)return 100;const range=max-min;const progress=this.userPoints-min;return Math.min(100,Math.round((progress/range)*100));},
+get filteredFitur(){if(this.kategoriAktif==='semua')return this.fiturList;return this.fiturList.filter(f=>f.kategori===this.kategoriAktif);},
+
+bukaFitur(f){
+  if(f.tab==='kitab'){this.activeTab='kitab';if(f.sub)this.kitabSubTab=f.sub;if(f.sub==='quran'&&this.surahList.length===0)this.fetchSurahs();}
+  else if(f.tab==='keuangan'){this.activeTab='keuangan';if(f.sub)this.finSubTab=f.sub;if(f.sub==='grafik')setTimeout(()=>this.drawCharts(),300);}
+  else if(f.tab==='tools'){this.activeTab='tools';if(f.sub)this.toolsSubTab=f.sub;}
+  else if(f.tab==='arcade'){this.activeTab='arcade';if(f.sub){this.gameSubTab=f.sub;if(f.sub==='tictactoe')this.initTTT();}}
+  else if(f.tab==='ai'){this.openChatAI();}
+  else if(f.tab==='cuaca'){this.openWeatherSheet();}
+  else if(f.tab==='berita'){this.openNews();}
+  else if(f.tab==='film'){this.openMovieSheet();}
+  else if(f.tab==='downloader'||f.tab==='tema'){this.activeTab=f.tab;}
+},
+openNotif(){this.notifPanelOpen=true;},
+detectDevice(){
+  const ua=navigator.userAgent;
+  let os='Unknown';
+  if(/Android/i.test(ua))os='Android';
+  else if(/iPhone|iPad|iPod/i.test(ua))os='iOS';
+  else if(/Windows/i.test(ua))os='Windows';
+  else if(/Mac/i.test(ua))os='macOS';
+  else if(/Linux/i.test(ua))os='Linux';
+  let browser='Unknown';
+  if(/Edg/i.test(ua))browser='Edge';
+  else if(/Chrome/i.test(ua))browser='Chrome';
+  else if(/Firefox/i.test(ua))browser='Firefox';
+  else if(/Safari/i.test(ua))browser='Safari';
+  else if(/Opera|OPR/i.test(ua))browser='Opera';
+  this.deviceInfo.os=os;
+  this.deviceInfo.browser=browser;
+  this.deviceInfo.online=navigator.onLine;
+  window.addEventListener('online',()=>{this.deviceInfo.online=true;});
+  window.addEventListener('offline',()=>{this.deviceInfo.online=false;});
+  if(navigator.getBattery){
+    navigator.getBattery().then(b=>{
+      const upd=()=>{this.deviceInfo.battery=Math.round(b.level*100)+'%';};
+      upd();
+      b.addEventListener('levelchange',upd);
+    });
+  }
+  const tips=['Rajin catat transaksi bikin keuangan lebih terkontrol! 💰','Baca Al-Quran 1 ayat sehari, lama-lama jadi kebiasaan 📖','Jangan lupa login harian buat dapet 10 poin gratis ⭐','Coba AI Chat dengan mode berbeda — Islami, Keuangan, Kesehatan 🎯','Gunakan target tabungan biar keuangan lebih terencana 🎯','Download video TikTok tanpa watermark di menu Unduh 📥'];
+  this.tipsHarian=tips[Math.floor(Math.random()*tips.length)];
+},
 
 async init(){
 const savedTheme=localStorage.getItem('zenkai_theme');
@@ -1112,6 +1451,7 @@ this.asmaulHusnaList=ASMAUL_HUSNA.map(x=>({...x,hafal:false}));
 this.updateAiDesc();
 this.welcomeTextEdit=DEFAULT_WELCOME;
 this.voiceSupported=('webkitSpeechRecognition' in window)||('SpeechRecognition' in window);
+this.detectDevice();
 try{const{data:settings}=await sb.from('app_settings').select('welcome_text').eq('id',1).maybeSingle();if(settings&&settings.welcome_text){this.welcomeText=settings.welcome_text;this.welcomeTextEdit=settings.welcome_text;}}catch(e){}
 try{const{data:{session}}=await sb.auth.getSession();if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}}catch(e){console.error(e);}
 this.initProvinces();
@@ -1151,22 +1491,12 @@ async addPoints(amount,reason){
       await sb.from('point_history').insert({user_id:this.currentUser.id,amount,reason});
       const oldLevel=this.userLevel;
       const newLevel=this.calcLevelFromPoints(newTotal);
-      if(newLevel>oldLevel){
-        this.userLevel=newLevel;
-        this.levelUpOpen=true;
-      }
+      if(newLevel>oldLevel){this.userLevel=newLevel;this.levelUpOpen=true;}
     }
   }catch(e){console.error('addPoints:',e);}
 },
 
-calcLevelFromPoints(pts){
-  if(pts>=2000)return 6;
-  if(pts>=1000)return 5;
-  if(pts>=600)return 4;
-  if(pts>=300)return 3;
-  if(pts>=100)return 2;
-  return 1;
-},
+calcLevelFromPoints(pts){if(pts>=2000)return 6;if(pts>=1000)return 5;if(pts>=600)return 4;if(pts>=300)return 3;if(pts>=100)return 2;return 1;},
 
 openTxSheet(){this.txCategory='';this.txAmount='';this.txSheetOpen=true;},
 openKisahDetail(idx){this.selectedKisah=this.kisahList[idx];this.kisahSheetOpen=true;},
@@ -1179,40 +1509,17 @@ async openChatAI(){
   if(this.currentUser&&!this.isOwner){
     try{
       const{data}=await sb.from('profiles').select('chat_count,chat_bonus,chat_date,is_vip').eq('id',this.currentUser.id).maybeSingle();
-      if(data){
-        this.chatCount=data.chat_count||0;
-        this.chatBonus=data.chat_bonus||0;
-        this.chatDate=data.chat_date||'';
-        this.isVip=data.is_vip||false;
-      }
+      if(data){this.chatCount=data.chat_count||0;this.chatBonus=data.chat_bonus||0;this.chatDate=data.chat_date||'';this.isVip=data.is_vip||false;}
     }catch(e){console.error(e);}
   }
 },
-openMenuSheet(){this.menuSheetOpen=true;},
 
 startThinkingMessages(){
-  const messages=[
-    '🤔 Zenkai AI lagi mikir...',
-    '☕ Sabar ya, otaknya lagi loading...',
-    '🐢 Dikit lagi, jangan kemana-mana ya!',
-    '😅 Server lagi rame nih, bentar ya...',
-    '🙏 Mohon sabar, Zenkai AI berusaha maksimal!'
-  ];
-  let i=0;
-  this.aiThinkingText=messages[0];
-  clearInterval(this.aiThinkingTimer);
-  this.aiThinkingTimer=setInterval(()=>{
-    i++;
-    if(i<messages.length){
-      this.aiThinkingText=messages[i];
-    }
-  },3000);
+  const messages=['🤔 Zenkai AI lagi mikir...','☕ Sabar ya, otaknya lagi loading...','🐢 Dikit lagi, jangan kemana-mana ya!','😅 Server lagi rame nih, bentar ya...','🙏 Mohon sabar, Zenkai AI berusaha maksimal!'];
+  let i=0;this.aiThinkingText=messages[0];clearInterval(this.aiThinkingTimer);
+  this.aiThinkingTimer=setInterval(()=>{i++;if(i<messages.length){this.aiThinkingText=messages[i];}},3000);
 },
-stopThinkingMessages(){
-  clearInterval(this.aiThinkingTimer);
-  this.aiThinkingTimer=null;
-  this.aiThinkingText='';
-},
+stopThinkingMessages(){clearInterval(this.aiThinkingTimer);this.aiThinkingTimer=null;this.aiThinkingText='';},
 
 async handleEmailAuth(){
 if(!this.authEmail||!this.authPassword){return this.showAlert('Perhatian','Isi email dan password!');}
@@ -1224,8 +1531,7 @@ if(ex){return this.showAlert('Peringatan','Nama sudah dipakai!');}
 const{data,error}=await sb.auth.signUp({email:this.authEmail,password:this.authPassword,options:{data:{username:this.authUsername}}});
 if(error)throw error;
 if(data.user){await sb.from('profiles').upsert({id:data.user.id,username:this.authUsername,status:'user',last_login:new Date().toISOString(),is_vip:false,is_banned:false,chat_count:0,chat_bonus:0});}
-this.showAlert('Sukses','Berhasil daftar!');
-this.authMode='login';
+this.showAlert('Sukses','Berhasil daftar!');this.authMode='login';
 }else{
 const{data,error}=await sb.auth.signInWithPassword({email:this.authEmail,password:this.authPassword});
 if(error)throw error;
@@ -1247,10 +1553,7 @@ await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',
 await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();
 const today=new Date().toISOString().slice(0,10);
 const lastLogin=localStorage.getItem('zenkai_last_bonus');
-if(lastLogin!==today){
-  localStorage.setItem('zenkai_last_bonus',today);
-  await this.addPoints(10,'Login harian');
-}
+if(lastLogin!==today){localStorage.setItem('zenkai_last_bonus',today);await this.addPoints(10,'Login harian');}
 if(showWelcome){playIntroAnimation(this.userName,()=>{this.welcomePopupOpen=true;});}
 else{playIntroAnimation(this.userName,()=>{});}
 }
@@ -1266,35 +1569,17 @@ async verifyOwnerPin(){
     const token = sessionData?.session?.access_token || '';
     const res = await fetch(SUPABASE_URL + '/functions/v1/dynamic-action', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-        'apikey': SUPABASE_ANON_KEY
-      },
+      headers: {'Content-Type': 'application/json','Authorization': 'Bearer ' + token,'apikey': SUPABASE_ANON_KEY},
       body: JSON.stringify({ pin: this.enteredPin })
     });
     const data = await res.json();
-    if(!data.success){
-      this.verifyingPin = false;
-      this.enteredPin = '';
-      return this.showAlert('PIN Salah', data.error || 'PIN salah!');
-    }
-    this.ownerPinModalOpen = false;
-    this.isOwner = true;
-    this.isVip = true;
-    this.isAuthenticated = true;
+    if(!data.success){this.verifyingPin = false;this.enteredPin = '';return this.showAlert('PIN Salah', data.error || 'PIN salah!');}
+    this.ownerPinModalOpen = false;this.isOwner = true;this.isVip = true;this.isAuthenticated = true;
     await sb.from('profiles').update({last_login: new Date().toISOString()}).eq('id', this.pendingUser.id);
-    await this.processUserData();
-    await this.loadTransactions();
-    await this.loadSavings();
-    await this.loadBudgets();
-    this.loadAppStats();
+    await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();this.loadAppStats();
     playIntroAnimation(this.userName,()=>{this.welcomePopupOpen = true;});
-  }catch(e){
-    this.showAlert('Gagal', e.message);
-  }finally{
-    this.verifyingPin = false;
-  }
+  }catch(e){this.showAlert('Gagal', e.message);}
+  finally{this.verifyingPin = false;}
 },
 
 async processUserData(){
@@ -1303,28 +1588,16 @@ this.userEmail=this.currentUser.email||'';
 const{data:profile}=await sb.from('profiles').select('*').eq('id',this.currentUser.id).maybeSingle();
 if(profile){
 this.userName=profile.username||this.userEmail.split('@')[0];
-this.quickNote=profile.quick_note||'';
-this.lastSavedNote=this.quickNote;
-this.userAvatar=profile.avatar_url||'';
-this.isVip=profile.is_vip||false;
-this.chatCount=profile.chat_count||0;
-this.chatDate=profile.chat_date||'';
-this.chatBonus=profile.chat_bonus||0;
+this.quickNote=profile.quick_note||'';this.lastSavedNote=this.quickNote;
+this.userAvatar=profile.avatar_url||'';this.isVip=profile.is_vip||false;
+this.chatCount=profile.chat_count||0;this.chatDate=profile.chat_date||'';this.chatBonus=profile.chat_bonus||0;
 }else{
 this.userName=(this.currentUser.user_metadata&&this.currentUser.user_metadata.username)||this.userEmail.split('@')[0]||'User';
 }
 try{
   const{data:pts}=await sb.from('user_points').select('*').eq('user_id',this.currentUser.id).maybeSingle();
-  if(pts){
-    this.userPoints=pts.total_points||0;
-    this.userLevel=pts.level||1;
-    this.lastKnownLevel=this.userLevel;
-  }else{
-    await sb.from('user_points').insert({user_id:this.currentUser.id,total_points:0,level:1});
-    this.userPoints=0;
-    this.userLevel=1;
-    this.lastKnownLevel=1;
-  }
+  if(pts){this.userPoints=pts.total_points||0;this.userLevel=pts.level||1;this.lastKnownLevel=this.userLevel;}
+  else{await sb.from('user_points').insert({user_id:this.currentUser.id,total_points:0,level:1});this.userPoints=0;this.userLevel=1;this.lastKnownLevel=1;}
 }catch(e){console.error('Load points:',e);}
 },
 
@@ -1356,14 +1629,7 @@ async addTransaction(type){
 if(!this.currentUser||!this.txCategory||!this.txAmount){return this.showAlert('Perhatian','Isi kategori dan nominal!');}
 const amount=parseFloat(this.txAmount);
 if(isNaN(amount)||amount<=0){return this.showAlert('Perhatian','Nominal tidak valid!');}
-const{error}=await sb.from('transactions').insert({
-  user_id:this.currentUser.id,
-  type,
-  category:this.txCategory,
-  amount,
-  date:new Date().toLocaleDateString('id-ID'),
-  created_at:new Date().toISOString()
-});
+const{error}=await sb.from('transactions').insert({user_id:this.currentUser.id,type,category:this.txCategory,amount,date:new Date().toLocaleDateString('id-ID'),created_at:new Date().toISOString()});
 if(!error){this.txCategory='';this.txAmount='';this.txSheetOpen=false;await this.loadTransactions();await this.addPoints(3,'Catat transaksi');}
 else{this.showAlert('Gagal',error.message);}
 },
@@ -1466,7 +1732,6 @@ else throw new Error('Format jadwal tidak dikenal');
 }catch(e){
 console.warn('Prayer fallback:',e.message);
 this.prayerTimes={subuh:'04:30',dzuhur:'11:55',ashar:'15:10',maghrib:'17:55',isya:'19:05'};
-this.showAlert('Info','Gagal memuat jadwal untuk '+this.prayerCity+'. Menampilkan jadwal default Jakarta.');
 }finally{this.prayerLoading=false;}
 },
 
@@ -1566,126 +1831,59 @@ async sendChat(){
   if(!this.isOwner&&!this.isVip){
     try{
       const{data:freshData}=await sb.from('profiles').select('chat_count,chat_bonus,chat_date,is_vip').eq('id',this.currentUser.id).maybeSingle();
-      if(freshData){
-        this.chatCount=freshData.chat_count||0;
-        this.chatBonus=freshData.chat_bonus||0;
-        this.chatDate=freshData.chat_date||'';
-        this.isVip=freshData.is_vip||false;
-      }
+      if(freshData){this.chatCount=freshData.chat_count||0;this.chatBonus=freshData.chat_bonus||0;this.chatDate=freshData.chat_date||'';this.isVip=freshData.is_vip||false;}
     }catch(e){console.error('Fresh data:',e);}
     const today=new Date().toISOString().slice(0,10);
-    if(this.chatDate!==today){
-      this.chatCount=0;
-      this.chatDate=today;
-      await sb.from('profiles').update({chat_count:0,chat_date:today}).eq('id',this.currentUser.id);
-    }
+    if(this.chatDate!==today){this.chatCount=0;this.chatDate=today;await sb.from('profiles').update({chat_count:0,chat_date:today}).eq('id',this.currentUser.id);}
     const maxChat=DAILY_LIMIT+this.chatBonus;
     if(this.chatCount>=maxChat){return this.showAlert('Limit','Chat harian habis ('+maxChat+'). Upgrade VIP atau minta owner tambah bonus!');}
   }
   const userMsg=this.chatInput.trim();
   this.chatMessages.push({role:'user',content:userMsg});
-  this.chatInput='';
-  this.aiThinking=true;
-  this.startThinkingMessages();
-
+  this.chatInput='';this.aiThinking=true;this.startThinkingMessages();
   const ctrl=new AbortController();
   const tid=setTimeout(()=>ctrl.abort(),45000);
-
   try{
     const { data: sessionData } = await sb.auth.getSession();
     const token = sessionData?.session?.access_token || '';
-
-    const headers = {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_ANON_KEY
-    };
+    const headers = {'Content-Type': 'application/json','apikey': SUPABASE_ANON_KEY};
     if(token) headers['Authorization'] = 'Bearer ' + token;
-
     const res = await fetch(AI_URL,{
-      method:'POST',
-      headers: headers,
+      method:'POST',headers: headers,
       body: JSON.stringify({
-        messages:[
-          {
-            role:'system',
-            content:`Kamu adalah Zenkai AI, asisten pintar dari aplikasi "Zenkai Tools".
-
-TENTANG DIRIMU:
-- Namamu: Zenkai AI
-- Kamu asisten pintar di aplikasi Zenkai Tools
-- Owner/pembuatmu: Andika
-- Karakter: ramah, sopan, santai, helpful
-
-GAYA BICARA:
-- Bahasa Indonesia santai tapi sopan
-- Pakai emoji secukupnya (1-2 per pesan)
-- Jawab singkat, jelas, to the point
-
-ATURAN PENTING:
-- Kalau ditanya "kamu siapa" → jawab: "Saya Zenkai AI, asisten pintar dari Zenkai Tools, dibuat oleh Andika 😊"
-- Kalau ditanya soal pembuat/owner → sebut nama "Andika"
-- JANGAN sebut "Andika" di setiap chat — hanya kalau relevan
-- Jangan sebut nama AI lain (Gemini, GPT, dll)
-- Kalau tidak tahu → bilang jujur
-- Tetap ramah dan membantu`
-          },
-          ...this.chatMessages.slice(-10)
-        ],
+        messages:[{role:'system',content:`Kamu adalah Zenkai AI, asisten pintar dari aplikasi "Zenkai Tools".\n\nTENTANG DIRIMU:\n- Namamu: Zenkai AI\n- Kamu asisten pintar di aplikasi Zenkai Tools\n- Owner/pembuatmu: Andika\n- Karakter: ramah, sopan, santai, helpful\n\nGAYA BICARA:\n- Bahasa Indonesia santai tapi sopan\n- Pakai emoji secukupnya (1-2 per pesan)\n- Jawab singkat, jelas, to the point\n\nATURAN PENTING:\n- Kalau ditanya "kamu siapa" → jawab: "Saya Zenkai AI, asisten pintar dari Zenkai Tools, dibuat oleh Andika 😊"\n- Kalau ditanya soal pembuat/owner → sebut nama "Andika"\n- JANGAN sebut "Andika" di setiap chat — hanya kalau relevan\n- Jangan sebut nama AI lain (Gemini, GPT, dll)\n- Kalau tidak tahu → bilang jujur\n- Tetap ramah dan membantu`},
+          ...this.chatMessages.slice(-10)],
         mode:this.aiMode
       }),
       signal:ctrl.signal
     });
-
     const rawText = await res.text();
     let data;
-    try{ data = JSON.parse(rawText); }
-    catch(e){ throw new Error('Server balikin: ' + rawText.substring(0,150)); }
-
+    try{ data = JSON.parse(rawText); }catch(e){ throw new Error('Server balikin: ' + rawText.substring(0,150)); }
     let reply = '';
     if(data.reply) reply = data.reply;
     else if(data.error) reply = '❌ ' + data.error;
     else if(typeof data.message === 'string') reply = data.message;
     else if(typeof data.text === 'string') reply = data.text;
     else if(data.candidates?.[0]?.content?.parts?.[0]?.text) reply = data.candidates[0].content.parts[0].text;
-    else if(data.steps){
-      for(const step of data.steps){
-        if(step.type === 'model_output' && step.content){
-          for(const c of step.content){
-            if(c.type === 'text' && c.text){ reply = c.text; break; }
-          }
-        }
-        if(reply) break;
-      }
-    }
+    else if(data.steps){for(const step of data.steps){if(step.type === 'model_output' && step.content){for(const c of step.content){if(c.type === 'text' && c.text){ reply = c.text; break; }}}if(reply) break;}}
     else if(data.choices?.[0]?.message?.content) reply = data.choices[0].message.content;
     else if(data.data?.reply) reply = data.data.reply;
     else if(data.data?.text) reply = data.data.text;
-
     if(!reply) reply = '⚠️ Format tidak dikenal: ' + JSON.stringify(data).substring(0,200);
-
     this.chatMessages.push({role:'assistant',content:reply});
-    
     if((reply.includes('Zenkai AI sedang sibuk') || reply.includes('sedang sibuk')) && !this.aiBusyPopupShown){
-      this.aiBusyPopupShown = true;
-      this.aiBusyPopupOpen = true;
+      this.aiBusyPopupShown = true;this.aiBusyPopupOpen = true;
     }
-    
     await this.addPoints(1,'Chat AI');
-
     if(!this.isOwner&&!this.isVip&&this.currentUser){
       this.chatCount++;
-      await sb.from('profiles')
-        .update({chat_count:this.chatCount,chat_date:this.chatDate})
-        .eq('id',this.currentUser.id);
+      await sb.from('profiles').update({chat_count:this.chatCount,chat_date:this.chatDate}).eq('id',this.currentUser.id);
     }
   }catch(e){
     const msg = e.name === 'AbortError' ? 'Timeout (server tidak merespon)' : e.message;
     this.chatMessages.push({role:'assistant',content:'❌ Error: ' + msg});
-  }finally{
-    this.stopThinkingMessages();
-    clearTimeout(tid);
-    this.aiThinking=false;
-  }
+  }finally{this.stopThinkingMessages();clearTimeout(tid);this.aiThinking=false;}
 },
 
 startVoiceInput(){if(!this.voiceSupported){return this.showAlert('Info','Browser tidak mendukung voice input.');}const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const rec=new SR();rec.lang='id-ID';rec.onresult=(e)=>{this.chatInput=e.results[0][0].transcript;setTimeout(()=>this.sendChat(),300);};rec.onerror=(e)=>{this.showAlert('Gagal','Voice error: '+e.error);};rec.start();},
@@ -1696,7 +1894,6 @@ async logout(){await sb.auth.signOut();this.isAuthenticated=false;this.currentUs
 };
 }
 
-/* === INTRO ANIMATION === */
 function playIntroAnimation(userName, onDone){
   const intro = document.getElementById('introAnimation');
   const canvas = document.getElementById('introCanvas');
