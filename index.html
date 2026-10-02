@@ -1664,7 +1664,56 @@ speakCustomText(){if(!this.customTtsText){return this.showAlert('Perhatian','Ket
 
 compressImageFile(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=(e)=>{const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');let w=img.width,h=img.height;const max=800;if(w>h&&w>max){h*=max/w;w=max;}else if(h>max){w*=max/h;h=max;}canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);this.compressedImageUrl=canvas.toDataURL('image/jpeg',0.6);this.showAlert('Berhasil','Foto dikompres!');};img.src=e.target.result;};reader.readAsDataURL(file);},
 
-async processMediaDownload(){const url=this.downloadLinkInput.trim();if(!url){return this.showAlert('Perhatian','Tempel link dulu!');}this.downloadLoading=true;this.downloadResultReady=false;this.downloadResultLinks=[];this.downloadMeta={};try{if(url.includes('tiktok.com')||url.includes('vt.tiktok')){const res=await fetch('https://www.tikwm.com/api/?url='+encodeURIComponent(url));const json=await res.json();if(json.code===0&&json.data){this.downloadMeta={title:json.data.title||'TikTok Video',thumbnail:json.data.cover};const links=[];if(json.data.play)links.push({label:'🎬 MP4 (No WM)',url:json.data.play,filename:'tiktok_'+Date.now()+'.mp4'});if(json.data.hdplay)links.push({label:'🎬 MP4 HD',url:json.data.hdplay,filename:'tiktok_hd_'+Date.now()+'.mp4'});if(json.data.music)links.push({label:'🎵 MP3 Audio',url:json.data.music,filename:'tiktok_'+Date.now()+'.mp3'});this.downloadResultLinks=links;this.downloadResultReady=true;}else{this.showAlert('Gagal','Tidak bisa memproses link.');}}else{this.showAlert('Info','Sementara hanya TikTok.');}}catch(e){this.showAlert('Gagal','Error: '+e.message);}finally{this.downloadLoading=false;}},
+async processMediaDownload(){
+  const url = this.downloadLinkInput.trim();
+  if(!url){ return this.showAlert('Perhatian','Tempel link dulu!'); }
+  this.downloadLoading = true;
+  this.downloadResultReady = false;
+  this.downloadResultLinks = [];
+  this.downloadMeta = {};
+  try {
+    const isTT = url.includes('tiktok.com') || url.includes('vt.tiktok');
+    const isIG = url.includes('instagram.com');
+    if(!isTT && !isIG){ this.showAlert('Info','Cuma TikTok & Instagram.'); return; }
+
+    if(isTT){
+      const r = await fetch('https://www.tikwm.com/api/?url=' + encodeURIComponent(url));
+      const j = await r.json();
+      if(j.code === 0 && j.data){
+        this.downloadMeta = { title: j.data.title || 'TikTok', thumbnail: j.data.cover };
+        const L = [];
+        if(j.data.play) L.push({ label:'🎬 MP4', url:j.data.play, filename:'tiktok_'+Date.now()+'.mp4' });
+        if(j.data.hdplay) L.push({ label:'🎬 MP4 HD', url:j.data.hdplay, filename:'tiktok_hd_'+Date.now()+'.mp4' });
+        if(j.data.music) L.push({ label:'🎵 MP3', url:j.data.music, filename:'tiktok_'+Date.now()+'.mp3' });
+        this.downloadResultLinks = L;
+        this.downloadResultReady = true;
+        return;
+      }
+    }
+
+    const r = await fetch('https://cobalt.tame.gg/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ url: url })
+    });
+    const d = await r.json();
+    if(d.status === 'redirect' || d.status === 'tunnel'){
+      this.downloadMeta = { title: isIG ? 'Instagram' : 'TikTok', thumbnail: '' };
+      this.downloadResultLinks = [{ label:'💾 Download', url:d.url, filename:(isIG?'ig_':'tt_')+Date.now()+'.mp4' }];
+      this.downloadResultReady = true;
+    } else if(d.status === 'picker'){
+      this.downloadMeta = { title:'Instagram', thumbnail:'' };
+      this.downloadResultLinks = d.picker.map((v,i)=>({ label:'💾 Item '+(i+1), url:v.url, filename:'ig_'+Date.now()+'_'+i+'.mp4' }));
+      this.downloadResultReady = true;
+    } else {
+      this.showAlert('Gagal', d.text || d.error?.code || 'Gagal proses.');
+    }
+  } catch(e){
+    this.showAlert('Gagal','Error: '+e.message);
+  } finally {
+    this.downloadLoading = false;
+  }
+},
 
 async downloadBlob(url,filename){
 this.downloadingFile=true;
