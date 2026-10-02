@@ -33,10 +33,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .splash-screen.hide{opacity:0;visibility:hidden}
 .splash-logo{font-family:'Bangers',cursive;font-size:clamp(42px,12vw,60px);color:#fff;letter-spacing:3px;text-shadow:3px 3px 0 var(--border),5px 5px 0 rgba(0,0,0,0.2)}
 .splash-bar-wrap{width:200px;height:18px;background:var(--border);border-radius:10px;margin-top:26px;padding:3px}
-.splash-bar{height:100%;background:linear-gradient(90deg,#86efac,#22c55e);border-radius:6px;width:0%;transition:width .25s}
-.bottom-nav-btn{flex:1;border:2.5px solid transparent;border-radius:10px;padding:6px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;color:var(--text);opacity:.7;transition:all .15s;cursor:pointer;min-width:44px}
+.splash-bar{height:100%;background:linear-gradient(90deg,#86efac,#22c55e);border-radius:6px;width:0%;transition:width .25s}.bottom-nav-btn{flex:1;border:2.5px solid transparent;border-radius:10px;padding:6px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;color:var(--text);opacity:.7;transition:all .15s;cursor:pointer;min-width:44px}
 .bottom-nav-btn.active{background:var(--primary);color:var(--text);opacity:1;border-color:var(--border);box-shadow:2px 2px 0 0 var(--border)}
-.bottom-nav-label{font-family:'Bangers',cursive;font-size:9px;letter-spacing:.5px;line-height:1}.bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.bottom-nav-label{font-family:'Bangers',cursive;font-size:9px;letter-spacing:.5px;line-height:1}
+.bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
 .bottom-sheet-content{background:var(--card-bg);width:100%;max-width:450px;border-top:4px solid var(--border);border-left:4px solid var(--border);border-right:4px solid var(--border);border-top-left-radius:28px;border-top-right-radius:28px;padding:20px;animation:slideUp .3s ease-out;max-height:90vh;overflow-y:auto}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}
@@ -75,20 +75,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .floating-chat-btn{position:fixed;bottom:90px;right:20px;width:60px;height:60px;border-radius:50%;background:var(--accent);border:3px solid var(--border);box-shadow:4px 4px 0 0 var(--border);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;z-index:100;transition:all .2s}
 .floating-chat-btn:active{transform:scale(0.95)}
 .ai-fullscreen{position:fixed;inset:0;z-index:99998;background:var(--bg-soft);display:flex;flex-direction:column}
-.intro-animation{position:fixed;inset:0;z-index:999999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.intro-animation.hide{opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s}
-#introCanvas{position:absolute;inset:0;width:100%;height:100%}
-.intro-content{position:relative;z-index:2;text-align:center;padding:20px}
-.intro-text-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
-.intro-word{font-family:'Bangers',cursive;font-size:clamp(52px,16vw,90px);letter-spacing:5px;color:#fff;display:block;line-height:1;opacity:0;text-shadow:0 0 20px currentColor,0 0 40px currentColor}
-.intro-zenkai{color:#a855f7;transform:translateX(-100px);animation:introSlideLeft .8s .2s forwards cubic-bezier(.22,1,.36,1)}
-.intro-tools{color:#fbbf24;transform:translateX(100px);animation:introSlideRight .8s .4s forwards cubic-bezier(.22,1,.36,1)}
-@keyframes introSlideLeft{to{opacity:1;transform:translateX(0)}}
-@keyframes introSlideRight{to{opacity:1;transform:translateX(0)}}
-.intro-subtitle{font-family:'Bangers',cursive;font-size:clamp(14px,4vw,20px);letter-spacing:6px;color:#fff;opacity:0;transform:translateY(20px);animation:introFadeUp .8s 1.4s forwards}
-@keyframes introFadeUp{to{opacity:.85;transform:translateY(0)}}
-.intro-bar{width:min(200px,60vw);height:6px;background:rgba(255,255,255,.15);border-radius:6px;margin:24px auto 0;overflow:hidden;opacity:0;animation:introFadeUp .5s 1.6s forwards}
-.intro-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#a855f7,#fbbf24);border-radius:6px;transition:width .1s linear}
 /* === HEADER BARU === */
 .app-header{position:relative;padding:14px 16px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-bottom:3px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
 .header-user{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer}
@@ -104,6 +90,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .hero-card{position:relative;border-radius:20px;padding:20px;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--accent-dark));border:3px solid var(--border);box-shadow:5px 5px 0 0 var(--border);color:#fff}
 .hero-card::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
 .hero-card::after{content:'';position:absolute;bottom:-40%;left:-15%;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
+.hero-anime{position:absolute;top:0;right:0;width:45%;height:100%;background-size:cover;background-position:center;opacity:.35;mask-image:linear-gradient(to left,rgba(0,0,0,1) 30%,rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to left,rgba(0,0,0,1) 30%,rgba(0,0,0,0) 100%);pointer-events:none}
 .hero-label{position:relative;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:1.5px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.3);margin-bottom:14px;backdrop-filter:blur(4px)}
 .hero-title{position:relative;font-family:'Bangers',cursive;font-size:clamp(24px,7vw,32px);letter-spacing:2px;line-height:1.1;margin-bottom:6px;text-shadow:2px 2px 0 rgba(0,0,0,.2)}
 .hero-subtitle{position:relative;font-size:13px;font-weight:600;opacity:.9;margin-bottom:16px}
@@ -111,13 +98,12 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .hero-stat{background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.25);border-radius:12px;padding:8px 6px;text-align:center;backdrop-filter:blur(4px)}
 .hero-stat-val{font-family:'Bangers',cursive;font-size:16px;letter-spacing:1px;line-height:1;margin-bottom:3px}
 .hero-stat-label{font-size:9px;font-weight:700;opacity:.85;letter-spacing:.5px;text-transform:uppercase}
-/* === DEVICE CARD === */
-.device-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.device-item{background:var(--primary-soft);border:2.5px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center;box-shadow:2px 2px 0 0 var(--border);transition:all .15s}
-.device-item:active{transform:translate(1px,1px);box-shadow:1px 1px 0 0 var(--border)}
-.device-icon{font-size:20px;line-height:1;margin-bottom:4px}
-.device-label{font-size:9px;font-weight:700;opacity:.6;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px}
-.device-val{font-size:11px;font-weight:800;color:var(--accent-dark);line-height:1.2;word-break:break-word}
+/* === DEVICE CARD (COMPACT) === */
+.device-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.device-item{background:var(--primary-soft);border:2px solid var(--border);border-radius:10px;padding:8px 10px;box-shadow:1.5px 1.5px 0 0 var(--border);display:flex;align-items:center;gap:8px;transition:all .15s}
+.device-item:active{transform:translate(1px,1px);box-shadow:.5px .5px 0 0 var(--border)}
+.device-icon{font-size:16px;line-height:1;flex-shrink:0}
+.device-val{font-size:11px;font-weight:700;color:var(--accent-dark);line-height:1.2;word-break:break-word;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* === KATEGORI TAB === */
 .kategori-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .kategori-scroll::-webkit-scrollbar{display:none}
@@ -152,13 +138,79 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .drawer-item:active{background:var(--primary-soft)}
 .drawer-item-icon{font-size:20px;width:28px;text-align:center}
 .drawer-item-label{flex:1}
-.drawer-item.danger{color:#ef4444}</style>
+.drawer-item.danger{color:#ef4444}
+/* === INTRO ANIMATION V2 === */
+.intro-animation{position:fixed;inset:0;z-index:999999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.intro-animation.hide{opacity:0;visibility:hidden;transition:opacity .8s,visibility .8s}
+.intro-blackout{position:absolute;inset:0;background:#000;z-index:1}
+.intro-light{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#fef3c7 20%,rgba(251,191,36,.6) 40%,transparent 70%);z-index:3;pointer-events:none;animation:introLightGrow 4.5s ease-out forwards}
+@keyframes introLightGrow{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:0}
+  18%{transform:translate(-50%,-50%) scale(0);opacity:0}
+  25%{transform:translate(-50%,-50%) scale(3);opacity:1}
+  35%{transform:translate(-50%,-50%) scale(20);opacity:.8}
+  50%{transform:translate(-50%,-50%) scale(40);opacity:.4}
+  70%{transform:translate(-50%,-50%) scale(60);opacity:.15}
+  100%{transform:translate(-50%,-50%) scale(80);opacity:0}
+}
+.intro-tear-wrap{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.intro-tear{width:100%;height:100%;filter:drop-shadow(0 0 20px #fff) drop-shadow(0 0 40px #fbbf24)}
+#tearPathTop, #tearPathBottom{transition:transform 1s cubic-bezier(.5,0,.5,1)}
+.intro-tear.open #tearPathTop{transform:translateY(-450px)}
+.intro-tear.open #tearPathBottom{transform:translateY(450px)}
+#introCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none}
+.intro-content{position:relative;z-index:6;text-align:center;padding:20px;pointer-events:none}
+.intro-glow-circle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.4),rgba(251,191,36,.2) 40%,transparent 70%);filter:blur(20px);opacity:0;animation:introGlowPulse 2s 2.2s forwards}
+@keyframes introGlowPulse{0%{opacity:0;transform:translate(-50%,-50%) scale(.8)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:.7;transform:translate(-50%,-50%) scale(1)}}
+.intro-text-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:18px;position:relative}
+.intro-word{font-family:'Bangers',cursive;font-size:clamp(52px,16vw,90px);letter-spacing:5px;color:#fff;display:block;line-height:1;opacity:0;text-shadow:0 0 20px currentColor,0 0 40px currentColor,0 0 80px currentColor}
+.intro-zenkai{color:#a855f7;transform:translateX(-100px) scale(.5);animation:introZoomIn 1s 2.4s forwards cubic-bezier(.22,1,.36,1)}
+.intro-tools{color:#fbbf24;transform:translateX(100px) scale(.5);animation:introZoomIn 1s 2.6s forwards cubic-bezier(.22,1,.36,1)}
+@keyframes introZoomIn{to{opacity:1;transform:translateX(0) scale(1)}}
+.intro-subtitle{font-family:'Bangers',cursive;font-size:clamp(14px,4vw,20px);letter-spacing:6px;color:#fff;opacity:0;transform:translateY(20px);animation:introFadeUp .8s 3.2s forwards}
+@keyframes introFadeUp{to{opacity:.85;transform:translateY(0)}}
+.intro-bar{width:min(200px,60vw);height:6px;background:rgba(255,255,255,.15);border-radius:6px;margin:24px auto 0;overflow:hidden;opacity:0;animation:introFadeUp .5s 3.4s forwards}
+.intro-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#a855f7,#fbbf24);border-radius:6px;transition:width .1s linear;box-shadow:0 0 20px #fbbf24}
+/* === GAYA VISUAL: GLASSMORPHISM === */
+[data-style="glass"] body{background:linear-gradient(135deg,#e0e7ff,#f3e8ff,#fce7f3)}
+[data-style="glass"] .card{background:rgba(255,255,255,.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1.5px solid rgba(255,255,255,.7);border-radius:20px;box-shadow:0 8px 32px rgba(31,38,135,.15);padding:18px}
+[data-style="glass"] .card-hover:active{transform:scale(.98);box-shadow:0 4px 16px rgba(31,38,135,.1);border-color:rgba(255,255,255,.9)}
+[data-style="glass"] .fitur-card{background:rgba(255,255,255,.6);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,.7);box-shadow:0 4px 20px rgba(31,38,135,.1);border-radius:18px}
+[data-style="glass"] .hero-card{background:linear-gradient(135deg,rgba(168,85,247,.85),rgba(126,34,206,.85));backdrop-filter:blur(20px);border:1.5px solid rgba(255,255,255,.3);box-shadow:0 8px 32px rgba(168,85,247,.3);border-radius:24px}
+[data-style="glass"] .app-header{background:linear-gradient(135deg,rgba(251,191,36,.9),rgba(217,119,6,.9));backdrop-filter:blur(20px);border-bottom:1.5px solid rgba(255,255,255,.3)}
+[data-style="glass"] .header-btn{background:rgba(255,255,255,.3);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.5);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+[data-style="glass"] .header-avatar{background:rgba(255,255,255,.4);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.6);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+[data-style="glass"] .drawer{background:rgba(255,255,255,.85);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-left:1.5px solid rgba(255,255,255,.6)}
+[data-style="glass"] .drawer-item{background:transparent;border-bottom:1px solid rgba(0,0,0,.05)}
+[data-style="glass"] .bottom-sheet-content{background:rgba(255,255,255,.9);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1.5px solid rgba(255,255,255,.6)}
+[data-style="glass"] .input-field{background:rgba(255,255,255,.5);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.6);border-radius:14px}
+[data-style="glass"] .btn-primary{background:linear-gradient(135deg,rgba(251,191,36,.9),rgba(217,119,6,.9));backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.5);box-shadow:0 4px 20px rgba(251,191,36,.3);border-radius:14px}
+[data-style="glass"] .quick-btn{background:rgba(255,255,255,.6);backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,.7);border-radius:16px;box-shadow:0 4px 16px rgba(31,38,135,.08)}
+[data-style="glass"] .kategori-tab{background:rgba(255,255,255,.6);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.7);border-radius:16px;box-shadow:0 2px 10px rgba(31,38,135,.06)}
+[data-style="glass"] .kategori-tab.active{background:var(--primary);color:var(--text);border-color:rgba(255,255,255,.9)}
+[data-style="glass"] .bottom-nav-btn{background:transparent}
+[data-style="glass"] .bottom-nav-btn.active{background:rgba(255,255,255,.5);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.7);box-shadow:0 2px 12px rgba(0,0,0,.08)}
+[data-style="glass"] .stat-box{background:rgba(255,255,255,.5);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.6);box-shadow:0 4px 12px rgba(31,38,135,.08)}
+</style>
 </head>
-<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme">
-
-<div id="introAnimation" class="intro-animation" style="display:none;">
+<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode"><div id="introAnimation" class="intro-animation" style="display:none;">
+  <div class="intro-blackout"></div>
+  <div class="intro-light" id="introLight"></div>
+  <div class="intro-tear-wrap">
+    <svg class="intro-tear" viewBox="0 0 400 800" preserveAspectRatio="none">
+      <defs>
+        <filter id="tearGlow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <path id="tearPathTop" d="M200,0 L200,400 L200,400 L200,0 Z" fill="#fff" filter="url(#tearGlow)"/>
+      <path id="tearPathBottom" d="M200,800 L200,400 L200,400 L200,800 Z" fill="#fff" filter="url(#tearGlow)"/>
+    </svg>
+  </div>
   <canvas id="introCanvas"></canvas>
   <div class="intro-content">
+    <div class="intro-glow-circle"></div>
     <div class="intro-text-wrap">
       <span class="intro-word intro-zenkai">ZENKAI</span>
       <span class="intro-word intro-tools">TOOLS</span>
@@ -198,7 +250,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <li><b>📥 Downloader:</b> TikTok tanpa watermark</li>
         <li><b>🛠️ Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
         <li><b>🎮 Game:</b> Refleks & Tic Tac Toe</li>
-        <li><b>🎨 Tema:</b> 6 tema warna</li>
+        <li><b>🎨 Tema:</b> 6 tema warna + 2 gaya visual</li>
         <li><b>🏆 Poin & Level:</b> Kumpulkan poin, naik level!</li>
       </ul>
       <p class="txt-xs italic text-center mt-2" style="color:var(--accent-dark)">Developer: <b>Andika</b></p>
@@ -258,16 +310,9 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="p-4 rounded-xl text-left space-y-3" style="background:var(--primary-soft);border:2.5px solid var(--border)">
       <p class="txt-sm font-bold" style="color:var(--accent-dark)">ℹ️ TENANG, INI NORMAL!</p>
       <p class="txt-sm">Zenkai AI kadang sibuk karena:</p>
-      <ul class="txt-sm pl-4 list-disc space-y-1">
-        <li>Banyak user pakai bersamaan</li>
-        <li>Server AI-nya ramai</li>
-      </ul>
+      <ul class="txt-sm pl-4 list-disc space-y-1"><li>Banyak user pakai bersamaan</li><li>Server AI-nya ramai</li></ul>
       <p class="txt-sm font-bold" style="color:var(--accent-dark)">💡 TIPS:</p>
-      <ul class="txt-sm pl-4 list-disc space-y-1">
-        <li>Tunggu 1-2 menit</li>
-        <li>Coba kirim pesan lagi</li>
-        <li>Kalau masih sibuk, tunggu 5 menit</li>
-      </ul>
+      <ul class="txt-sm pl-4 list-disc space-y-1"><li>Tunggu 1-2 menit</li><li>Coba kirim pesan lagi</li><li>Kalau masih sibuk, tunggu 5 menit</li></ul>
       <p class="txt-sm italic">Pesan ini cuma muncul 1x. Kalau masih sibuk, langsung coba lagi aja ya! 💪</p>
     </div>
     <button @click="aiBusyPopupOpen=false" class="btn-primary">OK, SAYA MENGERTI 👍</button>
@@ -349,7 +394,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 </div>
 
 <div class="w-full max-w-md h-[100dvh] relative flex flex-col overflow-hidden" style="background:var(--card-bg)">
-  <!-- HEADER BARU -->
   <header class="app-header">
     <div class="header-user" @click="profileModalOpen=true">
       <div class="header-avatar">
@@ -369,8 +413,8 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 
   <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24" style="background:var(--bg-soft)"><div x-show="activeTab==='home'" class="sec-gap">
 
-  <!-- HERO CARD -->
   <div class="hero-card">
+    <div class="hero-anime" id="heroAnime" style="display:none;"></div>
     <div class="hero-label">🚀 ZENKAI HUB</div>
     <div class="hero-title" x-text="'HALO, '+(userName||'USER').toUpperCase()+'! 👋'"></div>
     <div class="hero-subtitle">Developer Andika</div>
@@ -390,47 +434,21 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     </div>
   </div>
 
-  <!-- INFO DEVICE -->
   <div class="card" style="padding:12px">
     <div class="flex items-center gap-2 mb-2">
       <span class="text-xl">📡</span>
       <h3 class="font-title text-base" style="color:var(--accent-dark)">INFO PERANGKAT</h3>
     </div>
     <div class="device-grid">
-      <div class="device-item">
-        <div class="device-icon">🌐</div>
-        <div class="device-label">Negara</div>
-        <div class="device-val">Indonesia</div>
-      </div>
-      <div class="device-item">
-        <div class="device-icon">📱</div>
-        <div class="device-label">Device</div>
-        <div class="device-val" x-text="deviceInfo.os"></div>
-      </div>
-      <div class="device-item">
-        <div class="device-icon">🧭</div>
-        <div class="device-label">Browser</div>
-        <div class="device-val" x-text="deviceInfo.browser"></div>
-      </div>
-      <div class="device-item">
-        <div class="device-icon">🟢</div>
-        <div class="device-label">Status</div>
-        <div class="device-val" x-text="deviceInfo.online?'Online':'Offline'"></div>
-      </div>
-      <div class="device-item">
-        <div class="device-icon">🔋</div>
-        <div class="device-label">Baterai</div>
-        <div class="device-val" x-text="deviceInfo.battery"></div>
-      </div>
-      <div class="device-item">
-        <div class="device-icon">🕐</div>
-        <div class="device-label">Jam</div>
-        <div class="device-val" x-text="currentTime"></div>
-      </div>
+      <div class="device-item"><span class="device-icon">🌐</span><span class="device-val">Indonesia</span></div>
+      <div class="device-item"><span class="device-icon">📱</span><span class="device-val" x-text="deviceInfo.os"></span></div>
+      <div class="device-item"><span class="device-icon">🧭</span><span class="device-val" x-text="deviceInfo.browser"></span></div>
+      <div class="device-item"><span class="device-icon">🟢</span><span class="device-val" x-text="deviceInfo.online?'Online':'Offline'"></span></div>
+      <div class="device-item"><span class="device-icon">🔋</span><span class="device-val" x-text="deviceInfo.battery"></span></div>
+      <div class="device-item"><span class="device-icon">🕐</span><span class="device-val" x-text="currentTime"></span></div>
     </div>
   </div>
 
-  <!-- QUICK ACTION BAR -->
   <div class="quick-bar">
     <div class="quick-btn" @click="openTxSheet()">
       <div class="quick-icon">💰</div>
@@ -450,14 +468,12 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     </div>
   </div>
 
-  <!-- KATEGORI TAB -->
   <div class="kategori-scroll">
     <template x-for="k in kategoriList" :key="k.id">
       <button @click="kategoriAktif=k.id" :class="kategoriAktif===k.id?'active':''" class="kategori-tab" x-text="k.icon+' '+k.nama"></button>
     </template>
   </div>
 
-  <!-- GRID FITUR -->
   <div class="fitur-grid">
     <template x-for="f in filteredFitur" :key="f.id">
       <div class="fitur-card" @click="bukaFitur(f)">
@@ -468,7 +484,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     </template>
   </div>
 
-  <!-- TIPS HARIAN -->
   <div class="card" style="padding:12px;background:var(--accent-soft)">
     <div class="flex items-start gap-2">
       <span class="text-xl">💡</span>
@@ -479,386 +494,365 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     </div>
   </div>
 
-</div>  <div x-show="activeTab==='keuangan'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)">
-      <div class="txt-xs font-bold text-white opacity-90">💰 TOTAL SALDO</div>
-      <div class="font-title text-4xl text-white mt-1" x-text="'Rp '+totalBalance.toLocaleString('id-ID')"></div>
-    </div>
-    <div class="grid grid-cols-3 gap-2">
-      <button @click="finSubTab='transaksi'" :class="finSubTab==='transaksi'?'active':''" class="tab-pill">📋 Transaksi</button>
-      <button @click="finSubTab='grafik';setTimeout(()=>drawCharts(),300)" :class="finSubTab==='grafik'?'active':''" class="tab-pill">📊 Grafik</button>
-      <button @click="finSubTab='target'" :class="finSubTab==='target'?'active':''" class="tab-pill">🎯 Target</button>
-    </div>
-    <div x-show="finSubTab==='transaksi'" class="sec-gap">
-      <button @click="openTxSheet()" class="btn-primary">➕ TAMBAH TRANSAKSI</button>
-      <div class="card sec-gap">
-        <h3 class="font-title text-lg" style="color:var(--accent-dark)">📋 RIWAYAT</h3>
-        <div class="max-h-80 overflow-y-auto space-y-2">
-          <template x-for="t in transactions" :key="t.id">
-            <div class="p-3 rounded-xl flex justify-between items-center" :style="t.type==='income'?'background:#dcfce7;border:2px solid var(--border)':'background:#fee2e2;border:2px solid var(--border)'">
-              <div>
-                <div class="font-bold text-sm" x-text="t.category"></div>
-                <div class="txt-xs text-gray-600" x-text="t.date"></div>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="font-bold text-sm" :style="t.type==='income'?'color:#15803d':'color:#b91c1c'" x-text="(t.type==='income'?'+':'-')+'Rp '+Number(t.amount).toLocaleString('id-ID')"></span>
-                <button @click="confirmDeleteTx(t.id)" class="text-red-500 font-bold text-xl">×</button>
-              </div>
+</div><div x-show="activeTab==='keuangan'" class="sec-gap">
+  <div class="card text-center" style="background:var(--accent)">
+    <div class="txt-xs font-bold text-white opacity-90">💰 TOTAL SALDO</div>
+    <div class="font-title text-4xl text-white mt-1" x-text="'Rp '+totalBalance.toLocaleString('id-ID')"></div>
+  </div>
+  <div class="grid grid-cols-3 gap-2">
+    <button @click="finSubTab='transaksi'" :class="finSubTab==='transaksi'?'active':''" class="tab-pill">📋 Transaksi</button>
+    <button @click="finSubTab='grafik';setTimeout(()=>drawCharts(),300)" :class="finSubTab==='grafik'?'active':''" class="tab-pill">📊 Grafik</button>
+    <button @click="finSubTab='target'" :class="finSubTab==='target'?'active':''" class="tab-pill">🎯 Target</button>
+  </div>
+  <div x-show="finSubTab==='transaksi'" class="sec-gap">
+    <button @click="openTxSheet()" class="btn-primary">➕ TAMBAH TRANSAKSI</button>
+    <div class="card sec-gap">
+      <h3 class="font-title text-lg" style="color:var(--accent-dark)">📋 RIWAYAT</h3>
+      <div class="max-h-80 overflow-y-auto space-y-2">
+        <template x-for="t in transactions" :key="t.id">
+          <div class="p-3 rounded-xl flex justify-between items-center" :style="t.type==='income'?'background:#dcfce7;border:2px solid var(--border)':'background:#fee2e2;border:2px solid var(--border)'">
+            <div><div class="font-bold text-sm" x-text="t.category"></div><div class="txt-xs text-gray-600" x-text="t.date"></div></div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-sm" :style="t.type==='income'?'color:#15803d':'color:#b91c1c'" x-text="(t.type==='income'?'+':'-')+'Rp '+Number(t.amount).toLocaleString('id-ID')"></span>
+              <button @click="confirmDeleteTx(t.id)" class="text-red-500 font-bold text-xl">×</button>
             </div>
-          </template>
-          <template x-if="transactions.length===0"><div class="txt-sm text-center text-gray-500 py-6 font-bold">Belum ada transaksi</div></template>
-        </div>
-      </div>
-    </div>
-    <div x-show="finSubTab==='grafik'" class="sec-gap">
-      <div class="card"><h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">📊 PENGELUARAN</h3><canvas id="pieChart" height="200"></canvas></div>
-      <div class="card"><h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">📈 MASUK VS KELUAR</h3><canvas id="barChart" height="200"></canvas></div>
-    </div>
-    <div x-show="finSubTab==='target'" class="sec-gap">
-      <button @click="openTargetSheet()" class="btn-primary">🎯 TAMBAH TARGET</button>
-      <div class="card">
-        <h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">💰 BUDGET BULANAN</h3>
-        <button @click="openBudgetSheet()" class="btn-soft w-full mb-3">➕ Set Budget</button>
-        <div class="space-y-2">
-          <template x-for="b in budgets" :key="b.id">
-            <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
-              <div class="flex justify-between mb-1"><span class="font-bold text-sm" x-text="b.kategori"></span><button @click="confirmDeleteBudget(b.id)" class="text-red-500 font-bold text-lg">×</button></div>
-              <div class="txt-xs text-gray-600 mb-1 font-bold">Limit: Rp <span x-text="Number(b.limit_bulanan).toLocaleString('id-ID')"></span></div>
-              <div class="progress-bar"><div class="progress-fill" :style="'width:'+Math.min(100,(getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'" x-text="Math.round((getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'"></div></div>
-            </div>
-          </template>
-          <template x-if="budgets.length===0"><div class="txt-xs text-center text-gray-500 py-2 font-bold">Belum ada budget</div></template>
-        </div>
-      </div>
-      <div class="card">
-        <h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">🎯 TARGET TABUNGAN</h3>
-        <div class="space-y-2">
-          <template x-for="s in savings" :key="s.id">
-            <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
-              <div class="flex justify-between mb-1"><span class="font-bold text-sm" x-text="s.nama"></span><button @click="confirmDeleteSavings(s.id)" class="text-red-500 font-bold text-lg">×</button></div>
-              <div class="txt-xs text-gray-600 mb-1 font-bold">Target: Rp <span x-text="Number(s.target).toLocaleString('id-ID')"></span></div>
-              <div class="progress-bar"><div class="progress-fill" :style="'width:'+Math.min(100,(s.terkumpul/s.target)*100)+'%'" x-text="Math.round((s.terkumpul/s.target)*100)+'%'"></div></div>
-              <div class="txt-xs mt-1 font-bold">Terkumpul: Rp <span x-text="Number(s.terkumpul).toLocaleString('id-ID')"></span></div>
-              <button @click="addToSavings(s.id)" class="btn-soft w-full mt-2 text-xs">➕ Tambah Tabungan</button>
-            </div>
-          </template>
-          <template x-if="savings.length===0"><div class="txt-xs text-center text-gray-500 py-2 font-bold">Belum ada target</div></template>
-        </div>
+          </div>
+        </template>
+        <template x-if="transactions.length===0"><div class="txt-sm text-center text-gray-500 py-6 font-bold">Belum ada transaksi</div></template>
       </div>
     </div>
   </div>
+  <div x-show="finSubTab==='grafik'" class="sec-gap">
+    <div class="card"><h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">📊 PENGELUARAN</h3><canvas id="pieChart" height="200"></canvas></div>
+    <div class="card"><h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">📈 MASUK VS KELUAR</h3><canvas id="barChart" height="200"></canvas></div>
+  </div>
+  <div x-show="finSubTab==='target'" class="sec-gap">
+    <button @click="openTargetSheet()" class="btn-primary">🎯 TAMBAH TARGET</button>
+    <div class="card">
+      <h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">💰 BUDGET BULANAN</h3>
+      <button @click="openBudgetSheet()" class="btn-soft w-full mb-3">➕ Set Budget</button>
+      <div class="space-y-2">
+        <template x-for="b in budgets" :key="b.id">
+          <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
+            <div class="flex justify-between mb-1"><span class="font-bold text-sm" x-text="b.kategori"></span><button @click="confirmDeleteBudget(b.id)" class="text-red-500 font-bold text-lg">×</button></div>
+            <div class="txt-xs text-gray-600 mb-1 font-bold">Limit: Rp <span x-text="Number(b.limit_bulanan).toLocaleString('id-ID')"></span></div>
+            <div class="progress-bar"><div class="progress-fill" :style="'width:'+Math.min(100,(getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'" x-text="Math.round((getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'"></div></div>
+          </div>
+        </template>
+        <template x-if="budgets.length===0"><div class="txt-xs text-center text-gray-500 py-2 font-bold">Belum ada budget</div></template>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="font-title text-lg mb-2" style="color:var(--accent-dark)">🎯 TARGET TABUNGAN</h3>
+      <div class="space-y-2">
+        <template x-for="s in savings" :key="s.id">
+          <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
+            <div class="flex justify-between mb-1"><span class="font-bold text-sm" x-text="s.nama"></span><button @click="confirmDeleteSavings(s.id)" class="text-red-500 font-bold text-lg">×</button></div>
+            <div class="txt-xs text-gray-600 mb-1 font-bold">Target: Rp <span x-text="Number(s.target).toLocaleString('id-ID')"></span></div>
+            <div class="progress-bar"><div class="progress-fill" :style="'width:'+Math.min(100,(s.terkumpul/s.target)*100)+'%'" x-text="Math.round((s.terkumpul/s.target)*100)+'%'"></div></div>
+            <div class="txt-xs mt-1 font-bold">Terkumpul: Rp <span x-text="Number(s.terkumpul).toLocaleString('id-ID')"></span></div>
+            <button @click="addToSavings(s.id)" class="btn-soft w-full mt-2 text-xs">➕ Tambah Tabungan</button>
+          </div>
+        </template>
+        <template x-if="savings.length===0"><div class="txt-xs text-center text-gray-500 py-2 font-bold">Belum ada target</div></template>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <div x-show="activeTab==='downloader'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)">
-      <div class="text-4xl mb-1">📥</div>
-      <h2 class="font-title text-2xl text-white">TIKTOK DOWNLOADER</h2>
-      <p class="txt-xs text-white opacity-90">Tanpa Watermark • HD</p>
+<div x-show="activeTab==='downloader'" class="sec-gap">
+  <div class="card text-center" style="background:var(--accent)">
+    <div class="text-4xl mb-1">📥</div>
+    <h2 class="font-title text-2xl text-white">TIKTOK DOWNLOADER</h2>
+    <p class="txt-xs text-white opacity-90">Tanpa Watermark • HD</p>
+  </div>
+  <div class="card sec-gap">
+    <label class="font-bold text-sm">Tempel Link TikTok:</label>
+    <input type="text" x-model="downloadLinkInput" placeholder="https://tiktok.com/..." class="input-field">
+    <button @click="processMediaDownload()" class="btn-primary" :disabled="downloadLoading">
+      <span x-show="!downloadLoading">🔍 PROSES LINK</span>
+      <span x-show="downloadLoading"><span class="spin"></span> Memproses...</span>
+    </button>
+    <div class="txt-xs text-center text-gray-500 font-bold">💡 Support: Video TikTok (No WM) + MP3 Audio</div>
+  </div>
+  <template x-if="downloadResultReady">
+    <div class="card sec-gap text-center">
+      <template x-if="downloadMeta.thumbnail"><img :src="downloadMeta.thumbnail" class="max-h-48 mx-auto rounded-xl" style="border:3px solid var(--border)"></template>
+      <p class="font-bold text-sm" x-text="downloadMeta.title"></p>
+      <template x-for="(link,idx) in downloadResultLinks" :key="idx">
+        <button @click="downloadBlob(link.url,link.filename)" class="btn-primary" x-text="'💾 '+link.label"></button>
+      </template>
+      <div x-show="downloadingFile" class="txt-xs font-bold" style="color:var(--accent)"><span class="spin"></span> Mendownload...</div>
+    </div>
+  </template>
+</div>
+
+<div x-show="activeTab==='kitab'" class="sec-gap">
+  <div class="card text-center" style="background:var(--accent)">
+    <div class="text-4xl mb-1">📖</div>
+    <h2 class="font-title text-2xl text-white">IBADAH & DOA</h2>
+  </div>
+  <div class="grid grid-cols-3 gap-2">
+    <button @click="kitabSubTab='sholat'" :class="kitabSubTab==='sholat'?'active':''" class="tab-pill">🕌 Sholat</button>
+    <button @click="kitabSubTab='quran';if(surahList.length===0)fetchSurahs()" :class="kitabSubTab==='quran'?'active':''" class="tab-pill">📖 Quran</button>
+    <button @click="kitabSubTab='asmaul'" :class="kitabSubTab==='asmaul'?'active':''" class="tab-pill">✨ Asmaul</button>
+    <button @click="kitabSubTab='kisah'" :class="kitabSubTab==='kisah'?'active':''" class="tab-pill">🕋 Kisah</button>
+    <button @click="kitabSubTab='hadits'" :class="kitabSubTab==='hadits'?'active':''" class="tab-pill">📚 Hadits</button>
+    <button @click="kitabSubTab='doa'" :class="kitabSubTab==='doa'?'active':''" class="tab-pill">🤲 Doa</button>
+  </div>
+  <div x-show="kitabSubTab==='sholat'" class="sec-gap">
+    <div class="card sec-gap">
+      <div class="flex justify-between items-center"><h3 class="font-title text-lg" style="color:var(--accent-dark)">🕌 WAKTU SHOLAT</h3><button @click="openPrayerCityPicker()" class="btn-soft text-xs">🔄 Ganti</button></div>
+      <p class="txt-xs font-bold text-gray-600" x-text="'📍 '+prayerCity+', '+prayerProvince"></p>
+      <div x-show="prayerLoading" class="text-center py-2 txt-xs"><span class="spin"></span></div>
+      <div class="grid grid-cols-5 gap-1 text-center">
+        <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Subuh</div><div class="font-title text-sm" x-text="prayerTimes.subuh"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Dzuhur</div><div class="font-title text-sm" x-text="prayerTimes.dzuhur"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Ashar</div><div class="font-title text-sm" x-text="prayerTimes.ashar"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Maghrib</div><div class="font-title text-sm" x-text="prayerTimes.maghrib"></div></div>
+        <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Isya</div><div class="font-title text-sm" x-text="prayerTimes.isya"></div></div>
+      </div>
     </div>
     <div class="card sec-gap">
-      <label class="font-bold text-sm">Tempel Link TikTok:</label>
-      <input type="text" x-model="downloadLinkInput" placeholder="https://tiktok.com/..." class="input-field">
-      <button @click="processMediaDownload()" class="btn-primary" :disabled="downloadLoading">
-        <span x-show="!downloadLoading">🔍 PROSES LINK</span>
-        <span x-show="downloadLoading"><span class="spin"></span> Memproses...</span>
-      </button>
-      <div class="txt-xs text-center text-gray-500 font-bold">💡 Support: Video TikTok (No WM) + MP3 Audio</div>
-    </div>
-    <template x-if="downloadResultReady">
-      <div class="card sec-gap text-center">
-        <template x-if="downloadMeta.thumbnail"><img :src="downloadMeta.thumbnail" class="max-h-48 mx-auto rounded-xl" style="border:3px solid var(--border)"></template>
-        <p class="font-bold text-sm" x-text="downloadMeta.title"></p>
-        <template x-for="(link,idx) in downloadResultLinks" :key="idx">
-          <button @click="downloadBlob(link.url,link.filename)" class="btn-primary" x-text="'💾 '+link.label"></button>
+      <h3 class="font-title text-lg" style="color:var(--accent-dark)">📿 NIAT SHOLAT</h3>
+      <div class="grid grid-cols-5 gap-1">
+        <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s">
+          <button @click="selectedNiat=s" :class="selectedNiat===s?'active':''" class="tab-pill" x-text="s"></button>
         </template>
-        <div x-show="downloadingFile" class="txt-xs font-bold" style="color:var(--accent)"><span class="spin"></span> Mendownload...</div>
+      </div>
+      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
+        <div class="font-arab text-right text-xl leading-loose" x-text="niatSholat[selectedNiat].arab"></div>
+        <div class="txt-xs italic mt-2" style="color:var(--accent-dark)" x-text="niatSholat[selectedNiat].latin"></div>
+        <div class="txt-xs text-gray-700 mt-1" x-text="niatSholat[selectedNiat].arti"></div>
+      </div>
+    </div>
+    <div class="card sec-gap">
+      <h3 class="font-title text-lg" style="color:var(--accent-dark)">📿 BACAAN SHOLAT</h3>
+      <div class="space-y-2 max-h-80 overflow-y-auto">
+        <template x-for="(step,idx) in bacaanSholatList" :key="idx">
+          <div class="p-3 rounded-xl space-y-1" style="background:var(--primary-soft);border:2px solid var(--border)">
+            <div class="font-title text-base" style="color:var(--accent-dark)" x-text="step.nama"></div>
+            <div class="font-arab text-right text-lg" x-text="step.arab"></div>
+            <div class="txt-xs italic" style="color:var(--accent)" x-text="step.latin"></div>
+            <div class="txt-xs text-gray-700" x-text="step.arti"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+  <div x-show="kitabSubTab==='quran'" class="sec-gap">
+    <template x-if="!activeSurah">
+      <div class="card sec-gap">
+        <h3 class="font-title text-lg" style="color:var(--accent-dark)">📖 DAFTAR SURAH</h3>
+        <input type="text" x-model="surahSearch" placeholder="Cari surah..." class="input-field">
+        <div class="max-h-96 overflow-y-auto space-y-2">
+          <template x-for="s in filteredSurahs" :key="s.nomor">
+            <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
+              <div @click="loadSurahDetail(s.nomor)" class="cursor-pointer flex justify-between items-center">
+                <div><div class="font-bold text-sm" x-text="s.nomor+'. '+s.namaLatin"></div><div class="txt-xs text-gray-600" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></div></div>
+                <span class="font-arab text-base font-bold" style="color:var(--accent)" x-text="s.nama"></span>
+              </div>
+              <audio x-show="s.audioFull" controls preload="none" class="w-full h-8 mt-2" :src="s.audioFull&&s.audioFull['05']"></audio>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+    <template x-if="activeSurah">
+      <div class="card sec-gap">
+        <button @click="activeSurah=null" class="btn-soft self-start text-xs">← Kembali</button>
+        <div class="text-center pb-3" style="border-bottom:2px solid var(--border)">
+          <h3 class="font-title text-xl" style="color:var(--accent-dark)" x-text="activeSurah.namaLatin"></h3>
+          <p class="txt-xs text-gray-600 font-bold" x-text="activeSurah.arti+' • '+activeSurah.jumlahAyat+' Ayat'"></p>
+          <audio controls class="w-full h-9 mt-3" :src="activeSurah.audioFull&&activeSurah.audioFull['05']"></audio>
+        </div>
+        <div class="max-h-96 overflow-y-auto space-y-3 pt-2">
+          <template x-for="ay in activeSurah.ayat" :key="ay.nomorAyat">
+            <div class="p-4 rounded-xl space-y-2" style="background:var(--primary-soft);border:2px solid var(--border)">
+              <div class="flex justify-between items-center txt-xs font-bold pb-2" style="border-bottom:2px dashed var(--border)"><span>Ayat <span x-text="ay.nomorAyat"></span></span><audio controls preload="none" class="h-7 w-32" :src="(ay.audio&&(ay.audio['05']||ay.audio['01']))||''"></audio></div>
+              <div class="font-arab text-right text-xl leading-loose" x-text="ay.teksArab"></div>
+              <div class="txt-xs italic" style="color:var(--accent)" x-text="ay.teksLatin"></div>
+              <div class="txt-xs text-gray-700" x-text="ay.teksIndonesia"></div>
+            </div>
+          </template>
+        </div>
       </div>
     </template>
   </div>
+  <div x-show="kitabSubTab==='asmaul'" class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">✨ 99 ASMAUL HUSNA</h3>
+    <div class="max-h-96 overflow-y-auto space-y-2">
+      <template x-for="item in asmaulHusnaList" :key="item.no">
+        <div class="p-3 rounded-xl flex items-center justify-between" style="background:var(--primary-soft);border:2px solid var(--border)">
+          <div class="flex items-center space-x-3 flex-1 min-w-0">
+            <span class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0" style="background:var(--accent);color:#fff;border:2px solid var(--border)" x-text="item.no"></span>
+            <div class="min-w-0"><div class="font-arab text-lg font-bold" x-text="item.arab"></div><div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="item.latin+' • '+item.arti"></div></div>
+          </div>
+          <button @click="toggleHafalAsmaul(item.no)" class="w-9 h-9 rounded-lg text-sm font-bold shrink-0" :style="item.hafal?'background:#22c55e;color:#fff;border:2px solid var(--border)':'background:var(--card-bg);border:2px solid var(--border)'" x-text="item.hafal?'✓':'○'"></button>
+        </div>
+      </template>
+    </div>
+  </div>
+  <div x-show="kitabSubTab==='kisah'" class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">🕋 KISAH NABI & SAHABAT</h3>
+    <div class="max-h-96 overflow-y-auto space-y-2">
+      <template x-for="(k,idx) in kisahList" :key="idx">
+        <div class="p-3 rounded-xl cursor-pointer card-hover" style="background:var(--primary-soft);border:2px solid var(--border)" @click="openKisahDetail(idx)">
+          <div class="font-title text-base" style="color:var(--accent-dark)" x-text="k.judul"></div>
+          <div class="txt-xs text-gray-600" x-text="k.kategori"></div>
+        </div>
+      </template>
+    </div>
+  </div>
+  <div x-show="kitabSubTab==='hadits'" class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">📚 KUMPULAN HADITS</h3>
+    <div class="flex flex-wrap gap-1">
+      <template x-for="k in haditsKategori" :key="k"><button @click="filterHadits=k" :class="filterHadits===k?'active':''" class="tab-pill" x-text="k"></button></template>
+    </div>
+    <div class="max-h-96 overflow-y-auto space-y-2">
+      <template x-for="(h,idx) in filteredHadits" :key="idx">
+        <div class="p-4 rounded-xl space-y-2" style="background:var(--primary-soft);border:2px solid var(--border)">
+          <div class="txt-xs font-bold" style="color:var(--accent)" x-text="'#'+h.kategori"></div>
+          <div class="font-arab text-right text-base" x-text="h.arab"></div>
+          <div class="txt-xs italic" style="color:var(--accent-dark)" x-text="h.latin"></div>
+          <div class="txt-xs text-gray-700" x-text="h.arti"></div>
+          <div class="text-[11px] text-gray-500 font-bold" x-text="'('+h.perawi+')'"></div>
+        </div>
+      </template>
+    </div>
+  </div>
+  <div x-show="kitabSubTab==='doa'" class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">🤲 DOA HARIAN</h3>
+    <div class="max-h-96 overflow-y-auto space-y-2">
+      <template x-for="(d,idx) in doaHarian" :key="idx">
+        <div class="p-4 rounded-xl space-y-2" style="background:var(--primary-soft);border:2px solid var(--border)">
+          <div class="font-title text-base" style="color:var(--accent-dark)" x-text="d.nama"></div>
+          <div class="font-arab text-right text-base" x-text="d.arab"></div>
+          <div class="txt-xs italic" style="color:var(--accent)" x-text="d.latin"></div>
+          <div class="txt-xs text-gray-700" x-text="d.arti"></div>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
 
-  <div x-show="activeTab==='kitab'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)">
-      <div class="text-4xl mb-1">📖</div>
-      <h2 class="font-title text-2xl text-white">IBADAH & DOA</h2>
-    </div>
-    <div class="grid grid-cols-3 gap-2">
-      <button @click="kitabSubTab='sholat'" :class="kitabSubTab==='sholat'?'active':''" class="tab-pill">🕌 Sholat</button>
-      <button @click="kitabSubTab='quran';if(surahList.length===0)fetchSurahs()" :class="kitabSubTab==='quran'?'active':''" class="tab-pill">📖 Quran</button>
-      <button @click="kitabSubTab='asmaul'" :class="kitabSubTab==='asmaul'?'active':''" class="tab-pill">✨ Asmaul</button>
-      <button @click="kitabSubTab='kisah'" :class="kitabSubTab==='kisah'?'active':''" class="tab-pill">🕋 Kisah</button>
-      <button @click="kitabSubTab='hadits'" :class="kitabSubTab==='hadits'?'active':''" class="tab-pill">📚 Hadits</button>
-      <button @click="kitabSubTab='doa'" :class="kitabSubTab==='doa'?'active':''" class="tab-pill">🤲 Doa</button>
-    </div>
-    <div x-show="kitabSubTab==='sholat'" class="sec-gap">
-      <div class="card sec-gap">
-        <div class="flex justify-between items-center">
-          <h3 class="font-title text-lg" style="color:var(--accent-dark)">🕌 WAKTU SHOLAT</h3>
-          <button @click="openPrayerCityPicker()" class="btn-soft text-xs">🔄 Ganti</button>
-        </div>
-        <p class="txt-xs font-bold text-gray-600" x-text="'📍 '+prayerCity+', '+prayerProvince"></p>
-        <div x-show="prayerLoading" class="text-center py-2 txt-xs"><span class="spin"></span></div>
-        <div class="grid grid-cols-5 gap-1 text-center">
-          <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Subuh</div><div class="font-title text-sm" x-text="prayerTimes.subuh"></div></div>
-          <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Dzuhur</div><div class="font-title text-sm" x-text="prayerTimes.dzuhur"></div></div>
-          <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Ashar</div><div class="font-title text-sm" x-text="prayerTimes.ashar"></div></div>
-          <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Maghrib</div><div class="font-title text-sm" x-text="prayerTimes.maghrib"></div></div>
-          <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Isya</div><div class="font-title text-sm" x-text="prayerTimes.isya"></div></div>
-        </div>
-      </div>
-      <div class="card sec-gap">
-        <h3 class="font-title text-lg" style="color:var(--accent-dark)">📿 NIAT SHOLAT</h3>
-        <div class="grid grid-cols-5 gap-1">
-          <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s">
-            <button @click="selectedNiat=s" :class="selectedNiat===s?'active':''" class="tab-pill" x-text="s"></button>
-          </template>
-        </div>
-        <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
-          <div class="font-arab text-right text-xl leading-loose" x-text="niatSholat[selectedNiat].arab"></div>
-          <div class="txt-xs italic mt-2" style="color:var(--accent-dark)" x-text="niatSholat[selectedNiat].latin"></div>
-          <div class="txt-xs text-gray-700 mt-1" x-text="niatSholat[selectedNiat].arti"></div>
-        </div>
-      </div>
-      <div class="card sec-gap">
-        <h3 class="font-title text-lg" style="color:var(--accent-dark)">📿 BACAAN SHOLAT</h3>
-        <div class="space-y-2 max-h-80 overflow-y-auto">
-          <template x-for="(step,idx) in bacaanSholatList" :key="idx">
-            <div class="p-3 rounded-xl space-y-1" style="background:var(--primary-soft);border:2px solid var(--border)">
-              <div class="font-title text-base" style="color:var(--accent-dark)" x-text="step.nama"></div>
-              <div class="font-arab text-right text-lg" x-text="step.arab"></div>
-              <div class="txt-xs italic" style="color:var(--accent)" x-text="step.latin"></div>
-              <div class="txt-xs text-gray-700" x-text="step.arti"></div>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
-    <div x-show="kitabSubTab==='quran'" class="sec-gap">
-      <template x-if="!activeSurah">
-        <div class="card sec-gap">
-          <h3 class="font-title text-lg" style="color:var(--accent-dark)">📖 DAFTAR SURAH</h3>
-          <input type="text" x-model="surahSearch" placeholder="Cari surah..." class="input-field">
-          <div class="max-h-96 overflow-y-auto space-y-2">
-            <template x-for="s in filteredSurahs" :key="s.nomor">
-              <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
-                <div @click="loadSurahDetail(s.nomor)" class="cursor-pointer flex justify-between items-center">
-                  <div>
-                    <div class="font-bold text-sm" x-text="s.nomor+'. '+s.namaLatin"></div>
-                    <div class="txt-xs text-gray-600" x-text="s.arti+' ('+s.jumlahAyat+' Ayat)'"></div>
-                  </div>
-                  <span class="font-arab text-base font-bold" style="color:var(--accent)" x-text="s.nama"></span>
-                </div>
-                <audio x-show="s.audioFull" controls preload="none" class="w-full h-8 mt-2" :src="s.audioFull&&s.audioFull['05']"></audio>
-              </div>
-            </template>
-          </div>
-        </div>
-      </template>
-      <template x-if="activeSurah">
-        <div class="card sec-gap">
-          <button @click="activeSurah=null" class="btn-soft self-start text-xs">← Kembali</button>
-          <div class="text-center pb-3" style="border-bottom:2px solid var(--border)">
-            <h3 class="font-title text-xl" style="color:var(--accent-dark)" x-text="activeSurah.namaLatin"></h3>
-            <p class="txt-xs text-gray-600 font-bold" x-text="activeSurah.arti+' • '+activeSurah.jumlahAyat+' Ayat'"></p>
-            <audio controls class="w-full h-9 mt-3" :src="activeSurah.audioFull&&activeSurah.audioFull['05']"></audio>
-          </div>
-          <div class="max-h-96 overflow-y-auto space-y-3 pt-2">
-            <template x-for="ay in activeSurah.ayat" :key="ay.nomorAyat">
-              <div class="p-4 rounded-xl space-y-2" style="background:var(--primary-soft);border:2px solid var(--border)">
-                <div class="flex justify-between items-center txt-xs font-bold pb-2" style="border-bottom:2px dashed var(--border)">
-                  <span>Ayat <span x-text="ay.nomorAyat"></span></span>
-                  <audio controls preload="none" class="h-7 w-32" :src="(ay.audio&&(ay.audio['05']||ay.audio['01']))||''"></audio>
-                </div>
-                <div class="font-arab text-right text-xl leading-loose" x-text="ay.teksArab"></div>
-                <div class="txt-xs italic" style="color:var(--accent)" x-text="ay.teksLatin"></div>
-                <div class="txt-xs text-gray-700" x-text="ay.teksIndonesia"></div>
-              </div>
-            </template>
-          </div>
+<div x-show="activeTab==='tools'" class="sec-gap">
+  <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">🛠️</div><h2 class="font-title text-2xl text-white">TOOLS</h2></div>
+  <div class="grid grid-cols-5 gap-1">
+    <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="tab-pill">🌍</button>
+    <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="tab-pill">🗣️</button>
+    <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'active':''" class="tab-pill">🖼️</button>
+    <button @click="toolsSubTab='bmi'" :class="toolsSubTab==='bmi'?'active':''" class="tab-pill">⚖️</button>
+    <button @click="toolsSubTab='speed'" :class="toolsSubTab==='speed'?'active':''" class="tab-pill">🌐</button>
+  </div>
+  <div x-show="toolsSubTab==='jam'" class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">🌍 JAM DUNIA</h3>
+    <div class="space-y-2">
+      <template x-for="zone in worldClocks" :key="zone.name">
+        <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
+          <span class="flag-ico" :style="'background:'+zone.flag"></span>
+          <div class="flex-1"><div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="zone.name"></div><div class="font-title text-base" x-text="zone.time"></div></div>
         </div>
       </template>
     </div>
-    <div x-show="kitabSubTab==='asmaul'" class="card sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--accent-dark)">✨ 99 ASMAUL HUSNA</h3>
-      <div class="max-h-96 overflow-y-auto space-y-2">
-        <template x-for="item in asmaulHusnaList" :key="item.no">
-          <div class="p-3 rounded-xl flex items-center justify-between" style="background:var(--primary-soft);border:2px solid var(--border)">
-            <div class="flex items-center space-x-3 flex-1 min-w-0">
-              <span class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0" style="background:var(--accent);color:#fff;border:2px solid var(--border)" x-text="item.no"></span>
-              <div class="min-w-0">
-                <div class="font-arab text-lg font-bold" x-text="item.arab"></div>
-                <div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="item.latin+' • '+item.arti"></div>
-              </div>
-            </div>
-            <button @click="toggleHafalAsmaul(item.no)" class="w-9 h-9 rounded-lg text-sm font-bold shrink-0" :style="item.hafal?'background:#22c55e;color:#fff;border:2px solid var(--border)':'background:var(--card-bg);border:2px solid var(--border)'" x-text="item.hafal?'✓':'○'"></button>
-          </div>
-        </template>
+  </div>
+  <div x-show="toolsSubTab==='tts'" class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">🗣️ TEXT TO SPEECH</h3>
+    <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="input-field"></textarea>
+    <button @click="speakCustomText()" class="btn-primary">🔊 UCAPKAN</button>
+  </div>
+  <div x-show="toolsSubTab==='kompres'" class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">🖼️ KOMPRES FOTO</h3>
+    <input type="file" accept="image/*" @change="compressImageFile($event)" class="input-field">
+    <template x-if="compressedImageUrl">
+      <div class="text-center space-y-2">
+        <img :src="compressedImageUrl" class="max-h-40 mx-auto rounded-xl" style="border:2px solid var(--border)">
+        <a :href="compressedImageUrl" download="compressed.jpg" class="btn-primary block text-center">💾 DOWNLOAD</a>
       </div>
+    </template>
+  </div>
+  <div x-show="toolsSubTab==='bmi'" class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">⚖️ BMI & KALORI</h3>
+    <input type="number" x-model="bmiWeight" placeholder="Berat (kg)" class="input-field">
+    <input type="number" x-model="bmiHeight" placeholder="Tinggi (cm)" class="input-field">
+    <input type="number" x-model="bmiAge" placeholder="Umur (tahun)" class="input-field">
+    <select x-model="bmiGender" class="input-field"><option value="male">Laki-laki</option><option value="female">Perempuan</option></select>
+    <button @click="calcBMI()" class="btn-primary">🧮 HITUNG BMI</button>
+    <template x-if="bmiResult">
+      <div class="sec-gap">
+        <div class="p-4 rounded-xl text-center" style="background:var(--primary-soft);border:2.5px solid var(--border)"><div class="font-title text-5xl" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div><div class="font-bold text-base" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div></div>
+        <div class="p-4 rounded-xl" style="background:var(--primary-soft);border:2.5px solid var(--border)">
+          <div class="txt-xs font-bold text-center mb-2" style="color:var(--accent-dark)">📊 INDIKATOR BMI</div>
+          <div style="position:relative;padding:10px 0">
+            <div style="height:20px;border-radius:10px;border:2.5px solid var(--border);background:linear-gradient(90deg,#0ea5e9 0%,#0ea5e9 18.5%,#22c55e 18.5%,#22c55e 50%,#eab308 50%,#eab308 70%,#ef4444 70%,#ef4444 100%);overflow:hidden"></div>
+            <div style="position:absolute;top:0;transition:left .5s" :style="'left:'+bmiResult.marker+'%'"><div style="width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:12px solid var(--border);transform:translateX(-8px)"></div></div>
+            <div class="flex justify-between txt-xs font-bold mt-2" style="font-size:9px"><span style="color:#0ea5e9">&lt;18.5 Kurus</span><span style="color:#22c55e">18.5-25 Normal</span><span style="color:#eab308">25-30 Gemuk</span><span style="color:#ef4444">&gt;30 Obesitas</span></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="bmiResult.bbIdeal+' kg'"></div><div class="txt-xs font-bold">BB Ideal</div></div>
+          <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="bmiResult.kalori+' kkal'"></div><div class="txt-xs font-bold">Kalori/hari</div></div>
+        </div>
+      </div>
+    </template>
+  </div>
+  <div x-show="toolsSubTab==='speed'" class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">🌐 CEK KECEPATAN INTERNET</h3>
+    <button @click="runSpeedTest()" class="btn-primary">
+      <span x-show="!speedTesting">▶️ MULAI TES</span>
+      <span x-show="speedTesting"><span class="spin"></span> Mengukur...</span>
+    </button>
+    <div x-show="speedResult" class="grid grid-cols-3 gap-2">
+      <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.download+' Mbps':''"></div><div class="txt-xs font-bold">Download</div></div>
+      <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.latency+' ms':''"></div><div class="txt-xs font-bold">Ping</div></div>
+      <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.quality:''"></div><div class="txt-xs font-bold">Kualitas</div></div>
     </div>
-    <div x-show="kitabSubTab==='kisah'" class="card sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--accent-dark)">🕋 KISAH NABI & SAHABAT</h3>
-      <div class="max-h-96 overflow-y-auto space-y-2">
-        <template x-for="(k,idx) in kisahList" :key="idx">
-          <div class="p-3 rounded-xl cursor-pointer card-hover" style="background:var(--primary-soft);border:2px solid var(--border)" @click="openKisahDetail(idx)">
-            <div class="font-title text-base" style="color:var(--accent-dark)" x-text="k.judul"></div>
-            <div class="txt-xs text-gray-600" x-text="k.kategori"></div>
-          </div>
-        </template>
-      </div>
+  </div>
+</div>
+
+<div x-show="activeTab==='tema'" class="sec-gap">
+  <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">🎨</div><h2 class="font-title text-2xl text-white">TEMA</h2></div>
+  <div class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">WARNA TEMA</h3>
+    <div class="grid grid-cols-3 gap-4">
+      <template x-for="t in themes" :key="t.id">
+        <div @click="setTheme(t.id)" class="cursor-pointer text-center">
+          <div class="theme-dot mx-auto" :class="theme===t.id?'active':''" :style="'background:'+t.color"></div>
+          <div class="txt-xs font-bold mt-2" x-text="t.name"></div>
+        </div>
+      </template>
     </div>
-    <div x-show="kitabSubTab==='hadits'" class="card sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--accent-dark)">📚 KUMPULAN HADITS</h3>
-      <div class="flex flex-wrap gap-1">
-        <template x-for="k in haditsKategori" :key="k">
-          <button @click="filterHadits=k" :class="filterHadits===k?'active':''" class="tab-pill" x-text="k"></button>
-        </template>
+  </div>
+  <div class="card sec-gap">
+    <h3 class="font-title text-lg" style="color:var(--accent-dark)">GAYA VISUAL</h3>
+    <div class="grid grid-cols-2 gap-3">
+      <div @click="setStyle('comic')" class="cursor-pointer text-center p-4 rounded-xl" :style="styleMode==='comic'?'background:var(--primary);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border)':'background:var(--primary-soft);border:3px solid var(--border);box-shadow:2px 2px 0 0 var(--border)'">
+        <div class="text-4xl mb-2">🎨</div>
+        <div class="font-title text-base" style="color:var(--accent-dark)">KOMIK</div>
+        <div class="txt-xs text-gray-600 mt-1">Border tebal, warna cerah</div>
       </div>
-      <div class="max-h-96 overflow-y-auto space-y-2">
-        <template x-for="(h,idx) in filteredHadits" :key="idx">
-          <div class="p-4 rounded-xl space-y-2" style="background:var(--primary-soft);border:2px solid var(--border)">
-            <div class="txt-xs font-bold" style="color:var(--accent)" x-text="'#'+h.kategori"></div>
-            <div class="font-arab text-right text-base" x-text="h.arab"></div>
-            <div class="txt-xs italic" style="color:var(--accent-dark)" x-text="h.latin"></div>
-            <div class="txt-xs text-gray-700" x-text="h.arti"></div>
-            <div class="text-[11px] text-gray-500 font-bold" x-text="'('+h.perawi+')'"></div>
-          </div>
-        </template>
-      </div>
-    </div>
-    <div x-show="kitabSubTab==='doa'" class="card sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--accent-dark)">🤲 DOA HARIAN</h3>
-      <div class="max-h-96 overflow-y-auto space-y-2">
-        <template x-for="(d,idx) in doaHarian" :key="idx">
-          <div class="p-4 rounded-xl space-y-2" style="background:var(--primary-soft);border:2px solid var(--border)">
-            <div class="font-title text-base" style="color:var(--accent-dark)" x-text="d.nama"></div>
-            <div class="font-arab text-right text-base" x-text="d.arab"></div>
-            <div class="txt-xs italic" style="color:var(--accent)" x-text="d.latin"></div>
-            <div class="txt-xs text-gray-700" x-text="d.arti"></div>
-          </div>
-        </template>
+      <div @click="setStyle('glass')" class="cursor-pointer text-center p-4 rounded-xl" :style="styleMode==='glass'?'background:var(--primary);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border)':'background:var(--primary-soft);border:3px solid var(--border);box-shadow:2px 2px 0 0 var(--border)'">
+        <div class="text-4xl mb-2">✨</div>
+        <div class="font-title text-base" style="color:var(--accent-dark)">GLASS</div>
+        <div class="txt-xs text-gray-600 mt-1">Kaca blur, modern elegan</div>
       </div>
     </div>
   </div>
-
-  <div x-show="activeTab==='tools'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)">
-      <div class="text-4xl mb-1">🛠️</div>
-      <h2 class="font-title text-2xl text-white">TOOLS</h2>
-    </div>
-    <div class="grid grid-cols-4 gap-2">
-      <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="tab-pill">🌍 Jam</button>
-      <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="tab-pill">🗣️ TTS</button>
-      <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'active':''" class="tab-pill">🖼️ Kompres</button>
-      <button @click="toolsSubTab='bmi'" :class="toolsSubTab==='bmi'?'active':''" class="tab-pill">⚖️ BMI</button>
-      <button @click="toolsSubTab='speed'" :class="toolsSubTab==='speed'?'active':''" class="tab-pill">🌐 Speed</button>
-    </div>
-    <div x-show="toolsSubTab==='jam'" class="card sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--accent-dark)">🌍 JAM DUNIA</h3>
-      <div class="space-y-2">
-        <template x-for="zone in worldClocks" :key="zone.name">
-          <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
-            <span class="flag-ico" :style="'background:'+zone.flag"></span>
-            <div class="flex-1">
-              <div class="txt-xs font-bold" style="color:var(--accent-dark)" x-text="zone.name"></div>
-              <div class="font-title text-base" x-text="zone.time"></div>
-            </div>
-          </div>
-        </template>
-      </div>
-    </div>
-    <div x-show="toolsSubTab==='tts'" class="card sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--accent-dark)">🗣️ TEXT TO SPEECH</h3>
-      <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="input-field"></textarea>
-      <button @click="speakCustomText()" class="btn-primary">🔊 UCAPKAN</button>
-    </div>
-    <div x-show="toolsSubTab==='kompres'" class="card sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--accent-dark)">🖼️ KOMPRES FOTO</h3>
-      <input type="file" accept="image/*" @change="compressImageFile($event)" class="input-field">
-      <template x-if="compressedImageUrl">
-        <div class="text-center space-y-2">
-          <img :src="compressedImageUrl" class="max-h-40 mx-auto rounded-xl" style="border:2px solid var(--border)">
-          <a :href="compressedImageUrl" download="compressed.jpg" class="btn-primary block text-center">💾 DOWNLOAD</a>
-        </div>
-      </template>
-    </div>
-    <div x-show="toolsSubTab==='bmi'" class="card sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--accent-dark)">⚖️ BMI & KALORI</h3>
-      <input type="number" x-model="bmiWeight" placeholder="Berat (kg)" class="input-field">
-      <input type="number" x-model="bmiHeight" placeholder="Tinggi (cm)" class="input-field">
-      <input type="number" x-model="bmiAge" placeholder="Umur (tahun)" class="input-field">
-      <select x-model="bmiGender" class="input-field">
-        <option value="male">Laki-laki</option>
-        <option value="female">Perempuan</option>
-      </select>
-      <button @click="calcBMI()" class="btn-primary">🧮 HITUNG BMI</button>
-      <template x-if="bmiResult">
-        <div class="sec-gap">
-          <div class="p-4 rounded-xl text-center" style="background:var(--primary-soft);border:2.5px solid var(--border)">
-            <div class="font-title text-5xl" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div>
-            <div class="font-bold text-base" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="bmiResult.bbIdeal+' kg'"></div><div class="txt-xs font-bold">BB Ideal</div></div>
-            <div class="stat-box"><div class="font-title text-xl" style="color:var(--accent-dark)" x-text="bmiResult.kalori+' kkal'"></div><div class="txt-xs font-bold">Kalori/hari</div></div>
-          </div>
-        </div>
-      </template>
-    </div>
-    <div x-show="toolsSubTab==='speed'" class="card sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--accent-dark)">🌐 CEK KECEPATAN INTERNET</h3>
-      <button @click="runSpeedTest()" class="btn-primary">
-        <span x-show="!speedTesting">▶️ MULAI TES</span>
-        <span x-show="speedTesting"><span class="spin"></span> Mengukur...</span>
-      </button>
-      <div x-show="speedResult" class="grid grid-cols-3 gap-2">
-        <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.download+' Mbps':''"></div><div class="txt-xs font-bold">Download</div></div>
-        <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.latency+' ms':''"></div><div class="txt-xs font-bold">Ping</div></div>
-        <div class="stat-box"><div class="font-title text-lg" style="color:var(--accent-dark)" x-text="speedResult?speedResult.quality:''"></div><div class="txt-xs font-bold">Kualitas</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div x-show="activeTab==='tema'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)">
-      <div class="text-4xl mb-1">🎨</div>
-      <h2 class="font-title text-2xl text-white">TEMA</h2>
-    </div>
-    <div class="card sec-gap">
-      <h3 class="font-title text-lg" style="color:var(--accent-dark)">WARNA TEMA</h3>
-      <div class="grid grid-cols-3 gap-4">
-        <template x-for="t in themes" :key="t.id">
-          <div @click="setTheme(t.id)" class="cursor-pointer text-center">
-            <div class="theme-dot mx-auto" :class="theme===t.id?'active':''" :style="'background:'+t.color"></div>
-            <div class="txt-xs font-bold mt-2" x-text="t.name"></div>
-          </div>
-        </template>
-      </div>
-    </div>
-  </div>
-
-  <div x-show="activeTab==='arcade'" class="sec-gap">
-    <div class="card text-center" style="background:var(--accent)">
-      <div class="text-4xl mb-1">🎮</div>
-      <h2 class="font-title text-2xl text-white">ARCADE GAME</h2>
-    </div>
+</div>  <div x-show="activeTab==='arcade'" class="sec-gap">
+    <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">🎮</div><h2 class="font-title text-2xl text-white">ARCADE GAME</h2></div>
     <div class="grid grid-cols-2 gap-2">
       <button @click="gameSubTab='reflex'" :class="gameSubTab==='reflex'?'active':''" class="tab-pill">⚡ Refleks</button>
       <button @click="gameSubTab='tictactoe';initTTT()" :class="gameSubTab==='tictactoe'?'active':''" class="tab-pill">❌ Tic Tac Toe</button>
     </div>
     <div x-show="gameSubTab==='reflex'" class="card sec-gap text-center">
-      <div class="w-full h-40 rounded-2xl flex items-center justify-center cursor-pointer font-title text-2xl text-white transition-all"
-           :style="reflexState==='red'?'background:#ef4444;border:3px solid var(--border)':(reflexState==='yellow'?'background:#eab308;border:3px solid var(--border)':'background:#22c55e;border:3px solid var(--border)')"
-           @click="handleReflexTap()"><span x-text="reflexMessage"></span></div>
+      <div class="w-full h-40 rounded-2xl flex items-center justify-center cursor-pointer font-title text-2xl text-white transition-all" :style="reflexState==='red'?'background:#ef4444;border:3px solid var(--border)':(reflexState==='yellow'?'background:#eab308;border:3px solid var(--border)':'background:#22c55e;border:3px solid var(--border)')" @click="handleReflexTap()"><span x-text="reflexMessage"></span></div>
       <button @click="startReflexGame()" class="btn-primary">▶️ MULAI GAME</button>
     </div>
     <div x-show="gameSubTab==='tictactoe'" class="card sec-gap">
-      <div class="flex justify-between items-center">
-        <h3 class="font-title text-lg" style="color:var(--accent-dark)">❌ TIC TAC TOE ⭕</h3>
-        <span class="txt-xs font-bold px-2 py-1 rounded-lg" style="background:var(--primary-soft);border:2px solid var(--border)" x-text="tttStatus"></span>
-      </div>
+      <div class="flex justify-between items-center"><h3 class="font-title text-lg" style="color:var(--accent-dark)">❌ TIC TAC TOE ⭕</h3><span class="txt-xs font-bold px-2 py-1 rounded-lg" style="background:var(--primary-soft);border:2px solid var(--border)" x-text="tttStatus"></span></div>
       <div class="grid grid-cols-3 gap-2 mx-auto" style="max-width:280px">
         <template x-for="(cell,idx) in tttBoard" :key="idx">
-          <button @click="tttPlay(idx)" class="aspect-square rounded-xl font-title text-3xl flex items-center justify-center"
-                  :style="'background:var(--primary-soft);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border);color:'+(cell==='X'?'#a855f7':(cell==='O'?'#ef4444':'#1a1a1a'))"
-                  x-text="cell"></button>
+          <button @click="tttPlay(idx)" class="aspect-square rounded-xl font-title text-3xl flex items-center justify-center" :style="'background:var(--primary-soft);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border);color:'+(cell==='X'?'#a855f7':(cell==='O'?'#ef4444':'#1a1a1a'))" x-text="cell"></button>
         </template>
       </div>
       <button @click="initTTT()" class="btn-soft w-full">🔄 Reset Game</button>
@@ -867,11 +861,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 
   <template x-if="isOwner">
     <div x-show="activeTab==='owner'" class="sec-gap">
-      <div class="card text-center" style="background:var(--accent)">
-        <div class="text-4xl mb-1">👑</div>
-        <h2 class="font-title text-2xl text-white">OWNER PANEL</h2>
-        <p class="txt-xs text-white opacity-90">Kontrol penuh aplikasi</p>
-      </div>
+      <div class="card text-center" style="background:var(--accent)"><div class="text-4xl mb-1">👑</div><h2 class="font-title text-2xl text-white">OWNER PANEL</h2><p class="txt-xs text-white opacity-90">Kontrol penuh aplikasi</p></div>
       <div class="grid grid-cols-4 gap-1.5">
         <button @click="ownerSubTab='statistik';loadAppStats()" :class="ownerSubTab==='statistik'?'active':''" class="tab-pill">📊</button>
         <button @click="ownerSubTab='users';loadAllUsers()" :class="ownerSubTab==='users'?'active':''" class="tab-pill">👥</button>
@@ -909,15 +899,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
               <div class="p-3 rounded-xl" :style="u.is_banned?'background:#fee2e2;border:2px solid var(--border)':'background:var(--primary-soft);border:2px solid var(--border)'">
                 <div class="flex items-center gap-2 mb-2">
                   <div class="w-9 h-9 rounded-lg flex items-center justify-center font-title text-sm shrink-0" style="background:var(--accent);color:#fff;border:2px solid var(--border)" x-text="u.username?u.username.substring(0,1).toUpperCase():'?'"></div>
-                  <div class="flex-1 min-w-0">
-                    <div class="font-bold text-xs truncate" x-text="u.username"></div>
-                    <div class="txt-xs text-gray-600">
-                      <span x-text="u.status"></span>
-                      <span x-show="u.is_vip" class="text-yellow-600 font-bold"> • VIP</span>
-                      <span x-show="u.is_banned" class="text-red-600 font-bold"> • BANNED</span>
-                      <span x-show="u.chat_bonus>0" class="text-blue-600 font-bold"> • +<span x-text="u.chat_bonus"></span> chat</span>
-                    </div>
-                  </div>
+                  <div class="flex-1 min-w-0"><div class="font-bold text-xs truncate" x-text="u.username"></div><div class="txt-xs text-gray-600"><span x-text="u.status"></span><span x-show="u.is_vip" class="text-yellow-600 font-bold"> • VIP</span><span x-show="u.is_banned" class="text-red-600 font-bold"> • BANNED</span><span x-show="u.chat_bonus>0" class="text-blue-600 font-bold"> • +<span x-text="u.chat_bonus"></span> chat</span></div></div>
                 </div>
                 <div class="grid grid-cols-2 gap-1">
                   <template x-if="!u.is_banned"><button @click="banUser(u)" class="btn-danger text-[10px]">🚫 Ban</button></template>
@@ -942,14 +924,8 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </div>
       </div>
       <div x-show="ownerSubTab==='tools'" class="sec-gap">
-        <div class="card sec-gap">
-          <h3 class="font-title text-lg" style="color:var(--accent-dark)">📥 EXPORT DATA USER</h3>
-          <button @click="exportUsersCSV()" class="btn-primary">📥 EXPORT CSV</button>
-        </div>
-        <div class="card sec-gap">
-          <h3 class="font-title text-lg" style="color:var(--accent-dark)">🗑️ BERSIHKAN DATA LAMA</h3>
-          <button @click="confirmCleanOld()" class="btn-danger w-full">🗑️ BERSIHKAN (&gt;30 hari)</button>
-        </div>
+        <div class="card sec-gap"><h3 class="font-title text-lg" style="color:var(--accent-dark)">📥 EXPORT DATA USER</h3><button @click="exportUsersCSV()" class="btn-primary">📥 EXPORT CSV</button></div>
+        <div class="card sec-gap"><h3 class="font-title text-lg" style="color:var(--accent-dark)">🗑️ BERSIHKAN DATA LAMA</h3><button @click="confirmCleanOld()" class="btn-danger w-full">🗑️ BERSIHKAN (&gt;30 hari)</button></div>
       </div>
     </div>
   </template>
@@ -964,10 +940,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <button @click="openChatAI()" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-robot"/></svg><span class="bottom-nav-label">AI</span></button>
   </nav>
 
-  <div class="floating-chat-btn" @click="openChatAI()" x-show="isAuthenticated&&!chatFullscreen">
-    <span>🤖</span>
-  </div>
-</div><div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
+  <div class="floating-chat-btn" @click="openChatAI()" x-show="isAuthenticated&&!chatFullscreen"><span>🤖</span></div>
+</div>
+
+<div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content text-center space-y-4">
     <div class="w-12 h-1.5 rounded-full mx-auto" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl" style="color:var(--accent-dark)">💰 TRANSAKSI BARU</h3>
@@ -1029,11 +1005,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <template x-for="m in movieList" :key="m.id">
         <div class="p-3 rounded-xl flex gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
           <template x-if="m.poster"><img :src="m.poster" class="w-20 h-28 object-cover rounded-lg shrink-0" style="border:2px solid var(--border)"></template>
-          <div class="flex-1 min-w-0">
-            <div class="font-bold text-sm" x-text="m.title"></div>
-            <div class="txt-xs text-gray-600 mt-1 font-bold" x-text="m.year+' • ⭐ '+m.rating"></div>
-            <div class="txt-xs text-gray-500 mt-1 line-clamp-3" x-text="m.overview"></div>
-          </div>
+          <div class="flex-1 min-w-0"><div class="font-bold text-sm" x-text="m.title"></div><div class="txt-xs text-gray-600 mt-1 font-bold" x-text="m.year+' • ⭐ '+m.rating"></div><div class="txt-xs text-gray-500 mt-1 line-clamp-3" x-text="m.overview"></div></div>
         </div>
       </template>
     </div>
@@ -1050,10 +1022,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <template x-for="(n,idx) in newsList" :key="idx">
         <div @click="selectedNews=n" class="p-3 rounded-xl cursor-pointer flex gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
           <template x-if="n.thumbnail"><img :src="n.thumbnail" class="w-20 h-20 object-cover rounded-lg shrink-0" style="border:2px solid var(--border)" @error="$event.target.style.display='none'"></template>
-          <div class="flex-1 min-w-0">
-            <div class="font-bold text-xs line-clamp-2" x-text="n.title"></div>
-            <div class="txt-xs text-gray-500 mt-1" x-text="n.pubDate"></div>
-          </div>
+          <div class="flex-1 min-w-0"><div class="font-bold text-xs line-clamp-2" x-text="n.title"></div><div class="txt-xs text-gray-500 mt-1" x-text="n.pubDate"></div></div>
         </div>
       </template>
     </div>
@@ -1075,12 +1044,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">🌤️ PILIH PROVINSI</h3>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="p in provinces" :key="p">
-        <div @click="selectWeatherProvince(p)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="p"></span>
-          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
-        </div>
-      </template>
+      <template x-for="p in provinces" :key="p"><div @click="selectWeatherProvince(p)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="p"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
     </div>
     <button @click="weatherProvinceSheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -1092,12 +1056,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <h3 class="font-title text-xl text-center" style="color:var(--accent-dark)">PILIH KOTA</h3>
     <p class="txt-xs text-center text-gray-600 font-bold" x-text="'Provinsi: '+weatherProvince"></p>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="c in cities" :key="c">
-        <div @click="selectWeatherCity(c)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="c"></span>
-          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
-        </div>
-      </template>
+      <template x-for="c in cities" :key="c"><div @click="selectWeatherCity(c)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="c"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
     </div>
     <button @click="weatherCitySheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -1106,10 +1065,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 <div x-show="weatherSheetOpen" class="bottom-sheet-overlay" style="z-index:100008;">
   <div class="bottom-sheet-content">
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
-    <div class="flex justify-between items-center">
-      <h3 class="font-title text-xl" style="color:var(--accent-dark)">🌤️ CUACA</h3>
-      <button @click="openWeatherProvincePicker()" class="btn-soft text-xs">🔄 Ganti</button>
-    </div>
+    <div class="flex justify-between items-center"><h3 class="font-title text-xl" style="color:var(--accent-dark)">🌤️ CUACA</h3><button @click="openWeatherProvincePicker()" class="btn-soft text-xs">🔄 Ganti</button></div>
     <div x-show="weatherLoading" class="text-center py-4"><span class="spin"></span></div>
     <template x-if="weatherData && !weatherLoading">
       <div class="mt-3 space-y-3">
@@ -1128,14 +1084,8 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <template x-for="(d,idx) in weatherData.forecast" :key="idx">
             <div class="p-3 rounded-xl flex items-center gap-3" style="background:var(--primary-soft);border:2px solid var(--border)">
               <span class="text-3xl" x-text="d.emoji"></span>
-              <div class="flex-1">
-                <div class="font-bold text-xs" x-text="d.date"></div>
-                <div class="txt-xs text-gray-600" x-text="d.desc"></div>
-              </div>
-              <div class="text-right">
-                <div class="font-bold text-red-500 text-sm" x-text="d.max+'°'"></div>
-                <div class="font-bold text-blue-500 text-sm" x-text="d.min+'°'"></div>
-              </div>
+              <div class="flex-1"><div class="font-bold text-xs" x-text="d.date"></div><div class="txt-xs text-gray-600" x-text="d.desc"></div></div>
+              <div class="text-right"><div class="font-bold text-red-500 text-sm" x-text="d.max+'°'"></div><div class="font-bold text-blue-500 text-sm" x-text="d.min+'°'"></div></div>
             </div>
           </template>
         </div>
@@ -1150,12 +1100,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">🕌 PILIH PROVINSI</h3>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="p in provinces" :key="p">
-        <div @click="selectPrayerProvince(p)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="p"></span>
-          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
-        </div>
-      </template>
+      <template x-for="p in provinces" :key="p"><div @click="selectPrayerProvince(p)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="p"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
     </div>
     <button @click="prayerProvinceSheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -1167,12 +1112,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <h3 class="font-title text-xl text-center" style="color:var(--accent-dark)">PILIH KOTA</h3>
     <p class="txt-xs text-center text-gray-600 font-bold" x-text="'Provinsi: '+prayerProvince"></p>
     <div class="mt-3 max-h-[65vh] overflow-y-auto">
-      <template x-for="c in prayerCities" :key="c">
-        <div @click="selectPrayerCity(c)" class="sheet-picker-item">
-          <span class="font-bold text-sm" x-text="c"></span>
-          <span class="text-xl font-bold" style="color:var(--accent)">›</span>
-        </div>
-      </template>
+      <template x-for="c in prayerCities" :key="c"><div @click="selectPrayerCity(c)" class="sheet-picker-item"><span class="font-bold text-sm" x-text="c"></span><span class="text-xl font-bold" style="color:var(--accent)">›</span></div></template>
     </div>
     <button @click="prayerCitySheet=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -1184,16 +1124,13 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <template x-if="selectedKisah">
       <div class="space-y-3">
         <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)" x-text="selectedKisah.judul"></h3>
-        <div class="p-4 rounded-xl max-h-[55vh] overflow-y-auto" style="background:var(--primary-soft);border:2px solid var(--border)">
-          <p class="txt-sm leading-relaxed whitespace-pre-line text-gray-700" x-text="selectedKisah.isi"></p>
-        </div>
+        <div class="p-4 rounded-xl max-h-[55vh] overflow-y-auto" style="background:var(--primary-soft);border:2px solid var(--border)"><p class="txt-sm leading-relaxed whitespace-pre-line text-gray-700" x-text="selectedKisah.isi"></p></div>
         <button @click="kisahSheetOpen=false" class="btn-soft w-full">Tutup</button>
       </div>
     </template>
   </div>
 </div>
 
-<!-- DRAWER BARU -->
 <div x-show="drawerOpen" x-cloak>
   <div class="drawer-overlay" @click="drawerOpen=false"></div>
   <div class="drawer">
@@ -1222,30 +1159,19 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   </div>
 </div>
 
-<!-- NOTIF PANEL -->
 <div x-show="notifPanelOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content">
     <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">🔔 NOTIFIKASI</h3>
     <div class="mt-3 space-y-2 max-h-[60vh] overflow-y-auto">
-      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
-        <div class="font-bold text-sm">🎉 Selamat Datang!</div>
-        <div class="txt-xs text-gray-600 mt-1">Terima kasih sudah pakai Zenkai Tools. Semoga bermanfaat!</div>
-      </div>
-      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
-        <div class="font-bold text-sm">💡 Tips</div>
-        <div class="txt-xs text-gray-600 mt-1">Kumpulkan poin dengan login harian & catat transaksi. Naik level untuk pengalaman lebih seru!</div>
-      </div>
-      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
-        <div class="font-bold text-sm">🤖 Zenkai AI</div>
-        <div class="txt-xs text-gray-600 mt-1">Tanya apa saja ke Zenkai AI — mode Islami, Keuangan, Kesehatan, atau Umum.</div>
-      </div>
+      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="font-bold text-sm">🎉 Selamat Datang!</div><div class="txt-xs text-gray-600 mt-1">Terima kasih sudah pakai Zenkai Tools. Semoga bermanfaat!</div></div>
+      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="font-bold text-sm">💡 Tips</div><div class="txt-xs text-gray-600 mt-1">Kumpulkan poin dengan login harian & catat transaksi. Naik level untuk pengalaman lebih seru!</div></div>
+      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="font-bold text-sm">🤖 Zenkai AI</div><div class="txt-xs text-gray-600 mt-1">Tanya apa saja ke Zenkai AI — mode Islami, Keuangan, Kesehatan, atau Umum.</div></div>
     </div>
     <button @click="notifPanelOpen=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
 </div>
 
-<!-- CHAT FULLSCREEN -->
 <div x-show="chatFullscreen" class="ai-fullscreen" style="z-index:99998">
   <header class="p-3 flex items-center justify-between" style="background:var(--accent);border-bottom:3px solid var(--border)">
     <button @click="chatFullscreen=false" class="text-white text-2xl font-bold px-2">←</button>
@@ -1328,7 +1254,7 @@ sheetOpen:false,sheetTitle:'',sheetMessage:'',
 confirmModal:{open:false,title:'',message:'',icon:'⚠️',onConfirm:()=>{}},
 promptModal:{open:false,title:'',message:'',value:'',onConfirm:()=>{}},
 activeTab:'home',finSubTab:'transaksi',gameSubTab:'reflex',ownerSubTab:'statistik',currentTime:'',
-theme:'default',
+theme:'default',styleMode:'comic',
 kategoriAktif:'semua',
 tipsHarian:'Rajin catat transaksi bikin keuangan lebih terkontrol! 💰',
 kategoriList:[
@@ -1360,7 +1286,7 @@ fiturList:[
   {id:'ai',nama:'AI Chat',desc:'Tanya apa saja',icon:'🤖',kategori:'hiburan',tab:'ai'},
   {id:'refleks',nama:'Game Refleks',desc:'Uji kecepatan tangan',icon:'⚡',kategori:'hiburan',tab:'arcade',sub:'reflex'},
   {id:'tictactoe',nama:'Tic Tac Toe',desc:'Main lawan komputer',icon:'❌',kategori:'hiburan',tab:'arcade',sub:'tictactoe'},
-  {id:'tema',nama:'Ganti Tema',desc:'6 tema warna',icon:'🎨',kategori:'tools',tab:'tema'}
+  {id:'tema',nama:'Ganti Tema',desc:'6 warna + 2 gaya',icon:'🎨',kategori:'tools',tab:'tema'}
 ],
 deviceInfo:{os:'Unknown',browser:'Unknown',online:true,battery:'—'},
 themes:[{id:'default',name:'Kuning',color:'#fbbf24'},{id:'purple',name:'Ungu',color:'#a855f7'},{id:'pink',name:'Pink',color:'#ec4899'},{id:'emerald',name:'Hijau',color:'#10b981'},{id:'ocean',name:'Biru',color:'#0ea5e9'},{id:'sunset',name:'Oranye',color:'#f97316'},{id:'midnight',name:'Nila',color:'#6366f1'}],
@@ -1443,6 +1369,8 @@ detectDevice(){
 async init(){
 const savedTheme=localStorage.getItem('zenkai_theme');
 if(savedTheme)this.theme=savedTheme;
+const savedStyle=localStorage.getItem('zenkai_style');
+if(savedStyle)this.styleMode=savedStyle;
 this.splashProgress=100;
 setTimeout(()=>{this.splashHidden=true;},1000);
 this.updateClock();
@@ -1459,6 +1387,7 @@ this.initPrayerProvinces();
 },
 
 setTheme(id){this.theme=id;localStorage.setItem('zenkai_theme',id);},
+setStyle(id){this.styleMode=id;localStorage.setItem('zenkai_style',id);},
 updateAiDesc(){const d={islami:'Tanya soal fiqih, doa, hadits, Al-Quran',keuangan:'Tips nabung, investasi, atur budget',kesehatan:'Saran sehat, olahraga, pola makan',umum:'Tanya apa saja bebas'};this.aiModeDesc=d[this.aiMode]||'';},
 
 updateClock(){const now=new Date();this.currentTime=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});this.worldClocks.forEach(z=>{try{z.time=now.toLocaleTimeString('id-ID',{timeZone:z.tz,hour:'2-digit',minute:'2-digit',second:'2-digit'});}catch(e){z.time='--:--';}});},
@@ -1899,59 +1828,175 @@ function playIntroAnimation(userName, onDone){
   const canvas = document.getElementById('introCanvas');
   const subtitle = document.getElementById('introSubtitle');
   const barFill = document.getElementById('introBarFill');
+  const tearSvg = document.querySelector('.intro-tear');
+  const tearTop = document.getElementById('tearPathTop');
+  const tearBottom = document.getElementById('tearPathBottom');
   if(!intro || !canvas) { onDone && onDone(); return; }
-  subtitle.textContent = userName ? ('WELCOME BACK, ' + userName.toUpperCase()) : 'WELCOME BACK';
+
+  subtitle.textContent = userName ? ('WELCOME, ' + userName.toUpperCase()) : 'WELCOME';
   intro.style.display = 'flex';
   intro.classList.remove('hide');
+
+  function makeTearPath(isTop){
+    let d = isTop ? 'M200,0 ' : 'M200,800 ';
+    let y = isTop ? 0 : 800;
+    const endY = 400;
+    const dir = isTop ? 1 : -1;
+    let x = 200;
+    d += `L${x},${y} `;
+    for(let i = 0; i < 20; i++){
+      y += dir * (endY/20);
+      x += (Math.random() - 0.5) * 40;
+      x = Math.max(30, Math.min(370, x));
+      d += `L${x.toFixed(1)},${y.toFixed(1)} `;
+    }
+    d += `L200,${endY} L200,${isTop?0:800} Z`;
+    return d;
+  }
+
+  if(tearTop && tearBottom){
+    tearTop.setAttribute('d', makeTearPath(true));
+    tearBottom.setAttribute('d', makeTearPath(false));
+    tearSvg.classList.remove('open');
+    setTimeout(()=>{ tearSvg.classList.add('open'); }, 1500);
+  }
+
   const ctx = canvas.getContext('2d');
   let W = canvas.width = window.innerWidth;
   let H = canvas.height = window.innerHeight;
-  window.addEventListener('resize', ()=>{ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; });
-  const colors = ['#a855f7','#fbbf24','#ec4899','#10b981','#0ea5e9'];
+  const colors = ['#a855f7','#fbbf24','#ec4899','#10b981','#ffffff'];
   const particles = [];
-  for(let i=0;i<60;i++){
-    particles.push({x: W/2 + (Math.random()-0.5)*200, y: H/2 + (Math.random()-0.5)*200, vx: (Math.random()-0.5)*8, vy: (Math.random()-0.5)*8, r: Math.random()*3+1, color: colors[Math.floor(Math.random()*colors.length)], life: 1});
+
+  function spawnParticle(){
+    particles.push({
+      x: W/2 + (Math.random()-0.5) * 60,
+      y: H/2,
+      vx: (Math.random()-0.5) * 12,
+      vy: (Math.random()-0.5) * 12 - 2,
+      r: Math.random()*3+1,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      life: 1,
+      decay: 0.008 + Math.random()*0.01
+    });
   }
+
   let rafId;
+  let spawnInterval;
   function animate(){
-    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.fillStyle = 'rgba(0,0,0,0.12)';
     ctx.fillRect(0,0,W,H);
     particles.forEach(p=>{
-      p.x += p.vx; p.y += p.vy; p.vx *= 0.99; p.vy *= 0.99; p.life -= 0.008;
-      if(p.life <= 0){ p.x = W/2 + (Math.random()-0.5)*100; p.y = H/2 + (Math.random()-0.5)*100; p.vx = (Math.random()-0.5)*8; p.vy = (Math.random()-0.5)*8; p.life = 1; }
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fillStyle = p.color; ctx.globalAlpha = p.life * 0.8; ctx.shadowBlur = 15; ctx.shadowColor = p.color; ctx.fill();
+      p.x += p.vx; p.y += p.vy; p.vx *= 0.99; p.vy *= 0.99; p.life -= p.decay;
+      if(p.life > 0){
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = p.color;
+        ctx.fill();
+      }
     });
-    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+    for(let i = particles.length - 1; i >= 0; i--){
+      if(particles[i].life <= 0) particles.splice(i, 1);
+    }
     rafId = requestAnimationFrame(animate);
   }
   animate();
+
+  setTimeout(()=>{
+    spawnInterval = setInterval(spawnParticle, 30);
+  }, 1500);
+
   try{
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     if(AudioCtx){
       const audio = new AudioCtx();
-      const o1 = audio.createOscillator(); const g1 = audio.createGain();
-      o1.type = 'sine'; o1.frequency.setValueAtTime(120, audio.currentTime);
-      o1.frequency.exponentialRampToValueAtTime(300, audio.currentTime+1.2);
-      g1.gain.setValueAtTime(0.15, audio.currentTime);
-      g1.gain.exponentialRampToValueAtTime(0.001, audio.currentTime+1.5);
-      o1.connect(g1); g1.connect(audio.destination); o1.start(); o1.stop(audio.currentTime+1.5);
       setTimeout(()=>{
-        const o2 = audio.createOscillator(); const g2 = audio.createGain();
-        o2.type = 'triangle'; o2.frequency.setValueAtTime(800, audio.currentTime);
-        o2.frequency.exponentialRampToValueAtTime(1400, audio.currentTime+0.3);
-        g2.gain.setValueAtTime(0.12, audio.currentTime);
-        g2.gain.exponentialRampToValueAtTime(0.001, audio.currentTime+0.6);
-        o2.connect(g2); g2.connect(audio.destination); o2.start(); o2.stop(audio.currentTime+0.6);
-      }, 1200);
+        const o = audio.createOscillator();
+        const g = audio.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(80, audio.currentTime);
+        o.frequency.exponentialRampToValueAtTime(40, audio.currentTime + 0.8);
+        g.gain.setValueAtTime(0.3, audio.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 1);
+        o.connect(g); g.connect(audio.destination);
+        o.start(); o.stop(audio.currentTime + 1);
+      }, 800);
+      setTimeout(()=>{
+        const o = audio.createOscillator();
+        const g = audio.createGain();
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(200, audio.currentTime);
+        o.frequency.exponentialRampToValueAtTime(800, audio.currentTime + 0.5);
+        o.frequency.exponentialRampToValueAtTime(200, audio.currentTime + 1);
+        g.gain.setValueAtTime(0.08, audio.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 1);
+        o.connect(g); g.connect(audio.destination);
+        o.start(); o.stop(audio.currentTime + 1);
+      }, 1000);
+      setTimeout(()=>{
+        const bufferSize = audio.sampleRate * 0.8;
+        const buffer = audio.createBuffer(1, bufferSize, audio.sampleRate);
+        const data = buffer.getChannelData(0);
+        for(let i = 0; i < bufferSize; i++){
+          data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i/bufferSize, 2);
+        }
+        const src = audio.createBufferSource();
+        src.buffer = buffer;
+        const filter = audio.createBiquadFilter();
+        filter.type = 'highpass';
+        filter.frequency.value = 1000;
+        const g = audio.createGain();
+        g.gain.setValueAtTime(0.15, audio.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.8);
+        src.connect(filter); filter.connect(g); g.connect(audio.destination);
+        src.start();
+      }, 1500);
+      setTimeout(()=>{
+        const o = audio.createOscillator();
+        const g = audio.createGain();
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(1000, audio.currentTime);
+        o.frequency.exponentialRampToValueAtTime(1800, audio.currentTime + 0.2);
+        g.gain.setValueAtTime(0.15, audio.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.8);
+        o.connect(g); g.connect(audio.destination);
+        o.start(); o.stop(audio.currentTime + 0.8);
+      }, 2400);
+      setTimeout(()=>{
+        const o = audio.createOscillator();
+        const g = audio.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(523, audio.currentTime);
+        o.frequency.setValueAtTime(659, audio.currentTime + 0.15);
+        o.frequency.setValueAtTime(784, audio.currentTime + 0.3);
+        g.gain.setValueAtTime(0.12, audio.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 1);
+        o.connect(g); g.connect(audio.destination);
+        o.start(); o.stop(audio.currentTime + 1);
+      }, 3200);
     }
   }catch(e){ console.warn('Audio error:', e); }
+
   let progress = 0;
-  const barInt = setInterval(()=>{ progress += 2.5; barFill.style.width = progress + '%'; if(progress >= 100) clearInterval(barInt); }, 100);
+  const barInt = setInterval(()=>{
+    progress += 2;
+    barFill.style.width = progress + '%';
+    if(progress >= 100) clearInterval(barInt);
+  }, 100);
+
   setTimeout(()=>{
     cancelAnimationFrame(rafId);
+    clearInterval(spawnInterval);
     intro.classList.add('hide');
-    setTimeout(()=>{ intro.style.display = 'none'; onDone && onDone(); }, 700);
-  }, 4000);
+    setTimeout(()=>{
+      intro.style.display = 'none';
+      onDone && onDone();
+    }, 800);
+  }, 4500);
 }
 </script>
 </body>
