@@ -1695,8 +1695,7 @@ const token = sessionData?.session?.access_token || '';
 const r = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/cobalt-proxy', {
   method: 'POST',
   headers: { 
-    'Content-Type': 'application/json', 
-    'Accept': 'application/json',
+    'Content-Type': 'application/json',
     'Authorization': 'Bearer ' + token,
     'apikey': SUPABASE_ANON_KEY
   },
