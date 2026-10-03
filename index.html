@@ -2317,9 +2317,11 @@ loadMaintenance:async function(){
 
 toggleMaintenance:function(fiturId){
   if(!this.maintenanceForm[fiturId]) return;
-  this.maintenanceForm[fiturId].is_active = !this.maintenanceForm[fiturId].is_active;
-  // Force reactivity
-  this.maintenanceForm = Object.assign({}, this.maintenanceForm);
+  var newVal = !this.maintenanceForm[fiturId].is_active;
+  // Bikin object baru biar Alpine.js detect perubahan
+  var newForm = JSON.parse(JSON.stringify(this.maintenanceForm));
+  newForm[fiturId].is_active = newVal;
+  this.maintenanceForm = newForm;
 },
 
 saveMaintenance:async function(){
