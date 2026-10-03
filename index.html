@@ -798,7 +798,9 @@ select.zn-input{cursor:pointer}
         <div class="zn-card" style="border-color:var(--accent)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--accent)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">Tips & Trik</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Login harian dapat 10 poin gratis. Kumpulkan poin & naik level!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// 1 JAM LALU</div></div></div></div>
         <div class="zn-card" style="border-color:#00ff88"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(0,255,136,.15);border:1px solid #00ff88;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#00ff88"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#00ff88;margin-bottom:4px">Zenkai AI</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Tanya apa saja dengan 4 mode: Keuangan, Kesehatan, Teknologi, Umum.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// KEMARIN</div></div></div></div>
       </div>
-    </div>    <!-- TAB OWNER -->
+    </div>
+
+    <!-- TAB OWNER -->
     <template x-if="isOwner">
       <div x-show="activeTab==='owner'" class="zn-section">
         <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
@@ -1948,18 +1950,27 @@ formatRibuanInput:function(val){
   return parseInt(clean,10).toLocaleString('id-ID');
 },
 
-// ===== FORCE CLEAN LOGOUT (BUAT FIX BAN STUCK) =====
+// ===== CLEAN LOGOUT =====
 forceCleanLogout:async function(){
-  try{ await sb.auth.signOut(); }catch(e){}
   try{
-    var keys = Object.keys(localStorage);
-    keys.forEach(function(k){
-      if(k.indexOf('sb-')===0 || k.indexOf('supabase')>=0){
-        localStorage.removeItem(k);
-      }
-    });
-  }catch(e){}
-  try{ sessionStorage.clear(); }catch(e){}
+    try{
+      var channels = sb.getChannels();
+      channels.forEach(function(ch){
+        try{ sb.removeChannel(ch); }catch(e){}
+      });
+    }catch(e){}
+    await sb.auth.signOut();
+    try{
+      var keys = Object.keys(localStorage);
+      keys.forEach(function(k){
+        if(k.startsWith('sb-') && k.endsWith('-auth-token')){
+          localStorage.removeItem(k);
+        }
+      });
+    }catch(e){}
+  }catch(e){
+    console.error('forceCleanLogout error:', e);
+  }
 },
 
 getCityMap:function(){
@@ -2215,6 +2226,30 @@ init:async function(){
   try{var{data:{session}}=await sb.auth.getSession();if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}}catch(e){console.error(e);}
   this.chatFullscreen=false;this.proChatFullscreen=false;
   self.setupRealtime();
+  
+  // FALLBACK POLLING BAN/VIP (tiap 30 detik)
+  setInterval(async function(){
+    if(!self.currentUser || self.isOwner) return;
+    try{
+      var {data} = await sb.from('profiles')
+        .select('is_banned, ban_until, ban_reason, is_vip')
+        .eq('id', self.currentUser.id)
+        .maybeSingle();
+      if(!data) return;
+      if(self.isVip !== data.is_vip){ self.isVip = data.is_vip || false; }
+      if(data.is_banned){
+        var stillBanned = true;
+        if(data.ban_until && new Date(data.ban_until) < new Date()){ stillBanned = false; }
+        if(stillBanned && !self.bannedInfoSheetOpen){
+          self.bannedInfoData = {reason: data.ban_reason || 'Melanggar aturan', until: data.ban_until};
+          self.bannedInfoSheetOpen = true;
+          self.isAuthenticated = false;
+          setTimeout(function(){ try{ sb.auth.signOut(); }catch(e){} }, 1500);
+        }
+      }
+    }catch(e){}
+  }, 30000);
+  
   setTimeout(function(){
     self.loadingHidden=true;
     self.chatFullscreen=false;
@@ -2262,14 +2297,33 @@ handleEmailAuth:async function(){
       if(data.user){await sb.from('profiles').upsert({id:data.user.id,username:this.authUsername,status:'user',last_login:new Date().toISOString(),is_vip:false,is_banned:false,chat_count:0,chat_bonus:0});}
       this.showAlert('SUKSES','Berhasil daftar!');this.authMode='login';
     }else{
-      await this.forceCleanLogout();
-      setTimeout(async function(){
-        try{
-          var{data,error}=await sb.auth.signInWithPassword({email:self.authEmail,password:self.authPassword});
-          if(error)throw error;
-          await self.checkUserAccessOnLogin(data.user,true);
-        }catch(e){self.showAlert('GAGAL',e.message);}
-      }, 400);
+      // Sign out bersih dulu
+      try{ await sb.auth.signOut(); }catch(e){}
+      try{
+        var keys = Object.keys(localStorage);
+        keys.forEach(function(k){
+          if(k.startsWith('sb-') && k.endsWith('-auth-token')){
+            localStorage.removeItem(k);
+          }
+        });
+      }catch(e){}
+      await new Promise(function(r){ setTimeout(r, 300); });
+      
+      try{
+        var{data,error}=await sb.auth.signInWithPassword({email:self.authEmail,password:self.authPassword});
+        if(error)throw error;
+        if(!data || !data.user){ throw new Error('Login gagal: response kosong'); }
+        
+        // Reset state
+        self.isAuthenticated = false;
+        self.bannedInfoSheetOpen = false;
+        self.bannedInfoData = {reason:'', until:null};
+        
+        await self.checkUserAccessOnLogin(data.user, true);
+      }catch(e){
+        console.error('Login error:', e);
+        self.showAlert('GAGAL LOGIN', e.message);
+      }
     }
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
@@ -2290,29 +2344,102 @@ checkBanStatus:async function(userId){
   }catch(e){ console.error('Ban check err:', e); return false; }
 },
 
-checkUserAccessOnLogin:async function(user,showWelcome){
-  if(!user||!user.email)return;
-  this.chatFullscreen=false;this.proChatFullscreen=false;
-  if(user.email.toLowerCase()===OWNER_EMAIL.toLowerCase()){
-    this.pendingUser=user;this.enteredPin='';this.ownerPinModalOpen=true;
-  }else{
-    var{data:prof}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
-    if(prof&&prof.is_banned){
-      var banCheck = await this.checkBanStatus(user.id);
-      if(banCheck){
-        await this.forceCleanLogout();
-        return;
+checkUserAccessOnLogin: async function(user, showWelcome){
+  if(!user || !user.email) return;
+  
+  this.chatFullscreen = false;
+  this.proChatFullscreen = false;
+  
+  // ===== CEK BAN DULU =====
+  var isOwnerAccount = user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
+  
+  if(!isOwnerAccount){
+    try{
+      var {data: prof, error} = await sb.from('profiles')
+        .select('*').eq('id', user.id).maybeSingle();
+      
+      if(error){ console.error('Profile fetch error:', error); }
+      
+      if(prof && prof.is_banned){
+        var stillBanned = true;
+        if(prof.ban_until){
+          var banEnd = new Date(prof.ban_until);
+          if(banEnd < new Date()){
+            stillBanned = false;
+            await sb.from('profiles').update({
+              is_banned: false, ban_until: null, ban_reason: ''
+            }).eq('id', user.id);
+          }
+        }
+        
+        if(stillBanned){
+          this.bannedInfoData = {
+            reason: prof.ban_reason || 'Tidak ada alasan',
+            until: prof.ban_until
+          };
+          this.bannedInfoSheetOpen = true;
+          this.isAuthenticated = false;
+          
+          setTimeout(function(){
+            try{ sb.auth.signOut(); }catch(e){}
+          }, 200);
+          return;
+        }
       }
-    }
-    this.currentUser=user;this.isOwner=false;this.isAuthenticated=true;this.chatFullscreen=false;this.proChatFullscreen=false;
-    if(prof){this.isVip=prof.is_vip||false;this.chatCount=prof.chat_count||0;this.chatDate=prof.chat_date||'';this.chatBonus=prof.chat_bonus||0;this.proChatCount=prof.pro_chat_count||0;this.proChatDate=prof.pro_chat_date||'';}
-    await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',user.id);
-    await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();
-    var today=new Date().toISOString().slice(0,10);
-    var lastLogin=localStorage.getItem('zenkai_last_bonus');
-    if(lastLogin!==today){localStorage.setItem('zenkai_last_bonus',today);await this.addPoints(10,'Login harian');}
-    this.chatFullscreen=false;this.proChatFullscreen=false;
+    }catch(e){ console.error('Ban check error:', e); }
   }
+  
+  // ===== OWNER: verifikasi PIN =====
+  if(isOwnerAccount){
+    this.pendingUser = user;
+    this.enteredPin = '';
+    this.ownerPinModalOpen = true;
+    return;
+  }
+  
+  // ===== USER BIASA =====
+  this.currentUser = user;
+  this.isOwner = false;
+  this.isAuthenticated = true;
+  
+  var prof2 = null;
+  try{
+    var res = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
+    prof2 = res.data;
+  }catch(e){}
+  
+  if(prof2){
+    this.isVip = prof2.is_vip || false;
+    this.chatCount = prof2.chat_count || 0;
+    this.chatDate = prof2.chat_date || '';
+    this.chatBonus = prof2.chat_bonus || 0;
+    this.proChatCount = prof2.pro_chat_count || 0;
+    this.proChatDate = prof2.pro_chat_date || '';
+  }
+  
+  try{
+    await sb.from('profiles').update({
+      last_login: new Date().toISOString()
+    }).eq('id', user.id);
+  }catch(e){}
+  
+  await this.processUserData();
+  await this.loadTransactions();
+  await this.loadSavings();
+  await this.loadBudgets();
+  
+  var today = new Date().toISOString().slice(0,10);
+  var lastLogin = localStorage.getItem('zenkai_last_bonus_' + user.id);
+  if(lastLogin !== today){
+    localStorage.setItem('zenkai_last_bonus_' + user.id, today);
+    await this.addPoints(10, 'Login harian');
+  }
+  
+  if(showWelcome){
+    this.welcomePopupOpen = true;
+  }
+  
+  this.checkBroadcast();
 },
 
 verifyOwnerPin:async function(){
@@ -2364,7 +2491,14 @@ uploadAvatarFile:async function(event){
   finally{this.uploadingAvatar=false;}
 },
 
-logout:async function(){await this.forceCleanLogout();this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;this.chatFullscreen=false;this.proChatFullscreen=false;setTimeout(function(){window.location.reload();},200);},
+logout:async function(){
+  await this.forceCleanLogout();
+  this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;
+  this.chatFullscreen=false;this.proChatFullscreen=false;
+  this.bannedInfoSheetOpen=false;this.bannedInfoData={reason:'',until:null};
+  setTimeout(function(){window.location.reload();},200);
+},
+
 // TRANSAKSI
 loadTransactions:async function(){if(!this.currentUser)return;var{data}=await sb.from('transactions').select('*').eq('user_id',this.currentUser.id).order('id',{ascending:false});if(data){this.transactions=data;var s=this;setTimeout(function(){s.drawCharts()},300);}},
 addTransaction:async function(type){
@@ -2680,34 +2814,88 @@ loadAllUsers:async function(){try{var{data}=await sb.from('profiles').select('*'
 
 openBanSheet:function(u){this.banSheetTarget=u;this.banSheetForm={durasi:'1d',alasan:''};this.banSheetOpen=true;},
 confirmBan:async function(){
-  if(!this.banSheetTarget)return;
-  if(!this.banSheetForm.alasan||!this.banSheetForm.alasan.trim()){return this.showAlert('PERHATIAN','Alasan wajib diisi!');}
-  var durasi=this.banSheetForm.durasi;
-  var until=null;
-  if(durasi==='30m'){until=new Date(Date.now()+30*60*1000);}
-  else if(durasi==='1h'){until=new Date(Date.now()+60*60*1000);}
-  else if(durasi==='1d'){until=new Date(Date.now()+24*60*60*1000);}
-  else if(durasi==='7d'){until=new Date(Date.now()+7*24*60*60*1000);}
-  else if(durasi==='30d'){until=new Date(Date.now()+30*24*60*60*1000);}
-  else if(durasi==='perm'){until=null;}
+  if(!this.banSheetTarget) return;
+  if(!this.banSheetForm.alasan || !this.banSheetForm.alasan.trim()){
+    return this.showAlert('PERHATIAN', 'Alasan wajib diisi!');
+  }
+  
+  var durasi = this.banSheetForm.durasi;
+  var until = null;
+  var now = Date.now();
+  if(durasi === '30m') until = new Date(now + 30*60*1000);
+  else if(durasi === '1h') until = new Date(now + 60*60*1000);
+  else if(durasi === '1d') until = new Date(now + 24*60*60*1000);
+  else if(durasi === '7d') until = new Date(now + 7*24*60*60*1000);
+  else if(durasi === '30d') until = new Date(now + 30*24*60*60*1000);
+  else if(durasi === 'perm') until = null;
+  
+  var targetId = this.banSheetTarget.id;
+  var targetName = this.banSheetTarget.username;
+  
   try{
-    var payload={is_banned:true,ban_reason:this.banSheetForm.alasan.trim(),ban_until:until?until.toISOString():null};
-    var{error}=await sb.from('profiles').update(payload).eq('id',this.banSheetTarget.id);
-    if(error)throw error;
-    this.banSheetOpen=false;this.banSheetTarget=null;this.banSheetForm={durasi:'1d',alasan:''};
+    var sessionRes = await sb.auth.getSession();
+    var email = sessionRes?.data?.session?.user?.email || 'unknown';
+    
+    var payload = {
+      is_banned: true,
+      ban_reason: this.banSheetForm.alasan.trim(),
+      ban_until: until ? until.toISOString() : null
+    };
+    
+    console.log('Ban attempt:', { targetId, payload, byEmail: email });
+    
+    var {data, error} = await sb.from('profiles')
+      .update(payload)
+      .eq('id', targetId)
+      .select();
+    
+    if(error){
+      console.error('Ban error:', error);
+      throw new Error('Gagal ban: ' + error.message);
+    }
+    
+    if(!data || data.length === 0){
+      throw new Error('Update gak ngefek. Kemungkinan RLS nolak. Cek policy SQL-nya.');
+    }
+    
+    console.log('Ban success:', data);
+    
+    this.banSheetOpen = false;
+    this.banSheetTarget = null;
+    this.banSheetForm = {durasi:'1d', alasan:''};
+    
     await this.loadAllUsers();
-    var durasiText=durasi==='perm'?'PERMANEN':(durasi==='30m'?'30 Menit':durasi==='1h'?'1 Jam':durasi==='1d'?'1 Hari':durasi==='7d'?'7 Hari':'30 Hari');
-    this.showAlert('SUKSES','User berhasil di-ban selama '+durasiText);
-  }catch(e){this.showAlert('GAGAL',e.message);}
+    
+    var durasiText = durasi === 'perm' ? 'PERMANEN' :
+                     durasi === '30m' ? '30 Menit' :
+                     durasi === '1h' ? '1 Jam' :
+                     durasi === '1d' ? '1 Hari' :
+                     durasi === '7d' ? '7 Hari' : '30 Hari';
+    
+    this.showAlert('SUKSES', targetName + ' di-ban ' + durasiText);
+  }catch(e){
+    console.error('confirmBan catch:', e);
+    this.showAlert('GAGAL BAN', e.message);
+  }
 },
 unbanUser:async function(u){
-  var self=this;
-  this.showConfirm('UNBAN USER?',u.username+' akan diaktifkan kembali.',async function(){
-    var{error}=await sb.from('profiles').update({is_banned:false,ban_until:null,ban_reason:''}).eq('id',u.id);
-    if(error){self.showAlert('GAGAL',error.message);return;}
-    await self.loadAllUsers();
-    self.showAlert('SUKSES',u.username+' di-unban.');
-  },'✓');
+  var self = this;
+  this.showConfirm('UNBAN USER?', u.username + ' akan diaktifkan kembali.', async function(){
+    try{
+      var {data, error} = await sb.from('profiles')
+        .update({ is_banned: false, ban_until: null, ban_reason: '' })
+        .eq('id', u.id)
+        .select();
+      
+      if(error) throw error;
+      if(!data || data.length === 0) throw new Error('RLS nolak update unban');
+      
+      await self.loadAllUsers();
+      self.showAlert('SUKSES', u.username + ' di-unban.');
+    }catch(e){
+      self.showAlert('GAGAL UNBAN', e.message);
+    }
+  }, '✓');
 },
 toggleVip:async function(u,v){
   var payload={is_vip:v};
@@ -2892,10 +3080,11 @@ submitReview:async function(){
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
 
-// REALTIME (FIX VIP & BAN)
+// REALTIME
 setupRealtime:function(){
   var self = this;
-  // Realtime: Broadcast baru
+  
+  // Broadcast
   try{
     sb.channel('bc-rt').on('postgres_changes',{event:'INSERT',schema:'public',table:'broadcasts'},function(p){
       var n=p.new;
@@ -2907,7 +3096,7 @@ setupRealtime:function(){
     }).subscribe();
   }catch(e){console.error('RT BC:',e);}
   
-  // Realtime: Maintenance
+  // Maintenance
   try{
     sb.channel('maint-rt').on('postgres_changes',{event:'*',schema:'public',table:'feature_maintenance'},function(p){
       var u=p.new;
@@ -2923,33 +3112,48 @@ setupRealtime:function(){
     }).subscribe();
   }catch(e){console.error('RT MT:',e);}
   
-  // Realtime: Ban & VIP update (FIX)
+  // Ban & VIP update realtime
   try{
-    sb.channel('ban-rt').on('postgres_changes',{event:'UPDATE',schema:'public',table:'profiles'},function(p){
-      var u=p.new;
-      if(!self.currentUser)return;
-      if(u.id===self.currentUser.id){
-        // Real-time VIP update
+    sb.channel('ban-rt')
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'profiles'
+      }, function(p){
+        var u = p.new;
+        if(!self.currentUser) return;
+        if(u.id !== self.currentUser.id) return;
+        
         self.isVip = u.is_vip || false;
-        // Real-time ban check
-        if(u.is_banned && u.is_banned === true){
-          self.checkBanStatus(u.id).then(function(isBanned){
-            if(isBanned){
-              setTimeout(function(){
-                try{ sb.auth.signOut(); }catch(e){}
-                try{
-                  var keys = Object.keys(localStorage);
-                  keys.forEach(function(k){
-                    if(k.indexOf('sb-')===0 || k.indexOf('supabase')>=0){localStorage.removeItem(k);}
-                  });
-                }catch(e){}
-                setTimeout(function(){ window.location.reload(); }, 300);
-              }, 500);
-            }
-          });
+        
+        if(u.is_banned === true){
+          var stillBanned = true;
+          if(u.ban_until){
+            if(new Date(u.ban_until) < new Date()) stillBanned = false;
+          }
+          
+          if(stillBanned){
+            self.bannedInfoData = {
+              reason: u.ban_reason || 'Melanggar aturan',
+              until: u.ban_until
+            };
+            self.bannedInfoSheetOpen = true;
+            self.isAuthenticated = false;
+            self.chatFullscreen = false;
+            self.proChatFullscreen = false;
+            
+            setTimeout(function(){
+              try{ sb.auth.signOut(); }catch(e){}
+            }, 1500);
+          }
         }
-      }
-    }).subscribe();
+        
+        if(u.is_banned === false && self.bannedInfoData.reason){
+          self.bannedInfoSheetOpen = false;
+          self.bannedInfoData = {reason:'', until:null};
+        }
+      })
+      .subscribe();
   }catch(e){console.error('RT Ban:',e);}
 }
 
