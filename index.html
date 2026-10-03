@@ -1803,6 +1803,14 @@ formatRibuanInput:function(val){
 
 switchTab:function(tab){
   if(tab==='owner' && !this.isOwner) return;
+  var maintId = null;
+  if(tab==='keuangan') maintId='keuangan';
+  else if(tab==='tools') maintId='tools';
+  else if(tab==='tema') maintId='tema';
+  else if(tab==='downloader') maintId='downloader';
+  if(maintId && this.isUnderMaintenance(maintId)){
+    return this.showMaintenanceSheet(maintId);
+  }
   if(this.activeTab !== tab){
     this.tabHistory.push(this.activeTab);
     if(this.tabHistory.length > 20) this.tabHistory.shift();
@@ -2066,10 +2074,16 @@ showConfirm:function(title,message,arg3,arg4){var onConfirm=function(){},icon='â
 showPrompt:function(title,message,arg3,arg4){var defaultValue='',onConfirm=function(){};if(typeof arg3==='function'){onConfirm=arg3;}else{defaultValue=arg3||'';onConfirm=arg4||function(){};}var self=this;this.promptModal={open:true,title:title,message:message,value:defaultValue,onConfirm:function(val){try{onConfirm(val)}catch(e){}self.promptModal.open=false;}};},
 addPoints:async function(amount,reason){if(!this.currentUser)return;if(this.isOwner)return;try{var newTotal=this.userPoints+amount;var{error}=await sb.from('user_points').update({total_points:newTotal}).eq('user_id',this.currentUser.id);if(!error){this.userPoints=newTotal;await sb.from('point_history').insert({user_id:this.currentUser.id,amount:amount,reason:reason});var oldLevel=this.userLevel;var newLevel=this.calcLevelFromPoints(newTotal);if(newLevel>oldLevel){this.userLevel=newLevel;this.levelUpOpen=true;}}}catch(e){}},
 calcLevelFromPoints:function(pts){if(pts>=2000)return 6;if(pts>=1000)return 5;if(pts>=600)return 4;if(pts>=300)return 3;if(pts>=100)return 2;return 1;},
-openTxSheet:function(){this.txCategory='';this.txAmount='';this.txSheetOpen=true;},
+openTxSheet:function(){
+  if(this.isUnderMaintenance('keuangan')){return this.showMaintenanceSheet('keuangan');}
+  this.txCategory='';this.txAmount='';this.txSheetOpen=true;
+},
 openTargetSheet:function(){this.targetForm={nama:'',target:'',deadline:''};this.targetSheetOpen=true;},
 openBudgetSheet:function(){this.budgetForm={kategori:'',limit_bulanan:''};this.budgetSheetOpen=true;},
-openMovieSheet:function(){this.movieSheetOpen=true;if(this.movieList.length===0)this.fetchMovies();},
+openMovieSheet:function(){
+  if(this.isUnderMaintenance('film')){return this.showMaintenanceSheet('film');}
+  this.movieSheetOpen=true;if(this.movieList.length===0)this.fetchMovies();
+},
 openChatAI:async function(){
   if(this.isUnderMaintenance('ai')){return this.showMaintenanceSheet('ai');}
   this.chatFullscreen=true;
