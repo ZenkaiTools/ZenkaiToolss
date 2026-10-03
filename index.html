@@ -9,7 +9,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;500;600;700;800&family=Amiri&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;500;600;700;800&family=Amiri&family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--primary:#fbbf24;--primary-dark:#d97706;--primary-soft:#fef3c7;--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:#f3e8ff;--bg-soft:#fffbeb;--card-bg:#fffdf5;--text:#1a1a1a;--border:#1a1a1a;}
 [data-theme="purple"]{--primary:#a855f7;--primary-dark:#7e22ce;--primary-soft:#e9d5ff;--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:#e9d5ff;--bg-soft:#f3e8ff}
@@ -18,6 +18,8 @@
 [data-theme="ocean"]{--primary:#0ea5e9;--primary-dark:#0369a1;--primary-soft:#bae6fd;--accent:#0ea5e9;--accent-dark:#0369a1;--accent-soft:#bae6fd;--bg-soft:#e0f2fe}
 [data-theme="sunset"]{--primary:#f97316;--primary-dark:#c2410c;--primary-soft:#fed7aa;--accent:#f97316;--accent-dark:#c2410c;--accent-soft:#fed7aa;--bg-soft:#ffedd5}
 [data-theme="midnight"]{--primary:#6366f1;--primary-dark:#4338ca;--primary-soft:#c7d2fe;--accent:#6366f1;--accent-dark:#4338ca;--accent-soft:#c7d2fe;--bg-soft:#e0e7ff}
+[data-theme="cyber"]{--primary:#00ff9d;--primary-dark:#00cc7a;--primary-soft:#0d2818;--accent:#ff00ff;--accent-dark:#cc00cc;--accent-soft:#2d0d2d;--bg-soft:#0a0a0f;--card-bg:#14141f;--text:#e0e0ff;--border:#00ff9d}
+[data-theme="dark"]{--primary:#8b5cf6;--primary-dark:#6d28d9;--primary-soft:#1e1b4b;--accent:#f472b6;--accent-dark:#be185d;--accent-soft:#4c1d24;--bg-soft:#0f0f17;--card-bg:#1a1a24;--text:#f0f0f5;--border:#2d2d3d}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;overflow-x:hidden}
 body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:var(--text);min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;font-size:15px;line-height:1.5;font-weight:500;transition:background .3s}
@@ -157,6 +159,79 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .intro-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#a855f7,#fbbf24);border-radius:6px;transition:width .1s linear;box-shadow:0 0 20px #fbbf24}
 [data-style="glass"] body{background:linear-gradient(135deg,#e0e7ff,#f3e8ff,#fce7f3)}
 [data-style="glass"] .card{background:rgba(255,255,255,.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1.5px solid rgba(255,255,255,.7);border-radius:20px;box-shadow:0 8px 32px rgba(31,38,135,.15);padding:18px}
+[data-style="cyber"] body{background:#0a0a0f;font-family:'Orbitron',sans-serif}
+[data-style="cyber"] .card{background:linear-gradient(135deg,#14141f,#1a1a2e);border:1px solid #00ff9d;border-radius:4px;box-shadow:0 0 20px rgba(0,255,157,.15);padding:16px}
+[data-style="cyber"] .card-hover:active{border-color:#ff00ff;box-shadow:0 0 30px rgba(255,0,255,.3);transform:scale(.99)}
+[data-style="cyber"] .font-title{font-family:'Orbitron',sans-serif;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+[data-style="cyber"] .app-header{background:linear-gradient(135deg,#14141f,#0a0a0f);border-bottom:1px solid #00ff9d;box-shadow:0 0 20px rgba(0,255,157,.2)}
+[data-style="cyber"] .header-avatar{background:#0a0a0f;border:2px solid #00ff9d;box-shadow:0 0 15px rgba(0,255,157,.4)}
+[data-style="cyber"] .header-btn{background:#14141f;border:1px solid #00ff9d;box-shadow:0 0 10px rgba(0,255,157,.2);color:#00ff9d}
+[data-style="cyber"] .hero-card{background:linear-gradient(135deg,#1a0033,#0a001a);border:1px solid #ff00ff;box-shadow:0 0 30px rgba(255,0,255,.2);border-radius:4px}
+[data-style="cyber"] .hero-label{background:rgba(0,255,157,.1);border:1px solid #00ff9d;color:#00ff9d}
+[data-style="cyber"] .hero-title{color:#00ff9d;text-shadow:0 0 20px rgba(0,255,157,.5)}
+[data-style="cyber"] .hero-stat{background:rgba(0,255,157,.05);border:1px solid #00ff9d;border-radius:4px}
+[data-style="cyber"] .hero-stat-val{color:#00ff9d}
+[data-style="cyber"] .device-item{background:rgba(0,255,157,.05);border:1px solid #00ff9d;border-radius:4px}
+[data-style="cyber"] .device-val{color:#00ff9d}
+[data-style="cyber"] .kategori-tab{background:#14141f;border:1px solid #00ff9d;border-radius:4px;color:#00ff9d;box-shadow:0 0 10px rgba(0,255,157,.1)}
+[data-style="cyber"] .kategori-tab.active{background:#00ff9d;color:#0a0a0f;box-shadow:0 0 20px rgba(0,255,157,.5)}
+[data-style="cyber"] .fitur-card{background:linear-gradient(135deg,#14141f,#1a1a2e);border:1px solid #00ff9d;border-radius:4px;box-shadow:0 0 15px rgba(0,255,157,.1)}
+[data-style="cyber"] .fitur-name{color:#00ff9d;font-family:'Orbitron',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+[data-style="cyber"] .fitur-desc{color:#8888aa}
+[data-style="cyber"] .quick-btn{background:#14141f;border:1px solid #ff00ff;border-radius:4px;box-shadow:0 0 10px rgba(255,0,255,.2)}
+[data-style="cyber"] .quick-label{color:#ff00ff}
+[data-style="cyber"] .drawer{background:#0a0a0f;border-left:1px solid #00ff9d;box-shadow:-10px 0 40px rgba(0,255,157,.2)}
+[data-style="cyber"] .drawer-header{background:linear-gradient(135deg,#1a0033,#0a001a);border-bottom:1px solid #ff00ff}
+[data-style="cyber"] .drawer-item{border-bottom:1px solid #1a1a2e;color:#e0e0ff}
+[data-style="cyber"] .drawer-item:active{background:rgba(0,255,157,.1)}
+[data-style="cyber"] .bottom-nav-btn{border:1px solid transparent}
+[data-style="cyber"] .bottom-nav-btn.active{background:rgba(0,255,157,.15);border:1px solid #00ff9d;box-shadow:0 0 15px rgba(0,255,157,.3);color:#00ff9d}
+[data-style="cyber"] .btn-primary{background:linear-gradient(135deg,#00ff9d,#00cc7a);color:#0a0a0f;border:1px solid #00ff9d;border-radius:4px;box-shadow:0 0 20px rgba(0,255,157,.4);font-family:'Orbitron',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+[data-style="cyber"] .btn-soft{background:rgba(255,0,255,.1);color:#ff00ff;border:1px solid #ff00ff;border-radius:4px;font-family:'Orbitron',sans-serif}
+[data-style="cyber"] .input-field{background:#0a0a0f;border:1px solid #00ff9d;border-radius:4px;color:#00ff9d;font-family:'Orbitron',sans-serif}
+[data-style="cyber"] .tab-pill{background:#14141f;border:1px solid #00ff9d;border-radius:4px;color:#00ff9d;font-family:'Orbitron',sans-serif}
+[data-style="cyber"] .tab-pill.active{background:#00ff9d;color:#0a0a0f}
+[data-style="cyber"] .stat-box{background:rgba(0,255,157,.05);border:1px solid #00ff9d;border-radius:4px}
+[data-style="cyber"] .stat-box .font-title{color:#00ff9d}
+[data-style="cyber"] .bottom-sheet-content{background:#14141f;border:1px solid #00ff9d;box-shadow:0 0 40px rgba(0,255,157,.2)}
+[data-style="cyber"] .progress-bar{background:#0a0a0f;border:1px solid #00ff9d;border-radius:4px}
+[data-style="cyber"] .progress-fill{background:linear-gradient(90deg,#00ff9d,#ff00ff);border-radius:2px}
+[data-style="cyber"] .chat-bubble-ai{background:#14141f;border:1px solid #00ff9d;color:#e0e0ff;border-radius:4px;font-family:'Inter',sans-serif}
+[data-style="cyber"] .chat-bubble-user{background:linear-gradient(135deg,#00ff9d,#00cc7a);color:#0a0a0f;border:1px solid #00ff9d;border-radius:4px;font-family:'Inter',sans-serif}
+[data-style="cyber"] .theme-dot{border-radius:4px;box-shadow:0 0 15px rgba(0,255,157,.3)}
+[data-style="dark"] body{background:#0f0f17;color:#f0f0f5}
+[data-style="dark"] .card{background:#1a1a24;border:1px solid #2d2d3d;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+[data-style="dark"] .app-header{background:linear-gradient(135deg,#1a1a24,#0f0f17);border-bottom:1px solid #2d2d3d}
+[data-style="dark"] .header-avatar{background:#0f0f17;border:2px solid #2d2d3d}
+[data-style="dark"] .header-btn{background:#1a1a24;border:1px solid #2d2d3d;color:#f0f0f5}
+[data-style="dark"] .hero-card{background:linear-gradient(135deg,#4c1d95,#2d1b4e);border:1px solid #2d2d3d;border-radius:20px}
+[data-style="dark"] .hero-label{background:rgba(139,92,246,.2);border:1px solid #8b5cf6}
+[data-style="dark"] .hero-stat{background:rgba(255,255,255,.05);border:1px solid #2d2d3d}
+[data-style="dark"] .device-item{background:#22222e;border:1px solid #2d2d3d}
+[data-style="dark"] .device-val{color:#c4b5fd}
+[data-style="dark"] .kategori-tab{background:#22222e;border:1px solid #2d2d3d;color:#f0f0f5}
+[data-style="dark"] .kategori-tab.active{background:#8b5cf6;color:#fff;border-color:#8b5cf6}
+[data-style="dark"] .fitur-card{background:#1a1a24;border:1px solid #2d2d3d;border-radius:16px}
+[data-style="dark"] .fitur-name{color:#c4b5fd}
+[data-style="dark"] .fitur-desc{color:#8888aa}
+[data-style="dark"] .quick-btn{background:#1a1a24;border:1px solid #2d2d3d}
+[data-style="dark"] .quick-label{color:#c4b5fd}
+[data-style="dark"] .drawer{background:#0f0f17;border-left:1px solid #2d2d3d}
+[data-style="dark"] .drawer-header{background:linear-gradient(135deg,#4c1d95,#2d1b4e)}
+[data-style="dark"] .drawer-item{border-bottom:1px solid #2d2d3d;color:#f0f0f5}
+[data-style="dark"] .bottom-nav-btn.active{background:rgba(139,92,246,.2);border:1px solid #8b5cf6;color:#c4b5fd}
+[data-style="dark"] .btn-primary{background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;border:1px solid #8b5cf6;border-radius:12px}
+[data-style="dark"] .btn-soft{background:rgba(244,114,182,.15);color:#f472b6;border:1px solid #f472b6;border-radius:10px}
+[data-style="dark"] .input-field{background:#0f0f17;border:1px solid #2d2d3d;color:#f0f0f5;border-radius:10px}
+[data-style="dark"] .tab-pill{background:#22222e;border:1px solid #2d2d3d;color:#f0f0f5}
+[data-style="dark"] .tab-pill.active{background:#8b5cf6;color:#fff;border-color:#8b5cf6}
+[data-style="dark"] .stat-box{background:#22222e;border:1px solid #2d2d3d}
+[data-style="dark"] .stat-box .font-title{color:#c4b5fd}
+[data-style="dark"] .bottom-sheet-content{background:#1a1a24;border:1px solid #2d2d3d}
+[data-style="dark"] .progress-bar{background:#0f0f17;border:1px solid #2d2d3d}
+[data-style="dark"] .progress-fill{background:linear-gradient(90deg,#8b5cf6,#f472b6)}
+[data-style="dark"] .chat-bubble-ai{background:#1a1a24;border:1px solid #2d2d3d;color:#f0f0f5}
+[data-style="dark"] .chat-bubble-user{background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;border:1px solid #8b5cf6}
 [data-style="glass"] .hero-card{background:linear-gradient(135deg,rgba(168,85,247,.85),rgba(126,34,206,.85));backdrop-filter:blur(20px);border:1.5px solid rgba(255,255,255,.3);border-radius:24px}
 [data-style="glass"] .app-header{background:linear-gradient(135deg,rgba(251,191,36,.9),rgba(217,119,6,.9));backdrop-filter:blur(20px);border-bottom:1.5px solid rgba(255,255,255,.3)}
 [data-style="glass"] .drawer{background:rgba(255,255,255,.85);backdrop-filter:blur(30px);border-left:1.5px solid rgba(255,255,255,.6)}
@@ -566,19 +641,34 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <div class="p-2 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="text-[9px] font-bold" style="color:var(--accent-dark)">Isya</div><div class="font-title text-sm" x-text="prayerTimes.isya"></div></div>
         </div>
       </div>
-      <div class="card sec-gap">
-        <h3 class="font-title text-lg" style="color:var(--accent-dark)">📿 NIAT SHOLAT</h3>
-        <div class="grid grid-cols-5 gap-1">
-          <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s">
-            <button @click="selectedNiat=s" :class="selectedNiat===s?'active':''" class="tab-pill" x-text="s"></button>
-          </template>
-        </div>
-        <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
-          <div class="font-arab text-right text-xl leading-loose" x-text="niatSholat[selectedNiat].arab"></div>
-          <div class="txt-xs italic mt-2" style="color:var(--accent-dark)" x-text="niatSholat[selectedNiat].latin"></div>
-        </div>
+      
+<div class="card sec-gap">
+  <h3 class="font-title text-lg" style="color:var(--accent-dark)">📿 NIAT SHOLAT</h3>
+  <div class="grid grid-cols-5 gap-1">
+    <template x-for="s in ['Subuh','Dzuhur','Ashar','Maghrib','Isya']" :key="s">
+      <button @click="selectedNiat=s" :class="selectedNiat===s?'active':''" class="tab-pill" x-text="s"></button>
+    </template>
+  </div>
+  <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)">
+    <div class="font-arab text-right text-xl leading-loose" x-text="niatSholat[selectedNiat].arab"></div>
+    <div class="txt-xs italic mt-2" style="color:var(--accent-dark)" x-text="niatSholat[selectedNiat].latin"></div>
+    <div class="txt-xs text-gray-700 mt-1" x-text="niatSholat[selectedNiat].arti"></div>
+  </div>
+</div>
+
+<div class="card sec-gap">
+  <h3 class="font-title text-lg" style="color:var(--accent-dark)">📿 BACAAN SHOLAT</h3>
+  <div class="space-y-2 max-h-80 overflow-y-auto">
+    <template x-for="(step,idx) in bacaanSholatList" :key="idx">
+      <div class="p-3 rounded-xl space-y-1" style="background:var(--primary-soft);border:2px solid var(--border)">
+        <div class="font-title text-base" style="color:var(--accent-dark)" x-text="step.nama"></div>
+        <div class="font-arab text-right text-lg" x-text="step.arab"></div>
+        <div class="txt-xs italic" style="color:var(--accent)" x-text="step.latin"></div>
+        <div class="txt-xs text-gray-700" x-text="step.arti"></div>
       </div>
-    </div>
+    </template>
+  </div>
+  </div>
     <div x-show="kitabSubTab==='quran'" class="sec-gap">
       <template x-if="!activeSurah">
         <div class="card sec-gap">
@@ -602,10 +692,12 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
           <div class="text-center pb-3" style="border-bottom:2px solid var(--border)">
             <h3 class="font-title text-xl" style="color:var(--accent-dark)" x-text="activeSurah.namaLatin"></h3>
             <p class="txt-xs text-gray-600 font-bold" x-text="activeSurah.arti+' • '+activeSurah.jumlahAyat+' Ayat'"></p>
+            <audio controls class="w-full h-9 mt-3" :src="activeSurah.audioFull&&activeSurah.audioFull['05']"></audio>
           </div>
           <div class="max-h-96 overflow-y-auto space-y-3 pt-2">
             <template x-for="ay in activeSurah.ayat" :key="ay.nomorAyat">
               <div class="p-4 rounded-xl space-y-2" style="background:var(--primary-soft);border:2px solid var(--border)">
+                <div class="flex justify-between items-center txt-xs font-bold pb-2 mb-2" style="border-bottom:2px dashed var(--border)"><span>Ayat <span x-text="ay.nomorAyat"></span></span><audio controls preload="none" class="h-7 w-32" :src="(ay.audio&&(ay.audio['05']||ay.audio['01']))||''"></audio></div>
                 <div class="font-arab text-right text-xl leading-loose" x-text="ay.teksArab"></div>
                 <div class="txt-xs italic" style="color:var(--accent)" x-text="ay.teksLatin"></div>
                 <div class="txt-xs text-gray-700" x-text="ay.teksIndonesia"></div>
@@ -739,7 +831,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <div class="card sec-gap">
       <h3 class="font-title text-lg" style="color:var(--accent-dark)">WARNA TEMA</h3>
       <div class="grid grid-cols-3 gap-4">
-        <template x-for="t in themes" :key="t.id">
+        <template x-for="t in themes.concat([{id:'cyber',name:'Cyber',color:'#00ff9d'},{id:'dark',name:'Dark',color:'#8b5cf6'}])" :key="t.id">
           <div @click="setTheme(t.id)" class="cursor-pointer text-center">
             <div class="theme-dot mx-auto" :class="theme===t.id?'active':''" :style="'background:'+t.color"></div>
             <div class="txt-xs font-bold mt-2" x-text="t.name"></div>
@@ -755,6 +847,12 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </div>
         <div @click="setStyle('glass')" class="cursor-pointer text-center p-4 rounded-xl" :style="styleMode==='glass'?'background:var(--primary);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border)':'background:var(--primary-soft);border:3px solid var(--border);box-shadow:2px 2px 0 0 var(--border)'">
           <div class="text-4xl mb-2">✨</div><div class="font-title text-base" style="color:var(--accent-dark)">GLASS</div>
+        </div>
+        <div @click="setStyle('cyber')" class="cursor-pointer text-center p-4 rounded-xl" :style="styleMode==='cyber'?'background:var(--primary);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border)':'background:var(--primary-soft);border:3px solid var(--border);box-shadow:2px 2px 0 0 var(--border)'">
+          <div class="text-4xl mb-2">⚡</div><div class="font-title text-base" style="color:var(--accent-dark)">CYBER</div>
+        </div>
+        <div @click="setStyle('dark')" class="cursor-pointer text-center p-4 rounded-xl" :style="styleMode==='dark'?'background:var(--primary);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border)':'background:var(--primary-soft);border:3px solid var(--border);box-shadow:2px 2px 0 0 var(--border)'">
+          <div class="text-4xl mb-2">🌙</div><div class="font-title text-base" style="color:var(--accent-dark)">DARK</div>
         </div>
       </div>
     </div>
@@ -1192,12 +1290,14 @@ kitabSubTab:'sholat',prayerLoading:false,selectedNiat:'Subuh',
 prayerTimes:{subuh:'--:--',dzuhur:'--:--',ashar:'--:--',maghrib:'--:--',isya:'--:--'},
 prayerProvince:'DKI Jakarta',prayerCity:'Jakarta',prayerCities:['Jakarta'],
 niatSholat:{Subuh:{arab:'أُصَلِّي فَرْضَ الصُّبْحِ رَكْعَتَيْنِ مُسْتَقْبِلَ الْقِبْلَةِ',latin:'Ushallii fardhash-shubhi rak\'ataini',arti:'Aku niat sholat Subuh 2 rakaat karena Allah'},Dzuhur:{arab:'أُصَلِّي فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ',latin:'Ushallii fardhazh-zhuhri arba\'a raka\'aatin',arti:'Aku niat sholat Dzuhur 4 rakaat karena Allah'},Ashar:{arab:'أُصَلِّي فَرْضَ الْعَصْرِ أَرْبَعَ رَكَعَاتٍ',latin:'Ushallii fardhal-\'ashri arba\'a raka\'aatin',arti:'Aku niat sholat Ashar 4 rakaat karena Allah'},Maghrib:{arab:'أُصَلِّي فَرْضَ الْمَغْرِبِ ثَلَاثَ رَكَعَاتٍ',latin:'Ushallii fardhal-maghribi tsalaatsa raka\'aatin',arti:'Aku niat sholat Maghrib 3 rakaat karena Allah'},Isya:{arab:'أُصَلِّي فَرْضَ الْعِشَاءِ أَرْبَعَ رَكَعَاتٍ',latin:'Ushallii fardhal-\'isyaa\'i arba\'a raka\'aatin',arti:'Aku niat sholat Isya 4 rakaat karena Allah'}},
-bacaanSholatList:[{nama:'Takbiratul Ihram',arab:'اللهُ أَكْبَرُ',latin:'Allaahu Akbar',arti:'Allah Maha Besar'},{nama:'Doa Iftitah',arab:'سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ',latin:'Subhaanakallaahumma wa bihamdika',arti:'Maha Suci Engkau ya Allah'},{nama:'Al-Fatihah',arab:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِيْنَ',latin:'Alhamdulillaahi rabbil \'aalamiin',arti:'Segala puji bagi Allah'}],
+bacaanSholatList:[{nama:'Takbiratul Ihram',arab:'اللهُ أَكْبَرُ',latin:'Allaahu Akbar',arti:'Allah Maha Besar'},{nama:'Doa Iftitah',arab:'سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ',latin:'Subhaanakallaahumma wa bihamdika',arti:'Maha Suci Engkau ya Allah'},{nama:'Al-Fatihah',arab:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِيْنَ',latin:'Alhamdulillaahi rabbil \'aalamiin',arti:'Segala puji bagi Allah'},{nama:'Rukuk',arab:'سُبْحَانَ رَبِّيَ الْعَظِيْمِ (٣x)',latin:'Subhaana rabbiyal \'azhiim',arti:'Maha Suci Tuhanku Yang Maha Agung'},{nama:'I\'tidal',arab:'سَمِعَ اللهُ لِمَنْ حَمِدَهُ',latin:'Sami\'allaahu liman hamidah',arti:'Allah mendengar yang memujiNya'},{nama:'Sujud',arab:'سُبْحَانَ رَبِّيَ الْأَعْلَى (٣x)',latin:'Subhaana rabbiyal a\'laa',arti:'Maha Suci Tuhanku Yang Maha Tinggi'},{nama:'Duduk Antara 2 Sujud',arab:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي',latin:'Rabbighfir lii warhamnii',arti:'Ya Tuhanku, ampunilah aku'},{nama:'Tasyahud Awal',arab:'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ',latin:'At-tahiyyaatu lillaahi wash-shalawaatu',arti:'Segala kehormatan bagi Allah'},{nama:'Sholawat',arab:'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ',latin:'Allaahumma shalli \'alaa Muhammad',arti:'Ya Allah, limpahkanlah rahmat'},{nama:'Salam',arab:'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ',latin:'As-salaamu \'alaikum',arti:'Semoga keselamatan atasmu'}],
 surahList:[],surahSearch:'',activeSurah:null,
-asmaulHusnaList:[],
+asmaulHusnaList:[{no:1,arab:'الرَّحْمَنُ',latin:'Ar-Rahmaan',arti:'Yang Maha Pengasih'},{no:2,arab:'الرَّحِيمُ',latin:'Ar-Rahiim',arti:'Yang Maha Penyayang'},{no:3,arab:'الْمَلِكُ',latin:'Al-Malik',arti:'Yang Maha Merajai'},{no:4,arab:'الْقُدُّوسُ',latin:'Al-Quddus',arti:'Yang Maha Suci'},{no:5,arab:'السَّلَامُ',latin:'As-Salaam',arti:'Yang Maha Sejahtera'},{no:6,arab:'الْمُؤْمِنُ',latin:'Al-Mu\'min',arti:'Yang Maha Memberi Keamanan'},{no:7,arab:'الْمُهَيْمِنُ',latin:'Al-Muhaimin',arti:'Yang Maha Pemelihara'},{no:8,arab:'الْعَزِيزُ',latin:'Al-Aziiz',arti:'Yang Maha Perkasa'},{no:9,arab:'الْجَبَّارُ',latin:'Al-Jabbar',arti:'Yang Maha Kuasa'},{no:10,arab:'الْمُتَكَبِّرُ',latin:'Al-Mutakabbir',arti:'Yang Maha Megah'},{no:11,arab:'الْخَالِقُ',latin:'Al-Khaaliq',arti:'Yang Maha Pencipta'},{no:12,arab:'الْبَارِئُ',latin:'Al-Baari\'',arti:'Yang Maha Mengadakan'},{no:13,arab:'الْمُصَوِّرُ',latin:'Al-Mushawwir',arti:'Yang Maha Membentuk'},{no:14,arab:'الْغَفَّارُ',latin:'Al-Ghaffaar',arti:'Yang Maha Pengampun'},{no:15,arab:'الْقَهَّارُ',latin:'Al-Qahhaar',arti:'Yang Maha Menundukkan'},{no:16,arab:'الْوَهَّابُ',latin:'Al-Wahhaab',arti:'Yang Maha Pemberi'},{no:17,arab:'الرَّزَّاقُ',latin:'Ar-Razzaq',arti:'Yang Maha Pemberi Rezeki'},{no:18,arab:'الْفَتَّاحُ',latin:'Al-Fattaah',arti:'Yang Maha Pembuka'},{no:19,arab:'الْعَلِيمُ',latin:'Al-\'Aliim',arti:'Yang Maha Mengetahui'},{no:20,arab:'الْقَابِضُ',latin:'Al-Qaabidh',arti:'Yang Maha Menyempitkan'},{no:21,arab:'الْبَاسِطُ',latin:'Al-Baasith',arti:'Yang Maha Melapangkan'},{no:22,arab:'الْخَافِضُ',latin:'Al-Khaafidh',arti:'Yang Maha Merendahkan'},{no:23,arab:'الرَّافِعُ',latin:'Ar-Raafi\'',arti:'Yang Maha Meninggikan'},{no:24,arab:'الْمُعِزُّ',latin:'Al-Mu\'izz',arti:'Yang Maha Memuliakan'},{no:25,arab:'الْمُذِلُّ',latin:'Al-Mudzil',arti:'Yang Maha Menghinakan'},{no:26,arab:'السَّمِيعُ',latin:'As-Sami\'',arti:'Yang Maha Mendengar'},{no:27,arab:'الْبَصِيرُ',latin:'Al-Bashiir',arti:'Yang Maha Melihat'},{no:28,arab:'الْحَكَمُ',latin:'Al-Hakam',arti:'Yang Maha Menetapkan'},{no:29,arab:'الْعَدْلُ',latin:'Al-\'Adl',arti:'Yang Maha Adil'},{no:30,arab:'اللَّطِيفُ',latin:'Al-Lathiif',arti:'Yang Maha Lembut'},{no:31,arab:'الْخَبِيرُ',latin:'Al-Khabiir',arti:'Yang Maha Mengenal'},{no:32,arab:'الْحَلِيمُ',latin:'Al-Haliim',arti:'Yang Maha Penyantun'},{no:33,arab:'الْعَظِيمُ',latin:'Al-\'Azhiim',arti:'Yang Maha Agung'},{no:34,arab:'الْغَفُورُ',latin:'Al-Ghafuur',arti:'Yang Maha Pengampun'},{no:35,arab:'الشَّكُورُ',latin:'Ash-Shakuur',arti:'Yang Maha Pembalas'},{no:36,arab:'الْعَلِيُّ',latin:'Al-\'Aliy',arti:'Yang Maha Tinggi'},{no:37,arab:'الْكَبِيرُ',latin:'Al-Kabiir',arti:'Yang Maha Besar'},{no:38,arab:'الْحَفِيظُ',latin:'Al-Hafiizh',arti:'Yang Maha Memelihara'},{no:39,arab:'الْمُقِيتُ',latin:'Al-Muqiit',arti:'Yang Maha Pemberi Kecukupan'},{no:40,arab:'الْحَسِيبُ',latin:'Al-Hasiib',arti:'Yang Maha Membuat Perhitungan'},{no:41,arab:'الْجَلِيلُ',latin:'Al-Jaliil',arti:'Yang Maha Luhur'},{no:42,arab:'الْكَرِيمُ',latin:'Al-Kariim',arti:'Yang Maha Pemurah'},{no:43,arab:'الرَّقِيبُ',latin:'Ar-Raqiib',arti:'Yang Maha Mengawasi'},{no:44,arab:'الْمُجِيبُ',latin:'Al-Mujiib',arti:'Yang Maha Mengabulkan'},{no:45,arab:'الْوَاسِعُ',latin:'Al-Waasi\'',arti:'Yang Maha Luas'},{no:46,arab:'الْحَكِيمُ',latin:'Al-Hakiim',arti:'Yang Maha Bijaksana'},{no:47,arab:'الْوَدُودُ',latin:'Al-Waduud',arti:'Yang Maha Mengasihi'},{no:48,arab:'الْمَجِيدُ',latin:'Al-Majiid',arti:'Yang Maha Mulia'},{no:49,arab:'الْبَاعِثُ',latin:'Al-Baa\'its',arti:'Yang Maha Membangkitkan'},{no:50,arab:'الشَّهِيدُ',latin:'Ash-Shahiid',arti:'Yang Maha Menyaksikan'},{no:51,arab:'الْحَقُّ',latin:'Al-Haqq',arti:'Yang Maha Benar'},{no:52,arab:'الْوَكِيلُ',latin:'Al-Wakiil',arti:'Yang Maha Memelihara'},{no:53,arab:'الْقَوِيُّ',latin:'Al-Qawiyyu',arti:'Yang Maha Kuat'},{no:54,arab:'الْمَتِينُ',latin:'Al-Matiin',arti:'Yang Maha Kokoh'},{no:55,arab:'الْوَلِيُّ',latin:'Al-Waliyy',arti:'Yang Maha Melindungi'},{no:56,arab:'الْحَمِيدُ',latin:'Al-Hamiid',arti:'Yang Maha Terpuji'},{no:57,arab:'الْمُحْصِي',latin:'Al-Muhshii',arti:'Yang Maha Menghitung'},{no:58,arab:'الْمُبْدِئُ',latin:'Al-Mubdi\'',arti:'Yang Maha Memulai'},{no:59,arab:'الْمُعِيدُ',latin:'Al-Muiid',arti:'Yang Maha Mengembalikan'},{no:60,arab:'الْمُحْيِي',latin:'Al-Muhyii',arti:'Yang Maha Menghidupkan'},{no:61,arab:'الْمُمِيتُ',latin:'Al-Mumiit',arti:'Yang Maha Mematikan'},{no:62,arab:'الْحَيُّ',latin:'Al-Hayyu',arti:'Yang Maha Hidup'},{no:63,arab:'الْقَيُّومُ',latin:'Al-Qayyuum',arti:'Yang Maha Mandiri'},{no:64,arab:'الْوَاجِدُ',latin:'Al-Waajid',arti:'Yang Maha Penemu'},{no:65,arab:'الْمَاجِدُ',latin:'Al-Maajid',arti:'Yang Maha Mulia'},{no:66,arab:'الْوَاحِدُ',latin:'Al-Waahid',arti:'Yang Maha Tunggal'},{no:67,arab:'الْأَحَدُ',latin:'Al-Ahad',arti:'Yang Maha Esa'},{no:68,arab:'الصَّمَدُ',latin:'As-Samad',arti:'Yang Maha Dibutuhkan'},{no:69,arab:'الْقَادِرُ',latin:'Al-Qaadir',arti:'Yang Maha Menentukan'},{no:70,arab:'الْمُقْتَدِرُ',latin:'Al-Muqtadir',arti:'Yang Maha Berkuasa'},{no:71,arab:'الْمُقَدِّمُ',latin:'Al-Muqaddim',arti:'Yang Maha Mendahulukan'},{no:72,arab:'الْمُؤَخِّرُ',latin:'Al-Mu\'akhkhir',arti:'Yang Maha Mengakhirkan'},{no:73,arab:'الْأَوَّلُ',latin:'Al-Awwal',arti:'Yang Maha Awal'},{no:74,arab:'الْآخِرُ',latin:'Al-Akhir',arti:'Yang Maha Akhir'},{no:75,arab:'الظَّاهِرُ',latin:'Az-Zhaahir',arti:'Yang Maha Nyata'},{no:76,arab:'الْبَاطِنُ',latin:'Al-Baathin',arti:'Yang Maha Ghaib'},{no:77,arab:'الْوَالِي',latin:'Al-Waali',arti:'Yang Maha Memerintah'},{no:78,arab:'الْمُتَعَالِي',latin:'Al-Muta\'aali',arti:'Yang Maha Tinggi'},{no:79,arab:'الْبَرُّ',latin:'Al-Barr',arti:'Yang Maha Dermawan'},{no:80,arab:'التَّوَّابُ',latin:'At-Tawwaab',arti:'Yang Maha Penerima Taubat'},{no:81,arab:'الْمُنْتَقِمُ',latin:'Al-Muntaqim',arti:'Yang Maha Pemberi Balasan'},{no:82,arab:'الْعَفُوُّ',latin:'Al-\'Afuww',arti:'Yang Maha Pemaaf'},{no:83,arab:'الرَّءُوفُ',latin:'Ar-Ra\'uuf',arti:'Yang Maha Pengasuh'},{no:84,arab:'مَالِكُ الْمُلْكِ',latin:'Malikul Mulk',arti:'Yang Maha Penguasa'},{no:85,arab:'ذُو الْجَلَالِ وَالْإِكْرَامِ',latin:'Dzul Jalaali Wal Ikraam',arti:'Yang Maha Pemilik Kebesaran'},{no:86,arab:'الْمُقْسِطُ',latin:'Al-Muqsith',arti:'Yang Maha Adil'},{no:87,arab:'الْجَامِعُ',latin:'Al-Jaami\'',arti:'Yang Maha Pengumpul'},{no:88,arab:'الْغَنِيُّ',latin:'Al-Ghaniyy',arti:'Yang Maha Kaya'},{no:89,arab:'الْمُغْنِي',latin:'Al-Mughni',arti:'Yang Maha Pemberi Kekayaan'},{no:90,arab:'الْمَانِعُ',latin:'Al-Mani\'',arti:'Yang Maha Pencegahan'},{no:91,arab:'الضَّارُّ',latin:'Ad-Dhaar',arti:'Yang Maha Penimpa'},{no:92,arab:'النَّافِعُ',latin:'An-Naafi\'',arti:'Yang Maha Memberi Manfaat'},{no:93,arab:'النُّورُ',latin:'An-Nuur',arti:'Yang Maha Bercahaya'},{no:94,arab:'الْهَادِي',latin:'Al-Haadi',arti:'Yang Maha Pemberi Petunjuk'},{no:95,arab:'الْبَدِيعُ',latin:'Al-Badii\'',arti:'Yang Maha Pencipta'},{no:96,arab:'الْبَاقِي',latin:'Al-Baqii',arti:'Yang Maha Kekal'},{no:97,arab:'الْوَارِثُ',latin:'Al-Waarith',arti:'Yang Maha Pewaris'},{no:98,arab:'الرَّشِيدُ',latin:'Ar-Rasyiid',arti:'Yang Maha Pandai'},{no:99,arab:'الصَّبُورُ',latin:'As-Sabuur',arti:'Yang Maha Sabar'}],
 kisahList:[{judul:'Nabi Adam AS',kategori:'Nabi',isi:'Nabi Adam AS adalah manusia pertama yang diciptakan Allah SWT dari tanah liat.'},{judul:'Nabi Nuh AS',kategori:'Nabi',isi:'Nabi Nuh AS berdakwah kepada kaumnya selama 950 tahun.'},{judul:'Nabi Ibrahim AS',kategori:'Nabi',isi:'Nabi Ibrahim AS dikenal sebagai bapak para nabi.'},{judul:'Nabi Musa AS',kategori:'Nabi',isi:'Nabi Musa AS lahir di Mesir saat Fir\'aun membunuh bayi laki-laki Bani Israil.'},{judul:'Nabi Isa AS',kategori:'Nabi',isi:'Nabi Isa AS lahir dari Maryam tanpa ayah, dengan mukjizat dari Allah.'},{judul:'Nabi Muhammad SAW',kategori:'Nabi',isi:'Nabi Muhammad SAW lahir di Makkah tahun 570 M.'},{judul:'Abu Bakar Ash-Shiddiq',kategori:'Sahabat',isi:'Abu Bakar adalah sahabat pertama yang masuk Islam.'},{judul:'Umar bin Khattab',kategori:'Sahabat',isi:'Umar bin Khattab awalnya musuh Islam, namun hatinya terbuka.'},{judul:'Utsman bin Affan',kategori:'Sahabat',isi:'Utsman bin Affan dijuluki Dzun Nurain.'},{judul:'Ali bin Abi Thalib',kategori:'Sahabat',isi:'Ali bin Abi Thalib adalah sepupu Rasulullah.'}],selectedKisah:null,
-haditsList:[{kategori:'Iman',arab:'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ',latin:'Innamal a\'maalu bin niyyaat',arti:'Sesungguhnya amal itu tergantung niatnya',perawi:'HR. Bukhari'},{kategori:'Iman',arab:'الدِّينُ النَّصِيحَةُ',latin:'Ad-diinu an-nashiihat',arti:'Agama itu nasihat',perawi:'HR. Muslim'},{kategori:'Akhlak',arab:'إِنَّ أَكْمَلَ الْمُؤْمِنِينَ إِيمَانًا أَحْسَنُهُمْ خُلُقًا',latin:'Inna akmalal mu\'miniina iimaanan',arti:'Mukmin paling sempurna imannya adalah yang paling baik akhlaknya',perawi:'HR. Tirmidzi'},{kategori:'Akhlak',arab:'خَيْرُكُمْ خَيْرُكُمْ لِأَهْلِهِ',latin:'Khairukum khairukum li ahlihi',arti:'Sebaik-baik kalian adalah yang paling baik terhadap keluarganya',perawi:'HR. Tirmidzi'},{kategori:'Ibadah',arab:'الصَّلَاةُ عِمَادُ الدِّينِ',latin:'Ash-shalaatu \'imaadud diin',arti:'Sholat adalah tiang agama',perawi:'HR. Baihaqi'}],filterHadits:'Semua',haditsKategori:['Semua','Iman','Akhlak','Ibadah','Sosial','Ilmu','Rezeki','Sabar'],
-doaHarian:[{nama:'Doa Bangun Tidur',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا',latin:'Alhamdulillaahil ladzii ahyaanaa',arti:'Segala puji bagi Allah yang menghidupkan kami'},{nama:'Doa Sebelum Tidur',arab:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',latin:'Bismikallaahumma amuutu wa ahyaa',arti:'Dengan namaMu ya Allah aku mati dan hidup'},{nama:'Doa Sebelum Makan',arab:'بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيْمِ',latin:'Bismillaahir rahmaanir rahiim',arti:'Dengan nama Allah Yang Maha Pengasih'}],
+haditsList:[{kategori:'Iman',arab:'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ',latin:'Innamal a\'maalu bin niyyaat',arti:'Sesungguhnya amal itu tergantung niatnya',perawi:'HR. Bukhari'},{kategori:'Iman',arab:'الدِّينُ النَّصِيحَةُ',latin:'Ad-diinu an-nashiihat',arti:'Agama itu nasihat',perawi:'HR. Muslim'},{kategori:'Akhlak',arab:'إِنَّ أَكْمَلَ الْمُؤْمِنِينَ إِيمَانًا أَحْسَنُهُمْ خُلُقًا',latin:'Inna akmalal mu\'miniina iimaanan',arti:'Mukmin paling sempurna imannya adalah yang paling baik akhlaknya',perawi:'HR. Tirmidzi'},{kategori:'Akhlak',arab:'خَيْرُكُمْ خَيْرُكُمْ لِأَهْلِهِ',latin:'Khairukum khairukum li ahlihi',arti:'Sebaik-baik kalian adalah yang paling baik terhadap keluarganya',perawi:'HR. Tirmidzi'},{kategori:'Ibadah',arab:'الصَّلَاةُ عِمَادُ الدِّينِ',latin:'Ash-shalaatu \'imaadud diin',arti:'Sholat adalah tiang agama',perawi:'HR. Baihaqi'},{kategori:'Ibadah',arab:'الطُّهُورُ شَطْرُ الإِيمَانِ',latin:'Ath-thuhuuru syathrul iimaan',arti:'Kesucian adalah setengah dari iman',perawi:'HR. Muslim'},{kategori:'Sosial',arab:'الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ',latin:'Al-muslimu man salimal muslimuuna',arti:'Muslim sejati adalah yang membuat muslim lain selamat',perawi:'HR. Bukhari'},{kategori:'Sosial',arab:'مَنْ كَانَ يُؤْمِنُ بِاللهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ',latin:'Man kaana yu\'minu billaahi wal yaumil aakhiri',arti:'Barang siapa beriman kepada Allah dan hari akhir, berkatalah baik atau diam',perawi:'HR. Bukhari'},{kategori:'Ilmu',arab:'طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ',latin:'Thalabul \'ilmi fariidhatun \'alaa kulli muslim',arti:'Menuntut ilmu itu wajib bagi setiap muslim',perawi:'HR. Ibnu Majah'},{kategori:'Rezeki',arab:'مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ',latin:'Maa naqashat shadaqatun min maal',arti:'Sedekah tidak akan mengurangi harta',perawi:'HR. Muslim'},{kategori:'Sabar',arab:'عَجَبًا لِأَمْرِ الْمُؤْمِنِ إِنَّ أَمْرَهُ كُلَّهُ خَيْرٌ',latin:'\'Ajaban li amril mu\'mini inna amrahu kullahu khair',arti:'Sungguh menakjubkan urusan mukmin, semua urusannya baik',perawi:'HR. Muslim'}],
+doaHarian:[{nama:'Doa Bangun Tidur',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',latin:'Alhamdulillaahil ladzii ahyaanaa',arti:'Segala puji bagi Allah yang menghidupkan kami'},{nama:'Doa Sebelum Tidur',arab:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',latin:'Bismikallaahumma amuutu wa ahyaa',arti:'Dengan namaMu ya Allah aku mati dan hidup'},{nama:'Doa Sebelum Makan',arab:'بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيْمِ',latin:'Bismillaahir rahmaanir rahiim',arti:'Dengan nama Allah Yang Maha Pengasih'},{nama:'Doa Setelah Makan',arab:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا',latin:'Alhamdulillaahil ladzii ath\'amanaa',arti:'Segala puji bagi Allah yang memberi makan'},{nama:'Doa Keluar Rumah',arab:'بِسْمِ اللهِ تَوَكَّلْتُ عَلَى اللهِ',latin:'Bismillaahi tawakkaltu \'alallaahi',arti:'Dengan nama Allah aku bertawakal'},{nama:'Doa Masuk Rumah',arab:'اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلَجِ',latin:'Allaahumma innii as-aluka khairal maulaji',arti:'Ya Allah, aku memohon kebaikan'},{nama:'Doa Sebelum Belajar',arab:'رَبِّ زِدْنِي عِلْمًا وَارْزُقْنِي فَهْمًا',latin:'Rabbi zidnii \'ilman warzuqnii fahman',arti:'Tuhanku, tambahkanlah ilmu dan pemahaman'},{nama:'Doa Masuk Masjid',arab:'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ',latin:'Allaahummaftah lii abwaaba rahmatik',arti:'Ya Allah, bukakanlah pintu rahmatMu'},{nama:'Doa Naik Kendaraan',arab:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا',latin:'Subhaanal ladzii sakhkhara lanaa haadzaa',arti:'Maha Suci Allah yang menundukkan kendaraan'},{nama:'Doa Untuk Orang Tua',arab:'رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ',latin:'Rabbighfir lii wa liwaalidayya',arti:'Tuhanku, ampunilah aku dan orang tuaku'},{nama:'Doa Kesehatan',arab:'اللَّهُمَّ عَافِنِي فِي بَدَنِي',latin:'Allaahumma \'aafinii fii badanii',arti:'Ya Allah, sehatkanlah badanku'},{nama:'Doa Kebaikan Dunia Akhirat',arab:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً',latin:'Rabbanaa aatinaa fid-dunyaa hasanah',arti:'Ya Tuhan kami, berilah kebaikan dunia akhirat'}],
+filterHadits:'Semua',
+haditsKategori:['Semua','Iman','Akhlak','Ibadah','Sosial','Ilmu','Rezeki','Sabar'],
 toolsSubTab:'jam',customTtsText:'',compressedImageUrl:'',
 bmiWeight:'',bmiHeight:'',bmiAge:'',bmiGender:'male',bmiResult:null,
 worldClocks:[{name:'Jakarta',time:'',tz:'Asia/Jakarta',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},{name:'Makassar',time:'',tz:'Asia/Makassar',flag:'linear-gradient(to bottom,#e11d48 50%,#fff 50%)'},{name:'Tokyo',time:'',tz:'Asia/Tokyo',flag:'radial-gradient(circle,#bc002d 30%,#fff 30%)'},{name:'London',time:'',tz:'Europe/London',flag:'linear-gradient(to bottom,#012169 50%,#fff 50%)'}],
@@ -1284,7 +1384,7 @@ const savedTheme=localStorage.getItem('zenkai_theme');if(savedTheme)this.theme=s
 const savedStyle=localStorage.getItem('zenkai_style');if(savedStyle)this.styleMode=savedStyle;
 this.splashProgress=100;setTimeout(()=>{this.splashHidden=true;},1000);
 this.updateClock();setInterval(()=>this.updateClock(),1000);
-this.asmaulHusnaList=[];
+this.asmaulHusnaList=this.asmaulHusnaList.map(x=>({...x,hafal:false}));
 this.updateAiDesc();this.welcomeTextEdit=DEFAULT_WELCOME;
 this.voiceSupported=('webkitSpeechRecognition' in window)||('SpeechRecognition' in window);
 this.detectDevice();
