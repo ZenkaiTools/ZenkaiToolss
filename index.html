@@ -125,18 +125,15 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .drawer-item.danger{color:#ef4444}
 .intro-animation{position:fixed;inset:0;z-index:999999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .intro-animation.hide{opacity:0;visibility:hidden;transition:opacity .8s,visibility .8s}
-.intro-blackout{position:absolute;inset:0;background:#000;z-index:1}
 .intro-light{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#fef3c7 20%,rgba(251,191,36,.6) 40%,transparent 70%);z-index:3;pointer-events:none;animation:introLightGrow 4.5s ease-out forwards}
-@keyframes introLightGrow{0%{transform:translate(-50%,-50%) scale(0);opacity:0}18%{transform:translate(-50%,-50%) scale(0);opacity:0}25%{transform:translate(-50%,-50%) scale(3);opacity:1}35%{transform:translate(-50%,-50%) scale(20);opacity:.8}50%{transform:translate(-50%,-50%) scale(40);opacity:.4}70%{transform:translate(-50%,-50%) scale(60);opacity:.15}100%{transform:translate(-50%,-50%) scale(80);opacity:0}}
+@keyframes introLightGrow{0%{transform:translate(-50%,-50%) scale(0);opacity:0}18%{transform:translate(-50%,-50%) scale(0);opacity:0}25%{transform:translate(-50%,-50%) scale(3);opacity:1}35%{transform:translate(-50%,-50%) scale(20);opacity:.8}50%{transform:translate(-50%,-50%) scale(40);opacity:.4}100%{transform:translate(-50%,-50%) scale(80);opacity:0}}
 .intro-tear-wrap{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .intro-tear{width:100%;height:100%;filter:drop-shadow(0 0 20px #fff) drop-shadow(0 0 40px #fbbf24)}
-#tearPathTop, #tearPathBottom{transition:transform 1s cubic-bezier(.5,0,.5,1)}
+#tearPathTop,#tearPathBottom{transition:transform 1s cubic-bezier(.5,0,.5,1)}
 .intro-tear.open #tearPathTop{transform:translateY(-450px)}
 .intro-tear.open #tearPathBottom{transform:translateY(450px)}
 #introCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none}
 .intro-content{position:relative;z-index:6;text-align:center;padding:20px;pointer-events:none}
-.intro-glow-circle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.4),rgba(251,191,36,.2) 40%,transparent 70%);filter:blur(20px);opacity:0;animation:introGlowPulse 2s 2.2s forwards}
-@keyframes introGlowPulse{0%{opacity:0;transform:translate(-50%,-50%) scale(.8)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:.7;transform:translate(-50%,-50%) scale(1)}}
 .intro-text-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:18px;position:relative}
 .intro-word{font-family:'Bangers',cursive;font-size:clamp(52px,16vw,90px);letter-spacing:5px;color:#fff;display:block;line-height:1;opacity:0;text-shadow:0 0 20px currentColor,0 0 40px currentColor,0 0 80px currentColor}
 .intro-zenkai{color:#a855f7;transform:translateX(-100px) scale(.5);animation:introZoomIn 1s 2.4s forwards cubic-bezier(.22,1,.36,1)}
@@ -147,30 +144,71 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .intro-bar{width:min(200px,60vw);height:6px;background:rgba(255,255,255,.15);border-radius:6px;margin:24px auto 0;overflow:hidden;opacity:0;animation:introFadeUp .5s 3.4s forwards}
 .intro-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#a855f7,#fbbf24);border-radius:6px;transition:width .1s linear;box-shadow:0 0 20px #fbbf24}
 [data-style="glass"] body{background:linear-gradient(135deg,#e0e7ff,#f3e8ff,#fce7f3)}
-[data-style="glass"] .card{background:rgba(255,255,255,.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1.5px solid rgba(255,255,255,.7);border-radius:20px;box-shadow:0 8px 32px rgba(31,38,135,.15);padding:18px}
+[data-style="glass"] .card{background:rgba(255,255,255,.55);backdrop-filter:blur(20px);border:1.5px solid rgba(255,255,255,.7);border-radius:20px;box-shadow:0 8px 32px rgba(31,38,135,.15);padding:18px}
 [data-style="glass"] .hero-card{background:linear-gradient(135deg,rgba(168,85,247,.85),rgba(126,34,206,.85));backdrop-filter:blur(20px);border:1.5px solid rgba(255,255,255,.3);border-radius:24px}
 [data-style="glass"] .app-header{background:linear-gradient(135deg,rgba(251,191,36,.9),rgba(217,119,6,.9));backdrop-filter:blur(20px);border-bottom:1.5px solid rgba(255,255,255,.3)}
 [data-style="glass"] .drawer{background:rgba(255,255,255,.85);backdrop-filter:blur(30px);border-left:1.5px solid rgba(255,255,255,.6)}
 [data-style="glass"] .bottom-sheet-content{background:rgba(255,255,255,.9);backdrop-filter:blur(30px);border:1.5px solid rgba(255,255,255,.6)}
+/* === KOMIK === */
+.komik-search-bar{display:flex;gap:8px;margin-bottom:12px}
+.komik-search-bar input{flex:1}
+.komik-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.komik-tabs::-webkit-scrollbar{display:none}
+.komik-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:2.5px solid var(--border);background:var(--card-bg);color:var(--text);box-shadow:2px 2px 0 0 var(--border);transition:all .15s}
+.komik-tab.active{background:var(--accent);color:#fff}
+.komik-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.komik-card{background:var(--card-bg);border:3px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:3px 3px 0 0 var(--border);cursor:pointer;transition:all .15s;position:relative}
+.komik-card:active{transform:translate(2px,2px);box-shadow:1px 1px 0 0 var(--border)}
+.komik-cover{width:100%;aspect-ratio:2/3;object-fit:cover;background:var(--primary-soft);display:block}
+.komik-info{padding:8px}
+.komik-title{font-weight:700;font-size:12px;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px}
+.komik-meta{font-size:10px;color:#888;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:4px}
+.komik-status{padding:2px 6px;border-radius:6px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.komik-status.ongoing{background:#dcfce7;color:#15803d}
+.komik-status.completed{background:#dbeafe;color:#1e40af}
+.komik-status.hiatus{background:#fef3c7;color:#92400e}
+.komik-status.cancelled{background:#fee2e2;color:#991b1b}
+.komik-bookmark-btn{position:absolute;top:6px;right:6px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.9);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;box-shadow:2px 2px 0 0 var(--border);transition:all .15s;z-index:2}
+.komik-bookmark-btn.active{background:#fbbf24}
+.komik-bookmark-btn:active{transform:scale(0.9)}
+.komik-detail-cover{width:100%;max-height:340px;object-fit:cover;border-radius:14px;border:3px solid var(--border);box-shadow:4px 4px 0 0 var(--border)}
+.komik-detail-title{font-family:'Bangers',cursive;font-size:24px;letter-spacing:1px;line-height:1.1;margin:10px 0 6px;color:var(--accent-dark)}
+.komik-detail-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.komik-badge{padding:4px 10px;border-radius:8px;font-size:10px;font-weight:700;border:2px solid var(--border);background:var(--primary-soft);color:var(--accent-dark)}
+.komik-desc{font-size:13px;line-height:1.6;color:#444;max-height:150px;overflow-y:auto;padding:10px;border-radius:10px;background:var(--primary-soft);border:2px solid var(--border)}
+.komik-chapter-list{max-height:400px;overflow-y:auto;border-radius:10px;border:2px solid var(--border);background:var(--card-bg)}
+.komik-chapter-item{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--primary-soft);cursor:pointer;transition:background .15s;font-size:13px;font-weight:600}
+.komik-chapter-item:active{background:var(--primary-soft)}
+.komik-chapter-item:last-child{border-bottom:none}
+.komik-chapter-item.read{opacity:.5}
+.komik-chapter-item.read::before{content:'✓ ';color:#22c55e;font-weight:800}
+.komik-reader{position:fixed;inset:0;z-index:99997;background:#000;display:flex;flex-direction:column;overflow:hidden}
+.komik-reader-header{padding:10px 12px;background:rgba(0,0,0,.85);border-bottom:2px solid #333;display:flex;justify-content:space-between;align-items:center;color:#fff;backdrop-filter:blur(10px);z-index:2}
+.komik-reader-title{font-size:12px;font-weight:700;flex:1;margin:0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.komik-reader-body{flex:1;overflow-y:auto;background:#000;display:flex;flex-direction:column;align-items:center}
+.komik-reader-page{width:100%;max-width:900px;display:block;background:#111}
+.komik-reader-nav{padding:8px 12px;background:rgba(0,0,0,.85);border-top:2px solid #333;display:flex;gap:8px;align-items:center;backdrop-filter:blur(10px)}
+.komik-nav-btn{flex:1;padding:10px;background:rgba(255,255,255,.1);border:2px solid #444;border-radius:10px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;transition:all .15s}
+.komik-nav-btn:active{background:rgba(255,255,255,.2)}
+.komik-nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.komik-reader-loading{color:#888;text-align:center;padding:40px 20px;font-size:14px;font-weight:700}
+.komik-empty{text-align:center;padding:60px 20px;color:#999}
+.komik-empty-icon{font-size:64px;margin-bottom:12px;opacity:.5}
+.komik-empty-title{font-family:'Bangers',cursive;font-size:20px;color:var(--accent-dark);margin-bottom:6px}
+.komik-empty-desc{font-size:12px;font-weight:600}
 </style>
 </head>
-<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode">
-
-<div id="introAnimation" class="intro-animation" style="display:none;">
-  <div class="intro-blackout"></div>
+<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode"><div id="introAnimation" class="intro-animation" style="display:none;">
   <div class="intro-light" id="introLight"></div>
   <div class="intro-tear-wrap">
     <svg class="intro-tear" viewBox="0 0 400 800" preserveAspectRatio="none">
-      <defs>
-        <filter id="tearGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
+      <defs><filter id="tearGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
       <path id="tearPathTop" d="M200,0 L200,400 L200,400 L200,0 Z" fill="#fff" filter="url(#tearGlow)"/>
       <path id="tearPathBottom" d="M200,800 L200,400 L200,400 L200,800 Z" fill="#fff" filter="url(#tearGlow)"/>
     </svg>
   </div>
   <canvas id="introCanvas"></canvas>
   <div class="intro-content">
-    <div class="intro-glow-circle"></div>
     <div class="intro-text-wrap">
       <span class="intro-word intro-zenkai">ZENKAI</span>
       <span class="intro-word intro-tools">TOOLS</span>
@@ -205,10 +243,10 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         <li><b>💰 Dompet:</b> Transaksi, grafik, target tabungan, budget</li>
         <li><b>🤖 AI Chat:</b> Chatbot pintar 4 mode</li>
         <li><b>📥 Downloader:</b> TikTok tanpa watermark</li>
+        <li><b>📚 Komik:</b> Baca Manga, Manhwa, Manhua</li>
         <li><b>🛠️ Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
         <li><b>🎮 Game:</b> Refleks & Tic Tac Toe</li>
         <li><b>🎨 Tema:</b> 6 tema warna + 2 gaya visual</li>
-        <li><b>🏆 Poin & Level:</b> Kumpulkan poin, naik level!</li>
       </ul>
       <p class="txt-xs italic text-center mt-2" style="color:var(--accent-dark)">Developer: <b>Andika</b></p>
     </div>
@@ -356,7 +394,9 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     </div>
   </header>
 
-  <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24" style="background:var(--bg-soft)">  <div x-show="activeTab==='home'" class="sec-gap">
+  <main class="p-3 flex-1 overflow-y-auto space-y-3 pb-24" style="background:var(--bg-soft)">
+
+  <div x-show="activeTab==='home'" class="sec-gap">
     <div class="hero-card">
       <div class="hero-label">🚀 ZENKAI HUB</div>
       <div class="hero-title" x-text="'HALO, '+(userName||'USER').toUpperCase()+'! 👋'"></div>
@@ -384,7 +424,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <div class="quick-btn" @click="openTxSheet()"><div class="quick-icon">💰</div><div class="quick-label">Catat</div></div>
       <div class="quick-btn" @click="openChatAI()"><div class="quick-icon">🤖</div><div class="quick-label">AI Chat</div></div>
       <div class="quick-btn" @click="activeTab='downloader'"><div class="quick-icon">📥</div><div class="quick-label">Unduh</div></div>
-      <div class="quick-btn" @click="activeTab='tools';toolsSubTab='bmi'"><div class="quick-icon">⚖️</div><div class="quick-label">BMI</div></div>
+      <div class="quick-btn" @click="activeTab='komik';if(komikList.length===0)loadKomikPopular()"><div class="quick-icon">📚</div><div class="quick-label">Komik</div></div>
     </div>
 
     <div class="kategori-scroll">
@@ -499,6 +539,62 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </template>
       </div>
     </template>
+  </div>
+
+  <div x-show="activeTab==='komik'" class="sec-gap">
+    <div class="card text-center" style="background:linear-gradient(135deg,#4c1d95,#7e22ce)">
+      <div class="text-4xl mb-1">📚</div>
+      <h2 class="font-title text-2xl text-white">BACA KOMIK</h2>
+      <p class="txt-xs text-white opacity-90">Manga • Manhwa • Manhua — Powered by MangaDex</p>
+    </div>
+
+    <div class="komik-tabs">
+      <button @click="komikMode='popular';loadKomikPopular()" :class="komikMode==='popular'?'active':''" class="komik-tab">🔥 Populer</button>
+      <button @click="komikMode='latest';loadKomikLatest()" :class="komikMode==='latest'?'active':''" class="komik-tab">🆕 Terbaru</button>
+      <button @click="komikMode='search'" :class="komikMode==='search'?'active':''" class="komik-tab">🔍 Cari</button>
+      <button @click="komikMode='favorite';loadKomikFavorites()" :class="komikMode==='favorite'?'active':''" class="komik-tab">⭐ Favorit</button>
+      <button @click="komikMode='history';loadKomikHistory()" :class="komikMode==='history'?'active':''" class="komik-tab">📖 Riwayat</button>
+    </div>
+
+    <div class="komik-tabs" x-show="komikMode==='popular' || komikMode==='latest' || komikMode==='search'">
+      <button @click="komikLang='id';reloadKomik()" :class="komikLang==='id'?'active':''" class="komik-tab">🇮🇩 Indonesia</button>
+      <button @click="komikLang='en';reloadKomik()" :class="komikLang==='en'?'active':''" class="komik-tab">🇬🇧 English</button>
+      <button @click="komikLang='all';reloadKomik()" :class="komikLang==='all'?'active':''" class="komik-tab">🌏 Semua</button>
+    </div>
+
+    <div class="komik-search-bar" x-show="komikMode==='search'">
+      <input type="text" x-model="komikSearchQuery" @keyup.enter="searchKomik()" placeholder="Ketik judul komik..." class="input-field">
+      <button @click="searchKomik()" class="btn-soft" style="padding:12px 18px">🔍</button>
+    </div>
+
+    <div x-show="komikLoading" class="text-center py-8">
+      <div class="spin" style="width:32px;height:32px;border-width:3px"></div>
+      <div class="txt-xs font-bold mt-2" style="color:var(--accent-dark)" x-text="komikLoadingText"></div>
+    </div>
+
+    <div x-show="!komikLoading && komikList.length > 0" class="komik-grid">
+      <template x-for="m in komikList" :key="m.id">
+        <div class="komik-card" @click="openKomikDetail(m.id)">
+          <button class="komik-bookmark-btn" :class="isKomikFavorite(m.id)?'active':''" @click.stop="toggleKomikFavorite(m)">
+            <span x-text="isKomikFavorite(m.id)?'⭐':'☆'"></span>
+          </button>
+          <img :src="m.cover" class="komik-cover" loading="lazy" @error="$event.target.src='https://via.placeholder.com/200x300/eee/999?text=No+Cover'">
+          <div class="komik-info">
+            <div class="komik-title" x-text="m.title"></div>
+            <div class="komik-meta">
+              <span x-text="m.year || '-'"></span>
+              <span class="komik-status" :class="(m.status||'ongoing').toLowerCase()" x-text="m.status || 'Ongoing'"></span>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <div x-show="!komikLoading && komikList.length === 0" class="komik-empty">
+      <div class="komik-empty-icon" x-text="komikMode==='favorite'?'⭐':(komikMode==='history'?'📖':'📭')"></div>
+      <div class="komik-empty-title" x-text="komikMode==='favorite'?'Belum Ada Favorit':(komikMode==='history'?'Belum Ada Riwayat':(komikMode==='search'?'Cari Komik':'Komik Tidak Ditemukan'))"></div>
+      <div class="komik-empty-desc" x-text="komikMode==='favorite'?'Tap ⭐ di komik untuk menambah favorit':(komikMode==='history'?'Komik yang kamu baca akan muncul di sini':(komikMode==='search'?'Ketik judul lalu tekan enter':'Coba lagi nanti'))"></div>
+    </div>
   </div>
 
   <div x-show="activeTab==='tools'" class="sec-gap">
@@ -683,16 +779,14 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 
   <nav class="absolute bottom-0 left-0 right-0 flex p-2 gap-1" style="background:var(--card-bg);border-top:3px solid var(--border)">
     <button @click="activeTab='home'" :class="activeTab==='home'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-home"/></svg><span class="bottom-nav-label">HOME</span></button>
-    <button @click="activeTab='tools'" :class="activeTab==='tools'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-tools"/></svg><span class="bottom-nav-label">TOOLS</span></button>
+    <button @click="activeTab='komik';if(komikList.length===0)loadKomikPopular()" :class="activeTab==='komik'?'active':''" class="bottom-nav-btn"><span style="font-size:20px">📚</span><span class="bottom-nav-label">KOMIK</span></button>
     <button @click="activeTab='keuangan'" :class="activeTab==='keuangan'?'active':''" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-wallet"/></svg><span class="bottom-nav-label">DOMPET</span></button>
     <button @click="drawerOpen=true" class="bottom-nav-btn"><span style="font-size:20px">📂</span><span class="bottom-nav-label">MENU</span></button>
     <button @click="openChatAI()" class="bottom-nav-btn"><svg class="svg-icon-lg"><use href="#i-robot"/></svg><span class="bottom-nav-label">AI</span></button>
   </nav>
 
   <div class="floating-chat-btn" @click="openChatAI()" x-show="isAuthenticated&&!chatFullscreen"><span>🤖</span></div>
-</div>
-
-<div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
+</div><div x-show="txSheetOpen" class="bottom-sheet-overlay" style="z-index:100005;">
   <div class="bottom-sheet-content text-center space-y-4">
     <div class="w-12 h-1.5 rounded-full mx-auto" style="background:var(--border);opacity:.3"></div>
     <h3 class="font-title text-2xl" style="color:var(--accent-dark)">💰 TRANSAKSI BARU</h3>
@@ -857,6 +951,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
       <span class="drawer-badge" x-text="isOwner?'👑 OWNER':(isVip?'💎 VIP':'USER')"></span>
     </div>
     <div class="drawer-menu">
+      <div class="drawer-item" @click="drawerOpen=false;activeTab='komik';if(komikList.length===0)loadKomikPopular()"><span class="drawer-item-icon">📚</span><span class="drawer-item-label">Baca Komik</span><span>›</span></div>
       <div class="drawer-item" @click="drawerOpen=false;profileModalOpen=true"><span class="drawer-item-icon">👤</span><span class="drawer-item-label">Profil Saya</span><span>›</span></div>
       <div class="drawer-item" @click="drawerOpen=false;activeTab='tema'"><span class="drawer-item-icon">🎨</span><span class="drawer-item-label">Ganti Tema</span><span>›</span></div>
       <div class="drawer-item" @click="drawerOpen=false;activeTab='arcade'"><span class="drawer-item-icon">🎮</span><span class="drawer-item-label">Arcade Game</span><span>›</span></div>
@@ -879,8 +974,8 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
     <h3 class="font-title text-2xl text-center" style="color:var(--accent-dark)">🔔 NOTIFIKASI</h3>
     <div class="mt-3 space-y-2 max-h-[60vh] overflow-y-auto">
       <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="font-bold text-sm">🎉 Selamat Datang!</div><div class="txt-xs text-gray-600 mt-1">Terima kasih sudah pakai Zenkai Tools!</div></div>
+      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="font-bold text-sm">📚 Fitur Baru: Komik</div><div class="txt-xs text-gray-600 mt-1">Sekarang bisa baca Manga, Manhwa, Manhua!</div></div>
       <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="font-bold text-sm">💡 Tips</div><div class="txt-xs text-gray-600 mt-1">Kumpulkan poin dengan login harian & catat transaksi!</div></div>
-      <div class="p-3 rounded-xl" style="background:var(--primary-soft);border:2px solid var(--border)"><div class="font-bold text-sm">🤖 Zenkai AI</div><div class="txt-xs text-gray-600 mt-1">Tanya apa saja ke Zenkai AI dengan 4 mode berbeda.</div></div>
     </div>
     <button @click="notifPanelOpen=false" class="btn-soft w-full mt-3">Tutup</button>
   </div>
@@ -919,21 +1014,103 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   </div>
 </div>
 
+<div x-show="komikDetailOpen" class="bottom-sheet-overlay" style="z-index:100050;">
+  <div class="bottom-sheet-content" style="background:var(--bg-soft);">
+    <div class="w-12 h-1.5 rounded-full mx-auto mb-3" style="background:var(--border);opacity:.3"></div>
+    <template x-if="komikDetail">
+      <div class="space-y-3">
+        <button @click="komikDetailOpen=false" class="btn-soft">← Kembali</button>
+        <div class="text-center">
+          <img :src="komikDetail.cover" class="komik-detail-cover mx-auto" @error="$event.target.src='https://via.placeholder.com/300x400/eee/999?text=No+Cover'">
+        </div>
+        <h3 class="komik-detail-title" x-text="komikDetail.title"></h3>
+        <div class="komik-detail-meta">
+          <span class="komik-badge" :class="'komik-status '+(komikDetail.status||'').toLowerCase()" x-text="komikDetail.status || 'Ongoing'"></span>
+          <span class="komik-badge" x-text="'📅 '+(komikDetail.year||'-')"></span>
+          <span class="komik-badge" x-show="komikDetail.rating" x-text="'⭐ '+komikDetail.rating"></span>
+        </div>
+        <div class="card" style="padding:12px;background:var(--primary-soft);border:2px solid var(--border)">
+          <div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">✍️ PEMBUAT</div>
+          <div class="txt-sm" x-text="komikDetail.author || 'Tidak diketahui'"></div>
+        </div>
+        <div class="card" style="padding:12px;background:var(--primary-soft);border:2px solid var(--border)">
+          <div class="txt-xs font-bold mb-1" style="color:var(--accent-dark)">🏷️ GENRE</div>
+          <div class="flex flex-wrap gap-1">
+            <template x-for="tag in komikDetail.tags" :key="tag"><span class="komik-badge" x-text="tag"></span></template>
+          </div>
+        </div>
+        <div class="card" style="padding:12px">
+          <div class="txt-xs font-bold mb-2" style="color:var(--accent-dark)">📖 DESKRIPSI</div>
+          <div class="komik-desc" x-text="komikDetail.description || 'Tidak ada deskripsi.'"></div>
+        </div>
+        <div class="flex gap-2">
+          <button @click="toggleKomikFavorite(komikDetail)" class="btn-soft flex-1" :style="isKomikFavorite(komikDetail.id)?'background:#fbbf24':''">
+            <span x-text="isKomikFavorite(komikDetail.id)?'⭐ Favorit':'☆ Favorit'"></span>
+          </button>
+          <button @click="openKomikReader(0)" :disabled="!komikDetail.chapters || komikDetail.chapters.length===0" class="btn-primary flex-1">▶️ BACA</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="p-3 font-title text-lg" style="color:var(--accent-dark);border-bottom:2px solid var(--border);background:var(--primary-soft)" x-text="'📄 DAFTAR CHAPTER ('+(komikDetail.chapters?.length||0)+')'"></div>
+          <template x-if="komikDetailLoading">
+            <div class="text-center py-6"><div class="spin"></div></div>
+          </template>
+          <template x-if="!komikDetailLoading">
+            <div class="komik-chapter-list">
+              <template x-for="(ch,i) in komikDetail.chapters" :key="ch.id">
+                <div class="komik-chapter-item" :class="isChapterRead(ch.id)?'read':''" @click="openKomikReader(i)">
+                  <span x-text="'Ch. '+(ch.chapter||'?')+(ch.title?' — '+ch.title:'')"></span>
+                  <span class="txt-xs text-gray-500" x-text="ch.lang?.toUpperCase()"></span>
+                </div>
+              </template>
+              <template x-if="!komikDetail.chapters || komikDetail.chapters.length===0">
+                <div class="p-4 text-center txt-xs text-gray-500 font-bold">Belum ada chapter</div>
+              </template>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+    <template x-if="!komikDetail">
+      <div class="text-center py-8"><div class="spin"></div><div class="txt-xs mt-2">Memuat detail...</div></div>
+    </template>
+  </div>
+</div>
+
+<div x-show="komikReaderOpen" class="komik-reader" x-cloak>
+  <div class="komik-reader-header">
+    <button @click="closeKomikReader()" class="text-white text-xl px-2">←</button>
+    <div class="komik-reader-title" x-text="(komikDetail?.title||'') + (komikChapterNow? ' • Ch. '+komikChapterNow.chapter : '')"></div>
+    <button @click="komikReaderDark=!komikReaderDark" class="text-white text-xl px-2" x-text="komikReaderDark?'🌙':'☀️'"></button>
+  </div>
+  <div class="komik-reader-body" :style="komikReaderDark?'background:#000':'background:#1a1a1a'">
+    <template x-if="komikReaderLoading">
+      <div class="komik-reader-loading">
+        <div class="spin" style="width:32px;height:32px;border-width:3px;border-color:#fff;border-top-color:transparent"></div>
+        <div class="mt-3">Memuat halaman...</div>
+      </div>
+    </template>
+    <template x-for="(page,idx) in komikPages" :key="idx">
+      <img :src="page" class="komik-reader-page" loading="lazy" @error="$event.target.style.opacity='.3'">
+    </template>
+  </div>
+  <div class="komik-reader-nav">
+    <button @click="prevKomikChapter()" :disabled="komikChapterIndex<=0" class="komik-nav-btn">← Prev</button>
+    <button @click="nextKomikChapter()" :disabled="komikChapterIndex>=((komikDetail?.chapters?.length||1)-1)" class="komik-nav-btn">Next →</button>
+  </div>
+</div>
+
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
 <symbol id="i-home" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
 <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></symbol>
-<symbol id="i-tools" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></symbol>
 <symbol id="i-robot" viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></symbol>
-</svg>
-
-<script>
+</svg><script>
 const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
 const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-responder';
 const OWNER_EMAIL='andikaatka@gmail.com';
 const DAILY_LIMIT=10;
-const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi ini menyediakan berbagai tools: Dompet Keuangan, AI Chat pintar, TikTok Downloader, Cuaca & Berita, Film Trending, Game, dan banyak lagi.\n\nSemua fitur bisa diakses gratis. Yuk, mulai jelajahi!';
+const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi ini menyediakan berbagai tools: Dompet Keuangan, AI Chat pintar, TikTok Downloader, Baca Komik, Cuaca & Berita, Film Trending, Game, dan banyak lagi.\n\nSemua fitur bisa diakses gratis. Yuk, mulai jelajahi!';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
 function zenkaiCloudApp(){
@@ -966,6 +1143,7 @@ fiturList:[
   {id:'grafik',nama:'Grafik',desc:'Statistik keuangan',icon:'📊',kategori:'keuangan',tab:'keuangan',sub:'grafik'},
   {id:'target',nama:'Target & Budget',desc:'Rencanakan keuangan',icon:'🎯',kategori:'keuangan',tab:'keuangan',sub:'target'},
   {id:'downloader',nama:'TikTok Downloader',desc:'Unduh tanpa watermark',icon:'📥',kategori:'tools',tab:'downloader'},
+  {id:'komik',nama:'Baca Komik',desc:'Manga • Manhwa • Manhua',icon:'📚',kategori:'hiburan',tab:'komik'},
   {id:'tts',nama:'Text to Speech',desc:'Ubah teks jadi suara',icon:'🗣️',kategori:'tools',tab:'tools',sub:'tts'},
   {id:'kompres',nama:'Kompres Foto',desc:'Perkecil ukuran gambar',icon:'🖼️',kategori:'tools',tab:'tools',sub:'kompres'},
   {id:'bmi',nama:'BMI & Kalori',desc:'Hitung berat ideal',icon:'⚖️',kategori:'tools',tab:'tools',sub:'bmi'},
@@ -999,6 +1177,12 @@ welcomeText:DEFAULT_WELCOME,welcomeTextEdit:'',
 chatMessages:[],chatInput:'',aiThinking:false,aiThinkingText:'',aiThinkingTimer:null,aiMode:'umum',chatCount:0,chatDate:'',chatBonus:0,chatFullscreen:false,
 voiceSupported:false,aiModeDesc:'',
 
+// === KOMIK STATE ===
+komikMode:'popular',komikLang:'id',komikSearchQuery:'',komikLoading:false,komikLoadingText:'Memuat...',komikList:[],
+komikDetailOpen:false,komikDetail:null,komikDetailLoading:false,
+komikFavorites:[],komikHistory:[],
+komikReaderOpen:false,komikReaderLoading:false,komikReaderDark:true,komikPages:[],komikChapterIndex:0,komikChapterNow:null,
+
 getLevelName(lv){const names={1:'Pemula 🌱',2:'Rajin 📚',3:'Aktif ⚡',4:'Ahli 🎓',5:'Master 👑',6:'Legenda 🌟'};return names[lv]||'Pemula 🌱';},
 getNextLevelPoints(){const t={1:100,2:300,3:600,4:1000,5:2000,6:0};return t[this.userLevel]||0;},
 getCurrentLevelMin(){const t={1:0,2:100,3:300,4:600,5:1000,6:2000};return t[this.userLevel]||0;},
@@ -1015,6 +1199,7 @@ bukaFitur(f){
   else if(f.tab==='cuaca'){this.openWeatherSheet();}
   else if(f.tab==='berita'){this.openNews();}
   else if(f.tab==='film'){this.openMovieSheet();}
+  else if(f.tab==='komik'){this.activeTab='komik';if(this.komikList.length===0)this.loadKomikPopular();}
   else if(f.tab==='downloader'||f.tab==='tema'){this.activeTab=f.tab;}
 },
 openNotif(){this.notifPanelOpen=true;},
@@ -1036,7 +1221,7 @@ detectDevice(){
   window.addEventListener('online',()=>{this.deviceInfo.online=true;});
   window.addEventListener('offline',()=>{this.deviceInfo.online=false;});
   if(navigator.getBattery){navigator.getBattery().then(b=>{const upd=()=>{this.deviceInfo.battery=Math.round(b.level*100)+'%';};upd();b.addEventListener('levelchange',upd);});}
-  const tips=['Rajin catat transaksi bikin keuangan lebih terkontrol! 💰','Jangan lupa login harian buat dapet 10 poin gratis ⭐','Coba AI Chat dengan mode berbeda 🎯','Download video TikTok tanpa watermark di menu Unduh 📥','Gunakan target tabungan biar keuangan terencana 🎯'];
+  const tips=['Rajin catat transaksi bikin keuangan lebih terkontrol! 💰','Jangan lupa login harian buat dapet 10 poin gratis ⭐','Coba AI Chat dengan mode berbeda 🎯','Download video TikTok tanpa watermark di menu Unduh 📥','Baca komik favorit kamu di tab Komik 📚'];
   this.tipsHarian=tips[Math.floor(Math.random()*tips.length)];
 },
 
@@ -1048,6 +1233,8 @@ this.updateClock();setInterval(()=>this.updateClock(),1000);
 this.updateAiDesc();this.welcomeTextEdit=DEFAULT_WELCOME;
 this.voiceSupported=('webkitSpeechRecognition' in window)||('SpeechRecognition' in window);
 this.detectDevice();
+try{const fav=localStorage.getItem('zenkai_komik_fav');if(fav)this.komikFavorites=JSON.parse(fav);}catch(e){}
+try{const his=localStorage.getItem('zenkai_komik_history');if(his)this.komikHistory=JSON.parse(his);}catch(e){}
 try{const{data:settings}=await sb.from('app_settings').select('welcome_text').eq('id',1).maybeSingle();if(settings&&settings.welcome_text){this.welcomeText=settings.welcome_text;this.welcomeTextEdit=settings.welcome_text;}}catch(e){}
 try{const{data:{session}}=await sb.auth.getSession();if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}}catch(e){console.error(e);}
 this.initProvinces();
@@ -1136,6 +1323,173 @@ initTTT(){this.tttBoard=['','','','','','','','',''];this.tttStatus='Giliran kam
 tttPlay(idx){if(this.tttBoard[idx]||this.tttStatus.includes('Menang')||this.tttStatus.includes('Seri'))return;this.tttBoard[idx]='X';if(this.checkTTT('X')){this.tttStatus='🎉 Kamu Menang!';this.addPoints(5,'Menang TTT');return;}if(this.tttBoard.every(c=>c)){this.tttStatus='🤝 Seri!';return;}setTimeout(()=>{const empty=this.tttBoard.map((v,i)=>v?'':i).filter(v=>v!=='');if(empty.length===0)return;const cpu=empty[Math.floor(Math.random()*empty.length)];this.tttBoard[cpu]='O';if(this.checkTTT('O')){this.tttStatus='😢 CPU Menang!';return;}if(this.tttBoard.every(c=>c)){this.tttStatus='🤝 Seri!';return;}this.tttStatus='Giliran kamu (X)';},400);},
 checkTTT(p){const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return lines.some(l=>l.every(i=>this.tttBoard[i]===p));},
 
+// ========== KOMIK METHODS ==========
+getKomikProxyUrl(path){return SUPABASE_URL+'/functions/v1/mangadex-proxy?path='+encodeURIComponent(path);},
+
+async loadKomikPopular(){
+  this.komikLoading=true;this.komikLoadingText='Memuat komik populer...';this.komikList=[];
+  try{
+    const langFilter=this.komikLang==='all'?'':'&availableTranslatedLanguage[]='+this.komikLang;
+    const path='/manga?limit=20&order[followedCount]=desc'+langFilter+'&includes[]=cover_art&includes[]=author&contentRating[]=safe&contentRating[]=suggestive';
+    const res=await fetch(this.getKomikProxyUrl(path));
+    const json=await res.json();
+    this.komikList=this.parseKomikList(json.data);
+  }catch(e){this.showAlert('Gagal','Komik gagal dimuat: '+e.message);}
+  this.komikLoading=false;
+},
+
+async loadKomikLatest(){
+  this.komikLoading=true;this.komikLoadingText='Memuat komik terbaru...';this.komikList=[];
+  try{
+    const langFilter=this.komikLang==='all'?'':'&availableTranslatedLanguage[]='+this.komikLang;
+    const path='/manga?limit=20&order[latestUploadedChapter]=desc'+langFilter+'&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive';
+    const res=await fetch(this.getKomikProxyUrl(path));
+    const json=await res.json();
+    this.komikList=this.parseKomikList(json.data);
+  }catch(e){this.showAlert('Gagal','Komik gagal dimuat.');}
+  this.komikLoading=false;
+},
+
+async searchKomik(){
+  const q=this.komikSearchQuery.trim();
+  if(!q){return;}
+  this.komikLoading=true;this.komikLoadingText='Mencari "'+q+'"...';this.komikList=[];
+  try{
+    const langFilter=this.komikLang==='all'?'':'&availableTranslatedLanguage[]='+this.komikLang;
+    const path='/manga?title='+encodeURIComponent(q)+'&limit=30'+langFilter+'&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive';
+    const res=await fetch(this.getKomikProxyUrl(path));
+    const json=await res.json();
+    this.komikList=this.parseKomikList(json.data);
+  }catch(e){this.showAlert('Gagal','Pencarian gagal.');}
+  this.komikLoading=false;
+},
+
+reloadKomik(){
+  if(this.komikMode==='popular')this.loadKomikPopular();
+  else if(this.komikMode==='latest')this.loadKomikLatest();
+  else if(this.komikMode==='search'&&this.komikSearchQuery.trim())this.searchKomik();
+},
+
+parseKomikList(data){
+  if(!data)return [];
+  return data.map(m=>{
+    const coverRel=m.relationships?.find(r=>r.type==='cover_art');
+    const authorRel=m.relationships?.find(r=>r.type==='author');
+    const fileName=coverRel?.attributes?.fileName;
+    return{
+      id:m.id,
+      title:m.attributes?.title?.id||m.attributes?.title?.en||m.attributes?.title?.['ja-ro']||'Tanpa Judul',
+      status:m.attributes?.status||'ongoing',
+      year:m.attributes?.year||'-',
+      cover:fileName?'https://uploads.mangadex.org/covers/'+m.id+'/'+fileName+'.256.jpg':'',
+      author:authorRel?.attributes?.name||'',
+      tags:(m.attributes?.tags||[]).slice(0,3).map(t=>t.attributes?.name?.id||t.attributes?.name?.en).filter(Boolean),
+      description:m.attributes?.description?.id||m.attributes?.description?.en||''
+    };
+  });
+},
+
+async openKomikDetail(mangaId){
+  this.komikDetailOpen=true;
+  this.komikDetailLoading=true;
+  this.komikDetail=null;
+  try{
+    const path='/manga/'+mangaId+'?includes[]=cover_art&includes[]=author&includes[]=artist';
+    const res=await fetch(this.getKomikProxyUrl(path));
+    const json=await res.json();
+    const m=json.data;
+    if(!m)throw new Error('Komik tidak ditemukan');
+    const coverRel=m.relationships?.find(r=>r.type==='cover_art');
+    const authorRel=m.relationships?.find(r=>r.type==='author');
+    const fileName=coverRel?.attributes?.fileName;
+    this.komikDetail={
+      id:m.id,
+      title:m.attributes?.title?.id||m.attributes?.title?.en||'Tanpa Judul',
+      cover:fileName?'https://uploads.mangadex.org/covers/'+m.id+'/'+fileName+'.512.jpg':'',
+      status:m.attributes?.status||'ongoing',
+      year:m.attributes?.year||'-',
+      lang:m.attributes?.originalLanguage||'ja',
+      author:authorRel?.attributes?.name||'Tidak diketahui',
+      tags:(m.attributes?.tags||[]).map(t=>t.attributes?.name?.en||t.attributes?.name?.id).filter(Boolean),
+      description:m.attributes?.description?.id||m.attributes?.description?.en||'Tidak ada deskripsi.',
+      chapters:[]
+    };
+    await this.loadKomikChapters(mangaId);
+  }catch(e){this.showAlert('Gagal','Detail gagal dimuat: '+e.message);}
+  this.komikDetailLoading=false;
+},
+
+async loadKomikChapters(mangaId){
+  const langFilter=this.komikLang==='all'?'':'&translatedLanguage[]='+this.komikLang;
+  const path='/chapter?manga='+mangaId+'&limit=100'+langFilter+'&order[chapter]=desc&order[volume]=desc&includeEmptyPages=0&includeExternalUrl=0';
+  const res=await fetch(this.getKomikProxyUrl(path));
+  const json=await res.json();
+  this.komikDetail.chapters=(json.data||[]).map(ch=>({
+    id:ch.id,
+    chapter:ch.attributes?.chapter||'?',
+    title:ch.attributes?.title||'',
+    lang:ch.attributes?.translatedLanguage||'id',
+    pages:ch.attributes?.pages||0
+  }));
+  if(this.komikDetail)this.komikDetail={...this.komikDetail};
+},
+
+async openKomikReader(chapterIndex){
+  if(!this.komikDetail||!this.komikDetail.chapters.length)return;
+  this.komikChapterIndex=chapterIndex;
+  this.komikChapterNow=this.komikDetail.chapters[chapterIndex];
+  this.komikReaderOpen=true;
+  this.komikReaderLoading=true;
+  this.komikPages=[];
+  try{
+    const path='/at-home/server/'+this.komikChapterNow.id;
+    const res=await fetch(this.getKomikProxyUrl(path));
+    const json=await res.json();
+    const baseUrl=json.baseUrl;
+    const hash=json.chapter?.hash;
+    const data=json.chapter?.data||[];
+    const dataSaver=json.chapter?.dataSaver||[];
+    const mode=this.komikReaderDark?dataSaver:data;
+    const quality=this.komikReaderDark?'data-saver':'data';
+    this.komikPages=mode.map(f=>baseUrl+'/'+quality+'/'+hash+'/'+f);
+    this.addToKomikHistory(this.komikDetail,this.komikChapterNow);
+    this.markChapterRead(this.komikChapterNow.id);
+  }catch(e){this.showAlert('Gagal','Halaman gagal dimuat: '+e.message);this.komikReaderOpen=false;}
+  this.komikReaderLoading=false;
+},
+
+closeKomikReader(){this.komikReaderOpen=false;this.komikPages=[];this.komikChapterNow=null;},
+prevKomikChapter(){if(this.komikChapterIndex>0)this.openKomikReader(this.komikChapterIndex-1);},
+nextKomikChapter(){if(this.komikChapterIndex<(this.komikDetail?.chapters?.length||1)-1)this.openKomikReader(this.komikChapterIndex+1);},
+
+isKomikFavorite(id){return this.komikFavorites.some(f=>f.id===id);},
+toggleKomikFavorite(m){
+  const idx=this.komikFavorites.findIndex(f=>f.id===m.id);
+  if(idx>=0){this.komikFavorites.splice(idx,1);}
+  else{this.komikFavorites.push({id:m.id,title:m.title,cover:m.cover,status:m.status,year:m.year,addedAt:Date.now()});}
+  localStorage.setItem('zenkai_komik_fav',JSON.stringify(this.komikFavorites));
+},
+loadKomikFavorites(){this.komikList=[...this.komikFavorites];},
+
+addToKomikHistory(detail,chapter){
+  const item={id:detail.id,title:detail.title,cover:detail.cover,status:detail.status,year:detail.year,chapter:chapter.chapter,chapterId:chapter.id,readAt:Date.now()};
+  this.komikHistory=this.komikHistory.filter(h=>h.id!==detail.id);
+  this.komikHistory.unshift(item);
+  if(this.komikHistory.length>50)this.komikHistory=this.komikHistory.slice(0,50);
+  localStorage.setItem('zenkai_komik_history',JSON.stringify(this.komikHistory));
+},
+loadKomikHistory(){this.komikList=this.komikHistory.map(h=>({...h,year:h.year,status:h.status}));},
+
+markChapterRead(chId){
+  const read=JSON.parse(localStorage.getItem('zenkai_komik_read')||'[]');
+  if(!read.includes(chId)){read.push(chId);if(read.length>500)read.splice(0,200);}
+  localStorage.setItem('zenkai_komik_read',JSON.stringify(read));
+},
+isChapterRead(chId){
+  const read=JSON.parse(localStorage.getItem('zenkai_komik_read')||'[]');
+  return read.includes(chId);
+},
+
 async sendChat(){
   if(!this.chatInput.trim()||this.aiThinking)return;
   if(!this.currentUser)return this.showAlert('Perhatian','Login dulu!');
@@ -1177,7 +1531,7 @@ async logout(){await sb.auth.signOut();this.isAuthenticated=false;this.currentUs
 };
 }
 
-function playIntroAnimation(userName, onDone){
+function playIntroAnimation(userName,onDone){
   const intro=document.getElementById('introAnimation');
   const canvas=document.getElementById('introCanvas');
   const subtitle=document.getElementById('introSubtitle');
