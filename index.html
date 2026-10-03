@@ -2043,7 +2043,8 @@ init:async function(){
   this.proChatFullscreen = false;
   
   // FIX WELCOME TIMING: muncul setelah loading screen hilang
-  setTimeout(function(){ 
+  self.setupRealtime();
+setTimeout(function(){ 
     self.loadingHidden=true; 
     self.chatFullscreen=false; 
     self.proChatFullscreen=false;
@@ -2782,6 +2783,34 @@ sendChat:async function(){
 },
 startVoiceInput:function(){if(!this.voiceSupported){return this.showAlert('INFO','Browser tidak support.');}var SR=window.SpeechRecognition||window.webkitSpeechRecognition;var rec=new SR();rec.lang='id-ID';var self=this;rec.onresult=function(e){self.chatInput=e.results[0][0].transcript;setTimeout(function(){self.sendChat()},300)};rec.onerror=function(e){self.showAlert('GAGAL','Voice error: '+e.error)};rec.start();},
 confirmClearChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat dihapus.',function(){self.chatMessages=[];self.showAlert('SUKSES','Chat dihapus.');},'🗑️');},
+setupRealtime:function(){
+  var self = this;
+  try{
+    sb.channel('bc-rt').on('postgres_changes',{event:'INSERT',schema:'public',table:'broadcasts'},function(p){
+      var n=p.new;
+      var last=localStorage.getItem('zenkai_last_broadcast_id');
+      if(last && Number(last)===Number(n.id))return;
+      if(n.aktif_sampai && new Date(n.aktif_sampai)<new Date())return;
+      self.activeBroadcast=n;
+      self.broadcastPopupOpen=true;
+    }).subscribe();
+  }catch(e){console.error('RT BC:',e);}
+  try{
+    sb.channel('maint-rt').on('postgres_changes',{event:'*',schema:'public',table:'feature_maintenance'},function(p){
+      var u=p.new;
+      if(!u||!u.fitur_id)return;
+      self.maintenanceData[u.fitur_id]=u;
+      self.maintenanceData=Object.assign({},self.maintenanceData);
+      if(self.maintenanceForm[u.fitur_id]){
+        self.maintenanceForm[u.fitur_id].is_active=u.is_active||false;
+        self.maintenanceForm[u.fitur_id].alasan=u.alasan||'';
+        self.maintenanceForm[u.fitur_id].estimasi=u.estimasi||'';
+        self.maintenanceForm=Object.assign({},self.maintenanceForm);
+      }
+    }).subscribe();
+  }catch(e){console.error('RT MT:',e);}
+},
+
 logout:async function(){await sb.auth.signOut();this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;this.chatFullscreen=false;this.proChatFullscreen=false;window.location.reload();}
 };
 }
