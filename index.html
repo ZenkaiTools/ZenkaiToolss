@@ -163,11 +163,11 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .komik-info{padding:8px}
 .komik-title{font-weight:700;font-size:12px;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px}
 .komik-meta{font-size:10px;color:#888;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:4px}
-.komik-status{padding:2px 6px;border-radius:6px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
-.komik-status.ongoing{background:#dcfce7;color:#15803d}
-.komik-status.completed{background:#dbeafe;color:#1e40af}
-.komik-status.hiatus{background:#fef3c7;color:#92400e}
-.komik-status.cancelled{background:#fee2e2;color:#991b1b}
+.komik-status{padding:3px 8px;border-radius:6px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#fff}
+.komik-status.ongoing{background:#22c55e}
+.komik-status.completed{background:#3b82f6}
+.komik-status.hiatus{background:#f59e0b}
+.komik-status.cancelled{background:#ef4444}
 .komik-bookmark-btn{position:absolute;top:6px;right:6px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.9);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;box-shadow:2px 2px 0 0 var(--border);transition:all .15s;z-index:2}
 .komik-bookmark-btn.active{background:#fbbf24}
 .komik-bookmark-btn:active{transform:scale(0.9)}
@@ -583,7 +583,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
             <div class="komik-title" x-text="m.title"></div>
             <div class="komik-meta">
               <span x-text="m.year || '-'"></span>
-              <span class="komik-status" :class="(m.status||'ongoing').toLowerCase()" x-text="m.status || 'Ongoing'"></span>
+              <span class="komik-status" :class="(m.status||'ongoing').toLowerCase()" x-text="m.status==='ongoing'?'Ongoing':(m.status==='completed'?'Selesai':(m.status==='hiatus'?'Hiatus':(m.status==='cancelled'?'Dibatalkan':m.status||'Ongoing')))"></span>
             </div>
           </div>
         </div>
@@ -1025,7 +1025,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
         </div>
         <h3 class="komik-detail-title" x-text="komikDetail.title"></h3>
         <div class="komik-detail-meta">
-          <span class="komik-badge" :class="'komik-status '+(komikDetail.status||'').toLowerCase()" x-text="komikDetail.status || 'Ongoing'"></span>
+          <span class="komik-badge" :class="'komik-status '+(komikDetail.status||'').toLowerCase()" x-text="komikDetail.status==='ongoing'?'Ongoing':(komikDetail.status==='completed'?'Selesai':(komikDetail.status==='hiatus'?'Hiatus':(komikDetail.status==='cancelled'?'Dibatalkan':komikDetail.status||'Ongoing')))"></span>
           <span class="komik-badge" x-text="'📅 '+(komikDetail.year||'-')"></span>
           <span class="komik-badge" x-show="komikDetail.rating" x-text="'⭐ '+komikDetail.rating"></span>
         </div>
@@ -1177,7 +1177,6 @@ welcomeText:DEFAULT_WELCOME,welcomeTextEdit:'',
 chatMessages:[],chatInput:'',aiThinking:false,aiThinkingText:'',aiThinkingTimer:null,aiMode:'umum',chatCount:0,chatDate:'',chatBonus:0,chatFullscreen:false,
 voiceSupported:false,aiModeDesc:'',
 
-// === KOMIK STATE ===
 komikMode:'popular',komikLang:'id',komikSearchQuery:'',komikLoading:false,komikLoadingText:'Memuat...',komikList:[],
 komikDetailOpen:false,komikDetail:null,komikDetailLoading:false,
 komikFavorites:[],komikHistory:[],
@@ -1326,13 +1325,38 @@ checkTTT(p){const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8]
 // ========== KOMIK METHODS ==========
 getKomikProxyUrl(path){return SUPABASE_URL+'/functions/v1/mangadex-proxy?path='+encodeURIComponent(path);},
 
+async fetchKomik(path){
+  const res = await fetch(this.getKomikProxyUrl(path));
+  return await res.json();
+},
+
+parseKomikList(data){
+  if(!data)return [];
+  return data.map(m=>{
+    const coverRel=m.relationships?.find(r=>r.type==='cover_art');
+    const authorRel=m.relationships?.find(r=>r.type==='author');
+    const fileName=coverRel?.attributes?.fileName;
+    const titleObj = m.attributes?.title || {};
+    const title = titleObj.id || titleObj.en || titleObj['ja-ro'] || titleObj.ja || Object.values(titleObj)[0] || 'Tanpa Judul';
+    return{
+      id:m.id,
+      title:title,
+      status:m.attributes?.status||'ongoing',
+      year:m.attributes?.year||'-',
+      cover:fileName?'https://wsrv.nl/?url='+encodeURIComponent('https://uploads.mangadex.org/covers/'+m.id+'/'+fileName+'.256.jpg'):'',
+      author:authorRel?.attributes?.name||'',
+      tags:(m.attributes?.tags||[]).slice(0,3).map(t=>t.attributes?.name?.id||t.attributes?.name?.en).filter(Boolean),
+      description:m.attributes?.description?.id||m.attributes?.description?.en||''
+    };
+  });
+},
+
 async loadKomikPopular(){
   this.komikLoading=true;this.komikLoadingText='Memuat komik populer...';this.komikList=[];
   try{
     const langFilter=this.komikLang==='all'?'':'&availableTranslatedLanguage[]='+this.komikLang;
     const path='/manga?limit=20&order[followedCount]=desc'+langFilter+'&includes[]=cover_art&includes[]=author&contentRating[]=safe&contentRating[]=suggestive';
-    const res=await fetch(this.getKomikProxyUrl(path));
-    const json=await res.json();
+    const json = await this.fetchKomik(path);
     this.komikList=this.parseKomikList(json.data);
   }catch(e){this.showAlert('Gagal','Komik gagal dimuat: '+e.message);}
   this.komikLoading=false;
@@ -1343,8 +1367,7 @@ async loadKomikLatest(){
   try{
     const langFilter=this.komikLang==='all'?'':'&availableTranslatedLanguage[]='+this.komikLang;
     const path='/manga?limit=20&order[latestUploadedChapter]=desc'+langFilter+'&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive';
-    const res=await fetch(this.getKomikProxyUrl(path));
-    const json=await res.json();
+    const json = await this.fetchKomik(path);
     this.komikList=this.parseKomikList(json.data);
   }catch(e){this.showAlert('Gagal','Komik gagal dimuat.');}
   this.komikLoading=false;
@@ -1357,8 +1380,7 @@ async searchKomik(){
   try{
     const langFilter=this.komikLang==='all'?'':'&availableTranslatedLanguage[]='+this.komikLang;
     const path='/manga?title='+encodeURIComponent(q)+'&limit=30'+langFilter+'&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive';
-    const res=await fetch(this.getKomikProxyUrl(path));
-    const json=await res.json();
+    const json = await this.fetchKomik(path);
     this.komikList=this.parseKomikList(json.data);
   }catch(e){this.showAlert('Gagal','Pencarian gagal.');}
   this.komikLoading=false;
@@ -1370,42 +1392,24 @@ reloadKomik(){
   else if(this.komikMode==='search'&&this.komikSearchQuery.trim())this.searchKomik();
 },
 
-parseKomikList(data){
-  if(!data)return [];
-  return data.map(m=>{
-    const coverRel=m.relationships?.find(r=>r.type==='cover_art');
-    const authorRel=m.relationships?.find(r=>r.type==='author');
-    const fileName=coverRel?.attributes?.fileName;
-    return{
-      id:m.id,
-      title:m.attributes?.title?.id||m.attributes?.title?.en||m.attributes?.title?.['ja-ro']||'Tanpa Judul',
-      status:m.attributes?.status||'ongoing',
-      year:m.attributes?.year||'-',
-      cover:fileName?'https://uploads.mangadex.org/covers/'+m.id+'/'+fileName+'.256.jpg':'',
-      author:authorRel?.attributes?.name||'',
-      tags:(m.attributes?.tags||[]).slice(0,3).map(t=>t.attributes?.name?.id||t.attributes?.name?.en).filter(Boolean),
-      description:m.attributes?.description?.id||m.attributes?.description?.en||''
-    };
-  });
-},
-
 async openKomikDetail(mangaId){
   this.komikDetailOpen=true;
   this.komikDetailLoading=true;
   this.komikDetail=null;
   try{
     const path='/manga/'+mangaId+'?includes[]=cover_art&includes[]=author&includes[]=artist';
-    const res=await fetch(this.getKomikProxyUrl(path));
-    const json=await res.json();
+    const json = await this.fetchKomik(path);
     const m=json.data;
     if(!m)throw new Error('Komik tidak ditemukan');
     const coverRel=m.relationships?.find(r=>r.type==='cover_art');
     const authorRel=m.relationships?.find(r=>r.type==='author');
     const fileName=coverRel?.attributes?.fileName;
+    const titleObj = m.attributes?.title || {};
+    const title = titleObj.id || titleObj.en || titleObj['ja-ro'] || titleObj.ja || Object.values(titleObj)[0] || 'Tanpa Judul';
     this.komikDetail={
       id:m.id,
-      title:m.attributes?.title?.id||m.attributes?.title?.en||'Tanpa Judul',
-      cover:fileName?'https://uploads.mangadex.org/covers/'+m.id+'/'+fileName+'.512.jpg':'',
+      title:title,
+      cover:fileName?'https://wsrv.nl/?url='+encodeURIComponent('https://uploads.mangadex.org/covers/'+m.id+'/'+fileName+'.512.jpg'):'',
       status:m.attributes?.status||'ongoing',
       year:m.attributes?.year||'-',
       lang:m.attributes?.originalLanguage||'ja',
@@ -1422,8 +1426,7 @@ async openKomikDetail(mangaId){
 async loadKomikChapters(mangaId){
   const langFilter=this.komikLang==='all'?'':'&translatedLanguage[]='+this.komikLang;
   const path='/chapter?manga='+mangaId+'&limit=100'+langFilter+'&order[chapter]=desc&order[volume]=desc&includeEmptyPages=0&includeExternalUrl=0';
-  const res=await fetch(this.getKomikProxyUrl(path));
-  const json=await res.json();
+  const json = await this.fetchKomik(path);
   this.komikDetail.chapters=(json.data||[]).map(ch=>({
     id:ch.id,
     chapter:ch.attributes?.chapter||'?',
@@ -1443,15 +1446,14 @@ async openKomikReader(chapterIndex){
   this.komikPages=[];
   try{
     const path='/at-home/server/'+this.komikChapterNow.id;
-    const res=await fetch(this.getKomikProxyUrl(path));
-    const json=await res.json();
+    const json = await this.fetchKomik(path);
     const baseUrl=json.baseUrl;
     const hash=json.chapter?.hash;
     const data=json.chapter?.data||[];
     const dataSaver=json.chapter?.dataSaver||[];
     const mode=this.komikReaderDark?dataSaver:data;
     const quality=this.komikReaderDark?'data-saver':'data';
-    this.komikPages=mode.map(f=>baseUrl+'/'+quality+'/'+hash+'/'+f);
+    this.komikPages=mode.map(f=>'https://wsrv.nl/?url='+encodeURIComponent(baseUrl+'/'+quality+'/'+hash+'/'+f));
     this.addToKomikHistory(this.komikDetail,this.komikChapterNow);
     this.markChapterRead(this.komikChapterNow.id);
   }catch(e){this.showAlert('Gagal','Halaman gagal dimuat: '+e.message);this.komikReaderOpen=false;}
