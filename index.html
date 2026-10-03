@@ -30,7 +30,6 @@
 html{overflow-x:hidden;scroll-behavior:smooth}
 body{overflow-x:hidden;background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--text);min-height:100dvh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:auto}
 
-/* ⚠️ FORCE HIDE AI CHAT SAMPAI ALPINE SIAP */
 body:not([data-ready="1"]) .zn-chat-full{display:none !important}
 body:not([data-ready="1"]) .zn-app{display:none !important}
 
@@ -285,6 +284,19 @@ a{color:inherit;text-decoration:none}
 .zn-send-btn{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--accent));border:2.5px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 22px var(--primary-glow),0 4px 12px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s}
 .zn-send-btn:active{transform:scale(.92)}
 
+/* Zenkai AI Pro - Custom Styles */
+.zn-pro-model-chip{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:20px;background:var(--card);border:1px solid var(--border);color:var(--text-dim);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s}
+.zn-pro-model-chip.active{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);box-shadow:0 0 10px var(--primary-glow)}
+.zn-pro-model-chip:active{transform:scale(.95)}
+.zn-pro-badge-vision{background:linear-gradient(135deg,#a855f7,#ff0080);color:#fff;font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:.5px}
+.zn-pro-img-preview{position:relative;display:inline-block;margin:8px 0}
+.zn-pro-img-preview img{max-height:100px;border-radius:10px;border:2px solid var(--primary)}
+.zn-pro-img-preview button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--danger);color:#fff;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--bg)}
+.zn-pro-thinking{display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--primary);font-size:13px;color:var(--primary);font-family:'JetBrains Mono',monospace;max-width:88%}
+.zn-pro-thinking::before{content:'●';animation:znProBlink 1s infinite}
+@keyframes znProBlink{0%,100%{opacity:.3}50%{opacity:1}}
+.zn-pro-limit-badge{font-size:9px;color:var(--warning);font-family:'JetBrains Mono',monospace}
+
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -300,7 +312,7 @@ a{color:inherit;text-decoration:none}
       <div class="load-z">Z</div>
     </div>
     <div class="load-logo">ZENKAI</div>
-    <div class="load-sub">INITIALIZING // v3.1</div>
+    <div class="load-sub">INITIALIZING // v3.2</div>
     <div class="load-bar-wrap"><div class="load-bar-fill" id="loadBar"></div></div>
     <div class="load-pct" id="loadPct">0%</div>
     <div class="load-status" id="loadStatus">Memuat sistem</div>
@@ -449,6 +461,18 @@ a{color:inherit;text-decoration:none}
         </div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:1px"><span x-text="filteredFitur.length"></span> AKTIF</div>
       </div>
+
+      <!-- CARD ZENKAI AI PRO (cuma Owner & VIP) -->
+      <template x-if="isOwner||isVip">
+        <div class="zn-feat-card" @click="openProChat()" style="border-color:#ffd700;background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(168,85,247,.08))">
+          <span class="zn-feat-badge pro">◆ PRO</span>
+          <div class="zn-feat-icon" style="background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(168,85,247,.2));border-color:#ffd700">
+            <svg viewBox="0 0 24 24" style="fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <div class="zn-feat-name" style="color:#ffd700">Zenkai AI Pro</div>
+          <div class="zn-feat-desc">AI premium 17 model + vision</div>
+        </div>
+      </template>
 
       <div class="zn-feat-grid">
         <template x-for="f in filteredFitur" :key="f.id">
@@ -706,6 +730,7 @@ a{color:inherit;text-decoration:none}
       <div style="display:flex;flex-direction:column;gap:10px">
         <div class="zn-card" style="border-color:var(--primary)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px">Selamat Datang</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Terima kasih sudah pakai Zenkai Tools! Aplikasi ini akan terus berkembang.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU SAJA</div></div></div></div>
         <div class="zn-card" style="border-color:var(--accent)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--accent)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">Tips & Trik</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Login harian dapat 10 poin gratis. Kumpulkan poin & naik level!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// 1 JAM LALU</div></div></div></div>
+        <div class="zn-card" style="border-color:#ffd700"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid #ffd700;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#ffd700;margin-bottom:4px">◆ ZENKAI AI PRO BARU!</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">AI premium dengan 17 model + vision. Khusus Owner & VIP. Cek di Home!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU</div></div></div></div>
         <div class="zn-card" style="border-color:#00ff88"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(0,255,136,.15);border:1px solid #00ff88;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#00ff88"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#00ff88;margin-bottom:4px">Zenkai AI</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Tanya apa saja dengan 4 mode: Keuangan, Kesehatan, Teknologi, Umum.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// KEMARIN</div></div></div></div>
       </div>
     </div>
@@ -802,10 +827,12 @@ a{color:inherit;text-decoration:none}
 </div>
 
 <!-- AI BUBBLE -->
-<div x-show="isAuthenticated&&!chatFullscreen" x-cloak @click="openChatAI()" class="zn-ai-bubble">
+<div x-show="isAuthenticated&&!chatFullscreen&&!proChatFullscreen" x-cloak @click="openChatAI()" class="zn-ai-bubble">
   <div class="zn-ai-bubble-btn"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div>
   <div class="zn-ai-bubble-label">Chat dengan Zenkai AI</div>
-</div><!-- WELCOME -->
+</div>
+
+<!-- WELCOME -->
 <div x-show="welcomePopupOpen" x-cloak class="zn-sheet-overlay" style="z-index:100003" @click.self="welcomePopupOpen=false">
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'welcomePopupOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
@@ -831,6 +858,7 @@ a{color:inherit;text-decoration:none}
       <ul style="font-size:12px;color:var(--text-dim);line-height:1.9;padding-left:18px;list-style:disc">
         <li><b style="color:var(--primary)">Dompet:</b> Transaksi, grafik, target, budget</li>
         <li><b style="color:var(--accent)">AI Chat:</b> Chatbot pintar 4 mode</li>
+        <li><b style="color:#ffd700">Zenkai AI Pro:</b> AI premium 17 model (Owner & VIP)</li>
         <li><b style="color:var(--primary)">Downloader:</b> TikTok tanpa watermark</li>
         <li><b style="color:var(--accent)">Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
         <li><b style="color:var(--primary)">Tema:</b> 6 warna + 2 gaya visual</li>
@@ -1142,7 +1170,7 @@ a{color:inherit;text-decoration:none}
 </div>
 
 <!-- ============================================
-     AI CHAT FULLSCREEN — PAKAI x-if (FIX UTAMA!)
+     ZENKAI AI — CHAT FULLSCREEN (ORIGINAL)
      ============================================ -->
 <template x-if="chatFullscreen">
   <div class="zn-chat-full">
@@ -1200,6 +1228,93 @@ a{color:inherit;text-decoration:none}
   </div>
 </template>
 
+<!-- ============================================
+     ZENKAI AI PRO — CHAT FULLSCREEN (NEW)
+     ============================================ -->
+<template x-if="proChatFullscreen">
+  <div class="zn-chat-full">
+    <div class="zn-grid-bg"></div>
+    
+    <!-- HEADER -->
+    <header style="flex-shrink:0;position:relative;z-index:1;padding:14px 16px;background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(168,85,247,.1)),rgba(5,5,8,.9);backdrop-filter:blur(20px);border-bottom:1px solid #ffd700;display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <button @click="proChatFullscreen=false" style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-dim)">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      </button>
+      <div style="text-align:center;flex:1">
+        <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700">◆ ZENKAI AI PRO</div>
+        <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px">
+          <template x-if="isOwner"><span>// UNLIMITED · OWNER</span></template>
+          <template x-if="!isOwner&&isVip"><span>// SISA <span x-text="150-proChatCount"></span>/150 HARI INI</span></template>
+        </div>
+      </div>
+      <button @click="clearProChat()" style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--danger);display:flex;align-items:center;justify-content:center;color:var(--danger)">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      </button>
+    </header>
+    
+    <!-- MODEL SELECTOR -->
+    <div style="flex-shrink:0;position:relative;z-index:1;padding:8px 12px;display:flex;gap:6px;overflow-x:auto;background:rgba(5,5,8,.6);border-bottom:1px solid var(--border);scrollbar-width:none">
+      <template x-for="m in proModelList" :key="m.id">
+        <button @click="proModel=m.id;proModelManual=true" :class="proModel===m.id?'active':''" class="zn-pro-model-chip">
+          <span x-text="m.name"></span>
+          <span x-show="m.vision" class="zn-pro-badge-vision">VISION</span>
+          <span style="font-size:9px;opacity:.6" x-text="m.pengali"></span>
+        </button>
+      </template>
+    </div>
+    
+    <!-- CHAT BODY -->
+    <div class="zn-chat-body">
+      <div x-show="proMessages.length===0" style="text-align:center;padding:60px 20px">
+        <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,#ffd700,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+          <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:#050508"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:#ffd700;margin-bottom:8px">ZENKAI AI PRO</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.6">AI premium dengan 17 model. Bisa lihat gambar, analisis, coding, dan banyak lagi. Tanya apa aja!</div>
+      </div>
+      
+      <template x-for="(msg,idx) in proMessages" :key="idx">
+        <div :style="msg.role==='user'?'display:flex;justify-content:flex-end':'display:flex;justify-content:flex-start'">
+          <div :style="msg.role==='user'
+            ?'max-width:82%;padding:12px 16px;border-radius:16px 16px 4px 16px;background:linear-gradient(135deg,#ffd700,#a855f7);color:#050508;font-size:13px;font-weight:500;word-wrap:break-word;line-height:1.5'
+            :'max-width:88%;padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);color:var(--text);border:1px solid var(--border);font-size:13px;word-wrap:break-word;white-space:pre-wrap;line-height:1.5'">
+            <template x-if="msg.image">
+              <img :src="msg.image" style="max-width:100%;border-radius:8px;margin-bottom:6px">
+            </template>
+            <span x-text="msg.content"></span>
+          </div>
+        </div>
+      </template>
+      
+      <div x-show="proThinking" style="display:flex;justify-content:flex-start">
+        <div class="zn-pro-thinking" x-text="proThinkingText"></div>
+      </div>
+    </div>
+    
+    <!-- IMAGE PREVIEW -->
+    <template x-if="proImageData">
+      <div style="flex-shrink:0;padding:8px 12px 0 12px;position:relative;z-index:1">
+        <div class="zn-pro-img-preview">
+          <img :src="proImageData">
+          <button @click="removeProImage()">×</button>
+        </div>
+      </div>
+    </template>
+    
+    <!-- INPUT BAR -->
+    <div class="zn-chat-input-bar">
+      <label class="zn-icon-btn" style="width:46px;height:46px;flex-shrink:0;cursor:pointer" title="Kirim gambar">
+        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+        <input type="file" accept="image/*" @change="pickProImage($event)" style="display:none">
+      </label>
+      <input type="text" x-model="proInput" @keyup.enter="sendProChat()" placeholder="Tanya apa aja ke Zenkai AI Pro..." class="zn-input" style="flex:1;text-align:left;padding:13px 16px">
+      <button @click="sendProChat()" :disabled="proThinking" class="zn-send-btn" :style="proThinking?'opacity:.5':'opacity:1'">
+        <svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:#050508;filter:drop-shadow(0 1px 2px rgba(255,255,255,.3))"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+</template>
+
 <!-- DRAWER -->
 <div x-show="drawerOpen" x-cloak>
   <div class="zn-drawer-overlay" @click="drawerOpen=false"></div>
@@ -1227,6 +1342,12 @@ a{color:inherit;text-decoration:none}
         <div class="zn-drawer-item-icon" style="border-color:#ff0080"><svg viewBox="0 0 24 24" style="fill:#ff0080"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg></div>
         <span class="zn-drawer-item-label">Film Trending</span>
       </div>
+      <template x-if="isOwner||isVip">
+        <div class="zn-drawer-item" @click="drawerOpen=false;openProChat()">
+          <div class="zn-drawer-item-icon" style="border-color:#ffd700"><svg viewBox="0 0 24 24" style="fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+          <span class="zn-drawer-item-label">◆ Zenkai AI Pro</span>
+        </div>
+      </template>
       <div class="zn-drawer-item" @click="drawerOpen=false;aboutModalOpen=true">
         <div class="zn-drawer-item-icon" style="border-color:#00ff88"><svg viewBox="0 0 24 24" style="fill:#00ff88"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
         <span class="zn-drawer-item-label">Tentang App</span>
@@ -1239,14 +1360,16 @@ a{color:inherit;text-decoration:none}
       </template>
     </div>
   </div>
-</div><script>
+</div>
+
+<script>
 const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
 const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-responder';
 const OWNER_EMAIL='andikaatka@gmail.com';
 const DAILY_LIMIT=10;
-const DEFAULT_WELCOME='Selamat datang di Zenkai Tools!\n\nAplikasi ini menyediakan berbagai tools: Dompet Keuangan, AI Chat, TikTok Downloader, Cuaca, Berita, Film Trending, dan banyak lagi.\n\nSemua fitur gratis. Yuk jelajahi!';
+const DEFAULT_WELCOME='Selamat datang di Zenkai Tools!\n\nAplikasi ini menyediakan berbagai tools: Dompet Keuangan, AI Chat, Zenkai AI Pro, TikTok Downloader, Cuaca, Berita, Film Trending, dan banyak lagi.\n\nSemua fitur gratis untuk user, dan ada fitur premium khusus VIP & Owner.\n\nYuk jelajahi!';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
 function startLoadingProgress(){
@@ -1383,6 +1506,22 @@ welcomeText:DEFAULT_WELCOME,welcomeTextEdit:'',
 chatMessages:[],chatInput:'',aiThinking:false,aiThinkingText:'',aiThinkingTimer:null,aiMode:'umum',chatCount:0,chatDate:'',chatBonus:0,chatFullscreen:false,
 voiceSupported:false,aiModeDesc:'',
 
+// === ZENKAI AI PRO ===
+proChatFullscreen:false,proMessages:[],proInput:'',proThinking:false,proThinkingText:'',proThinkingTimer:null,
+proModel:'deepseek-v4-pro',proModelManual:false,
+proChatCount:0,proChatDate:'',proImageData:null,
+proEdgeUrl:'https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zenkai-pro',
+proThinkingTexts:['Zenkai AI Pro sedang berpikir...','Memproses pertanyaan lu...','Sebentar ya, lagi mikir...','Lagi nyari jawaban terbaik...','Hmm, menarik nih...','Bentar, loading...','AI-nya lagi mikir nih...','Sabarin dikit ya...','Lagi olah data...','Hampir selesai...','Udah mau kelar...','Dikit lagi...','Lagi baca ulang pertanyaan lu...','Menyusun jawaban...','Fokus sebentar...'],
+proModelList:[
+  {id:'auto',name:'Auto',pengali:'1x',vision:false},
+  {id:'deepseek-v4-flash',name:'DeepSeek Flash',pengali:'2x',vision:false},
+  {id:'deepseek-v4-pro',name:'DeepSeek Pro',pengali:'1.15x',vision:false},
+  {id:'glm-5.3-flash',name:'GLM Flash',pengali:'2x',vision:true},
+  {id:'kimi-k2.7-code',name:'Kimi Code',pengali:'1x',vision:false},
+  {id:'kimi-k3',name:'Kimi K3',pengali:'2x',vision:true},
+  {id:'gpt-5.6',name:'GPT-5.6',pengali:'5x',vision:true}
+],
+
 get filteredProvinces(){if(!this.provinceSearch)return this.provinces;var q=this.provinceSearch.toLowerCase();return this.provinces.filter(function(p){return p.toLowerCase().indexOf(q)>=0});},
 get filteredCities(){if(!this.citySearch)return this.cities;var q=this.citySearch.toLowerCase();return this.cities.filter(function(c){return c.toLowerCase().indexOf(q)>=0});},
 
@@ -1488,6 +1627,7 @@ handleBackButton:function(){
   if(this.weatherProvinceSheet){this.weatherProvinceSheet=false;return true;}
   if(this.weatherSheetOpen){this.weatherSheetOpen=false;return true;}
   if(this.chatFullscreen){this.chatFullscreen=false;return true;}
+  if(this.proChatFullscreen){this.proChatFullscreen=false;return true;}
   if(this.drawerOpen){this.drawerOpen=false;return true;}
   if(this.ownerPinModalOpen){this.ownerPinModalOpen=false;return true;}
   if(this.tabHistory.length > 0){
@@ -1533,7 +1673,7 @@ detectDevice:function(){
   window.addEventListener('online',function(){self.deviceInfo.online=true});
   window.addEventListener('offline',function(){self.deviceInfo.online=false});
   if(navigator.getBattery){navigator.getBattery().then(function(b){var upd=function(){self.deviceInfo.battery=Math.round(b.level*100)+'%'};upd();b.addEventListener('levelchange',upd);});}
-  var tips=['Rajin catat transaksi bikin keuangan lebih terkontrol!','Login harian dapat 10 poin gratis!','Coba Zenkai AI dengan 4 mode berbeda!','Download TikTok tanpa watermark!','Kumpulkan poin, naik level!'];
+  var tips=['Rajin catat transaksi bikin keuangan lebih terkontrol!','Login harian dapat 10 poin gratis!','Coba Zenkai AI dengan 4 mode berbeda!','Coba Zenkai AI Pro dengan 17 model premium!','Download TikTok tanpa watermark!','Kumpulkan poin, naik level!'];
   this.tipsHarian=tips[Math.floor(Math.random()*tips.length)];
 },
 
@@ -1542,10 +1682,9 @@ init:async function(){
   var savedTheme=localStorage.getItem('zenkai_theme');if(savedTheme)this.theme=savedTheme;
   var savedStyle=localStorage.getItem('zenkai_style');if(savedStyle)this.styleMode=savedStyle;
   
-  // ⚠️ PAKSA CHAT TERTUTUP
   this.chatFullscreen = false;
+  this.proChatFullscreen = false;
   
-  // ✅ AKTIFKAN CSS (biar AI Chat & app TIDAK tampil sebelum Alpine siap)
   document.body.setAttribute('data-ready','1');
   
   startLoadingProgress();
@@ -1574,8 +1713,9 @@ init:async function(){
   this.initProvinces();
   
   this.chatFullscreen = false;
+  this.proChatFullscreen = false;
   
-  setTimeout(function(){ self.loadingHidden=true; self.chatFullscreen=false; }, 2500);
+  setTimeout(function(){ self.loadingHidden=true; self.chatFullscreen=false; self.proChatFullscreen=false; }, 2500);
 },
 
 updateAiDesc:function(){var d={keuangan:'Tips keuangan & budget',kesehatan:'Saran kesehatan',teknologi:'Tips teknologi & coding',umum:'Tanya apa saja'};this.aiModeDesc=d[this.aiMode]||'';},
@@ -1592,6 +1732,143 @@ openMovieSheet:function(){this.movieSheetOpen=true;if(this.movieList.length===0)
 openChatAI:async function(){this.chatFullscreen=true;if(this.currentUser&&!this.isOwner){try{var{data}=await sb.from('profiles').select('chat_count,chat_bonus,chat_date,is_vip').eq('id',this.currentUser.id).maybeSingle();if(data){this.chatCount=data.chat_count||0;this.chatBonus=data.chat_bonus||0;this.chatDate=data.chat_date||'';this.isVip=data.is_vip||false;}}catch(e){}}},
 startThinkingMessages:function(){var messages=['Zenkai AI sedang berpikir...','Sabar ya, loading...','Dikit lagi...'];var i=0;this.aiThinkingText=messages[0];clearInterval(this.aiThinkingTimer);var self=this;this.aiThinkingTimer=setInterval(function(){i++;if(i<messages.length){self.aiThinkingText=messages[i]}},3000);},
 stopThinkingMessages:function(){clearInterval(this.aiThinkingTimer);this.aiThinkingTimer=null;this.aiThinkingText='';},
+
+// === ZENKAI AI PRO FUNCTIONS ===
+openProChat:async function(){
+  if(!this.isOwner&&!this.isVip){return this.showAlert('AKSES DITOLAK','Fitur Zenkai AI Pro cuma buat Owner & VIP.');}
+  this.proChatFullscreen=true;
+  this.proImageData=null;
+  if(this.isVip&&!this.isOwner&&this.currentUser){
+    try{
+      var{data}=await sb.from('profiles').select('pro_chat_count,pro_chat_date').eq('id',this.currentUser.id).maybeSingle();
+      if(data){
+        this.proChatCount=data.pro_chat_count||0;
+        this.proChatDate=data.pro_chat_date||'';
+      }
+    }catch(e){}
+  }
+},
+
+startProThinking:function(){
+  var self=this;
+  var idx=0;
+  this.proThinkingText=this.proThinkingTexts[0];
+  clearInterval(this.proThinkingTimer);
+  this.proThinkingTimer=setInterval(function(){
+    idx=(idx+1)%self.proThinkingTexts.length;
+    self.proThinkingText=self.proThinkingTexts[idx];
+  },1500+Math.random()*2500);
+},
+
+stopProThinking:function(){
+  clearInterval(this.proThinkingTimer);
+  this.proThinkingTimer=null;
+  this.proThinkingText='';
+},
+
+pickProImage:function(event){
+  var file=event.target.files[0];
+  if(!file)return;
+  if(file.size>5*1024*1024){return this.showAlert('PERHATIAN','Max gambar 5MB!');}
+  var self=this;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    self.proImageData=e.target.result;
+    self.proModel='glm-5.3-flash';
+    self.proModelManual=true;
+  };
+  reader.readAsDataURL(file);
+},
+
+removeProImage:function(){
+  this.proImageData=null;
+},
+
+sendProChat:async function(){
+  if((!this.proInput.trim()&&!this.proImageData)||this.proThinking)return;
+  if(!this.currentUser)return this.showAlert('PERHATIAN','Login dulu!');
+  if(!this.isOwner&&!this.isVip){return this.showAlert('AKSES DITOLAK','Fitur ini cuma buat Owner & VIP.');}
+  
+  if(this.isVip&&!this.isOwner){
+    var today=new Date().toISOString().slice(0,10);
+    if(this.proChatDate!==today){this.proChatCount=0;this.proChatDate=today;}
+    if(this.proChatCount>=150){
+      return this.showAlert('LIMIT HABIS','Limit VIP 150 chat/hari udah kepake. Coba lagi besok ya! 😊');
+    }
+  }
+  
+  var userMsg=this.proInput.trim();
+  var imgData=this.proImageData;
+  
+  var displayContent=userMsg||'(Kirim gambar)';
+  this.proMessages.push({role:'user',content:displayContent,image:imgData});
+  
+  var apiMessages=[];
+  this.proMessages.slice(-10).forEach(function(m){
+    if(m.image){
+      apiMessages.push({
+        role:'user',
+        content:[
+          {type:'text',text:m.content||'Analisa gambar ini'},
+          {type:'image_url',image_url:{url:m.image}}
+        ]
+      });
+    }else{
+      apiMessages.push({role:m.role,content:m.content});
+    }
+  });
+  
+  this.proInput='';
+  this.proImageData=null;
+  this.proThinking=true;
+  this.startProThinking();
+  
+  try{
+    var{data:sessionData}=await sb.auth.getSession();
+    var token=sessionData&&sessionData.session?sessionData.session.access_token:'';
+    
+    var res=await fetch(this.proEdgeUrl,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+token,
+        'apikey':SUPABASE_ANON_KEY
+      },
+      body:JSON.stringify({
+        messages:apiMessages,
+        model:this.proModelManual?this.proModel:null,
+        hasImage:!!imgData
+      })
+    });
+    
+    var data=await res.json();
+    var reply=data.reply||'Maaf, Zenkai AI Pro tidak bisa menjawab saat ini.';
+    
+    this.proMessages.push({role:'assistant',content:reply});
+    await this.addPoints(2,'Chat Zenkai AI Pro');
+    
+    if(this.isVip&&!this.isOwner&&this.currentUser){
+      this.proChatCount++;
+      try{
+        await sb.from('profiles').update({pro_chat_count:this.proChatCount,pro_chat_date:this.proChatDate}).eq('id',this.currentUser.id);
+      }catch(e){}
+    }
+  }catch(e){
+    this.proMessages.push({role:'assistant',content:'Maaf, koneksi ke Zenkai AI Pro lagi bermasalah. Coba lagi ya 😊'});
+  }
+  finally{
+    this.stopProThinking();
+    this.proThinking=false;
+  }
+},
+
+clearProChat:function(){
+  var self=this;
+  this.showConfirm('HAPUS CHAT?','Semua chat Zenkai AI Pro bakal dihapus.',function(){
+    self.proMessages=[];
+    self.showAlert('SUKSES','Chat dihapus.');
+  },'🗑️');
+},
 
 handleEmailAuth:async function(){
   if(!this.authEmail||!this.authPassword){return this.showAlert('PERHATIAN','Isi email dan password!');}
@@ -1618,14 +1895,15 @@ handleEmailAuth:async function(){
 checkUserAccessOnLogin:async function(user,showWelcome){
   if(!user||!user.email)return;
   this.chatFullscreen = false;
+  this.proChatFullscreen = false;
   
   if(user.email.toLowerCase()===OWNER_EMAIL.toLowerCase()){
     this.pendingUser=user;this.enteredPin='';this.ownerPinModalOpen=true;
   }else{
     var{data:prof}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
     if(prof&&prof.is_banned){this.showAlert('BANNED','Akun diblokir.');await sb.auth.signOut();return;}
-    this.currentUser=user;this.isOwner=false;this.isAuthenticated=true;this.chatFullscreen=false;
-    if(prof){this.isVip=prof.is_vip||false;this.chatCount=prof.chat_count||0;this.chatDate=prof.chat_date||'';this.chatBonus=prof.chat_bonus||0;}
+    this.currentUser=user;this.isOwner=false;this.isAuthenticated=true;this.chatFullscreen=false;this.proChatFullscreen=false;
+    if(prof){this.isVip=prof.is_vip||false;this.chatCount=prof.chat_count||0;this.chatDate=prof.chat_date||'';this.chatBonus=prof.chat_bonus||0;this.proChatCount=prof.pro_chat_count||0;this.proChatDate=prof.pro_chat_date||'';}
     await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',user.id);
     await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();
     var today=new Date().toISOString().slice(0,10);
@@ -1633,6 +1911,7 @@ checkUserAccessOnLogin:async function(user,showWelcome){
     if(lastLogin!==today){localStorage.setItem('zenkai_last_bonus',today);await this.addPoints(10,'Login harian');}
     if(showWelcome)this.welcomePopupOpen=true;
     this.chatFullscreen=false;
+    this.proChatFullscreen=false;
   }
 },
 
@@ -1647,11 +1926,12 @@ verifyOwnerPin:async function(){
     var res=await fetch(SUPABASE_URL+'/functions/v1/dynamic-action',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_ANON_KEY},body:JSON.stringify({pin:this.enteredPin})});
     var data=await res.json();
     if(!data.success){this.verifyingPin=false;this.enteredPin='';return this.showAlert('PIN SALAH',data.error||'PIN salah!');}
-    this.ownerPinModalOpen=false;this.isOwner=true;this.isVip=true;this.isAuthenticated=true;this.chatFullscreen=false;
+    this.ownerPinModalOpen=false;this.isOwner=true;this.isVip=true;this.isAuthenticated=true;this.chatFullscreen=false;this.proChatFullscreen=false;
     await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',this.pendingUser.id);
     await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();this.loadAppStats();
     this.welcomePopupOpen=true;
     this.chatFullscreen=false;
+    this.proChatFullscreen=false;
   }catch(e){this.showAlert('GAGAL',e.message);}
   finally{this.verifyingPin=false;}
 },
@@ -1660,7 +1940,7 @@ processUserData:async function(){
   if(!this.currentUser)return;
   this.userEmail=this.currentUser.email||'';
   var{data:profile}=await sb.from('profiles').select('*').eq('id',this.currentUser.id).maybeSingle();
-  if(profile){this.userName=profile.username||this.userEmail.split('@')[0];this.userAvatar=profile.avatar_url||'';this.isVip=profile.is_vip||false;this.chatCount=profile.chat_count||0;this.chatDate=profile.chat_date||'';this.chatBonus=profile.chat_bonus||0;}
+  if(profile){this.userName=profile.username||this.userEmail.split('@')[0];this.userAvatar=profile.avatar_url||'';this.isVip=profile.is_vip||false;this.chatCount=profile.chat_count||0;this.chatDate=profile.chat_date||'';this.chatBonus=profile.chat_bonus||0;this.proChatCount=profile.pro_chat_count||0;this.proChatDate=profile.pro_chat_date||'';}
   else{this.userName=this.userEmail.split('@')[0]||'User';}
   try{var{data:pts}=await sb.from('user_points').select('*').eq('user_id',this.currentUser.id).maybeSingle();if(pts){this.userPoints=pts.total_points||0;this.userLevel=pts.level||1;}else{await sb.from('user_points').insert({user_id:this.currentUser.id,total_points:0,level:1});this.userPoints=0;this.userLevel=1;}}catch(e){}
 },
@@ -1943,7 +2223,7 @@ loadNewsFromRSS:async function(){
         var xmlText = await res.text();
         var items = self.parseRSSItems(xmlText);
         if(items.length > 0){
-          this.newsList = items.slice(0, 20);
+          self.newsList = items.slice(0, 20);
           return;
         }
       }catch(e){ console.warn('Proxy gagal:', p, feeds[i], e.message); }
@@ -1953,7 +2233,7 @@ loadNewsFromRSS:async function(){
     var r = await self.fetchWithTimeout('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://www.antaranews.com/rss/terkini.xml'), 10000);
     var j = await r.json();
     if(j.items && j.items.length > 0){
-      this.newsList = j.items.slice(0,20).map(function(it){
+      self.newsList = j.items.slice(0,20).map(function(it){
         return {
           title: it.title,
           link: it.link,
@@ -2060,7 +2340,7 @@ sendChat:async function(){
 },
 startVoiceInput:function(){if(!this.voiceSupported){return this.showAlert('INFO','Browser tidak support.');}var SR=window.SpeechRecognition||window.webkitSpeechRecognition;var rec=new SR();rec.lang='id-ID';var self=this;rec.onresult=function(e){self.chatInput=e.results[0][0].transcript;setTimeout(function(){self.sendChat()},300)};rec.onerror=function(e){self.showAlert('GAGAL','Voice error: '+e.error)};rec.start();},
 confirmClearChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat dihapus.',function(){self.chatMessages=[];self.showAlert('SUKSES','Chat dihapus.');},'🗑️');},
-logout:async function(){await sb.auth.signOut();this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;this.chatFullscreen=false;window.location.reload();}
+logout:async function(){await sb.auth.signOut();this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;this.chatFullscreen=false;this.proChatFullscreen=false;window.location.reload();}
 };
 }
 
