@@ -151,7 +151,6 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 [data-style="glass"] .app-header{background:linear-gradient(135deg,rgba(251,191,36,.9),rgba(217,119,6,.9));backdrop-filter:blur(20px);border-bottom:1.5px solid rgba(255,255,255,.3)}
 [data-style="glass"] .drawer{background:rgba(255,255,255,.85);backdrop-filter:blur(30px);border-left:1.5px solid rgba(255,255,255,.6)}
 [data-style="glass"] .bottom-sheet-content{background:rgba(255,255,255,.9);backdrop-filter:blur(30px);border:1.5px solid rgba(255,255,255,.6)}
-/* === KOMIK === */
 .komik-search-bar{display:flex;gap:8px;margin-bottom:12px}
 .komik-search-bar input{flex:1}
 .komik-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
@@ -173,7 +172,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .komik-bookmark-btn{position:absolute;top:6px;right:6px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.9);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;box-shadow:2px 2px 0 0 var(--border);transition:all .15s;z-index:2}
 .komik-bookmark-btn.active{background:#fbbf24}
 .komik-bookmark-btn:active{transform:scale(0.9)}
-.komik-detail-cover{width:100%;max-height:340px;object-fit:cover;border-radius:14px;border:3px solid var(--border);box-shadow:4px 4px 0 0 var(--border)}
+.komik-detail-cover{width:100%;max-height:340px;object-fit:cover;border-radius:14px;border:3px solid var(--border);box-shadow:4px 4px 0 0 var(--border);background:var(--primary-soft)}
 .komik-detail-title{font-family:'Bangers',cursive;font-size:24px;letter-spacing:1px;line-height:1.1;margin:10px 0 6px;color:var(--accent-dark)}
 .komik-detail-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .komik-badge{padding:4px 10px;border-radius:8px;font-size:10px;font-weight:700;border:2px solid var(--border);background:var(--primary-soft);color:var(--accent-dark)}
@@ -184,11 +183,11 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
 .komik-chapter-item:last-child{border-bottom:none}
 .komik-chapter-item.read{opacity:.5}
 .komik-chapter-item.read::before{content:'✓ ';color:#22c55e;font-weight:800}
-.komik-reader{position:fixed;inset:0;z-index:99997;background:#000;display:flex;flex-direction:column;overflow:hidden}
+.komik-reader{position:fixed;inset:0;z-index:100060;background:#000;display:flex;flex-direction:column;overflow:hidden}
 .komik-reader-header{padding:10px 12px;background:rgba(0,0,0,.85);border-bottom:2px solid #333;display:flex;justify-content:space-between;align-items:center;color:#fff;backdrop-filter:blur(10px);z-index:2}
 .komik-reader-title{font-size:12px;font-weight:700;flex:1;margin:0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .komik-reader-body{flex:1;overflow-y:auto;background:#000;display:flex;flex-direction:column;align-items:center}
-.komik-reader-page{width:100%;max-width:900px;display:block;background:#111}
+.komik-reader-page{width:100%;max-width:900px;display:block;background:#111;min-height:100px}
 .komik-reader-nav{padding:8px 12px;background:rgba(0,0,0,.85);border-top:2px solid #333;display:flex;gap:8px;align-items:center;backdrop-filter:blur(10px)}
 .komik-nav-btn{flex:1;padding:10px;background:rgba(255,255,255,.1);border:2px solid #444;border-radius:10px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;transition:all .15s}
 .komik-nav-btn:active{background:rgba(255,255,255,.2)}
@@ -1083,7 +1082,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg-soft);color:
   </div>
 </div>
 
-<div x-show="komikReaderOpen" class="komik-reader" x-cloak>
+<div x-show="komikReaderOpen" x-transition.opacity.duration.100ms class="komik-reader" x-cloak>
   <div class="komik-reader-header">
     <button @click="closeKomikReader()" class="text-white text-xl px-2">←</button>
     <div class="komik-reader-title" x-text="(komikDetail?.title||'') + (komikChapterNow? ' • Ch. '+komikChapterNow.chapter : '')"></div>
@@ -1233,7 +1232,7 @@ onSheetTouchMove(e){
   const diff = touchY - this.sheetDragStart;
   if(diff > 0){
     this.sheetDragY = diff;
-    target.style.transform = `translateY(${diff}px)`;
+    target.style.transform = 'translateY(' + diff + 'px)';
   }
 },
 onSheetTouchEnd(e){
@@ -1385,7 +1384,7 @@ promptAddChat(u){this.showPrompt('Tambah Bonus Chat','Berapa chat tambahan untuk
 promptResetChat(u){this.showConfirm('Reset Chat?','Reset chat '+u.username+'?',async()=>{await sb.from('profiles').update({chat_count:0,chat_bonus:0,chat_date:new Date().toISOString().slice(0,10)}).eq('id',u.id);this.showAlert('Sukses','Chat di-reset.');await this.loadAllUsers();},'🔄');},
 confirmDeleteUser(u){this.showConfirm('Hapus User?','Semua data '+u.username+' akan dihapus!',async()=>{await sb.from('transactions').delete().eq('user_id',u.id);await sb.from('savings_targets').delete().eq('user_id',u.id);await sb.from('budgets').delete().eq('user_id',u.id);await sb.from('user_points').delete().eq('user_id',u.id);await sb.from('profiles').delete().eq('id',u.id);this.showAlert('Sukses','User dihapus.');await this.loadAllUsers();},'🗑️');},
 async saveWelcomeText(){if(!this.welcomeTextEdit)return;await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit}).eq('id',1);this.welcomeText=this.welcomeTextEdit;this.showAlert('Sukses','Kata sambutan diperbarui!');},
-async exportUsersCSV(){let csv='Username,Status,VIP,Banned,Bonus Chat,Created\n';this.allUsers.forEach(u=>{csv+=`${u.username},${u.status},${u.is_vip},${u.is_banned},${u.chat_bonus||0},${u.created_at||''}\n`;});const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='users_'+Date.now()+'.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);this.showAlert('Sukses','CSV didownload!');},
+async exportUsersCSV(){let csv='Username,Status,VIP,Banned,Bonus Chat,Created\n';this.allUsers.forEach(u=>{csv+=u.username+','+u.status+','+u.is_vip+','+u.is_banned+','+(u.chat_bonus||0)+','+(u.created_at||'')+'\n';});const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='users_'+Date.now()+'.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);this.showAlert('Sukses','CSV didownload!');},
 confirmCleanOld(){this.showConfirm('Bersihkan Data Lama?','Hapus transaksi >30 hari?',async()=>{const cutoff=new Date();cutoff.setDate(cutoff.getDate()-30);await sb.from('transactions').delete().lt('created_at',cutoff.toISOString());this.showAlert('Sukses','Data lama dibersihkan.');},'🗑️');},
 async runSpeedTest(){this.speedTesting=true;this.speedResult=null;try{const start=Date.now();const res=await fetch('https://speed.cloudflare.com/__down?bytes=5000000&r='+Math.random());const blob=await res.blob();const dur=(Date.now()-start)/1000;const mbps=(blob.size*8)/(dur*1000000);this.speedResult={download:mbps.toFixed(1),latency:Math.round(dur*100),quality:mbps>20?'Bagus':mbps>5?'Cukup':'Lambat'};}catch(e){this.showAlert('Gagal','Tes gagal.');}this.speedTesting=false;},
 calcBMI(){const w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)/100;if(!w||!h){return this.showAlert('Perhatian','Isi berat & tinggi!');}const bmi=w/(h*h);let kategori,color,marker;if(bmi<18.5){kategori='Kurus';color='#0ea5e9';marker=10;}else if(bmi<25){kategori='Normal';color='#22c55e';marker=35;}else if(bmi<30){kategori='Gemuk';color='#eab308';marker=60;}else{kategori='Obesitas';color='#ef4444';marker=85;}const bbIdeal=(22*h*h).toFixed(1);const age=parseFloat(this.bmiAge)||25;const kalori=this.bmiGender==='male'?Math.round(66+(13.7*w)+(5*h*100)-(6.8*age)):Math.round(655+(9.6*w)+(1.8*h*100)-(4.7*age));this.bmiResult={bmi:bmi.toFixed(1),kategori,color,bbIdeal,kalori,marker};},
@@ -1413,8 +1412,8 @@ initTTT(){this.tttBoard=['','','','','','','','',''];this.tttStatus='Giliran kam
 tttPlay(idx){if(this.tttBoard[idx]||this.tttStatus.includes('Menang')||this.tttStatus.includes('Seri'))return;this.tttBoard[idx]='X';if(this.checkTTT('X')){this.tttStatus='🎉 Kamu Menang!';this.addPoints(5,'Menang TTT');return;}if(this.tttBoard.every(c=>c)){this.tttStatus='🤝 Seri!';return;}setTimeout(()=>{const empty=this.tttBoard.map((v,i)=>v?'':i).filter(v=>v!=='');if(empty.length===0)return;const cpu=empty[Math.floor(Math.random()*empty.length)];this.tttBoard[cpu]='O';if(this.checkTTT('O')){this.tttStatus='😢 CPU Menang!';return;}if(this.tttBoard.every(c=>c)){this.tttStatus='🤝 Seri!';return;}this.tttStatus='Giliran kamu (X)';},400);},
 checkTTT(p){const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return lines.some(l=>l.every(i=>this.tttBoard[i]===p));},
 
-// ========== KOMIK METHODS ==========
 getKomikProxyUrl(path){return SUPABASE_URL+'/functions/v1/mangadex-proxy?path='+encodeURIComponent(path);},
+getKomikImageUrl(url){return SUPABASE_URL+'/functions/v1/mangadex-proxy?image='+encodeURIComponent(url);},
 
 async fetchKomik(path){
   const res = await fetch(this.getKomikProxyUrl(path));
@@ -1434,7 +1433,7 @@ parseKomikList(data){
       title:title,
       status:m.attributes?.status||'ongoing',
       year:m.attributes?.year||'-',
-      cover:fileName?'https://wsrv.nl/?url='+encodeURIComponent('https://uploads.mangadex.org/covers/'+m.id+'/'+fileName+'.256.jpg'):'',
+      cover:fileName?this.getKomikImageUrl('https://uploads.mangadex.org/covers/'+m.id+'/'+fileName+'.256.jpg'):'',
       author:authorRel?.attributes?.name||'',
       tags:(m.attributes?.tags||[]).slice(0,3).map(t=>t.attributes?.name?.id||t.attributes?.name?.en).filter(Boolean),
       description:m.attributes?.description?.id||m.attributes?.description?.en||''
@@ -1500,7 +1499,7 @@ async openKomikDetail(mangaId){
     this.komikDetail={
       id:m.id,
       title:title,
-      cover:fileName?'https://wsrv.nl/?url='+encodeURIComponent('https://uploads.mangadex.org/covers/'+m.id+'/'+fileName+'.512.jpg'):'',
+      cover:fileName?this.getKomikImageUrl('https://uploads.mangadex.org/covers/'+m.id+'/'+fileName+'.512.jpg'):'',
       status:m.attributes?.status||'ongoing',
       year:m.attributes?.year||'-',
       lang:m.attributes?.originalLanguage||'ja',
@@ -1516,25 +1515,38 @@ async openKomikDetail(mangaId){
 
 async loadKomikChapters(mangaId){
   const langFilter=this.komikLang==='all'?'':'&translatedLanguage[]='+this.komikLang;
-  const path='/chapter?manga='+mangaId+'&limit=100'+langFilter+'&order[chapter]=desc&order[volume]=desc&includeEmptyPages=0&includeExternalUrl=0';
+  const path='/chapter?manga='+mangaId+'&limit=200'+langFilter+'&order[chapter]=desc&order[volume]=desc&includeEmptyPages=1&includeExternalUrl=0';
   const json = await this.fetchKomik(path);
-  this.komikDetail.chapters=(json.data||[]).map(ch=>({
-    id:ch.id,
-    chapter:ch.attributes?.chapter||'?',
-    title:ch.attributes?.title||'',
-    lang:ch.attributes?.translatedLanguage||'id',
-    pages:ch.attributes?.pages||0
-  }));
+  const seen = new Set();
+  const chapters = [];
+  (json.data||[]).forEach(ch=>{
+    const num = ch.attributes?.chapter;
+    const pages = ch.attributes?.pages || 0;
+    if(!num || num==='0' || pages<=0) return;
+    const key = num+'_'+(ch.attributes?.translatedLanguage||'id');
+    if(seen.has(key)) return;
+    seen.add(key);
+    chapters.push({
+      id:ch.id,
+      chapter:num,
+      title:ch.attributes?.title||'',
+      lang:ch.attributes?.translatedLanguage||'id',
+      pages:pages
+    });
+  });
+  this.komikDetail.chapters = chapters;
   if(this.komikDetail)this.komikDetail={...this.komikDetail};
 },
 
 async openKomikReader(chapterIndex){
   if(!this.komikDetail||!this.komikDetail.chapters.length)return;
+  this.komikDetailOpen = false;
   this.komikChapterIndex=chapterIndex;
   this.komikChapterNow=this.komikDetail.chapters[chapterIndex];
   this.komikReaderOpen=true;
   this.komikReaderLoading=true;
   this.komikPages=[];
+  await new Promise(r=>setTimeout(r,50));
   try{
     const path='/at-home/server/'+this.komikChapterNow.id;
     const json = await this.fetchKomik(path);
@@ -1544,14 +1556,21 @@ async openKomikReader(chapterIndex){
     const dataSaver=json.chapter?.dataSaver||[];
     const mode=this.komikReaderDark?dataSaver:data;
     const quality=this.komikReaderDark?'data-saver':'data';
-    this.komikPages=mode.map(f=>'https://wsrv.nl/?url='+encodeURIComponent(baseUrl+'/'+quality+'/'+hash+'/'+f));
+    this.komikPages=mode.map(f=>this.getKomikImageUrl(baseUrl+'/'+quality+'/'+hash+'/'+f));
     this.addToKomikHistory(this.komikDetail,this.komikChapterNow);
     this.markChapterRead(this.komikChapterNow.id);
-  }catch(e){this.showAlert('Gagal','Halaman gagal dimuat: '+e.message);this.komikReaderOpen=false;}
+  }catch(e){
+    this.showAlert('Gagal','Halaman gagal dimuat: '+e.message);
+  }
   this.komikReaderLoading=false;
 },
 
-closeKomikReader(){this.komikReaderOpen=false;this.komikPages=[];this.komikChapterNow=null;},
+closeKomikReader(){
+  this.komikReaderOpen=false;
+  this.komikPages=[];
+  this.komikChapterNow=null;
+  if(this.komikDetail) this.komikDetailOpen=true;
+},
 prevKomikChapter(){if(this.komikChapterIndex>0)this.openKomikReader(this.komikChapterIndex-1);},
 nextKomikChapter(){if(this.komikChapterIndex<(this.komikDetail?.chapters?.length||1)-1)this.openKomikReader(this.komikChapterIndex+1);},
 
@@ -1636,7 +1655,7 @@ function playIntroAnimation(userName,onDone){
   subtitle.textContent=userName?('WELCOME, '+userName.toUpperCase()):'WELCOME';
   intro.style.display='flex';
   intro.classList.remove('hide');
-  function makeTearPath(isTop){let d=isTop?'M200,0 ':'M200,800 ';let y=isTop?0:800;const endY=400;const dir=isTop?1:-1;let x=200;d+=`L${x},${y} `;for(let i=0;i<20;i++){y+=dir*(endY/20);x+=(Math.random()-0.5)*40;x=Math.max(30,Math.min(370,x));d+=`L${x.toFixed(1)},${y.toFixed(1)} `;}d+=`L200,${endY} L200,${isTop?0:800} Z`;return d;}
+  function makeTearPath(isTop){let d=isTop?'M200,0 ':'M200,800 ';let y=isTop?0:800;const endY=400;const dir=isTop?1:-1;let x=200;d+='L'+x+','+y+' ';for(let i=0;i<20;i++){y+=dir*(endY/20);x+=(Math.random()-0.5)*40;x=Math.max(30,Math.min(370,x));d+='L'+x.toFixed(1)+','+y.toFixed(1)+' ';}d+='L200,'+endY+' L200,'+(isTop?0:800)+' Z';return d;}
   if(tearTop&&tearBottom){tearTop.setAttribute('d',makeTearPath(true));tearBottom.setAttribute('d',makeTearPath(false));tearSvg.classList.remove('open');setTimeout(()=>{tearSvg.classList.add('open');},1500);}
   const ctx=canvas.getContext('2d');
   let W=canvas.width=window.innerWidth;let H=canvas.height=window.innerHeight;
