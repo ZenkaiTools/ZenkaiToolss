@@ -29,6 +29,11 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 html{overflow-x:hidden;scroll-behavior:smooth}
 body{overflow-x:hidden;background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--text);min-height:100dvh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:auto}
+
+/* ⚠️ FORCE HIDE AI CHAT SAMPAI ALPINE SIAP */
+body:not([data-ready="1"]) .zn-chat-full{display:none !important}
+body:not([data-ready="1"]) .zn-app{display:none !important}
+
 button{border:none;background:none;cursor:pointer;color:inherit;font-family:inherit}
 input,textarea,select{font-family:inherit;color:inherit;outline:none;border:none;background:none}
 a{color:inherit;text-decoration:none}
@@ -43,7 +48,6 @@ a{color:inherit;text-decoration:none}
 .zn-header.scrolled{box-shadow:0 4px 20px rgba(0,0,0,.5), 0 0 20px rgba(0,217,255,.15)}
 [data-style="comic"] .zn-header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-bottom:3px solid var(--border);backdrop-filter:none}
 [data-style="comic"] .zn-header.scrolled{box-shadow:0 4px 0 0 var(--border), 0 6px 16px rgba(0,0,0,.2)}
-
 .zn-header-user{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer;padding:6px 8px;border-radius:12px;transition:all .2s;border:1px solid transparent}
 .zn-header-user:active{background:var(--primary-soft);border-color:var(--primary)}
 .zn-avatar-wrap{position:relative;flex-shrink:0}
@@ -296,7 +300,7 @@ a{color:inherit;text-decoration:none}
       <div class="load-z">Z</div>
     </div>
     <div class="load-logo">ZENKAI</div>
-    <div class="load-sub">INITIALIZING // v3.0</div>
+    <div class="load-sub">INITIALIZING // v3.1</div>
     <div class="load-bar-wrap"><div class="load-bar-fill" id="loadBar"></div></div>
     <div class="load-pct" id="loadPct">0%</div>
     <div class="load-status" id="loadStatus">Memuat sistem</div>
@@ -346,9 +350,7 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<!-- ============================================
-     MAIN APP CONTAINER
-     ============================================ -->
+<!-- MAIN APP CONTAINER -->
 <div x-show="isAuthenticated" x-cloak class="zn-app">
   <div class="zn-grid-bg"></div>
 
@@ -1139,60 +1141,64 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<!-- AI CHAT FULLSCREEN -->
-<div x-show="chatFullscreen" x-cloak class="zn-chat-full">
-  <div class="zn-grid-bg"></div>
-  
-  <header style="flex-shrink:0;position:relative;z-index:1;padding:14px 16px;background:rgba(5,5,8,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px">
-    <button @click="chatFullscreen=false" style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-dim)">
-      <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-    </button>
-    <div style="text-align:center;flex:1">
-      <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:var(--primary)">ZENKAI AI</div>
-      <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px" x-text="(isOwner||isVip)?'// UNLIMITED':('// SISA '+Math.max(0,(10+chatBonus)-chatCount))"></div>
-    </div>
-    <button @click="confirmClearChat()" style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--danger);display:flex;align-items:center;justify-content:center;color:var(--danger)">
-      <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-    </button>
-  </header>
-  
-  <div style="flex-shrink:0;position:relative;z-index:1;padding:8px 12px;display:flex;gap:6px;overflow-x:auto;background:rgba(5,5,8,.6);border-bottom:1px solid var(--border);scrollbar-width:none">
-    <button @click="aiMode='keuangan';updateAiDesc()" :class="aiMode==='keuangan'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">KEUANGAN</button>
-    <button @click="aiMode='kesehatan';updateAiDesc()" :class="aiMode==='kesehatan'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">KESEHATAN</button>
-    <button @click="aiMode='teknologi';updateAiDesc()" :class="aiMode==='teknologi'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">TEKNOLOGI</button>
-    <button @click="aiMode='umum';updateAiDesc()" :class="aiMode==='umum'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">UMUM</button>
-  </div>
-  
-  <div class="zn-chat-body">
-    <div x-show="chatMessages.length===0" style="text-align:center;padding:60px 20px">
-      <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
-        <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:#050508"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
+<!-- ============================================
+     AI CHAT FULLSCREEN — PAKAI x-if (FIX UTAMA!)
+     ============================================ -->
+<template x-if="chatFullscreen">
+  <div class="zn-chat-full">
+    <div class="zn-grid-bg"></div>
+    
+    <header style="flex-shrink:0;position:relative;z-index:1;padding:14px 16px;background:rgba(5,5,8,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <button @click="chatFullscreen=false" style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-dim)">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      </button>
+      <div style="text-align:center;flex:1">
+        <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:var(--primary)">ZENKAI AI</div>
+        <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px" x-text="(isOwner||isVip)?'// UNLIMITED':('// SISA '+Math.max(0,(10+chatBonus)-chatCount))"></div>
       </div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:8px">HALO! SAYA ZENKAI AI</div>
-      <div style="font-size:11px;color:var(--text-dim);line-height:1.6" x-text="aiModeDesc"></div>
+      <button @click="confirmClearChat()" style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--danger);display:flex;align-items:center;justify-content:center;color:var(--danger)">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      </button>
+    </header>
+    
+    <div style="flex-shrink:0;position:relative;z-index:1;padding:8px 12px;display:flex;gap:6px;overflow-x:auto;background:rgba(5,5,8,.6);border-bottom:1px solid var(--border);scrollbar-width:none">
+      <button @click="aiMode='keuangan';updateAiDesc()" :class="aiMode==='keuangan'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">KEUANGAN</button>
+      <button @click="aiMode='kesehatan';updateAiDesc()" :class="aiMode==='kesehatan'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">KESEHATAN</button>
+      <button @click="aiMode='teknologi';updateAiDesc()" :class="aiMode==='teknologi'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">TEKNOLOGI</button>
+      <button @click="aiMode='umum';updateAiDesc()" :class="aiMode==='umum'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">UMUM</button>
     </div>
-    <template x-for="(msg,idx) in chatMessages" :key="idx">
-      <div :style="msg.role==='user'?'display:flex;justify-content:flex-end':'display:flex;justify-content:flex-start'">
-        <div :style="msg.role==='user'
-          ?'max-width:82%;padding:12px 16px;border-radius:16px 16px 4px 16px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#050508;font-size:13px;font-weight:500;word-wrap:break-word;line-height:1.5'
-          :'max-width:88%;padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);color:var(--text);border:1px solid var(--border);font-size:13px;word-wrap:break-word;white-space:pre-wrap;line-height:1.5'" x-text="msg.content"></div>
+    
+    <div class="zn-chat-body">
+      <div x-show="chatMessages.length===0" style="text-align:center;padding:60px 20px">
+        <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+          <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:#050508"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
+        </div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:8px">HALO! SAYA ZENKAI AI</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.6" x-text="aiModeDesc"></div>
       </div>
-    </template>
-    <div x-show="aiThinking" style="display:flex;justify-content:flex-start">
-      <div style="padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--primary);font-size:13px;color:var(--primary);font-family:'JetBrains Mono',monospace" x-text="aiThinkingText"></div>
+      <template x-for="(msg,idx) in chatMessages" :key="idx">
+        <div :style="msg.role==='user'?'display:flex;justify-content:flex-end':'display:flex;justify-content:flex-start'">
+          <div :style="msg.role==='user'
+            ?'max-width:82%;padding:12px 16px;border-radius:16px 16px 4px 16px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#050508;font-size:13px;font-weight:500;word-wrap:break-word;line-height:1.5'
+            :'max-width:88%;padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);color:var(--text);border:1px solid var(--border);font-size:13px;word-wrap:break-word;white-space:pre-wrap;line-height:1.5'" x-text="msg.content"></div>
+        </div>
+      </template>
+      <div x-show="aiThinking" style="display:flex;justify-content:flex-start">
+        <div style="padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--primary);font-size:13px;color:var(--primary);font-family:'JetBrains Mono',monospace" x-text="aiThinkingText"></div>
+      </div>
+    </div>
+    
+    <div class="zn-chat-input-bar">
+      <button @click="startVoiceInput()" class="zn-icon-btn" style="width:46px;height:46px;flex-shrink:0" x-show="voiceSupported" title="Voice input">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+      </button>
+      <input type="text" x-model="chatInput" @keyup.enter="sendChat()" placeholder="Ketik pesan..." class="zn-input" style="flex:1;text-align:left;padding:13px 16px">
+      <button @click="sendChat()" :disabled="aiThinking" class="zn-send-btn" :style="aiThinking?'opacity:.5':'opacity:1'">
+        <svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:#050508;filter:drop-shadow(0 1px 2px rgba(255,255,255,.3))"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
     </div>
   </div>
-  
-  <div class="zn-chat-input-bar">
-    <button @click="startVoiceInput()" class="zn-icon-btn" style="width:46px;height:46px;flex-shrink:0" x-show="voiceSupported" title="Voice input">
-      <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
-    </button>
-    <input type="text" x-model="chatInput" @keyup.enter="sendChat()" placeholder="Ketik pesan..." class="zn-input" style="flex:1;text-align:left;padding:13px 16px">
-    <button @click="sendChat()" :disabled="aiThinking" class="zn-send-btn" :style="aiThinking?'opacity:.5':'opacity:1'">
-      <svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:#050508;filter:drop-shadow(0 1px 2px rgba(255,255,255,.3))"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-    </button>
-  </div>
-</div>
+</template>
 
 <!-- DRAWER -->
 <div x-show="drawerOpen" x-cloak>
@@ -1536,8 +1542,11 @@ init:async function(){
   var savedTheme=localStorage.getItem('zenkai_theme');if(savedTheme)this.theme=savedTheme;
   var savedStyle=localStorage.getItem('zenkai_style');if(savedStyle)this.styleMode=savedStyle;
   
-  // ⚠️ PAKSA CHAT TERTUTUP DARI AWAL
+  // ⚠️ PAKSA CHAT TERTUTUP
   this.chatFullscreen = false;
+  
+  // ✅ AKTIFKAN CSS (biar AI Chat & app TIDAK tampil sebelum Alpine siap)
+  document.body.setAttribute('data-ready','1');
   
   startLoadingProgress();
   this.updateClock();
@@ -1564,7 +1573,6 @@ init:async function(){
   try{var{data:{session}}=await sb.auth.getSession();if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}}catch(e){console.error(e);}
   this.initProvinces();
   
-  // ⚠️ PAKSA LAGI setelah login check
   this.chatFullscreen = false;
   
   setTimeout(function(){ self.loadingHidden=true; self.chatFullscreen=false; }, 2500);
@@ -1609,7 +1617,6 @@ handleEmailAuth:async function(){
 
 checkUserAccessOnLogin:async function(user,showWelcome){
   if(!user||!user.email)return;
-  // ⚠️ PAKSA CHAT TERTUTUP
   this.chatFullscreen = false;
   
   if(user.email.toLowerCase()===OWNER_EMAIL.toLowerCase()){
