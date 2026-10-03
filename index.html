@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================
-   ZENKAI NEON — Theme System v2.2
+   ZENKAI NEON — Theme System v2.3 (FIXED)
    ============================================ */
 :root{
   --bg:#050508;--bg-2:#0a0a12;--card:#0d0d18;--card-2:#121220;
@@ -30,13 +30,15 @@
 [data-theme="purple"]{--primary:#a855f7;--primary-dark:#7e22ce;--primary-soft:rgba(168,85,247,.1);--primary-glow:rgba(168,85,247,.5);--accent:#ff0080;--accent-dark:#cc0066;--accent-soft:rgba(255,0,128,.1);--accent-glow:rgba(255,0,128,.5)}
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
-html,body{overflow-x:hidden;background:var(--bg)}
+html{overflow-x:hidden}
 body{
+  overflow-x:hidden;
+  background:var(--bg);
   font-family:'Inter',system-ui,sans-serif;color:var(--text);
   min-height:100dvh;font-size:14px;line-height:1.5;
   display:flex;justify-content:center;align-items:flex-start;
   -webkit-font-smoothing:antialiased;
-  overscroll-behavior:none;
+  overscroll-behavior-y:auto;
 }
 button{border:none;background:none;cursor:pointer;color:inherit;font-family:inherit}
 input,textarea,select{font-family:inherit;color:inherit;outline:none;border:none;background:none}
@@ -67,7 +69,6 @@ a{color:inherit;text-decoration:none}
   position:relative;background:var(--bg);
 }
 
-/* === HEADER STICKY === */
 .zn-header{
   position:sticky;top:0;z-index:50;
   padding:10px 14px;
@@ -117,14 +118,14 @@ a{color:inherit;text-decoration:none}
 .zn-icon-btn.danger{color:var(--danger);border-color:rgba(255,51,85,.3)}
 .zn-icon-btn.danger:active{background:rgba(255,51,85,.1);border-color:var(--danger);box-shadow:0 0 15px rgba(255,51,85,.4)}
 
-/* === MAIN === */
 .zn-main{
   flex:1;overflow-y:auto;padding:14px;padding-bottom:100px;
   position:relative;z-index:1;display:flex;flex-direction:column;gap:14px;
+  -webkit-overflow-scrolling:touch;
 }
 .zn-section{display:flex;flex-direction:column;gap:12px}
 
-/* === HERO (Siap Gambar Anime) === */
+/* === HERO === */
 .zn-hero{
   position:relative;border-radius:var(--radius-lg);padding:20px;overflow:hidden;
   background:linear-gradient(135deg,rgba(0,217,255,.08),rgba(255,0,128,.05)),var(--card);
@@ -133,7 +134,6 @@ a{color:inherit;text-decoration:none}
   min-height:180px;
   display:flex;flex-direction:column;justify-content:flex-end;
 }
-/* Background anime placeholder */
 .zn-hero-bg{
   position:absolute;inset:0;z-index:0;
   background:linear-gradient(135deg,#1a1a3e,#0a0a12);
@@ -178,8 +178,6 @@ a{color:inherit;text-decoration:none}
   font-size:11px;color:var(--text-dim);
   letter-spacing:1px;font-family:'JetBrains Mono',monospace;
 }
-
-/* Compact Stats di bawah hero */
 .zn-hero-stats-compact{display:flex;gap:6px;margin-top:4px}
 .zn-stat-compact{
   flex:1;background:rgba(0,0,0,.4);
@@ -190,21 +188,19 @@ a{color:inherit;text-decoration:none}
 }
 .zn-stat-compact:active{border-color:var(--primary);box-shadow:0 0 12px var(--primary-glow)}
 .zn-stat-compact-icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.zn-stat-compact-icon svg{width:14px;height:14px;fill:var(--primary);filter:drop-shadow(0 0 4px var(--primary-glow))}
+.zn-stat-compact-icon svg{width:14px;height:14px}
 .zn-stat-compact-text{flex:1;min-width:0}
 .zn-stat-compact-val{
   font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;
-  color:var(--primary);line-height:1;text-shadow:0 0 8px var(--primary-glow);
+  color:var(--primary);line-height:1;
 }
 .zn-stat-compact-label{
   font-size:7px;color:var(--text-mute);letter-spacing:1px;
   text-transform:uppercase;font-weight:600;margin-top:2px;
 }
 
-/* === INFO PERANGKAT NEXORA-STYLE === */
-.zn-info-header{
-  display:flex;align-items:center;gap:6px;margin-bottom:8px;
-}
+/* === INFO PERANGKAT === */
+.zn-info-header{display:flex;align-items:center;gap:6px;margin-bottom:8px}
 .zn-info-header-title{
   font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;
   letter-spacing:1.5px;color:var(--primary);
@@ -257,6 +253,7 @@ a{color:inherit;text-decoration:none}
 .zn-cat-scroll{
   display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;
   scrollbar-width:none;margin:0 -14px;padding-left:14px;padding-right:14px;
+  -webkit-overflow-scrolling:touch;
 }
 .zn-cat-scroll::-webkit-scrollbar{display:none}
 .zn-cat-tab{
@@ -300,7 +297,7 @@ a{color:inherit;text-decoration:none}
   border:1px solid var(--primary);
   box-shadow:0 0 12px var(--primary-glow);flex-shrink:0;
 }
-.zn-feat-icon svg{width:20px;height:20px;fill:var(--primary);filter:drop-shadow(0 0 6px var(--primary-glow))}
+.zn-feat-icon svg{width:20px;height:20px}
 .zn-feat-name{
   font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;
   letter-spacing:.3px;color:var(--text);line-height:1.2;
@@ -312,12 +309,11 @@ a{color:inherit;text-decoration:none}
   display:flex;gap:12px;align-items:flex-start;
   padding:14px;background:linear-gradient(135deg,var(--primary-soft),transparent);
   border:1px solid var(--primary);border-radius:var(--radius);
-  box-shadow:0 0 20px var(--primary-glow);
 }
 .zn-tips-icon{
   width:32px;height:32px;border-radius:8px;
   background:var(--primary);display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;box-shadow:0 0 15px var(--primary-glow);
+  flex-shrink:0;
 }
 .zn-tips-icon svg{width:18px;height:18px;fill:#050508}
 .zn-tips-label{
@@ -335,24 +331,23 @@ a{color:inherit;text-decoration:none}
   text-transform:uppercase;
 }
 .zn-btn svg{width:16px;height:16px;fill:currentColor}
-.zn-btn-primary{background:var(--primary);color:#050508;box-shadow:0 0 20px var(--primary-glow);border:1px solid var(--primary)}
-.zn-btn-primary:active{transform:scale(.97);box-shadow:0 0 35px var(--primary-glow)}
+.zn-btn-primary{background:var(--primary);color:#050508;border:1px solid var(--primary)}
+.zn-btn-primary:active{transform:scale(.97)}
 .zn-btn-primary:disabled{opacity:.5;cursor:not-allowed}
-.zn-btn-soft{background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary);box-shadow:0 0 15px var(--primary-glow)}
+.zn-btn-soft{background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary)}
 .zn-btn-soft:active{background:var(--primary);color:#050508;transform:scale(.97)}
 .zn-btn-danger{background:rgba(255,51,85,.1);color:var(--danger);border:1px solid var(--danger)}
-.zn-btn-danger:active{background:var(--danger);color:#fff;box-shadow:0 0 20px rgba(255,51,85,.5)}
+.zn-btn-danger:active{background:var(--danger);color:#fff}
 .zn-btn-success{background:rgba(0,255,136,.1);color:var(--success);border:1px solid var(--success)}
-.zn-btn-success:active{background:var(--success);color:#050508;box-shadow:0 0 20px rgba(0,255,136,.5)}
+.zn-btn-success:active{background:var(--success);color:#050508}
 
 /* === CARDS === */
 .zn-card{
   padding:16px;border-radius:var(--radius);
   background:var(--card);border:1px solid var(--border);
-  box-shadow:0 4px 20px rgba(0,0,0,.3);
   position:relative;transition:all .2s;
 }
-.zn-card-glow{border-color:var(--primary);box-shadow:0 0 25px var(--primary-glow),0 4px 20px rgba(0,0,0,.4)}
+.zn-card-glow{border-color:var(--primary)}
 .zn-card-title{
   font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;
   letter-spacing:1px;color:var(--primary);
@@ -370,7 +365,7 @@ a{color:inherit;text-decoration:none}
 }
 .zn-tab-pill.active{
   background:var(--primary-soft);color:var(--primary);
-  border-color:var(--primary);box-shadow:0 0 15px var(--primary-glow);
+  border-color:var(--primary);
 }
 .zn-tab-pill:active{transform:scale(.96)}
 
@@ -381,16 +376,15 @@ a{color:inherit;text-decoration:none}
   color:var(--text);font-size:14px;font-weight:500;transition:all .2s;
 }
 .zn-input::placeholder{color:var(--text-mute)}
-.zn-input:focus{border-color:var(--primary);box-shadow:0 0 15px var(--primary-glow);background:var(--card)}
+.zn-input:focus{border-color:var(--primary);background:var(--card)}
 
-/* Number input center */
 .zn-input-number{
   width:100%;padding:14px 16px;border-radius:var(--radius-sm);
   background:var(--bg-2);border:1px solid var(--border);
   color:var(--text);font-size:16px;font-weight:600;transition:all .2s;
   font-family:'JetBrains Mono',monospace;letter-spacing:1px;
 }
-.zn-input-number:focus{border-color:var(--primary);box-shadow:0 0 15px var(--primary-glow);background:var(--card)}
+.zn-input-number:focus{border-color:var(--primary);background:var(--card)}
 
 /* === STAT BOX === */
 .zn-stat-box{
@@ -416,14 +410,8 @@ a{color:inherit;text-decoration:none}
   transition:width .5s ease-out;
   display:flex;align-items:center;justify-content:center;
   font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;
-  color:#050508;box-shadow:0 0 15px var(--primary-glow);position:relative;
+  color:#050508;position:relative;
 }
-.zn-progress-fill::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
-  animation:znShine 2s linear infinite;
-}
-@keyframes znShine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 
 /* === BOTTOM NAV === */
 .zn-bottom-nav{
@@ -446,11 +434,9 @@ a{color:inherit;text-decoration:none}
   letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;
 }
 .zn-nav-btn.active{background:var(--primary-soft);color:var(--primary)}
-.zn-nav-btn.active svg{filter:drop-shadow(0 0 8px var(--primary-glow))}
 .zn-nav-btn.active::before{
   content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:16px;height:2px;background:var(--primary);
-  border-radius:2px;box-shadow:0 0 10px var(--primary-glow);
+  width:16px;height:2px;background:var(--primary);border-radius:2px;
 }
 
 /* === DRAWER === */
@@ -466,7 +452,6 @@ a{color:inherit;text-decoration:none}
   border-left:1px solid var(--border);z-index:1000;
   display:flex;flex-direction:column;
   animation:znDrawerIn .3s cubic-bezier(.22,1,.36,1);
-  box-shadow:-10px 0 40px rgba(0,0,0,.5);
 }
 @keyframes znDrawerIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
 .zn-drawer-header{
@@ -498,7 +483,7 @@ a{color:inherit;text-decoration:none}
 .zn-drawer-item-label{flex:1}
 .zn-drawer-item.danger{color:var(--danger)}
 
-/* === BOTTOM SHEET (SWIPE-TO-CLOSE) === */
+/* === BOTTOM SHEET === */
 .zn-sheet-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.75);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
@@ -511,8 +496,7 @@ a{color:inherit;text-decoration:none}
   border-top-left-radius:24px;border-top-right-radius:24px;
   padding:20px;
   animation:znSheetUp .3s cubic-bezier(.22,1,.36,1);
-  box-shadow:0 -10px 50px var(--primary-glow);
-  touch-action:pan-y;
+  -webkit-overflow-scrolling:touch;
   will-change:transform;
 }
 @keyframes znSheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -520,6 +504,7 @@ a{color:inherit;text-decoration:none}
   width:40px;height:4px;background:var(--border);
   border-radius:2px;margin:0 auto 12px;
   cursor:grab;position:relative;
+  touch-action:none;
 }
 .zn-sheet-handle::before{
   content:'';position:absolute;top:-10px;left:-20px;right:-20px;bottom:-10px;
@@ -533,7 +518,7 @@ a{color:inherit;text-decoration:none}
 }
 @keyframes znSpin{to{transform:rotate(360deg)}}
 
-/* === AI BUBBLE (FIX) === */
+/* === AI BUBBLE === */
 .zn-ai-bubble{
   position:fixed;bottom:88px;right:16px;z-index:60;
   display:flex;flex-direction:column;align-items:center;gap:4px;
@@ -554,7 +539,6 @@ a{color:inherit;text-decoration:none}
   letter-spacing:.5px;color:var(--primary);
   background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;
   border:1px solid var(--primary);white-space:nowrap;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
 }
 
 /* === UTIL === */
@@ -591,7 +575,7 @@ a{color:inherit;text-decoration:none}
 [data-style="comic"] .zn-hero-title{background:none;-webkit-text-fill-color:#fff;color:#fff;font-family:'Inter',sans-serif;text-shadow:2px 2px 0 rgba(0,0,0,.2)}
 [data-style="comic"] .zn-hero-subtitle{color:#fff;opacity:.9}
 [data-style="comic"] .zn-stat-compact{background:rgba(255,255,255,.2);border:2px solid var(--border);backdrop-filter:none}
-[data-style="comic"] .zn-stat-compact-icon svg{fill:#fff;filter:none}
+[data-style="comic"] .zn-stat-compact-icon svg{filter:none}
 [data-style="comic"] .zn-stat-compact-val{color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.3);font-family:'Inter',sans-serif}
 [data-style="comic"] .zn-stat-compact-label{color:#fff}
 [data-style="comic"] .zn-info-header-title{color:var(--accent-dark);font-family:'Inter',sans-serif;font-weight:800}
@@ -608,12 +592,12 @@ a{color:inherit;text-decoration:none}
 [data-style="comic"] .zn-cat-tab.active,
 [data-style="comic"] .zn-tab-pill.active{background:var(--primary);color:#fff;box-shadow:3px 3px 0 0 var(--border)}
 [data-style="comic"] .zn-feat-icon{background:var(--primary-soft);border:2px solid var(--border);box-shadow:2px 2px 0 0 var(--border)}
-[data-style="comic"] .zn-feat-icon svg{fill:var(--primary-dark);filter:none}
+[data-style="comic"] .zn-feat-icon svg{filter:none}
 [data-style="comic"] .zn-feat-name{color:var(--primary-dark);font-family:'Inter',sans-serif;font-weight:800;text-transform:none}
 [data-style="comic"] .zn-feat-desc{color:#666}
 [data-style="comic"] .zn-feat-badge{background:var(--accent);color:#fff;border:2px solid var(--border)}
 [data-style="comic"] .zn-tips{background:var(--accent-soft);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border)}
-[data-style="comic"] .zn-tips-icon{background:var(--accent);box-shadow:none}
+[data-style="comic"] .zn-tips-icon{background:var(--accent)}
 [data-style="comic"] .zn-tips-label{color:var(--accent-dark)}
 [data-style="comic"] .zn-tips-text{color:#666}
 [data-style="comic"] .zn-btn-primary{background:var(--primary);color:#fff;border:3px solid var(--border);box-shadow:4px 4px 0 0 var(--border);font-family:'Inter',sans-serif;font-weight:800}
@@ -643,12 +627,12 @@ a{color:inherit;text-decoration:none}
 #introCanvas{position:absolute;inset:0;width:100%;height:100%}
 #loadingScreen{position:fixed;inset:0;z-index:99998;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;transition:opacity .5s,visibility .5s}
 #loadingScreen.hide{opacity:0;visibility:hidden}
-.load-logo{font-family:'Orbitron',sans-serif;font-size:clamp(24px,7vw,36px);font-weight:900;letter-spacing:6px;color:#00d9ff;text-shadow:0 0 20px #00d9ff,0 0 40px #00d9ff,0 0 80px rgba(0,217,255,.5);margin-bottom:8px;animation:loadGlow 2s ease-in-out infinite}
-@keyframes loadGlow{0%,100%{text-shadow:0 0 20px #00d9ff,0 0 40px #00d9ff}50%{text-shadow:0 0 30px #00d9ff,0 0 60px #00d9ff,0 0 120px rgba(0,217,255,.8)}}
+.load-logo{font-family:'Orbitron',sans-serif;font-size:clamp(24px,7vw,36px);font-weight:900;letter-spacing:6px;color:#00d9ff;margin-bottom:8px;animation:loadGlow 2s ease-in-out infinite}
+@keyframes loadGlow{0%,100%{text-shadow:0 0 20px #00d9ff,0 0 40px #00d9ff}50%{text-shadow:0 0 30px #00d9ff,0 0 60px #00d9ff}}
 .load-sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:#555568;letter-spacing:3px;margin-bottom:30px;text-transform:uppercase}
 .load-bar-wrap{width:min(280px,75vw);height:4px;background:#121220;border-radius:2px;overflow:hidden;position:relative;margin-bottom:14px}
-.load-bar-fill{height:100%;background:linear-gradient(90deg,#00d9ff,#ff0080);width:0%;transition:width .3s ease-out;box-shadow:0 0 15px #00d9ff;border-radius:2px}
-.load-pct{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:#00d9ff;text-shadow:0 0 10px #00d9ff;letter-spacing:2px}
+.load-bar-fill{height:100%;background:linear-gradient(90deg,#00d9ff,#ff0080);width:0%;transition:width .3s ease-out;border-radius:2px}
+.load-pct{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:#00d9ff;letter-spacing:2px}
 .load-status{font-family:'JetBrains Mono',monospace;font-size:11px;color:#555568;margin-top:8px;letter-spacing:1px;min-height:16px}
 .load-status::after{content:'▊';animation:loadBlink .8s steps(2) infinite;color:#00d9ff;margin-left:2px}
 @keyframes loadBlink{50%{opacity:0}}
@@ -668,7 +652,7 @@ a{color:inherit;text-decoration:none}
 <!-- LOADING SCREEN -->
 <div id="loadingScreen" x-show="!loadingHidden" x-cloak>
   <div class="load-logo">ZENKAI</div>
-  <div class="load-sub">INITIALIZING // v2.2</div>
+  <div class="load-sub">INITIALIZING // v2.3</div>
   <div class="load-bar-wrap"><div class="load-bar-fill" id="loadBar"></div></div>
   <div class="load-pct" id="loadPct">0%</div>
   <div class="load-status" id="loadStatus">Memuat sistem</div>
@@ -680,7 +664,7 @@ a{color:inherit;text-decoration:none}
   <div class="zn-card zn-card-glow" style="width:100%;max-width:380px;padding:28px;position:relative;z-index:1">
     <div style="text-align:center;margin-bottom:24px">
       <div class="zn-avatar" style="width:64px;height:64px;font-size:26px;margin:0 auto 16px;border-radius:18px">Z</div>
-      <h1 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:4px;color:var(--primary);text-shadow:0 0 15px var(--primary-glow);margin-bottom:6px">ZENKAI</h1>
+      <h1 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:4px;color:var(--primary);margin-bottom:6px">ZENKAI</h1>
       <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:3px">// Developer: Andika</p>
     </div>
     <div class="zn-tab-pill" style="margin-bottom:20px;padding:10px" x-text="authMode==='login'?'MASUK AKUN':'DAFTAR AKUN'"></div>
@@ -702,7 +686,7 @@ a{color:inherit;text-decoration:none}
 <!-- OWNER PIN MODAL -->
 <div x-show="ownerPinModalOpen" x-cloak style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.85);backdrop-filter:blur(8px)">
   <div class="zn-card zn-card-glow" style="width:100%;max-width:380px;padding:28px;text-align:center">
-    <div style="width:56px;height:56px;border-radius:16px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 25px var(--primary-glow)">
+    <div style="width:56px;height:56px;border-radius:16px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
       <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:var(--primary)"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
     </div>
     <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:8px">VERIFIKASI OWNER</h2>
@@ -722,7 +706,7 @@ a{color:inherit;text-decoration:none}
 <div x-show="isAuthenticated" x-cloak class="zn-app">
   <div class="zn-grid-bg"></div>
 
-  <!-- ============ HEADER (STICKY) ============ -->
+  <!-- HEADER (STICKY) -->
   <header class="zn-header">
     <div class="zn-header-user" @click="profileModalOpen=true">
       <div class="zn-avatar">
@@ -735,31 +719,27 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
     <div class="zn-header-actions">
-      <!-- Logout button -->
       <button class="zn-icon-btn danger" @click="confirmLogout()" title="Keluar">
         <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
       </button>
-      <!-- Menu button -->
       <button class="zn-icon-btn" @click="drawerOpen=true" title="Menu">
         <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
       </button>
     </div>
   </header>
 
-  <!-- ============ MAIN ============ -->
+  <!-- MAIN -->
   <main class="zn-main">
 
-    <!-- ============ TAB HOME ============ -->
+    <!-- TAB HOME -->
     <div x-show="activeTab==='home'" class="zn-section">
-      
-      <!-- HERO (Ready for anime bg) -->
+      <!-- HERO -->
       <div class="zn-hero">
         <div class="zn-hero-bg" id="heroBg"></div>
         <div class="zn-hero-content">
           <div class="zn-hero-label">ZENKAI TOOLS</div>
           <div class="zn-hero-title">All Tools in One</div>
           <div class="zn-hero-subtitle">// Powerful & Fast</div>
-          
           <div class="zn-hero-stats-compact">
             <div class="zn-stat-compact">
               <div class="zn-stat-compact-icon">
@@ -792,13 +772,12 @@ a{color:inherit;text-decoration:none}
         </div>
       </div>
 
-      <!-- INFO PERANGKAT (NEXORA STYLE) -->
+      <!-- INFO PERANGKAT -->
       <div>
         <div class="zn-info-header">
           <div class="zn-info-header-title">INFO PERANGKAT</div>
         </div>
         <div class="zn-info-grid">
-          <!-- Negara -->
           <div class="zn-info-item">
             <div class="zn-info-top">
               <div class="zn-info-icon">
@@ -808,7 +787,6 @@ a{color:inherit;text-decoration:none}
             </div>
             <div class="zn-info-val">Indonesia</div>
           </div>
-          <!-- Device -->
           <div class="zn-info-item">
             <div class="zn-info-top">
               <div class="zn-info-icon">
@@ -818,7 +796,6 @@ a{color:inherit;text-decoration:none}
             </div>
             <div class="zn-info-val" x-text="deviceInfo.os"></div>
           </div>
-          <!-- Browser -->
           <div class="zn-info-item">
             <div class="zn-info-top">
               <div class="zn-info-icon">
@@ -828,7 +805,6 @@ a{color:inherit;text-decoration:none}
             </div>
             <div class="zn-info-val" x-text="deviceInfo.browser"></div>
           </div>
-          <!-- Status -->
           <div class="zn-info-item">
             <div class="zn-info-top">
               <div class="zn-info-icon">
@@ -838,7 +814,6 @@ a{color:inherit;text-decoration:none}
             </div>
             <div class="zn-info-val" :style="deviceInfo.online?'color:#00ff88':'color:#ff3355'" x-text="deviceInfo.online?'● Online':'○ Offline'"></div>
           </div>
-          <!-- Baterai -->
           <div class="zn-info-item">
             <div class="zn-info-top">
               <div class="zn-info-icon">
@@ -848,7 +823,6 @@ a{color:inherit;text-decoration:none}
             </div>
             <div class="zn-info-val" x-text="deviceInfo.battery"></div>
           </div>
-          <!-- Waktu -->
           <div class="zn-info-item">
             <div class="zn-info-top">
               <div class="zn-info-icon">
@@ -875,13 +849,13 @@ a{color:inherit;text-decoration:none}
           </div>
           <div class="zn-quick-label">AI Chat</div>
         </div>
-        <div class="zn-quick-btn" @click="activeTab='downloader'">
+        <div class="zn-quick-btn" @click="switchTab('downloader')">
           <div class="zn-quick-icon">
             <svg viewBox="0 0 24 24" fill="#ffd700"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
           </div>
           <div class="zn-quick-label">Unduh</div>
         </div>
-        <div class="zn-quick-btn" @click="activeTab='tema'">
+        <div class="zn-quick-btn" @click="switchTab('tema')">
           <div class="zn-quick-icon">
             <svg viewBox="0 0 24 24" fill="#a855f7"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg>
           </div>
@@ -899,7 +873,7 @@ a{color:inherit;text-decoration:none}
         </template>
       </div>
 
-      <!-- Section Title -->
+      <!-- SECTION TITLE -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
         <div style="display:flex;align-items:center;gap:10px">
           <div class="zn-feat-icon" style="width:28px;height:28px;border-radius:8px">
@@ -940,13 +914,12 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
 
-    <!-- ============ TAB KEUANGAN ============ -->
+    <!-- TAB KEUANGAN -->
     <div x-show="activeTab==='keuangan'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px">TOTAL SALDO</div>
         <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--primary);letter-spacing:1px" x-text="'Rp '+formatRibuan(totalBalance)"></div>
       </div>
-      
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
         <button @click="finSubTab='transaksi'" :class="finSubTab==='transaksi'?'active':''" class="zn-tab-pill">Transaksi</button>
         <button @click="finSubTab='grafik';setTimeout(()=>drawCharts(),300)" :class="finSubTab==='grafik'?'active':''" class="zn-tab-pill">Grafik</button>
@@ -1035,7 +1008,7 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
 
-    <!-- ============ TAB DOWNLOADER ============ -->
+    <!-- TAB DOWNLOADER -->
     <div x-show="activeTab==='downloader'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15));border-color:#ffd700">
@@ -1070,7 +1043,7 @@ a{color:inherit;text-decoration:none}
       </template>
     </div>
 
-    <!-- ============ TAB TOOLS ============ -->
+    <!-- TAB TOOLS -->
     <div x-show="activeTab==='tools'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px">
@@ -1086,7 +1059,6 @@ a{color:inherit;text-decoration:none}
         <button @click="toolsSubTab='speed'" :class="toolsSubTab==='speed'?'active':''" class="zn-tab-pill">🌐</button>
       </div>
 
-      <!-- JAM DUNIA (dengan bendera SVG) -->
       <div x-show="toolsSubTab==='jam'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><span>JAM DUNIA</span></div>
         <div style="display:flex;flex-direction:column;gap:8px">
@@ -1159,7 +1131,7 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
 
-    <!-- ============ TAB TEMA ============ -->
+    <!-- TAB TEMA -->
     <div x-show="activeTab==='tema'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px">
@@ -1183,8 +1155,8 @@ a{color:inherit;text-decoration:none}
       <div class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg><span>GAYA VISUAL</span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div @click="setStyle('neon')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px" :style="styleMode==='neon'?'background:var(--primary-soft);border:1px solid var(--primary);box-shadow:0 0 20px var(--primary-glow)':'background:var(--bg-2);border:1px solid var(--border)'">
-            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto 10px;box-shadow:0 0 15px var(--primary-glow)"></div>
+          <div @click="setStyle('neon')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px" :style="styleMode==='neon'?'background:var(--primary-soft);border:1px solid var(--primary)':'background:var(--bg-2);border:1px solid var(--border)'">
+            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto 10px"></div>
             <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--primary)">ZENKAI NEON</div>
           </div>
           <div @click="setStyle('comic')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px" :style="styleMode==='comic'?'background:var(--primary-soft);border:2px solid var(--border);box-shadow:3px 3px 0 0 var(--border)':'background:var(--bg-2);border:1px solid var(--border)'">
@@ -1195,7 +1167,7 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
 
-    <!-- ============ TAB PEMBERTAHUAN (Notif) ============ -->
+    <!-- TAB PEMBERITAHUAN -->
     <div x-show="activeTab==='pemberitahuan'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))">
@@ -1203,7 +1175,7 @@ a{color:inherit;text-decoration:none}
         </div>
         <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--accent)">PEMBERITAHUAN</h2>
       </div>
-      
+
       <div style="display:flex;flex-direction:column;gap:10px">
         <div class="zn-card" style="border-color:var(--primary)">
           <div style="display:flex;align-items:flex-start;gap:12px">
@@ -1217,7 +1189,7 @@ a{color:inherit;text-decoration:none}
             </div>
           </div>
         </div>
-        
+
         <div class="zn-card" style="border-color:var(--accent)">
           <div style="display:flex;align-items:flex-start;gap:12px">
             <div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -1230,7 +1202,7 @@ a{color:inherit;text-decoration:none}
             </div>
           </div>
         </div>
-        
+
         <div class="zn-card" style="border-color:#00ff88">
           <div style="display:flex;align-items:flex-start;gap:12px">
             <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,255,136,.15);border:1px solid #00ff88;display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -1245,6 +1217,97 @@ a{color:inherit;text-decoration:none}
         </div>
       </div>
     </div>
+
+    <!-- TAB OWNER -->
+    <template x-if="isOwner">
+      <div x-show="activeTab==='owner'" class="zn-section">
+        <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
+          <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:var(--primary);border-color:var(--primary)">
+            <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#050508"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+          </div>
+          <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">OWNER PANEL</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+          <button @click="ownerSubTab='statistik';loadAppStats()" :class="ownerSubTab==='statistik'?'active':''" class="zn-tab-pill">📊</button>
+          <button @click="ownerSubTab='users';loadAllUsers()" :class="ownerSubTab==='users'?'active':''" class="zn-tab-pill">👥</button>
+          <button @click="ownerSubTab='setelan'" :class="ownerSubTab==='setelan'?'active':''" class="zn-tab-pill">⚙</button>
+          <button @click="ownerSubTab='tools'" :class="ownerSubTab==='tools'?'active':''" class="zn-tab-pill">🔧</button>
+        </div>
+
+        <div x-show="ownerSubTab==='statistik'" class="zn-section">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="appStats.totalUsers"></div><div class="zn-stat-box-label">Total User</div></div>
+            <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="appStats.activeToday"></div><div class="zn-stat-box-label">Aktif Hari Ini</div></div>
+            <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="appStats.totalTx"></div><div class="zn-stat-box-label">Transaksi</div></div>
+            <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="appStats.banned"></div><div class="zn-stat-box-label">Banned</div></div>
+          </div>
+          <div class="zn-card">
+            <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span>TOP 10 USER</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto">
+              <template x-for="(u,idx) in topUsers" :key="u.id">
+                <div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;background:var(--bg-2);border:1px solid var(--border)">
+                  <span style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:800;color:var(--primary);min-width:24px" x-text="'#'+(idx+1)"></span>
+                  <span style="font-size:12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" x-text="u.username"></span>
+                  <span style="font-size:10px;color:var(--accent);font-family:'JetBrains Mono',monospace" x-text="u.count+'tx'"></span>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <div x-show="ownerSubTab==='users'" class="zn-section">
+          <input type="text" x-model="userSearch" placeholder="Cari user..." class="zn-input">
+          <div class="zn-card">
+            <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><span>USER (<span x-text="filteredUsers.length"></span>)</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto">
+              <template x-for="u in filteredUsers" :key="u.id">
+                <div style="padding:10px;border-radius:10px" :style="u.is_banned?'background:rgba(255,51,85,.06);border:1px solid var(--danger)':'background:var(--bg-2);border:1px solid var(--border)'">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                    <div style="width:32px;height:32px;border-radius:8px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;color:var(--primary)" x-text="u.username?u.username.substring(0,1).toUpperCase():'?'"></div>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" x-text="u.username"></div>
+                      <div style="font-size:10px;color:var(--text-mute)">
+                        <span x-text="u.status"></span>
+                        <span x-show="u.is_vip" style="color:var(--gold)"> • VIP</span>
+                        <span x-show="u.is_banned" style="color:var(--danger)"> • BANNED</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+                    <template x-if="!u.is_banned"><button @click="banUser(u)" class="zn-btn zn-btn-danger" style="padding:6px;font-size:9px">BAN</button></template>
+                    <template x-if="u.is_banned"><button @click="unbanUser(u)" class="zn-btn zn-btn-success" style="padding:6px;font-size:9px">UNBAN</button></template>
+                    <template x-if="!u.is_vip && u.status!=='owner'"><button @click="setVip(u,true)" class="zn-btn zn-btn-soft" style="padding:6px;font-size:9px">+VIP</button></template>
+                    <template x-if="u.is_vip && u.status!=='owner'"><button @click="setVip(u,false)" class="zn-btn zn-btn-soft" style="padding:6px;font-size:9px">-VIP</button></template>
+                    <button @click="promptAddChat(u)" class="zn-btn zn-btn-soft" style="padding:6px;font-size:9px">+CHAT</button>
+                    <button @click="promptResetChat(u)" class="zn-btn zn-btn-success" style="padding:6px;font-size:9px">RESET</button>
+                    <button @click="confirmDeleteUser(u)" class="zn-btn zn-btn-danger" style="grid-column:span 2;padding:6px;font-size:9px">HAPUS USER</button>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <div x-show="ownerSubTab==='setelan'" class="zn-section">
+          <div class="zn-card">
+            <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg><span>EDIT SAMBUTAN</span></div>
+            <textarea x-model="welcomeTextEdit" rows="6" class="zn-input"></textarea>
+            <button @click="saveWelcomeText()" class="zn-btn zn-btn-primary" style="margin-top:10px">SIMPAN</button>
+          </div>
+        </div>
+
+        <div x-show="ownerSubTab==='tools'" class="zn-section">
+          <div class="zn-card">
+            <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span>EXPORT DATA</span></div>
+            <button @click="exportUsersCSV()" class="zn-btn zn-btn-primary">EXPORT CSV</button>
+          </div>
+          <div class="zn-card">
+            <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg><span>BERSIHKAN</span></div>
+            <button @click="confirmCleanOld()" class="zn-btn zn-btn-danger">BERSIHKAN &gt;30 HARI</button>
+          </div>
+        </div>
+      </div>
+    </template>
 
   </main>
 
@@ -1280,14 +1343,14 @@ a{color:inherit;text-decoration:none}
   </div>
   <div class="zn-ai-bubble-label">Chat dengan Zenkai AI</div>
 </div><!-- ============================================
-     BOTTOM SHEETS & MODALS (SEMUA SWIPE-TO-CLOSE)
+     BOTTOM SHEETS & MODALS
      ============================================ -->
 
 <!-- WELCOME -->
 <div x-show="welcomePopupOpen" x-cloak class="zn-sheet-overlay" style="z-index:100003" @click.self="welcomePopupOpen=false">
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'welcomePopupOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <div style="width:64px;height:64px;border-radius:18px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 25px var(--primary-glow)">
+    <div style="width:64px;height:64px;border-radius:18px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
       <svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
     </div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:6px">HELLO, <span x-text="userName"></span></h3>
@@ -1363,7 +1426,7 @@ a{color:inherit;text-decoration:none}
 <div x-show="levelUpOpen" x-cloak class="zn-sheet-overlay" style="z-index:100030" @click.self="levelUpOpen=false">
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'levelUpOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <div style="width:72px;height:72px;border-radius:20px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 35px var(--primary-glow)">
+    <div style="width:72px;height:72px;border-radius:20px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
       <svg viewBox="0 0 24 24" style="width:40px;height:40px;fill:var(--primary)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
     </div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;letter-spacing:3px;color:var(--primary);margin-bottom:8px">LEVEL UP!</h3>
@@ -1553,7 +1616,7 @@ a{color:inherit;text-decoration:none}
         <a :href="selectedNews.link" target="_blank" class="zn-btn zn-btn-primary">BACA SELENGKAPNYA</a>
       </div>
     </template>
-    <button @click="newsSheetOpen=false" class="zn-btn zn-btn-soft" style="margin-top:14px">TUTUP</button>
+    <button @click="newsSheetOpen=false;selectedNews=null" class="zn-btn zn-btn-soft" style="margin-top:14px">TUTUP</button>
   </div>
 </div>
 
@@ -1602,8 +1665,8 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<!-- WEATHER PROVINCE -->
-<div x-show="weatherProvinceSheet" x-cloak class="zn-sheet-overlay" style="z-index:100006" @click.self="weatherProvinceSheet=false">
+<!-- WEATHER PROVINCE (z-index lebih tinggi dari weather sheet) -->
+<div x-show="weatherProvinceSheet" x-cloak class="zn-sheet-overlay" style="z-index:100009" @click.self="weatherProvinceSheet=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherProvinceSheet')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">PILIH PROVINSI</h3>
@@ -1619,8 +1682,8 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<!-- WEATHER CITY -->
-<div x-show="weatherCitySheet" x-cloak class="zn-sheet-overlay" style="z-index:100007" @click.self="weatherCitySheet=false">
+<!-- WEATHER CITY (z-index lebih tinggi dari province) -->
+<div x-show="weatherCitySheet" x-cloak class="zn-sheet-overlay" style="z-index:100010" @click.self="weatherCitySheet=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherCitySheet')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH KOTA</h3>
@@ -1662,9 +1725,9 @@ a{color:inherit;text-decoration:none}
     <button @click="aiMode='umum';updateAiDesc()" :class="aiMode==='umum'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">UMUM</button>
   </div>
 
-  <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;z-index:1">
+  <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;z-index:1;-webkit-overflow-scrolling:touch">
     <div x-show="chatMessages.length===0" style="text-align:center;padding:60px 20px">
-      <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 40px var(--primary-glow)">
+      <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
         <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:#050508"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
       </div>
       <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:8px">HALO! SAYA ZENKAI AI</div>
@@ -1687,7 +1750,7 @@ a{color:inherit;text-decoration:none}
       <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
     </button>
     <input type="text" x-model="chatInput" @keyup.enter="sendChat()" placeholder="Ketik pesan..." class="zn-input" style="flex:1;text-align:center">
-    <button @click="sendChat()" :disabled="aiThinking" style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s" :style="aiThinking?'opacity:.5':'opacity:1'">
+    <button @click="sendChat()" :disabled="aiThinking" style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0" :style="aiThinking?'opacity:.5':'opacity:1'">
       <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#050508"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
     </button>
   </div>
@@ -1724,7 +1787,7 @@ a{color:inherit;text-decoration:none}
         <span class="zn-drawer-item-label">Tentang App</span>
       </div>
       <template x-if="isOwner">
-        <div class="zn-drawer-item" @click="drawerOpen=false;activeTab='owner';loadAppStats()">
+        <div class="zn-drawer-item" @click="drawerOpen=false;switchTab('owner');loadAppStats()">
           <div class="zn-drawer-item-icon" style="border-color:#ffd700"><svg viewBox="0 0 24 24" style="fill:#ffd700"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg></div>
           <span class="zn-drawer-item-label">Owner Panel</span>
         </div>
@@ -2156,7 +2219,6 @@ get filteredFitur(){if(this.kategoriAktif==='semua')return this.fiturList;var ka
 get filteredUsers(){if(!this.userSearch)return this.allUsers;var q=this.userSearch.toLowerCase();return this.allUsers.filter(function(u){return u.username&&u.username.toLowerCase().indexOf(q)>=0});},
 get totalBalance(){return this.transactions.reduce(function(a,t){return t.type==='income'?a+Number(t.amount):a-Number(t.amount)},0);},
 
-/* ===== FORMAT RIBUAN ===== */
 formatRibuan:function(num){
   if(num===null||num===undefined||num==='')return '0';
   var n = typeof num === 'string' ? parseFloat(num.replace(/\./g,'')) : num;
@@ -2172,21 +2234,23 @@ formatRibuanInput:function(val){
 
 /* ===== TAB HISTORY (Back button) ===== */
 switchTab:function(tab){
+  if(tab==='owner' && !this.isOwner) return;
   if(this.activeTab !== tab){
     this.tabHistory.push(this.activeTab);
     if(this.tabHistory.length > 20) this.tabHistory.shift();
+    try{ history.pushState({tab:tab}, ''); }catch(e){}
   }
   this.activeTab = tab;
 },
 
-/* ===== SWIPE-TO-CLOSE BOTTOM SHEETS ===== */
+/* ===== SWIPE-TO-CLOSE ===== */
 onSheetTouchStart:function(e,sheetKey){
   var target = e.target.closest('.zn-sheet-content');
   if(!target)return;
   var touchY = e.touches[0].clientY;
   var rect = target.getBoundingClientRect();
   var scrollTop = target.scrollTop;
-  if(scrollTop <= 0 && touchY - rect.top < 100){
+  if(scrollTop <= 0 && touchY - rect.top < 150){
     this.sheetDragging = true;
     this.sheetDragStart = touchY;
     this.sheetDragY = 0;
@@ -2217,6 +2281,7 @@ onSheetTouchEnd:function(e){
     var self = this;
     setTimeout(function(){
       if(key === 'confirmModal.open'){ self.confirmModal.open = false; }
+      else if(key === 'promptModal.open'){ self.promptModal.open = false; }
       else { self[key] = false; }
       target.style.transform = '';
     }, 300);
@@ -2230,7 +2295,6 @@ onSheetTouchEnd:function(e){
 
 /* ===== BACK BUTTON HP ===== */
 handleBackButton:function(){
-  // 1. Kalau ada sheet terbuka → tutup
   if(this.welcomePopupOpen){this.welcomePopupOpen=false;return true;}
   if(this.aboutModalOpen){this.aboutModalOpen=false;return true;}
   if(this.profileModalOpen){this.profileModalOpen=false;return true;}
@@ -2245,21 +2309,17 @@ handleBackButton:function(){
   if(this.addSavingsSheet){this.addSavingsSheet=false;return true;}
   if(this.movieSheetOpen){this.movieSheetOpen=false;return true;}
   if(this.newsSheetOpen){ if(this.selectedNews){this.selectedNews=null;return true;} this.newsSheetOpen=false;return true;}
-  if(this.weatherProvinceSheet){this.weatherProvinceSheet=false;return true;}
   if(this.weatherCitySheet){this.weatherCitySheet=false;return true;}
+  if(this.weatherProvinceSheet){this.weatherProvinceSheet=false;return true;}
   if(this.weatherSheetOpen){this.weatherSheetOpen=false;return true;}
   if(this.chatFullscreen){this.chatFullscreen=false;return true;}
   if(this.drawerOpen){this.drawerOpen=false;return true;}
   if(this.ownerPinModalOpen){this.ownerPinModalOpen=false;return true;}
-  
-  // 2. Kalau ada history tab → balik ke sebelumnya
   if(this.tabHistory.length > 0){
     var prev = this.tabHistory.pop();
     this.activeTab = prev;
     return true;
   }
-  
-  // 3. Kalau di home → biarin keluar (return false)
   return false;
 },
 
@@ -2316,15 +2376,13 @@ init:async function(){
   this.voiceSupported=('webkitSpeechRecognition' in window)||('SpeechRecognition' in window);
   this.detectDevice();
   
-  // Back button handler
-  history.pushState({tab:'home'}, '');
+  try{ history.replaceState({tab:'home'}, ''); }catch(e){}
   window.addEventListener('popstate', function(){
     var handled = self.handleBackButton();
     if(handled){
-      history.pushState({tab:self.activeTab}, '');
-    } else {
-      history.back();
+      try{ history.pushState({tab:self.activeTab}, ''); }catch(e){}
     }
+    // kalau gak handled, biarin browser handle (keluar dari halaman)
   });
   
   try{var{data:settings}=await sb.from('app_settings').select('welcome_text').eq('id',1).maybeSingle();if(settings&&settings.welcome_text){this.welcomeText=settings.welcome_text;this.welcomeTextEdit=settings.welcome_text;}}catch(e){}
@@ -2361,6 +2419,9 @@ handleEmailAuth:async function(){
       if(ex){return this.showAlert('PERINGATAN','Nama sudah dipakai!');}
       var{data,error}=await sb.auth.signUp({email:this.authEmail,password:this.authPassword,options:{data:{username:this.authUsername}}});
       if(error)throw error;
+      if(data.user && data.user.identities && data.user.identities.length === 0){
+        return this.showAlert('PERINGATAN','Email sudah terdaftar. Coba masuk.');
+      }
       if(data.user){await sb.from('profiles').upsert({id:data.user.id,username:this.authUsername,status:'user',last_login:new Date().toISOString(),is_vip:false,is_banned:false,chat_count:0,chat_bonus:0});}
       this.showAlert('SUKSES','Berhasil daftar!');this.authMode='login';
     }else{
@@ -2519,8 +2580,14 @@ calcBMI:function(){var w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)
 
 getCityMap:function(){return{'DKI JAKARTA':['Jakarta','Jakarta Pusat','Jakarta Utara','Jakarta Selatan','Jakarta Barat','Jakarta Timur'],'JAWA BARAT':['Bandung','Bekasi','Bogor','Depok'],'JAWA TENGAH':['Semarang','Surakarta','Magelang'],'DI YOGYAKARTA':['Yogyakarta','Sleman','Bantul'],'JAWA TIMUR':['Surabaya','Malang','Kediri'],'BANTEN':['Serang','Tangerang','Cilegon'],'BALI':['Denpasar','Singaraja','Ubud'],'SUMATERA UTARA':['Medan','Binjai'],'SUMATERA BARAT':['Padang','Bukittinggi'],'SUMATERA SELATAN':['Palembang'],'RIAU':['Pekanbaru'],'LAMPUNG':['Bandar Lampung'],'KALIMANTAN TIMUR':['Samarinda','Balikpapan'],'KALIMANTAN SELATAN':['Banjarmasin'],'SULAWESI SELATAN':['Makassar'],'SULAWESI UTARA':['Manado'],'PAPUA':['Jayapura']};},
 initProvinces:function(){this.provinces=Object.keys(this.getCityMap());this.weatherProvince='DKI JAKARTA';this.cities=this.getCityMap()['DKI JAKARTA'];this.weatherCity='Jakarta';},
+
+/* ===== FIX: GANTI CUACA — TUTUP DULU BARU BUKA PICKER ===== */
 openWeatherSheet:function(){this.weatherProvinceSheet=true;},
-openWeatherPickerDirect:function(){this.weatherProvinceSheet=true;},
+openWeatherPickerDirect:function(){
+  var self = this;
+  this.weatherSheetOpen = false;
+  setTimeout(function(){ self.weatherProvinceSheet = true; }, 200);
+},
 selectWeatherProvince:function(p){this.weatherProvince=p;this.cities=this.getCityMap()[p]||['Jakarta'];this.weatherProvinceSheet=false;this.weatherCitySheet=true;},
 selectWeatherCity:function(c){this.weatherCity=c;this.weatherCitySheet=false;this.weatherSheetOpen=true;this.fetchWeather();},
 openWeatherProvincePicker:function(){this.weatherProvinceSheet=true;},
@@ -2601,7 +2668,7 @@ openNews:async function(){
       });
     }
     if(!this.newsList||this.newsList.length===0){
-      var res2=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.antaranews.com/rss/terkini.xml');
+      var res2=await fetch('https://api.rss2json.com/v1/api.php?rss_url=https://www.antaranews.com/rss/terkini.xml');
       var json2=await res2.json();
       if(json2.items){
         this.newsList=json2.items.slice(0,20).map(function(it){
