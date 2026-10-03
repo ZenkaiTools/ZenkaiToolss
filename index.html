@@ -1814,7 +1814,6 @@ sheetDragY:0,sheetDragStart:0,sheetDragging:false,currentSheetKey:null,
 provinceSearch:'',citySearch:'',
 headerScrolled:false,
 
-// STATE BARU
 vipOnlySheetOpen:false,
 activeBroadcast:null,broadcastPopupOpen:false,
 maintenanceSheetOpen:false,
@@ -1926,7 +1925,6 @@ proModelList:[
 
 get filteredProvinces(){if(!this.provinceSearch)return this.provinces;var q=this.provinceSearch.toLowerCase();return this.provinces.filter(function(p){return p.toLowerCase().indexOf(q)>=0});},
 get filteredCities(){if(!this.citySearch)return this.cities;var q=this.citySearch.toLowerCase();return this.cities.filter(function(c){return c.toLowerCase().indexOf(q)>=0});},
-
 getLevelName:function(lv){var n={1:'PEMULA',2:'RAJIN',3:'AKTIF',4:'AHLI',5:'MASTER',6:'LEGENDA'};return n[lv]||'PEMULA';},
 getNextLevelPoints:function(){var t={1:100,2:300,3:600,4:1000,5:2000,6:0};return t[this.userLevel]||0;},
 getCurrentLevelMin:function(){var t={1:0,2:100,3:300,4:600,5:1000,6:2000};return t[this.userLevel]||0;},
@@ -1948,6 +1946,20 @@ formatRibuanInput:function(val){
   var clean = String(val).replace(/\./g,'').replace(/[^0-9]/g,'');
   if(!clean)return '';
   return parseInt(clean,10).toLocaleString('id-ID');
+},
+
+// ===== FORCE CLEAN LOGOUT (BUAT FIX BAN STUCK) =====
+forceCleanLogout:async function(){
+  try{ await sb.auth.signOut(); }catch(e){}
+  try{
+    var keys = Object.keys(localStorage);
+    keys.forEach(function(k){
+      if(k.indexOf('sb-')===0 || k.indexOf('supabase')>=0){
+        localStorage.removeItem(k);
+      }
+    });
+  }catch(e){}
+  try{ sessionStorage.clear(); }catch(e){}
 },
 
 getCityMap:function(){
@@ -1994,7 +2006,6 @@ getCityMap:function(){
 },
 initProvinces:function(){this.provinces=Object.keys(this.getCityMap());this.weatherProvince='DKI JAKARTA';this.cities=this.getCityMap()['DKI JAKARTA'];this.weatherCity='Jakarta';},
 
-// GATE MAINTENANCE
 gate:function(fiturId,nextAction){
   if(this.isUnderMaintenance(fiturId)){return this.showMaintenanceSheet(fiturId);}
   if(typeof nextAction === 'function') nextAction();
@@ -2102,7 +2113,6 @@ handleBackButton:function(){
   return false;
 },
 
-// MAINTENANCE
 mapFiturToMaintenance:function(f){
   if(!f) return null;
   if(f.id === 'ai') return 'ai';
@@ -2239,6 +2249,7 @@ addPoints:async function(amount,reason){
 calcLevelFromPoints:function(pts){if(pts>=2000)return 6;if(pts>=1000)return 5;if(pts>=600)return 4;if(pts>=300)return 3;if(pts>=100)return 2;return 1;},
 
 handleEmailAuth:async function(){
+  var self = this;
   if(!this.authEmail||!this.authPassword){return this.showAlert('PERHATIAN','Isi email dan password!');}
   try{
     if(this.authMode==='register'){
@@ -2251,16 +2262,22 @@ handleEmailAuth:async function(){
       if(data.user){await sb.from('profiles').upsert({id:data.user.id,username:this.authUsername,status:'user',last_login:new Date().toISOString(),is_vip:false,is_banned:false,chat_count:0,chat_bonus:0});}
       this.showAlert('SUKSES','Berhasil daftar!');this.authMode='login';
     }else{
-      var{data,error}=await sb.auth.signInWithPassword({email:this.authEmail,password:this.authPassword});
-      if(error)throw error;
-      await this.checkUserAccessOnLogin(data.user,true);
+      await this.forceCleanLogout();
+      setTimeout(async function(){
+        try{
+          var{data,error}=await sb.auth.signInWithPassword({email:self.authEmail,password:self.authPassword});
+          if(error)throw error;
+          await self.checkUserAccessOnLogin(data.user,true);
+        }catch(e){self.showAlert('GAGAL',e.message);}
+      }, 400);
     }
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
 
 checkBanStatus:async function(userId){
   try{
-    var {data} = await sb.from('profiles').select('is_banned, ban_until, ban_reason').eq('id', userId).maybeSingle();
+    var {data, error} = await sb.from('profiles').select('is_banned, ban_until, ban_reason').eq('id', userId).maybeSingle();
+    if(error){console.error('Ban check error:', error); return false;}
     if(!data) return false;
     if(!data.is_banned) return false;
     if(data.ban_until && new Date(data.ban_until) < new Date()){
@@ -2270,7 +2287,7 @@ checkBanStatus:async function(userId){
     this.bannedInfoData = {reason:data.ban_reason||'Tidak ada alasan',until:data.ban_until};
     this.bannedInfoSheetOpen = true;
     return true;
-  }catch(e){ return false; }
+  }catch(e){ console.error('Ban check err:', e); return false; }
 },
 
 checkUserAccessOnLogin:async function(user,showWelcome){
@@ -2282,7 +2299,10 @@ checkUserAccessOnLogin:async function(user,showWelcome){
     var{data:prof}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
     if(prof&&prof.is_banned){
       var banCheck = await this.checkBanStatus(user.id);
-      if(banCheck){await sb.auth.signOut();return;}
+      if(banCheck){
+        await this.forceCleanLogout();
+        return;
+      }
     }
     this.currentUser=user;this.isOwner=false;this.isAuthenticated=true;this.chatFullscreen=false;this.proChatFullscreen=false;
     if(prof){this.isVip=prof.is_vip||false;this.chatCount=prof.chat_count||0;this.chatDate=prof.chat_date||'';this.chatBonus=prof.chat_bonus||0;this.proChatCount=prof.pro_chat_count||0;this.proChatDate=prof.pro_chat_date||'';}
@@ -2344,8 +2364,7 @@ uploadAvatarFile:async function(event){
   finally{this.uploadingAvatar=false;}
 },
 
-logout:async function(){await sb.auth.signOut();this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;this.chatFullscreen=false;this.proChatFullscreen=false;window.location.reload();},
-
+logout:async function(){await this.forceCleanLogout();this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;this.chatFullscreen=false;this.proChatFullscreen=false;setTimeout(function(){window.location.reload();},200);},
 // TRANSAKSI
 loadTransactions:async function(){if(!this.currentUser)return;var{data}=await sb.from('transactions').select('*').eq('user_id',this.currentUser.id).order('id',{ascending:false});if(data){this.transactions=data;var s=this;setTimeout(function(){s.drawCharts()},300);}},
 addTransaction:async function(type){
@@ -2406,7 +2425,7 @@ drawCharts:function(){var self=this;setTimeout(function(){try{
   }
 }catch(e){console.error(e)}},200);},
 
-// MOVIE + NEWS + TTS + KOMPRES + BMI + SPEED
+// MOVIE
 fetchMovies:async function(){this.movieLoading=true;try{var res=await fetch('https://api.themoviedb.org/3/trending/movie/week?api_key='+TMDB_KEY+'&language=id-ID');var json=await res.json();if(json.results){this.movieList=json.results.slice(0,15).map(function(m){return{id:m.id,title:m.title,year:m.release_date?m.release_date.slice(0,4):'-',rating:m.vote_average?m.vote_average.toFixed(1):'-',overview:m.overview||'-',poster:m.poster_path?'https://image.tmdb.org/t/p/w200'+m.poster_path:''}});}}catch(e){}this.movieLoading=false;},
 openMovieSheet:function(){if(this.isUnderMaintenance('film')){return this.showMaintenanceSheet('film');}this.movieSheetOpen=true;if(this.movieList.length===0)this.fetchMovies();},
 openNews:async function(){
@@ -2459,6 +2478,8 @@ parseRSSItems:function(xmlText){
     return result;
   }catch(e){console.error('Parse RSS gagal:',e);return [];}
 },
+
+// TTS + KOMPRES + BMI + SPEED
 speakCustomText:function(){if(!this.customTtsText){return this.showAlert('PERHATIAN','Ketik teks dulu!');}if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(this.customTtsText);u.lang='id-ID';window.speechSynthesis.speak(u);}},
 compressImageFile:function(event){var file=event.target.files[0];if(!file)return;var self=this;var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var canvas=document.createElement('canvas');var ctx=canvas.getContext('2d');var w=img.width,h=img.height;var max=800;if(w>h&&w>max){h*=max/w;w=max;}else if(h>max){w*=max/h;h=max;}canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);self.compressedImageUrl=canvas.toDataURL('image/jpeg',0.6);self.showAlert('BERHASIL','Foto dikompres!');};img.src=e.target.result;};reader.readAsDataURL(file);},
 runSpeedTest:async function(){this.speedTesting=true;this.speedResult=null;try{var start=Date.now();var res=await fetch('https://speed.cloudflare.com/__down?bytes=5000000&r='+Math.random());var blob=await res.blob();var dur=(Date.now()-start)/1000;var mbps=(blob.size*8)/(dur*1000000);this.speedResult={download:mbps.toFixed(1),latency:Math.round(dur*100),quality:mbps>20?'BAGUS':mbps>5?'CUKUP':'LAMBAT'};}catch(e){this.showAlert('GAGAL','Tes gagal.');}this.speedTesting=false;},
@@ -2627,23 +2648,21 @@ sendProChat:async function(){
 },
 clearProChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat Zenkai AI Pro bakal dihapus.',function(){self.proMessages=[];self.showAlert('SUKSES','Chat dihapus.');},'🗑️');},
 
-// OWNER
-loadAppStats:async function(){
-  try{
-    var{count:u}=await sb.from('profiles').select('*',{count:'exact',head:true});
-    var{count:t}=await sb.from('transactions').select('*',{count:'exact',head:true});
-    var{count:b}=await sb.from('profiles').select('*',{count:'exact',head:true}).eq('is_banned',true);
-    var today=new Date().toISOString().slice(0,10);
-    var{count:a}=await sb.from('profiles').select('*',{count:'exact',head:true}).gte('last_login',today);
-    this.appStats={totalUsers:u||0,totalTx:t||0,banned:b||0,activeToday:a||0};
-    var{data:txs}=await sb.from('transactions').select('user_id');
-    var counts={};(txs||[]).forEach(function(t){counts[t.user_id]=(counts[t.user_id]||0)+1});
-    var sorted=Object.entries(counts).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
-    var{data:profs}=await sb.from('profiles').select('id,username');
-    var map={};(profs||[]).forEach(function(p){map[p.id]=p.username});
-    this.topUsers=sorted.map(function(p){return{id:p[0],username:map[p[0]]||'Unknown',count:p[1]}});
-  }catch(e){}
-},
+// OWNER - STATISTIK
+loadAppStats:async function(){try{
+  var{count:u}=await sb.from('profiles').select('*',{count:'exact',head:true});
+  var{count:t}=await sb.from('transactions').select('*',{count:'exact',head:true});
+  var{count:b}=await sb.from('profiles').select('*',{count:'exact',head:true}).eq('is_banned',true);
+  var today=new Date().toISOString().slice(0,10);
+  var{count:a}=await sb.from('profiles').select('*',{count:'exact',head:true}).gte('last_login',today);
+  this.appStats={totalUsers:u||0,totalTx:t||0,banned:b||0,activeToday:a||0};
+  var{data:txs}=await sb.from('transactions').select('user_id');
+  var counts={};(txs||[]).forEach(function(t){counts[t.user_id]=(counts[t.user_id]||0)+1});
+  var sorted=Object.entries(counts).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
+  var{data:profs}=await sb.from('profiles').select('id,username');
+  var map={};(profs||[]).forEach(function(p){map[p.id]=p.username});
+  this.topUsers=sorted.map(function(p){return{id:p[0],username:map[p[0]]||'Unknown',count:p[1]}});
+}catch(e){}},
 loadLiveDashboard:async function(){
   try{
     var today=new Date().toISOString().slice(0,10);
@@ -2655,6 +2674,8 @@ loadLiveDashboard:async function(){
     this.liveStats={onlineNow:active||0,chatToday:chats||0,newUsersToday:newUsers||0,txToday:txTotal,activeToday:active||0};
   }catch(e){console.error(e);}
 },
+
+// OWNER - USERS
 loadAllUsers:async function(){try{var{data}=await sb.from('profiles').select('*').order('created_at',{ascending:false});if(data)this.allUsers=data;}catch(e){}},
 
 openBanSheet:function(u){this.banSheetTarget=u;this.banSheetForm={durasi:'1d',alasan:''};this.banSheetOpen=true;},
@@ -2701,6 +2722,7 @@ promptAddChat:function(u){var self=this;this.showPrompt('TAMBAH BONUS CHAT','Ber
 promptAddPoints:function(u){var self=this;this.showPrompt('TAMBAH POIN','Berapa poin untuk '+u.username+'?',async function(val){var n=parseInt(val)||0;if(n<=0)return;try{var{data:pts}=await sb.from('user_points').select('*').eq('user_id',u.id).maybeSingle();if(!pts){await sb.from('user_points').insert({user_id:u.id,total_points:n,level:1});}else{await sb.from('user_points').update({total_points:(pts.total_points||0)+n}).eq('user_id',u.id);}self.showAlert('SUKSES','+'+n+' poin untuk '+u.username);}catch(e){self.showAlert('GAGAL',e.message);}});},
 confirmDeleteUser:function(u){var self=this;this.showConfirm('HAPUS USER?','Semua data '+u.username+' akan dihapus!',async function(){await sb.from('transactions').delete().eq('user_id',u.id);await sb.from('savings_targets').delete().eq('user_id',u.id);await sb.from('budgets').delete().eq('user_id',u.id);await sb.from('user_points').delete().eq('user_id',u.id);await sb.from('profiles').delete().eq('id',u.id);self.showAlert('SUKSES','User dihapus.');await self.loadAllUsers();},'🗑️');},
 
+// OWNER WALLET
 loadWallet:async function(){
   try{
     var {data} = await sb.from('app_settings').select('*').eq('id',1).maybeSingle();
@@ -2752,6 +2774,8 @@ sendGift:async function(){
     await this.loadAllUsers();
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
+
+// SUBSCRIPTION MANAGER
 loadSubscriptions:async function(){
   try{
     var {data} = await sb.from('profiles').select('id,username,is_vip,vip_expiry,status').eq('is_vip',true).order('vip_expiry',{ascending:true});
@@ -2771,6 +2795,7 @@ extendVip:async function(u,days){
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
 
+// OWNER - BROADCAST
 loadBroadcasts:async function(){
   try{var {data} = await sb.from('broadcasts').select('*').order('created_at',{ascending:false}).limit(10);if(data)this.broadcastList = data;}catch(e){console.error(e);}
 },
@@ -2808,6 +2833,8 @@ closeBroadcast:function(){
   if(this.activeBroadcast){localStorage.setItem('zenkai_last_broadcast_id', this.activeBroadcast.id);}
   this.broadcastPopupOpen = false;
 },
+
+// OWNER - MAINTENANCE
 loadMaintenance:async function(){
   try{
     var {data} = await sb.from('feature_maintenance').select('*');
@@ -2839,8 +2866,11 @@ saveMaintenance:async function(){
     this.showAlert('SUKSES','Perubahan maintenance disimpan!');
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
+
+// OWNER - SETELAN
 saveWelcomeText:async function(){if(!this.welcomeTextEdit)return;await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit}).eq('id',1);this.welcomeText=this.welcomeTextEdit;this.showAlert('SUKSES','Kata sambutan diperbarui!');},
 
+// REVIEW
 loadReviews:async function(){
   try{var {data} = await sb.from('reviews').select('*').order('created_at',{ascending:false}).limit(50);this.reviewList = data || [];}catch(e){console.error(e);}
 },
@@ -2862,8 +2892,10 @@ submitReview:async function(){
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
 
+// REALTIME (FIX VIP & BAN)
 setupRealtime:function(){
   var self = this;
+  // Realtime: Broadcast baru
   try{
     sb.channel('bc-rt').on('postgres_changes',{event:'INSERT',schema:'public',table:'broadcasts'},function(p){
       var n=p.new;
@@ -2874,6 +2906,8 @@ setupRealtime:function(){
       self.broadcastPopupOpen=true;
     }).subscribe();
   }catch(e){console.error('RT BC:',e);}
+  
+  // Realtime: Maintenance
   try{
     sb.channel('maint-rt').on('postgres_changes',{event:'*',schema:'public',table:'feature_maintenance'},function(p){
       var u=p.new;
@@ -2888,13 +2922,32 @@ setupRealtime:function(){
       }
     }).subscribe();
   }catch(e){console.error('RT MT:',e);}
+  
+  // Realtime: Ban & VIP update (FIX)
   try{
     sb.channel('ban-rt').on('postgres_changes',{event:'UPDATE',schema:'public',table:'profiles'},function(p){
       var u=p.new;
       if(!self.currentUser)return;
       if(u.id===self.currentUser.id){
-        if(u.is_banned){self.checkBanStatus(u.id).then(function(isBanned){if(isBanned){sb.auth.signOut();}});}
+        // Real-time VIP update
         self.isVip = u.is_vip || false;
+        // Real-time ban check
+        if(u.is_banned && u.is_banned === true){
+          self.checkBanStatus(u.id).then(function(isBanned){
+            if(isBanned){
+              setTimeout(function(){
+                try{ sb.auth.signOut(); }catch(e){}
+                try{
+                  var keys = Object.keys(localStorage);
+                  keys.forEach(function(k){
+                    if(k.indexOf('sb-')===0 || k.indexOf('supabase')>=0){localStorage.removeItem(k);}
+                  });
+                }catch(e){}
+                setTimeout(function(){ window.location.reload(); }, 300);
+              }, 500);
+            }
+          });
+        }
       }
     }).subscribe();
   }catch(e){console.error('RT Ban:',e);}
