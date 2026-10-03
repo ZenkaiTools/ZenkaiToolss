@@ -212,9 +212,6 @@ select.zn-input{cursor:pointer}
 
 [x-cloak]{display:none !important}
 
-/* ============================================
-   TEMA COMIC (Light Mode)
-   ============================================ */
 [data-style="comic"]{--bg:#fffbeb;--bg-2:#fef3c7;--card:#fffdf5;--card-2:#ffffff;--border:#1a1a1a;--text:#1a1a1a;--text-dim:#666666;--text-mute:#999999;--radius:14px;--radius-sm:10px;--radius-lg:20px}
 [data-style="comic"][data-theme="cyan"]{--primary:#0ea5e9;--primary-dark:#0369a1;--primary-soft:#e0f2fe;--primary-glow:rgba(14,165,233,.4);--accent:#fbbf24;--accent-dark:#d97706;--accent-soft:#fef3c7;--accent-glow:rgba(251,191,36,.4)}
 [data-style="comic"][data-theme="magenta"]{--primary:#ec4899;--primary-dark:#be185d;--primary-soft:#fce7f3;--primary-glow:rgba(236,72,153,.4);--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:#f3e8ff;--accent-glow:rgba(168,85,247,.4)}
@@ -255,9 +252,6 @@ select.zn-input{cursor:pointer}
 [data-style="comic"] .zn-nav-btn.active{background:var(--primary);color:#fff;opacity:1;box-shadow:2px 2px 0 0 var(--border)}
 [data-style="comic"] .zn-nav-btn.active::before{display:none}
 
-/* ============================================
-   LOADING SCREEN
-   ============================================ */
 #loadingScreen{position:fixed;inset:0;z-index:99998;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:hidden;transition:opacity .6s,visibility .6s}
 #loadingScreen.hide{opacity:0;visibility:hidden}
 #loadingScreen::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(0,217,255,.15),transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,0,128,.12),transparent 50%);animation:loadBgPulse 4s ease-in-out infinite;pointer-events:none}
@@ -294,9 +288,6 @@ select.zn-input{cursor:pointer}
 .zn-send-btn{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--accent));border:2.5px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 22px var(--primary-glow),0 4px 12px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s}
 .zn-send-btn:active{transform:scale(.92)}
 
-/* ============================================
-   ZENKAI AI PRO — CUSTOM STYLES
-   ============================================ */
 .zn-pro-model-chip{display:inline-flex;flex-direction:column;align-items:center;gap:2px;padding:8px 14px;border-radius:14px;background:var(--card);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;white-space:nowrap;transition:all .2s;min-width:110px}
 .zn-pro-model-chip.active{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);box-shadow:0 0 10px var(--primary-glow)}
 .zn-pro-model-chip:active{transform:scale(.95)}
@@ -312,9 +303,6 @@ select.zn-input{cursor:pointer}
 @keyframes znProBlink{0%,100%{opacity:.3}50%{opacity:1}}
 .zn-pro-bubble-label{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;color:#ffd700;margin-bottom:4px;display:flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);width:fit-content}
 
-/* ============================================
-   BROADCAST & MAINTENANCE — CUSTOM STYLES
-   ============================================ */
 .zn-broadcast-icon{width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px;line-height:1}
 .zn-broadcast-icon.pengumuman{background:var(--primary-soft);border:2px solid var(--primary);box-shadow:0 0 30px var(--primary-glow)}
 .zn-broadcast-icon.peringatan{background:rgba(255,170,0,.15);border:2px solid var(--warning);box-shadow:0 0 30px rgba(255,170,0,.5)}
@@ -348,9 +336,6 @@ select.zn-input{cursor:pointer}
 .zn-broadcast-history-card.peringatan{border-left:3px solid var(--warning)}
 .zn-broadcast-history-card.maintenance{border-left:3px solid var(--danger)}
 
-/* ============================================
-   REVIEW & RATING — CUSTOM STYLES
-   ============================================ */
 .zn-star{font-size:28px;cursor:pointer;color:var(--text-mute);transition:all .2s;display:inline-block;line-height:1}
 .zn-star.active{color:var(--gold);text-shadow:0 0 10px rgba(255,215,0,.5);transform:scale(1.1)}
 .zn-review-card{padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:8px}
@@ -360,25 +345,16 @@ select.zn-input{cursor:pointer}
 .zn-review-komentar{font-size:12px;color:var(--text-dim);line-height:1.5}
 .zn-review-date{font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:4px}
 
-/* ============================================
-   LIVE DASHBOARD — CUSTOM STYLES
-   ============================================ */
 .zn-dash-card{padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);position:relative;overflow:hidden}
 .zn-dash-card::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.3;pointer-events:none}
 .zn-dash-label{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px}
 .zn-dash-value{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--primary);line-height:1;position:relative;z-index:1}
 .zn-dash-sub{font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:4px;position:relative;z-index:1}
 
-/* ============================================
-   OWNER WALLET — CUSTOM STYLES
-   ============================================ */
 .zn-wallet-balance{padding:20px;border-radius:16px;background:linear-gradient(135deg,var(--gold),var(--accent));border:2px solid var(--gold);text-align:center;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(255,215,0,.4)}
 .zn-wallet-balance-label{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#050508;margin-bottom:6px}
 .zn-wallet-balance-value{font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:#050508;line-height:1}
 
-/* ============================================
-   SUBSCRIPTION MANAGER — CUSTOM STYLES
-   ============================================ */
 .zn-sub-card{padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:10px;transition:all .2s}
 .zn-sub-card.active{border-color:var(--gold);background:rgba(255,215,0,.05);box-shadow:0 0 15px rgba(255,215,0,.2)}
 .zn-sub-expire-bar{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin-top:8px}
@@ -581,248 +557,248 @@ select.zn-input{cursor:pointer}
         <div style="flex:1"><div class="zn-tips-label">TIPS HARI INI</div><div class="zn-tips-text" x-text="tipsHarian"></div></div>
       </div>
     </div>
-<!-- TAB KEUANGAN -->
-<div x-show="activeTab==='keuangan'" class="zn-section">
-  <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-    <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px">TOTAL SALDO</div>
-    <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--primary);letter-spacing:1px" x-text="'Rp '+formatRibuan(totalBalance)"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
-      <div style="padding:8px;border-radius:8px;background:rgba(0,255,136,.08);border:1px solid var(--success)">
-        <div style="font-size:8px;color:var(--text-mute);letter-spacing:1px;margin-bottom:2px">MASUK</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--success)" x-text="'Rp '+formatRibuan(totalIncome)"></div>
-      </div>
-      <div style="padding:8px;border-radius:8px;background:rgba(255,51,85,.08);border:1px solid var(--danger)">
-        <div style="font-size:8px;color:var(--text-mute);letter-spacing:1px;margin-bottom:2px">KELUAR</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--danger)" x-text="'Rp '+formatRibuan(totalExpense)"></div>
-      </div>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
-    <button @click="finSubTab='transaksi'" :class="finSubTab==='transaksi'?'active':''" class="zn-tab-pill">Transaksi</button>
-    <button @click="finSubTab='grafik';setTimeout(()=>drawCharts(),300)" :class="finSubTab==='grafik'?'active':''" class="zn-tab-pill">Grafik</button>
-    <button @click="finSubTab='target'" :class="finSubTab==='target'?'active':''" class="zn-tab-pill">Target</button>
-  </div>
 
-  <div x-show="finSubTab==='transaksi'" class="zn-section">
-    <button @click="openTxSheet()" class="zn-btn zn-btn-primary"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>TAMBAH TRANSAKSI</span></button>
-    <div class="zn-card">
-      <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg><span>RIWAYAT</span></div>
-      <div style="display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto">
-        <template x-for="t in transactions" :key="t.id">
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px" :style="t.type==='income'?'background:rgba(0,255,136,.06);border:1px solid var(--success)':'background:rgba(255,51,85,.06);border:1px solid var(--danger)'">
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:600" x-text="t.category"></div>
-              <div style="font-size:10px;color:var(--text-mute);margin-top:2px" x-text="t.date"></div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700" :style="t.type==='income'?'color:var(--success)':'color:var(--danger)'" x-text="(t.type==='income'?'+':'-')+'Rp'+formatRibuan(t.amount)"></span>
-              <button @click="confirmDeleteTx(t.id)" style="color:var(--danger);font-size:20px;line-height:1;padding:0 4px">×</button>
-            </div>
+    <!-- TAB KEUANGAN -->
+    <div x-show="activeTab==='keuangan'" class="zn-section">
+      <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
+        <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px">TOTAL SALDO</div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--primary);letter-spacing:1px" x-text="'Rp '+formatRibuan(totalBalance)"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
+          <div style="padding:8px;border-radius:8px;background:rgba(0,255,136,.08);border:1px solid var(--success)">
+            <div style="font-size:8px;color:var(--text-mute);letter-spacing:1px;margin-bottom:2px">MASUK</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--success)" x-text="'Rp '+formatRibuan(totalIncome)"></div>
           </div>
-        </template>
-        <template x-if="transactions.length===0">
-          <div style="text-align:center;padding:24px;color:var(--text-mute);font-size:12px">Belum ada transaksi. Klik <b style="color:var(--primary)">+ TAMBAH TRANSAKSI</b> di atas.</div>
-        </template>
-      </div>
-    </div>
-  </div>
-
-  <div x-show="finSubTab==='grafik'" class="zn-section">
-    <div class="zn-card"><div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg><span>PENGELUARAN</span></div><div style="position:relative;height:200px"><canvas id="pieChart"></canvas></div></div>
-    <div class="zn-card"><div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span>MASUK VS KELUAR</span></div><div style="position:relative;height:200px"><canvas id="barChart"></canvas></div></div>
-  </div>
-
-  <div x-show="finSubTab==='target'" class="zn-section">
-    <button @click="openTargetSheet()" class="zn-btn zn-btn-primary"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>TAMBAH TARGET</span></button>
-    <div class="zn-card">
-      <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg><span>BUDGET</span></div>
-      <button @click="openBudgetSheet()" class="zn-btn zn-btn-soft" style="margin-bottom:12px">+ SET BUDGET</button>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <template x-for="b in budgets" :key="b.id">
-          <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
-            <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600" x-text="b.kategori"></span><button @click="confirmDeleteBudget(b.id)" style="color:var(--danger);font-size:16px;line-height:1">×</button></div>
-            <div style="font-size:10px;color:var(--text-mute);margin-bottom:6px">Limit: Rp <span x-text="formatRibuan(b.limit_bulanan)"></span></div>
-            <div class="zn-progress"><div class="zn-progress-fill" :style="'width:'+Math.min(100,(getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'" x-text="Math.round((getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'"></div></div>
+          <div style="padding:8px;border-radius:8px;background:rgba(255,51,85,.08);border:1px solid var(--danger)">
+            <div style="font-size:8px;color:var(--text-mute);letter-spacing:1px;margin-bottom:2px">KELUAR</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--danger)" x-text="'Rp '+formatRibuan(totalExpense)"></div>
           </div>
-        </template>
-        <template x-if="budgets.length===0"><div style="text-align:center;padding:16px;color:var(--text-mute);font-size:12px">Belum ada budget</div></template>
+        </div>
       </div>
-    </div>
-    <div class="zn-card">
-      <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span>TARGET TABUNGAN</span></div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <template x-for="s in savings" :key="s.id">
-          <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
-            <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600" x-text="s.nama"></span><button @click="confirmDeleteSavings(s.id)" style="color:var(--danger);font-size:16px;line-height:1">×</button></div>
-            <div style="font-size:10px;color:var(--text-mute);margin-bottom:6px">Target: Rp <span x-text="formatRibuan(s.target)"></span></div>
-            <div class="zn-progress"><div class="zn-progress-fill" :style="'width:'+Math.min(100,(s.terkumpul/s.target)*100)+'%'" x-text="Math.round((s.terkumpul/s.target)*100)+'%'"></div></div>
-            <div style="font-size:10px;color:var(--text-mute);margin-top:6px">Terkumpul: Rp <span x-text="formatRibuan(s.terkumpul)"></span></div>
-            <button @click="addToSavings(s.id)" class="zn-btn zn-btn-soft" style="margin-top:8px;padding:8px;font-size:10px">+ TABUNG</button>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+        <button @click="finSubTab='transaksi'" :class="finSubTab==='transaksi'?'active':''" class="zn-tab-pill">Transaksi</button>
+        <button @click="finSubTab='grafik';setTimeout(()=>drawCharts(),300)" :class="finSubTab==='grafik'?'active':''" class="zn-tab-pill">Grafik</button>
+        <button @click="finSubTab='target'" :class="finSubTab==='target'?'active':''" class="zn-tab-pill">Target</button>
+      </div>
+
+      <div x-show="finSubTab==='transaksi'" class="zn-section">
+        <button @click="openTxSheet()" class="zn-btn zn-btn-primary"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>TAMBAH TRANSAKSI</span></button>
+        <div class="zn-card">
+          <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg><span>RIWAYAT</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto">
+            <template x-for="t in transactions" :key="t.id">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px" :style="t.type==='income'?'background:rgba(0,255,136,.06);border:1px solid var(--success)':'background:rgba(255,51,85,.06);border:1px solid var(--danger)'">
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:13px;font-weight:600" x-text="t.category"></div>
+                  <div style="font-size:10px;color:var(--text-mute);margin-top:2px" x-text="t.date"></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700" :style="t.type==='income'?'color:var(--success)':'color:var(--danger)'" x-text="(t.type==='income'?'+':'-')+'Rp'+formatRibuan(t.amount)"></span>
+                  <button @click="confirmDeleteTx(t.id)" style="color:var(--danger);font-size:20px;line-height:1;padding:0 4px">×</button>
+                </div>
+              </div>
+            </template>
+            <template x-if="transactions.length===0">
+              <div style="text-align:center;padding:24px;color:var(--text-mute);font-size:12px">Belum ada transaksi. Klik <b style="color:var(--primary)">+ TAMBAH TRANSAKSI</b> di atas.</div>
+            </template>
           </div>
-        </template>
-        <template x-if="savings.length===0">
-          <div style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">Belum ada target. Klik <b style="color:var(--primary)">+ TAMBAH TARGET</b> di atas.</div>
-        </template>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- TAB DOWNLOADER -->
-<div x-show="activeTab==='downloader'" class="zn-section">
-  <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-    <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15));border-color:#ffd700"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ffd700"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:#ffd700;margin-bottom:4px">TIKTOK DOWNLOADER</h2>
-    <p style="font-size:11px;color:var(--text-mute);letter-spacing:1px">NO WATERMARK // HD</p>
-  </div>
-  <div class="zn-card">
-    <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;letter-spacing:1px">TEMPEL LINK TIKTOK:</div>
-    <input type="text" x-model="downloadLinkInput" placeholder="https://tiktok.com/..." class="zn-input">
-    <button @click="processMediaDownload()" class="zn-btn zn-btn-primary" :disabled="downloadLoading" style="margin-top:12px">
-      <template x-if="!downloadLoading"><span>PROSES LINK</span></template>
-      <template x-if="downloadLoading"><span><span class="zn-spin"></span> MEMPROSES</span></template>
-    </button>
-  </div>
-  <template x-if="downloadResultReady">
-    <div class="zn-card zn-card-glow">
-      <template x-if="downloadMeta.thumbnail"><img :src="downloadMeta.thumbnail" style="width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px;border:1px solid var(--border)"></template>
-      <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px" x-text="downloadMeta.title"></div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <template x-for="(link,idx) in downloadResultLinks" :key="idx">
-          <button @click="downloadBlob(link.url,link.filename)" class="zn-btn zn-btn-soft"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span x-text="link.label"></span></button>
-        </template>
+      <div x-show="finSubTab==='grafik'" class="zn-section">
+        <div class="zn-card"><div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg><span>PENGELUARAN</span></div><div style="position:relative;height:200px"><canvas id="pieChart"></canvas></div></div>
+        <div class="zn-card"><div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span>MASUK VS KELUAR</span></div><div style="position:relative;height:200px"><canvas id="barChart"></canvas></div></div>
       </div>
-    </div>
-  </template>
-</div>
 
-<!-- TAB TOOLS -->
-<div x-show="activeTab==='tools'" class="zn-section">
-  <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-    <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TOOLS</h2>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
-    <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="zn-tab-pill">🌍</button>
-    <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="zn-tab-pill">🗣</button>
-    <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'active':''" class="zn-tab-pill">🖼</button>
-    <button @click="toolsSubTab='bmi'" :class="toolsSubTab==='bmi'?'active':''" class="zn-tab-pill">⚖</button>
-    <button @click="toolsSubTab='speed'" :class="toolsSubTab==='speed'?'active':''" class="zn-tab-pill">🌐</button>
-  </div>
-
-  <div x-show="toolsSubTab==='jam'" class="zn-card">
-    <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><span>JAM DUNIA (<span x-text="worldClocks.length"></span>)</span></div>
-    <div style="display:flex;flex-direction:column;gap:6px;max-height:450px;overflow-y:auto">
-      <template x-for="zone in worldClocks" :key="zone.name">
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
-          <div style="display:flex;align-items:center;gap:10px;min-width:0">
-            <span style="width:28px;height:20px;border-radius:3px;overflow:hidden;flex-shrink:0;border:1px solid var(--border)" x-html="zone.flagSvg"></span>
-            <div style="min-width:0">
-              <div style="font-size:12px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" x-text="zone.name"></div>
-              <div style="font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace" x-text="zone.tz"></div>
-            </div>
+      <div x-show="finSubTab==='target'" class="zn-section">
+        <button @click="openTargetSheet()" class="zn-btn zn-btn-primary"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>TAMBAH TARGET</span></button>
+        <div class="zn-card">
+          <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg><span>BUDGET</span></div>
+          <button @click="openBudgetSheet()" class="zn-btn zn-btn-soft" style="margin-bottom:12px">+ SET BUDGET</button>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <template x-for="b in budgets" :key="b.id">
+              <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600" x-text="b.kategori"></span><button @click="confirmDeleteBudget(b.id)" style="color:var(--danger);font-size:16px;line-height:1">×</button></div>
+                <div style="font-size:10px;color:var(--text-mute);margin-bottom:6px">Limit: Rp <span x-text="formatRibuan(b.limit_bulanan)"></span></div>
+                <div class="zn-progress"><div class="zn-progress-fill" :style="'width:'+Math.min(100,(getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'" x-text="Math.round((getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'"></div></div>
+              </div>
+            </template>
+            <template x-if="budgets.length===0"><div style="text-align:center;padding:16px;color:var(--text-mute);font-size:12px">Belum ada budget</div></template>
           </div>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--primary);flex-shrink:0" x-text="zone.time"></span>
+        </div>
+        <div class="zn-card">
+          <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span>TARGET TABUNGAN</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <template x-for="s in savings" :key="s.id">
+              <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600" x-text="s.nama"></span><button @click="confirmDeleteSavings(s.id)" style="color:var(--danger);font-size:16px;line-height:1">×</button></div>
+                <div style="font-size:10px;color:var(--text-mute);margin-bottom:6px">Target: Rp <span x-text="formatRibuan(s.target)"></span></div>
+                <div class="zn-progress"><div class="zn-progress-fill" :style="'width:'+Math.min(100,(s.terkumpul/s.target)*100)+'%'" x-text="Math.round((s.terkumpul/s.target)*100)+'%'"></div></div>
+                <div style="font-size:10px;color:var(--text-mute);margin-top:6px">Terkumpul: Rp <span x-text="formatRibuan(s.terkumpul)"></span></div>
+                <button @click="addToSavings(s.id)" class="zn-btn zn-btn-soft" style="margin-top:8px;padding:8px;font-size:10px">+ TABUNG</button>
+              </div>
+            </template>
+            <template x-if="savings.length===0">
+              <div style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">Belum ada target. Klik <b style="color:var(--primary)">+ TAMBAH TARGET</b> di atas.</div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB DOWNLOADER -->
+    <div x-show="activeTab==='downloader'" class="zn-section">
+      <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
+        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15));border-color:#ffd700"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ffd700"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
+        <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:#ffd700;margin-bottom:4px">TIKTOK DOWNLOADER</h2>
+        <p style="font-size:11px;color:var(--text-mute);letter-spacing:1px">NO WATERMARK // HD</p>
+      </div>
+      <div class="zn-card">
+        <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;letter-spacing:1px">TEMPEL LINK TIKTOK:</div>
+        <input type="text" x-model="downloadLinkInput" placeholder="https://tiktok.com/..." class="zn-input">
+        <button @click="processMediaDownload()" class="zn-btn zn-btn-primary" :disabled="downloadLoading" style="margin-top:12px">
+          <template x-if="!downloadLoading"><span>PROSES LINK</span></template>
+          <template x-if="downloadLoading"><span><span class="zn-spin"></span> MEMPROSES</span></template>
+        </button>
+      </div>
+      <template x-if="downloadResultReady">
+        <div class="zn-card zn-card-glow">
+          <template x-if="downloadMeta.thumbnail"><img :src="downloadMeta.thumbnail" style="width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px;border:1px solid var(--border)"></template>
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px" x-text="downloadMeta.title"></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <template x-for="(link,idx) in downloadResultLinks" :key="idx">
+              <button @click="downloadBlob(link.url,link.filename)" class="zn-btn zn-btn-soft"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span x-text="link.label"></span></button>
+            </template>
+          </div>
         </div>
       </template>
     </div>
-  </div>
 
-  <div x-show="toolsSubTab==='tts'" class="zn-card">
-    <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg><span>TEXT TO SPEECH</span></div>
-    <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="zn-input"></textarea>
-    <button @click="speakCustomText()" class="zn-btn zn-btn-primary" style="margin-top:10px">UCAPKAN</button>
-  </div>
+    <!-- TAB TOOLS -->
+    <div x-show="activeTab==='tools'" class="zn-section">
+      <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
+        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
+        <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TOOLS</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
+        <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="zn-tab-pill">🌍</button>
+        <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="zn-tab-pill">🗣</button>
+        <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'active':''" class="zn-tab-pill">🖼</button>
+        <button @click="toolsSubTab='bmi'" :class="toolsSubTab==='bmi'?'active':''" class="zn-tab-pill">⚖</button>
+        <button @click="toolsSubTab='speed'" :class="toolsSubTab==='speed'?'active':''" class="zn-tab-pill">🌐</button>
+      </div>
 
-  <div x-show="toolsSubTab==='kompres'" class="zn-card">
-    <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>KOMPRES FOTO</span></div>
-    <input type="file" accept="image/*" @change="compressImageFile($event)" class="zn-input">
-    <template x-if="compressedImageUrl"><div style="text-align:center;margin-top:12px"><img :src="compressedImageUrl" style="max-height:160px;border-radius:10px;border:1px solid var(--border);margin:0 auto"><a :href="compressedImageUrl" download="compressed.jpg" class="zn-btn zn-btn-primary" style="margin-top:10px;display:flex">DOWNLOAD</a></div></template>
-  </div>
-
-  <div x-show="toolsSubTab==='bmi'" class="zn-card">
-    <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg><span>BMI & KALORI</span></div>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <input type="number" x-model="bmiWeight" placeholder="Berat (kg)" class="zn-input">
-      <input type="number" x-model="bmiHeight" placeholder="Tinggi (cm)" class="zn-input">
-      <input type="number" x-model="bmiAge" placeholder="Umur" class="zn-input">
-      <select x-model="bmiGender" class="zn-input"><option value="male">Laki-laki</option><option value="female">Perempuan</option></select>
-      <button @click="calcBMI()" class="zn-btn zn-btn-primary">HITUNG BMI</button>
-    </div>
-    <template x-if="bmiResult">
-      <div style="margin-top:14px">
-        <div style="text-align:center;padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
-          <div style="font-family:'Orbitron',sans-serif;font-size:32px;font-weight:900" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div>
-          <div style="font-size:12px;margin-top:6px;letter-spacing:1px" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-          <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="bmiResult.bbIdeal+'kg'"></div><div class="zn-stat-box-label">BB Ideal</div></div>
-          <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="bmiResult.kalori"></div><div class="zn-stat-box-label">Kalori</div></div>
+      <div x-show="toolsSubTab==='jam'" class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><span>JAM DUNIA (<span x-text="worldClocks.length"></span>)</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;max-height:450px;overflow-y:auto">
+          <template x-for="zone in worldClocks" :key="zone.name">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:10px;min-width:0">
+                <span style="width:28px;height:20px;border-radius:3px;overflow:hidden;flex-shrink:0;border:1px solid var(--border)" x-html="zone.flagSvg"></span>
+                <div style="min-width:0">
+                  <div style="font-size:12px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" x-text="zone.name"></div>
+                  <div style="font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace" x-text="zone.tz"></div>
+                </div>
+              </div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--primary);flex-shrink:0" x-text="zone.time"></span>
+            </div>
+          </template>
         </div>
       </div>
-    </template>
-  </div>
 
-  <div x-show="toolsSubTab==='speed'" class="zn-card">
-    <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg><span>SPEED TEST</span></div>
-    <button @click="runSpeedTest()" class="zn-btn zn-btn-primary">
-      <template x-if="!speedTesting"><span>MULAI TES</span></template>
-      <template x-if="speedTesting"><span><span class="zn-spin"></span> MENGUKUR</span></template>
-    </button>
-    <div x-show="speedResult" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px">
-      <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="speedResult?speedResult.download:''"></div><div class="zn-stat-box-label">Mbps</div></div>
-      <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="speedResult?speedResult.latency:''"></div><div class="zn-stat-box-label">Ping</div></div>
-      <div class="zn-stat-box"><div class="zn-stat-box-val" style="font-size:11px" x-text="speedResult?speedResult.quality:''"></div><div class="zn-stat-box-label">Kualitas</div></div>
-    </div>
-  </div>
-</div>
+      <div x-show="toolsSubTab==='tts'" class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg><span>TEXT TO SPEECH</span></div>
+        <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="zn-input"></textarea>
+        <button @click="speakCustomText()" class="zn-btn zn-btn-primary" style="margin-top:10px">UCAPKAN</button>
+      </div>
 
-<!-- TAB TEMA -->
-<div x-show="activeTab==='tema'" class="zn-section">
-  <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-    <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg></div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TEMA & GAYA</h2>
-  </div>
-  <div class="zn-card">
-    <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg><span>WARNA NEON</span></div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-      <template x-for="t in themes" :key="t.id">
-        <div @click="setTheme(t.id)" style="cursor:pointer;text-align:center">
-          <div :style="'width:48px;height:48px;border-radius:50%;background:'+t.color+';margin:0 auto;border:2px solid '+(theme===t.id?t.color:'var(--border)')+';box-shadow:0 0 15px '+t.color+';'+(theme===t.id?'outline:2px solid '+t.color+';outline-offset:3px;':'')"></div>
-          <div style="font-size:10px;color:var(--text-dim);margin-top:8px;font-weight:600;letter-spacing:1px" x-text="t.name"></div>
+      <div x-show="toolsSubTab==='kompres'" class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>KOMPRES FOTO</span></div>
+        <input type="file" accept="image/*" @change="compressImageFile($event)" class="zn-input">
+        <template x-if="compressedImageUrl"><div style="text-align:center;margin-top:12px"><img :src="compressedImageUrl" style="max-height:160px;border-radius:10px;border:1px solid var(--border);margin:0 auto"><a :href="compressedImageUrl" download="compressed.jpg" class="zn-btn zn-btn-primary" style="margin-top:10px;display:flex">DOWNLOAD</a></div></template>
+      </div>
+
+      <div x-show="toolsSubTab==='bmi'" class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg><span>BMI & KALORI</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <input type="number" x-model="bmiWeight" placeholder="Berat (kg)" class="zn-input">
+          <input type="number" x-model="bmiHeight" placeholder="Tinggi (cm)" class="zn-input">
+          <input type="number" x-model="bmiAge" placeholder="Umur" class="zn-input">
+          <select x-model="bmiGender" class="zn-input"><option value="male">Laki-laki</option><option value="female">Perempuan</option></select>
+          <button @click="calcBMI()" class="zn-btn zn-btn-primary">HITUNG BMI</button>
         </div>
-      </template>
-    </div>
-  </div>
-  <div class="zn-card">
-    <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg><span>GAYA VISUAL</span></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div @click="setStyle('neon')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px" :style="styleMode==='neon'?'background:var(--primary-soft);border:1px solid var(--primary)':'background:var(--bg-2);border:1px solid var(--border)'">
-        <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto 10px"></div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--primary)">ZENKAI NEON</div>
+        <template x-if="bmiResult">
+          <div style="margin-top:14px">
+            <div style="text-align:center;padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
+              <div style="font-family:'Orbitron',sans-serif;font-size:32px;font-weight:900" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div>
+              <div style="font-size:12px;margin-top:6px;letter-spacing:1px" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+              <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="bmiResult.bbIdeal+'kg'"></div><div class="zn-stat-box-label">BB Ideal</div></div>
+              <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="bmiResult.kalori"></div><div class="zn-stat-box-label">Kalori</div></div>
+            </div>
+          </div>
+        </template>
       </div>
-      <div @click="setStyle('comic')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px" :style="styleMode==='comic'?'background:var(--primary-soft);border:2px solid var(--border);box-shadow:3px 3px 0 0 var(--border)':'background:var(--bg-2);border:1px solid var(--border)'">
-        <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#fbbf24,#a855f7);margin:0 auto 10px;border:2px solid var(--border)"></div>
-        <div style="font-size:12px;font-weight:700">KOMIK</div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- TAB PEMBERITAHUAN -->
-<div x-show="activeTab==='pemberitahuan'" class="zn-section">
-  <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-    <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 9h10v2H7V9zm6 5H7v-2h6v2zm4-6H7V6h10v2z"/></svg></div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--accent)">PEMBERITAHUAN</h2>
-  </div>
-  <div style="display:flex;flex-direction:column;gap:10px">
-    <div class="zn-card" style="border-color:var(--primary)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px">Selamat Datang</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Terima kasih sudah pakai Zenkai Tools! Aplikasi ini akan terus berkembang.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU SAJA</div></div></div></div>
-    <div class="zn-card" style="border-color:#ffd700"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid #ffd700;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#ffd700;margin-bottom:4px">◆ ZENKAI AI PRO</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">AI premium dengan 7 model + vision. Khusus member VIP. Cek di Home!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU</div></div></div></div>
-    <div class="zn-card" style="border-color:var(--accent)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--accent)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">Tips & Trik</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Login harian dapat 10 poin gratis. Kumpulkan poin & naik level!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// 1 JAM LALU</div></div></div></div>
-    <div class="zn-card" style="border-color:#00ff88"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(0,255,136,.15);border:1px solid #00ff88;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#00ff88"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#00ff88;margin-bottom:4px">Zenkai AI</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Tanya apa saja dengan 4 mode: Keuangan, Kesehatan, Teknologi, Umum.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// KEMARIN</div></div></div></div>
-  </div>
-</div>
-    <!-- TAB OWNER -->
+      <div x-show="toolsSubTab==='speed'" class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg><span>SPEED TEST</span></div>
+        <button @click="runSpeedTest()" class="zn-btn zn-btn-primary">
+          <template x-if="!speedTesting"><span>MULAI TES</span></template>
+          <template x-if="speedTesting"><span><span class="zn-spin"></span> MENGUKUR</span></template>
+        </button>
+        <div x-show="speedResult" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px">
+          <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="speedResult?speedResult.download:''"></div><div class="zn-stat-box-label">Mbps</div></div>
+          <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="speedResult?speedResult.latency:''"></div><div class="zn-stat-box-label">Ping</div></div>
+          <div class="zn-stat-box"><div class="zn-stat-box-val" style="font-size:11px" x-text="speedResult?speedResult.quality:''"></div><div class="zn-stat-box-label">Kualitas</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB TEMA -->
+    <div x-show="activeTab==='tema'" class="zn-section">
+      <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
+        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg></div>
+        <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TEMA & GAYA</h2>
+      </div>
+      <div class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg><span>WARNA NEON</span></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          <template x-for="t in themes" :key="t.id">
+            <div @click="setTheme(t.id)" style="cursor:pointer;text-align:center">
+              <div :style="'width:48px;height:48px;border-radius:50%;background:'+t.color+';margin:0 auto;border:2px solid '+(theme===t.id?t.color:'var(--border)')+';box-shadow:0 0 15px '+t.color+';'+(theme===t.id?'outline:2px solid '+t.color+';outline-offset:3px;':'')"></div>
+              <div style="font-size:10px;color:var(--text-dim);margin-top:8px;font-weight:600;letter-spacing:1px" x-text="t.name"></div>
+            </div>
+          </template>
+        </div>
+      </div>
+      <div class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg><span>GAYA VISUAL</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div @click="setStyle('neon')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px" :style="styleMode==='neon'?'background:var(--primary-soft);border:1px solid var(--primary)':'background:var(--bg-2);border:1px solid var(--border)'">
+            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto 10px"></div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--primary)">ZENKAI NEON</div>
+          </div>
+          <div @click="setStyle('comic')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px" :style="styleMode==='comic'?'background:var(--primary-soft);border:2px solid var(--border);box-shadow:3px 3px 0 0 var(--border)':'background:var(--bg-2);border:1px solid var(--border)'">
+            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#fbbf24,#a855f7);margin:0 auto 10px;border:2px solid var(--border)"></div>
+            <div style="font-size:12px;font-weight:700">KOMIK</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB PEMBERITAHUAN -->
+    <div x-show="activeTab==='pemberitahuan'" class="zn-section">
+      <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
+        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 9h10v2H7V9zm6 5H7v-2h6v2zm4-6H7V6h10v2z"/></svg></div>
+        <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--accent)">PEMBERITAHUAN</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="zn-card" style="border-color:var(--primary)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px">Selamat Datang</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Terima kasih sudah pakai Zenkai Tools! Aplikasi ini akan terus berkembang.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU SAJA</div></div></div></div>
+        <div class="zn-card" style="border-color:#ffd700"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid #ffd700;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#ffd700;margin-bottom:4px">◆ ZENKAI AI PRO</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">AI premium dengan 7 model + vision. Khusus member VIP. Cek di Home!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU</div></div></div></div>
+        <div class="zn-card" style="border-color:var(--accent)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--accent)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">Tips & Trik</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Login harian dapat 10 poin gratis. Kumpulkan poin & naik level!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// 1 JAM LALU</div></div></div></div>
+        <div class="zn-card" style="border-color:#00ff88"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(0,255,136,.15);border:1px solid #00ff88;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#00ff88"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#00ff88;margin-bottom:4px">Zenkai AI</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Tanya apa saja dengan 4 mode: Keuangan, Kesehatan, Teknologi, Umum.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// KEMARIN</div></div></div></div>
+      </div>
+    </div>    <!-- TAB OWNER -->
     <template x-if="isOwner">
       <div x-show="activeTab==='owner'" class="zn-section">
         <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
@@ -830,7 +806,6 @@ select.zn-input{cursor:pointer}
           <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">OWNER PANEL</h2>
         </div>
 
-        <!-- TAB GRID (7 TAB) -->
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
           <button @click="ownerSubTab='dashboard';loadLiveDashboard()" :class="ownerSubTab==='dashboard'?'active':''" class="zn-tab-pill" style="font-size:9px">📊 Dash</button>
           <button @click="ownerSubTab='statistik';loadAppStats()" :class="ownerSubTab==='statistik'?'active':''" class="zn-tab-pill" style="font-size:9px">📈 Stat</button>
@@ -1081,6 +1056,7 @@ select.zn-input{cursor:pointer}
   <div class="zn-ai-bubble-btn"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div>
   <div class="zn-ai-bubble-label">Chat dengan Zenkai AI</div>
 </div>
+
 <!-- WELCOME POPUP -->
 <div x-show="welcomePopupOpen" x-cloak class="zn-sheet-overlay" style="z-index:100003" @click.self="welcomePopupOpen=false">
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'welcomePopupOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
@@ -1154,7 +1130,7 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- BAN SHEET (Owner) -->
+<!-- BAN SHEET -->
 <div x-show="banSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100050" @click.self="banSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'banSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
@@ -1182,7 +1158,7 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- BANNED INFO SHEET (User) -->
+<!-- BANNED INFO SHEET -->
 <div x-show="bannedInfoSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100060" @click.self="bannedInfoSheetOpen=false">
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'bannedInfoSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
@@ -1203,7 +1179,7 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- REVIEW SHEET (User Review Fitur) -->
+<!-- REVIEW SHEET -->
 <div x-show="reviewSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100070" @click.self="reviewSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'reviewSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
@@ -1227,7 +1203,7 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- REVIEW LIST SHEET (Owner) -->
+<!-- REVIEW LIST SHEET -->
 <div x-show="reviewListSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100071" @click.self="reviewListSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'reviewListSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
@@ -1377,6 +1353,7 @@ select.zn-input{cursor:pointer}
     <button @click="logout()" class="zn-btn zn-btn-danger" style="margin-top:8px">KELUAR</button>
   </div>
 </div>
+
 <!-- TX SHEET -->
 <div x-show="txSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="txSheetOpen=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'txSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
@@ -1571,7 +1548,7 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- ZENKAI AI CHAT (Original) -->
+<!-- ZENKAI AI CHAT -->
 <template x-if="chatFullscreen">
   <div class="zn-chat-full">
     <div class="zn-grid-bg"></div>
@@ -1774,8 +1751,8 @@ select.zn-input{cursor:pointer}
     </div>
   </div>
 </div>
-
-<script>const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
+<script>
+const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
 const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-responder';
@@ -1853,20 +1830,12 @@ reviewListSheetOpen:false,
 reviewList:[],
 proModelSheetOpen:false,
 
-// LIVE DASHBOARD
 liveStats:{onlineNow:0,chatToday:0,newUsersToday:0,txToday:0,activeToday:0},
-
-// OWNER WALLET
 ownerWallet:{saldo:0,topupAmount:'',targetUsername:'',giftType:'poin',giftAmount:'',giftVipDays:7,giftNote:''},
-
-// VIP USERS LIST
 vipUsers:[],
-
-// BROADCAST
 broadcastForm:{tipe:'pengumuman',judul:'',pesan:'',tombol_text:'',aktif_sampai:''},
 broadcastList:[],
 
-// MAINTENANCE
 maintenanceFeatures:[
   {id:'keuangan',nama:'Dompet Keuangan'},
   {id:'downloader',nama:'Downloader TikTok'},
@@ -1940,7 +1909,6 @@ welcomeText:DEFAULT_WELCOME,welcomeTextEdit:'',
 chatMessages:[],chatInput:'',aiThinking:false,aiThinkingText:'',aiThinkingTimer:null,aiMode:'umum',chatCount:0,chatDate:'',chatBonus:0,chatFullscreen:false,
 voiceSupported:false,aiModeDesc:'',
 
-// ZENKAI AI PRO
 proChatFullscreen:false,proMessages:[],proInput:'',proThinking:false,proThinkingText:'',proThinkingTimer:null,
 proModel:'deepseek-v4-pro',proModelManual:false,
 proChatCount:0,proChatDate:'',proImageData:null,
@@ -1981,6 +1949,50 @@ formatRibuanInput:function(val){
   if(!clean)return '';
   return parseInt(clean,10).toLocaleString('id-ID');
 },
+
+getCityMap:function(){
+  return {
+    'ACEH':['Banda Aceh','Langsa','Lhokseumawe','Sabang','Subulussalam','Meulaboh','Jantho','Tapaktuan','Sinabang','Blangpidie'],
+    'SUMATERA UTARA':['Medan','Binjai','Pematangsiantar','Tanjungbalai','Tebing Tinggi','Padang Sidempuan','Gunungsitoli','Sibolga','Rantau Prapat','Kisaran','Kabanjahe','Berastagi','Stabat'],
+    'SUMATERA BARAT':['Padang','Bukittinggi','Payakumbuh','Solok','Padang Panjang','Pariaman','Sawahlunto','Painan','Lubuk Sikaping','Batusangkar'],
+    'RIAU':['Pekanbaru','Dumai','Pematang Reba','Bangkinang','Pasir Pengaraian','Tembilahan','Rengat','Siak Sri Indrapura','Selat Panjang','Bengkalis'],
+    'KEPULAUAN RIAU':['Batam','Tanjungpinang','Karimun','Natuna','Anambas','Lingga','Dabo Singkep'],
+    'JAMBI':['Jambi','Sungai Penuh','Muara Bulian','Sarolangun','Bangko','Kuala Tungkal','Muara Sabak','Muara Bungo'],
+    'BENGKULU':['Bengkulu','Curup','Arga Makmur','Manna','Mukomuko','Krui','Tais','Bintuhan'],
+    'SUMATERA SELATAN':['Palembang','Prabumulih','Pagar Alam','Lubuklinggau','Kayuagung','Baturaja','Muara Enim','Lahat','Sekayu','Indralaya'],
+    'KEPULAUAN BANGKA BELITUNG':['Pangkalpinang','Sungailiat','Tanjungpandan','Manggar','Koba','Toboali','Muntok'],
+    'LAMPUNG':['Bandar Lampung','Metro','Kalianda','Kotabumi','Gunung Sugih','Liwa','Pringsewu','Gedong Tataan','Blambangan Umpu','Sukadana'],
+    'BANTEN':['Serang','Tangerang','Tangerang Selatan','Cilegon','Pandeglang','Rangkasbitung','Ciruas','Kresek','Malingping'],
+    'DKI JAKARTA':['Jakarta','Jakarta Pusat','Jakarta Utara','Jakarta Selatan','Jakarta Barat','Jakarta Timur'],
+    'JAWA BARAT':['Bandung','Bekasi','Bogor','Depok','Cimahi','Cirebon','Sukabumi','Tasikmalaya','Banjar','Garut','Karawang','Purwakarta','Subang','Sumedang','Indramayu','Majalengka','Cianjur','Ciamis','Kuningan','Pangandaran','Soreang','Ngamprah','Cikarang','Pelabuhanratu'],
+    'JAWA TENGAH':['Semarang','Surakarta','Magelang','Pekalongan','Salatiga','Tegal','Purwokerto','Cilacap','Kudus','Jepara','Klaten','Wonosobo','Boyolali','Rembang','Blora','Pati','Demak','Kendal','Batang','Pemalang','Brebes','Temanggung','Purworejo','Kebumen','Banjarnegara','Purbalingga','Sragen','Karanganyar','Sukoharjo','Wonogiri'],
+    'DI YOGYAKARTA':['Yogyakarta','Sleman','Bantul','Gunungkidul','Kulon Progo','Wates','Wonosari'],
+    'JAWA TIMUR':['Surabaya','Malang','Kediri','Blitar','Madiun','Mojokerto','Pasuruan','Probolinggo','Batu','Sidoarjo','Gresik','Jember','Banyuwangi','Situbondo','Bondowoso','Lumajang','Jombang','Nganjuk','Ngawi','Magetan','Ponorogo','Pacitan','Trenggalek','Tulungagung','Bojonegoro','Tuban','Lamongan','Bangkalan','Sampang','Pamekasan','Sumenep'],
+    'BALI':['Denpasar','Singaraja','Ubud','Kuta','Nusa Dua','Tabanan','Gianyar','Klungkung','Karangasem','Bangli','Badung','Jembrana'],
+    'NUSA TENGGARA BARAT':['Mataram','Bima','Sumbawa Besar','Praya','Selong','Taliwang','Dompu','Gerung'],
+    'NUSA TENGGARA TIMUR':['Kupang','Ende','Maumere','Larantuka','Soe','Atambua','Ruteng','Labuan Bajo','Bajawa','Waingapu','Kalabahi','Lewoleba'],
+    'KALIMANTAN BARAT':['Pontianak','Singkawang','Sintang','Putussibau','Ketapang','Mempawah','Bengkayang'],
+    'KALIMANTAN TENGAH':['Palangka Raya','Sampit','Pangkalan Bun','Muara Teweh','Kuala Kapuas','Buntok','Puruk Cahu'],
+    'KALIMANTAN SELATAN':['Banjarmasin','Banjarbaru','Martapura','Kotabaru','Amuntai','Tanjung','Barabai','Kandangan','Pelaihari'],
+    'KALIMANTAN TIMUR':['Samarinda','Balikpapan','Bontang','Tarakan','Berau','Tenggarong','Sangatta','Penajam'],
+    'KALIMANTAN UTARA':['Tanjung Selor','Tarakan','Malinau','Nunukan'],
+    'SULAWESI UTARA':['Manado','Bitung','Tomohon','Kotamobagu','Tondano','Airmadidi','Amurang'],
+    'GORONTALO':['Gorontalo','Limboto','Marisa','Kwandang','Tilamuta'],
+    'SULAWESI TENGAH':['Palu','Luwuk','Poso','Donggala','Toli-Toli','Buol','Ampana','Banggai','Parigi'],
+    'SULAWESI BARAT':['Mamuju','Majene','Polewali','Mamasa','Pasangkayu'],
+    'SULAWESI SELATAN':['Makassar','Parepare','Palopo','Bulukumba','Bantaeng','Jeneponto','Takalar','Gowa','Sinjai','Bone','Maros','Pangkep','Barru','Soppeng','Wajo','Sidrap','Pinrang','Enrekang','Tana Toraja','Toraja Utara','Luwu','Luwu Utara','Luwu Timur','Selayar','Makale'],
+    'SULAWESI TENGGARA':['Kendari','Baubau','Kolaka','Bombana','Wakatobi','Konawe','Konawe Selatan','Konawe Utara','Buton','Muna','Raha'],
+    'MALUKU':['Ambon','Tual','Masohi','Namlea','Bula','Piru','Saumlaki'],
+    'MALUKU UTARA':['Sofifi','Ternate','Tidore','Tobelo','Sanana','Labuha','Weda'],
+    'PAPUA':['Jayapura','Biak','Merauke','Timika','Nabire','Wamena','Sarmi','Keerom','Genyem','Sentani'],
+    'PAPUA BARAT':['Manokwari','Sorong','Fakfak','Kaimana','Bintuni','Ransiki'],
+    'PAPUA BARAT DAYA':['Sorong','Maybrat','Raja Ampat','Tambrauw','Sorong Selatan'],
+    'PAPUA TENGAH':['Nabire','Timika','Mimika','Paniai','Deiyai','Dogiyai','Intan Jaya'],
+    'PAPUA PEGUNUNGAN':['Wamena','Jayawijaya','Lanny Jaya','Mamberamo Tengah','Nduga','Pegunungan Bintang','Tolikara','Yahukimo','Yalimo'],
+    'PAPUA SELATAN':['Merauke','Boven Digoel','Mappi','Asmat']
+  };
+},
+initProvinces:function(){this.provinces=Object.keys(this.getCityMap());this.weatherProvince='DKI JAKARTA';this.cities=this.getCityMap()['DKI JAKARTA'];this.weatherCity='Jakarta';},
 
 // GATE MAINTENANCE
 gate:function(fiturId,nextAction){
@@ -2090,7 +2102,7 @@ handleBackButton:function(){
   return false;
 },
 
-// MAINTENANCE HELPERS
+// MAINTENANCE
 mapFiturToMaintenance:function(f){
   if(!f) return null;
   if(f.id === 'ai') return 'ai';
@@ -2333,6 +2345,7 @@ uploadAvatarFile:async function(event){
 },
 
 logout:async function(){await sb.auth.signOut();this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;this.chatFullscreen=false;this.proChatFullscreen=false;window.location.reload();},
+
 // TRANSAKSI
 loadTransactions:async function(){if(!this.currentUser)return;var{data}=await sb.from('transactions').select('*').eq('user_id',this.currentUser.id).order('id',{ascending:false});if(data){this.transactions=data;var s=this;setTimeout(function(){s.drawCharts()},300);}},
 addTransaction:async function(type){
@@ -2393,7 +2406,7 @@ drawCharts:function(){var self=this;setTimeout(function(){try{
   }
 }catch(e){console.error(e)}},200);},
 
-// MOVIE
+// MOVIE + NEWS + TTS + KOMPRES + BMI + SPEED
 fetchMovies:async function(){this.movieLoading=true;try{var res=await fetch('https://api.themoviedb.org/3/trending/movie/week?api_key='+TMDB_KEY+'&language=id-ID');var json=await res.json();if(json.results){this.movieList=json.results.slice(0,15).map(function(m){return{id:m.id,title:m.title,year:m.release_date?m.release_date.slice(0,4):'-',rating:m.vote_average?m.vote_average.toFixed(1):'-',overview:m.overview||'-',poster:m.poster_path?'https://image.tmdb.org/t/p/w200'+m.poster_path:''}});}}catch(e){}this.movieLoading=false;},
 openMovieSheet:function(){if(this.isUnderMaintenance('film')){return this.showMaintenanceSheet('film');}this.movieSheetOpen=true;if(this.movieList.length===0)this.fetchMovies();},
 openNews:async function(){
@@ -2404,15 +2417,7 @@ openNews:async function(){
   try{await this.loadNewsFromRSS();}catch(e){console.error('Berita error:',e);this.showAlert('GAGAL','Berita gagal dimuat.');}
   this.newsLoading=false;
 },
-
-fetchWithTimeout:function(url,timeout){
-  return new Promise(function(resolve,reject){
-    var ctrl = new AbortController();
-    var tid = setTimeout(function(){ ctrl.abort(); }, timeout || 8000);
-    fetch(url, {signal: ctrl.signal}).then(function(r){ clearTimeout(tid); resolve(r); }).catch(function(e){ clearTimeout(tid); reject(e); });
-  });
-},
-
+fetchWithTimeout:function(url,timeout){return new Promise(function(resolve,reject){var ctrl=new AbortController();var tid=setTimeout(function(){ctrl.abort();},timeout||8000);fetch(url,{signal:ctrl.signal}).then(function(r){clearTimeout(tid);resolve(r);}).catch(function(e){clearTimeout(tid);reject(e);});});},
 loadNewsFromRSS:async function(){
   var self = this;
   var feeds = ['https://www.antaranews.com/rss/terkini.xml','https://rss.detik.com/index.php/detikcom','https://www.cnnindonesia.com/nasional/rss'];
@@ -2431,7 +2436,6 @@ loadNewsFromRSS:async function(){
   }
   throw new Error('Semua sumber berita gagal');
 },
-
 parseRSSItems:function(xmlText){
   try{
     var parser=new DOMParser();
@@ -2455,16 +2459,9 @@ parseRSSItems:function(xmlText){
     return result;
   }catch(e){console.error('Parse RSS gagal:',e);return [];}
 },
-
-// TTS + KOMPRES + BMI + SPEED
 speakCustomText:function(){if(!this.customTtsText){return this.showAlert('PERHATIAN','Ketik teks dulu!');}if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(this.customTtsText);u.lang='id-ID';window.speechSynthesis.speak(u);}},
 compressImageFile:function(event){var file=event.target.files[0];if(!file)return;var self=this;var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var canvas=document.createElement('canvas');var ctx=canvas.getContext('2d');var w=img.width,h=img.height;var max=800;if(w>h&&w>max){h*=max/w;w=max;}else if(h>max){w*=max/h;h=max;}canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);self.compressedImageUrl=canvas.toDataURL('image/jpeg',0.6);self.showAlert('BERHASIL','Foto dikompres!');};img.src=e.target.result;};reader.readAsDataURL(file);},
-runSpeedTest:async function(){
-  this.speedTesting=true;this.speedResult=null;
-  try{var start=Date.now();var res=await fetch('https://speed.cloudflare.com/__down?bytes=5000000&r='+Math.random());var blob=await res.blob();var dur=(Date.now()-start)/1000;var mbps=(blob.size*8)/(dur*1000000);this.speedResult={download:mbps.toFixed(1),latency:Math.round(dur*100),quality:mbps>20?'BAGUS':mbps>5?'CUKUP':'LAMBAT'};}
-  catch(e){this.showAlert('GAGAL','Tes gagal.');}
-  this.speedTesting=false;
-},
+runSpeedTest:async function(){this.speedTesting=true;this.speedResult=null;try{var start=Date.now();var res=await fetch('https://speed.cloudflare.com/__down?bytes=5000000&r='+Math.random());var blob=await res.blob();var dur=(Date.now()-start)/1000;var mbps=(blob.size*8)/(dur*1000000);this.speedResult={download:mbps.toFixed(1),latency:Math.round(dur*100),quality:mbps>20?'BAGUS':mbps>5?'CUKUP':'LAMBAT'};}catch(e){this.showAlert('GAGAL','Tes gagal.');}this.speedTesting=false;},
 calcBMI:function(){var w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)/100;if(!w||!h){return this.showAlert('PERHATIAN','Isi berat & tinggi!');}var bmi=w/(h*h);var kategori,color;if(bmi<18.5){kategori='KURUS';color='#00d9ff';}else if(bmi<25){kategori='NORMAL';color='#00ff88';}else if(bmi<30){kategori='GEMUK';color='#ffd700';}else{kategori='OBESITAS';color='#ff3355';}var bbIdeal=(22*h*h).toFixed(1);var age=parseFloat(this.bmiAge)||25;var kalori=this.bmiGender==='male'?Math.round(66+(13.7*w)+(5*h*100)-(6.8*age)):Math.round(655+(9.6*w)+(1.8*h*100)-(4.7*age));this.bmiResult={bmi:bmi.toFixed(1),kategori:kategori,color:color,bbIdeal:bbIdeal,kalori:kalori};},
 
 // DOWNLOADER
@@ -2540,7 +2537,6 @@ openChatAI:async function(){
 },
 startThinkingMessages:function(){var messages=['Zenkai AI sedang berpikir...','Sabar ya, loading...','Dikit lagi...'];var i=0;this.aiThinkingText=messages[0];clearInterval(this.aiThinkingTimer);var self=this;this.aiThinkingTimer=setInterval(function(){i++;if(i<messages.length){self.aiThinkingText=messages[i]}},3000);},
 stopThinkingMessages:function(){clearInterval(this.aiThinkingTimer);this.aiThinkingTimer=null;this.aiThinkingText='';},
-
 sendChat:async function(){
   if(this.isUnderMaintenance('ai')){return this.showMaintenanceSheet('ai');}
   if(!this.chatInput.trim()||this.aiThinking)return;
@@ -2595,20 +2591,9 @@ openProChat:async function(){
     if(data){this.proChatCount=data.pro_chat_count||0;this.proChatDate=data.pro_chat_date||'';}}catch(e){}
   }
 },
-startProThinking:function(){
-  var self=this;var idx=0;
-  this.proThinkingText=this.proThinkingTexts[0];
-  clearInterval(this.proThinkingTimer);
-  this.proThinkingTimer=setInterval(function(){idx=(idx+1)%self.proThinkingTexts.length;self.proThinkingText=self.proThinkingTexts[idx];},1500+Math.random()*2500);
-},
+startProThinking:function(){var self=this;var idx=0;this.proThinkingText=this.proThinkingTexts[0];clearInterval(this.proThinkingTimer);this.proThinkingTimer=setInterval(function(){idx=(idx+1)%self.proThinkingTexts.length;self.proThinkingText=self.proThinkingTexts[idx];},1500+Math.random()*2500);},
 stopProThinking:function(){clearInterval(this.proThinkingTimer);this.proThinkingTimer=null;this.proThinkingText='';},
-pickProImage:function(event){
-  var file=event.target.files[0];if(!file)return;
-  if(file.size>5*1024*1024){return this.showAlert('PERHATIAN','Max gambar 5MB!');}
-  var self=this;var reader=new FileReader();
-  reader.onload=function(e){self.proImageData=e.target.result;self.proModel='glm-5.3-flash';self.proModelManual=true;};
-  reader.readAsDataURL(file);
-},
+pickProImage:function(event){var file=event.target.files[0];if(!file)return;if(file.size>5*1024*1024){return this.showAlert('PERHATIAN','Max gambar 5MB!');}var self=this;var reader=new FileReader();reader.onload=function(e){self.proImageData=e.target.result;self.proModel='glm-5.3-flash';self.proModelManual=true;};reader.readAsDataURL(file);},
 removeProImage:function(){this.proImageData=null;},
 sendProChat:async function(){
   if((!this.proInput.trim()&&!this.proImageData)||this.proThinking)return;
@@ -2631,44 +2616,37 @@ sendProChat:async function(){
   try{
     var{data:sessionData}=await sb.auth.getSession();
     var token=sessionData&&sessionData.session?sessionData.session.access_token:'';
-    var res=await fetch(this.proEdgeUrl,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_ANON_KEY},
-      body:JSON.stringify({messages:apiMessages,model:this.proModelManual?this.proModel:null,hasImage:!!imgData})
-    });
+    var res=await fetch(this.proEdgeUrl,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_ANON_KEY},body:JSON.stringify({messages:apiMessages,model:this.proModelManual?this.proModel:null,hasImage:!!imgData})});
     var data=await res.json();
     var reply=data.reply||'Maaf, Zenkai AI Pro tidak bisa menjawab saat ini.';
     this.proMessages.push({role:'assistant',content:reply});
     await this.addPoints(2,'Chat Zenkai AI Pro');
-    if(this.isVip&&!this.isOwner&&this.currentUser){
-      this.proChatCount++;
-      try{await sb.from('profiles').update({pro_chat_count:this.proChatCount,pro_chat_date:this.proChatDate}).eq('id',this.currentUser.id);}catch(e){}
-    }
+    if(this.isVip&&!this.isOwner&&this.currentUser){this.proChatCount++;try{await sb.from('profiles').update({pro_chat_count:this.proChatCount,pro_chat_date:this.proChatDate}).eq('id',this.currentUser.id);}catch(e){}}
   }catch(e){this.proMessages.push({role:'assistant',content:'Maaf, koneksi ke Zenkai AI Pro lagi bermasalah. Coba lagi ya 😊'});}
   finally{this.stopProThinking();this.proThinking=false;}
 },
 clearProChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat Zenkai AI Pro bakal dihapus.',function(){self.proMessages=[];self.showAlert('SUKSES','Chat dihapus.');},'🗑️');},
 
-// OWNER - STATISTIK
-loadAppStats:async function(){try{
-  var{count:u}=await sb.from('profiles').select('*',{count:'exact',head:true});
-  var{count:t}=await sb.from('transactions').select('*',{count:'exact',head:true});
-  var{count:b}=await sb.from('profiles').select('*',{count:'exact',head:true}).eq('is_banned',true);
-  var today=new Date().toISOString().slice(0,10);
-  var{count:a}=await sb.from('profiles').select('*',{count:'exact',head:true}).gte('last_login',today);
-  this.appStats={totalUsers:u||0,totalTx:t||0,banned:b||0,activeToday:a||0};
-  var{data:txs}=await sb.from('transactions').select('user_id');
-  var counts={};(txs||[]).forEach(function(t){counts[t.user_id]=(counts[t.user_id]||0)+1});
-  var sorted=Object.entries(counts).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
-  var{data:profs}=await sb.from('profiles').select('id,username');
-  var map={};(profs||[]).forEach(function(p){map[p.id]=p.username});
-  this.topUsers=sorted.map(function(p){return{id:p[0],username:map[p[0]]||'Unknown',count:p[1]}});
-}catch(e){}},
-
+// OWNER
+loadAppStats:async function(){
+  try{
+    var{count:u}=await sb.from('profiles').select('*',{count:'exact',head:true});
+    var{count:t}=await sb.from('transactions').select('*',{count:'exact',head:true});
+    var{count:b}=await sb.from('profiles').select('*',{count:'exact',head:true}).eq('is_banned',true);
+    var today=new Date().toISOString().slice(0,10);
+    var{count:a}=await sb.from('profiles').select('*',{count:'exact',head:true}).gte('last_login',today);
+    this.appStats={totalUsers:u||0,totalTx:t||0,banned:b||0,activeToday:a||0};
+    var{data:txs}=await sb.from('transactions').select('user_id');
+    var counts={};(txs||[]).forEach(function(t){counts[t.user_id]=(counts[t.user_id]||0)+1});
+    var sorted=Object.entries(counts).sort(function(a,b){return b[1]-a[1]}).slice(0,10);
+    var{data:profs}=await sb.from('profiles').select('id,username');
+    var map={};(profs||[]).forEach(function(p){map[p.id]=p.username});
+    this.topUsers=sorted.map(function(p){return{id:p[0],username:map[p[0]]||'Unknown',count:p[1]}});
+  }catch(e){}
+},
 loadLiveDashboard:async function(){
   try{
     var today=new Date().toISOString().slice(0,10);
-    var{count:total}=await sb.from('profiles').select('*',{count:'exact',head:true});
     var{count:active}=await sb.from('profiles').select('*',{count:'exact',head:true}).gte('last_login',today);
     var{count:newUsers}=await sb.from('profiles').select('*',{count:'exact',head:true}).gte('created_at',today);
     var{count:chats}=await sb.from('point_history').select('*',{count:'exact',head:true}).eq('reason','Chat AI').gte('created_at',today);
@@ -2677,8 +2655,6 @@ loadLiveDashboard:async function(){
     this.liveStats={onlineNow:active||0,chatToday:chats||0,newUsersToday:newUsers||0,txToday:txTotal,activeToday:active||0};
   }catch(e){console.error(e);}
 },
-
-// OWNER - USERS
 loadAllUsers:async function(){try{var{data}=await sb.from('profiles').select('*').order('created_at',{ascending:false});if(data)this.allUsers=data;}catch(e){}},
 
 openBanSheet:function(u){this.banSheetTarget=u;this.banSheetForm={durasi:'1d',alasan:''};this.banSheetOpen=true;},
@@ -2697,11 +2673,7 @@ confirmBan:async function(){
     var payload={is_banned:true,ban_reason:this.banSheetForm.alasan.trim(),ban_until:until?until.toISOString():null};
     var{error}=await sb.from('profiles').update(payload).eq('id',this.banSheetTarget.id);
     if(error)throw error;
-    var targetId=this.banSheetTarget.id;
     this.banSheetOpen=false;this.banSheetTarget=null;this.banSheetForm={durasi:'1d',alasan:''};
-    // Update lokal
-    var idx=this.allUsers.findIndex(function(x){return x.id===targetId;});
-    if(idx>=0){this.allUsers[idx].is_banned=true;this.allUsers[idx].ban_reason=payload.ban_reason;this.allUsers[idx].ban_until=payload.ban_until;}
     await this.loadAllUsers();
     var durasiText=durasi==='perm'?'PERMANEN':(durasi==='30m'?'30 Menit':durasi==='1h'?'1 Jam':durasi==='1d'?'1 Hari':durasi==='7d'?'7 Hari':'30 Hari');
     this.showAlert('SUKSES','User berhasil di-ban selama '+durasiText);
@@ -2712,29 +2684,23 @@ unbanUser:async function(u){
   this.showConfirm('UNBAN USER?',u.username+' akan diaktifkan kembali.',async function(){
     var{error}=await sb.from('profiles').update({is_banned:false,ban_until:null,ban_reason:''}).eq('id',u.id);
     if(error){self.showAlert('GAGAL',error.message);return;}
-    var idx=self.allUsers.findIndex(function(x){return x.id===u.id;});
-    if(idx>=0){self.allUsers[idx].is_banned=false;self.allUsers[idx].ban_reason='';self.allUsers[idx].ban_until=null;}
     await self.loadAllUsers();
     self.showAlert('SUKSES',u.username+' di-unban.');
   },'✓');
 },
 toggleVip:async function(u,v){
-  var self=this;
   var payload={is_vip:v};
   if(v){payload.vip_expiry=new Date(Date.now()+30*24*60*60*1000).toISOString();}
   else{payload.vip_expiry=null;}
   var{error}=await sb.from('profiles').update(payload).eq('id',u.id);
   if(error){this.showAlert('GAGAL',error.message);return;}
-  var idx=this.allUsers.findIndex(function(x){return x.id===u.id;});
-  if(idx>=0){this.allUsers[idx].is_vip=v;this.allUsers[idx].vip_expiry=payload.vip_expiry;}
   await this.loadAllUsers();
   this.showAlert('SUKSES', v ? u.username+' jadi VIP' : u.username+' bukan VIP');
 },
-promptAddChat:function(u){var self=this;this.showPrompt('TAMBAH BONUS CHAT','Berapa chat tambahan untuk '+u.username+'?',async function(val){var n=parseInt(val)||0;if(n<=0)return;var current=u.chat_bonus||0;var{error}=await sb.from('profiles').update({chat_bonus:current+n}).eq('id',u.id);if(error){self.showAlert('GAGAL',error.message);return;}var idx=self.allUsers.findIndex(function(x){return x.id===u.id;});if(idx>=0)self.allUsers[idx].chat_bonus=current+n;await self.loadAllUsers();self.showAlert('SUKSES','+'+n+' chat untuk '+u.username);});},
+promptAddChat:function(u){var self=this;this.showPrompt('TAMBAH BONUS CHAT','Berapa chat tambahan untuk '+u.username+'?',async function(val){var n=parseInt(val)||0;if(n<=0)return;var current=u.chat_bonus||0;var{error}=await sb.from('profiles').update({chat_bonus:current+n}).eq('id',u.id);if(error){self.showAlert('GAGAL',error.message);return;}await self.loadAllUsers();self.showAlert('SUKSES','+'+n+' chat untuk '+u.username);});},
 promptAddPoints:function(u){var self=this;this.showPrompt('TAMBAH POIN','Berapa poin untuk '+u.username+'?',async function(val){var n=parseInt(val)||0;if(n<=0)return;try{var{data:pts}=await sb.from('user_points').select('*').eq('user_id',u.id).maybeSingle();if(!pts){await sb.from('user_points').insert({user_id:u.id,total_points:n,level:1});}else{await sb.from('user_points').update({total_points:(pts.total_points||0)+n}).eq('user_id',u.id);}self.showAlert('SUKSES','+'+n+' poin untuk '+u.username);}catch(e){self.showAlert('GAGAL',e.message);}});},
 confirmDeleteUser:function(u){var self=this;this.showConfirm('HAPUS USER?','Semua data '+u.username+' akan dihapus!',async function(){await sb.from('transactions').delete().eq('user_id',u.id);await sb.from('savings_targets').delete().eq('user_id',u.id);await sb.from('budgets').delete().eq('user_id',u.id);await sb.from('user_points').delete().eq('user_id',u.id);await sb.from('profiles').delete().eq('id',u.id);self.showAlert('SUKSES','User dihapus.');await self.loadAllUsers();},'🗑️');},
 
-// OWNER WALLET
 loadWallet:async function(){
   try{
     var {data} = await sb.from('app_settings').select('*').eq('id',1).maybeSingle();
@@ -2786,8 +2752,6 @@ sendGift:async function(){
     await this.loadAllUsers();
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
-
-// SUBSCRIPTION MANAGER
 loadSubscriptions:async function(){
   try{
     var {data} = await sb.from('profiles').select('id,username,is_vip,vip_expiry,status').eq('is_vip',true).order('vip_expiry',{ascending:true});
@@ -2807,7 +2771,6 @@ extendVip:async function(u,days){
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
 
-// OWNER - BROADCAST
 loadBroadcasts:async function(){
   try{var {data} = await sb.from('broadcasts').select('*').order('created_at',{ascending:false}).limit(10);if(data)this.broadcastList = data;}catch(e){console.error(e);}
 },
@@ -2845,8 +2808,6 @@ closeBroadcast:function(){
   if(this.activeBroadcast){localStorage.setItem('zenkai_last_broadcast_id', this.activeBroadcast.id);}
   this.broadcastPopupOpen = false;
 },
-
-// OWNER - MAINTENANCE
 loadMaintenance:async function(){
   try{
     var {data} = await sb.from('feature_maintenance').select('*');
@@ -2878,16 +2839,10 @@ saveMaintenance:async function(){
     this.showAlert('SUKSES','Perubahan maintenance disimpan!');
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
-
-// OWNER - SETELAN
 saveWelcomeText:async function(){if(!this.welcomeTextEdit)return;await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit}).eq('id',1);this.welcomeText=this.welcomeTextEdit;this.showAlert('SUKSES','Kata sambutan diperbarui!');},
 
-// REVIEW
 loadReviews:async function(){
-  try{
-    var {data} = await sb.from('reviews').select('*').order('created_at',{ascending:false}).limit(50);
-    this.reviewList = data || [];
-  }catch(e){console.error(e);}
+  try{var {data} = await sb.from('reviews').select('*').order('created_at',{ascending:false}).limit(50);this.reviewList = data || [];}catch(e){console.error(e);}
 },
 openReviewSheet:function(f){
   if(!this.currentUser){return this.showAlert('PERHATIAN','Login dulu!');}
@@ -2902,14 +2857,11 @@ submitReview:async function(){
     var {error} = await sb.from('reviews').insert({user_id:this.currentUser.id,username:this.userName,fitur_id:this.reviewTarget.id,rating:this.reviewForm.rating,komentar:this.reviewForm.komentar||'',created_at:new Date().toISOString()});
     if(error) throw error;
     await this.addPoints(3,'Review fitur');
-    this.reviewSheetOpen = false;
-    this.reviewTarget = null;
-    this.reviewForm = {rating:5,komentar:''};
+    this.reviewSheetOpen = false;this.reviewTarget = null;this.reviewForm = {rating:5,komentar:''};
     this.showAlert('SUKSES','Terima kasih! Review lu udah terkirim.');
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
 
-// REALTIME
 setupRealtime:function(){
   var self = this;
   try{
@@ -2941,9 +2893,7 @@ setupRealtime:function(){
       var u=p.new;
       if(!self.currentUser)return;
       if(u.id===self.currentUser.id){
-        if(u.is_banned){
-          self.checkBanStatus(u.id).then(function(isBanned){if(isBanned){sb.auth.signOut();}});
-        }
+        if(u.is_banned){self.checkBanStatus(u.id).then(function(isBanned){if(isBanned){sb.auth.signOut();}});}
         self.isVip = u.is_vip || false;
       }
     }).subscribe();
