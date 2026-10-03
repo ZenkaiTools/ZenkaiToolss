@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================
-   ZENKAI NEON — Theme System v2.5 (FIXED)
+   ZENKAI NEON — Theme System v2.3 (FIXED)
    ============================================ */
 :root{
   --bg:#050508;--bg-2:#0a0a12;--card:#0d0d18;--card-2:#121220;
@@ -31,114 +31,305 @@
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 html{overflow-x:hidden}
-body{overflow-x:hidden;background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--text);min-height:100dvh;font-size:14px;line-height:1.5;display:flex;justify-content:center;align-items:flex-start;-webkit-font-smoothing:antialiased;overscroll-behavior-y:auto}
+body{
+  overflow-x:hidden;
+  background:var(--bg);
+  font-family:'Inter',system-ui,sans-serif;color:var(--text);
+  min-height:100dvh;font-size:14px;line-height:1.5;
+  display:flex;justify-content:center;align-items:flex-start;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:auto;
+}
 button{border:none;background:none;cursor:pointer;color:inherit;font-family:inherit}
 input,textarea,select{font-family:inherit;color:inherit;outline:none;border:none;background:none}
 a{color:inherit;text-decoration:none}
 
-.zn-grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle at 20% 30%,var(--primary-soft),transparent 50%),radial-gradient(circle at 80% 70%,var(--accent-soft),transparent 50%)}
-.zn-grid-bg::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,217,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,217,255,.03) 1px,transparent 1px);background-size:50px 50px;animation:znGridMove 20s linear infinite}
+/* ============================================
+   STYLE 1: ZENKAI NEON
+   ============================================ */
+.zn-grid-bg{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(circle at 20% 30%,var(--primary-soft),transparent 50%),
+    radial-gradient(circle at 80% 70%,var(--accent-soft),transparent 50%);
+}
+.zn-grid-bg::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,217,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,217,255,.03) 1px,transparent 1px);
+  background-size:50px 50px;
+  animation:znGridMove 20s linear infinite;
+}
 @keyframes znGridMove{0%{background-position:0 0}100%{background-position:50px 50px}}
 
-.zn-app{width:100%;max-width:480px;min-height:100dvh;display:flex;flex-direction:column;position:relative;background:var(--bg)}
+.zn-app{
+  width:100%;max-width:480px;min-height:100dvh;
+  display:flex;flex-direction:column;
+  position:relative;background:var(--bg);
+}
 
-.zn-header{position:sticky;top:0;z-index:50;padding:10px 14px;background:rgba(5,5,8,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;transition:box-shadow .3s ease, background .3s ease}
-.zn-header.scrolled{box-shadow:0 4px 20px rgba(0,0,0,.5), 0 0 20px rgba(0,217,255,.15)}
-[data-style="comic"] .zn-header.scrolled{box-shadow:0 4px 0 0 var(--border), 0 6px 16px rgba(0,0,0,.2)}
+.zn-header{
+  position:sticky;top:0;z-index:50;
+  padding:10px 14px;
+  background:rgba(5,5,8,.85);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+}
 .zn-header-user{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer;padding:4px;border-radius:12px;transition:all .2s}
 .zn-header-user:active{background:var(--primary-soft)}
-.zn-avatar-wrap{position:relative;flex-shrink:0}
-.zn-avatar{width:40px;height:40px;border-radius:11px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:800;font-size:15px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#050508;border:1.5px solid var(--primary);box-shadow:0 0 12px var(--primary-glow),inset 0 0 10px rgba(255,255,255,.15)}
+.zn-avatar{
+  width:40px;height:40px;border-radius:11px;overflow:hidden;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-weight:800;font-size:15px;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#050508;border:1.5px solid var(--primary);
+  box-shadow:0 0 12px var(--primary-glow),inset 0 0 10px rgba(255,255,255,.15);
+}
 .zn-avatar img{width:100%;height:100%;object-fit:cover}
-.zn-avatar-edit{position:absolute;bottom:-3px;right:-3px;width:18px;height:18px;border-radius:50%;background:var(--primary);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 8px var(--primary-glow);pointer-events:none}
-.zn-avatar-edit svg{width:9px;height:9px;fill:#050508}
-[data-style="comic"] .zn-avatar-edit{background:var(--accent);border:2px solid var(--border);box-shadow:1px 1px 0 0 var(--border)}
-[data-style="comic"] .zn-avatar-edit svg{fill:#fff}
 .zn-header-info{flex:1;min-width:0}
-.zn-header-name{font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;letter-spacing:.3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.zn-header-hint{font-size:8px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;margin-top:2px;opacity:.7;transition:opacity .2s}
-.zn-header-user:active .zn-header-hint{opacity:1;color:var(--primary)}
-[data-style="comic"] .zn-header-hint{color:rgba(255,255,255,.75);font-family:'Inter',sans-serif;font-weight:600}
-.zn-badge{display:inline-block;font-family:'Orbitron',sans-serif;font-size:7px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary);letter-spacing:1px}
+.zn-header-name{
+  font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;
+  letter-spacing:.3px;margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.zn-badge{
+  display:inline-block;font-family:'Orbitron',sans-serif;font-size:7px;font-weight:700;
+  padding:2px 6px;border-radius:5px;
+  background:var(--primary-soft);color:var(--primary);
+  border:1px solid var(--primary);letter-spacing:1px;
+}
 .zn-badge.vip{background:rgba(255,215,0,.1);color:var(--gold);border-color:var(--gold)}
 .zn-badge.owner{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
 .zn-header-actions{display:flex;gap:6px;flex-shrink:0}
-.zn-icon-btn{width:38px;height:38px;border-radius:11px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:var(--text-dim)}
-.zn-icon-btn:active{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);box-shadow:0 0 15px var(--primary-glow);transform:scale(.95)}
+.zn-icon-btn{
+  width:38px;height:38px;border-radius:11px;
+  background:var(--card);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;color:var(--text-dim);
+}
+.zn-icon-btn:active{
+  background:var(--primary-soft);border-color:var(--primary);
+  color:var(--primary);box-shadow:0 0 15px var(--primary-glow);
+  transform:scale(.95);
+}
 .zn-icon-btn svg{width:20px;height:20px;fill:currentColor}
 .zn-icon-btn.danger{color:var(--danger);border-color:rgba(255,51,85,.3)}
 .zn-icon-btn.danger:active{background:rgba(255,51,85,.1);border-color:var(--danger);box-shadow:0 0 15px rgba(255,51,85,.4)}
 
-.zn-main{flex:1;overflow-y:auto;padding:14px;padding-bottom:100px;position:relative;z-index:1;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch}
+.zn-main{
+  flex:1;overflow-y:auto;padding:14px;padding-bottom:100px;
+  position:relative;z-index:1;display:flex;flex-direction:column;gap:14px;
+  -webkit-overflow-scrolling:touch;
+}
 .zn-section{display:flex;flex-direction:column;gap:12px}
 
-.zn-hero{position:relative;border-radius:var(--radius-lg);padding:20px;overflow:hidden;background:linear-gradient(135deg,rgba(0,217,255,.08),rgba(255,0,128,.05)),var(--card);border:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05);min-height:180px;display:flex;flex-direction:column;justify-content:flex-end}
-.zn-hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(135deg,#1a1a3e,#0a0a12);background-size:cover;background-position:center;opacity:.6}
-.zn-hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,transparent 30%,rgba(5,5,8,.7) 70%,rgba(5,5,8,.95) 100%)}
-.zn-hero::before{content:'';position:absolute;top:-50%;right:-20%;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.3;pointer-events:none;z-index:1}
-.zn-hero-content{position:relative;z-index:2;display:flex;flex-direction:column;gap:8px}
-.zn-hero-label{display:inline-flex;align-items:center;gap:6px;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;padding:4px 10px;border-radius:20px;background:rgba(0,217,255,.15);border:1px solid var(--primary);color:var(--primary);text-shadow:0 0 8px var(--primary-glow);align-self:flex-start;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.zn-hero-label::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--primary);box-shadow:0 0 8px var(--primary);animation:znPulse 2s infinite}
+/* === HERO === */
+.zn-hero{
+  position:relative;border-radius:var(--radius-lg);padding:20px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(0,217,255,.08),rgba(255,0,128,.05)),var(--card);
+  border:1px solid var(--border);
+  box-shadow:0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05);
+  min-height:180px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.zn-hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:linear-gradient(135deg,#1a1a3e,#0a0a12);
+  background-size:cover;background-position:center;
+  opacity:.6;
+}
+.zn-hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 0%,transparent 30%,rgba(5,5,8,.7) 70%,rgba(5,5,8,.95) 100%);
+}
+.zn-hero::before{
+  content:'';position:absolute;top:-50%;right:-20%;
+  width:250px;height:250px;border-radius:50%;
+  background:radial-gradient(circle,var(--primary-glow),transparent 70%);
+  opacity:.3;pointer-events:none;z-index:1;
+}
+.zn-hero-content{position:relative;z-index:2;display:flex;flex-direction:column;gap:10px}
+.zn-hero-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;
+  padding:4px 10px;border-radius:20px;
+  background:rgba(0,217,255,.15);border:1px solid var(--primary);
+  color:var(--primary);text-shadow:0 0 8px var(--primary-glow);
+  align-self:flex-start;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.zn-hero-label::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--primary);box-shadow:0 0 8px var(--primary);
+  animation:znPulse 2s infinite;
+}
 @keyframes znPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
-.zn-hero-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(20px,5.5vw,26px);letter-spacing:1px;line-height:1.15;background:linear-gradient(135deg,#ffffff,var(--primary));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 2px 20px rgba(0,217,255,.3)}
-.zn-hero-subtitle{font-size:11px;color:var(--text-dim);letter-spacing:1px;font-family:'JetBrains Mono',monospace}
-.zn-hero-credit{display:flex;align-items:center;gap:6px;margin-top:2px}
-.zn-hero-credit-badge{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:900;color:#050508;border:1px solid var(--primary);box-shadow:0 0 8px var(--primary-glow)}
-.zn-hero-credit-text{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px}
-.zn-hero-credit-text b{color:var(--primary);text-shadow:0 0 8px var(--primary-glow)}
-[data-style="comic"] .zn-hero-credit-text{color:#fff}
-[data-style="comic"] .zn-hero-credit-text b{color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.3)}
-[data-style="comic"] .zn-hero-credit-badge{background:#fff;color:var(--primary-dark);border:2px solid var(--border);box-shadow:1px 1px 0 0 var(--border)}
-.zn-hero-stats-compact{display:flex;gap:6px;margin-top:6px}
-.zn-stat-compact{flex:1;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:10px;padding:8px 8px;display:flex;align-items:center;gap:6px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:all .2s}
+.zn-hero-title{
+  font-family:'Orbitron',sans-serif;font-weight:900;
+  font-size:clamp(20px,5.5vw,26px);
+  letter-spacing:1px;line-height:1.15;
+  background:linear-gradient(135deg,#ffffff,var(--primary));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 2px 20px rgba(0,217,255,.3);
+}
+.zn-hero-subtitle{
+  font-size:11px;color:var(--text-dim);
+  letter-spacing:1px;font-family:'JetBrains Mono',monospace;
+}
+.zn-hero-stats-compact{display:flex;gap:6px;margin-top:4px}
+.zn-stat-compact{
+  flex:1;background:rgba(0,0,0,.4);
+  border:1px solid var(--border);border-radius:10px;
+  padding:8px 8px;display:flex;align-items:center;gap:6px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:all .2s;
+}
 .zn-stat-compact:active{border-color:var(--primary);box-shadow:0 0 12px var(--primary-glow)}
 .zn-stat-compact-icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .zn-stat-compact-icon svg{width:14px;height:14px}
 .zn-stat-compact-text{flex:1;min-width:0}
-.zn-stat-compact-val{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:var(--primary);line-height:1}
-.zn-stat-compact-label{font-size:7px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-top:2px}
+.zn-stat-compact-val{
+  font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;
+  color:var(--primary);line-height:1;
+}
+.zn-stat-compact-label{
+  font-size:7px;color:var(--text-mute);letter-spacing:1px;
+  text-transform:uppercase;font-weight:600;margin-top:2px;
+}
 
+/* === INFO PERANGKAT === */
 .zn-info-header{display:flex;align-items:center;gap:6px;margin-bottom:8px}
-.zn-info-header-title{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--primary)}
+.zn-info-header-title{
+  font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:1.5px;color:var(--primary);
+}
 .zn-info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.zn-info-item{display:flex;flex-direction:column;gap:3px;padding:10px 8px;border-radius:10px;background:var(--card);border:1px solid var(--border);transition:all .15s}
+.zn-info-item{
+  display:flex;flex-direction:column;gap:3px;
+  padding:10px 8px;border-radius:10px;
+  background:var(--card);border:1px solid var(--border);
+  transition:all .15s;
+}
 .zn-info-item:active{border-color:var(--primary);box-shadow:0 0 10px var(--primary-glow)}
 .zn-info-top{display:flex;align-items:center;gap:5px;margin-bottom:2px}
-.zn-info-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.zn-info-icon{
+  width:16px;height:16px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
 .zn-info-icon svg{width:14px;height:14px}
-.zn-info-label{font-family:'Orbitron',sans-serif;font-size:7px;font-weight:600;color:var(--text-mute);letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.zn-info-val{font-size:11px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.2}
+.zn-info-label{
+  font-family:'Orbitron',sans-serif;font-size:7px;font-weight:600;
+  color:var(--text-mute);letter-spacing:.8px;text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.zn-info-val{
+  font-size:11px;font-weight:600;color:var(--text);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  line-height:1.2;
+}
 
+/* === QUICK ACTIONS === */
 .zn-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.zn-quick-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s}
-.zn-quick-btn:active{border-color:var(--primary);box-shadow:0 0 20px var(--primary-glow);transform:scale(.96)}
+.zn-quick-btn{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:12px 6px;background:var(--card);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  cursor:pointer;transition:all .2s;
+}
+.zn-quick-btn:active{
+  border-color:var(--primary);box-shadow:0 0 20px var(--primary-glow);
+  transform:scale(.96);
+}
 .zn-quick-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center}
 .zn-quick-icon svg{width:22px;height:22px}
-.zn-quick-label{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase}
+.zn-quick-label{
+  font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;
+  letter-spacing:1px;color:var(--text-dim);text-transform:uppercase;
+}
 
-.zn-cat-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin:0 -14px;padding-left:14px;padding-right:14px;-webkit-overflow-scrolling:touch}
+/* === CATEGORY === */
+.zn-cat-scroll{
+  display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;
+  scrollbar-width:none;margin:0 -14px;padding-left:14px;padding-right:14px;
+  -webkit-overflow-scrolling:touch;
+}
 .zn-cat-scroll::-webkit-scrollbar{display:none}
-.zn-cat-tab{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:20px;background:var(--card);border:1px solid var(--border);color:var(--text-dim);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.zn-cat-tab{
+  flex-shrink:0;display:flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:20px;
+  background:var(--card);border:1px solid var(--border);
+  color:var(--text-dim);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
 .zn-cat-tab svg{width:14px;height:14px;fill:currentColor}
-.zn-cat-tab.active{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);box-shadow:0 0 15px var(--primary-glow)}
+.zn-cat-tab.active{
+  background:var(--primary-soft);border-color:var(--primary);
+  color:var(--primary);box-shadow:0 0 15px var(--primary-glow);
+}
 
+/* === FEATURE GRID === */
 .zn-feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.zn-feat-card{position:relative;padding:16px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all .25s;overflow:hidden;min-height:110px;display:flex;flex-direction:column;gap:8px}
-.zn-feat-card:active{border-color:var(--primary);box-shadow:0 0 25px var(--primary-glow),inset 0 0 20px var(--primary-soft);transform:scale(.97)}
-.zn-feat-badge{position:absolute;top:10px;right:10px;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;padding:3px 7px;border-radius:6px;background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary);letter-spacing:1px}
+.zn-feat-card{
+  position:relative;padding:16px;border-radius:var(--radius);
+  background:var(--card);border:1px solid var(--border);
+  cursor:pointer;transition:all .25s;overflow:hidden;
+  min-height:110px;display:flex;flex-direction:column;gap:8px;
+}
+.zn-feat-card:active{
+  border-color:var(--primary);
+  box-shadow:0 0 25px var(--primary-glow),inset 0 0 20px var(--primary-soft);
+  transform:scale(.97);
+}
+.zn-feat-badge{
+  position:absolute;top:10px;right:10px;
+  font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;
+  padding:3px 7px;border-radius:6px;
+  background:var(--primary-soft);color:var(--primary);
+  border:1px solid var(--primary);letter-spacing:1px;
+}
 .zn-feat-badge.pro{background:rgba(255,215,0,.1);color:var(--gold);border-color:var(--gold)}
-.zn-feat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);box-shadow:0 0 12px var(--primary-glow);flex-shrink:0}
+.zn-feat-icon{
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));
+  border:1px solid var(--primary);
+  box-shadow:0 0 12px var(--primary-glow);flex-shrink:0;
+}
 .zn-feat-icon svg{width:20px;height:20px}
-.zn-feat-name{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;letter-spacing:.3px;color:var(--text);line-height:1.2}
+.zn-feat-name{
+  font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.3px;color:var(--text);line-height:1.2;
+}
 .zn-feat-desc{font-size:11px;color:var(--text-mute);line-height:1.3}
 
-.zn-tips{display:flex;gap:12px;align-items:flex-start;padding:14px;background:linear-gradient(135deg,var(--primary-soft),transparent);border:1px solid var(--primary);border-radius:var(--radius)}
-.zn-tips-icon{width:32px;height:32px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* === TIPS === */
+.zn-tips{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:14px;background:linear-gradient(135deg,var(--primary-soft),transparent);
+  border:1px solid var(--primary);border-radius:var(--radius);
+}
+.zn-tips-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--primary);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
 .zn-tips-icon svg{width:18px;height:18px;fill:#050508}
-.zn-tips-label{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--primary);margin-bottom:4px}
+.zn-tips-label{
+  font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:1.5px;color:var(--primary);margin-bottom:4px;
+}
 .zn-tips-text{font-size:12px;color:var(--text-dim);line-height:1.4}
 
-.zn-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 20px;border-radius:var(--radius-sm);font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+/* === BUTTONS === */
+.zn-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:14px 20px;border-radius:var(--radius-sm);
+  font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:1.5px;cursor:pointer;transition:all .2s;
+  text-transform:uppercase;
+}
 .zn-btn svg{width:16px;height:16px;fill:currentColor}
 .zn-btn-primary{background:var(--primary);color:#050508;border:1px solid var(--primary)}
 .zn-btn-primary:active{transform:scale(.97)}
@@ -150,74 +341,224 @@ a{color:inherit;text-decoration:none}
 .zn-btn-success{background:rgba(0,255,136,.1);color:var(--success);border:1px solid var(--success)}
 .zn-btn-success:active{background:var(--success);color:#050508}
 
-.zn-card{padding:16px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);position:relative;transition:all .2s}
+/* === CARDS === */
+.zn-card{
+  padding:16px;border-radius:var(--radius);
+  background:var(--card);border:1px solid var(--border);
+  position:relative;transition:all .2s;
+}
 .zn-card-glow{border-color:var(--primary)}
-.zn-card-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.zn-card-title{
+  font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:1px;color:var(--primary);
+  margin-bottom:12px;display:flex;align-items:center;gap:8px;
+}
 .zn-card-title svg{width:16px;height:16px;fill:var(--primary)}
 
-.zn-tab-pill{flex:1;padding:10px 8px;border-radius:var(--radius-sm);font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-align:center;cursor:pointer;transition:all .2s;background:var(--card);color:var(--text-dim);border:1px solid var(--border);text-transform:uppercase}
-.zn-tab-pill.active{background:var(--primary-soft);color:var(--primary);border-color:var(--primary)}
+/* === TAB PILL === */
+.zn-tab-pill{
+  flex:1;padding:10px 8px;border-radius:var(--radius-sm);
+  font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:1px;text-align:center;cursor:pointer;transition:all .2s;
+  background:var(--card);color:var(--text-dim);
+  border:1px solid var(--border);text-transform:uppercase;
+}
+.zn-tab-pill.active{
+  background:var(--primary-soft);color:var(--primary);
+  border-color:var(--primary);
+}
 .zn-tab-pill:active{transform:scale(.96)}
 
-.zn-input{width:100%;padding:14px 16px;border-radius:var(--radius-sm);background:var(--bg-2);border:1px solid var(--border);color:var(--text);font-size:14px;font-weight:500;transition:all .2s}
+/* === INPUT === */
+.zn-input{
+  width:100%;padding:14px 16px;border-radius:var(--radius-sm);
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--text);font-size:14px;font-weight:500;transition:all .2s;
+}
 .zn-input::placeholder{color:var(--text-mute)}
 .zn-input:focus{border-color:var(--primary);background:var(--card)}
 
-.zn-input-number{width:100%;padding:14px 16px;border-radius:var(--radius-sm);background:var(--bg-2);border:1px solid var(--border);color:var(--text);font-size:16px;font-weight:600;transition:all .2s;font-family:'JetBrains Mono',monospace;letter-spacing:1px}
+.zn-input-number{
+  width:100%;padding:14px 16px;border-radius:var(--radius-sm);
+  background:var(--bg-2);border:1px solid var(--border);
+  color:var(--text);font-size:16px;font-weight:600;transition:all .2s;
+  font-family:'JetBrains Mono',monospace;letter-spacing:1px;
+}
 .zn-input-number:focus{border-color:var(--primary);background:var(--card)}
 
-.zn-stat-box{padding:14px 10px;border-radius:var(--radius-sm);background:var(--card);border:1px solid var(--border);text-align:center}
-.zn-stat-box-val{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:800;color:var(--primary);margin-bottom:4px}
-.zn-stat-box-label{font-size:9px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;font-weight:700}
+/* === STAT BOX === */
+.zn-stat-box{
+  padding:14px 10px;border-radius:var(--radius-sm);
+  background:var(--card);border:1px solid var(--border);text-align:center;
+}
+.zn-stat-box-val{
+  font-family:'Orbitron',sans-serif;font-size:20px;font-weight:800;
+  color:var(--primary);margin-bottom:4px;
+}
+.zn-stat-box-label{
+  font-size:9px;color:var(--text-mute);letter-spacing:1px;
+  text-transform:uppercase;font-weight:700;
+}
 
-.zn-progress{height:18px;background:var(--bg-2);border-radius:10px;overflow:hidden;border:1px solid var(--border);position:relative}
-.zn-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .5s ease-out;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;color:#050508;position:relative}
+/* === PROGRESS === */
+.zn-progress{
+  height:18px;background:var(--bg-2);border-radius:10px;
+  overflow:hidden;border:1px solid var(--border);position:relative;
+}
+.zn-progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));
+  transition:width .5s ease-out;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;
+  color:#050508;position:relative;
+}
 
-.zn-bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;display:flex;padding:6px;gap:2px;background:rgba(5,5,8,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);z-index:50}
-.zn-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px 2px;border-radius:var(--radius-sm);background:transparent;color:var(--text-mute);cursor:pointer;transition:all .2s;position:relative;min-width:44px}
+/* === BOTTOM NAV === */
+.zn-bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  max-width:480px;margin:0 auto;
+  display:flex;padding:6px;gap:2px;
+  background:rgba(5,5,8,.95);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);z-index:50;
+}
+.zn-nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;padding:7px 2px;border-radius:var(--radius-sm);
+  background:transparent;color:var(--text-mute);
+  cursor:pointer;transition:all .2s;position:relative;min-width:44px;
+}
 .zn-nav-btn svg{width:20px;height:20px;fill:currentColor;transition:all .2s}
-.zn-nav-label{font-family:'Orbitron',sans-serif;font-size:7px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
+.zn-nav-label{
+  font-family:'Orbitron',sans-serif;font-size:7px;font-weight:700;
+  letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;
+}
 .zn-nav-btn.active{background:var(--primary-soft);color:var(--primary)}
-.zn-nav-btn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:16px;height:2px;background:var(--primary);border-radius:2px}
+.zn-nav-btn.active::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:16px;height:2px;background:var(--primary);border-radius:2px;
+}
 
-.zn-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:999;animation:znFadeIn .2s ease-out}
+/* === DRAWER === */
+.zn-drawer-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  z-index:999;animation:znFadeIn .2s ease-out;
+}
 @keyframes znFadeIn{from{opacity:0}to{opacity:1}}
-.zn-drawer{position:fixed;top:0;right:0;bottom:0;width:min(300px,85vw);background:var(--bg);border-left:1px solid var(--border);z-index:1000;display:flex;flex-direction:column;animation:znDrawerIn .3s cubic-bezier(.22,1,.36,1)}
+.zn-drawer{
+  position:fixed;top:0;right:0;bottom:0;
+  width:min(300px,85vw);background:var(--bg);
+  border-left:1px solid var(--border);z-index:1000;
+  display:flex;flex-direction:column;
+  animation:znDrawerIn .3s cubic-bezier(.22,1,.36,1);
+}
 @keyframes znDrawerIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
-.zn-drawer-header{padding:24px 20px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border-bottom:1px solid var(--border);position:relative}
-.zn-drawer-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text-dim);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.zn-drawer-header{
+  padding:24px 20px;
+  background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));
+  border-bottom:1px solid var(--border);position:relative;
+}
+.zn-drawer-close{
+  position:absolute;top:12px;right:12px;
+  width:32px;height:32px;border-radius:8px;
+  background:var(--card);border:1px solid var(--border);
+  color:var(--text-dim);font-size:18px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
 .zn-drawer-menu{flex:1;overflow-y:auto;padding:8px 0}
-.zn-drawer-item{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;transition:all .2s;font-size:13px;font-weight:500;color:var(--text-dim);border-left:2px solid transparent}
+.zn-drawer-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 20px;cursor:pointer;transition:all .2s;
+  font-size:13px;font-weight:500;color:var(--text-dim);
+  border-left:2px solid transparent;
+}
 .zn-drawer-item:active{background:var(--primary-soft);color:var(--primary);border-left-color:var(--primary)}
-.zn-drawer-item-icon{width:32px;height:32px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.zn-drawer-item-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--card);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
 .zn-drawer-item-icon svg{width:16px;height:16px}
 .zn-drawer-item-label{flex:1}
 .zn-drawer-item.danger{color:var(--danger)}
 
-.zn-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:1000;display:flex;align-items:flex-end;justify-content:center;animation:znFadeIn .2s ease-out}
-.zn-sheet-content{width:100%;max-width:480px;max-height:90vh;overflow-y:auto;background:var(--bg);border-top:1px solid var(--primary);border-top-left-radius:24px;border-top-right-radius:24px;padding:20px;animation:znSheetUp .3s cubic-bezier(.22,1,.36,1);-webkit-overflow-scrolling:touch;will-change:transform}
+/* === BOTTOM SHEET === */
+.zn-sheet-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  z-index:1000;display:flex;align-items:flex-end;justify-content:center;
+  animation:znFadeIn .2s ease-out;
+}
+.zn-sheet-content{
+  width:100%;max-width:480px;max-height:90vh;overflow-y:auto;
+  background:var(--bg);border-top:1px solid var(--primary);
+  border-top-left-radius:24px;border-top-right-radius:24px;
+  padding:20px;
+  animation:znSheetUp .3s cubic-bezier(.22,1,.36,1);
+  -webkit-overflow-scrolling:touch;
+  will-change:transform;
+}
 @keyframes znSheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.zn-sheet-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 12px;cursor:grab;position:relative;touch-action:none}
-.zn-sheet-handle::before{content:'';position:absolute;top:-10px;left:-20px;right:-20px;bottom:-10px}
+.zn-sheet-handle{
+  width:40px;height:4px;background:var(--border);
+  border-radius:2px;margin:0 auto 12px;
+  cursor:grab;position:relative;
+  touch-action:none;
+}
+.zn-sheet-handle::before{
+  content:'';position:absolute;top:-10px;left:-20px;right:-20px;bottom:-10px;
+}
 
-.zn-spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:znSpin .6s linear infinite}
+/* === SPIN === */
+.zn-spin{
+  display:inline-block;width:14px;height:14px;
+  border:2px solid currentColor;border-top-color:transparent;
+  border-radius:50%;animation:znSpin .6s linear infinite;
+}
 @keyframes znSpin{to{transform:rotate(360deg)}}
 
-.zn-ai-bubble{position:fixed;bottom:88px;right:16px;z-index:60;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
-.zn-ai-bubble-btn{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--primary);box-shadow:0 0 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;animation:znBubbleFloat 3s ease-in-out infinite}
+/* === AI BUBBLE === */
+.zn-ai-bubble{
+  position:fixed;bottom:88px;right:16px;z-index:60;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  cursor:pointer;
+}
+.zn-ai-bubble-btn{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  border:2px solid var(--primary);
+  box-shadow:0 0 25px var(--primary-glow);
+  display:flex;align-items:center;justify-content:center;
+  animation:znBubbleFloat 3s ease-in-out infinite;
+}
 @keyframes znBubbleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .zn-ai-bubble-btn svg{width:28px;height:28px;fill:#050508}
-.zn-ai-bubble-label{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:.5px;color:var(--primary);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;border:1px solid var(--primary);white-space:nowrap}
+.zn-ai-bubble-label{
+  font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;
+  letter-spacing:.5px;color:var(--primary);
+  background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;
+  border:1px solid var(--primary);white-space:nowrap;
+}
 
+/* === UTIL === */
 [x-cloak]{display:none !important}
 
-[data-style="comic"]{--bg:#fffbeb;--bg-2:#fef3c7;--card:#fffdf5;--card-2:#ffffff;--border:#1a1a1a;--text:#1a1a1a;--text-dim:#666666;--text-mute:#999999;--radius:14px;--radius-sm:10px;--radius-lg:20px}
+/* ============================================
+   STYLE 2: KOMIK
+   ============================================ */
+[data-style="comic"]{
+  --bg:#fffbeb;--bg-2:#fef3c7;--card:#fffdf5;--card-2:#ffffff;
+  --border:#1a1a1a;--text:#1a1a1a;--text-dim:#666666;--text-mute:#999999;
+  --radius:14px;--radius-sm:10px;--radius-lg:20px;
+}
 [data-style="comic"][data-theme="cyan"]{--primary:#0ea5e9;--primary-dark:#0369a1;--primary-soft:#e0f2fe;--primary-glow:rgba(14,165,233,.4);--accent:#fbbf24;--accent-dark:#d97706;--accent-soft:#fef3c7;--accent-glow:rgba(251,191,36,.4)}
 [data-style="comic"][data-theme="magenta"]{--primary:#ec4899;--primary-dark:#be185d;--primary-soft:#fce7f3;--primary-glow:rgba(236,72,153,.4);--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:#f3e8ff;--accent-glow:rgba(168,85,247,.4)}
 [data-style="comic"][data-theme="emerald"]{--primary:#10b981;--primary-dark:#047857;--primary-soft:#d1fae5;--primary-glow:rgba(16,185,129,.4);--accent:#f97316;--accent-dark:#c2410c;--accent-soft:#ffedd5;--accent-glow:rgba(249,115,22,.4)}
 [data-style="comic"][data-theme="gold"]{--primary:#f59e0b;--primary-dark:#b45309;--primary-soft:#fef3c7;--primary-glow:rgba(245,158,11,.4);--accent:#dc2626;--accent-dark:#991b1b;--accent-soft:#fee2e2;--accent-glow:rgba(220,38,38,.4)}
 [data-style="comic"][data-theme="orange"]{--primary:#f97316;--primary-dark:#c2410c;--primary-soft:#ffedd5;--primary-glow:rgba(249,115,22,.4);--accent:#eab308;--accent-dark:#a16207;--accent-soft:#fef9c3;--accent-glow:rgba(234,179,8,.4)}
 [data-style="comic"][data-theme="purple"]{--primary:#a855f7;--primary-dark:#7e22ce;--primary-soft:#f3e8ff;--primary-glow:rgba(168,85,247,.4);--accent:#ec4899;--accent-dark:#be185d;--accent-soft:#fce7f3;--accent-glow:rgba(236,72,153,.4)}
+
 [data-style="comic"] body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif}
 [data-style="comic"] .zn-grid-bg{display:none}
 [data-style="comic"] .zn-header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-bottom:3px solid var(--border);backdrop-filter:none}
@@ -241,10 +582,15 @@ a{color:inherit;text-decoration:none}
 [data-style="comic"] .zn-info-item{background:var(--card);border:2.5px solid var(--border);box-shadow:2px 2px 0 0 var(--border);border-radius:12px}
 [data-style="comic"] .zn-info-label{color:#666}
 [data-style="comic"] .zn-info-val{color:var(--text);font-weight:700}
-[data-style="comic"] .zn-quick-btn,[data-style="comic"] .zn-cat-tab,[data-style="comic"] .zn-feat-card,[data-style="comic"] .zn-card,[data-style="comic"] .zn-stat-box{background:var(--card);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border);border-radius:14px}
+[data-style="comic"] .zn-quick-btn,
+[data-style="comic"] .zn-cat-tab,
+[data-style="comic"] .zn-feat-card,
+[data-style="comic"] .zn-card,
+[data-style="comic"] .zn-stat-box{background:var(--card);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border);border-radius:14px}
 [data-style="comic"] .zn-card-title{color:var(--accent-dark);font-family:'Inter',sans-serif;font-weight:800;text-transform:none;letter-spacing:0;font-size:15px}
 [data-style="comic"] .zn-card-title svg{fill:var(--accent-dark)}
-[data-style="comic"] .zn-cat-tab.active,[data-style="comic"] .zn-tab-pill.active{background:var(--primary);color:#fff;box-shadow:3px 3px 0 0 var(--border)}
+[data-style="comic"] .zn-cat-tab.active,
+[data-style="comic"] .zn-tab-pill.active{background:var(--primary);color:#fff;box-shadow:3px 3px 0 0 var(--border)}
 [data-style="comic"] .zn-feat-icon{background:var(--primary-soft);border:2px solid var(--border);box-shadow:2px 2px 0 0 var(--border)}
 [data-style="comic"] .zn-feat-icon svg{filter:none}
 [data-style="comic"] .zn-feat-name{color:var(--primary-dark);font-family:'Inter',sans-serif;font-weight:800;text-transform:none}
@@ -257,7 +603,8 @@ a{color:inherit;text-decoration:none}
 [data-style="comic"] .zn-btn-primary{background:var(--primary);color:#fff;border:3px solid var(--border);box-shadow:4px 4px 0 0 var(--border);font-family:'Inter',sans-serif;font-weight:800}
 [data-style="comic"] .zn-btn-soft{background:var(--accent-soft);color:var(--accent-dark);border:2.5px solid var(--border);box-shadow:3px 3px 0 0 var(--border);font-family:'Inter',sans-serif;font-weight:700}
 [data-style="comic"] .zn-stat-box-val{color:var(--accent-dark)}
-[data-style="comic"] .zn-input,[data-style="comic"] .zn-input-number{background:var(--bg-2);border:3px solid var(--border);color:var(--text)}
+[data-style="comic"] .zn-input,
+[data-style="comic"] .zn-input-number{background:var(--bg-2);border:3px solid var(--border);color:var(--text)}
 [data-style="comic"] .zn-bottom-nav{background:var(--card);border-top:3px solid var(--border);backdrop-filter:none}
 [data-style="comic"] .zn-nav-btn{color:var(--text);opacity:.6}
 [data-style="comic"] .zn-nav-btn.active{background:var(--primary);color:#fff;opacity:1;box-shadow:2px 2px 0 0 var(--border)}
@@ -272,34 +619,21 @@ a{color:inherit;text-decoration:none}
 [data-style="comic"] .zn-ai-bubble-btn svg{fill:#fff}
 [data-style="comic"] .zn-ai-bubble-label{background:var(--card);color:var(--accent-dark);border:2px solid var(--border)}
 
-/* LOADING SCREEN */
-#loadingScreen{position:fixed;inset:0;z-index:99998;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;transition:opacity .6s,visibility .6s;overflow:hidden}
+/* ============================================
+   INTRO + LOADING
+   ============================================ */
+#introCanvasWrap{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#introCanvasWrap.hide{opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s}
+#introCanvas{position:absolute;inset:0;width:100%;height:100%}
+#loadingScreen{position:fixed;inset:0;z-index:99998;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;transition:opacity .5s,visibility .5s}
 #loadingScreen.hide{opacity:0;visibility:hidden}
-#loadingScreen::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(0,217,255,.15),transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,0,128,.12),transparent 50%);animation:loadBgPulse 4s ease-in-out infinite;pointer-events:none}
-@keyframes loadBgPulse{0%,100%{opacity:.6}50%{opacity:1}}
-#loadingScreen::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,217,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,217,255,.04) 1px,transparent 1px);background-size:40px 40px;animation:loadGridMove 15s linear infinite;pointer-events:none}
-@keyframes loadGridMove{0%{background-position:0 0}100%{background-position:40px 40px}}
-.load-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
-.load-logo-anim{position:relative;width:100px;height:100px;margin-bottom:20px;display:flex;align-items:center;justify-content:center}
-.load-ring-1,.load-ring-2,.load-ring-3{position:absolute;border-radius:50%;border:2px solid transparent}
-.load-ring-1{width:100px;height:100px;border-top-color:#00d9ff;border-right-color:#00d9ff;animation:loadSpin 1.5s linear infinite;box-shadow:0 0 20px rgba(0,217,255,.5)}
-.load-ring-2{width:76px;height:76px;border-bottom-color:#ff0080;border-left-color:#ff0080;animation:loadSpin 2s linear infinite reverse;box-shadow:0 0 15px rgba(255,0,128,.5)}
-.load-ring-3{width:52px;height:52px;border-top-color:#a855f7;border-right-color:#a855f7;animation:loadSpin 1.2s linear infinite;box-shadow:0 0 12px rgba(168,85,247,.5)}
-.load-z{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:900;color:#00d9ff;text-shadow:0 0 15px #00d9ff,0 0 30px #00d9ff;animation:loadZPulse 1.5s ease-in-out infinite;z-index:2}
-@keyframes loadSpin{to{transform:rotate(360deg)}}
-@keyframes loadZPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:.8}}
-.load-dots{display:flex;gap:8px;margin-top:18px}
-.load-dots span{width:8px;height:8px;border-radius:50%;background:#00d9ff;box-shadow:0 0 10px #00d9ff;animation:loadDotBounce 1.2s ease-in-out infinite}
-.load-dots span:nth-child(2){background:#a855f7;box-shadow:0 0 10px #a855f7;animation-delay:.2s}
-.load-dots span:nth-child(3){background:#ff0080;box-shadow:0 0 10px #ff0080;animation-delay:.4s}
-@keyframes loadDotBounce{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-10px);opacity:1}}
-.load-logo{font-family:'Orbitron',sans-serif;font-size:clamp(24px,7vw,36px);font-weight:900;letter-spacing:6px;color:#00d9ff;margin-bottom:8px;animation:loadGlow 2s ease-in-out infinite;position:relative;z-index:2}
+.load-logo{font-family:'Orbitron',sans-serif;font-size:clamp(24px,7vw,36px);font-weight:900;letter-spacing:6px;color:#00d9ff;margin-bottom:8px;animation:loadGlow 2s ease-in-out infinite}
 @keyframes loadGlow{0%,100%{text-shadow:0 0 20px #00d9ff,0 0 40px #00d9ff}50%{text-shadow:0 0 30px #00d9ff,0 0 60px #00d9ff}}
-.load-sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:#555568;letter-spacing:3px;margin-bottom:30px;text-transform:uppercase;position:relative;z-index:2}
-.load-bar-wrap{width:min(280px,75vw);height:4px;background:#121220;border-radius:2px;overflow:hidden;position:relative;margin-bottom:14px;z-index:2}
+.load-sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:#555568;letter-spacing:3px;margin-bottom:30px;text-transform:uppercase}
+.load-bar-wrap{width:min(280px,75vw);height:4px;background:#121220;border-radius:2px;overflow:hidden;position:relative;margin-bottom:14px}
 .load-bar-fill{height:100%;background:linear-gradient(90deg,#00d9ff,#ff0080);width:0%;transition:width .3s ease-out;border-radius:2px}
-.load-pct{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:#00d9ff;letter-spacing:2px;position:relative;z-index:2}
-.load-status{font-family:'JetBrains Mono',monospace;font-size:11px;color:#555568;margin-top:8px;letter-spacing:1px;min-height:16px;position:relative;z-index:2}
+.load-pct{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:#00d9ff;letter-spacing:2px}
+.load-status{font-family:'JetBrains Mono',monospace;font-size:11px;color:#555568;margin-top:8px;letter-spacing:1px;min-height:16px}
 .load-status::after{content:'▊';animation:loadBlink .8s steps(2) infinite;color:#00d9ff;margin-left:2px}
 @keyframes loadBlink{50%{opacity:0}}
 
@@ -310,25 +644,21 @@ a{color:inherit;text-decoration:none}
 </head>
 <body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode">
 
-<!-- LOADING SCREEN -->
-<div id="loadingScreen" x-show="!loadingHidden" x-cloak>
-  <div class="load-content">
-    <div class="load-logo-anim">
-      <div class="load-ring-1"></div>
-      <div class="load-ring-2"></div>
-      <div class="load-ring-3"></div>
-      <div class="load-z">Z</div>
-    </div>
-    <div class="load-logo">ZENKAI</div>
-    <div class="load-sub">INITIALIZING // v2.5</div>
-    <div class="load-bar-wrap"><div class="load-bar-fill" id="loadBar"></div></div>
-    <div class="load-pct" id="loadPct">0%</div>
-    <div class="load-status" id="loadStatus">Memuat sistem</div>
-    <div class="load-dots"><span></span><span></span><span></span></div>
-  </div>
+<!-- INTRO ANIMATION -->
+<div id="introCanvasWrap">
+  <canvas id="introCanvas"></canvas>
 </div>
 
-<!-- LOGIN SCREEN -->
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" x-show="!loadingHidden" x-cloak>
+  <div class="load-logo">ZENKAI</div>
+  <div class="load-sub">INITIALIZING // v2.3</div>
+  <div class="load-bar-wrap"><div class="load-bar-fill" id="loadBar"></div></div>
+  <div class="load-pct" id="loadPct">0%</div>
+  <div class="load-status" id="loadStatus">Memuat sistem</div>
+</div><!-- ============================================
+     LOGIN SCREEN
+     ============================================ -->
 <div x-show="!isAuthenticated" x-cloak style="position:fixed;inset:0;z-index:9997;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)">
   <div class="zn-grid-bg"></div>
   <div class="zn-card zn-card-glow" style="width:100%;max-width:380px;padding:28px;position:relative;z-index:1">
@@ -370,26 +700,22 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- ============================================
+     MAIN APP
+     ============================================ -->
 <div x-show="isAuthenticated" x-cloak class="zn-app">
   <div class="zn-grid-bg"></div>
 
-  <!-- HEADER -->
+  <!-- HEADER (STICKY) -->
   <header class="zn-header">
     <div class="zn-header-user" @click="profileModalOpen=true">
-      <div class="zn-avatar-wrap">
-        <div class="zn-avatar">
-          <template x-if="userAvatar"><img :src="userAvatar" alt="avatar"></template>
-          <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
-        </div>
-        <div class="zn-avatar-edit">
-          <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-        </div>
+      <div class="zn-avatar">
+        <template x-if="userAvatar"><img :src="userAvatar" alt="avatar"></template>
+        <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
       </div>
       <div class="zn-header-info">
         <div class="zn-header-name" x-text="userName||'Zenkai User'"></div>
         <span class="zn-badge" :class="isOwner?'owner':(isVip?'vip':'')" x-text="isOwner?'◆ OWNER':(isVip?'◆ VIP':'◆ USER')"></span>
-        <div class="zn-header-hint">Tap untuk profil →</div>
       </div>
     </div>
     <div class="zn-header-actions">
@@ -400,57 +726,144 @@ a{color:inherit;text-decoration:none}
         <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
       </button>
     </div>
-  </header>  <!-- MAIN -->
+  </header>
+
+  <!-- MAIN -->
   <main class="zn-main">
 
     <!-- TAB HOME -->
     <div x-show="activeTab==='home'" class="zn-section">
+      <!-- HERO -->
       <div class="zn-hero">
         <div class="zn-hero-bg" id="heroBg"></div>
         <div class="zn-hero-content">
           <div class="zn-hero-label">ZENKAI TOOLS</div>
           <div class="zn-hero-title">All Tools in One</div>
           <div class="zn-hero-subtitle">// Powerful & Fast</div>
-          <div class="zn-hero-credit">
-            <div class="zn-hero-credit-badge">A</div>
-            <div class="zn-hero-credit-text">by <b>Andika</b></div>
-          </div>
           <div class="zn-hero-stats-compact">
             <div class="zn-stat-compact">
-              <div class="zn-stat-compact-icon"><svg viewBox="0 0 24 24" fill="#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-              <div class="zn-stat-compact-text"><div class="zn-stat-compact-val" x-text="userPoints"></div><div class="zn-stat-compact-label">Poin</div></div>
+              <div class="zn-stat-compact-icon">
+                <svg viewBox="0 0 24 24" fill="#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <div class="zn-stat-compact-text">
+                <div class="zn-stat-compact-val" x-text="userPoints"></div>
+                <div class="zn-stat-compact-label">Poin</div>
+              </div>
             </div>
             <div class="zn-stat-compact">
-              <div class="zn-stat-compact-icon"><svg viewBox="0 0 24 24" fill="#00d9ff"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-              <div class="zn-stat-compact-text"><div class="zn-stat-compact-val" x-text="'Lv'+userLevel"></div><div class="zn-stat-compact-label">Level</div></div>
+              <div class="zn-stat-compact-icon">
+                <svg viewBox="0 0 24 24" fill="#00d9ff"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <div class="zn-stat-compact-text">
+                <div class="zn-stat-compact-val" x-text="'Lv'+userLevel"></div>
+                <div class="zn-stat-compact-label">Level</div>
+              </div>
             </div>
             <div class="zn-stat-compact">
-              <div class="zn-stat-compact-icon"><svg viewBox="0 0 24 24" fill="#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
-              <div class="zn-stat-compact-text"><div class="zn-stat-compact-val" x-text="(isOwner||isVip)?'∞':Math.max(0,(10+chatBonus)-chatCount)"></div><div class="zn-stat-compact-label">Chat</div></div>
+              <div class="zn-stat-compact-icon">
+                <svg viewBox="0 0 24 24" fill="#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+              </div>
+              <div class="zn-stat-compact-text">
+                <div class="zn-stat-compact-val" x-text="(isOwner||isVip)?'∞':Math.max(0,(10+chatBonus)-chatCount)"></div>
+                <div class="zn-stat-compact-label">Chat</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- INFO PERANGKAT -->
       <div>
-        <div class="zn-info-header"><div class="zn-info-header-title">INFO PERANGKAT</div></div>
+        <div class="zn-info-header">
+          <div class="zn-info-header-title">INFO PERANGKAT</div>
+        </div>
         <div class="zn-info-grid">
-          <div class="zn-info-item"><div class="zn-info-top"><div class="zn-info-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#ff3355"/></svg></div><div class="zn-info-label">Negara</div></div><div class="zn-info-val">Indonesia</div></div>
-          <div class="zn-info-item"><div class="zn-info-top"><div class="zn-info-icon"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z" fill="#a855f7"/></svg></div><div class="zn-info-label">Device</div></div><div class="zn-info-val" x-text="deviceInfo.os"></div></div>
-          <div class="zn-info-item"><div class="zn-info-top"><div class="zn-info-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z" fill="#00d9ff"/></svg></div><div class="zn-info-label">Browser</div></div><div class="zn-info-val" x-text="deviceInfo.browser"></div></div>
-          <div class="zn-info-item"><div class="zn-info-top"><div class="zn-info-icon"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" :fill="deviceInfo.online?'#00ff88':'#ff3355'"/></svg></div><div class="zn-info-label">Status</div></div><div class="zn-info-val" :style="deviceInfo.online?'color:#00ff88':'color:#ff3355'" x-text="deviceInfo.online?'● Online':'○ Offline'"></div></div>
-          <div class="zn-info-item"><div class="zn-info-top"><div class="zn-info-icon"><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z" fill="#00ff88"/></svg></div><div class="zn-info-label">Baterai</div></div><div class="zn-info-val" x-text="deviceInfo.battery"></div></div>
-          <div class="zn-info-item"><div class="zn-info-top"><div class="zn-info-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="#ffd700"/></svg></div><div class="zn-info-label">Waktu</div></div><div class="zn-info-val" x-text="currentTime"></div></div>
+          <div class="zn-info-item">
+            <div class="zn-info-top">
+              <div class="zn-info-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#ff3355"/></svg>
+              </div>
+              <div class="zn-info-label">Negara</div>
+            </div>
+            <div class="zn-info-val">Indonesia</div>
+          </div>
+          <div class="zn-info-item">
+            <div class="zn-info-top">
+              <div class="zn-info-icon">
+                <svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z" fill="#a855f7"/></svg>
+              </div>
+              <div class="zn-info-label">Device</div>
+            </div>
+            <div class="zn-info-val" x-text="deviceInfo.os"></div>
+          </div>
+          <div class="zn-info-item">
+            <div class="zn-info-top">
+              <div class="zn-info-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z" fill="#00d9ff"/></svg>
+              </div>
+              <div class="zn-info-label">Browser</div>
+            </div>
+            <div class="zn-info-val" x-text="deviceInfo.browser"></div>
+          </div>
+          <div class="zn-info-item">
+            <div class="zn-info-top">
+              <div class="zn-info-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" :fill="deviceInfo.online?'#00ff88':'#ff3355'"/></svg>
+              </div>
+              <div class="zn-info-label">Status</div>
+            </div>
+            <div class="zn-info-val" :style="deviceInfo.online?'color:#00ff88':'color:#ff3355'" x-text="deviceInfo.online?'● Online':'○ Offline'"></div>
+          </div>
+          <div class="zn-info-item">
+            <div class="zn-info-top">
+              <div class="zn-info-icon">
+                <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z" fill="#00ff88"/></svg>
+              </div>
+              <div class="zn-info-label">Baterai</div>
+            </div>
+            <div class="zn-info-val" x-text="deviceInfo.battery"></div>
+          </div>
+          <div class="zn-info-item">
+            <div class="zn-info-top">
+              <div class="zn-info-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" fill="#ffd700"/></svg>
+              </div>
+              <div class="zn-info-label">Waktu</div>
+            </div>
+            <div class="zn-info-val" x-text="currentTime"></div>
+          </div>
         </div>
       </div>
 
+      <!-- QUICK ACTIONS -->
       <div class="zn-quick-grid">
-        <div class="zn-quick-btn" @click="openTxSheet()"><div class="zn-quick-icon"><svg viewBox="0 0 24 24" fill="#00ff88"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div><div class="zn-quick-label">Catat</div></div>
-        <div class="zn-quick-btn" @click="openChatAI()"><div class="zn-quick-icon"><svg viewBox="0 0 24 24" fill="#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div><div class="zn-quick-label">AI Chat</div></div>
-        <div class="zn-quick-btn" @click="switchTab('downloader')"><div class="zn-quick-icon"><svg viewBox="0 0 24 24" fill="#ffd700"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div><div class="zn-quick-label">Unduh</div></div>
-        <div class="zn-quick-btn" @click="switchTab('tema')"><div class="zn-quick-icon"><svg viewBox="0 0 24 24" fill="#a855f7"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg></div><div class="zn-quick-label">Tema</div></div>
+        <div class="zn-quick-btn" @click="openTxSheet()">
+          <div class="zn-quick-icon">
+            <svg viewBox="0 0 24 24" fill="#00ff88"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+          </div>
+          <div class="zn-quick-label">Catat</div>
+        </div>
+        <div class="zn-quick-btn" @click="openChatAI()">
+          <div class="zn-quick-icon">
+            <svg viewBox="0 0 24 24" fill="#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+          </div>
+          <div class="zn-quick-label">AI Chat</div>
+        </div>
+        <div class="zn-quick-btn" @click="switchTab('downloader')">
+          <div class="zn-quick-icon">
+            <svg viewBox="0 0 24 24" fill="#ffd700"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          </div>
+          <div class="zn-quick-label">Unduh</div>
+        </div>
+        <div class="zn-quick-btn" @click="switchTab('tema')">
+          <div class="zn-quick-icon">
+            <svg viewBox="0 0 24 24" fill="#a855f7"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg>
+          </div>
+          <div class="zn-quick-label">Tema</div>
+        </div>
       </div>
 
+      <!-- CATEGORY -->
       <div class="zn-cat-scroll">
         <template x-for="k in kategoriList" :key="k.id">
           <button @click="kategoriAktif=k.id" :class="kategoriAktif===k.id?'active':''" class="zn-cat-tab">
@@ -460,18 +873,26 @@ a{color:inherit;text-decoration:none}
         </template>
       </div>
 
+      <!-- SECTION TITLE -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
         <div style="display:flex;align-items:center;gap:10px">
-          <div class="zn-feat-icon" style="width:28px;height:28px;border-radius:8px"><svg viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"/></svg></div>
+          <div class="zn-feat-icon" style="width:28px;height:28px;border-radius:8px">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"/></svg>
+          </div>
           <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px">All Tools</div>
         </div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:1px"><span x-text="filteredFitur.length"></span> AKTIF</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:1px">
+          <span x-text="filteredFitur.length"></span> AKTIF
+        </div>
       </div>
 
+      <!-- FEATURE GRID -->
       <div class="zn-feat-grid">
         <template x-for="f in filteredFitur" :key="f.id">
           <div class="zn-feat-card" @click="bukaFitur(f)">
-            <template x-if="f.badge"><span class="zn-feat-badge" :class="f.badgeClass||''" x-text="f.badge"></span></template>
+            <template x-if="f.badge">
+              <span class="zn-feat-badge" :class="f.badgeClass||''" x-text="f.badge"></span>
+            </template>
             <div class="zn-feat-icon" :style="'background:'+(f.iconBg||'linear-gradient(135deg,var(--primary-soft),var(--accent-soft))')">
               <svg viewBox="0 0 24 24" :style="'fill:'+(f.iconColor||'var(--primary)')" x-html="f.svg"></svg>
             </div>
@@ -481,9 +902,15 @@ a{color:inherit;text-decoration:none}
         </template>
       </div>
 
+      <!-- TIPS -->
       <div class="zn-tips">
-        <div class="zn-tips-icon"><svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
-        <div style="flex:1"><div class="zn-tips-label">TIPS HARI INI</div><div class="zn-tips-text" x-text="tipsHarian"></div></div>
+        <div class="zn-tips-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
+        </div>
+        <div style="flex:1">
+          <div class="zn-tips-label">TIPS HARI INI</div>
+          <div class="zn-tips-text" x-text="tipsHarian"></div>
+        </div>
       </div>
     </div>
 
@@ -500,43 +927,65 @@ a{color:inherit;text-decoration:none}
       </div>
 
       <div x-show="finSubTab==='transaksi'" class="zn-section">
-        <button @click="openTxSheet()" class="zn-btn zn-btn-primary"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>TAMBAH TRANSAKSI</span></button>
+        <button @click="openTxSheet()" class="zn-btn zn-btn-primary">
+          <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          <span>TAMBAH TRANSAKSI</span>
+        </button>
         <div class="zn-card">
-          <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg><span>RIWAYAT</span></div>
+          <div class="zn-card-title">
+            <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+            <span>RIWAYAT</span>
+          </div>
           <div style="display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto">
             <template x-for="t in transactions" :key="t.id">
               <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px" :style="t.type==='income'?'background:rgba(0,255,136,.06);border:1px solid var(--success)':'background:rgba(255,51,85,.06);border:1px solid var(--danger)'">
-                <div><div style="font-size:13px;font-weight:600" x-text="t.category"></div><div style="font-size:10px;color:var(--text-mute);margin-top:2px" x-text="t.date"></div></div>
+                <div>
+                  <div style="font-size:13px;font-weight:600" x-text="t.category"></div>
+                  <div style="font-size:10px;color:var(--text-mute);margin-top:2px" x-text="t.date"></div>
+                </div>
                 <div style="display:flex;align-items:center;gap:10px">
                   <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700" :style="t.type==='income'?'color:var(--success)':'color:var(--danger)'" x-text="(t.type==='income'?'+':'-')+'Rp'+formatRibuan(t.amount)"></span>
                   <button @click="confirmDeleteTx(t.id)" style="color:var(--danger);font-size:20px;line-height:1;padding:0 4px">×</button>
                 </div>
               </div>
             </template>
-            <template x-if="transactions.length===0"><div style="text-align:center;padding:24px;color:var(--text-mute);font-size:12px">Belum ada transaksi</div></template>
+            <template x-if="transactions.length===0">
+              <div style="text-align:center;padding:24px;color:var(--text-mute);font-size:12px">Belum ada transaksi</div>
+            </template>
           </div>
         </div>
       </div>
 
       <div x-show="finSubTab==='grafik'" class="zn-section">
-        <div class="zn-card"><div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg><span>PENGELUARAN</span></div><div style="position:relative;height:200px"><canvas id="pieChart"></canvas></div></div>
-        <div class="zn-card"><div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span>MASUK VS KELUAR</span></div><div style="position:relative;height:200px"><canvas id="barChart"></canvas></div></div>
+        <div class="zn-card">
+          <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg><span>PENGELUARAN</span></div>
+          <div style="position:relative;height:200px"><canvas id="pieChart"></canvas></div>
+        </div>
+        <div class="zn-card">
+          <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span>MASUK VS KELUAR</span></div>
+          <div style="position:relative;height:200px"><canvas id="barChart"></canvas></div>
+        </div>
       </div>
 
       <div x-show="finSubTab==='target'" class="zn-section">
-        <button @click="openTargetSheet()" class="zn-btn zn-btn-primary"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>TAMBAH TARGET</span></button>
+        <button @click="openTargetSheet()" class="zn-btn zn-btn-primary">
+          <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          <span>TAMBAH TARGET</span>
+        </button>
         <div class="zn-card">
           <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg><span>BUDGET</span></div>
           <button @click="openBudgetSheet()" class="zn-btn zn-btn-soft" style="margin-bottom:12px">+ SET BUDGET</button>
           <div style="display:flex;flex-direction:column;gap:8px">
             <template x-for="b in budgets" :key="b.id">
               <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600" x-text="b.kategori"></span><button @click="confirmDeleteBudget(b.id)" style="color:var(--danger);font-size:16px;line-height:1">×</button></div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                  <span style="font-size:13px;font-weight:600" x-text="b.kategori"></span>
+                  <button @click="confirmDeleteBudget(b.id)" style="color:var(--danger);font-size:16px;line-height:1">×</button>
+                </div>
                 <div style="font-size:10px;color:var(--text-mute);margin-bottom:6px">Limit: Rp <span x-text="formatRibuan(b.limit_bulanan)"></span></div>
                 <div class="zn-progress"><div class="zn-progress-fill" :style="'width:'+Math.min(100,(getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'" x-text="Math.round((getBudgetUsed(b.kategori)/b.limit_bulanan)*100)+'%'"></div></div>
               </div>
             </template>
-            <template x-if="budgets.length===0"><div style="text-align:center;padding:16px;color:var(--text-mute);font-size:12px">Belum ada budget</div></template>
           </div>
         </div>
         <div class="zn-card">
@@ -544,15 +993,15 @@ a{color:inherit;text-decoration:none}
           <div style="display:flex;flex-direction:column;gap:8px">
             <template x-for="s in savings" :key="s.id">
               <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600" x-text="s.nama"></span><button @click="confirmDeleteSavings(s.id)" style="color:var(--danger);font-size:16px;line-height:1">×</button></div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                  <span style="font-size:13px;font-weight:600" x-text="s.nama"></span>
+                  <button @click="confirmDeleteSavings(s.id)" style="color:var(--danger);font-size:16px;line-height:1">×</button>
+                </div>
                 <div style="font-size:10px;color:var(--text-mute);margin-bottom:6px">Target: Rp <span x-text="formatRibuan(s.target)"></span></div>
                 <div class="zn-progress"><div class="zn-progress-fill" :style="'width:'+Math.min(100,(s.terkumpul/s.target)*100)+'%'" x-text="Math.round((s.terkumpul/s.target)*100)+'%'"></div></div>
                 <div style="font-size:10px;color:var(--text-mute);margin-top:6px">Terkumpul: Rp <span x-text="formatRibuan(s.terkumpul)"></span></div>
                 <button @click="addToSavings(s.id)" class="zn-btn zn-btn-soft" style="margin-top:8px;padding:8px;font-size:10px">+ TABUNG</button>
               </div>
-            </template>
-            <template x-if="savings.length===0">
-              <div style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">Belum ada target. Klik <b style="color:var(--primary)">+ TAMBAH TARGET</b> di atas.</div>
             </template>
           </div>
         </div>
@@ -562,7 +1011,9 @@ a{color:inherit;text-decoration:none}
     <!-- TAB DOWNLOADER -->
     <div x-show="activeTab==='downloader'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15));border-color:#ffd700"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ffd700"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
+        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15));border-color:#ffd700">
+          <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ffd700"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        </div>
         <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:#ffd700;margin-bottom:4px">TIKTOK DOWNLOADER</h2>
         <p style="font-size:11px;color:var(--text-mute);letter-spacing:1px">NO WATERMARK // HD</p>
       </div>
@@ -576,11 +1027,16 @@ a{color:inherit;text-decoration:none}
       </div>
       <template x-if="downloadResultReady">
         <div class="zn-card zn-card-glow">
-          <template x-if="downloadMeta.thumbnail"><img :src="downloadMeta.thumbnail" style="width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px;border:1px solid var(--border)"></template>
+          <template x-if="downloadMeta.thumbnail">
+            <img :src="downloadMeta.thumbnail" style="width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px;border:1px solid var(--border)">
+          </template>
           <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px" x-text="downloadMeta.title"></div>
           <div style="display:flex;flex-direction:column;gap:8px">
             <template x-for="(link,idx) in downloadResultLinks" :key="idx">
-              <button @click="downloadBlob(link.url,link.filename)" class="zn-btn zn-btn-soft"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span x-text="link.label"></span></button>
+              <button @click="downloadBlob(link.url,link.filename)" class="zn-btn zn-btn-soft">
+                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                <span x-text="link.label"></span>
+              </button>
             </template>
           </div>
         </div>
@@ -590,7 +1046,9 @@ a{color:inherit;text-decoration:none}
     <!-- TAB TOOLS -->
     <div x-show="activeTab==='tools'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
+        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px">
+          <svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+        </div>
         <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TOOLS</h2>
       </div>
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
@@ -600,34 +1058,49 @@ a{color:inherit;text-decoration:none}
         <button @click="toolsSubTab='bmi'" :class="toolsSubTab==='bmi'?'active':''" class="zn-tab-pill">⚖</button>
         <button @click="toolsSubTab='speed'" :class="toolsSubTab==='speed'?'active':''" class="zn-tab-pill">🌐</button>
       </div>
+
       <div x-show="toolsSubTab==='jam'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><span>JAM DUNIA</span></div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <template x-for="zone in worldClocks" :key="zone.name">
             <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
-              <div style="display:flex;align-items:center;gap:10px"><span style="width:24px;height:18px;border-radius:3px;overflow:hidden;flex-shrink:0;border:1px solid var(--border)" x-html="zone.flagSvg"></span><span style="font-size:12px;color:var(--text-dim)" x-text="zone.name"></span></div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="width:24px;height:18px;border-radius:3px;overflow:hidden;flex-shrink:0;border:1px solid var(--border)" x-html="zone.flagSvg"></span>
+                <span style="font-size:12px;color:var(--text-dim)" x-text="zone.name"></span>
+              </div>
               <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--primary)" x-text="zone.time"></span>
             </div>
           </template>
         </div>
       </div>
+
       <div x-show="toolsSubTab==='tts'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg><span>TEXT TO SPEECH</span></div>
         <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="zn-input"></textarea>
         <button @click="speakCustomText()" class="zn-btn zn-btn-primary" style="margin-top:10px">UCAPKAN</button>
       </div>
+
       <div x-show="toolsSubTab==='kompres'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>KOMPRES FOTO</span></div>
         <input type="file" accept="image/*" @change="compressImageFile($event)" class="zn-input">
-        <template x-if="compressedImageUrl"><div style="text-align:center;margin-top:12px"><img :src="compressedImageUrl" style="max-height:160px;border-radius:10px;border:1px solid var(--border);margin:0 auto"><a :href="compressedImageUrl" download="compressed.jpg" class="zn-btn zn-btn-primary" style="margin-top:10px;display:flex">DOWNLOAD</a></div></template>
+        <template x-if="compressedImageUrl">
+          <div style="text-align:center;margin-top:12px">
+            <img :src="compressedImageUrl" style="max-height:160px;border-radius:10px;border:1px solid var(--border);margin:0 auto">
+            <a :href="compressedImageUrl" download="compressed.jpg" class="zn-btn zn-btn-primary" style="margin-top:10px;display:flex">DOWNLOAD</a>
+          </div>
+        </template>
       </div>
+
       <div x-show="toolsSubTab==='bmi'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg><span>BMI & KALORI</span></div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <input type="number" x-model="bmiWeight" placeholder="Berat (kg)" class="zn-input">
           <input type="number" x-model="bmiHeight" placeholder="Tinggi (cm)" class="zn-input">
           <input type="number" x-model="bmiAge" placeholder="Umur" class="zn-input">
-          <select x-model="bmiGender" class="zn-input"><option value="male">Laki-laki</option><option value="female">Perempuan</option></select>
+          <select x-model="bmiGender" class="zn-input">
+            <option value="male">Laki-laki</option>
+            <option value="female">Perempuan</option>
+          </select>
           <button @click="calcBMI()" class="zn-btn zn-btn-primary">HITUNG BMI</button>
         </div>
         <template x-if="bmiResult">
@@ -643,6 +1116,7 @@ a{color:inherit;text-decoration:none}
           </div>
         </template>
       </div>
+
       <div x-show="toolsSubTab==='speed'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg><span>SPEED TEST</span></div>
         <button @click="runSpeedTest()" class="zn-btn zn-btn-primary">
@@ -660,9 +1134,12 @@ a{color:inherit;text-decoration:none}
     <!-- TAB TEMA -->
     <div x-show="activeTab==='tema'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg></div>
+        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px">
+          <svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg>
+        </div>
         <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TEMA & GAYA</h2>
       </div>
+
       <div class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg><span>WARNA NEON</span></div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
@@ -674,6 +1151,7 @@ a{color:inherit;text-decoration:none}
           </template>
         </div>
       </div>
+
       <div class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg><span>GAYA VISUAL</span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -692,13 +1170,51 @@ a{color:inherit;text-decoration:none}
     <!-- TAB PEMBERITAHUAN -->
     <div x-show="activeTab==='pemberitahuan'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 9h10v2H7V9zm6 5H7v-2h6v2zm4-6H7V6h10v2z"/></svg></div>
+        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))">
+          <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 9h10v2H7V9zm6 5H7v-2h6v2zm4-6H7V6h10v2z"/></svg>
+        </div>
         <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--accent)">PEMBERITAHUAN</h2>
       </div>
+
       <div style="display:flex;flex-direction:column;gap:10px">
-        <div class="zn-card" style="border-color:var(--primary)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px">Selamat Datang</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Terima kasih sudah pakai Zenkai Tools! Aplikasi ini akan terus berkembang.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU SAJA</div></div></div></div>
-        <div class="zn-card" style="border-color:var(--accent)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--accent)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">Tips & Trik</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Login harian dapat 10 poin gratis. Kumpulkan poin & naik level!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// 1 JAM LALU</div></div></div></div>
-        <div class="zn-card" style="border-color:#00ff88"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(0,255,136,.15);border:1px solid #00ff88;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#00ff88"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#00ff88;margin-bottom:4px">Zenkai AI</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Tanya apa saja dengan 4 mode: Keuangan, Kesehatan, Teknologi, Umum.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// KEMARIN</div></div></div></div>
+        <div class="zn-card" style="border-color:var(--primary)">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="width:40px;height:40px;border-radius:10px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px">Selamat Datang</div>
+              <div style="font-size:12px;color:var(--text-dim);line-height:1.5">Terima kasih sudah pakai Zenkai Tools! Aplikasi ini akan terus berkembang.</div>
+              <div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU SAJA</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="zn-card" style="border-color:var(--accent)">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--accent)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">Tips & Trik</div>
+              <div style="font-size:12px;color:var(--text-dim);line-height:1.5">Login harian dapat 10 poin gratis. Kumpulkan poin & naik level!</div>
+              <div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// 1 JAM LALU</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="zn-card" style="border-color:#00ff88">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,255,136,.15);border:1px solid #00ff88;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#00ff88"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:700;color:#00ff88;margin-bottom:4px">Zenkai AI</div>
+              <div style="font-size:12px;color:var(--text-dim);line-height:1.5">Tanya apa saja dengan 4 mode: Keuangan, Kesehatan, Teknologi, Umum.</div>
+              <div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// KEMARIN</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -706,7 +1222,9 @@ a{color:inherit;text-decoration:none}
     <template x-if="isOwner">
       <div x-show="activeTab==='owner'" class="zn-section">
         <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-          <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:var(--primary);border-color:var(--primary)"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#050508"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg></div>
+          <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:var(--primary);border-color:var(--primary)">
+            <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#050508"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+          </div>
           <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">OWNER PANEL</h2>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
@@ -715,6 +1233,7 @@ a{color:inherit;text-decoration:none}
           <button @click="ownerSubTab='setelan'" :class="ownerSubTab==='setelan'?'active':''" class="zn-tab-pill">⚙</button>
           <button @click="ownerSubTab='tools'" :class="ownerSubTab==='tools'?'active':''" class="zn-tab-pill">🔧</button>
         </div>
+
         <div x-show="ownerSubTab==='statistik'" class="zn-section">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
             <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="appStats.totalUsers"></div><div class="zn-stat-box-label">Total User</div></div>
@@ -735,6 +1254,7 @@ a{color:inherit;text-decoration:none}
             </div>
           </div>
         </div>
+
         <div x-show="ownerSubTab==='users'" class="zn-section">
           <input type="text" x-model="userSearch" placeholder="Cari user..." class="zn-input">
           <div class="zn-card">
@@ -744,7 +1264,14 @@ a{color:inherit;text-decoration:none}
                 <div style="padding:10px;border-radius:10px" :style="u.is_banned?'background:rgba(255,51,85,.06);border:1px solid var(--danger)':'background:var(--bg-2);border:1px solid var(--border)'">
                   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
                     <div style="width:32px;height:32px;border-radius:8px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;color:var(--primary)" x-text="u.username?u.username.substring(0,1).toUpperCase():'?'"></div>
-                    <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" x-text="u.username"></div><div style="font-size:10px;color:var(--text-mute)"><span x-text="u.status"></span><span x-show="u.is_vip" style="color:var(--gold)"> • VIP</span><span x-show="u.is_banned" style="color:var(--danger)"> • BANNED</span></div></div>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" x-text="u.username"></div>
+                      <div style="font-size:10px;color:var(--text-mute)">
+                        <span x-text="u.status"></span>
+                        <span x-show="u.is_vip" style="color:var(--gold)"> • VIP</span>
+                        <span x-show="u.is_banned" style="color:var(--danger)"> • BANNED</span>
+                      </div>
+                    </div>
                   </div>
                   <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
                     <template x-if="!u.is_banned"><button @click="banUser(u)" class="zn-btn zn-btn-danger" style="padding:6px;font-size:9px">BAN</button></template>
@@ -760,6 +1287,7 @@ a{color:inherit;text-decoration:none}
             </div>
           </div>
         </div>
+
         <div x-show="ownerSubTab==='setelan'" class="zn-section">
           <div class="zn-card">
             <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg><span>EDIT SAMBUTAN</span></div>
@@ -767,27 +1295,52 @@ a{color:inherit;text-decoration:none}
             <button @click="saveWelcomeText()" class="zn-btn zn-btn-primary" style="margin-top:10px">SIMPAN</button>
           </div>
         </div>
+
         <div x-show="ownerSubTab==='tools'" class="zn-section">
-          <div class="zn-card"><div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span>EXPORT DATA</span></div><button @click="exportUsersCSV()" class="zn-btn zn-btn-primary">EXPORT CSV</button></div>
-          <div class="zn-card"><div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg><span>BERSIHKAN</span></div><button @click="confirmCleanOld()" class="zn-btn zn-btn-danger">BERSIHKAN &gt;30 HARI</button></div>
+          <div class="zn-card">
+            <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span>EXPORT DATA</span></div>
+            <button @click="exportUsersCSV()" class="zn-btn zn-btn-primary">EXPORT CSV</button>
+          </div>
+          <div class="zn-card">
+            <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg><span>BERSIHKAN</span></div>
+            <button @click="confirmCleanOld()" class="zn-btn zn-btn-danger">BERSIHKAN &gt;30 HARI</button>
+          </div>
         </div>
       </div>
     </template>
 
   </main>
 
+  <!-- BOTTOM NAV -->
   <nav class="zn-bottom-nav">
-    <button @click="switchTab('home')" :class="activeTab==='home'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span class="zn-nav-label">Home</span></button>
-    <button @click="switchTab('tools')" :class="activeTab==='tools'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg><span class="zn-nav-label">Tools</span></button>
-    <button @click="switchTab('keuangan')" :class="activeTab==='keuangan'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg><span class="zn-nav-label">Dompet</span></button>
-    <button @click="switchTab('tema')" :class="activeTab==='tema'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg><span class="zn-nav-label">Tema</span></button>
-    <button @click="switchTab('pemberitahuan')" :class="activeTab==='pemberitahuan'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg><span class="zn-nav-label">Info</span></button>
+    <button @click="switchTab('home')" :class="activeTab==='home'?'active':''" class="zn-nav-btn">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span class="zn-nav-label">Home</span>
+    </button>
+    <button @click="switchTab('tools')" :class="activeTab==='tools'?'active':''" class="zn-nav-btn">
+      <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+      <span class="zn-nav-label">Tools</span>
+    </button>
+    <button @click="switchTab('keuangan')" :class="activeTab==='keuangan'?'active':''" class="zn-nav-btn">
+      <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+      <span class="zn-nav-label">Dompet</span>
+    </button>
+    <button @click="switchTab('tema')" :class="activeTab==='tema'?'active':''" class="zn-nav-btn">
+      <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg>
+      <span class="zn-nav-label">Tema</span>
+    </button>
+    <button @click="switchTab('pemberitahuan')" :class="activeTab==='pemberitahuan'?'active':''" class="zn-nav-btn">
+      <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+      <span class="zn-nav-label">Info</span>
+    </button>
   </nav>
 </div>
 
 <!-- AI BUBBLE -->
 <div x-show="isAuthenticated&&!chatFullscreen" x-cloak @click="openChatAI()" class="zn-ai-bubble">
-  <div class="zn-ai-bubble-btn"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div>
+  <div class="zn-ai-bubble-btn">
+    <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
+  </div>
   <div class="zn-ai-bubble-label">Chat dengan Zenkai AI</div>
 </div><!-- ============================================
      BOTTOM SHEETS & MODALS
@@ -922,13 +1475,26 @@ a{color:inherit;text-decoration:none}
         <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--primary);margin-top:6px" x-text="userPoints"></div>
         <div style="font-size:10px;color:var(--text-mute);letter-spacing:2px">TOTAL POIN</div>
       </div>
-      <div class="zn-progress"><div class="zn-progress-fill" :style="'width:'+getProgressPercent()+'%'" x-text="getProgressPercent()+'%'"></div></div>
-      <div style="font-size:10px;color:var(--text-dim);text-align:center;margin-top:8px" x-show="getNextLevelPoints() > 0"><span x-text="getNextLevelPoints() - userPoints"></span> poin lagi ke LV<span x-text="userLevel + 1"></span></div>
+      <div class="zn-progress">
+        <div class="zn-progress-fill" :style="'width:'+getProgressPercent()+'%'" x-text="getProgressPercent()+'%'"></div>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);text-align:center;margin-top:8px" x-show="getNextLevelPoints() > 0">
+        <span x-text="getNextLevelPoints() - userPoints"></span> poin lagi ke LV<span x-text="userLevel + 1"></span>
+      </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px">
-      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// NAMA</div><div style="font-size:13px;font-weight:600" x-text="userName"></div></div>
-      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// EMAIL</div><div style="font-size:13px;font-weight:600;word-break:break-all" x-text="userEmail"></div></div>
-      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// STATUS</div><div style="font-size:13px;font-weight:600" x-text="isOwner?'OWNER':(isVip?'VIP':'USER')"></div></div>
+      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// NAMA</div>
+        <div style="font-size:13px;font-weight:600" x-text="userName"></div>
+      </div>
+      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// EMAIL</div>
+        <div style="font-size:13px;font-weight:600;word-break:break-all" x-text="userEmail"></div>
+      </div>
+      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// STATUS</div>
+        <div style="font-size:13px;font-weight:600" x-text="isOwner?'OWNER':(isVip?'VIP':'USER')"></div>
+      </div>
     </div>
     <button @click="profileModalOpen=false" class="zn-btn zn-btn-soft" style="margin-top:14px">TUTUP</button>
     <button @click="logout()" class="zn-btn zn-btn-danger" style="margin-top:8px">KELUAR</button>
@@ -1019,34 +1585,31 @@ a{color:inherit;text-decoration:none}
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'newsSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">BERITA INDONESIA</h3>
-    <div x-show="newsLoading" style="text-align:center;padding:20px"><span class="zn-spin"></span><div style="font-size:11px;color:var(--text-mute);margin-top:8px">Memuat berita...</div></div>
+    <div x-show="newsLoading" style="text-align:center;padding:20px"><span class="zn-spin"></span></div>
     <div x-show="!newsLoading && !selectedNews" style="display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow-y:auto">
       <template x-for="(n,idx) in newsList" :key="idx">
         <div @click="selectedNews=n" style="display:flex;gap:12px;padding:10px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);cursor:pointer">
-          <img 
-            :src="n.thumbnail || 'https://placehold.co/160x160/0d0d18/00d9ff?text=ZENKAI'" 
-            @error="$event.target.src='https://placehold.co/160x160/0d0d18/00d9ff?text=ZENKAI'"
-            style="width:80px;height:80px;object-fit:cover;border-radius:8px;flex-shrink:0;border:1px solid var(--border);background:var(--card)">
+          <template x-if="n.thumbnail">
+            <img :src="n.thumbnail" style="width:80px;height:80px;object-fit:cover;border-radius:8px;flex-shrink:0;border:1px solid var(--border)" @error="$event.target.style.display='none'">
+          </template>
+          <template x-if="!n.thumbnail">
+            <div style="width:80px;height:80px;border-radius:8px;flex-shrink:0;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center">
+              <svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:var(--primary)"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+          </template>
           <div style="flex:1;min-width:0">
             <div style="font-size:12px;font-weight:600;line-height:1.3;margin-bottom:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical" x-text="n.title"></div>
             <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace" x-text="n.pubDate"></div>
           </div>
         </div>
       </template>
-      <template x-if="!newsLoading && newsList.length===0">
-        <div style="text-align:center;padding:30px;color:var(--text-mute);font-size:12px">
-          Tidak ada berita. 
-          <button @click="newsList=[];openNews()" class="zn-btn zn-btn-soft" style="margin-top:12px">Coba Lagi</button>
-        </div>
-      </template>
     </div>
     <template x-if="selectedNews">
       <div style="display:flex;flex-direction:column;gap:12px;margin-top:14px">
         <button @click="selectedNews=null" class="zn-btn zn-btn-soft">← KEMBALI</button>
-        <img 
-          :src="selectedNews.thumbnail || 'https://placehold.co/600x300/0d0d18/00d9ff?text=Zenkai+News'" 
-          @error="$event.target.src='https://placehold.co/600x300/0d0d18/00d9ff?text=Zenkai+News'"
-          style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;border:1px solid var(--border)">
+        <template x-if="selectedNews.thumbnail">
+          <img :src="selectedNews.thumbnail" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;border:1px solid var(--border)">
+        </template>
         <h4 style="font-size:14px;font-weight:700;line-height:1.4;color:var(--text)" x-text="selectedNews.title"></h4>
         <p style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace" x-text="selectedNews.pubDate"></p>
         <p style="font-size:12px;color:var(--text-dim);line-height:1.6" x-text="selectedNews.description"></p>
@@ -1084,8 +1647,14 @@ a{color:inherit;text-decoration:none}
             <template x-for="(d,idx) in weatherData.forecast" :key="idx">
               <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
                 <span style="font-size:22px" x-text="d.emoji"></span>
-                <div style="flex:1"><div style="font-size:11px;font-weight:600" x-text="d.date"></div><div style="font-size:10px;color:var(--text-mute)" x-text="d.desc"></div></div>
-                <div style="text-align:right"><div style="font-size:12px;font-weight:700;color:var(--danger)" x-text="d.max+'°'"></div><div style="font-size:12px;font-weight:700;color:var(--primary)" x-text="d.min+'°'"></div></div>
+                <div style="flex:1">
+                  <div style="font-size:11px;font-weight:600" x-text="d.date"></div>
+                  <div style="font-size:10px;color:var(--text-mute)" x-text="d.desc"></div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:12px;font-weight:700;color:var(--danger)" x-text="d.max+'°'"></div>
+                  <div style="font-size:12px;font-weight:700;color:var(--primary)" x-text="d.min+'°'"></div>
+                </div>
               </div>
             </template>
           </div>
@@ -1096,51 +1665,44 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
-<!-- WEATHER PROVINCE -->
+<!-- WEATHER PROVINCE (z-index lebih tinggi dari weather sheet) -->
 <div x-show="weatherProvinceSheet" x-cloak class="zn-sheet-overlay" style="z-index:100009" @click.self="weatherProvinceSheet=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherProvinceSheet')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH PROVINSI</h3>
-    <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:14px"><span x-text="provinces.length"></span> provinsi tersedia</p>
-    <input type="text" x-model="provinceSearch" placeholder="Cari provinsi..." class="zn-input" style="margin-bottom:10px">
-    <div style="max-height:55vh;overflow-y:auto;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
-      <template x-for="p in filteredProvinces" :key="p">
+    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">PILIH PROVINSI</h3>
+    <div style="max-height:65vh;overflow-y:auto;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
+      <template x-for="p in provinces" :key="p">
         <div @click="selectWeatherProvince(p)" style="padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;justify-content:space-between;align-items:center">
           <span style="font-size:13px;font-weight:600" x-text="p"></span>
           <span style="color:var(--primary);font-size:18px">›</span>
         </div>
-      </template>
-      <template x-if="filteredProvinces.length===0">
-        <div style="padding:20px;text-align:center;color:var(--text-mute);font-size:12px">Provinsi tidak ditemukan</div>
       </template>
     </div>
     <button @click="weatherProvinceSheet=false" class="zn-btn zn-btn-soft" style="margin-top:14px">TUTUP</button>
   </div>
 </div>
 
-<!-- WEATHER CITY -->
+<!-- WEATHER CITY (z-index lebih tinggi dari province) -->
 <div x-show="weatherCitySheet" x-cloak class="zn-sheet-overlay" style="z-index:100010" @click.self="weatherCitySheet=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherCitySheet')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH KOTA</h3>
-    <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:14px">Provinsi: <b style="color:var(--primary)" x-text="weatherProvince"></b> (<span x-text="cities.length"></span> kota)</p>
-    <input type="text" x-model="citySearch" placeholder="Cari kota..." class="zn-input" style="margin-bottom:10px">
-    <div style="max-height:55vh;overflow-y:auto;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
-      <template x-for="c in filteredCities" :key="c">
+    <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:14px">Provinsi: <span x-text="weatherProvince"></span></p>
+    <div style="max-height:65vh;overflow-y:auto;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
+      <template x-for="c in cities" :key="c">
         <div @click="selectWeatherCity(c)" style="padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;justify-content:space-between;align-items:center">
           <span style="font-size:13px;font-weight:600" x-text="c"></span>
           <span style="color:var(--primary);font-size:18px">›</span>
         </div>
-      </template>
-      <template x-if="filteredCities.length===0">
-        <div style="padding:20px;text-align:center;color:var(--text-mute);font-size:12px">Kota tidak ditemukan</div>
       </template>
     </div>
     <button @click="weatherCitySheet=false" class="zn-btn zn-btn-soft" style="margin-top:14px">TUTUP</button>
   </div>
 </div>
 
-<!-- AI CHAT FULLSCREEN -->
+<!-- ============================================
+     AI CHAT FULLSCREEN
+     ============================================ -->
 <div x-show="chatFullscreen" x-cloak style="position:fixed;inset:0;z-index:99998;background:var(--bg);display:flex;flex-direction:column">
   <div class="zn-grid-bg"></div>
   <header style="position:relative;z-index:1;padding:14px 16px;background:rgba(5,5,8,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px">
@@ -1155,12 +1717,14 @@ a{color:inherit;text-decoration:none}
       <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
     </button>
   </header>
+
   <div style="position:relative;z-index:1;padding:8px 12px;display:flex;gap:6px;overflow-x:auto;background:rgba(5,5,8,.6);border-bottom:1px solid var(--border);scrollbar-width:none">
     <button @click="aiMode='keuangan';updateAiDesc()" :class="aiMode==='keuangan'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">KEUANGAN</button>
     <button @click="aiMode='kesehatan';updateAiDesc()" :class="aiMode==='kesehatan'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">KESEHATAN</button>
     <button @click="aiMode='teknologi';updateAiDesc()" :class="aiMode==='teknologi'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">TEKNOLOGI</button>
     <button @click="aiMode='umum';updateAiDesc()" :class="aiMode==='umum'?'active':''" class="zn-tab-pill" style="white-space:nowrap;flex:none;padding:8px 14px">UMUM</button>
   </div>
+
   <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;z-index:1;-webkit-overflow-scrolling:touch">
     <div x-show="chatMessages.length===0" style="text-align:center;padding:60px 20px">
       <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
@@ -1180,13 +1744,14 @@ a{color:inherit;text-decoration:none}
       <div style="padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--primary);font-size:13px;color:var(--primary);font-family:'JetBrains Mono',monospace" x-text="aiThinkingText"></div>
     </div>
   </div>
+
   <div style="padding:12px;display:flex;gap:8px;background:rgba(5,5,8,.9);backdrop-filter:blur(20px);border-top:1px solid var(--border);position:relative;z-index:1;align-items:center">
     <button @click="startVoiceInput()" class="zn-icon-btn" style="width:48px;height:48px;flex-shrink:0" x-show="voiceSupported" title="Voice input">
       <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
     </button>
-    <input type="text" x-model="chatInput" @keyup.enter="sendChat()" placeholder="Ketik pesan..." class="zn-input" style="flex:1;text-align:left">
-    <button @click="sendChat()" :disabled="aiThinking" style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 15px var(--primary-glow);cursor:pointer" :style="aiThinking?'opacity:.5':'opacity:1'">
-      <svg viewBox="0 0 24 24" style="width:24px;height:24px;fill:#050508"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    <input type="text" x-model="chatInput" @keyup.enter="sendChat()" placeholder="Ketik pesan..." class="zn-input" style="flex:1;text-align:center">
+    <button @click="sendChat()" :disabled="aiThinking" style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0" :style="aiThinking?'opacity:.5':'opacity:1'">
+      <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#050508"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
     </button>
   </div>
 </div>
@@ -1203,7 +1768,6 @@ a{color:inherit;text-decoration:none}
       </div>
       <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:1px;margin-bottom:6px" x-text="userName||'Zenkai User'"></div>
       <span class="zn-badge" :class="isOwner?'owner':(isVip?'vip':'')" x-text="isOwner?'◆ OWNER':(isVip?'◆ VIP':'◆ USER')"></span>
-      <div style="font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:8px;letter-spacing:1px">// BY ANDIKA</div>
     </div>
     <div class="zn-drawer-menu">
       <div class="zn-drawer-item" @click="drawerOpen=false;openNews()">
@@ -1240,18 +1804,320 @@ const DAILY_LIMIT=10;
 const DEFAULT_WELCOME='Selamat datang di Zenkai Tools!\n\nAplikasi ini menyediakan berbagai tools: Dompet Keuangan, AI Chat, TikTok Downloader, Cuaca, Berita, Film Trending, dan banyak lagi.\n\nSemua fitur gratis. Yuk jelajahi!';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
+/* ============================================
+   INTRO ANIMATION — PORTAL DIMENSION
+   ============================================ */
+function playIntroAnimation(onDone){
+  const canvas = document.getElementById('introCanvas');
+  const wrap = document.getElementById('introCanvasWrap');
+  if(!canvas || !wrap){ onDone && onDone(); return; }
+  const ctx = canvas.getContext('2d');
+  let W, H, cx, cy;
+  function resize(){
+    const dpr = window.devicePixelRatio || 1;
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cx = W/2; cy = H/2;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  const startTime = performance.now();
+  const DURATION = 4200;
+  let particles = [];
+  let rafId;
+  let explosionDone = false;
+  
+  function spawnParticle(x,y,opts){
+    opts = opts || {};
+    const angle = opts.angle !== undefined ? opts.angle : Math.random()*Math.PI*2;
+    const speed = opts.speed !== undefined ? opts.speed : (0.5 + Math.random()*2);
+    return {x:x,y:y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,r:opts.r||(0.8+Math.random()*1.8),life:1,decay:opts.decay||(0.008+Math.random()*0.012),color:opts.color||(Math.random()<0.5?'#00d9ff':'#ff0080'),glow:opts.glow||20};
+  }
+  function drawParticles(){
+    particles.forEach(function(p){
+      if(p.life<=0)return;
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.color;
+      ctx.shadowBlur = p.glow;
+      ctx.shadowColor = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+  }
+  function drawPortal(t){
+    if(t < 400) return;
+    const portalP = Math.min((t-400)/1000, 1);
+    const radius = 40 + portalP * 90;
+    const rotation = t * 0.001;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.strokeStyle = '#00d9ff';
+    ctx.lineWidth = 3;
+    ctx.shadowBlur = 30;
+    ctx.shadowColor = '#00d9ff';
+    ctx.globalAlpha = portalP;
+    ctx.beginPath();
+    ctx.arc(0, 0, radius, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.strokeStyle = '#ff0080';
+    ctx.lineWidth = 2;
+    ctx.shadowColor = '#ff0080';
+    ctx.globalAlpha = portalP * 0.8;
+    ctx.beginPath();
+    ctx.arc(0, 0, radius - 8, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.rotate(rotation);
+    ctx.strokeStyle = 'rgba(0,217,255,.6)';
+    ctx.lineWidth = 1.5;
+    for(let i=0;i<6;i++){
+      const startAng = (i/6)*Math.PI*2;
+      const endAng = startAng + Math.PI*0.4;
+      ctx.beginPath();
+      ctx.arc(0, 0, radius - 20 + (i*3), startAng, endAng);
+      ctx.stroke();
+    }
+    ctx.rotate(-rotation);
+    const grad = ctx.createRadialGradient(0,0,0, 0,0, radius);
+    grad.addColorStop(0, 'rgba(0,217,255,.5)');
+    grad.addColorStop(0.5, 'rgba(157,0,255,.3)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(0,0,radius,0,Math.PI*2);
+    ctx.fill();
+    if(portalP > 0.5){
+      for(let i=0;i<2;i++){
+        const ang = Math.random()*Math.PI*2;
+        const rad = radius*0.9;
+        particles.push(spawnParticle(cx + Math.cos(ang)*rad, cy + Math.sin(ang)*rad, {angle: ang + Math.PI + (Math.random()-0.5)*0.5, speed: 1.5 + Math.random()*2, color: Math.random()<0.7?'#00d9ff':'#ff0080', glow: 25}));
+      }
+    }
+    ctx.restore();
+  }
+  function drawCharacter(t){
+    if(t < 1600) return;
+    const charP = Math.min((t-1600)/1000, 1);
+    const scale = 0.4 + charP * 0.6;
+    const alpha = charP;
+    const floatY = Math.sin(t*0.003) * 8;
+    ctx.save();
+    ctx.translate(cx, cy + floatY);
+    ctx.scale(scale, scale);
+    ctx.globalAlpha = alpha * 0.95;
+    const auraR = 140 + Math.sin(t*0.005)*15;
+    const auraGrad = ctx.createRadialGradient(0,0,0, 0,0,auraR);
+    auraGrad.addColorStop(0, 'rgba(0,217,255,.6)');
+    auraGrad.addColorStop(0.4, 'rgba(157,0,255,.4)');
+    auraGrad.addColorStop(0.7, 'rgba(255,0,128,.2)');
+    auraGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = auraGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, auraR, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = '#0a0a12';
+    ctx.shadowBlur = 40;
+    ctx.shadowColor = '#00d9ff';
+    ctx.beginPath();
+    ctx.moveTo(-70, -10);
+    ctx.quadraticCurveTo(-90, -70, -55, -110);
+    ctx.quadraticCurveTo(-30, -130, 0, -125);
+    ctx.quadraticCurveTo(35, -140, 60, -100);
+    ctx.quadraticCurveTo(85, -65, 70, -10);
+    ctx.lineTo(65, 60);
+    ctx.lineTo(-65, 60);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#00d9ff';
+    ctx.lineWidth = 2;
+    ctx.shadowBlur = 25;
+    ctx.shadowColor = '#00d9ff';
+    for(let i=0;i<10;i++){
+      const a = -Math.PI + (i/9)*Math.PI;
+      const sx = Math.cos(a)*60, sy = Math.sin(a)*60;
+      const ex = Math.cos(a)*100 + (Math.random()-0.5)*10;
+      const ey = Math.sin(a)*100 - 30;
+      ctx.beginPath();
+      ctx.moveTo(sx, sy);
+      ctx.quadraticCurveTo((sx+ex)/2 + Math.random()*15, (sy+ey)/2 - 20, ex, ey);
+      ctx.stroke();
+    }
+    ctx.fillStyle = '#1a1a2e';
+    ctx.shadowBlur = 30;
+    ctx.shadowColor = '#9d00ff';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 45, 58, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = '#00d9ff';
+    ctx.shadowBlur = 40;
+    ctx.shadowColor = '#00d9ff';
+    ctx.beginPath();
+    ctx.ellipse(-17, -6, 7, 3.5, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(17, -6, 7, 3.5, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    ctx.arc(-17, -6, 2, 0, Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(17, -6, 2, 0, Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle = '#ff0080';
+    ctx.lineWidth = 2;
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = '#ff0080';
+    ctx.beginPath();
+    ctx.moveTo(-10, 20);
+    ctx.quadraticCurveTo(0, 28, 10, 20);
+    ctx.stroke();
+    ctx.restore();
+  }
+  function drawExplosion(t){
+    if(t < 2800) return;
+    if(t >= 2800 && !explosionDone){
+      explosionDone = true;
+      for(let i=0;i<120;i++){
+        const angle = Math.random()*Math.PI*2;
+        const speed = 3 + Math.random()*10;
+        const color = ['#00d9ff','#ff0080','#9d00ff','#ffd700'][Math.floor(Math.random()*4)];
+        particles.push(spawnParticle(cx, cy, {angle:angle, speed:speed, r:1+Math.random()*3, color:color, glow:35, decay:0.008+Math.random()*0.008}));
+      }
+    }
+    const shockP = (t-2800)/400;
+    if(shockP >= 0 && shockP <= 1){
+      const r1 = shockP * Math.max(W,H) * 1.1;
+      ctx.strokeStyle = '#00d9ff';
+      ctx.lineWidth = 4 * (1 - shockP);
+      ctx.shadowBlur = 40;
+      ctx.shadowColor = '#00d9ff';
+      ctx.globalAlpha = 1 - shockP;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r1, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.strokeStyle = '#ff0080';
+      ctx.lineWidth = 3 * (1 - shockP);
+      ctx.shadowColor = '#ff0080';
+      ctx.globalAlpha = (1 - shockP) * 0.8;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r1 * 0.85, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+    }
+    if(t >= 2900 && t < 3600){
+      for(let i=0;i<3;i++){
+        const angle = Math.random()*Math.PI*2;
+        const speed = 2 + Math.random()*5;
+        const color = ['#00d9ff','#ff0080','#9d00ff','#ffd700'][Math.floor(Math.random()*4)];
+        particles.push(spawnParticle(cx, cy, {angle:angle, speed:speed, r:0.8+Math.random()*2, color:color, glow:30}));
+      }
+    }
+  }
+  function drawText(t){
+    if(t < 3400) return;
+    const textP = Math.min((t-3400)/600, 1);
+    const alpha = textP;
+    const scale = 0.6 + textP*0.4;
+    const shake = t < 3600 ? (Math.random()-0.5) * 4 : 0;
+    ctx.save();
+    ctx.translate(cx + shake, cy + shake);
+    ctx.scale(scale, scale);
+    ctx.globalAlpha = alpha;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const fontSize = Math.min(W*0.15, 68);
+    ctx.font = '900 ' + fontSize + 'px "Orbitron", sans-serif';
+    ctx.shadowBlur = 40;
+    ctx.shadowColor = '#00d9ff';
+    ctx.fillStyle = '#00d9ff';
+    ctx.fillText('ZENKAI', 0, -20);
+    ctx.shadowColor = '#ff0080';
+    ctx.fillStyle = '#ff0080';
+    ctx.fillText('TOOLS', 0, fontSize*0.55);
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = '#ffffff';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '900 ' + (fontSize-2) + 'px "Orbitron", sans-serif';
+    ctx.fillText('ZENKAI', 0, -20);
+    ctx.fillText('TOOLS', 0, fontSize*0.55);
+    ctx.font = '600 13px "JetBrains Mono", monospace';
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = '#00d9ff';
+    ctx.fillStyle = '#00d9ff';
+    ctx.fillText('// Developer: Andika', 0, fontSize*1.35);
+    ctx.restore();
+    if(t >= 3500 && t < 4200){
+      const streakX = ((t-3500)/700) * W;
+      const grad = ctx.createLinearGradient(streakX-150, 0, streakX+150, H);
+      grad.addColorStop(0, 'rgba(255,255,255,0)');
+      grad.addColorStop(0.5, 'rgba(255,255,255,' + (1-(t-3500)/700)*0.4 + ')');
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
+  function spawnAmbientParticles(t){
+    const rate = t < 400 ? 3 : (t < 2800 ? 1 : 2);
+    for(let i=0;i<rate;i++){
+      const x = Math.random()*W;
+      const y = Math.random()*H;
+      const color = Math.random()<0.6 ? '#00d9ff' : '#ff0080';
+      particles.push(spawnParticle(x, y, {angle: Math.random()*Math.PI*2, speed: 0.2 + Math.random()*0.8, r: 0.5 + Math.random()*1.5, color: color, glow: 15, decay: 0.004 + Math.random()*0.006}));
+    }
+  }
+  function animate(now){
+    const t = now - startTime;
+    ctx.fillStyle = 'rgba(0,0,0,' + (t < 2800 ? 0.18 : 0.25) + ')';
+    ctx.fillRect(0, 0, W, H);
+    spawnAmbientParticles(t);
+    drawPortal(t);
+    drawCharacter(t);
+    drawExplosion(t);
+    particles.forEach(function(p){
+      p.x += p.vx; p.y += p.vy;
+      p.vx *= 0.98; p.vy *= 0.98;
+      p.life -= p.decay;
+    });
+    particles = particles.filter(function(p){ return p.life > 0; });
+    drawParticles();
+    if(t >= 2800 && t < 3100){
+      const shakeAmt = (1-(t-2800)/300) * 6;
+      ctx.save();
+      ctx.translate((Math.random()-0.5)*shakeAmt, (Math.random()-0.5)*shakeAmt);
+      drawText(t);
+      ctx.restore();
+    } else { drawText(t); }
+    if(t >= DURATION){
+      cancelAnimationFrame(rafId);
+      wrap.classList.add('hide');
+      setTimeout(function(){ wrap.style.display = 'none'; onDone && onDone(); }, 600);
+      return;
+    }
+    rafId = requestAnimationFrame(animate);
+  }
+  rafId = requestAnimationFrame(animate);
+}
+
+/* ============================================
+   LOADING PROGRESS
+   ============================================ */
 function startLoadingProgress(){
   var bar = document.getElementById('loadBar');
   var pct = document.getElementById('loadPct');
   var status = document.getElementById('loadStatus');
   if(!bar || !pct) return;
   var steps = [
-    {p:15, s:'Cek koneksi server'},
-    {p:32, s:'Memuat data user'},
-    {p:48, s:'Sinkronisasi database'},
-    {p:65, s:'Memuat sistem matrix'},
-    {p:80, s:'Persiapan antarmuka'},
-    {p:93, s:'Hampir selesai'},
+    {p:12, s:'Cek koneksi server'},
+    {p:28, s:'Memuat data user'},
+    {p:45, s:'Sinkronisasi database'},
+    {p:62, s:'Memuat sistem matrix'},
+    {p:78, s:'Persiapan UI react'},
+    {p:92, s:'Hampir selesai'},
     {p:100, s:'Siap digunakan'}
   ];
   var i = 0;
@@ -1262,9 +2128,12 @@ function startLoadingProgress(){
     pct.textContent = step.p + '%';
     status.textContent = step.s;
     i++;
-  }, 320);
+  }, 240);
 }
 
+/* ============================================
+   ALPINE APP
+   ============================================ */
 function zenkaiCloudApp(){
 return {
 loadingHidden:false,
@@ -1287,8 +2156,6 @@ kategoriAktif:'semua',
 tipsHarian:'Rajin catat transaksi bikin keuangan lebih terkontrol!',
 tabHistory:[],
 sheetDragY:0,sheetDragStart:0,sheetDragging:false,currentSheetKey:null,
-provinceSearch:'',
-citySearch:'',
 
 kategoriList:[
   {id:'semua',nama:'Semua',svg:'<path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"/>'},
@@ -1344,9 +2211,6 @@ welcomeText:DEFAULT_WELCOME,welcomeTextEdit:'',
 chatMessages:[],chatInput:'',aiThinking:false,aiThinkingText:'',aiThinkingTimer:null,aiMode:'umum',chatCount:0,chatDate:'',chatBonus:0,chatFullscreen:false,
 voiceSupported:false,aiModeDesc:'',
 
-get filteredProvinces(){ if(!this.provinceSearch) return this.provinces; var q=this.provinceSearch.toLowerCase(); return this.provinces.filter(function(p){return p.toLowerCase().indexOf(q)>=0}); },
-get filteredCities(){ if(!this.citySearch) return this.cities; var q=this.citySearch.toLowerCase(); return this.cities.filter(function(c){return c.toLowerCase().indexOf(q)>=0}); },
-
 getLevelName:function(lv){var n={1:'PEMULA',2:'RAJIN',3:'AKTIF',4:'AHLI',5:'MASTER',6:'LEGENDA'};return n[lv]||'PEMULA';},
 getNextLevelPoints:function(){var t={1:100,2:300,3:600,4:1000,5:2000,6:0};return t[this.userLevel]||0;},
 getCurrentLevelMin:function(){var t={1:0,2:100,3:300,4:600,5:1000,6:2000};return t[this.userLevel]||0;},
@@ -1368,6 +2232,7 @@ formatRibuanInput:function(val){
   return parseInt(clean,10).toLocaleString('id-ID');
 },
 
+/* ===== TAB HISTORY (Back button) ===== */
 switchTab:function(tab){
   if(tab==='owner' && !this.isOwner) return;
   if(this.activeTab !== tab){
@@ -1378,6 +2243,7 @@ switchTab:function(tab){
   this.activeTab = tab;
 },
 
+/* ===== SWIPE-TO-CLOSE ===== */
 onSheetTouchStart:function(e,sheetKey){
   var target = e.target.closest('.zn-sheet-content');
   if(!target)return;
@@ -1427,6 +2293,7 @@ onSheetTouchEnd:function(e){
   this.currentSheetKey = null;
 },
 
+/* ===== BACK BUTTON HP ===== */
 handleBackButton:function(){
   if(this.welcomePopupOpen){this.welcomePopupOpen=false;return true;}
   if(this.aboutModalOpen){this.aboutModalOpen=false;return true;}
@@ -1456,6 +2323,7 @@ handleBackButton:function(){
   return false;
 },
 
+/* ===== ACTIONS ===== */
 bukaFitur:function(f){
   if(f.tab==='keuangan'){this.switchTab('keuangan');if(f.sub)this.finSubTab=f.sub;if(f.sub==='grafik'){var s=this;setTimeout(function(){s.drawCharts()},300)}}
   else if(f.tab==='tools'){this.switchTab('tools');if(f.sub)this.toolsSubTab=f.sub;}
@@ -1514,22 +2382,17 @@ init:async function(){
     if(handled){
       try{ history.pushState({tab:self.activeTab}, ''); }catch(e){}
     }
+    // kalau gak handled, biarin browser handle (keluar dari halaman)
   });
   
   try{var{data:settings}=await sb.from('app_settings').select('welcome_text').eq('id',1).maybeSingle();if(settings&&settings.welcome_text){this.welcomeText=settings.welcome_text;this.welcomeTextEdit=settings.welcome_text;}}catch(e){}
   try{var{data:{session}}=await sb.auth.getSession();if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}}catch(e){console.error(e);}
   this.initProvinces();
   
-  var headerEl = document.querySelector('.zn-header');
-  var mainEl = document.querySelector('.zn-main');
-  if(mainEl && headerEl){
-    mainEl.addEventListener('scroll', function(){
-      if(mainEl.scrollTop > 10){ headerEl.classList.add('scrolled'); }
-      else { headerEl.classList.remove('scrolled'); }
-    }, {passive:true});
-  }
-  
-  setTimeout(function(){ self.loadingHidden=true; }, 2500);
+  setTimeout(function(){
+    self.loadingHidden=true;
+    playIntroAnimation(function(){});
+  }, 2200);
 },
 
 updateAiDesc:function(){var d={keuangan:'Tips keuangan & budget',kesehatan:'Saran kesehatan',teknologi:'Tips teknologi & coding',umum:'Tanya apa saja'};this.aiModeDesc=d[this.aiMode]||'';},
@@ -1649,23 +2512,7 @@ loadSavings:async function(){if(!this.currentUser)return;var{data}=await sb.from
 addSavings:async function(){if(!this.targetForm.nama||!this.targetForm.target){return this.showAlert('PERHATIAN','Isi nama & target!');}var{error}=await sb.from('savings_targets').insert({user_id:this.currentUser.id,nama:this.targetForm.nama,target:parseFloat(String(this.targetForm.target).replace(/\./g,'')),terkumpul:0,deadline:this.targetForm.deadline});if(!error){this.targetSheetOpen=false;await this.loadSavings();await this.addPoints(2,'Bikin target');}},
 confirmDeleteSavings:function(id){var self=this;this.showConfirm('HAPUS TARGET?','Target akan dihapus.',async function(){await sb.from('savings_targets').delete().eq('id',id);await self.loadSavings();},'🗑️');},
 addToSavings:function(id){this.currentSavingsId=id;this.addSavingsAmount='';this.addSavingsSheet=true;},
-
-confirmAddSavings:async function(){
-  var self = this;
-  var s = this.savings.find(function(x){ return x.id === self.currentSavingsId; });
-  if(!s){ return this.showAlert('GAGAL','Target tidak ditemukan.'); }
-  var nominal = parseFloat(String(this.addSavingsAmount||'').replace(/\./g,''));
-  if(!nominal || nominal <= 0){ return this.showAlert('PERHATIAN','Isi nominal dulu!'); }
-  var newVal = Number(s.terkumpul) + nominal;
-  var {error} = await sb.from('savings_targets').update({terkumpul:newVal}).eq('id',this.currentSavingsId);
-  if(error){ return this.showAlert('GAGAL', error.message); }
-  this.addSavingsSheet=false;
-  this.addSavingsAmount='';
-  this.currentSavingsId=null;
-  await this.loadSavings();
-  await this.addPoints(5,'Setor tabungan');
-  this.showAlert('SUKSES','Tabungan bertambah Rp '+this.formatRibuan(nominal));
-},
+confirmAddSavings:async function(){var s=this.savings.find(function(x){return x.id===this.currentSavingsId}.bind(this));if(!s||!this.addSavingsAmount)return;var newVal=Number(s.terkumpul)+parseFloat(String(this.addSavingsAmount).replace(/\./g,''));await sb.from('savings_targets').update({terkumpul:newVal}).eq('id',this.currentSavingsId);this.addSavingsSheet=false;await this.loadSavings();await this.addPoints(5,'Setor tabungan');},
 
 loadBudgets:async function(){if(!this.currentUser)return;var bulan=new Date().toISOString().slice(0,7);var{data}=await sb.from('budgets').select('*').eq('user_id',this.currentUser.id).eq('bulan',bulan);if(data)this.budgets=data;},
 addBudget:async function(){if(!this.budgetForm.kategori||!this.budgetForm.limit_bulanan){return this.showAlert('PERHATIAN','Isi kategori & limit!');}var bulan=new Date().toISOString().slice(0,7);var{error}=await sb.from('budgets').insert({user_id:this.currentUser.id,kategori:this.budgetForm.kategori,limit_bulanan:parseFloat(String(this.budgetForm.limit_bulanan).replace(/\./g,'')),bulan:bulan});if(!error){this.budgetSheetOpen=false;await this.loadBudgets();await this.addPoints(2,'Set budget');}},
@@ -1731,62 +2578,18 @@ runSpeedTest:async function(){
 
 calcBMI:function(){var w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)/100;if(!w||!h){return this.showAlert('PERHATIAN','Isi berat & tinggi!');}var bmi=w/(h*h);var kategori,color;if(bmi<18.5){kategori='KURUS';color='#00d9ff';}else if(bmi<25){kategori='NORMAL';color='#00ff88';}else if(bmi<30){kategori='GEMUK';color='#ffd700';}else{kategori='OBESITAS';color='#ff3355';}var bbIdeal=(22*h*h).toFixed(1);var age=parseFloat(this.bmiAge)||25;var kalori=this.bmiGender==='male'?Math.round(66+(13.7*w)+(5*h*100)-(6.8*age)):Math.round(655+(9.6*w)+(1.8*h*100)-(4.7*age));this.bmiResult={bmi:bmi.toFixed(1),kategori:kategori,color:color,bbIdeal:bbIdeal,kalori:kalori};},
 
-getCityMap:function(){
-  return {
-    'ACEH':['Banda Aceh','Langsa','Lhokseumawe','Sabang','Subulussalam'],
-    'SUMATERA UTARA':['Medan','Binjai','Pematangsiantar','Tanjungbalai','Tebing Tinggi','Padang Sidempuan','Gunungsitoli'],
-    'SUMATERA BARAT':['Padang','Bukittinggi','Payakumbuh','Solok','Padang Panjang','Pariaman','Sawahlunto'],
-    'RIAU':['Pekanbaru','Dumai','Pematang Reba'],
-    'KEPULAUAN RIAU':['Batam','Tanjungpinang'],
-    'JAMBI':['Jambi','Sungai Penuh'],
-    'BENGKULU':['Bengkulu','Curup'],
-    'SUMATERA SELATAN':['Palembang','Prabumulih','Pagar Alam','Lubuklinggau'],
-    'KEPULAUAN BANGKA BELITUNG':['Pangkalpinang','Sungailiat'],
-    'LAMPUNG':['Bandar Lampung','Metro','Kalianda'],
-    'BANTEN':['Serang','Tangerang','Tangerang Selatan','Cilegon','Pandeglang','Rangkasbitung'],
-    'DKI JAKARTA':['Jakarta','Jakarta Pusat','Jakarta Utara','Jakarta Selatan','Jakarta Barat','Jakarta Timur'],
-    'JAWA BARAT':['Bandung','Bekasi','Bogor','Depok','Cimahi','Cirebon','Sukabumi','Tasikmalaya','Banjar','Garut','Karawang','Purwakarta','Subang','Sumedang','Indramayu','Majalengka','Cianjur','Ciamis','Kuningan','Pangandaran'],
-    'JAWA TENGAH':['Semarang','Surakarta','Magelang','Pekalongan','Salatiga','Tegal','Purwokerto','Cilacap','Kudus','Jepara','Klaten','Wonosobo','Boyolali','Rembang','Blora','Pati','Demak','Kendal','Batang','Pemalang','Brebes','Temanggung','Purworejo','Kebumen','Banjarnegara','Purbalingga','Sragen','Karanganyar','Sukoharjo','Wonogiri'],
-    'DI YOGYAKARTA':['Yogyakarta','Sleman','Bantul','Gunungkidul','Kulon Progo'],
-    'JAWA TIMUR':['Surabaya','Malang','Kediri','Blitar','Madiun','Mojokerto','Pasuruan','Probolinggo','Batu','Sidoarjo','Gresik','Jember','Banyuwangi','Situbondo','Bondowoso','Lumajang','Jombang','Nganjuk','Ngawi','Magetan','Ponorogo','Pacitan','Trenggalek','Tulungagung','Bojonegoro','Tuban','Lamongan','Bangkalan','Sampang','Pamekasan','Sumenep'],
-    'BALI':['Denpasar','Singaraja','Ubud','Kuta','Nusa Dua','Tabanan','Gianyar','Klungkung','Karangasem','Bangli','Badung','Jembrana'],
-    'NUSA TENGGARA BARAT':['Mataram','Bima','Sumbawa Besar','Praya','Selong'],
-    'NUSA TENGGARA TIMUR':['Kupang','Ende','Maumere','Larantuka','Soe','Atambua','Ruteng','Labuan Bajo'],
-    'KALIMANTAN BARAT':['Pontianak','Singkawang','Sintang','Putussibau','Ketapang'],
-    'KALIMANTAN TENGAH':['Palangka Raya','Sampit','Pangkalan Bun','Muara Teweh','Kuala Kapuas'],
-    'KALIMANTAN SELATAN':['Banjarmasin','Banjarbaru','Martapura','Kotabaru','Amuntai','Tanjung'],
-    'KALIMANTAN TIMUR':['Samarinda','Balikpapan','Bontang','Tarakan','Berau','Tenggarong','Sangatta'],
-    'KALIMANTAN UTARA':['Tanjung Selor','Tarakan','Malinau','Nunukan'],
-    'SULAWESI UTARA':['Manado','Bitung','Tomohon','Kotamobagu','Tondano'],
-    'GORONTALO':['Gorontalo','Limboto','Marisa'],
-    'SULAWESI TENGAH':['Palu','Luwuk','Poso','Donggala','Toli-Toli','Buol','Ampana'],
-    'SULAWESI BARAT':['Mamuju','Majene','Polewali','Mamasa'],
-    'SULAWESI SELATAN':['Makassar','Parepare','Palopo','Bulukumba','Bantaeng','Jeneponto','Takalar','Gowa','Sinjai','Bone','Maros','Pangkep','Barru','Soppeng','Wajo','Sidrap','Pinrang','Enrekang','Tana Toraja','Toraja Utara','Luwu','Luwu Utara','Luwu Timur','Selayar'],
-    'SULAWESI TENGGARA':['Kendari','Baubau','Kolaka','Bombana','Wakatobi','Konawe','Konawe Selatan','Konawe Utara','Buton','Muna'],
-    'MALUKU':['Ambon','Tual','Masohi','Namlea'],
-    'MALUKU UTARA':['Sofifi','Ternate','Tidore','Tobelo','Sanana'],
-    'PAPUA':['Jayapura','Biak','Merauke','Timika','Nabire','Wamena','Sarmi','Keerom'],
-    'PAPUA BARAT':['Manokwari','Sorong','Fakfak','Kaimana','Bintuni','Ransiki'],
-    'PAPUA BARAT DAYA':['Sorong','Maybrat','Raja Ampat','Tambrauw','Sorong Selatan'],
-    'PAPUA TENGAH':['Nabire','Timika','Mimika','Paniai','Deiyai','Dogiyai','Intan Jaya'],
-    'PAPUA PEGUNUNGAN':['Wamena','Jayawijaya','Lanny Jaya','Mamberamo Tengah','Nduga','Pegunungan Bintang','Tolikara','Yahukimo','Yalimo'],
-    'PAPUA SELATAN':['Merauke','Boven Digoel','Mappi','Asmat']
-  };
-},
+getCityMap:function(){return{'DKI JAKARTA':['Jakarta','Jakarta Pusat','Jakarta Utara','Jakarta Selatan','Jakarta Barat','Jakarta Timur'],'JAWA BARAT':['Bandung','Bekasi','Bogor','Depok'],'JAWA TENGAH':['Semarang','Surakarta','Magelang'],'DI YOGYAKARTA':['Yogyakarta','Sleman','Bantul'],'JAWA TIMUR':['Surabaya','Malang','Kediri'],'BANTEN':['Serang','Tangerang','Cilegon'],'BALI':['Denpasar','Singaraja','Ubud'],'SUMATERA UTARA':['Medan','Binjai'],'SUMATERA BARAT':['Padang','Bukittinggi'],'SUMATERA SELATAN':['Palembang'],'RIAU':['Pekanbaru'],'LAMPUNG':['Bandar Lampung'],'KALIMANTAN TIMUR':['Samarinda','Balikpapan'],'KALIMANTAN SELATAN':['Banjarmasin'],'SULAWESI SELATAN':['Makassar'],'SULAWESI UTARA':['Manado'],'PAPUA':['Jayapura']};},
 initProvinces:function(){this.provinces=Object.keys(this.getCityMap());this.weatherProvince='DKI JAKARTA';this.cities=this.getCityMap()['DKI JAKARTA'];this.weatherCity='Jakarta';},
 
-openWeatherSheet:function(){
-  if(this.weatherCity && this.weatherData){ this.weatherSheetOpen=true; return; }
-  this.weatherProvinceSheet=true;
-},
+/* ===== FIX: GANTI CUACA — TUTUP DULU BARU BUKA PICKER ===== */
+openWeatherSheet:function(){this.weatherProvinceSheet=true;},
 openWeatherPickerDirect:function(){
   var self = this;
   this.weatherSheetOpen = false;
-  this.provinceSearch = '';
   setTimeout(function(){ self.weatherProvinceSheet = true; }, 200);
 },
-selectWeatherProvince:function(p){this.weatherProvince=p;this.cities=this.getCityMap()[p]||['Jakarta'];this.provinceSearch='';this.citySearch='';this.weatherProvinceSheet=false;this.weatherCitySheet=true;},
-selectWeatherCity:function(c){this.weatherCity=c;this.citySearch='';this.weatherCitySheet=false;this.weatherSheetOpen=true;this.fetchWeather();},
+selectWeatherProvince:function(p){this.weatherProvince=p;this.cities=this.getCityMap()[p]||['Jakarta'];this.weatherProvinceSheet=false;this.weatherCitySheet=true;},
+selectWeatherCity:function(c){this.weatherCity=c;this.weatherCitySheet=false;this.weatherSheetOpen=true;this.fetchWeather();},
 openWeatherProvincePicker:function(){this.weatherProvinceSheet=true;},
 
 fetchWeather:async function(){
@@ -1800,7 +2603,7 @@ fetchWeather:async function(){
     var w=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lng+'&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia/Jakarta&forecast_days=7');
     var wj=await w.json();
     if(!wj.current)throw new Error('Data kosong');
-    var codes={0:['☀️','Cerah'],1:['🌤️','Cerah Berawan'],2:['⛅','Berawan'],3:['☁️','Mendung'],45:['🌫️','Berkabut'],51:['🌦️','Gerimis'],61:['🌧️','Hujan'],71:['🌨️','Salju'],80:['🌧️','Hujan Lokal'],95:['⛈️','Badai']};
+    var codes={0:['☀️','Cerah'],1:['🌤️','Cerah Berawan'],2:['⛅','Berawan'],3:['☁️','Mendung'],61:['🌧️','Hujan'],95:['⛈️','Badai']};
     var c=codes[wj.current.weather_code]||['🌡️','Cerah'];
     var forecast=wj.daily.time.map(function(t,i){var cc=codes[wj.daily.weather_code[i]]||['🌡️','-'];return{date:new Date(t).toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'}),emoji:cc[0],desc:cc[1],max:Math.round(wj.daily.temperature_2m_max[i]),min:Math.round(wj.daily.temperature_2m_min[i])}});
     this.weatherData={city:name,temp:Math.round(wj.current.temperature_2m),humidity:wj.current.relative_humidity_2m,wind:Math.round(wj.current.wind_speed_10m),emoji:c[0],desc:c[1],forecast:forecast};
@@ -1847,121 +2650,40 @@ downloadBlob:async function(url,filename){
 },
 
 openNews:async function(){
-  this.newsSheetOpen=true;
-  this.selectedNews=null;
+  this.newsSheetOpen=true;this.selectedNews=null;
   if(this.newsList.length>0)return;
   this.newsLoading=true;
   try{
-    await this.loadNewsFromRSS();
-  }catch(e){
-    console.error(e);
-    this.showAlert('GAGAL','Berita gagal dimuat. Coba lagi nanti.');
-  }
-  this.newsLoading=false;
-},
-
-loadNewsFromRSS:async function(){
-  var self = this;
-  var feeds = [
-    'https://www.antaranews.com/rss/terkini.xml',
-    'https://rss.detik.com/index.php/detikcom',
-    'https://www.cnnindonesia.com/nasional/rss'
-  ];
-  var proxies = [
-    function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); },
-    function(u){ return 'https://corsproxy.io/?' + encodeURIComponent(u); },
-    function(u){ return 'https://thingproxy.freeboard.io/fetch/' + u; }
-  ];
-  
-  for(var i=0;i<feeds.length;i++){
-    for(var p=0;p<proxies.length;p++){
-      try{
-        var url = proxies[p](feeds[i]);
-        var res = await fetch(url);
-        if(!res.ok) continue;
-        var xmlText = await res.text();
-        var items = self.parseRSSItems(xmlText);
-        if(items.length > 0){
-          this.newsList = items.slice(0, 20);
-          return;
-        }
-      }catch(e){ console.warn('Proxy gagal:', p, feeds[i]); }
+    var res=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://rss.detik.com/index.php/detikcom');
+    var json=await res.json();
+    if(json.items&&json.items.length>0){
+      this.newsList=json.items.slice(0,20).map(function(it){
+        return {
+          title:it.title,
+          link:it.link,
+          description:it.description?it.description.replace(/<[^>]*>/g,'').substring(0,300):'-',
+          pubDate:new Date(it.pubDate).toLocaleString('id-ID'),
+          thumbnail:(it.thumbnail)||((it.enclosure)&&(it.enclosure.link))||''
+        };
+      });
     }
-  }
-  if(this.newsList.length === 0){
-    try{
-      var r = await fetch('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://www.antaranews.com/rss/terkini.xml'));
-      var j = await r.json();
-      if(j.items && j.items.length > 0){
-        this.newsList = j.items.slice(0,20).map(function(it){
+    if(!this.newsList||this.newsList.length===0){
+      var res2=await fetch('https://api.rss2json.com/v1/api.php?rss_url=https://www.antaranews.com/rss/terkini.xml');
+      var json2=await res2.json();
+      if(json2.items){
+        this.newsList=json2.items.slice(0,20).map(function(it){
           return {
-            title: it.title,
-            link: it.link,
-            description: (it.description||'').replace(/<[^>]*>/g,'').substring(0,300),
-            pubDate: new Date(it.pubDate).toLocaleString('id-ID'),
-            thumbnail: it.thumbnail || (it.enclosure && it.enclosure.link) || ''
+            title:it.title,
+            link:it.link,
+            description:it.description?it.description.replace(/<[^>]*>/g,'').substring(0,300):'-',
+            pubDate:new Date(it.pubDate).toLocaleString('id-ID'),
+            thumbnail:(it.thumbnail)||((it.enclosure)&&(it.enclosure.link))||''
           };
         });
-        return;
       }
-    }catch(e){}
-  }
-  throw new Error('Semua sumber berita gagal');
-},
-
-parseRSSItems:function(xmlText){
-  try{
-    var parser=new DOMParser();
-    var doc=parser.parseFromString(xmlText,'text/xml');
-    var items=doc.querySelectorAll('item');
-    var result=[];
-    items.forEach(function(item){
-      var title=item.querySelector('title')?item.querySelector('title').textContent.trim():'';
-      var link=item.querySelector('link')?item.querySelector('link').textContent.trim():'';
-      var descRaw=item.querySelector('description')?item.querySelector('description').textContent:'';
-      var pubDateRaw=item.querySelector('pubDate')?item.querySelector('pubDate').textContent:'';
-      var desc=descRaw.replace(/<[^>]*>/g,'').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').trim().substring(0,300);
-      var pubDate='-';
-      try{pubDate=new Date(pubDateRaw).toLocaleString('id-ID',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){}
-      var thumb='';
-      var mediaThumb=item.getElementsByTagName('media:thumbnail')[0];
-      if(mediaThumb&&mediaThumb.getAttribute('url'))thumb=mediaThumb.getAttribute('url');
-      if(!thumb){
-        var mediaContent=item.getElementsByTagName('media:content')[0];
-        if(mediaContent&&mediaContent.getAttribute('url'))thumb=mediaContent.getAttribute('url');
-      }
-      if(!thumb){
-        var enc=item.querySelector('enclosure');
-        if(enc&&enc.getAttribute('url')&&enc.getAttribute('type')&&enc.getAttribute('type').indexOf('image')===0){
-          thumb=enc.getAttribute('url');
-        }
-      }
-      if(!thumb){
-        var imgMatch=descRaw.match(/<img[^>]+src=["']([^"']+)["']/i);
-        if(imgMatch&&imgMatch[1])thumb=imgMatch[1];
-      }
-      if(!thumb){
-        var contentEncoded=item.getElementsByTagName('content:encoded')[0];
-        if(contentEncoded){
-          var m=contentEncoded.textContent.match(/<img[^>]+src=["']([^"']+)["']/i);
-          if(m&&m[1])thumb=m[1];
-        }
-      }
-      if(title&&link){
-        result.push({
-          title:title,
-          link:link,
-          description:desc||'Klik untuk baca selengkapnya...',
-          pubDate:pubDate,
-          thumbnail:thumb
-        });
-      }
-    });
-    return result;
-  }catch(e){
-    console.error('Parse RSS gagal:',e);
-    return [];
-  }
+    }
+  }catch(e){this.showAlert('GAGAL','Berita gagal.');}
+  this.newsLoading=false;
 },
 
 sendChat:async function(){
