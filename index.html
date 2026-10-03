@@ -863,7 +863,7 @@ select.zn-input{cursor:pointer}
                     </div>
                   </div>
                   <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
-                    <template x-if="!u.is_banned"><button @click="banUser(u)" class="zn-btn zn-btn-danger" style="padding:6px;font-size:9px">BAN</button></template>
+                    <template x-if="!u.is_banned"><button @click="openBanSheet(u)" class="zn-btn zn-btn-danger" style="padding:6px;font-size:9px">BAN</button></template>
                     <template x-if="u.is_banned"><button @click="unbanUser(u)" class="zn-btn zn-btn-success" style="padding:6px;font-size:9px">UNBAN</button></template>
                     <template x-if="!u.is_vip && u.status!=='owner'"><button @click="setVip(u,true)" class="zn-btn zn-btn-soft" style="padding:6px;font-size:9px">+VIP</button></template>
                     <template x-if="u.is_vip && u.status!=='owner'"><button @click="setVip(u,false)" class="zn-btn zn-btn-soft" style="padding:6px;font-size:9px">-VIP</button></template>
@@ -1088,6 +1088,68 @@ select.zn-input{cursor:pointer}
       <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--primary);text-align:center;margin-top:14px;letter-spacing:2px">Developer: Andika</p>
     </div>
     <button @click="aboutModalOpen=false" class="zn-btn zn-btn-soft" style="margin-top:16px">TUTUP</button>
+  </div>
+</div>
+<!-- ============================================
+     BAN SHEET (Owner)
+     ============================================ -->
+<div x-show="banSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100050" @click.self="banSheetOpen=false">
+  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'banSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+    <div class="zn-sheet-handle"></div>
+    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--danger);text-align:center;margin-bottom:6px">🚫 BAN USER</h3>
+    <p style="font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:16px">Target: <b style="color:var(--danger)" x-text="banSheetTarget?banSheetTarget.username:''"></b></p>
+
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Durasi Ban</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+        <button @click="banSheetForm.durasi='30m'" :class="banSheetForm.durasi==='30m'?'active':''" class="zn-tab-pill" style="font-size:10px">30 Menit</button>
+        <button @click="banSheetForm.durasi='1h'" :class="banSheetForm.durasi==='1h'?'active':''" class="zn-tab-pill" style="font-size:10px">1 Jam</button>
+        <button @click="banSheetForm.durasi='1d'" :class="banSheetForm.durasi==='1d'?'active':''" class="zn-tab-pill" style="font-size:10px">1 Hari</button>
+        <button @click="banSheetForm.durasi='7d'" :class="banSheetForm.durasi==='7d'?'active':''" class="zn-tab-pill" style="font-size:10px">7 Hari</button>
+        <button @click="banSheetForm.durasi='30d'" :class="banSheetForm.durasi==='30d'?'active':''" class="zn-tab-pill" style="font-size:10px">30 Hari</button>
+        <button @click="banSheetForm.durasi='perm'" :class="banSheetForm.durasi==='perm'?'active':''" class="zn-tab-pill" style="font-size:10px;color:var(--danger)">PERMANEN</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Alasan (Wajib)</div>
+      <textarea x-model="banSheetForm.alasan" placeholder="Contoh: Melanggar aturan, spam chat, dll..." class="zn-input" rows="3"></textarea>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button @click="banSheetOpen=false;banSheetTarget=null" class="zn-btn zn-btn-soft">BATAL</button>
+      <button @click="confirmBan()" class="zn-btn zn-btn-danger">🚫 BAN SEKARANG</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     BANNED INFO SHEET (User)
+     ============================================ -->
+<div x-show="bannedInfoSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100060" @click.self="bannedInfoSheetOpen=false">
+  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'bannedInfoSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+    <div class="zn-sheet-handle"></div>
+    <div style="width:72px;height:72px;border-radius:20px;background:rgba(255,51,85,.15);border:2px solid var(--danger);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px">🚫</div>
+    <h3 style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;letter-spacing:2px;color:var(--danger);margin-bottom:12px">AKUN DIBLOKIR</h3>
+
+    <div style="padding:14px;border-radius:12px;background:rgba(255,51,85,.08);border:1px solid rgba(255,51,85,.3);text-align:left;margin-bottom:12px">
+      <div style="font-size:9px;color:var(--danger);letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// ALASAN</div>
+      <div style="font-size:13px;color:var(--text)" x-text="bannedInfoData.reason"></div>
+    </div>
+
+    <div style="padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-align:left;margin-bottom:16px">
+      <div style="font-size:9px;color:var(--primary);letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// BERAKHIR</div>
+      <div style="font-size:13px;color:var(--text)">
+        <template x-if="bannedInfoData.until">
+          <span x-text="new Date(bannedInfoData.until).toLocaleString('id-ID')"></span>
+        </template>
+        <template x-if="!bannedInfoData.until">
+          <span style="color:var(--danger);font-weight:700">PERMANEN</span>
+        </template>
+      </div>
+    </div>
+
+    <button @click="bannedInfoSheetOpen=false;logout()" class="zn-btn zn-btn-danger">KELUAR</button>
   </div>
 </div>
 
@@ -1652,6 +1714,12 @@ headerScrolled:false,
 
 // === VIP ONLY & BROADCAST & MAINTENANCE STATE ===
 vipOnlySheetOpen:false,
+// === BAN STATE ===
+banSheetOpen:false,
+banSheetTarget:null,
+banSheetForm:{durasi:'1d',alasan:''},
+bannedInfoSheetOpen:false,
+bannedInfoData:{reason:'',until:null},
 activeBroadcast:null,
 broadcastPopupOpen:false,
 maintenanceSheetOpen:false,
@@ -2380,6 +2448,25 @@ handleEmailAuth:async function(){
     }
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
+checkBanStatus:async function(userId){
+  try{
+    var {data} = await sb.from('profiles')
+      .select('is_banned, ban_until, ban_reason')
+      .eq('id', userId).maybeSingle();
+    if(!data) return false;
+    if(!data.is_banned) return false;
+    if(data.ban_until && new Date(data.ban_until) < new Date()){
+      await sb.from('profiles').update({is_banned:false, ban_until:null, ban_reason:''}).eq('id', userId);
+      return false;
+    }
+    this.bannedInfoData = {
+      reason: data.ban_reason || 'Tidak ada alasan',
+      until: data.ban_until
+    };
+    this.bannedInfoSheetOpen = true;
+    return true;
+  }catch(e){ return false; }
+},
 
 checkUserAccessOnLogin:async function(user,showWelcome){
   if(!user||!user.email)return;
@@ -2390,7 +2477,13 @@ checkUserAccessOnLogin:async function(user,showWelcome){
     this.pendingUser=user;this.enteredPin='';this.ownerPinModalOpen=true;
   }else{
     var{data:prof}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
-    if(prof&&prof.is_banned){this.showAlert('BANNED','Akun diblokir.');await sb.auth.signOut();return;}
+    if(prof&&prof.is_banned){
+  var banCheck = await this.checkBanStatus(user.id);
+  if(banCheck){
+    await sb.auth.signOut();
+    return;
+  }
+}
     this.currentUser=user;this.isOwner=false;this.isAuthenticated=true;this.chatFullscreen=false;this.proChatFullscreen=false;
     if(prof){this.isVip=prof.is_vip||false;this.chatCount=prof.chat_count||0;this.chatDate=prof.chat_date||'';this.chatBonus=prof.chat_bonus||0;this.proChatCount=prof.pro_chat_count||0;this.proChatDate=prof.pro_chat_date||'';}
     await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',user.id);
@@ -2533,8 +2626,43 @@ loadAppStats:async function(){try{
 }catch(e){}},
 loadAllUsers:async function(){try{var{data}=await sb.from('profiles').select('*').order('created_at',{ascending:false});if(data)this.allUsers=data;}catch(e){}},
 
-banUser:function(u){var self=this;this.showConfirm('BAN USER?',u.username+' akan diblokir.',async function(){await sb.from('profiles').update({is_banned:true}).eq('id',u.id);self.showAlert('SUKSES',u.username+' diblokir.');await self.loadAllUsers();},'🚫');},
-unbanUser:function(u){var self=this;this.showConfirm('UNBAN USER?',u.username+' akan diaktifkan.',async function(){await sb.from('profiles').update({is_banned:false}).eq('id',u.id);self.showAlert('SUKSES',u.username+' di-unban.');await self.loadAllUsers();},'✓');},
+openBanSheet:function(u){
+  this.banSheetTarget = u;
+  this.banSheetForm = {durasi:'1d', alasan:''};
+  this.banSheetOpen = true;
+},
+confirmBan:async function(){
+  if(!this.banSheetTarget) return;
+  if(!this.banSheetForm.alasan || !this.banSheetForm.alasan.trim()){
+    return this.showAlert('PERHATIAN','Alasan wajib diisi!');
+  }
+  var durasi = this.banSheetForm.durasi;
+  var until = null;
+  if(durasi === '30m'){ until = new Date(Date.now() + 30*60*1000); }
+  else if(durasi === '1h'){ until = new Date(Date.now() + 60*60*1000); }
+  else if(durasi === '1d'){ until = new Date(Date.now() + 24*60*60*1000); }
+  else if(durasi === '7d'){ until = new Date(Date.now() + 7*24*60*60*1000); }
+  else if(durasi === '30d'){ until = new Date(Date.now() + 30*24*60*60*1000); }
+  else if(durasi === 'perm'){ until = null; }
+  try{
+    var payload = {
+      is_banned: true,
+      ban_reason: this.banSheetForm.alasan.trim(),
+      ban_until: until ? until.toISOString() : null
+    };
+    var {error} = await sb.from('profiles').update(payload).eq('id', this.banSheetTarget.id);
+    if(error) throw error;
+    this.banSheetOpen = false;
+    this.banSheetTarget = null;
+    this.banSheetForm = {durasi:'1d', alasan:''};
+    await this.loadAllUsers();
+    var durasiText = durasi === 'perm' ? 'PERMANEN' : (durasi === '30m' ? '30 Menit' : durasi === '1h' ? '1 Jam' : durasi === '1d' ? '1 Hari' : durasi === '7d' ? '7 Hari' : '30 Hari');
+    this.showAlert('SUKSES', 'User berhasil di-ban selama ' + durasiText);
+  }catch(e){
+    this.showAlert('GAGAL', e.message);
+  }
+},
+unbanUser:function(u){var self=this;this.showConfirm('UNBAN USER?',u.username+' akan diaktifkan kembali.',async function(){await sb.from('profiles').update({is_banned:false,ban_until:null,ban_reason:''}).eq('id',u.id);self.showAlert('SUKSES',u.username+' di-unban.');await self.loadAllUsers();},'✓');},
 setVip:function(u,v){var self=this;this.showConfirm(v?'SET VIP?':'CABUT VIP?',v?u.username+' jadi VIP':u.username+' bukan VIP',async function(){await sb.from('profiles').update({is_vip:v}).eq('id',u.id);self.showAlert('SUKSES','Berhasil!');await self.loadAllUsers();},'💎');},
 promptAddChat:function(u){var self=this;this.showPrompt('TAMBAH BONUS CHAT','Berapa chat tambahan untuk '+u.username+'?',async function(val){var n=parseInt(val)||0;if(n<=0)return;await sb.from('profiles').update({chat_bonus:(u.chat_bonus||0)+n}).eq('id',u.id);self.showAlert('SUKSES','+'+n+' chat');await self.loadAllUsers();});},
 promptResetChat:function(u){var self=this;this.showConfirm('RESET CHAT?','Reset chat '+u.username+'?',async function(){await sb.from('profiles').update({chat_count:0,chat_bonus:0,chat_date:new Date().toISOString().slice(0,10)}).eq('id',u.id);self.showAlert('SUKSES','Chat di-reset.');await self.loadAllUsers();},'🔄');},
