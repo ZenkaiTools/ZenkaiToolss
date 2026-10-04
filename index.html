@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#050508">
 <title>Zenkai Tools v1.5</title>
+<style>[x-cloak]{display:none !important}</style>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -29,6 +30,9 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 html{overflow-x:hidden;scroll-behavior:smooth}
 body{overflow-x:hidden;background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--text);min-height:100dvh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:auto}
+body:not([data-ready="1"]){opacity:0 !important;pointer-events:none !important}
+body:not([data-ready="1"]) *{animation-play-state:paused !important}
+body[data-ready="1"]{opacity:1;transition:opacity .2s ease-out}
 
 body.sheet-open{overflow:hidden !important;position:fixed;width:100%;touch-action:none}
 body.sheet-open .zn-sheet-content{touch-action:pan-y}
@@ -135,7 +139,6 @@ a{color:inherit;text-decoration:none}
   color:#ffd700;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.5px;
   transition:all .2s;cursor:pointer;
 }
-.zn-feat-review-btn:hover{background:rgba(255,215,0,.15);border-color:#ffd700;transform:translateY(-1px)}
 .zn-feat-review-btn:active{transform:scale(.96)}
 
 .zn-tips{display:flex;gap:12px;align-items:flex-start;padding:14px;background:linear-gradient(135deg,var(--primary-soft),transparent);border:1px solid var(--primary);border-radius:var(--radius)}
@@ -208,36 +211,26 @@ select.zn-input{cursor:pointer}
 .zn-spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:znSpin .6s linear infinite}
 @keyframes znSpin{to{transform:rotate(360deg)}}
 
-.zn-ai-bubble{position:fixed;z-index:60;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:grab;user-select:none;touch-action:none;transition:box-shadow .2s}
-.zn-ai-bubble.dragging{cursor:grabbing;opacity:.85;transition:none}
-.zn-ai-bubble-btn{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--primary);box-shadow:0 0 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;pointer-events:none}
-.zn-ai-bubble-btn svg{width:28px;height:28px;fill:#050508}
-.zn-ai-bubble-label{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:.5px;color:var(--primary);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;border:1px solid var(--primary);white-space:nowrap;pointer-events:none}
-.zn-ai-bubble-hint{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:6px;border:1px solid var(--border);white-space:nowrap;pointer-events:none;animation:znHintPulse 2.5s ease-in-out infinite}
-
-/* WEB MAINTENANCE BANNER */
-.web-maint-banner{position:fixed;top:0;left:0;right:0;z-index:9990;padding:10px 14px;background:linear-gradient(90deg,#ff3355,#ff6600);color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-align:center;box-shadow:0 4px 20px rgba(255,51,85,.6),0 0 30px rgba(255,51,85,.4);backdrop-filter:blur(10px);animation:bannerPulse 1s ease-in-out infinite}
-@keyframes bannerPulse{0%,100%{box-shadow:0 4px 20px rgba(255,51,85,.6),0 0 30px rgba(255,51,85,.4)}50%{box-shadow:0 4px 25px rgba(255,51,85,.9),0 0 40px rgba(255,51,85,.6)}}
-.web-maint-banner .countdown-num{display:inline-block;background:rgba(0,0,0,.3);padding:2px 8px;border-radius:6px;margin:0 4px;font-size:16px;font-weight:900;min-width:34px;text-align:center;border:1px solid rgba(255,255,255,.3)}
-
-/* WEB MAINTENANCE FULL SCREEN */
-.web-maint-screen{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
-.web-maint-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,170,0,.15),transparent 50%),radial-gradient(circle at 70% 80%,rgba(255,51,85,.15),transparent 50%);pointer-events:none;z-index:0}
-.web-maint-screen::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,170,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,170,0,.04) 1px,transparent 1px);background-size:50px 50px;animation:znGridMove 20s linear infinite;pointer-events:none;z-index:0}
-.web-maint-content{position:relative;z-index:1;text-align:center;max-width:500px;width:100%}
-.web-maint-icon{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,rgba(255,170,0,.2),rgba(255,51,85,.2));border:3px solid var(--warning);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:60px;box-shadow:0 0 60px rgba(255,170,0,.6),inset 0 0 30px rgba(255,170,0,.3);animation:webMaintPulse 2s ease-in-out infinite}
-@keyframes webMaintPulse{0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(255,170,0,.6),inset 0 0 30px rgba(255,170,0,.3)}50%{transform:scale(1.05);box-shadow:0 0 80px rgba(255,170,0,.8),inset 0 0 40px rgba(255,170,0,.4)}}
-.web-maint-title{font-family:'Orbitron',sans-serif;font-size:clamp(28px,8vw,44px);font-weight:900;letter-spacing:4px;color:var(--warning);text-shadow:0 0 30px rgba(255,170,0,.6);margin-bottom:10px}
-.web-maint-sub{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-mute);letter-spacing:3px;margin-bottom:32px}
-
-/* OWNER MAINTENANCE BANNER */
-.owner-maint-banner{position:fixed;top:0;left:0;right:0;z-index:9995;padding:8px 12px;background:rgba(255,51,85,.95);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-align:center;letter-spacing:.5px;backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(255,51,85,.5)}
-.owner-maint-banner button{background:#fff;color:#ff3355;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;letter-spacing:.5px}
-
-/* MUSIC PLAYER */
+/* ========== MUSIC PLAYER (BUBBLE DRAGGABLE) ========== */
 .zn-music-btn{position:relative}
 .zn-music-btn::after{content:'';position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;opacity:0;transition:opacity .2s}
 .zn-music-btn.active::after{opacity:1;animation:znPulse 1.5s infinite}
+
+.zn-music-bubble{position:fixed;z-index:56;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:grab;user-select:none;touch-action:none;transition:box-shadow .2s}
+.zn-music-bubble.dragging{cursor:grabbing;opacity:.85;transition:none}
+.zn-music-bubble-btn{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--primary);box-shadow:0 0 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;pointer-events:none;position:relative}
+.zn-music-bubble-btn svg{width:28px;height:28px;fill:#050508}
+.zn-music-bubble-btn::after{content:'';position:absolute;inset:-2px;border-radius:50%;border:2px dashed rgba(255,255,255,.3);animation:znSpin 8s linear infinite;opacity:.6}
+.zn-music-bubble-label{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:.5px;color:var(--primary);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;border:1px solid var(--primary);white-space:nowrap;pointer-events:none;max-width:120px;overflow:hidden;text-overflow:ellipsis}
+.zn-music-bubble-hint{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:6px;border:1px solid var(--border);white-space:nowrap;pointer-events:none;animation:znHintPulse 2.5s ease-in-out infinite}
+.zn-music-bubble-minimize{position:absolute;bottom:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--card);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:14px;line-height:1;cursor:pointer;box-shadow:0 0 10px var(--primary-glow);pointer-events:auto;z-index:2}
+.zn-music-bubble-minimize svg{width:12px;height:12px;fill:currentColor}
+
+.zn-music-mini{position:fixed;z-index:56;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);display:flex;align-items:center;justify-content:center;cursor:pointer;animation:znSlideIn .3s ease-out}
+.zn-music-mini svg{width:20px;height:20px;fill:#050508}
+.zn-music-mini::after{content:'';position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:#00ff88;border:2px solid #050508;box-shadow:0 0 6px #00ff88;animation:znPulse 1.5s infinite}
+@keyframes znSlideIn{from{opacity:0;transform:translateY(20px) scale(.8)}to{opacity:1;transform:translateY(0) scale(1)}}
+
 .zn-music-sheet-content{display:flex;flex-direction:column;gap:14px}
 .zn-music-info{padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-align:center}
 .zn-music-info-title{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:4px}
@@ -253,9 +246,23 @@ select.zn-input{cursor:pointer}
 .zn-music-volume input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--border);outline:none}
 .zn-music-volume input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--primary);box-shadow:0 0 8px var(--primary-glow);cursor:pointer}
 .zn-music-volume input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--primary);border:none;cursor:pointer}
-.zn-music-floating{position:fixed;bottom:170px;right:12px;z-index:55;background:rgba(13,13,24,.95);border:1px solid var(--primary);border-radius:14px;padding:8px;backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(0,0,0,.6),0 0 20px var(--primary-glow);display:flex;align-items:center;gap:8px;max-width:260px;animation:znSlideIn .3s ease-out}
-@keyframes znSlideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.zn-music-floating-close{width:22px;height:22px;border-radius:6px;background:var(--bg-2);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:14px;line-height:1;flex-shrink:0;cursor:pointer}
+
+/* WEB MAINTENANCE BANNER */
+.web-maint-banner{position:fixed;top:0;left:0;right:0;z-index:9990;padding:10px 14px;background:linear-gradient(90deg,#ff3355,#ff6600);color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-align:center;box-shadow:0 4px 20px rgba(255,51,85,.6);backdrop-filter:blur(10px);animation:bannerPulse 1s ease-in-out infinite}
+@keyframes bannerPulse{0%,100%{box-shadow:0 4px 20px rgba(255,51,85,.6),0 0 30px rgba(255,51,85,.4)}50%{box-shadow:0 4px 25px rgba(255,51,85,.9),0 0 40px rgba(255,51,85,.6)}}
+.web-maint-banner .countdown-num{display:inline-block;background:rgba(0,0,0,.3);padding:2px 8px;border-radius:6px;margin:0 4px;font-size:16px;font-weight:900;min-width:34px;text-align:center;border:1px solid rgba(255,255,255,.3)}
+
+.web-maint-screen{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.web-maint-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,170,0,.15),transparent 50%),radial-gradient(circle at 70% 80%,rgba(255,51,85,.15),transparent 50%);pointer-events:none;z-index:0}
+.web-maint-screen::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,170,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,170,0,.04) 1px,transparent 1px);background-size:50px 50px;animation:znGridMove 20s linear infinite;pointer-events:none;z-index:0}
+.web-maint-content{position:relative;z-index:1;text-align:center;max-width:500px;width:100%}
+.web-maint-icon{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,rgba(255,170,0,.2),rgba(255,51,85,.2));border:3px solid var(--warning);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:60px;box-shadow:0 0 60px rgba(255,170,0,.6),inset 0 0 30px rgba(255,170,0,.3);animation:webMaintPulse 2s ease-in-out infinite}
+@keyframes webMaintPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.web-maint-title{font-family:'Orbitron',sans-serif;font-size:clamp(28px,8vw,44px);font-weight:900;letter-spacing:4px;color:var(--warning);text-shadow:0 0 30px rgba(255,170,0,.6);margin-bottom:10px}
+.web-maint-sub{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-mute);letter-spacing:3px;margin-bottom:32px}
+
+.owner-maint-banner{position:fixed;top:0;left:0;right:0;z-index:9995;padding:8px 12px;background:rgba(255,51,85,.95);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-align:center;letter-spacing:.5px;backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(255,51,85,.5)}
+.owner-maint-banner button{background:#fff;color:#ff3355;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;letter-spacing:.5px}
 
 #loadingScreen{position:fixed;inset:0;z-index:99998;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:hidden;transition:opacity .6s,visibility .6s}
 #loadingScreen.hide{opacity:0;visibility:hidden}
@@ -499,7 +506,7 @@ select.zn-input{cursor:pointer}
 </template>
 
 <!-- TOAST CONTAINER -->
-<div class="zn-toast-container">
+<div class="zn-toast-container" x-cloak>
   <template x-for="toast in toasts" :key="toast.id">
     <div class="zn-toast" :class="toast.type" :class="{out: toast.out}">
       <div class="zn-toast-icon"><span x-text="toast.type==='success'?'✓':(toast.type==='error'?'✕':'!')"></span></div>
@@ -557,7 +564,6 @@ select.zn-input{cursor:pointer}
 <div x-show="isAuthenticated" x-cloak class="zn-app">
   <div class="zn-grid-bg"></div>
 
-  <!-- HEADER -->
   <header class="zn-header" :class="{scrolled: headerScrolled}" :style="isOwner && webMaintenanceActive ? 'margin-top:32px' : ''">
     <div class="zn-header-user" @click="profileModalOpen=true">
       <div class="zn-avatar-wrap">
@@ -576,7 +582,6 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
     <div class="zn-header-actions">
-      <!-- MUSIC BUTTON -->
       <button x-show="musicEnabled" class="zn-icon-btn zn-music-btn" :class="{active: musicEnabled && musicPlaying}" @click="musicSheetOpen=true" title="Musik">
         <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
       </button>
@@ -1169,18 +1174,17 @@ select.zn-input{cursor:pointer}
                 <div>
                   <div style="font-size:10px;color:var(--warning);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Countdown (detik)</div>
                   <input type="number" x-model.number="webMaintenanceData.countdown" placeholder="10" class="zn-maint-input" min="3" max="120">
-                  <div style="font-size:9px;color:var(--text-mute);margin-top:4px">User bakal liat banner countdown dulu sebelum masuk maintenance. Default: 10 detik.</div>
                 </div>
                 <div>
                   <div style="font-size:10px;color:var(--warning);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Alasan</div>
-                  <textarea x-model="webMaintenanceData.alasan" placeholder="Contoh: Update database, perbaikan server..." class="zn-maint-textarea"></textarea>
+                  <textarea x-model="webMaintenanceData.alasan" placeholder="Contoh: Update database..." class="zn-maint-textarea"></textarea>
                 </div>
                 <div>
                   <div style="font-size:10px;color:var(--warning);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Estimasi Selesai</div>
-                  <input type="text" x-model="webMaintenanceData.estimasi" placeholder="Contoh: 2 jam, 30 menit" class="zn-maint-input">
+                  <input type="text" x-model="webMaintenanceData.estimasi" placeholder="Contoh: 2 jam" class="zn-maint-input">
                 </div>
                 <button @click="saveWebMaintenance()" class="zn-btn zn-btn-danger">💾 SIMPAN & AKTIFKAN</button>
-                <button @click="quickDisableWebMaintenance()" class="zn-btn zn-btn-success">✅ MATIIN MAINTENANCE SEKARANG</button>
+                <button @click="quickDisableWebMaintenance()" class="zn-btn zn-btn-success">✅ MATIIN SEKARANG</button>
               </div>
             </template>
           </div>
@@ -1228,10 +1232,10 @@ select.zn-input{cursor:pointer}
                 </div>
                 
                 <div>
-                  <div style="font-size:10px;color:var(--primary);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Link YouTube Playlist</div>
+                  <div style="font-size:10px;color:var(--primary);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Link YouTube</div>
                   <input type="text" x-model="musicUrl" placeholder="https://www.youtube.com/playlist?list=..." class="zn-input">
                   <div style="font-size:9px;color:var(--text-mute);margin-top:6px;line-height:1.5">
-                    💡 Cara: buka YouTube → cari playlist lagu (contoh: "Top 50 Indonesia") → klik "Bagikan" → "Salin link" → paste di sini.
+                    💡 Cara: buka YouTube → cari playlist lagu → klik "Bagikan" → "Salin link" → paste di sini. Bisa playlist atau video tunggal.
                   </div>
                 </div>
                 
@@ -1254,7 +1258,7 @@ select.zn-input{cursor:pointer}
                 <li>Gunakan <b style="color:var(--text)">playlist</b>, bukan video tunggal</li>
                 <li>User bisa play/pause/volume sendiri</li>
                 <li>Musik gak auto-play — user yang klik play</li>
-                <li>Tutup sheet = musik tetep jalan di mini player</li>
+                <li>Mini player bisa <b style="color:var(--text)">digeser & dikecilin</b></li>
               </ul>
             </div>
           </div>
@@ -1323,20 +1327,47 @@ select.zn-input{cursor:pointer}
   </nav>
 </div>
 
-<!-- AI BUBBLE (Draggable) -->
-<div x-show="isAuthenticated&&!chatFullscreen&&!proChatFullscreen&&!developerProfileOpen" x-cloak 
-     @click="handleBubbleClick()"
-     @mousedown="startDragBubble($event)"
-     @touchstart="startDragBubble($event)"
-     class="zn-ai-bubble"
-     :class="{dragging: bubbleDragging}"
-     :style="'right:auto;bottom:auto;left:'+bubblePosition.x+'px;top:'+bubblePosition.y+'px;'">
-  <div class="zn-ai-bubble-hint" x-show="showBubbleHint">↔ Geser aku</div>
-  <div class="zn-ai-bubble-btn"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div>
-  <div class="zn-ai-bubble-label">Chat Zenkai AI</div>
-</div>
+<!-- ============ AI BUBBLE (Draggable) ============ -->
+<template x-if="isAuthenticated && !chatFullscreen && !proChatFullscreen && !developerProfileOpen">
+  <div @click="handleBubbleClick()"
+       @mousedown="startDragBubble($event)"
+       @touchstart="startDragBubble($event)"
+       class="zn-ai-bubble"
+       :class="{dragging: bubbleDragging}"
+       :style="'left:'+bubblePosition.x+'px;top:'+bubblePosition.y+'px;right:auto;bottom:auto;'">
+    <div class="zn-ai-bubble-hint" x-show="showBubbleHint">↔ Geser aku</div>
+    <div class="zn-ai-bubble-btn"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div>
+    <div class="zn-ai-bubble-label">Chat Zenkai AI</div>
+  </div>
+</template>
 
-<!-- MUSIC SHEET -->
+<!-- ============ MUSIC BUBBLE (Draggable + Minimize) ============ -->
+<!-- Full bubble (kalau gak minimized) -->
+<template x-if="isAuthenticated && musicEnabled && musicPlaying && !musicSheetOpen && !musicMinimized">
+  <div @mousedown="startDragMusic($event)"
+       @touchstart="startDragMusic($event)"
+       class="zn-music-bubble"
+       :class="{dragging: musicDragging}"
+       :style="'left:'+musicPosition.x+'px;top:'+musicPosition.y+'px;right:auto;bottom:auto;'">
+    <div class="zn-music-bubble-hint" x-show="showMusicHint">↔ Geser / − Kecilin</div>
+    <div class="zn-music-bubble-btn" @click="musicSheetOpen=true" title="Buka Player">
+      <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+    </div>
+    <div class="zn-music-bubble-minimize" @click.stop="minimizeMusic()" title="Kecilin">
+      <svg viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>
+    </div>
+  </div>
+</template>
+
+<!-- Mini bubble (kalau minimized) -->
+<template x-if="isAuthenticated && musicEnabled && musicPlaying && !musicSheetOpen && musicMinimized">
+  <div class="zn-music-mini"
+       :style="'left:'+musicMiniPosition.x+'px;top:'+musicMiniPosition.y+'px;right:auto;bottom:auto;'"
+       @click="expandMusic()"
+       title="Buka Player">
+    <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+  </div>
+</template><!-- MUSIC SHEET -->
 <div x-show="musicSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100011" @click.self="musicSheetOpen=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'musicSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
@@ -1346,7 +1377,7 @@ select.zn-input{cursor:pointer}
       <div style="text-align:center;padding:40px 20px">
         <div style="font-size:60px;opacity:.3;margin-bottom:16px">🎵</div>
         <div style="font-size:14px;color:var(--text-dim);margin-bottom:8px">Musik belum diaktifkan</div>
-        <div style="font-size:11px;color:var(--text-mute)">Owner belum set playlist. Coba lagi nanti ya!</div>
+        <div style="font-size:11px;color:var(--text-mute)">Owner belum set playlist.</div>
       </div>
     </template>
     
@@ -1354,7 +1385,7 @@ select.zn-input{cursor:pointer}
       <div class="zn-music-sheet-content">
         <div class="zn-music-info">
           <div class="zn-music-info-title" x-text="musicTitle || '🎵 Playlist Zenkai'"></div>
-          <div class="zn-music-info-sub">// YOUTUBE PLAYLIST</div>
+          <div class="zn-music-info-sub">// YOUTUBE PLAYER</div>
         </div>
         
         <div class="zn-music-frame-wrap">
@@ -1375,7 +1406,7 @@ select.zn-input{cursor:pointer}
         
         <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border);text-align:center">
           <div style="font-size:10px;color:var(--text-mute);line-height:1.5">
-            💡 <b style="color:var(--primary)">Tips:</b> Kalau mau dengerin sambil pakai fitur lain, tutup sheet ini aja. Musik tetep jalan di mini player.
+            💡 <b style="color:var(--primary)">Tips:</b> Tutup sheet ini = musik tetep jalan di bubble. Bubble bisa digeser & dikecilin.
           </div>
         </div>
         
@@ -1385,22 +1416,7 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- FLOATING MINI PLAYER -->
-<template x-if="musicEnabled && musicPlaying && !musicSheetOpen">
-  <div class="zn-music-floating">
-    <div style="flex:1;min-width:0">
-      <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;color:var(--primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" x-text="musicTitle || '🎵 Zenkai Music'"></div>
-      <div style="font-size:8px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px">▶ NOW PLAYING</div>
-    </div>
-    <button class="zn-icon-btn" style="width:32px;height:32px" @click="toggleMusicPlay()" title="Pause">
-      <svg viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-    </button>
-    <button class="zn-icon-btn" style="width:32px;height:32px" @click="musicSheetOpen=true" title="Buka">
-      <svg viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/></svg>
-    </button>
-    <button class="zn-music-floating-close" @click="stopMusicAndHide()">×</button>
-  </div>
-</template><!-- DEVELOPER PROFILE SHEET -->
+<!-- DEVELOPER PROFILE SHEET -->
 <div x-show="developerProfileOpen" x-cloak class="zn-sheet-overlay" style="z-index:100085" @click.self="developerProfileOpen=false">
   <div class="zn-sheet-content" style="padding:0;overflow-y:auto" @touchstart.passive="onSheetTouchStart($event,'developerProfileOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle" style="margin:12px auto 0"></div>
@@ -1863,7 +1879,7 @@ select.zn-input{cursor:pointer}
         <li><b style="color:var(--primary)">Downloader:</b> TikTok tanpa watermark</li>
         <li><b style="color:var(--accent)">Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
         <li><b style="color:var(--primary)">Tema:</b> 6 warna + 2 gaya visual</li>
-        <li><b style="color:var(--primary)">Musik:</b> Playlist YouTube (kalau diaktifin)</li>
+        <li><b style="color:var(--primary)">Musik:</b> YouTube player</li>
       </ul>
       <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--primary);text-align:center;margin-top:14px;letter-spacing:2px">Developer: Andika · v1.5</p>
     </div>
@@ -2361,9 +2377,7 @@ select.zn-input{cursor:pointer}
       </template>
     </div>
   </div>
-</div>
-
-<script>
+</div><script>
 const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
@@ -2427,12 +2441,30 @@ headerScrolled:false,
 toasts:[],
 toastId:0,
 
+// AI BUBBLE POSITION
 bubblePosition:{x:0,y:0},
 bubbleDragging:false,
 bubbleDragStart:{x:0,y:0},
 bubblePosStart:{x:0,y:0},
 bubbleMoved:false,
 showBubbleHint:true,
+
+// MUSIC PLAYER
+musicSheetOpen:false,
+musicEnabled:false,
+musicUrl:'',
+musicTitle:'',
+musicPlaying:false,
+musicVolume:50,
+musicIframeUrl:'',
+musicPosition:{x:0,y:0},
+musicMiniPosition:{x:0,y:0},
+musicDragging:false,
+musicDragStart:{x:0,y:0},
+musicPosStart:{x:0,y:0},
+musicMoved:false,
+musicMinimized:false,
+showMusicHint:true,
 
 // WEB MAINTENANCE
 webMaintenanceActive:false,
@@ -2441,15 +2473,6 @@ webMaintenanceData:{alasan:'',estimasi:'',countdown:10},
 webMaintShouldBlock:false,
 webMaintCountdown:0,
 webMaintCountdownTimer:null,
-
-// MUSIC
-musicSheetOpen:false,
-musicEnabled:false,
-musicUrl:'',
-musicTitle:'',
-musicPlaying:false,
-musicVolume:50,
-musicIframeUrl:'',
 
 developerProfileOpen:false,
 developerData:{
@@ -2651,7 +2674,7 @@ showToast:function(title, message, type){
   }, 3500);
 },
 
-// AI BUBBLE DRAG
+// ============ AI BUBBLE DRAG ============
 handleBubbleClick:function(){
   if(this.bubbleMoved){ this.bubbleMoved = false; return; }
   this.openChatAI();
@@ -2702,25 +2725,104 @@ initBubblePosition:function(){
   if(saved){
     try{
       var pos = JSON.parse(saved);
+      var maxX = window.innerWidth - 70;
+      var maxY = window.innerHeight - 100;
+      if(pos.x > maxX) pos.x = maxX;
+      if(pos.y > maxY) pos.y = maxY;
+      if(pos.x < 10) pos.x = 10;
+      if(pos.y < 70) pos.y = 70;
       this.bubblePosition = {x:pos.x, y:pos.y};
       return;
     }catch(e){}
   }
-  this.bubblePosition = {x:window.innerWidth - 80, y:window.innerHeight - 160};
+  this.bubblePosition = {x:window.innerWidth - 80, y:window.innerHeight - 220};
 },
+
+// ============ MUSIC BUBBLE DRAG ============
+startDragMusic:function(e){
+  var self = this;
+  var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  this.musicDragging = true;
+  this.musicMoved = false;
+  this.musicDragStart = {x:clientX, y:clientY};
+  this.musicPosStart = {x:this.musicPosition.x, y:this.musicPosition.y};
+  this.showMusicHint = false;
+
+  var onMove = function(ev){
+    if(!self.musicDragging) return;
+    var cx = ev.touches ? ev.touches[0].clientX : ev.clientX;
+    var cy = ev.touches ? ev.touches[0].clientY : ev.clientY;
+    var dx = cx - self.musicDragStart.x;
+    var dy = cy - self.musicDragStart.y;
+    if(Math.abs(dx) > 5 || Math.abs(dy) > 5) self.musicMoved = true;
+    var newX = self.musicPosStart.x + dx;
+    var newY = self.musicPosStart.y + dy;
+    var maxX = window.innerWidth - 70;
+    var maxY = window.innerHeight - 100;
+    if(newX < 10) newX = 10;
+    if(newX > maxX) newX = maxX;
+    if(newY < 70) newY = 70;
+    if(newY > maxY) newY = maxY;
+    self.musicPosition = {x:newX, y:newY};
+  };
+  var onUp = function(){
+    self.musicDragging = false;
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onUp);
+    localStorage.setItem('zenkai_music_pos', JSON.stringify(self.musicPosition));
+    setTimeout(function(){ self.musicMoved = false; }, 100);
+  };
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+  document.addEventListener('touchmove', onMove, {passive:false});
+  document.addEventListener('touchend', onUp);
+},
+initMusicPosition:function(){
+  var saved = localStorage.getItem('zenkai_music_pos');
+  if(saved){
+    try{
+      var pos = JSON.parse(saved);
+      var maxX = window.innerWidth - 70;
+      var maxY = window.innerHeight - 100;
+      if(pos.x > maxX) pos.x = maxX;
+      if(pos.y > maxY) pos.y = maxY;
+      if(pos.x < 10) pos.x = 10;
+      if(pos.y < 70) pos.y = 70;
+      this.musicPosition = {x:pos.x, y:pos.y};
+      this.musicMiniPosition = {x:pos.x + 6, y:pos.y + 6};
+      return;
+    }catch(e){}
+  }
+  this.musicPosition = {x:window.innerWidth - 80, y:window.innerHeight - 160};
+  this.musicMiniPosition = {x:window.innerWidth - 74, y:window.innerHeight - 154};
+},
+minimizeMusic:function(){
+  this.musicMinimized = true;
+  try{ localStorage.setItem('zenkai_music_minimized', '1'); }catch(e){}
+},
+expandMusic:function(){
+  this.musicMinimized = false;
+  try{ localStorage.setItem('zenkai_music_minimized', '0'); }catch(e){}
+},
+
 handleResize:function(){
   var maxX = window.innerWidth - 70;
   var maxY = window.innerHeight - 100;
-  var newX = this.bubblePosition.x;
-  var newY = this.bubblePosition.y;
-  if(newX > maxX) newX = maxX;
-  if(newY > maxY) newY = maxY;
-  if(newX < 10) newX = 10;
-  if(newY < 70) newY = 70;
-  this.bubblePosition = {x:newX, y:newY};
+  ['bubblePosition','musicPosition'].forEach(function(key){
+    var pos = this[key];
+    if(pos){
+      if(pos.x > maxX) pos.x = maxX;
+      if(pos.y > maxY) pos.y = maxY;
+      if(pos.x < 10) pos.x = 10;
+      if(pos.y < 70) pos.y = 70;
+    }
+  }, this);
 },
 
-// WEB MAINTENANCE
+// ============ WEB MAINTENANCE ============
 toggleWebMaintenance:function(){
   this.webMaintenanceActive = !this.webMaintenanceActive;
   this.checkWebMaintenanceBlock();
@@ -2729,12 +2831,10 @@ checkWebMaintenanceBlock:function(){
   if(!this.isAuthenticated){ this.webMaintShouldBlock = false; this.stopCountdown(); return; }
   if(!this.webMaintenanceActive){ this.webMaintShouldBlock = false; this.stopCountdown(); return; }
   if(this.isOwner){ this.webMaintShouldBlock = false; this.stopCountdown(); return; }
-  
   var shouldBlock = false;
   if(this.webMaintScope === 'both') shouldBlock = true;
   else if(this.webMaintScope === 'user' && !this.isVip) shouldBlock = true;
   else if(this.webMaintScope === 'vip' && this.isVip) shouldBlock = true;
-  
   if(!shouldBlock){ this.webMaintShouldBlock = false; this.stopCountdown(); return; }
   if(this.webMaintShouldBlock){ return; }
   if(this.webMaintCountdown === 0 && !this.webMaintCountdownTimer){ this.startCountdown(); }
@@ -2802,7 +2902,7 @@ quickDisableWebMaintenance:async function(){
   }catch(e){ this.showToast('❌ GAGAL', e.message, 'error'); }
 },
 
-// MUSIC
+// ============ MUSIC ============
 getMusicPreviewId:function(){
   if(!this.musicUrl) return '';
   var listMatch = this.musicUrl.match(/[?&]list=([a-zA-Z0-9_-]+)/);
@@ -2838,11 +2938,6 @@ updateMusicVolume:function(){
   try{ localStorage.setItem('zenkai_music_volume', this.musicVolume); }catch(e){}
   this.buildMusicIframe();
 },
-stopMusicAndHide:function(){
-  this.musicPlaying = false;
-  try{ localStorage.setItem('zenkai_music_playing', '0'); }catch(e){}
-  this.buildMusicIframe();
-},
 loadMusicSettings:async function(){
   try{
     var {data} = await sb.from('app_settings').select('music_url, music_title, music_enabled').eq('id',1).maybeSingle();
@@ -2857,6 +2952,8 @@ loadMusicSettings:async function(){
     if(savedVol) this.musicVolume = parseInt(savedVol);
     var savedPlaying = localStorage.getItem('zenkai_music_playing');
     if(savedPlaying === '1' && this.musicEnabled) this.musicPlaying = true;
+    var savedMinimized = localStorage.getItem('zenkai_music_minimized');
+    if(savedMinimized === '1') this.musicMinimized = true;
   }catch(e){}
   this.buildMusicIframe();
 },
@@ -2872,7 +2969,7 @@ saveMusicSettings:async function(){
   }catch(e){ this.showToast('❌ GAGAL', e.message, 'error'); }
 },
 
-// FORCE CLEAN LOGOUT
+// ============ FORCE CLEAN LOGOUT ============
 forceCleanLogout:async function(){
   try{
     try{
@@ -2884,7 +2981,7 @@ forceCleanLogout:async function(){
       var keys = Object.keys(localStorage);
       keys.forEach(function(k){
         if(k.startsWith('sb-') || k.toLowerCase().indexOf('supabase') >= 0){
-          if(k !== 'zenkai_theme' && k !== 'zenkai_style' && k !== 'zenkai_bubble_pos' && k !== 'zenkai_music_volume'){
+          if(k !== 'zenkai_theme' && k !== 'zenkai_style' && k !== 'zenkai_bubble_pos' && k !== 'zenkai_music_pos' && k !== 'zenkai_music_volume' && k !== 'zenkai_music_playing' && k !== 'zenkai_music_minimized'){
             localStorage.removeItem(k);
           }
         }
@@ -3113,16 +3210,18 @@ detectDevice:function(){
   window.addEventListener('online',function(){self.deviceInfo.online=true});
   window.addEventListener('offline',function(){self.deviceInfo.online=false});
   if(navigator.getBattery){navigator.getBattery().then(function(b){var upd=function(){self.deviceInfo.battery=Math.round(b.level*100)+'%'};upd();b.addEventListener('levelchange',upd);});}
-  var tips=['Rajin catat transaksi bikin keuangan lebih terkontrol!','Login harian dapat 10 poin gratis!','Zenkai AI Pro unlimited buat VIP!','Geser bubble AI ke mana aja!','Coba musiknya, enak buat santai!','Kumpulkan poin, naik level!'];
+  var tips=['Rajin catat transaksi bikin keuangan lebih terkontrol!','Login harian dapat 10 poin gratis!','Zenkai AI Pro unlimited buat VIP!','Geser bubble AI & musik ke mana aja!','Coba musiknya, enak buat santai!','Kumpulkan poin, naik level!'];
   this.tipsHarian=tips[Math.floor(Math.random()*tips.length)];
 },
 
 init:async function(){
   var self=this;
+  // ⚡ PALING AWAL — set data-ready sebelum apapun
+  document.body.setAttribute('data-ready','1');
+  
   var savedTheme=localStorage.getItem('zenkai_theme');if(savedTheme)this.theme=savedTheme;
   var savedStyle=localStorage.getItem('zenkai_style');if(savedStyle)this.styleMode=savedStyle;
   this.chatFullscreen=false;this.proChatFullscreen=false;
-  document.body.setAttribute('data-ready','1');
   startLoadingProgress();
   this.updateClock();
   setInterval(function(){self.updateClock()},1000);
@@ -3132,7 +3231,9 @@ init:async function(){
   this.detectDevice();
   this.initProvinces();
   this.initBubblePosition();
+  this.initMusicPosition();
   setTimeout(function(){ self.showBubbleHint = false; }, 6000);
+  setTimeout(function(){ self.showMusicHint = false; }, 6000);
   window.addEventListener('resize', function(){ self.handleResize(); });
 
   try{
@@ -3611,7 +3712,6 @@ sendChat:async function(){
   if(this.isUnderMaintenance('ai')){return this.showMaintenanceSheet('ai');}
   if(!this.chatInput.trim()||this.aiThinking)return;
   if(!this.currentUser)return this.showToast('⚠️ PERHATIAN','Login dulu!','warning');
-  
   if(!this.isOwner&&!this.isVip){
     try{var{data:freshData}=await sb.from('profiles').select('chat_count,chat_bonus,chat_date,is_vip').eq('id',this.currentUser.id).maybeSingle();if(freshData){this.chatCount=freshData.chat_count||0;this.chatBonus=freshData.chat_bonus||0;this.chatDate=freshData.chat_date||'';this.isVip=freshData.is_vip||false;}}catch(e){}
     var today=new Date().toISOString().slice(0,10);
@@ -3629,7 +3729,6 @@ sendChat:async function(){
       return;
     }
   }
-  
   var userMsg=this.chatInput.trim();
   this.chatMessages.push({role:'user',content:userMsg});
   this.chatInput='';this.aiThinking=true;this.startThinkingMessages();
@@ -4010,7 +4109,6 @@ setupRealtime:function(){
         self.webMaintenanceData.estimasi = d.web_maintenance_estimasi || '';
         self.webMaintenanceData.countdown = d.web_maintenance_countdown || 10;
         self.checkWebMaintenanceBlock();
-        // Update music
         self.musicEnabled = d.music_enabled || false;
         self.musicUrl = d.music_url || '';
         self.musicTitle = d.music_title || '';
