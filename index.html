@@ -363,8 +363,57 @@ select.zn-input{cursor:pointer}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ===================== DEVELOPER PROFILE STYLES ===================== */
+.dev-sheet{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 100%)}
+.dev-hero{position:relative;padding:30px 24px 24px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border-bottom:1px solid var(--border);text-align:center}
+.dev-hero::before{content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.3;pointer-events:none}
+.dev-avatar{position:relative;display:inline-block;margin-bottom:16px}
+.dev-avatar-img{width:100px;height:100px;border-radius:28px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;border:3px solid var(--primary);box-shadow:0 0 30px var(--primary-glow),0 8px 24px rgba(0,0,0,.4);overflow:hidden;position:relative;z-index:1}
+.dev-avatar-img img{width:100%;height:100%;object-fit:cover}
+.dev-avatar-img span{font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:#050508;letter-spacing:2px}
+.dev-status-dot{position:absolute;bottom:2px;right:2px;width:20px;height:20px;border-radius:50%;background:#00ff88;border:3px solid var(--bg);box-shadow:0 0 10px #00ff88;z-index:2}
+.dev-status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:rgba(0,255,136,.1);border:1px solid #00ff88;margin-bottom:14px;position:relative;z-index:1}
+.dev-status-badge span{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;color:#00ff88}
+.dev-status-pulse{width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;animation:znPulse 2s infinite}
+.dev-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
+.dev-stat{background:var(--card);padding:16px 8px;text-align:center}
+.dev-stat-val{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900}
+.dev-stat-lbl{font-size:9px;color:var(--text-mute);letter-spacing:1px;margin-top:4px;text-transform:uppercase}
+.dev-section{padding:0 24px 20px}
+.dev-section-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.dev-section-title svg{width:16px;height:16px;fill:var(--primary)}
+.dev-bio-box{padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)}
+.dev-bio-box p{font-size:13px;color:var(--text-dim);line-height:1.7;white-space:pre-line}
+.dev-pill{padding:6px 12px;border-radius:16px;background:var(--primary-soft);border:1px solid var(--primary);color:var(--primary);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;transition:all .2s}
+.dev-pill:hover{transform:translateY(-2px);box-shadow:0 4px 12px var(--primary-glow)}
+.dev-skill-group{margin-bottom:10px}
+.dev-skill-label{font-size:10px;color:var(--text-mute);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:600;display:flex;align-items:center;gap:6px}
+.dev-skill-note{font-size:10px;color:var(--text-mute);font-style:italic;margin-top:6px;padding-left:2px}
+.dev-school-card{display:flex;gap:14px;padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);align-items:flex-start}
+.dev-school-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dev-school-icon svg{width:24px;height:24px;fill:var(--primary)}
+.dev-learning-list{display:flex;flex-direction:column;gap:10px}
+.dev-learning-item{display:flex;gap:12px;padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);align-items:flex-start;transition:all .2s}
+.dev-learning-item:hover{border-color:var(--primary);transform:translateX(4px)}
+.dev-learning-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.dev-learning-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.dev-learning-desc{font-size:11px;color:var(--text-mute);line-height:1.4}
+.dev-project-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-decoration:none;transition:all .25s}
+.dev-project-item:hover{border-color:var(--primary);transform:translateX(4px)}
+.dev-project-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dev-project-icon svg{width:18px;height:18px;fill:var(--primary)}
+.dev-project-status{font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:.5px}
+.dev-contact-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-decoration:none;transition:all .25s}
+.dev-contact-item:hover{border-color:var(--primary);transform:translateX(4px)}
+.dev-contact-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dev-contact-icon svg{width:18px;height:18px}
+.dev-quote{padding:16px;border-radius:12px;background:var(--bg-2);border:1px dashed var(--border);text-align:center;font-style:italic;color:var(--text-dim);font-size:12px;line-height:1.6}
+.dev-cta-box{padding:20px;border-radius:14px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);text-align:center}
+.dev-footer{padding:20px 24px;border-top:1px solid var(--border);text-align:center;background:var(--bg-2)}
 </style>
-</head><body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode">
+</head>
+<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode">
 
 <!-- LOADING SCREEN -->
 <div id="loadingScreen" x-show="!loadingHidden" x-cloak>
@@ -376,7 +425,7 @@ select.zn-input{cursor:pointer}
       <div class="load-z">Z</div>
     </div>
     <div class="load-logo">ZENKAI</div>
-    <div class="load-sub">INITIALIZING // v3.4</div>
+    <div class="load-sub">INITIALIZING // v3.5</div>
     <div class="load-bar-wrap"><div class="load-bar-fill" id="loadBar"></div></div>
     <div class="load-pct" id="loadPct">0%</div>
     <div class="load-status" id="loadStatus">Memuat sistem</div>
@@ -1054,9 +1103,249 @@ select.zn-input{cursor:pointer}
 </div>
 
 <!-- AI BUBBLE -->
-<div x-show="isAuthenticated&&!chatFullscreen&&!proChatFullscreen" x-cloak @click="openChatAI()" class="zn-ai-bubble">
+<div x-show="isAuthenticated&&!chatFullscreen&&!proChatFullscreen&&!developerProfileOpen" x-cloak @click="openChatAI()" class="zn-ai-bubble">
   <div class="zn-ai-bubble-btn"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div>
   <div class="zn-ai-bubble-label">Chat dengan Zenkai AI</div>
+</div>
+
+<!-- ============================
+     DEVELOPER PROFILE SHEET (BARU)
+     ============================ -->
+<div x-show="developerProfileOpen" x-cloak class="zn-sheet-overlay" style="z-index:100085" @click.self="developerProfileOpen=false">
+  <div class="zn-sheet-content dev-sheet" style="padding:0;overflow-y:auto" @touchstart.passive="onSheetTouchStart($event,'developerProfileOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+    <div class="zn-sheet-handle" style="margin:12px auto 0"></div>
+
+    <!-- HERO SECTION -->
+    <div class="dev-hero">
+      <!-- Avatar -->
+      <div class="dev-avatar">
+        <div class="dev-avatar-img">
+          <span>ATM</span>
+        </div>
+        <div class="dev-status-dot"></div>
+      </div>
+
+      <!-- Nama & Role -->
+      <div style="position:relative;z-index:1">
+        <h2 style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;letter-spacing:2px;color:var(--primary);margin-bottom:4px" x-text="developerData.nama.toUpperCase()"></h2>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:2px;margin-bottom:10px" x-text="'// '+developerData.role"></div>
+
+        <!-- Status Badge -->
+        <div class="dev-status-badge">
+          <span class="dev-status-pulse"></span>
+          <span x-text="developerData.status"></span>
+        </div>
+
+        <!-- Tagline -->
+        <p style="font-size:13px;color:var(--text);line-height:1.6;font-style:italic;max-width:320px;margin:0 auto;font-weight:500" x-text="'&quot;'+developerData.tagline+'&quot;'"></p>
+
+        <!-- Lokasi -->
+        <div style="display:inline-flex;align-items:center;gap:4px;margin-top:12px;font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace">
+          <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:var(--text-mute)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          <span x-text="developerData.lokasi"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATISTIK -->
+    <div class="dev-stats">
+      <template x-for="(stat,idx) in developerData.statistik" :key="idx">
+        <div class="dev-stat">
+          <div class="dev-stat-val" :style="'color:'+stat.color" x-text="stat.value"></div>
+          <div class="dev-stat-lbl" x-text="stat.label"></div>
+        </div>
+      </template>
+    </div>
+
+    <!-- TENTANG SAYA -->
+    <div class="dev-section" style="padding-top:20px">
+      <div class="dev-section-title">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        <span>TENTANG SAYA</span>
+      </div>
+      <div class="dev-bio-box">
+        <p x-text="developerData.bio"></p>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="dev-section">
+      <div class="dev-section-title">
+        <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+        <span>SKILLS & TECH</span>
+      </div>
+      <template x-for="(group,idx) in developerData.skills" :key="idx">
+        <div class="dev-skill-group">
+          <div class="dev-skill-label">
+            <span x-text="group.label"></span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <template x-for="skill in group.items" :key="skill">
+              <span class="dev-pill" x-text="skill"></span>
+            </template>
+          </div>
+          <template x-if="group.note">
+            <div class="dev-skill-note" x-text="'* '+group.note"></div>
+          </template>
+        </div>
+      </template>
+    </div>
+
+    <!-- SEKOLAH -->
+    <div class="dev-section">
+      <div class="dev-section-title">
+        <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+        <span>PENDIDIKAN</span>
+      </div>
+      <div class="dev-school-card">
+        <div class="dev-school-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px" x-text="developerData.sekolah.nama"></div>
+          <div style="font-size:11px;color:var(--primary);font-family:'JetBrains Mono',monospace;margin-bottom:6px" x-text="developerData.sekolah.jurusan + ' · ' + developerData.sekolah.tahun"></div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.5" x-text="developerData.sekolah.deskripsi"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- YANG LAGI DIPELAJARI -->
+    <div class="dev-section">
+      <div class="dev-section-title">
+        <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+        <span>YANG LAGI DIPELAJARI</span>
+      </div>
+      <div class="dev-learning-list">
+        <template x-for="(item,idx) in developerData.learning" :key="idx">
+          <div class="dev-learning-item">
+            <div class="dev-learning-icon" x-text="item.icon"></div>
+            <div style="flex:1;min-width:0">
+              <div class="dev-learning-title" x-text="item.title"></div>
+              <div class="dev-learning-desc" x-text="item.desc"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- PROJECT -->
+    <div class="dev-section">
+      <div class="dev-section-title">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        <span>PROJECT</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <template x-for="(proj,idx) in developerData.projects" :key="idx">
+          <a :href="proj.link" target="_blank" class="dev-project-item">
+            <div class="dev-project-icon">
+              <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+                <span style="font-size:13px;font-weight:700;color:var(--text)" x-text="proj.nama"></span>
+                <span class="dev-project-status" :style="proj.status==='Live'?'background:rgba(0,255,136,.15);color:#00ff88;border:1px solid #00ff88':(proj.status==='Beta'?'background:rgba(255,170,0,.15);color:#ffaa00;border:1px solid #ffaa00':'background:var(--bg);color:var(--text-mute);border:1px solid var(--border)')" x-text="proj.status"></span>
+              </div>
+              <div style="font-size:11px;color:var(--text-mute)" x-text="proj.desc"></div>
+            </div>
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+          </a>
+        </template>
+      </div>
+    </div>
+
+    <!-- KONTAK -->
+    <div class="dev-section">
+      <div class="dev-section-title">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        <span>HUBUNGI SAYA</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <!-- WhatsApp -->
+        <a :href="'https://wa.me/'+developerData.kontak.wa" target="_blank" class="dev-contact-item">
+          <div class="dev-contact-icon" style="background:rgba(37,211,102,.15);border:1px solid #25d366">
+            <svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">WHATSAPP</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'+'+developerData.kontak.wa"></div>
+          </div>
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        </a>
+        <!-- Email -->
+        <a :href="'mailto:'+developerData.kontak.email" class="dev-contact-item">
+          <div class="dev-contact-icon" style="background:rgba(255,51,85,.15);border:1px solid #ff3355">
+            <svg viewBox="0 0 24 24" fill="#ff3355"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">EMAIL</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text);word-break:break-all" x-text="developerData.kontak.email"></div>
+          </div>
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        </a>
+        <!-- Instagram -->
+        <a :href="'https://instagram.com/'+developerData.kontak.ig" target="_blank" class="dev-contact-item">
+          <div class="dev-contact-icon" style="background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(255,170,0,.15));border:1px solid #ff0080">
+            <svg viewBox="0 0 24 24" fill="#ff0080"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">INSTAGRAM</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.ig"></div>
+          </div>
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        </a>
+        <!-- TikTok -->
+        <a :href="'https://tiktok.com/@'+developerData.kontak.tiktok" target="_blank" class="dev-contact-item">
+          <div class="dev-contact-icon" style="background:linear-gradient(135deg,rgba(0,0,0,.4),rgba(255,0,128,.2));border:1px solid #00f2ea">
+            <svg viewBox="0 0 24 24" fill="#00f2ea"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">TIKTOK</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.tiktok"></div>
+          </div>
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        </a>
+        <!-- GitHub -->
+        <a :href="'https://github.com/'+developerData.kontak.github" target="_blank" class="dev-contact-item">
+          <div class="dev-contact-icon" style="background:rgba(255,255,255,.08);border:1px solid #fff">
+            <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">GITHUB</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.github"></div>
+          </div>
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- QUOTE -->
+    <div class="dev-section">
+      <div class="dev-quote" x-text="'&quot;'+developerData.quote+'&quot;'"></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="dev-section">
+      <div class="dev-cta-box">
+        <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:6px">MAU NGODING BARENG?</div>
+        <p style="font-size:11px;color:var(--text-dim);margin-bottom:14px;line-height:1.5">Masih belajar, tapi siap diskusi & kolaborasi. Chat aja lewat WhatsApp!</p>
+        <a :href="'https://wa.me/'+developerData.kontak.wa+'?text=Halo%20Andika,%20saya%20tertarik%20ngobrol%20soal%20coding'" target="_blank" class="zn-btn zn-btn-primary" style="text-decoration:none">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          <span>CHAT SEKARANG</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="dev-footer">
+      <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--primary);margin-bottom:4px">ZENKAI TOOLS</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);letter-spacing:1px">© <span x-text="new Date().getFullYear()"></span> Andika Talova Martin · v3.5</div>
+    </div>
+
+    <!-- CLOSE BUTTON -->
+    <div style="padding:20px 24px 24px">
+      <button @click="developerProfileOpen=false" class="zn-btn zn-btn-soft">TUTUP</button>
+    </div>
+  </div>
 </div>
 
 <!-- WELCOME POPUP -->
@@ -1720,6 +2009,10 @@ select.zn-input{cursor:pointer}
       <div style="font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:8px;letter-spacing:1px">// BY ANDIKA</div>
     </div>
     <div class="zn-drawer-menu">
+      <div class="zn-drawer-item" @click="drawerOpen=false;developerProfileOpen=true">
+        <div class="zn-drawer-item-icon" style="border-color:#a855f7"><svg viewBox="0 0 24 24" style="fill:#a855f7"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+        <span class="zn-drawer-item-label">👨‍💻 Developer</span>
+      </div>
       <div class="zn-drawer-item" @click="drawerOpen=false;openNews()">
         <div class="zn-drawer-item-icon" style="border-color:#00d9ff"><svg viewBox="0 0 24 24" style="fill:#00d9ff"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
         <span class="zn-drawer-item-label">Berita</span>
@@ -1815,6 +2108,61 @@ tabHistory:[],
 sheetDragY:0,sheetDragStart:0,sheetDragging:false,currentSheetKey:null,
 provinceSearch:'',citySearch:'',
 headerScrolled:false,
+
+// ============ DEVELOPER PROFILE (BARU) ============
+developerProfileOpen:false,
+developerData:{
+  nama:'Andika Talova Martin',
+  role:'Student Developer',
+  tagline:'Banyak Belajar, Banyak Ngoding, Banyak Proyek Jadi',
+  bio:'Developer asal Jambi, Indonesia yang baru mulai belajar coding sekitar 2 bulan lalu. Zenkai Tools adalah project pertama gw untuk ngasah skill — dari yang awalnya cuma HTML statis, sekarang jadi aplikasi web full-featured. Masih banyak yang harus dipelajari, tapi gw percaya konsistensi bakal ngebawa ke hasil yang keren. 🚀',
+  lokasi:'Jambi, Indonesia 🇮🇩',
+  status:'Lagi Belajar',
+  statistik:[
+    {value:'2 Bulan', label:'Belajar Coding', color:'var(--primary)'},
+    {value:'2', label:'Project Jadi', color:'var(--accent)'},
+    {value:'∞', label:'Semangat Belajar', color:'#00ff88'}
+  ],
+  skills:[
+    {
+      label:'FRONTEND',
+      items:['HTML','CSS','JavaScript']
+    },
+    {
+      label:'BACKEND',
+      items:['Supabase','PHP']
+    },
+    {
+      label:'DATABASE',
+      items:['MySQL'],
+      note:'Masih belajar, baru ngerti dikit 😅'
+    }
+  ],
+  sekolah:{
+    nama:'SMK Negeri 2 Tebo',
+    jurusan:'TKR (Teknik Kendaraan Ringan)',
+    tahun:'2024 - Sekarang (Kelas 12)',
+    deskripsi:'Walau jurusan gw TKR, tapi passion gw di dunia coding & web development. Sekolah tetap jalan, ngoding jalan. 💪'
+  },
+  learning:[
+    {icon:'🌐', title:'Frontend Web Development', desc:'HTML, CSS, JavaScript — dasar-dasar yang lagi gw asah tiap hari'},
+    {icon:'⚡', title:'Backend & Database', desc:'Supabase, PHP, MySQL — masih pemula, pelan-pelan ngerti'},
+    {icon:'🎨', title:'UI/UX Design', desc:'Belajar bikin tampilan yang enak dilihat & gampang dipake user'},
+    {icon:'🚀', title:'Building Real Projects', desc:'Belajar dari project nyata, bukan cuma tutorial'}
+  ],
+  projects:[
+    {nama:'Zenkai Tools v1', desc:'Versi pertama — static HTML doang, tapi ini titik awal semuanya', status:'Arsip', link:'#'},
+    {nama:'Zenkai Tools v3.5', desc:'Versi sekarang — full-featured web app dengan AI, dompet digital, downloader, dll', status:'Live', link:'#'}
+  ],
+  quote:'Belajar dari nol bukan alasan buat berhenti — justru alasan buat terus maju.',
+  kontak:{
+    wa:'6285352831643',
+    email:'andikaatka@gmail.com',
+    ig:'andik4.tm',
+    tiktok:'diktherh',
+    github:'ZenkaiTools'
+  }
+},
 
 vipOnlySheetOpen:false,
 activeBroadcast:null,broadcastPopupOpen:false,
@@ -1950,7 +2298,6 @@ formatRibuanInput:function(val){
   return parseInt(clean,10).toLocaleString('id-ID');
 },
 
-// ===== CLEAN LOGOUT =====
 forceCleanLogout:async function(){
   try{
     try{
@@ -1975,47 +2322,43 @@ forceCleanLogout:async function(){
 
 getCityMap:function(){
   return {
-    'ACEH':['Banda Aceh','Langsa','Lhokseumawe','Sabang','Subulussalam','Meulaboh','Jantho','Tapaktuan','Sinabang','Blangpidie'],
-    'SUMATERA UTARA':['Medan','Binjai','Pematangsiantar','Tanjungbalai','Tebing Tinggi','Padang Sidempuan','Gunungsitoli','Sibolga','Rantau Prapat','Kisaran','Kabanjahe','Berastagi','Stabat'],
-    'SUMATERA BARAT':['Padang','Bukittinggi','Payakumbuh','Solok','Padang Panjang','Pariaman','Sawahlunto','Painan','Lubuk Sikaping','Batusangkar'],
-    'RIAU':['Pekanbaru','Dumai','Pematang Reba','Bangkinang','Pasir Pengaraian','Tembilahan','Rengat','Siak Sri Indrapura','Selat Panjang','Bengkalis'],
-    'KEPULAUAN RIAU':['Batam','Tanjungpinang','Karimun','Natuna','Anambas','Lingga','Dabo Singkep'],
-    'JAMBI':['Jambi','Sungai Penuh','Muara Bulian','Sarolangun','Bangko','Kuala Tungkal','Muara Sabak','Muara Bungo'],
-    'BENGKULU':['Bengkulu','Curup','Arga Makmur','Manna','Mukomuko','Krui','Tais','Bintuhan'],
-    'SUMATERA SELATAN':['Palembang','Prabumulih','Pagar Alam','Lubuklinggau','Kayuagung','Baturaja','Muara Enim','Lahat','Sekayu','Indralaya'],
-    'KEPULAUAN BANGKA BELITUNG':['Pangkalpinang','Sungailiat','Tanjungpandan','Manggar','Koba','Toboali','Muntok'],
-    'LAMPUNG':['Bandar Lampung','Metro','Kalianda','Kotabumi','Gunung Sugih','Liwa','Pringsewu','Gedong Tataan','Blambangan Umpu','Sukadana'],
-    'BANTEN':['Serang','Tangerang','Tangerang Selatan','Cilegon','Pandeglang','Rangkasbitung','Ciruas','Kresek','Malingping'],
+    'ACEH':['Banda Aceh','Langsa','Lhokseumawe','Sabang','Subulussalam','Meulaboh'],
+    'SUMATERA UTARA':['Medan','Binjai','Pematangsiantar','Tanjungbalai','Tebing Tinggi','Padang Sidempuan','Sibolga'],
+    'SUMATERA BARAT':['Padang','Bukittinggi','Payakumbuh','Solok','Padang Panjang','Pariaman','Sawahlunto'],
+    'RIAU':['Pekanbaru','Dumai','Bangkinang','Pasir Pengaraian','Tembilahan','Rengat'],
+    'KEPULAUAN RIAU':['Batam','Tanjungpinang','Karimun','Natuna','Anambas'],
+    'JAMBI':['Jambi','Sungai Penuh','Muara Bulian','Sarolangun','Bangko','Kuala Tungkal','Muara Sabak','Muara Bungo','Tebo','Muara Tebo'],
+    'BENGKULU':['Bengkulu','Curup','Arga Makmur','Manna','Mukomuko'],
+    'SUMATERA SELATAN':['Palembang','Prabumulih','Pagar Alam','Lubuklinggau','Kayuagung','Baturaja','Muara Enim','Lahat'],
+    'KEPULAUAN BANGKA BELITUNG':['Pangkalpinang','Sungailiat','Tanjungpandan','Manggar'],
+    'LAMPUNG':['Bandar Lampung','Metro','Kalianda','Kotabumi','Gunung Sugih','Liwa'],
+    'BANTEN':['Serang','Tangerang','Tangerang Selatan','Cilegon','Pandeglang','Rangkasbitung'],
     'DKI JAKARTA':['Jakarta','Jakarta Pusat','Jakarta Utara','Jakarta Selatan','Jakarta Barat','Jakarta Timur'],
-    'JAWA BARAT':['Bandung','Bekasi','Bogor','Depok','Cimahi','Cirebon','Sukabumi','Tasikmalaya','Banjar','Garut','Karawang','Purwakarta','Subang','Sumedang','Indramayu','Majalengka','Cianjur','Ciamis','Kuningan','Pangandaran','Soreang','Ngamprah','Cikarang','Pelabuhanratu'],
-    'JAWA TENGAH':['Semarang','Surakarta','Magelang','Pekalongan','Salatiga','Tegal','Purwokerto','Cilacap','Kudus','Jepara','Klaten','Wonosobo','Boyolali','Rembang','Blora','Pati','Demak','Kendal','Batang','Pemalang','Brebes','Temanggung','Purworejo','Kebumen','Banjarnegara','Purbalingga','Sragen','Karanganyar','Sukoharjo','Wonogiri'],
-    'DI YOGYAKARTA':['Yogyakarta','Sleman','Bantul','Gunungkidul','Kulon Progo','Wates','Wonosari'],
-    'JAWA TIMUR':['Surabaya','Malang','Kediri','Blitar','Madiun','Mojokerto','Pasuruan','Probolinggo','Batu','Sidoarjo','Gresik','Jember','Banyuwangi','Situbondo','Bondowoso','Lumajang','Jombang','Nganjuk','Ngawi','Magetan','Ponorogo','Pacitan','Trenggalek','Tulungagung','Bojonegoro','Tuban','Lamongan','Bangkalan','Sampang','Pamekasan','Sumenep'],
-    'BALI':['Denpasar','Singaraja','Ubud','Kuta','Nusa Dua','Tabanan','Gianyar','Klungkung','Karangasem','Bangli','Badung','Jembrana'],
-    'NUSA TENGGARA BARAT':['Mataram','Bima','Sumbawa Besar','Praya','Selong','Taliwang','Dompu','Gerung'],
-    'NUSA TENGGARA TIMUR':['Kupang','Ende','Maumere','Larantuka','Soe','Atambua','Ruteng','Labuan Bajo','Bajawa','Waingapu','Kalabahi','Lewoleba'],
-    'KALIMANTAN BARAT':['Pontianak','Singkawang','Sintang','Putussibau','Ketapang','Mempawah','Bengkayang'],
-    'KALIMANTAN TENGAH':['Palangka Raya','Sampit','Pangkalan Bun','Muara Teweh','Kuala Kapuas','Buntok','Puruk Cahu'],
-    'KALIMANTAN SELATAN':['Banjarmasin','Banjarbaru','Martapura','Kotabaru','Amuntai','Tanjung','Barabai','Kandangan','Pelaihari'],
-    'KALIMANTAN TIMUR':['Samarinda','Balikpapan','Bontang','Tarakan','Berau','Tenggarong','Sangatta','Penajam'],
+    'JAWA BARAT':['Bandung','Bekasi','Bogor','Depok','Cimahi','Cirebon','Sukabumi','Tasikmalaya','Garut','Karawang','Purwakarta','Subang'],
+    'JAWA TENGAH':['Semarang','Surakarta','Magelang','Pekalongan','Salatiga','Tegal','Purwokerto','Cilacap','Kudus','Jepara','Klaten'],
+    'DI YOGYAKARTA':['Yogyakarta','Sleman','Bantul','Gunungkidul','Kulon Progo'],
+    'JAWA TIMUR':['Surabaya','Malang','Kediri','Blitar','Madiun','Mojokerto','Pasuruan','Probolinggo','Batu','Sidoarjo','Gresik','Jember','Banyuwangi'],
+    'BALI':['Denpasar','Singaraja','Ubud','Kuta','Nusa Dua'],
+    'NUSA TENGGARA BARAT':['Mataram','Bima','Sumbawa Besar','Praya','Selong'],
+    'NUSA TENGGARA TIMUR':['Kupang','Ende','Maumere','Larantuka','Soe'],
+    'KALIMANTAN BARAT':['Pontianak','Singkawang','Sintang','Putussibau','Ketapang'],
+    'KALIMANTAN TENGAH':['Palangka Raya','Sampit','Pangkalan Bun'],
+    'KALIMANTAN SELATAN':['Banjarmasin','Banjarbaru','Martapura','Kotabaru'],
+    'KALIMANTAN TIMUR':['Samarinda','Balikpapan','Bontang','Tarakan','Berau'],
     'KALIMANTAN UTARA':['Tanjung Selor','Tarakan','Malinau','Nunukan'],
-    'SULAWESI UTARA':['Manado','Bitung','Tomohon','Kotamobagu','Tondano','Airmadidi','Amurang'],
-    'GORONTALO':['Gorontalo','Limboto','Marisa','Kwandang','Tilamuta'],
-    'SULAWESI TENGAH':['Palu','Luwuk','Poso','Donggala','Toli-Toli','Buol','Ampana','Banggai','Parigi'],
-    'SULAWESI BARAT':['Mamuju','Majene','Polewali','Mamasa','Pasangkayu'],
-    'SULAWESI SELATAN':['Makassar','Parepare','Palopo','Bulukumba','Bantaeng','Jeneponto','Takalar','Gowa','Sinjai','Bone','Maros','Pangkep','Barru','Soppeng','Wajo','Sidrap','Pinrang','Enrekang','Tana Toraja','Toraja Utara','Luwu','Luwu Utara','Luwu Timur','Selayar','Makale'],
-    'SULAWESI TENGGARA':['Kendari','Baubau','Kolaka','Bombana','Wakatobi','Konawe','Konawe Selatan','Konawe Utara','Buton','Muna','Raha'],
-    'MALUKU':['Ambon','Tual','Masohi','Namlea','Bula','Piru','Saumlaki'],
-    'MALUKU UTARA':['Sofifi','Ternate','Tidore','Tobelo','Sanana','Labuha','Weda'],
-    'PAPUA':['Jayapura','Biak','Merauke','Timika','Nabire','Wamena','Sarmi','Keerom','Genyem','Sentani'],
-    'PAPUA BARAT':['Manokwari','Sorong','Fakfak','Kaimana','Bintuni','Ransiki'],
-    'PAPUA BARAT DAYA':['Sorong','Maybrat','Raja Ampat','Tambrauw','Sorong Selatan'],
-    'PAPUA TENGAH':['Nabire','Timika','Mimika','Paniai','Deiyai','Dogiyai','Intan Jaya'],
-    'PAPUA PEGUNUNGAN':['Wamena','Jayawijaya','Lanny Jaya','Mamberamo Tengah','Nduga','Pegunungan Bintang','Tolikara','Yahukimo','Yalimo'],
-    'PAPUA SELATAN':['Merauke','Boven Digoel','Mappi','Asmat']
+    'SULAWESI UTARA':['Manado','Bitung','Tomohon','Kotamobagu','Tondano'],
+    'GORONTALO':['Gorontalo','Limboto','Marisa'],
+    'SULAWESI TENGAH':['Palu','Luwuk','Poso','Donggala'],
+    'SULAWESI BARAT':['Mamuju','Majene','Polewali'],
+    'SULAWESI SELATAN':['Makassar','Parepare','Palopo','Bulukumba','Gowa','Maros'],
+    'SULAWESI TENGGARA':['Kendari','Baubau','Kolaka','Raha'],
+    'MALUKU':['Ambon','Tual','Masohi'],
+    'MALUKU UTARA':['Sofifi','Ternate','Tidore','Tobelo'],
+    'PAPUA':['Jayapura','Biak','Merauke','Timika','Nabire','Wamena'],
+    'PAPUA BARAT':['Manokwari','Sorong','Fakfak','Kaimana']
   };
 },
-initProvinces:function(){this.provinces=Object.keys(this.getCityMap());this.weatherProvince='DKI JAKARTA';this.cities=this.getCityMap()['DKI JAKARTA'];this.weatherCity='Jakarta';},
+initProvinces:function(){this.provinces=Object.keys(this.getCityMap());this.weatherProvince='JAMBI';this.cities=this.getCityMap()['JAMBI'];this.weatherCity='Jambi';},
 
 gate:function(fiturId,nextAction){
   if(this.isUnderMaintenance(fiturId)){return this.showMaintenanceSheet(fiturId);}
@@ -2091,6 +2434,7 @@ onSheetTouchEnd:function(e){
 },
 
 handleBackButton:function(){
+  if(this.developerProfileOpen){this.developerProfileOpen=false;return true;}
   if(this.welcomePopupOpen){this.welcomePopupOpen=false;return true;}
   if(this.aboutModalOpen){this.aboutModalOpen=false;return true;}
   if(this.profileModalOpen){this.profileModalOpen=false;return true;}
@@ -2227,7 +2571,6 @@ init:async function(){
   this.chatFullscreen=false;this.proChatFullscreen=false;
   self.setupRealtime();
   
-  // FALLBACK POLLING BAN/VIP (tiap 30 detik)
   setInterval(async function(){
     if(!self.currentUser || self.isOwner) return;
     try{
@@ -2297,7 +2640,6 @@ handleEmailAuth:async function(){
       if(data.user){await sb.from('profiles').upsert({id:data.user.id,username:this.authUsername,status:'user',last_login:new Date().toISOString(),is_vip:false,is_banned:false,chat_count:0,chat_bonus:0});}
       this.showAlert('SUKSES','Berhasil daftar!');this.authMode='login';
     }else{
-      // Sign out bersih dulu
       try{ await sb.auth.signOut(); }catch(e){}
       try{
         var keys = Object.keys(localStorage);
@@ -2314,7 +2656,6 @@ handleEmailAuth:async function(){
         if(error)throw error;
         if(!data || !data.user){ throw new Error('Login gagal: response kosong'); }
         
-        // Reset state
         self.isAuthenticated = false;
         self.bannedInfoSheetOpen = false;
         self.bannedInfoData = {reason:'', until:null};
@@ -2350,7 +2691,6 @@ checkUserAccessOnLogin: async function(user, showWelcome){
   this.chatFullscreen = false;
   this.proChatFullscreen = false;
   
-  // ===== CEK BAN DULU =====
   var isOwnerAccount = user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
   
   if(!isOwnerAccount){
@@ -2389,7 +2729,6 @@ checkUserAccessOnLogin: async function(user, showWelcome){
     }catch(e){ console.error('Ban check error:', e); }
   }
   
-  // ===== OWNER: verifikasi PIN =====
   if(isOwnerAccount){
     this.pendingUser = user;
     this.enteredPin = '';
@@ -2397,7 +2736,6 @@ checkUserAccessOnLogin: async function(user, showWelcome){
     return;
   }
   
-  // ===== USER BIASA =====
   this.currentUser = user;
   this.isOwner = false;
   this.isAuthenticated = true;
@@ -2499,7 +2837,6 @@ logout:async function(){
   setTimeout(function(){window.location.reload();},200);
 },
 
-// TRANSAKSI
 loadTransactions:async function(){if(!this.currentUser)return;var{data}=await sb.from('transactions').select('*').eq('user_id',this.currentUser.id).order('id',{ascending:false});if(data){this.transactions=data;var s=this;setTimeout(function(){s.drawCharts()},300);}},
 addTransaction:async function(type){
   if(!this.currentUser||!this.txCategory||!this.txAmount){return this.showAlert('PERHATIAN','Isi kategori dan nominal!');}
@@ -2511,7 +2848,6 @@ addTransaction:async function(type){
 },
 confirmDeleteTx:function(id){var self=this;this.showConfirm('HAPUS TRANSAKSI?','Data akan dihapus permanen.',async function(){await sb.from('transactions').delete().eq('id',id);await self.loadTransactions();self.showAlert('SUKSES','Transaksi dihapus.');},'🗑️');},
 
-// SAVINGS
 loadSavings:async function(){if(!this.currentUser)return;var{data}=await sb.from('savings_targets').select('*').eq('user_id',this.currentUser.id).order('id',{ascending:false});if(data)this.savings=data;},
 addSavings:async function(){if(!this.targetForm.nama||!this.targetForm.target){return this.showAlert('PERHATIAN','Isi nama & target!');}var{error}=await sb.from('savings_targets').insert({user_id:this.currentUser.id,nama:this.targetForm.nama,target:parseFloat(String(this.targetForm.target).replace(/\./g,'')),terkumpul:0,deadline:this.targetForm.deadline});if(!error){this.targetSheetOpen=false;await this.loadSavings();await this.addPoints(2,'Bikin target');this.showAlert('SUKSES','Target dibuat!');}},
 confirmDeleteSavings:function(id){var self=this;this.showConfirm('HAPUS TARGET?','Target akan dihapus.',async function(){await sb.from('savings_targets').delete().eq('id',id);await self.loadSavings();},'🗑️');},
@@ -2530,13 +2866,11 @@ confirmAddSavings:async function(){
   this.showAlert('SUKSES','Tabungan bertambah Rp '+this.formatRibuan(nominal));
 },
 
-// BUDGET
 loadBudgets:async function(){if(!this.currentUser)return;var bulan=new Date().toISOString().slice(0,7);var{data}=await sb.from('budgets').select('*').eq('user_id',this.currentUser.id).eq('bulan',bulan);if(data)this.budgets=data;},
 addBudget:async function(){if(!this.budgetForm.kategori||!this.budgetForm.limit_bulanan){return this.showAlert('PERHATIAN','Isi kategori & limit!');}var bulan=new Date().toISOString().slice(0,7);var{error}=await sb.from('budgets').insert({user_id:this.currentUser.id,kategori:this.budgetForm.kategori,limit_bulanan:parseFloat(String(this.budgetForm.limit_bulanan).replace(/\./g,'')),bulan:bulan});if(!error){this.budgetSheetOpen=false;await this.loadBudgets();await this.addPoints(2,'Set budget');}},
 confirmDeleteBudget:function(id){var self=this;this.showConfirm('HAPUS BUDGET?','Budget dihapus.',async function(){await sb.from('budgets').delete().eq('id',id);await self.loadBudgets();},'🗑️');},
 getBudgetUsed:function(kategori){return this.transactions.filter(function(t){return t.type==='expense'&&t.category===kategori}).reduce(function(a,t){return a+Number(t.amount)},0);},
 
-// CHARTS
 drawCharts:function(){var self=this;setTimeout(function(){try{
   var pieEl=document.getElementById('pieChart');
   if(pieEl){
@@ -2559,7 +2893,6 @@ drawCharts:function(){var self=this;setTimeout(function(){try{
   }
 }catch(e){console.error(e)}},200);},
 
-// MOVIE
 fetchMovies:async function(){this.movieLoading=true;try{var res=await fetch('https://api.themoviedb.org/3/trending/movie/week?api_key='+TMDB_KEY+'&language=id-ID');var json=await res.json();if(json.results){this.movieList=json.results.slice(0,15).map(function(m){return{id:m.id,title:m.title,year:m.release_date?m.release_date.slice(0,4):'-',rating:m.vote_average?m.vote_average.toFixed(1):'-',overview:m.overview||'-',poster:m.poster_path?'https://image.tmdb.org/t/p/w200'+m.poster_path:''}});}}catch(e){}this.movieLoading=false;},
 openMovieSheet:function(){if(this.isUnderMaintenance('film')){return this.showMaintenanceSheet('film');}this.movieSheetOpen=true;if(this.movieList.length===0)this.fetchMovies();},
 openNews:async function(){
@@ -2573,7 +2906,7 @@ openNews:async function(){
 fetchWithTimeout:function(url,timeout){return new Promise(function(resolve,reject){var ctrl=new AbortController();var tid=setTimeout(function(){ctrl.abort();},timeout||8000);fetch(url,{signal:ctrl.signal}).then(function(r){clearTimeout(tid);resolve(r);}).catch(function(e){clearTimeout(tid);reject(e);});});},
 loadNewsFromRSS:async function(){
   var self = this;
-  var feeds = ['https://www.antaranews.com/rss/terkini.xml','https://rss.detik.com/index.php/detikcom','https://www.cnnindonesia.com/nasional/rss'];
+  var feeds = ['https://www.antaranews.com/rss/terkini.xml','https://rss.detik.com/index.php/detikcom'];
   var proxies = [function(u){return 'https://corsproxy.io/?'+encodeURIComponent(u);},function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);}];
   for(var i=0;i<feeds.length;i++){
     for(var p=0;p<proxies.length;p++){
@@ -2613,13 +2946,11 @@ parseRSSItems:function(xmlText){
   }catch(e){console.error('Parse RSS gagal:',e);return [];}
 },
 
-// TTS + KOMPRES + BMI + SPEED
 speakCustomText:function(){if(!this.customTtsText){return this.showAlert('PERHATIAN','Ketik teks dulu!');}if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(this.customTtsText);u.lang='id-ID';window.speechSynthesis.speak(u);}},
 compressImageFile:function(event){var file=event.target.files[0];if(!file)return;var self=this;var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var canvas=document.createElement('canvas');var ctx=canvas.getContext('2d');var w=img.width,h=img.height;var max=800;if(w>h&&w>max){h*=max/w;w=max;}else if(h>max){w*=max/h;h=max;}canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);self.compressedImageUrl=canvas.toDataURL('image/jpeg',0.6);self.showAlert('BERHASIL','Foto dikompres!');};img.src=e.target.result;};reader.readAsDataURL(file);},
 runSpeedTest:async function(){this.speedTesting=true;this.speedResult=null;try{var start=Date.now();var res=await fetch('https://speed.cloudflare.com/__down?bytes=5000000&r='+Math.random());var blob=await res.blob();var dur=(Date.now()-start)/1000;var mbps=(blob.size*8)/(dur*1000000);this.speedResult={download:mbps.toFixed(1),latency:Math.round(dur*100),quality:mbps>20?'BAGUS':mbps>5?'CUKUP':'LAMBAT'};}catch(e){this.showAlert('GAGAL','Tes gagal.');}this.speedTesting=false;},
 calcBMI:function(){var w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)/100;if(!w||!h){return this.showAlert('PERHATIAN','Isi berat & tinggi!');}var bmi=w/(h*h);var kategori,color;if(bmi<18.5){kategori='KURUS';color='#00d9ff';}else if(bmi<25){kategori='NORMAL';color='#00ff88';}else if(bmi<30){kategori='GEMUK';color='#ffd700';}else{kategori='OBESITAS';color='#ff3355';}var bbIdeal=(22*h*h).toFixed(1);var age=parseFloat(this.bmiAge)||25;var kalori=this.bmiGender==='male'?Math.round(66+(13.7*w)+(5*h*100)-(6.8*age)):Math.round(655+(9.6*w)+(1.8*h*100)-(4.7*age));this.bmiResult={bmi:bmi.toFixed(1),kategori:kategori,color:color,bbIdeal:bbIdeal,kalori:kalori};},
 
-// DOWNLOADER
 processMediaDownload:async function(){
   if(this.isUnderMaintenance('downloader')){return this.showMaintenanceSheet('downloader');}
   var url=this.downloadLinkInput.trim();
@@ -2656,7 +2987,6 @@ downloadBlob:async function(url,filename){
   finally{this.downloadingFile=false;}
 },
 
-// CUACA
 openWeatherSheet:function(){
   if(this.isUnderMaintenance('cuaca')){return this.showMaintenanceSheet('cuaca');}
   if(this.weatherCity && this.weatherData){this.weatherSheetOpen=true;return;}
@@ -2684,7 +3014,6 @@ fetchWeather:async function(){
   finally{this.weatherLoading=false;}
 },
 
-// CHAT AI BIASA
 openChatAI:async function(){
   if(this.isUnderMaintenance('ai')){return this.showMaintenanceSheet('ai');}
   this.chatFullscreen=true;
@@ -2730,7 +3059,6 @@ sendChat:async function(){
 startVoiceInput:function(){if(!this.voiceSupported){return this.showAlert('INFO','Browser tidak support.');}var SR=window.SpeechRecognition||window.webkitSpeechRecognition;var rec=new SR();rec.lang='id-ID';var self=this;rec.onresult=function(e){self.chatInput=e.results[0][0].transcript;setTimeout(function(){self.sendChat()},300)};rec.onerror=function(e){self.showAlert('GAGAL','Voice error: '+e.error)};rec.start();},
 confirmClearChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat dihapus.',function(){self.chatMessages=[];self.showAlert('SUKSES','Chat dihapus.');},'🗑️');},
 
-// ZENKAI AI PRO
 handleProCardClick:function(){
   if(this.isUnderMaintenance('ai_pro')){return this.showMaintenanceSheet('ai_pro');}
   if(this.isOwner || this.isVip){ return this.openProChat(); }
@@ -2782,7 +3110,6 @@ sendProChat:async function(){
 },
 clearProChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat Zenkai AI Pro bakal dihapus.',function(){self.proMessages=[];self.showAlert('SUKSES','Chat dihapus.');},'🗑️');},
 
-// OWNER - STATISTIK
 loadAppStats:async function(){try{
   var{count:u}=await sb.from('profiles').select('*',{count:'exact',head:true});
   var{count:t}=await sb.from('transactions').select('*',{count:'exact',head:true});
@@ -2809,7 +3136,6 @@ loadLiveDashboard:async function(){
   }catch(e){console.error(e);}
 },
 
-// OWNER - USERS
 loadAllUsers:async function(){try{var{data}=await sb.from('profiles').select('*').order('created_at',{ascending:false});if(data)this.allUsers=data;}catch(e){}},
 
 openBanSheet:function(u){this.banSheetTarget=u;this.banSheetForm={durasi:'1d',alasan:''};this.banSheetOpen=true;},
@@ -2910,7 +3236,6 @@ promptAddChat:function(u){var self=this;this.showPrompt('TAMBAH BONUS CHAT','Ber
 promptAddPoints:function(u){var self=this;this.showPrompt('TAMBAH POIN','Berapa poin untuk '+u.username+'?',async function(val){var n=parseInt(val)||0;if(n<=0)return;try{var{data:pts}=await sb.from('user_points').select('*').eq('user_id',u.id).maybeSingle();if(!pts){await sb.from('user_points').insert({user_id:u.id,total_points:n,level:1});}else{await sb.from('user_points').update({total_points:(pts.total_points||0)+n}).eq('user_id',u.id);}self.showAlert('SUKSES','+'+n+' poin untuk '+u.username);}catch(e){self.showAlert('GAGAL',e.message);}});},
 confirmDeleteUser:function(u){var self=this;this.showConfirm('HAPUS USER?','Semua data '+u.username+' akan dihapus!',async function(){await sb.from('transactions').delete().eq('user_id',u.id);await sb.from('savings_targets').delete().eq('user_id',u.id);await sb.from('budgets').delete().eq('user_id',u.id);await sb.from('user_points').delete().eq('user_id',u.id);await sb.from('profiles').delete().eq('id',u.id);self.showAlert('SUKSES','User dihapus.');await self.loadAllUsers();},'🗑️');},
 
-// OWNER WALLET
 loadWallet:async function(){
   try{
     var {data} = await sb.from('app_settings').select('*').eq('id',1).maybeSingle();
@@ -2963,7 +3288,6 @@ sendGift:async function(){
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
 
-// SUBSCRIPTION MANAGER
 loadSubscriptions:async function(){
   try{
     var {data} = await sb.from('profiles').select('id,username,is_vip,vip_expiry,status').eq('is_vip',true).order('vip_expiry',{ascending:true});
@@ -2983,7 +3307,6 @@ extendVip:async function(u,days){
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
 
-// OWNER - BROADCAST
 loadBroadcasts:async function(){
   try{var {data} = await sb.from('broadcasts').select('*').order('created_at',{ascending:false}).limit(10);if(data)this.broadcastList = data;}catch(e){console.error(e);}
 },
@@ -3022,7 +3345,6 @@ closeBroadcast:function(){
   this.broadcastPopupOpen = false;
 },
 
-// OWNER - MAINTENANCE
 loadMaintenance:async function(){
   try{
     var {data} = await sb.from('feature_maintenance').select('*');
@@ -3055,10 +3377,8 @@ saveMaintenance:async function(){
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
 
-// OWNER - SETELAN
 saveWelcomeText:async function(){if(!this.welcomeTextEdit)return;await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit}).eq('id',1);this.welcomeText=this.welcomeTextEdit;this.showAlert('SUKSES','Kata sambutan diperbarui!');},
 
-// REVIEW
 loadReviews:async function(){
   try{var {data} = await sb.from('reviews').select('*').order('created_at',{ascending:false}).limit(50);this.reviewList = data || [];}catch(e){console.error(e);}
 },
@@ -3080,11 +3400,9 @@ submitReview:async function(){
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
 
-// REALTIME
 setupRealtime:function(){
   var self = this;
   
-  // Broadcast
   try{
     sb.channel('bc-rt').on('postgres_changes',{event:'INSERT',schema:'public',table:'broadcasts'},function(p){
       var n=p.new;
@@ -3096,7 +3414,6 @@ setupRealtime:function(){
     }).subscribe();
   }catch(e){console.error('RT BC:',e);}
   
-  // Maintenance
   try{
     sb.channel('maint-rt').on('postgres_changes',{event:'*',schema:'public',table:'feature_maintenance'},function(p){
       var u=p.new;
@@ -3112,7 +3429,6 @@ setupRealtime:function(){
     }).subscribe();
   }catch(e){console.error('RT MT:',e);}
   
-  // Ban & VIP update realtime
   try{
     sb.channel('ban-rt')
       .on('postgres_changes', {
