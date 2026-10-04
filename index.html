@@ -137,7 +137,6 @@ a{color:inherit;text-decoration:none}
 }
 .zn-feat-review-btn:hover{background:rgba(255,215,0,.15);border-color:#ffd700;transform:translateY(-1px)}
 .zn-feat-review-btn:active{transform:scale(.96)}
-.zn-feat-review-btn svg{flex-shrink:0}
 
 .zn-tips{display:flex;gap:12px;align-items:flex-start;padding:14px;background:linear-gradient(135deg,var(--primary-soft),transparent);border:1px solid var(--primary);border-radius:var(--radius)}
 .zn-tips-icon{width:32px;height:32px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -209,13 +208,17 @@ select.zn-input{cursor:pointer}
 .zn-spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:znSpin .6s linear infinite}
 @keyframes znSpin{to{transform:rotate(360deg)}}
 
-/* AI BUBBLE — DRAGGABLE */
 .zn-ai-bubble{position:fixed;z-index:60;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:grab;user-select:none;touch-action:none;transition:box-shadow .2s}
 .zn-ai-bubble.dragging{cursor:grabbing;opacity:.85;transition:none}
 .zn-ai-bubble-btn{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--primary);box-shadow:0 0 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;pointer-events:none}
 .zn-ai-bubble-btn svg{width:28px;height:28px;fill:#050508}
 .zn-ai-bubble-label{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:.5px;color:var(--primary);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;border:1px solid var(--primary);white-space:nowrap;pointer-events:none}
 .zn-ai-bubble-hint{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:6px;border:1px solid var(--border);white-space:nowrap;pointer-events:none;animation:znHintPulse 2.5s ease-in-out infinite}
+
+/* WEB MAINTENANCE BANNER */
+.web-maint-banner{position:fixed;top:0;left:0;right:0;z-index:9990;padding:10px 14px;background:linear-gradient(90deg,#ff3355,#ff6600);color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-align:center;box-shadow:0 4px 20px rgba(255,51,85,.6),0 0 30px rgba(255,51,85,.4);backdrop-filter:blur(10px);animation:bannerPulse 1s ease-in-out infinite}
+@keyframes bannerPulse{0%,100%{box-shadow:0 4px 20px rgba(255,51,85,.6),0 0 30px rgba(255,51,85,.4)}50%{box-shadow:0 4px 25px rgba(255,51,85,.9),0 0 40px rgba(255,51,85,.6)}}
+.web-maint-banner .countdown-num{display:inline-block;background:rgba(0,0,0,.3);padding:2px 8px;border-radius:6px;margin:0 4px;font-size:16px;font-weight:900;min-width:34px;text-align:center;border:1px solid rgba(255,255,255,.3)}
 
 /* WEB MAINTENANCE FULL SCREEN */
 .web-maint-screen{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
@@ -226,6 +229,10 @@ select.zn-input{cursor:pointer}
 @keyframes webMaintPulse{0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(255,170,0,.6),inset 0 0 30px rgba(255,170,0,.3)}50%{transform:scale(1.05);box-shadow:0 0 80px rgba(255,170,0,.8),inset 0 0 40px rgba(255,170,0,.4)}}
 .web-maint-title{font-family:'Orbitron',sans-serif;font-size:clamp(28px,8vw,44px);font-weight:900;letter-spacing:4px;color:var(--warning);text-shadow:0 0 30px rgba(255,170,0,.6);margin-bottom:10px}
 .web-maint-sub{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-mute);letter-spacing:3px;margin-bottom:32px}
+
+/* OWNER MAINTENANCE BANNER */
+.owner-maint-banner{position:fixed;top:0;left:0;right:0;z-index:9995;padding:8px 12px;background:rgba(255,51,85,.95);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-align:center;letter-spacing:.5px;backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(255,51,85,.5)}
+.owner-maint-banner button{background:#fff;color:#ff3355;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;letter-spacing:.5px}
 
 #loadingScreen{position:fixed;inset:0;z-index:99998;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:hidden;transition:opacity .6s,visibility .6s}
 #loadingScreen.hide{opacity:0;visibility:hidden}
@@ -294,7 +301,7 @@ select.zn-input{cursor:pointer}
 .zn-maint-card.active .zn-maint-card-header{margin-bottom:12px}
 .zn-maint-card-name{font-size:13px;font-weight:600;color:var(--text);flex:1}
 .zn-maint-fields{display:flex;flex-direction:column;gap:8px;animation:znSlideDown .3s ease-out}
-@keyframes znSlideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:200px}}
+@keyframes znSlideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:300px}}
 .zn-maint-input{width:100%;padding:10px 12px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:12px}
 .zn-maint-input:focus{border-color:var(--warning)}
 .zn-maint-textarea{width:100%;padding:10px 12px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:12px;resize:vertical;min-height:50px;font-family:'Inter',sans-serif}
@@ -359,7 +366,6 @@ select.zn-input{cursor:pointer}
 .dev-bio-box{padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)}
 .dev-bio-box p{font-size:13px;color:var(--text-dim);line-height:1.7;white-space:pre-line}
 .dev-pill{padding:6px 12px;border-radius:16px;background:var(--primary-soft);border:1px solid var(--primary);color:var(--primary);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;transition:all .2s}
-.dev-pill:hover{transform:translateY(-2px);box-shadow:0 4px 12px var(--primary-glow)}
 .dev-skill-group{margin-bottom:10px}
 .dev-skill-label{font-size:10px;color:var(--text-mute);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:600}
 .dev-skill-note{font-size:10px;color:var(--text-mute);font-style:italic;margin-top:6px;padding-left:2px}
@@ -367,25 +373,22 @@ select.zn-input{cursor:pointer}
 .dev-school-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .dev-school-icon svg{width:24px;height:24px;fill:var(--primary)}
 .dev-learning-list{display:flex;flex-direction:column;gap:10px}
-.dev-learning-item{display:flex;gap:12px;padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);align-items:flex-start;transition:all .2s}
-.dev-learning-item:hover{border-color:var(--primary);transform:translateX(4px)}
+.dev-learning-item{display:flex;gap:12px;padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);align-items:flex-start}
 .dev-learning-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
 .dev-learning-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
 .dev-learning-desc{font-size:11px;color:var(--text-mute);line-height:1.4}
-.dev-project-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-decoration:none;transition:all .25s}
-.dev-project-item:hover{border-color:var(--primary);transform:translateX(4px)}
+.dev-project-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-decoration:none}
 .dev-project-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .dev-project-icon svg{width:18px;height:18px;fill:var(--primary)}
 .dev-project-status{font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:.5px}
-.dev-contact-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-decoration:none;transition:all .25s}
-.dev-contact-item:hover{border-color:var(--primary);transform:translateX(4px)}
+.dev-contact-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-decoration:none}
 .dev-contact-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .dev-contact-icon svg{width:18px;height:18px}
 .dev-quote{padding:16px;border-radius:12px;background:var(--bg-2);border:1px dashed var(--border);text-align:center;font-style:italic;color:var(--text-dim);font-size:12px;line-height:1.6}
 .dev-cta-box{padding:20px;border-radius:14px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);text-align:center}
 .dev-footer{padding:20px 24px;border-top:1px solid var(--border);text-align:center;background:var(--bg-2)}
 
-/* TOAST NOTIFICATION */
+/* TOAST */
 .zn-toast-container{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:999999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:min(400px,90vw)}
 .zn-toast{padding:12px 16px;border-radius:12px;background:rgba(13,13,24,.98);border:1px solid var(--primary);box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px var(--primary-glow);display:flex;align-items:flex-start;gap:10px;animation:znToastIn .3s ease-out;pointer-events:auto;backdrop-filter:blur(10px)}
 .zn-toast.success{border-color:#00ff88;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px rgba(0,255,136,.5)}
@@ -428,8 +431,31 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- WEB MAINTENANCE FULL SCREEN (Owner bypass) -->
-<template x-if="webMaintenanceActive && !isOwner && webMaintShouldBlock">
+<!-- ============================================
+     WEB MAINTENANCE — COUNTDOWN BANNER (User kena)
+     ============================================ -->
+<template x-if="webMaintCountdown > 0 && !isOwner">
+  <div class="web-maint-banner">
+    🚨 WEB AKAN MAINTENANCE DALAM
+    <span class="countdown-num" x-text="webMaintCountdown"></span>
+    DETIK — Simpen kerjaan lu dulu!
+  </div>
+</template>
+
+<!-- ============================================
+     WEB MAINTENANCE — OWNER BANNER
+     ============================================ -->
+<template x-if="isOwner && webMaintenanceActive">
+  <div class="owner-maint-banner">
+    <span>🚨 MAINTENANCE WEB AKTIF — Cakupan: <span x-text="webMaintScope==='user'?'USER BIASA':(webMaintScope==='vip'?'VIP':'SEMUA')"></span></span>
+    <button @click="quickDisableWebMaintenance()">MATIIN SEKARANG</button>
+  </div>
+</template>
+
+<!-- ============================================
+     WEB MAINTENANCE — FULL SCREEN BLOCK
+     ============================================ -->
+<template x-if="webMaintenanceActive && !isOwner && webMaintShouldBlock && webMaintCountdown === 0">
   <div class="web-maint-screen">
     <div class="web-maint-content">
       <div class="web-maint-icon">🔧</div>
@@ -441,10 +467,7 @@ select.zn-input{cursor:pointer}
         <div style="font-size:14px;color:var(--text);line-height:1.6;margin-bottom:16px" x-text="webMaintenanceData.alasan || 'Sedang dalam perbaikan sistem'"></div>
         
         <div style="font-size:10px;color:var(--warning);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:8px">// ESTIMASI SELESAI</div>
-        <div style="font-size:14px;color:var(--text);line-height:1.6;margin-bottom:16px" x-text="webMaintenanceData.estimasi || 'Belum diketahui'"></div>
-        
-        <div style="font-size:10px;color:var(--warning);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:8px">// CAKUPAN</div>
-        <div style="font-size:12px;color:var(--text-dim);line-height:1.6" x-text="webMaintScopeLabel"></div>
+        <div style="font-size:14px;color:var(--text);line-height:1.6" x-text="webMaintenanceData.estimasi || 'Belum diketahui'"></div>
       </div>
       
       <p style="font-size:12px;color:var(--text-mute);line-height:1.6;margin-bottom:20px">
@@ -453,7 +476,7 @@ select.zn-input{cursor:pointer}
       
       <button @click="logoutFromMaintenance()" class="zn-btn zn-btn-danger" style="max-width:300px;margin:0 auto">
         <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
-        <span>KELUAR & TUNGGU</span>
+        <span>KELUAR KE LOGIN</span>
       </button>
     </div>
   </div>
@@ -463,9 +486,7 @@ select.zn-input{cursor:pointer}
 <div class="zn-toast-container">
   <template x-for="toast in toasts" :key="toast.id">
     <div class="zn-toast" :class="toast.type" :class="{out: toast.out}">
-      <div class="zn-toast-icon">
-        <span x-text="toast.type==='success'?'✓':(toast.type==='error'?'✕':'!')"></span>
-      </div>
+      <div class="zn-toast-icon"><span x-text="toast.type==='success'?'✓':(toast.type==='error'?'✕':'!')"></span></div>
       <div class="zn-toast-body">
         <div class="zn-toast-title" x-text="toast.title"></div>
         <div class="zn-toast-msg" x-text="toast.message"></div>
@@ -635,11 +656,8 @@ select.zn-input{cursor:pointer}
             </div>
             <div class="zn-feat-name" x-text="f.nama"></div>
             <div class="zn-feat-desc" x-text="f.desc"></div>
-
             <button @click.stop="openReviewListForFeature(f)" class="zn-feat-review-btn">
-              <svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:currentColor">
-                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-              </svg>
+              <svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
               <span x-text="getFeatureRating(f.id).total > 0 ? getFeatureRating(f.id).avg + ' (' + getFeatureRating(f.id).total + ')' : 'Review'"></span>
             </button>
           </div>
@@ -1109,7 +1127,7 @@ select.zn-input{cursor:pointer}
               <svg viewBox="0 0 24 24" style="fill:var(--danger)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
               <span>🚨 MAINTENANCE WEB</span>
             </div>
-            <p style="font-size:11px;color:var(--text-mute);margin-bottom:14px;line-height:1.5">Blokir total akses web. Owner tetap bisa akses. Pilih cakupan siapa yang diblokir.</p>
+            <p style="font-size:11px;color:var(--text-mute);margin-bottom:14px;line-height:1.5">Blokir total akses web. Owner tetap bisa akses.</p>
             
             <div class="zn-maint-card" :class="webMaintenanceActive ? 'active' : ''" style="margin-bottom:12px">
               <div class="zn-maint-card-header">
@@ -1129,14 +1147,20 @@ select.zn-input{cursor:pointer}
                   </div>
                 </div>
                 <div>
+                  <div style="font-size:10px;color:var(--warning);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Countdown (detik)</div>
+                  <input type="number" x-model.number="webMaintenanceData.countdown" placeholder="10" class="zn-maint-input" min="3" max="120">
+                  <div style="font-size:9px;color:var(--text-mute);margin-top:4px">User bakal liat banner countdown dulu sebelum masuk maintenance. Default: 10 detik.</div>
+                </div>
+                <div>
                   <div style="font-size:10px;color:var(--warning);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Alasan</div>
                   <textarea x-model="webMaintenanceData.alasan" placeholder="Contoh: Update database, perbaikan server..." class="zn-maint-textarea"></textarea>
                 </div>
                 <div>
                   <div style="font-size:10px;color:var(--warning);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Estimasi Selesai</div>
-                  <input type="text" x-model="webMaintenanceData.estimasi" placeholder="Contoh: 2 jam, 30 menit, sampai jam 15:00" class="zn-maint-input">
+                  <input type="text" x-model="webMaintenanceData.estimasi" placeholder="Contoh: 2 jam, 30 menit" class="zn-maint-input">
                 </div>
                 <button @click="saveWebMaintenance()" class="zn-btn zn-btn-danger">💾 SIMPAN & AKTIFKAN</button>
+                <button @click="quickDisableWebMaintenance()" class="zn-btn zn-btn-success">✅ MATIIN MAINTENANCE SEKARANG</button>
               </div>
             </template>
           </div>
@@ -1236,9 +1260,7 @@ select.zn-input{cursor:pointer}
   <div class="zn-ai-bubble-hint" x-show="showBubbleHint">↔ Geser aku</div>
   <div class="zn-ai-bubble-btn"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div>
   <div class="zn-ai-bubble-label">Chat Zenkai AI</div>
-</div><!-- ============================================
-     DEVELOPER PROFILE SHEET
-     ============================================ -->
+</div><!-- DEVELOPER PROFILE SHEET -->
 <div x-show="developerProfileOpen" x-cloak class="zn-sheet-overlay" style="z-index:100085" @click.self="developerProfileOpen=false">
   <div class="zn-sheet-content" style="padding:0;overflow-y:auto" @touchstart.passive="onSheetTouchStart($event,'developerProfileOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle" style="margin:12px auto 0"></div>
@@ -1304,9 +1326,7 @@ select.zn-input{cursor:pointer}
         <span>PENDIDIKAN</span>
       </div>
       <div class="dev-school-card">
-        <div class="dev-school-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
-        </div>
+        <div class="dev-school-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div>
         <div style="flex:1;min-width:0">
           <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px" x-text="developerData.sekolah.nama"></div>
           <div style="font-size:11px;color:var(--primary);font-family:'JetBrains Mono',monospace;margin-bottom:6px" x-text="developerData.sekolah.jurusan + ' · ' + developerData.sekolah.tahun"></div>
@@ -1349,7 +1369,6 @@ select.zn-input{cursor:pointer}
               </div>
               <div style="font-size:11px;color:var(--text-mute)" x-text="proj.desc"></div>
             </div>
-            <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
           </a>
         </template>
       </div>
@@ -2205,7 +2224,7 @@ const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-respon
 const OWNER_EMAIL='andikaatka@gmail.com';
 const DAILY_LIMIT=10;
 
-const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi all-in-one yang siap bantu aktivitas harian lu.\n\n💰 DOMPET DIGITAL\nCatat transaksi, grafik, budget, target tabungan.\n\n🤖 ZENKAI AI\nChat pintar gratis 10x/hari (VIP unlimited).\n\n⚡ ZENKAI AI PRO\nAI premium 7 model buat VIP — unlimited chat + vision!\n\n📥 TIKTOK DOWNLOADER\nDownload video tanpa watermark.\n\n🛠️ TOOLS LENGKAP\nJam dunia, TTS, kompres foto, BMI, speed test.\n\n🎨 6 WARNA NEON + 2 GAYA VISUAL\n\n🐛 LAPOR BUG\nKetemu bug? Lapor langsung dari menu.\n\nYuk jelajahi semua fiturnya! 🚀';
+const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi all-in-one yang siap bantu aktivitas harian lu.\n\n💰 DOMPET DIGITAL\nCatat transaksi, grafik, budget, target tabungan.\n\n🤖 ZENKAI AI\nChat pintar gratis 10x/hari (VIP unlimited).\n\n⚡ ZENKAI AI PRO\nAI premium 7 model buat VIP — unlimited + vision!\n\n📥 TIKTOK DOWNLOADER\nDownload video tanpa watermark.\n\n🛠️ TOOLS LENGKAP\nJam dunia, TTS, kompres foto, BMI, speed test.\n\n🐛 LAPOR BUG\nKetemu bug? Lapor langsung dari menu.\n\nYuk jelajahi semua fiturnya! 🚀';
 
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
@@ -2259,11 +2278,9 @@ sheetDragY:0,sheetDragStart:0,sheetDragging:false,currentSheetKey:null,
 provinceSearch:'',citySearch:'',
 headerScrolled:false,
 
-// TOAST
 toasts:[],
 toastId:0,
 
-// AI BUBBLE
 bubblePosition:{x:0,y:0},
 bubbleDragging:false,
 bubbleDragStart:{x:0,y:0},
@@ -2274,8 +2291,11 @@ showBubbleHint:true,
 // WEB MAINTENANCE
 webMaintenanceActive:false,
 webMaintScope:'both',
-webMaintenanceData:{alasan:'',estimasi:''},
+webMaintenanceData:{alasan:'',estimasi:'',countdown:10},
 webMaintShouldBlock:false,
+webMaintCountdown:0,
+webMaintCountdownTimer:null,
+webMaintLastActive:false,
 
 developerProfileOpen:false,
 developerData:{
@@ -2425,7 +2445,7 @@ voiceSupported:false,aiModeDesc:'',
 
 proChatFullscreen:false,proMessages:[],proInput:'',proThinking:false,proThinkingText:'',proThinkingTimer:null,
 proModel:'deepseek-v4-pro',proModelManual:false,
-proChatCount:0,proChatDate:'',proImageData:null,
+proImageData:null,
 proEdgeUrl:'https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zenkai-pro',
 proThinkingTexts:['Zenkai AI Pro sedang berpikir...','Memproses pertanyaan lu...','Sebentar ya, lagi mikir...','Lagi nyari jawaban terbaik...','Hmm, menarik nih...','Bentar, loading...','AI-nya lagi mikir nih...','Sabarin dikit ya...','Lagi olah data...','Hampir selesai...','Udah mau kelar...','Dikit lagi...'],
 proModelList:[
@@ -2440,7 +2460,6 @@ proModelList:[
 
 get filteredProvinces(){if(!this.provinceSearch)return this.provinces;var q=this.provinceSearch.toLowerCase();return this.provinces.filter(function(p){return p.toLowerCase().indexOf(q)>=0});},
 get filteredCities(){if(!this.citySearch)return this.cities;var q=this.citySearch.toLowerCase();return this.cities.filter(function(c){return c.toLowerCase().indexOf(q)>=0});},
-get webMaintScopeLabel(){var m={user:'Cuma user biasa yang diblokir. VIP tetap bisa akses.',vip:'Cuma VIP yang diblokir. User biasa tetap bisa akses.',both:'Semua user (biasa + VIP) diblokir. Cuma owner yang bisa akses.'};return m[this.webMaintScope]||'';},
 getLevelName:function(lv){var n={1:'PEMULA',2:'RAJIN',3:'AKTIF',4:'AHLI',5:'MASTER',6:'LEGENDA'};return n[lv]||'PEMULA';},
 getNextLevelPoints:function(){var t={1:100,2:300,3:600,4:1000,5:2000,6:0};return t[this.userLevel]||0;},
 getCurrentLevelMin:function(){var t={1:0,2:100,3:300,4:600,5:1000,6:2000};return t[this.userLevel]||0;},
@@ -2464,7 +2483,6 @@ formatRibuanInput:function(val){
   return parseInt(clean,10).toLocaleString('id-ID');
 },
 
-// ============ TOAST ============
 showToast:function(title, message, type){
   type = type || 'success';
   var id = ++this.toastId;
@@ -2479,7 +2497,7 @@ showToast:function(title, message, type){
   }, 3500);
 },
 
-// ============ AI BUBBLE DRAG ============
+// AI BUBBLE DRAG
 handleBubbleClick:function(){
   if(this.bubbleMoved){ this.bubbleMoved = false; return; }
   this.openChatAI();
@@ -2505,7 +2523,6 @@ startDragBubble:function(e){
     var newX = self.bubblePosStart.x + dx;
     var newY = self.bubblePosStart.y + dy;
     
-    // Batasi biar gak keluar layar
     var maxX = window.innerWidth - 70;
     var maxY = window.innerHeight - 100;
     if(newX < 10) newX = 10;
@@ -2521,7 +2538,6 @@ startDragBubble:function(e){
     document.removeEventListener('mouseup', onUp);
     document.removeEventListener('touchmove', onMove);
     document.removeEventListener('touchend', onUp);
-    // Simpan posisi
     localStorage.setItem('zenkai_bubble_pos', JSON.stringify(self.bubblePosition));
     setTimeout(function(){ self.bubbleMoved = false; }, 100);
   };
@@ -2539,7 +2555,6 @@ initBubblePosition:function(){
       return;
     }catch(e){}
   }
-  // Default: kanan bawah
   this.bubblePosition = {x:window.innerWidth - 80, y:window.innerHeight - 160};
 },
 handleResize:function(){
@@ -2554,23 +2569,68 @@ handleResize:function(){
   this.bubblePosition = {x:newX, y:newY};
 },
 
-// ============ WEB MAINTENANCE ============
+// WEB MAINTENANCE
 toggleWebMaintenance:function(){
   this.webMaintenanceActive = !this.webMaintenanceActive;
-  if(!this.webMaintenanceActive){
-    this.webMaintShouldBlock = false;
-  } else {
-    // Langsung cek block
-    this.checkWebMaintenanceBlock();
-  }
+  this.checkWebMaintenanceBlock();
 },
 checkWebMaintenanceBlock:function(){
-  if(!this.webMaintenanceActive){ this.webMaintShouldBlock = false; return; }
-  if(this.isOwner){ this.webMaintShouldBlock = false; return; }
-  if(this.webMaintScope === 'both'){ this.webMaintShouldBlock = true; return; }
-  if(this.webMaintScope === 'user' && !this.isVip){ this.webMaintShouldBlock = true; return; }
-  if(this.webMaintScope === 'vip' && this.isVip){ this.webMaintShouldBlock = true; return; }
-  this.webMaintShouldBlock = false;
+  if(!this.isAuthenticated){ this.webMaintShouldBlock = false; this.stopCountdown(); return; }
+  if(!this.webMaintenanceActive){ 
+    this.webMaintShouldBlock = false; 
+    this.stopCountdown();
+    return; 
+  }
+  if(this.isOwner){ 
+    this.webMaintShouldBlock = false; 
+    this.stopCountdown();
+    return; 
+  }
+  
+  // Tentukan apakah user harus diblokir berdasarkan scope
+  var shouldBlock = false;
+  if(this.webMaintScope === 'both') shouldBlock = true;
+  else if(this.webMaintScope === 'user' && !this.isVip) shouldBlock = true;
+  else if(this.webMaintScope === 'vip' && this.isVip) shouldBlock = true;
+  
+  if(!shouldBlock){
+    this.webMaintShouldBlock = false;
+    this.stopCountdown();
+    return;
+  }
+  
+  // Kalau harus diblokir:
+  // 1. Kalau countdown udah selesai (webMaintShouldBlock = true), langsung block
+  // 2. Kalau baru mulai, jalankan countdown dulu
+  if(this.webMaintShouldBlock){ return; } // udah block, gak perlu countdown lagi
+  
+  // Mulai countdown kalau belum
+  if(this.webMaintCountdown === 0 && !this.webMaintCountdownTimer){
+    this.startCountdown();
+  }
+},
+startCountdown:function(){
+  var self = this;
+  var detik = this.webMaintenanceData.countdown || 10;
+  if(detik < 3) detik = 3;
+  if(detik > 120) detik = 120;
+  this.webMaintCountdown = detik;
+  
+  this.webMaintCountdownTimer = setInterval(function(){
+    self.webMaintCountdown--;
+    if(self.webMaintCountdown <= 0){
+      self.stopCountdown();
+      self.webMaintShouldBlock = true;
+      self.showToast('🚨 MAINTENANCE', 'Web sekarang dalam perbaikan. Tunggu sampai selesai ya!', 'warning');
+    }
+  }, 1000);
+},
+stopCountdown:function(){
+  if(this.webMaintCountdownTimer){
+    clearInterval(this.webMaintCountdownTimer);
+    this.webMaintCountdownTimer = null;
+  }
+  this.webMaintCountdown = 0;
 },
 saveWebMaintenance:async function(){
   try{
@@ -2578,12 +2638,20 @@ saveWebMaintenance:async function(){
       web_maintenance_active: this.webMaintenanceActive,
       web_maintenance_scope: this.webMaintScope,
       web_maintenance_alasan: this.webMaintenanceData.alasan || '',
-      web_maintenance_estimasi: this.webMaintenanceData.estimasi || ''
+      web_maintenance_estimasi: this.webMaintenanceData.estimasi || '',
+      web_maintenance_countdown: this.webMaintenanceData.countdown || 10,
+      web_maintenance_started_at: new Date().toISOString()
     };
     var {error} = await sb.from('app_settings').update(payload).eq('id',1);
     if(error) throw error;
-    this.showToast('✅ TERSIMPAN', 'Maintenance web berhasil di-'+(this.webMaintenanceActive?'AKTIFKAN':'MATIKAN'), this.webMaintenanceActive?'warning':'success');
+    
     this.checkWebMaintenanceBlock();
+    
+    if(this.webMaintenanceActive){
+      this.showToast('🚨 MAINTENANCE ON', 'Cakupan: '+(this.webMaintScope==='user'?'User Biasa':(this.webMaintScope==='vip'?'VIP':'Semua User'))+' · Countdown: '+this.webMaintenanceData.countdown+'s', 'warning');
+    } else {
+      this.showToast('✅ MAINTENANCE OFF', 'Web bisa diakses semua user lagi.', 'success');
+    }
   }catch(e){ this.showToast('❌ GAGAL', e.message, 'error'); }
 },
 loadWebMaintenance:async function(){
@@ -2594,29 +2662,69 @@ loadWebMaintenance:async function(){
       this.webMaintScope = data.web_maintenance_scope || 'both';
       this.webMaintenanceData.alasan = data.web_maintenance_alasan || '';
       this.webMaintenanceData.estimasi = data.web_maintenance_estimasi || '';
+      this.webMaintenanceData.countdown = data.web_maintenance_countdown || 10;
     }
-  }catch(e){ console.error(e); }
+  }catch(e){}
   this.checkWebMaintenanceBlock();
 },
-logoutFromMaintenance:async function(){
-  await this.logout();
+quickDisableWebMaintenance:async function(){
+  try{
+    var {error} = await sb.from('app_settings').update({
+      web_maintenance_active: false
+    }).eq('id',1);
+    if(error) throw error;
+    this.webMaintenanceActive = false;
+    this.webMaintShouldBlock = false;
+    this.stopCountdown();
+    this.showToast('✅ MAINTENANCE OFF', 'Web bisa diakses user lagi.', 'success');
+  }catch(e){ this.showToast('❌ GAGAL', e.message, 'error'); }
 },
 
-// ============ FORCE CLEAN LOGOUT ============
+// FORCE CLEAN LOGOUT
 forceCleanLogout:async function(){
   try{
     try{
       var channels = sb.getChannels();
       channels.forEach(function(ch){ try{ sb.removeChannel(ch); }catch(e){} });
     }catch(e){}
-    await sb.auth.signOut();
+    
+    try{ await sb.auth.signOut({scope:'global'}); }catch(e){}
+    
     try{
       var keys = Object.keys(localStorage);
       keys.forEach(function(k){
-        if(k.startsWith('sb-') && k.endsWith('-auth-token')){ localStorage.removeItem(k); }
+        if(k.startsWith('sb-') || k.toLowerCase().indexOf('supabase') >= 0){
+          if(k !== 'zenkai_theme' && k !== 'zenkai_style' && k !== 'zenkai_bubble_pos'){
+            localStorage.removeItem(k);
+          }
+        }
       });
     }catch(e){}
-  }catch(e){ console.error('forceCleanLogout error:', e); }
+    
+    try{ sessionStorage.clear(); }catch(e){}
+    
+    try{
+      if(window.indexedDB && indexedDB.databases){
+        var dbs = await indexedDB.databases();
+        dbs.forEach(function(db){
+          if(db.name && db.name.indexOf('supabase') >= 0){
+            indexedDB.deleteDatabase(db.name);
+          }
+        });
+      }
+    }catch(e){}
+  }catch(e){}
+},
+logoutFromMaintenance:async function(){
+  try{ localStorage.setItem('zenkai_force_logout', '1'); }catch(e){}
+  await this.forceCleanLogout();
+  this.isAuthenticated = false;
+  this.currentUser = null;
+  this.isOwner = false;
+  this.isVip = false;
+  this.webMaintShouldBlock = false;
+  this.stopCountdown();
+  window.location.href = window.location.href.split('?')[0] + '?logout=' + Date.now();
 },
 
 getCityMap:function(){
@@ -2839,11 +2947,21 @@ init:async function(){
   this.initProvinces();
   this.initBubblePosition();
   
-  // Sembunyikan hint bubble setelah 6 detik
   setTimeout(function(){ self.showBubbleHint = false; }, 6000);
-  
-  // Handle window resize
   window.addEventListener('resize', function(){ self.handleResize(); });
+
+  // Cek force logout flag
+  try{
+    var forceLogout = localStorage.getItem('zenkai_force_logout');
+    if(forceLogout === '1'){
+      localStorage.removeItem('zenkai_force_logout');
+      await this.forceCleanLogout();
+      this.isAuthenticated = false;
+      this.currentUser = null;
+      this.loadingHidden = true;
+      return;
+    }
+  }catch(e){}
   
   try{history.replaceState({tab:'home'}, '');}catch(e){}
   window.addEventListener('popstate', function(){
@@ -2857,11 +2975,11 @@ init:async function(){
   try{var{data:settings}=await sb.from('app_settings').select('*').eq('id',1).maybeSingle();
     if(settings){
       if(settings.welcome_text){this.welcomeText=settings.welcome_text;this.welcomeTextEdit=settings.welcome_text;}
-      // Load web maintenance
       this.webMaintenanceActive = settings.web_maintenance_active || false;
       this.webMaintScope = settings.web_maintenance_scope || 'both';
       this.webMaintenanceData.alasan = settings.web_maintenance_alasan || '';
       this.webMaintenanceData.estimasi = settings.web_maintenance_estimasi || '';
+      this.webMaintenanceData.countdown = settings.web_maintenance_countdown || 10;
     }
   }catch(e){}
   
@@ -2879,16 +2997,28 @@ init:async function(){
     }
   }catch(e){}
   
-  try{var{data:{session}}=await sb.auth.getSession();if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}}catch(e){console.error(e);}
+  try{var{data:{session}}=await sb.auth.getSession();if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}}catch(e){}
   this.chatFullscreen=false;this.proChatFullscreen=false;
   self.setupRealtime();
 
   setTimeout(function(){ self.loadAllFeatureRatings(); }, 3000);
 
-  // Polling ban/vip/maintenance
+  // Polling cepat: 5 detik
   setInterval(async function(){
     if(!self.currentUser) return;
     try{
+      // Cek maintenance web DULU
+      var {data:ws} = await sb.from('app_settings').select('web_maintenance_active, web_maintenance_scope, web_maintenance_alasan, web_maintenance_estimasi, web_maintenance_countdown').eq('id',1).maybeSingle();
+      if(ws){
+        var wasActive = self.webMaintenanceActive;
+        self.webMaintenanceActive = ws.web_maintenance_active || false;
+        self.webMaintScope = ws.web_maintenance_scope || 'both';
+        self.webMaintenanceData.alasan = ws.web_maintenance_alasan || '';
+        self.webMaintenanceData.estimasi = ws.web_maintenance_estimasi || '';
+        self.webMaintenanceData.countdown = ws.web_maintenance_countdown || 10;
+      }
+      self.checkWebMaintenanceBlock();
+      
       var {data} = await sb.from('profiles').select('is_banned, ban_until, ban_reason, is_vip').eq('id', self.currentUser.id).maybeSingle();
       if(data){
         if(self.isVip !== data.is_vip){ self.isVip = data.is_vip || false; }
@@ -2903,20 +3033,26 @@ init:async function(){
           }
         }
       }
-      // Cek web maintenance
-      if(!self.isOwner){
-        var {data:ws} = await sb.from('app_settings').select('web_maintenance_active, web_maintenance_scope, web_maintenance_alasan, web_maintenance_estimasi').eq('id',1).maybeSingle();
+    }catch(e){}
+  }, 5000);
+
+  // Cek maintenance saat tab jadi aktif
+  document.addEventListener('visibilitychange', async function(){
+    if(document.visibilityState === 'visible' && self.currentUser){
+      try{
+        var {data:ws} = await sb.from('app_settings').select('web_maintenance_active, web_maintenance_scope, web_maintenance_alasan, web_maintenance_estimasi, web_maintenance_countdown').eq('id',1).maybeSingle();
         if(ws){
           self.webMaintenanceActive = ws.web_maintenance_active || false;
           self.webMaintScope = ws.web_maintenance_scope || 'both';
           self.webMaintenanceData.alasan = ws.web_maintenance_alasan || '';
           self.webMaintenanceData.estimasi = ws.web_maintenance_estimasi || '';
+          self.webMaintenanceData.countdown = ws.web_maintenance_countdown || 10;
         }
-      }
-      self.checkWebMaintenanceBlock();
-    }catch(e){}
-  }, 15000);
-
+        self.checkWebMaintenanceBlock();
+      }catch(e){}
+    }
+  });
+  
   setTimeout(function(){
     self.loadingHidden=true;
     self.chatFullscreen=false;
@@ -2953,17 +3089,18 @@ calcLevelFromPoints:function(pts){if(pts>=2000)return 6;if(pts>=1000)return 5;if
 
 handleEmailAuth:async function(){
   var self = this;
-  if(!this.authEmail||!this.authPassword){return this.showAlert('PERHATIAN','Isi email dan password!');}
+  if(!this.authEmail||!this.authPassword){return this.showToast('⚠️ PERHATIAN','Isi email dan password!','warning');}
   try{
     if(this.authMode==='register'){
-      if(!this.authUsername){return this.showAlert('PERHATIAN','Isi nama!');}
+      if(!this.authUsername){return this.showToast('⚠️ PERHATIAN','Isi nama!','warning');}
       var{data:ex}=await sb.from('profiles').select('username').eq('username',this.authUsername).maybeSingle();
-      if(ex){return this.showAlert('PERINGATAN','Nama sudah dipakai!');}
+      if(ex){return this.showToast('⚠️ PERINGATAN','Nama sudah dipakai!','warning');}
       var{data,error}=await sb.auth.signUp({email:this.authEmail,password:this.authPassword,options:{data:{username:this.authUsername}}});
       if(error)throw error;
-      if(data.user && data.user.identities && data.user.identities.length === 0){return this.showAlert('PERINGATAN','Email sudah terdaftar.');}
+      if(data.user && data.user.identities && data.user.identities.length === 0){return this.showToast('⚠️ PERINGATAN','Email sudah terdaftar.','warning');}
       if(data.user){await sb.from('profiles').upsert({id:data.user.id,username:this.authUsername,status:'user',last_login:new Date().toISOString(),is_vip:false,is_banned:false,chat_count:0,chat_bonus:0});}
-      this.showAlert('SUKSES','Berhasil daftar!');this.authMode='login';
+      this.showToast('✅ SUKSES','Berhasil daftar!','success');
+      this.authMode='login';
     }else{
       try{ await sb.auth.signOut(); }catch(e){}
       try{
@@ -2981,9 +3118,9 @@ handleEmailAuth:async function(){
         self.bannedInfoSheetOpen = false;
         self.bannedInfoData = {reason:'', until:null};
         await self.checkUserAccessOnLogin(data.user, true);
-      }catch(e){ self.showAlert('GAGAL LOGIN', e.message); }
+      }catch(e){ self.showToast('❌ GAGAL LOGIN', e.message, 'error'); }
     }
-  }catch(e){this.showAlert('GAGAL',e.message);}
+  }catch(e){this.showToast('❌ GAGAL',e.message,'error');}
 },
 
 checkUserAccessOnLogin: async function(user, showWelcome){
@@ -3038,7 +3175,6 @@ checkUserAccessOnLogin: async function(user, showWelcome){
     localStorage.setItem('zenkai_last_bonus_' + user.id, today);
     await this.addPoints(10, 'Login harian');
   }
-  // Cek web maintenance
   this.checkWebMaintenanceBlock();
   if(showWelcome){ this.welcomePopupOpen = true; }
   this.checkBroadcast();
@@ -3046,7 +3182,7 @@ checkUserAccessOnLogin: async function(user, showWelcome){
 
 verifyOwnerPin:async function(){
   if(!this.pendingUser)return;
-  if(this.enteredPin.length!==6){return this.showAlert('PERHATIAN','PIN 6 digit!');}
+  if(this.enteredPin.length!==6){return this.showToast('⚠️ PERHATIAN','PIN 6 digit!','warning');}
   this.verifyingPin=true;
   try{
     this.currentUser=this.pendingUser;
@@ -3054,14 +3190,14 @@ verifyOwnerPin:async function(){
     var token=sessionData&&sessionData.session?sessionData.session.access_token:'';
     var res=await fetch(SUPABASE_URL+'/functions/v1/dynamic-action',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_ANON_KEY},body:JSON.stringify({pin:this.enteredPin})});
     var data=await res.json();
-    if(!data.success){this.verifyingPin=false;this.enteredPin='';return this.showAlert('PIN SALAH',data.error||'PIN salah!');}
-    this.ownerPinModalOpen=false;this.isOwner=true;this.isVip=true;this.isAuthenticated=true;this.chatFullscreen=false;this.proChatFullscreen=false;
+    if(!data.success){this.verifyingPin=false;this.enteredPin='';return this.showToast('❌ PIN SALAH',data.error||'PIN salah!','error');}
+    this.ownerPinModalOpen=false;this.isOwner=true;this.isVip=true;this.isAuthenticated=true;
     await sb.from('profiles').update({last_login:new Date().toISOString()}).eq('id',this.pendingUser.id);
     await this.processUserData();await this.loadTransactions();await this.loadSavings();await this.loadBudgets();this.loadAppStats();
     this.welcomePopupOpen=true;
     this.checkBroadcast();
-    this.chatFullscreen=false;this.proChatFullscreen=false;
-  }catch(e){this.showAlert('GAGAL',e.message);}
+    this.webMaintShouldBlock = false;
+  }catch(e){this.showToast('❌ GAGAL',e.message,'error');}
   finally{this.verifyingPin=false;}
 },
 
@@ -3077,7 +3213,7 @@ processUserData:async function(){
 uploadAvatarFile:async function(event){
   var file=event.target.files[0];
   if(!file||!this.currentUser)return;
-  if(file.size>2*1024*1024){return this.showAlert('PERHATIAN','Max 2MB!');}
+  if(file.size>2*1024*1024){return this.showToast('⚠️ PERHATIAN','Max 2MB!','warning');}
   this.uploadingAvatar=true;
   try{
     var ext=file.name.split('.').pop()||'jpg';
@@ -3088,8 +3224,8 @@ uploadAvatarFile:async function(event){
     var url=pub.publicUrl;
     await sb.from('profiles').upsert({id:this.currentUser.id,username:this.userName,avatar_url:url});
     this.userAvatar=url;
-    this.showAlert('SUKSES','Foto profil diperbarui!');
-  }catch(e){this.showAlert('GAGAL',e.message);}
+    this.showToast('✅ SUKSES','Foto profil diperbarui!','success');
+  }catch(e){this.showToast('❌ GAGAL',e.message,'error');}
   finally{this.uploadingAvatar=false;}
 },
 
@@ -3099,14 +3235,15 @@ logout:async function(){
   this.chatFullscreen=false;this.proChatFullscreen=false;
   this.bannedInfoSheetOpen=false;this.bannedInfoData={reason:'',until:null};
   this.webMaintShouldBlock=false;
+  this.stopCountdown();
   setTimeout(function(){window.location.reload();},200);
 },
 
 loadTransactions:async function(){if(!this.currentUser)return;var{data}=await sb.from('transactions').select('*').eq('user_id',this.currentUser.id).order('id',{ascending:false});if(data){this.transactions=data;var s=this;setTimeout(function(){s.drawCharts()},300);}},
 addTransaction:async function(type){
-  if(!this.currentUser||!this.txCategory||!this.txAmount){return this.showAlert('PERHATIAN','Isi kategori dan nominal!');}
+  if(!this.currentUser||!this.txCategory||!this.txAmount){return this.showToast('⚠️ PERHATIAN','Isi kategori dan nominal!','warning');}
   var amount=parseFloat(String(this.txAmount).replace(/\./g,''));
-  if(isNaN(amount)||amount<=0){return this.showAlert('PERHATIAN','Nominal tidak valid!');}
+  if(isNaN(amount)||amount<=0){return this.showToast('⚠️ PERHATIAN','Nominal tidak valid!','warning');}
   var{error}=await sb.from('transactions').insert({user_id:this.currentUser.id,type:type,category:this.txCategory,amount:amount,date:new Date().toLocaleDateString('id-ID'),created_at:new Date().toISOString()});
   if(!error){this.txCategory='';this.txAmount='';this.txSheetOpen=false;await this.loadTransactions();await this.addPoints(3,'Catat transaksi');this.showToast('✅ SUKSES','Transaksi ditambahkan!','success');}
   else{this.showToast('❌ GAGAL',error.message,'error');}
@@ -3114,25 +3251,25 @@ addTransaction:async function(type){
 confirmDeleteTx:function(id){var self=this;this.showConfirm('HAPUS TRANSAKSI?','Data akan dihapus permanen.',async function(){await sb.from('transactions').delete().eq('id',id);await self.loadTransactions();self.showToast('✅ SUKSES','Transaksi dihapus.','success');},'🗑️');},
 
 loadSavings:async function(){if(!this.currentUser)return;var{data}=await sb.from('savings_targets').select('*').eq('user_id',this.currentUser.id).order('id',{ascending:false});if(data)this.savings=data;},
-addSavings:async function(){if(!this.targetForm.nama||!this.targetForm.target){return this.showAlert('PERHATIAN','Isi nama & target!');}var{error}=await sb.from('savings_targets').insert({user_id:this.currentUser.id,nama:this.targetForm.nama,target:parseFloat(String(this.targetForm.target).replace(/\./g,'')),terkumpul:0,deadline:this.targetForm.deadline});if(!error){this.targetSheetOpen=false;await this.loadSavings();await this.addPoints(2,'Bikin target');this.showToast('✅ SUKSES','Target dibuat!','success');}},
+addSavings:async function(){if(!this.targetForm.nama||!this.targetForm.target){return this.showToast('⚠️ PERHATIAN','Isi nama & target!','warning');}var{error}=await sb.from('savings_targets').insert({user_id:this.currentUser.id,nama:this.targetForm.nama,target:parseFloat(String(this.targetForm.target).replace(/\./g,'')),terkumpul:0,deadline:this.targetForm.deadline});if(!error){this.targetSheetOpen=false;await this.loadSavings();await this.addPoints(2,'Bikin target');this.showToast('✅ SUKSES','Target dibuat!','success');}},
 confirmDeleteSavings:function(id){var self=this;this.showConfirm('HAPUS TARGET?','Target akan dihapus.',async function(){await sb.from('savings_targets').delete().eq('id',id);await self.loadSavings();},'🗑️');},
 addToSavings:function(id){this.currentSavingsId=id;this.addSavingsAmount='';this.addSavingsSheet=true;},
 confirmAddSavings:async function(){
   var self = this;
   var s = this.savings.find(function(x){ return x.id === self.currentSavingsId; });
-  if(!s){ return this.showAlert('GAGAL','Target tidak ditemukan.'); }
+  if(!s){ return this.showToast('❌ GAGAL','Target tidak ditemukan.','error'); }
   var nominal = parseFloat(String(this.addSavingsAmount||'').replace(/\./g,''));
-  if(!nominal || nominal <= 0){ return this.showAlert('PERHATIAN','Isi nominal dulu!'); }
+  if(!nominal || nominal <= 0){ return this.showToast('⚠️ PERHATIAN','Isi nominal dulu!','warning'); }
   var newVal = Number(s.terkumpul) + nominal;
   var {error} = await sb.from('savings_targets').update({terkumpul:newVal}).eq('id',this.currentSavingsId);
-  if(error){ return this.showAlert('GAGAL', error.message); }
+  if(error){ return this.showToast('❌ GAGAL', error.message, 'error'); }
   this.addSavingsSheet=false;this.addSavingsAmount='';this.currentSavingsId=null;
   await this.loadSavings();await this.addPoints(5,'Setor tabungan');
   this.showToast('✅ SUKSES','Tabungan bertambah Rp '+this.formatRibuan(nominal),'success');
 },
 
 loadBudgets:async function(){if(!this.currentUser)return;var bulan=new Date().toISOString().slice(0,7);var{data}=await sb.from('budgets').select('*').eq('user_id',this.currentUser.id).eq('bulan',bulan);if(data)this.budgets=data;},
-addBudget:async function(){if(!this.budgetForm.kategori||!this.budgetForm.limit_bulanan){return this.showAlert('PERHATIAN','Isi kategori & limit!');}var bulan=new Date().toISOString().slice(0,7);var{error}=await sb.from('budgets').insert({user_id:this.currentUser.id,kategori:this.budgetForm.kategori,limit_bulanan:parseFloat(String(this.budgetForm.limit_bulanan).replace(/\./g,'')),bulan:bulan});if(!error){this.budgetSheetOpen=false;await this.loadBudgets();await this.addPoints(2,'Set budget');}},
+addBudget:async function(){if(!this.budgetForm.kategori||!this.budgetForm.limit_bulanan){return this.showToast('⚠️ PERHATIAN','Isi kategori & limit!','warning');}var bulan=new Date().toISOString().slice(0,7);var{error}=await sb.from('budgets').insert({user_id:this.currentUser.id,kategori:this.budgetForm.kategori,limit_bulanan:parseFloat(String(this.budgetForm.limit_bulanan).replace(/\./g,'')),bulan:bulan});if(!error){this.budgetSheetOpen=false;await this.loadBudgets();await this.addPoints(2,'Set budget');}},
 confirmDeleteBudget:function(id){var self=this;this.showConfirm('HAPUS BUDGET?','Budget dihapus.',async function(){await sb.from('budgets').delete().eq('id',id);await self.loadBudgets();},'🗑️');},
 getBudgetUsed:function(kategori){return this.transactions.filter(function(t){return t.type==='expense'&&t.category===kategori}).reduce(function(a,t){return a+Number(t.amount)},0);},
 
@@ -3155,7 +3292,7 @@ drawCharts:function(){var self=this;setTimeout(function(){try{
     if(window.barChartInst)window.barChartInst.destroy();
     window.barChartInst=new Chart(barEl,{type:'bar',data:{labels:['MASUK','KELUAR'],datasets:[{data:[income,expense],backgroundColor:['#00ff88','#ff3355'],borderRadius:8,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:'#8888a0',font:{family:'JetBrains Mono',size:10}},grid:{color:'rgba(255,255,255,.05)'}},x:{ticks:{color:'#8888a0',font:{family:'Orbitron',size:10,weight:'700'}},grid:{display:false}}}}});
   }
-}catch(e){console.error(e)}},200);},
+}catch(e){}},200);},
 
 fetchMovies:async function(){this.movieLoading=true;try{var res=await fetch('https://api.themoviedb.org/3/trending/movie/week?api_key='+TMDB_KEY+'&language=id-ID');var json=await res.json();if(json.results){this.movieList=json.results.slice(0,15).map(function(m){return{id:m.id,title:m.title,year:m.release_date?m.release_date.slice(0,4):'-',rating:m.vote_average?m.vote_average.toFixed(1):'-',overview:m.overview||'-',poster:m.poster_path?'https://image.tmdb.org/t/p/w200'+m.poster_path:''}});}}catch(e){}this.movieLoading=false;},
 openMovieSheet:function(){if(this.isUnderMaintenance('film')){return this.showMaintenanceSheet('film');}this.movieSheetOpen=true;if(this.movieList.length===0)this.fetchMovies();},
@@ -3165,7 +3302,7 @@ openNews:async function(){
   this.newsSheetOpen=true;this.selectedNews=null;
   if(this.newsList.length>0)return;
   this.newsLoading=true;
-  try{await this.loadNewsFromRSS();}catch(e){console.error('Berita error:',e);this.showAlert('GAGAL','Berita gagal dimuat.');}
+  try{await this.loadNewsFromRSS();}catch(e){this.showToast('❌ GAGAL','Berita gagal dimuat.','error');}
   this.newsLoading=false;
 },
 fetchWithTimeout:function(url,timeout){return new Promise(function(resolve,reject){var ctrl=new AbortController();var tid=setTimeout(function(){ctrl.abort();},timeout||8000);fetch(url,{signal:ctrl.signal}).then(function(r){clearTimeout(tid);resolve(r);}).catch(function(e){clearTimeout(tid);reject(e);});});},
@@ -3211,18 +3348,18 @@ parseRSSItems:function(xmlText){
   }catch(e){return [];}
 },
 
-speakCustomText:function(){if(!this.customTtsText){return this.showAlert('PERHATIAN','Ketik teks dulu!');}if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(this.customTtsText);u.lang='id-ID';window.speechSynthesis.speak(u);}},
+speakCustomText:function(){if(!this.customTtsText){return this.showToast('⚠️ PERHATIAN','Ketik teks dulu!','warning');}if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(this.customTtsText);u.lang='id-ID';window.speechSynthesis.speak(u);}},
 compressImageFile:function(event){var file=event.target.files[0];if(!file)return;var self=this;var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var canvas=document.createElement('canvas');var ctx=canvas.getContext('2d');var w=img.width,h=img.height;var max=800;if(w>h&&w>max){h*=max/w;w=max;}else if(h>max){w*=max/h;h=max;}canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);self.compressedImageUrl=canvas.toDataURL('image/jpeg',0.6);self.showToast('✅ BERHASIL','Foto dikompres!','success');};img.src=e.target.result;};reader.readAsDataURL(file);},
 runSpeedTest:async function(){this.speedTesting=true;this.speedResult=null;try{var start=Date.now();var res=await fetch('https://speed.cloudflare.com/__down?bytes=5000000&r='+Math.random());var blob=await res.blob();var dur=(Date.now()-start)/1000;var mbps=(blob.size*8)/(dur*1000000);this.speedResult={download:mbps.toFixed(1),latency:Math.round(dur*100),quality:mbps>20?'BAGUS':mbps>5?'CUKUP':'LAMBAT'};}catch(e){this.showToast('❌ GAGAL','Tes gagal.','error');}this.speedTesting=false;},
-calcBMI:function(){var w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)/100;if(!w||!h){return this.showAlert('PERHATIAN','Isi berat & tinggi!');}var bmi=w/(h*h);var kategori,color;if(bmi<18.5){kategori='KURUS';color='#00d9ff';}else if(bmi<25){kategori='NORMAL';color='#00ff88';}else if(bmi<30){kategori='GEMUK';color='#ffd700';}else{kategori='OBESITAS';color='#ff3355';}var bbIdeal=(22*h*h).toFixed(1);var age=parseFloat(this.bmiAge)||25;var kalori=this.bmiGender==='male'?Math.round(66+(13.7*w)+(5*h*100)-(6.8*age)):Math.round(655+(9.6*w)+(1.8*h*100)-(4.7*age));this.bmiResult={bmi:bmi.toFixed(1),kategori:kategori,color:color,bbIdeal:bbIdeal,kalori:kalori};},
+calcBMI:function(){var w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)/100;if(!w||!h){return this.showToast('⚠️ PERHATIAN','Isi berat & tinggi!','warning');}var bmi=w/(h*h);var kategori,color;if(bmi<18.5){kategori='KURUS';color='#00d9ff';}else if(bmi<25){kategori='NORMAL';color='#00ff88';}else if(bmi<30){kategori='GEMUK';color='#ffd700';}else{kategori='OBESITAS';color='#ff3355';}var bbIdeal=(22*h*h).toFixed(1);var age=parseFloat(this.bmiAge)||25;var kalori=this.bmiGender==='male'?Math.round(66+(13.7*w)+(5*h*100)-(6.8*age)):Math.round(655+(9.6*w)+(1.8*h*100)-(4.7*age));this.bmiResult={bmi:bmi.toFixed(1),kategori:kategori,color:color,bbIdeal:bbIdeal,kalori:kalori};},
 
 processMediaDownload:async function(){
   if(this.isUnderMaintenance('downloader')){return this.showMaintenanceSheet('downloader');}
   var url=this.downloadLinkInput.trim();
-  if(!url){return this.showAlert('PERHATIAN','Tempel link dulu!');}
+  if(!url){return this.showToast('⚠️ PERHATIAN','Tempel link dulu!','warning');}
   this.downloadLoading=true;this.downloadResultReady=false;this.downloadResultLinks=[];this.downloadMeta={};
   try{
-    if(url.indexOf('tiktok.com')<0&&url.indexOf('vt.tiktok')<0){this.showAlert('INFO','Sementara hanya TikTok.');return;}
+    if(url.indexOf('tiktok.com')<0&&url.indexOf('vt.tiktok')<0){this.showToast('ℹ️ INFO','Sementara hanya TikTok.','warning');return;}
     var r=await fetch('https://www.tikwm.com/api/?url='+encodeURIComponent(url));
     var j=await r.json();
     if(j.code===0&&j.data){
@@ -3290,9 +3427,8 @@ stopThinkingMessages:function(){clearInterval(this.aiThinkingTimer);this.aiThink
 sendChat:async function(){
   if(this.isUnderMaintenance('ai')){return this.showMaintenanceSheet('ai');}
   if(!this.chatInput.trim()||this.aiThinking)return;
-  if(!this.currentUser)return this.showAlert('PERHATIAN','Login dulu!');
+  if(!this.currentUser)return this.showToast('⚠️ PERHATIAN','Login dulu!','warning');
   
-  // CEK LIMIT SEBELUM KIRIM
   if(!this.isOwner&&!this.isVip){
     try{var{data:freshData}=await sb.from('profiles').select('chat_count,chat_bonus,chat_date,is_vip').eq('id',this.currentUser.id).maybeSingle();if(freshData){this.chatCount=freshData.chat_count||0;this.chatBonus=freshData.chat_bonus||0;this.chatDate=freshData.chat_date||'';this.isVip=freshData.is_vip||false;}}catch(e){}
     var today=new Date().toISOString().slice(0,10);
@@ -3302,11 +3438,10 @@ sendChat:async function(){
     }
     var maxChat=10+this.chatBonus;
     if(this.chatCount>=maxChat){
-      // Tampilkan alert SEKARANG, jangan tunggu keluar
       this.chatFullscreen=false;
       var self=this;
       setTimeout(function(){
-        self.showAlert('⚠️ LIMIT HABIS','Chat harian gratis udah abis ('+maxChat+'/hari).\n\nUpgrade ke VIP buat chat unlimited, atau coba lagi besok ya! 🚀');
+        self.showToast('⚠️ LIMIT HABIS','Chat harian ('+maxChat+') udah abis. Upgrade VIP buat unlimited!','warning');
       }, 350);
       return;
     }
@@ -3336,7 +3471,7 @@ sendChat:async function(){
   }catch(e){this.chatMessages.push({role:'assistant',content:'ERROR: '+e.message});}
   finally{this.stopThinkingMessages();clearTimeout(tid);this.aiThinking=false;}
 },
-startVoiceInput:function(){if(!this.voiceSupported){return this.showAlert('INFO','Browser tidak support.');}var SR=window.SpeechRecognition||window.webkitSpeechRecognition;var rec=new SR();rec.lang='id-ID';var self=this;rec.onresult=function(e){self.chatInput=e.results[0][0].transcript;setTimeout(function(){self.sendChat()},300)};rec.onerror=function(e){self.showAlert('GAGAL','Voice error: '+e.error)};rec.start();},
+startVoiceInput:function(){if(!this.voiceSupported){return this.showToast('ℹ️ INFO','Browser tidak support.','warning');}var SR=window.SpeechRecognition||window.webkitSpeechRecognition;var rec=new SR();rec.lang='id-ID';var self=this;rec.onresult=function(e){self.chatInput=e.results[0][0].transcript;setTimeout(function(){self.sendChat()},300)};rec.onerror=function(e){self.showToast('❌ GAGAL','Voice error: '+e.error,'error');};rec.start();},
 confirmClearChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat dihapus.',function(){self.chatMessages=[];self.showToast('✅ SUKSES','Chat dihapus.','success');},'🗑️');},
 
 handleProCardClick:function(){
@@ -3347,17 +3482,17 @@ handleProCardClick:function(){
 getProModelName:function(){var self=this;var found='';this.proModelList.forEach(function(m){if(m.id===self.proModel)found=m.name;});return found||'Zenkai AI Pro';},
 getProModelDesc:function(){var self=this;var found='';this.proModelList.forEach(function(m){if(m.id===self.proModel)found=m.desc;});return found||'';},
 openProChat:async function(){
-  if(!this.isOwner&&!this.isVip){return this.showAlert('AKSES DITOLAK','Fitur Zenkai AI Pro cuma buat VIP.');}
+  if(!this.isOwner&&!this.isVip){return this.showToast('🚫 AKSES DITOLAK','Fitur Zenkai AI Pro cuma buat VIP.','error');}
   this.proChatFullscreen=true;this.proImageData=null;
 },
 startProThinking:function(){var self=this;var idx=0;this.proThinkingText=this.proThinkingTexts[0];clearInterval(this.proThinkingTimer);this.proThinkingTimer=setInterval(function(){idx=(idx+1)%self.proThinkingTexts.length;self.proThinkingText=self.proThinkingTexts[idx];},1500+Math.random()*2500);},
 stopProThinking:function(){clearInterval(this.proThinkingTimer);this.proThinkingTimer=null;this.proThinkingText='';},
-pickProImage:function(event){var file=event.target.files[0];if(!file)return;if(file.size>5*1024*1024){return this.showAlert('PERHATIAN','Max gambar 5MB!');}var self=this;var reader=new FileReader();reader.onload=function(e){self.proImageData=e.target.result;self.proModel='glm-5.3-flash';self.proModelManual=true;};reader.readAsDataURL(file);},
+pickProImage:function(event){var file=event.target.files[0];if(!file)return;if(file.size>5*1024*1024){return this.showToast('⚠️ PERHATIAN','Max gambar 5MB!','warning');}var self=this;var reader=new FileReader();reader.onload=function(e){self.proImageData=e.target.result;self.proModel='glm-5.3-flash';self.proModelManual=true;};reader.readAsDataURL(file);},
 removeProImage:function(){this.proImageData=null;},
 sendProChat:async function(){
   if((!this.proInput.trim()&&!this.proImageData)||this.proThinking)return;
-  if(!this.currentUser)return this.showAlert('PERHATIAN','Login dulu!');
-  if(!this.isOwner&&!this.isVip){return this.showAlert('AKSES DITOLAK','Fitur ini cuma buat VIP.');}
+  if(!this.currentUser)return this.showToast('⚠️ PERHATIAN','Login dulu!','warning');
+  if(!this.isOwner&&!this.isVip){return this.showToast('🚫 AKSES DITOLAK','Fitur ini cuma buat VIP.','error');}
   // VIP UNLIMITED - gak ada cek limit
   var userMsg=this.proInput.trim();var imgData=this.proImageData;
   var displayContent=userMsg||'(Kirim gambar)';
@@ -3406,7 +3541,7 @@ loadAllFeatureRatings:async function(){
     });
     this.featureRatingsCache = result;
     this.featureRatingsCacheTime = now;
-  }catch(e){ console.error('Load ratings error:', e); }
+  }catch(e){}
 },
 openReviewListForFeature:async function(f){
   this.reviewForFeatureId = f;
@@ -3422,7 +3557,7 @@ loadReviewsForFeature:async function(fiturId){
   }catch(e){ this.reviewList = []; }
 },
 openReviewFromList:function(){
-  if(!this.currentUser){return this.showAlert('PERHATIAN','Login dulu!');}
+  if(!this.currentUser){return this.showToast('⚠️ PERHATIAN','Login dulu!','warning');}
   if(!this.reviewForFeatureId){return;}
   var f = this.reviewForFeatureId;
   this.reviewTarget = f;
@@ -3446,14 +3581,13 @@ getRatingLabel:function(rating){
 },
 submitReview:async function(){
   if(!this.reviewTarget) return;
-  if(!this.reviewForm.rating || this.reviewForm.rating < 1){return this.showAlert('PERHATIAN','Kasih rating dulu!');}
+  if(!this.reviewForm.rating || this.reviewForm.rating < 1){return this.showToast('⚠️ PERHATIAN','Kasih rating dulu!','warning');}
   try{
     var {error} = await sb.from('reviews').insert({user_id:this.currentUser.id,username:this.userName,fitur_id:this.reviewTarget.id,rating:this.reviewForm.rating,komentar:this.reviewForm.komentar||'',created_at:new Date().toISOString()});
     if(error) throw error;
     await this.addPoints(3,'Review fitur');
     this.featureRatingsCacheTime = 0;
     await this.loadAllFeatureRatings();
-    // Close review sheet dulu, baru tampilkan toast
     this.reviewSheetOpen = false;
     this.reviewTarget = null;
     this.reviewForm = {rating:5,komentar:''};
@@ -3464,9 +3598,9 @@ submitReview:async function(){
   }catch(e){this.showToast('❌ GAGAL', e.message, 'error');}
 },
 
-// BUG REPORT FUNCTIONS - FIX: Close sheet dulu, baru toast
+// BUG REPORT
 openBugReportSheet:function(){
-  if(!this.currentUser){return this.showAlert('PERHATIAN','Login dulu!');}
+  if(!this.currentUser){return this.showToast('⚠️ PERHATIAN','Login dulu!','warning');}
   this.bugReportForm = {tipe:'bug', judul:'', deskripsi:''};
   this.bugReportSheetOpen = true;
 },
@@ -3477,7 +3611,7 @@ submitBugReport:async function(){
   if(this.bugReportForm.deskripsi.length < 10){return this.showToast('⚠️ PERHATIAN','Deskripsi minimal 10 karakter!','warning');}
   
   this.bugReportSubmitting = true;
-  var savedForm = {...this.bugReportForm};
+  var savedForm = Object.assign({}, this.bugReportForm);
   
   try{
     var {error} = await sb.from('bug_reports').insert({
@@ -3490,15 +3624,14 @@ submitBugReport:async function(){
     });
     if(error) throw error;
     
-    // PENTING: Tutup sheet DULU sebelum tampilkan toast
+    // Tutup sheet DULU
     this.bugReportSheetOpen = false;
     this.bugReportForm = {tipe:'bug', judul:'', deskripsi:''};
     this.bugReportSubmitting = false;
     
-    // Add points
     await this.addPoints(5, 'Lapor bug');
     
-    // Baru tampilkan toast (setelah sheet ketutup)
+    // Baru tampilkan toast
     var self = this;
     setTimeout(function(){
       self.showToast('🐛 TERKIRIM', 'Makasih udah lapor! Bonus +5 poin 🎉', 'success');
@@ -3524,7 +3657,7 @@ loadAllBugReports:async function(){
     var {data, error} = await sb.from('bug_reports').select('*').order('created_at', {ascending:false}).limit(100);
     if(error) throw error;
     this.bugReportList = data || [];
-  }catch(e){console.error(e);}
+  }catch(e){}
 },
 updateBugStatus:async function(reportId, newStatus){
   try{
@@ -3771,6 +3904,23 @@ saveWelcomeText:async function(){if(!this.welcomeTextEdit)return;await sb.from('
 
 setupRealtime:function(){
   var self = this;
+  
+  // Realtime Web Maintenance
+  try{
+    sb.channel('web-maint-rt')
+      .on('postgres_changes', {event:'UPDATE', schema:'public', table:'app_settings'}, function(p){
+        var d = p.new;
+        if(!d || d.id !== 1) return;
+        self.webMaintenanceActive = d.web_maintenance_active || false;
+        self.webMaintScope = d.web_maintenance_scope || 'both';
+        self.webMaintenanceData.alasan = d.web_maintenance_alasan || '';
+        self.webMaintenanceData.estimasi = d.web_maintenance_estimasi || '';
+        self.webMaintenanceData.countdown = d.web_maintenance_countdown || 10;
+        self.checkWebMaintenanceBlock();
+      })
+      .subscribe();
+  }catch(e){}
+  
   try{
     sb.channel('bc-rt').on('postgres_changes',{event:'INSERT',schema:'public',table:'broadcasts'},function(p){
       var n=p.new;
