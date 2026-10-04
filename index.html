@@ -10,7 +10,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Bangers&family=Comic+Neue:wght@400;700&family=Press+Start+2P&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#050508;--bg-2:#0a0a12;--card:#0d0d18;--card-2:#121220;
@@ -20,6 +20,9 @@
   --gold:#ffd700;--gold-glow:rgba(255,215,0,.5);
   --success:#00ff88;--danger:#ff3355;--warning:#ffaa00;
   --radius:16px;--radius-sm:10px;--radius-lg:22px;
+  --font-display:'Orbitron',sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
 }
 [data-theme="magenta"]{--primary:#ff0080;--primary-dark:#cc0066;--primary-soft:rgba(255,0,128,.1);--primary-glow:rgba(255,0,128,.5);--accent:#00d9ff;--accent-dark:#0099bb;--accent-soft:rgba(0,217,255,.1);--accent-glow:rgba(0,217,255,.5)}
 [data-theme="emerald"]{--primary:#00ff88;--primary-dark:#00bb66;--primary-soft:rgba(0,255,136,.1);--primary-glow:rgba(0,255,136,.5);--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:rgba(168,85,247,.1);--accent-glow:rgba(168,85,247,.5)}
@@ -29,7 +32,7 @@
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 html{overflow-x:hidden;scroll-behavior:smooth}
-body{overflow-x:hidden;background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--text);min-height:100dvh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:auto}
+body{overflow-x:hidden;background:var(--bg);font-family:var(--font-body);color:var(--text);min-height:100dvh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:auto}
 body:not([data-ready="1"]){opacity:0 !important;pointer-events:none !important}
 body:not([data-ready="1"]) *{animation-play-state:paused !important}
 body[data-ready="1"]{opacity:1;transition:opacity .2s ease-out}
@@ -55,15 +58,15 @@ a{color:inherit;text-decoration:none}
 .zn-header-user{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer;padding:6px 8px;border-radius:12px;transition:all .2s;border:1px solid transparent}
 .zn-header-user:active{background:var(--primary-soft);border-color:var(--primary)}
 .zn-avatar-wrap{position:relative;flex-shrink:0}
-.zn-avatar{width:40px;height:40px;border-radius:11px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:800;font-size:15px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#050508;border:1.5px solid var(--primary);box-shadow:0 0 12px var(--primary-glow),inset 0 0 10px rgba(255,255,255,.15)}
+.zn-avatar{width:40px;height:40px;border-radius:11px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:15px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#050508;border:1.5px solid var(--primary);box-shadow:0 0 12px var(--primary-glow),inset 0 0 10px rgba(255,255,255,.15)}
 .zn-avatar img{width:100%;height:100%;object-fit:cover}
 .zn-avatar-edit{position:absolute;bottom:-3px;right:-3px;width:18px;height:18px;border-radius:50%;background:var(--primary);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 8px var(--primary-glow);pointer-events:none}
 .zn-avatar-edit svg{width:9px;height:9px;fill:#050508}
 .zn-header-info{flex:1;min-width:0}
-.zn-header-name{font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;letter-spacing:.3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.zn-header-hint{font-size:9px;color:var(--primary);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;margin-top:3px;display:inline-flex;align-items:center;gap:3px;background:var(--primary-soft);padding:2px 6px;border-radius:6px;border:1px solid var(--primary);animation:znHintPulse 2.5s ease-in-out infinite}
+.zn-header-name{font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:.3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zn-header-hint{font-size:9px;color:var(--primary);font-family:var(--font-mono);letter-spacing:.5px;margin-top:3px;display:inline-flex;align-items:center;gap:3px;background:var(--primary-soft);padding:2px 6px;border-radius:6px;border:1px solid var(--primary);animation:znHintPulse 2.5s ease-in-out infinite}
 @keyframes znHintPulse{0%,100%{opacity:.7}50%{opacity:1}}
-.zn-badge{display:inline-block;font-family:'Orbitron',sans-serif;font-size:7px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary);letter-spacing:1px}
+.zn-badge{display:inline-block;font-family:var(--font-display);font-size:7px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary);letter-spacing:1px}
 .zn-badge.vip{background:rgba(255,215,0,.1);color:var(--gold);border-color:var(--gold)}
 .zn-badge.owner{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
 .zn-header-actions{display:flex;gap:6px;flex-shrink:0}
@@ -81,31 +84,31 @@ a{color:inherit;text-decoration:none}
 .zn-hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,transparent 30%,rgba(5,5,8,.7) 70%,rgba(5,5,8,.95) 100%)}
 .zn-hero::before{content:'';position:absolute;top:-50%;right:-20%;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.3;pointer-events:none;z-index:1}
 .zn-hero-content{position:relative;z-index:2;display:flex;flex-direction:column;gap:8px}
-.zn-hero-label{display:inline-flex;align-items:center;gap:6px;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;padding:4px 10px;border-radius:20px;background:rgba(0,217,255,.15);border:1px solid var(--primary);color:var(--primary);text-shadow:0 0 8px var(--primary-glow);align-self:flex-start}
+.zn-hero-label{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:9px;font-weight:700;letter-spacing:2px;padding:4px 10px;border-radius:20px;background:rgba(0,217,255,.15);border:1px solid var(--primary);color:var(--primary);text-shadow:0 0 8px var(--primary-glow);align-self:flex-start}
 .zn-hero-label::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--primary);box-shadow:0 0 8px var(--primary);animation:znPulse 2s infinite}
 @keyframes znPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
-.zn-hero-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(20px,5.5vw,26px);letter-spacing:1px;line-height:1.15;background:linear-gradient(135deg,#ffffff,var(--primary));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.zn-hero-subtitle{font-size:11px;color:var(--text-dim);letter-spacing:1px;font-family:'JetBrains Mono',monospace}
+.zn-hero-title{font-family:var(--font-display);font-weight:900;font-size:clamp(20px,5.5vw,26px);letter-spacing:1px;line-height:1.15;background:linear-gradient(135deg,#ffffff,var(--primary));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.zn-hero-subtitle{font-size:11px;color:var(--text-dim);letter-spacing:1px;font-family:var(--font-mono)}
 .zn-hero-credit{display:flex;align-items:center;gap:6px;margin-top:2px}
-.zn-hero-credit-badge{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:900;color:#050508;border:1px solid var(--primary);box-shadow:0 0 8px var(--primary-glow)}
-.zn-hero-credit-text{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:1px}
+.zn-hero-credit-badge{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:9px;font-weight:900;color:#050508;border:1px solid var(--primary);box-shadow:0 0 8px var(--primary-glow)}
+.zn-hero-credit-text{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:1px}
 .zn-hero-credit-text b{color:var(--primary);text-shadow:0 0 8px var(--primary-glow)}
 .zn-hero-stats-compact{display:flex;gap:6px;margin-top:6px}
 .zn-stat-compact{flex:1;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;align-items:center;gap:6px}
 .zn-stat-compact-icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .zn-stat-compact-icon svg{width:14px;height:14px}
 .zn-stat-compact-text{flex:1;min-width:0}
-.zn-stat-compact-val{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:var(--primary);line-height:1}
+.zn-stat-compact-val{font-family:var(--font-display);font-size:12px;font-weight:800;color:var(--primary);line-height:1}
 .zn-stat-compact-label{font-size:7px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-top:2px}
 
 .zn-info-header{display:flex;align-items:center;gap:6px;margin-bottom:8px}
-.zn-info-header-title{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--primary)}
+.zn-info-header-title{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--primary)}
 .zn-info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .zn-info-item{display:flex;flex-direction:column;gap:3px;padding:10px 8px;border-radius:10px;background:var(--card);border:1px solid var(--border)}
 .zn-info-top{display:flex;align-items:center;gap:5px;margin-bottom:2px}
 .zn-info-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .zn-info-icon svg{width:14px;height:14px}
-.zn-info-label{font-family:'Orbitron',sans-serif;font-size:7px;font-weight:600;color:var(--text-mute);letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zn-info-label{font-family:var(--font-display);font-size:7px;font-weight:600;color:var(--text-mute);letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .zn-info-val{font-size:11px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.2}
 
 .zn-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -113,7 +116,7 @@ a{color:inherit;text-decoration:none}
 .zn-quick-btn:active{border-color:var(--primary);box-shadow:0 0 20px var(--primary-glow);transform:scale(.96)}
 .zn-quick-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center}
 .zn-quick-icon svg{width:22px;height:22px}
-.zn-quick-label{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase}
+.zn-quick-label{font-family:var(--font-display);font-size:8px;font-weight:700;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase}
 
 .zn-cat-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin:0 -14px;padding-left:14px;padding-right:14px}
 .zn-cat-scroll::-webkit-scrollbar{display:none}
@@ -124,11 +127,11 @@ a{color:inherit;text-decoration:none}
 .zn-feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .zn-feat-card{position:relative;padding:16px 16px 40px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all .25s;overflow:hidden;min-height:140px;display:flex;flex-direction:column;gap:8px}
 .zn-feat-card:active{border-color:var(--primary);box-shadow:0 0 25px var(--primary-glow),inset 0 0 20px var(--primary-soft);transform:scale(.97)}
-.zn-feat-badge{position:absolute;top:10px;right:10px;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;padding:3px 7px;border-radius:6px;background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary);letter-spacing:1px}
+.zn-feat-badge{position:absolute;top:10px;right:10px;font-family:var(--font-display);font-size:8px;font-weight:700;padding:3px 7px;border-radius:6px;background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary);letter-spacing:1px}
 .zn-feat-badge.pro{background:rgba(255,215,0,.1);color:var(--gold);border-color:var(--gold)}
 .zn-feat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);box-shadow:0 0 12px var(--primary-glow);flex-shrink:0}
 .zn-feat-icon svg{width:20px;height:20px}
-.zn-feat-name{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;letter-spacing:.3px;color:var(--text);line-height:1.2}
+.zn-feat-name{font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:.3px;color:var(--text);line-height:1.2}
 .zn-feat-desc{font-size:11px;color:var(--text-mute);line-height:1.3}
 
 .zn-feat-review-btn{
@@ -136,7 +139,7 @@ a{color:inherit;text-decoration:none}
   display:flex;align-items:center;justify-content:center;gap:4px;
   padding:5px 8px;border-radius:8px;
   background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);
-  color:#ffd700;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.5px;
+  color:#ffd700;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.5px;
   transition:all .2s;cursor:pointer;
 }
 .zn-feat-review-btn:active{transform:scale(.96)}
@@ -144,10 +147,10 @@ a{color:inherit;text-decoration:none}
 .zn-tips{display:flex;gap:12px;align-items:flex-start;padding:14px;background:linear-gradient(135deg,var(--primary-soft),transparent);border:1px solid var(--primary);border-radius:var(--radius)}
 .zn-tips-icon{width:32px;height:32px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .zn-tips-icon svg{width:18px;height:18px;fill:#050508}
-.zn-tips-label{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--primary);margin-bottom:4px}
+.zn-tips-label{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--primary);margin-bottom:4px}
 .zn-tips-text{font-size:12px;color:var(--text-dim);line-height:1.4}
 
-.zn-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 20px;border-radius:var(--radius-sm);font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.zn-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 20px;border-radius:var(--radius-sm);font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .2s;text-transform:uppercase}
 .zn-btn svg{width:16px;height:16px;fill:currentColor}
 .zn-btn-primary{background:var(--primary);color:#050508;border:1px solid var(--primary)}
 .zn-btn-primary:active{transform:scale(.97)}
@@ -163,32 +166,32 @@ a{color:inherit;text-decoration:none}
 
 .zn-card{padding:16px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);position:relative;transition:all .2s}
 .zn-card-glow{border-color:var(--primary)}
-.zn-card-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.zn-card-title{font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:1px;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .zn-card-title svg{width:16px;height:16px;fill:var(--primary)}
 
-.zn-tab-pill{flex:1;padding:10px 8px;border-radius:var(--radius-sm);font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-align:center;cursor:pointer;transition:all .2s;background:var(--card);color:var(--text-dim);border:1px solid var(--border);text-transform:uppercase}
+.zn-tab-pill{flex:1;padding:10px 8px;border-radius:var(--radius-sm);font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:1px;text-align:center;cursor:pointer;transition:all .2s;background:var(--card);color:var(--text-dim);border:1px solid var(--border);text-transform:uppercase}
 .zn-tab-pill.active{background:var(--primary-soft);color:var(--primary);border-color:var(--primary)}
 .zn-tab-pill:active{transform:scale(.96)}
 
 .zn-input{width:100%;padding:14px 16px;border-radius:var(--radius-sm);background:var(--bg-2);border:1px solid var(--border);color:var(--text);font-size:14px;font-weight:500;transition:all .2s}
 .zn-input::placeholder{color:var(--text-mute)}
 .zn-input:focus{border-color:var(--primary);background:var(--card)}
-.zn-input-number{width:100%;padding:14px 16px;border-radius:var(--radius-sm);background:var(--bg-2);border:1px solid var(--border);color:var(--text);font-size:16px;font-weight:600;transition:all .2s;font-family:'JetBrains Mono',monospace;letter-spacing:1px}
+.zn-input-number{width:100%;padding:14px 16px;border-radius:var(--radius-sm);background:var(--bg-2);border:1px solid var(--border);color:var(--text);font-size:16px;font-weight:600;transition:all .2s;font-family:var(--font-mono);letter-spacing:1px}
 .zn-input-number:focus{border-color:var(--primary);background:var(--card)}
-textarea.zn-input{resize:vertical;min-height:80px;font-family:'Inter',sans-serif}
+textarea.zn-input{resize:vertical;min-height:80px;font-family:var(--font-body)}
 select.zn-input{cursor:pointer}
 
 .zn-stat-box{padding:14px 10px;border-radius:var(--radius-sm);background:var(--card);border:1px solid var(--border);text-align:center}
-.zn-stat-box-val{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:800;color:var(--primary);margin-bottom:4px}
+.zn-stat-box-val{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--primary);margin-bottom:4px}
 .zn-stat-box-label{font-size:9px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;font-weight:700}
 
 .zn-progress{height:18px;background:var(--bg-2);border-radius:10px;overflow:hidden;border:1px solid var(--border);position:relative}
-.zn-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .5s ease-out;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;color:#050508}
+.zn-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .5s ease-out;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:9px;font-weight:700;color:#050508}
 
 .zn-bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:flex;padding:6px;gap:2px;background:rgba(5,5,8,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);z-index:50}
 .zn-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px 2px;border-radius:var(--radius-sm);background:transparent;color:var(--text-mute);cursor:pointer;transition:all .2s;position:relative;min-width:44px}
 .zn-nav-btn svg{width:20px;height:20px;fill:currentColor}
-.zn-nav-label{font-family:'Orbitron',sans-serif;font-size:7px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
+.zn-nav-label{font-family:var(--font-display);font-size:7px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
 .zn-nav-btn.active{background:var(--primary-soft);color:var(--primary)}
 .zn-nav-btn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:16px;height:2px;background:var(--primary);border-radius:2px}
 
@@ -211,7 +214,6 @@ select.zn-input{cursor:pointer}
 .zn-spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:znSpin .6s linear infinite}
 @keyframes znSpin{to{transform:rotate(360deg)}}
 
-/* ========== MUSIC PLAYER (BUBBLE DRAGGABLE) ========== */
 .zn-music-btn{position:relative}
 .zn-music-btn::after{content:'';position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;opacity:0;transition:opacity .2s}
 .zn-music-btn.active::after{opacity:1;animation:znPulse 1.5s infinite}
@@ -221,8 +223,8 @@ select.zn-input{cursor:pointer}
 .zn-music-bubble-btn{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--primary);box-shadow:0 0 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;pointer-events:none;position:relative}
 .zn-music-bubble-btn svg{width:28px;height:28px;fill:#050508}
 .zn-music-bubble-btn::after{content:'';position:absolute;inset:-2px;border-radius:50%;border:2px dashed rgba(255,255,255,.3);animation:znSpin 8s linear infinite;opacity:.6}
-.zn-music-bubble-label{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:.5px;color:var(--primary);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;border:1px solid var(--primary);white-space:nowrap;pointer-events:none;max-width:120px;overflow:hidden;text-overflow:ellipsis}
-.zn-music-bubble-hint{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:6px;border:1px solid var(--border);white-space:nowrap;pointer-events:none;animation:znHintPulse 2.5s ease-in-out infinite}
+.zn-music-bubble-label{font-family:var(--font-display);font-size:8px;font-weight:700;letter-spacing:.5px;color:var(--primary);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;border:1px solid var(--primary);white-space:nowrap;pointer-events:none;max-width:120px;overflow:hidden;text-overflow:ellipsis}
+.zn-music-bubble-hint{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:9px;color:var(--text-mute);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:6px;border:1px solid var(--border);white-space:nowrap;pointer-events:none;animation:znHintPulse 2.5s ease-in-out infinite}
 .zn-music-bubble-minimize{position:absolute;bottom:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--card);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:14px;line-height:1;cursor:pointer;box-shadow:0 0 10px var(--primary-glow);pointer-events:auto;z-index:2}
 .zn-music-bubble-minimize svg{width:12px;height:12px;fill:currentColor}
 
@@ -233,8 +235,8 @@ select.zn-input{cursor:pointer}
 
 .zn-music-sheet-content{display:flex;flex-direction:column;gap:14px}
 .zn-music-info{padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-align:center}
-.zn-music-info-title{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:4px}
-.zn-music-info-sub{font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;letter-spacing:1px}
+.zn-music-info-title{font-family:var(--font-display);font-size:13px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:4px}
+.zn-music-info-sub{font-size:10px;color:var(--text-mute);font-family:var(--font-mono);letter-spacing:1px}
 .zn-music-frame-wrap{position:relative;width:100%;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:16/9;border:1px solid var(--border)}
 .zn-music-frame-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
 .zn-music-controls{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)}
@@ -247,8 +249,7 @@ select.zn-input{cursor:pointer}
 .zn-music-volume input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--primary);box-shadow:0 0 8px var(--primary-glow);cursor:pointer}
 .zn-music-volume input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--primary);border:none;cursor:pointer}
 
-/* WEB MAINTENANCE BANNER */
-.web-maint-banner{position:fixed;top:0;left:0;right:0;z-index:9990;padding:10px 14px;background:linear-gradient(90deg,#ff3355,#ff6600);color:#fff;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-align:center;box-shadow:0 4px 20px rgba(255,51,85,.6);backdrop-filter:blur(10px);animation:bannerPulse 1s ease-in-out infinite}
+.web-maint-banner{position:fixed;top:0;left:0;right:0;z-index:9990;padding:10px 14px;background:linear-gradient(90deg,#ff3355,#ff6600);color:#fff;font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:1px;text-align:center;box-shadow:0 4px 20px rgba(255,51,85,.6);backdrop-filter:blur(10px);animation:bannerPulse 1s ease-in-out infinite}
 @keyframes bannerPulse{0%,100%{box-shadow:0 4px 20px rgba(255,51,85,.6),0 0 30px rgba(255,51,85,.4)}50%{box-shadow:0 4px 25px rgba(255,51,85,.9),0 0 40px rgba(255,51,85,.6)}}
 .web-maint-banner .countdown-num{display:inline-block;background:rgba(0,0,0,.3);padding:2px 8px;border-radius:6px;margin:0 4px;font-size:16px;font-weight:900;min-width:34px;text-align:center;border:1px solid rgba(255,255,255,.3)}
 
@@ -258,10 +259,10 @@ select.zn-input{cursor:pointer}
 .web-maint-content{position:relative;z-index:1;text-align:center;max-width:500px;width:100%}
 .web-maint-icon{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,rgba(255,170,0,.2),rgba(255,51,85,.2));border:3px solid var(--warning);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:60px;box-shadow:0 0 60px rgba(255,170,0,.6),inset 0 0 30px rgba(255,170,0,.3);animation:webMaintPulse 2s ease-in-out infinite}
 @keyframes webMaintPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-.web-maint-title{font-family:'Orbitron',sans-serif;font-size:clamp(28px,8vw,44px);font-weight:900;letter-spacing:4px;color:var(--warning);text-shadow:0 0 30px rgba(255,170,0,.6);margin-bottom:10px}
-.web-maint-sub{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-mute);letter-spacing:3px;margin-bottom:32px}
+.web-maint-title{font-family:var(--font-display);font-size:clamp(28px,8vw,44px);font-weight:900;letter-spacing:4px;color:var(--warning);text-shadow:0 0 30px rgba(255,170,0,.6);margin-bottom:10px}
+.web-maint-sub{font-family:var(--font-mono);font-size:12px;color:var(--text-mute);letter-spacing:3px;margin-bottom:32px}
 
-.owner-maint-banner{position:fixed;top:0;left:0;right:0;z-index:9995;padding:8px 12px;background:rgba(255,51,85,.95);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;text-align:center;letter-spacing:.5px;backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(255,51,85,.5)}
+.owner-maint-banner{position:fixed;top:0;left:0;right:0;z-index:9995;padding:8px 12px;background:rgba(255,51,85,.95);color:#fff;font-family:var(--font-mono);font-size:10px;font-weight:700;text-align:center;letter-spacing:.5px;backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(255,51,85,.5)}
 .owner-maint-banner button{background:#fff;color:#ff3355;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;letter-spacing:.5px}
 
 #loadingScreen{position:fixed;inset:0;z-index:99998;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:hidden;transition:opacity .6s,visibility .6s}
@@ -276,7 +277,7 @@ select.zn-input{cursor:pointer}
 .load-ring-1{width:100px;height:100px;border-top-color:#00d9ff;border-right-color:#00d9ff;animation:loadSpin 1.5s linear infinite;box-shadow:0 0 20px rgba(0,217,255,.5)}
 .load-ring-2{width:76px;height:76px;border-bottom-color:#ff0080;border-left-color:#ff0080;animation:loadSpin 2s linear infinite reverse;box-shadow:0 0 15px rgba(255,0,128,.5)}
 .load-ring-3{width:52px;height:52px;border-top-color:#a855f7;border-right-color:#a855f7;animation:loadSpin 1.2s linear infinite;box-shadow:0 0 12px rgba(168,85,247,.5)}
-.load-z{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:900;color:#00d9ff;text-shadow:0 0 15px #00d9ff,0 0 30px #00d9ff;animation:loadZPulse 1.5s ease-in-out infinite;z-index:2}
+.load-z{font-family:var(--font-display);font-size:26px;font-weight:900;color:#00d9ff;text-shadow:0 0 15px #00d9ff,0 0 30px #00d9ff;animation:loadZPulse 1.5s ease-in-out infinite;z-index:2}
 @keyframes loadSpin{to{transform:rotate(360deg)}}
 @keyframes loadZPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:.8}}
 .load-dots{display:flex;gap:8px;margin-top:18px}
@@ -284,13 +285,13 @@ select.zn-input{cursor:pointer}
 .load-dots span:nth-child(2){background:#a855f7;box-shadow:0 0 10px #a855f7;animation-delay:.2s}
 .load-dots span:nth-child(3){background:#ff0080;box-shadow:0 0 10px #ff0080;animation-delay:.4s}
 @keyframes loadDotBounce{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-10px);opacity:1}}
-.load-logo{font-family:'Orbitron',sans-serif;font-size:clamp(24px,7vw,36px);font-weight:900;letter-spacing:6px;color:#00d9ff;margin-bottom:8px;animation:loadGlow 2s ease-in-out infinite;position:relative;z-index:2}
+.load-logo{font-family:var(--font-display);font-size:clamp(24px,7vw,36px);font-weight:900;letter-spacing:6px;color:#00d9ff;margin-bottom:8px;animation:loadGlow 2s ease-in-out infinite;position:relative;z-index:2}
 @keyframes loadGlow{0%,100%{text-shadow:0 0 20px #00d9ff,0 0 40px #00d9ff}50%{text-shadow:0 0 30px #00d9ff,0 0 60px #00d9ff}}
-.load-sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:#555568;letter-spacing:3px;margin-bottom:30px;text-transform:uppercase;position:relative;z-index:2}
+.load-sub{font-family:var(--font-mono);font-size:11px;color:#555568;letter-spacing:3px;margin-bottom:30px;text-transform:uppercase;position:relative;z-index:2}
 .load-bar-wrap{width:min(280px,75vw);height:4px;background:#121220;border-radius:2px;overflow:hidden;position:relative;margin-bottom:14px;z-index:2}
 .load-bar-fill{height:100%;background:linear-gradient(90deg,#00d9ff,#ff0080);width:0%;transition:width .3s ease-out;border-radius:2px}
-.load-pct{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;color:#00d9ff;letter-spacing:2px;position:relative;z-index:2}
-.load-status{font-family:'JetBrains Mono',monospace;font-size:11px;color:#555568;margin-top:8px;letter-spacing:1px;min-height:16px;position:relative;z-index:2}
+.load-pct{font-family:var(--font-display);font-size:12px;font-weight:800;color:#00d9ff;letter-spacing:2px;position:relative;z-index:2}
+.load-status{font-family:var(--font-mono);font-size:11px;color:#555568;margin-top:8px;letter-spacing:1px;min-height:16px;position:relative;z-index:2}
 .load-status::after{content:'▊';animation:loadBlink .8s steps(2) infinite;color:#00d9ff;margin-left:2px}
 @keyframes loadBlink{50%{opacity:0}}
 
@@ -300,10 +301,10 @@ select.zn-input{cursor:pointer}
 .zn-send-btn{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--accent));border:2.5px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 22px var(--primary-glow),0 4px 12px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s}
 .zn-send-btn:active{transform:scale(.92)}
 
-.zn-pro-thinking{display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--primary);font-size:13px;color:var(--primary);font-family:'JetBrains Mono',monospace;max-width:88%}
+.zn-pro-thinking{display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--primary);font-size:13px;color:var(--primary);font-family:var(--font-mono);max-width:88%}
 .zn-pro-thinking::before{content:'●';animation:znProBlink 1s infinite}
 @keyframes znProBlink{0%,100%{opacity:.3}50%{opacity:1}}
-.zn-pro-bubble-label{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;color:#ffd700;margin-bottom:4px;display:flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);width:fit-content}
+.zn-pro-bubble-label{font-family:var(--font-display);font-size:9px;font-weight:700;letter-spacing:1px;color:#ffd700;margin-bottom:4px;display:flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);width:fit-content}
 .zn-pro-badge-vision{background:linear-gradient(135deg,#a855f7,#ff0080);color:#fff;font-size:7px;padding:1px 5px;border-radius:4px;font-weight:700;letter-spacing:.5px}
 .zn-pro-img-preview{position:relative;display:inline-block;margin:8px 0}
 .zn-pro-img-preview img{max-height:100px;border-radius:10px;border:2px solid var(--primary)}
@@ -313,11 +314,11 @@ select.zn-input{cursor:pointer}
 .zn-broadcast-icon.pengumuman{background:var(--primary-soft);border:2px solid var(--primary);box-shadow:0 0 30px var(--primary-glow)}
 .zn-broadcast-icon.peringatan{background:rgba(255,170,0,.15);border:2px solid var(--warning);box-shadow:0 0 30px rgba(255,170,0,.5)}
 .zn-broadcast-icon.maintenance{background:rgba(255,51,85,.15);border:2px solid var(--danger);box-shadow:0 0 30px rgba(255,51,85,.5)}
-.zn-broadcast-type-label{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:800;letter-spacing:3px;margin-bottom:8px;text-align:center}
+.zn-broadcast-type-label{font-family:var(--font-display);font-size:10px;font-weight:800;letter-spacing:3px;margin-bottom:8px;text-align:center}
 .zn-broadcast-type-label.pengumuman{color:var(--primary)}
 .zn-broadcast-type-label.peringatan{color:var(--warning)}
 .zn-broadcast-type-label.maintenance{color:var(--danger)}
-.zn-broadcast-title{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:.5px;text-align:center;margin-bottom:14px;color:var(--text)}
+.zn-broadcast-title{font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:.5px;text-align:center;margin-bottom:14px;color:var(--text)}
 .zn-broadcast-body{padding:16px;border-radius:14px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:16px}
 .zn-broadcast-body p{font-size:13px;line-height:1.7;color:var(--text-dim);white-space:pre-line}
 
@@ -334,7 +335,7 @@ select.zn-input{cursor:pointer}
 @keyframes znSlideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:400px}}
 .zn-maint-input{width:100%;padding:10px 12px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:12px}
 .zn-maint-input:focus{border-color:var(--warning)}
-.zn-maint-textarea{width:100%;padding:10px 12px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:12px;resize:vertical;min-height:50px;font-family:'Inter',sans-serif}
+.zn-maint-textarea{width:100%;padding:10px 12px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:12px;resize:vertical;min-height:50px;font-family:var(--font-body)}
 .zn-maint-textarea:focus{border-color:var(--warning)}
 
 .zn-broadcast-history-card{padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:8px}
@@ -347,9 +348,9 @@ select.zn-input{cursor:pointer}
 .zn-review-card{padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:8px}
 .zn-review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .zn-review-stars{color:var(--gold);font-size:14px;letter-spacing:1px}
-.zn-review-user{font-size:11px;color:var(--primary);font-weight:600;font-family:'JetBrains Mono',monospace}
+.zn-review-user{font-size:11px;color:var(--primary);font-weight:600;font-family:var(--font-mono)}
 .zn-review-komentar{font-size:12px;color:var(--text-dim);line-height:1.5}
-.zn-review-date{font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:4px}
+.zn-review-date{font-size:9px;color:var(--text-mute);font-family:var(--font-mono);margin-top:4px}
 
 .review-feature-header{display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:14px}
 .review-feature-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -358,20 +359,20 @@ select.zn-input{cursor:pointer}
 .review-feature-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
 .review-feature-desc{font-size:11px;color:var(--text-mute)}
 .review-summary{display:flex;align-items:center;gap:16px;padding:16px;border-radius:14px;background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,215,0,.03));border:1px solid rgba(255,215,0,.3);margin-bottom:16px}
-.review-summary-score{font-family:'Orbitron',sans-serif;font-size:42px;font-weight:900;color:#ffd700;line-height:1}
+.review-summary-score{font-family:var(--font-display);font-size:42px;font-weight:900;color:#ffd700;line-height:1}
 .review-summary-detail{flex:1;min-width:0}
 .review-summary-stars{color:#ffd700;font-size:16px;letter-spacing:2px;margin-bottom:4px}
-.review-summary-count{font-size:11px;color:var(--text-mute);font-family:'JetBrains Mono',monospace}
+.review-summary-count{font-size:11px;color:var(--text-mute);font-family:var(--font-mono)}
 
 .zn-dash-card{padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);position:relative;overflow:hidden}
 .zn-dash-card::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.3;pointer-events:none}
-.zn-dash-label{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px}
-.zn-dash-value{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--primary);line-height:1;position:relative;z-index:1}
-.zn-dash-sub{font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:4px;position:relative;z-index:1}
+.zn-dash-label{font-family:var(--font-display);font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px}
+.zn-dash-value{font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--primary);line-height:1;position:relative;z-index:1}
+.zn-dash-sub{font-size:10px;color:var(--text-mute);font-family:var(--font-mono);margin-top:4px;position:relative;z-index:1}
 
 .zn-wallet-balance{padding:20px;border-radius:16px;background:linear-gradient(135deg,var(--gold),var(--accent));border:2px solid var(--gold);text-align:center;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(255,215,0,.4)}
-.zn-wallet-balance-label{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:#050508;margin-bottom:6px}
-.zn-wallet-balance-value{font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:#050508;line-height:1}
+.zn-wallet-balance-label{font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:2px;color:#050508;margin-bottom:6px}
+.zn-wallet-balance-value{font-family:var(--font-display);font-size:36px;font-weight:900;color:#050508;line-height:1}
 
 .zn-sub-card{padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:10px;transition:all .2s}
 .zn-sub-card.active{border-color:var(--gold);background:rgba(255,215,0,.05);box-shadow:0 0 15px rgba(255,215,0,.2)}
@@ -381,21 +382,21 @@ select.zn-input{cursor:pointer}
 .dev-avatar{position:relative;display:inline-block;margin-bottom:16px}
 .dev-avatar-img{width:100px;height:100px;border-radius:28px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;border:3px solid var(--primary);box-shadow:0 0 30px var(--primary-glow),0 8px 24px rgba(0,0,0,.4);overflow:hidden;position:relative;z-index:1}
 .dev-avatar-img img{width:100%;height:100%;object-fit:cover}
-.dev-avatar-img span{font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:#050508;letter-spacing:2px}
+.dev-avatar-img span{font-family:var(--font-display);font-size:36px;font-weight:900;color:#050508;letter-spacing:2px}
 .dev-status-dot{position:absolute;bottom:2px;right:2px;width:20px;height:20px;border-radius:50%;background:#00ff88;border:3px solid var(--bg);box-shadow:0 0 10px #00ff88;z-index:2}
 .dev-status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:rgba(0,255,136,.1);border:1px solid #00ff88;margin-bottom:14px;position:relative;z-index:1}
-.dev-status-badge span{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;color:#00ff88}
+.dev-status-badge span{font-family:var(--font-display);font-size:9px;font-weight:700;letter-spacing:1px;color:#00ff88}
 .dev-status-pulse{width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;animation:znPulse 2s infinite}
 .dev-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
 .dev-stat{background:var(--card);padding:16px 8px;text-align:center}
-.dev-stat-val{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900}
+.dev-stat-val{font-family:var(--font-display);font-size:22px;font-weight:900}
 .dev-stat-lbl{font-size:9px;color:var(--text-mute);letter-spacing:1px;margin-top:4px;text-transform:uppercase}
 .dev-section{padding:0 24px 20px}
-.dev-section-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.dev-section-title{font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .dev-section-title svg{width:16px;height:16px;fill:var(--primary)}
 .dev-bio-box{padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)}
 .dev-bio-box p{font-size:13px;color:var(--text-dim);line-height:1.7;white-space:pre-line}
-.dev-pill{padding:6px 12px;border-radius:16px;background:var(--primary-soft);border:1px solid var(--primary);color:var(--primary);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;transition:all .2s}
+.dev-pill{padding:6px 12px;border-radius:16px;background:var(--primary-soft);border:1px solid var(--primary);color:var(--primary);font-family:var(--font-mono);font-size:11px;font-weight:600;transition:all .2s}
 .dev-skill-group{margin-bottom:10px}
 .dev-skill-label{font-size:10px;color:var(--text-mute);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:600}
 .dev-skill-note{font-size:10px;color:var(--text-mute);font-style:italic;margin-top:6px;padding-left:2px}
@@ -428,7 +429,7 @@ select.zn-input{cursor:pointer}
 .zn-toast.error .zn-toast-icon{background:rgba(255,51,85,.15)}
 .zn-toast.warning .zn-toast-icon{background:rgba(255,170,0,.15)}
 .zn-toast-body{flex:1;min-width:0}
-.zn-toast-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--text);margin-bottom:2px}
+.zn-toast-title{font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--text);margin-bottom:2px}
 .zn-toast.success .zn-toast-title{color:#00ff88}
 .zn-toast.error .zn-toast-title{color:#ff3355}
 .zn-toast.warning .zn-toast-title{color:#ffaa00}
@@ -440,9 +441,780 @@ select.zn-input{cursor:pointer}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ============================================================
+   ★★★ STYLE SYSTEM — 4 GAYA VISUAL YANG BEDA TOTAL ★★★
+   ============================================================ */
+
+/* ---------- STYLE 1: NEON (default) ---------- */
+[data-style="neon"]{
+  --font-display:'Orbitron',sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --radius:16px; --radius-sm:10px; --radius-lg:22px;
+}
+[data-style="neon"] .zn-hero-title{
+  text-shadow:0 0 20px var(--primary-glow);
+}
+
+/* ---------- STYLE 2: KOMIK ---------- */
+[data-style="comic"]{
+  --font-display:'Bangers',cursive;
+  --font-body:'Comic Neue',cursive;
+  --font-mono:'Comic Neue',cursive;
+  --radius:8px; --radius-sm:6px; --radius-lg:10px;
+}
+[data-style="comic"] body,
+[data-style="comic"] .zn-app{
+  background:#fdf6e3 !important;
+  color:#111 !important;
+}
+[data-style="comic"] .zn-grid-bg{display:none !important}
+
+[data-style="comic"] .zn-card,
+[data-style="comic"] .zn-feat-card,
+[data-style="comic"] .zn-quick-btn,
+[data-style="comic"] .zn-info-item,
+[data-style="comic"] .zn-stat-box,
+[data-style="comic"] .zn-stat-compact,
+[data-style="comic"] .zn-cat-tab,
+[data-style="comic"] .zn-tab-pill,
+[data-style="comic"] .zn-sub-card,
+[data-style="comic"] .zn-maint-card,
+[data-style="comic"] .zn-broadcast-body,
+[data-style="comic"] .review-feature-header,
+[data-style="comic"] .review-summary,
+[data-style="comic"] .dev-bio-box,
+[data-style="comic"] .dev-school-card,
+[data-style="comic"] .dev-learning-item,
+[data-style="comic"] .dev-project-item,
+[data-style="comic"] .dev-contact-item,
+[data-style="comic"] .dev-quote,
+[data-style="comic"] .dev-cta-box,
+[data-style="comic"] .zn-dash-card{
+  background:#fff !important;
+  border:3px solid #000 !important;
+  border-radius:8px !important;
+  box-shadow:5px 5px 0 0 #000 !important;
+  color:#111 !important;
+}
+[data-style="comic"] .zn-feat-card:active,
+[data-style="comic"] .zn-quick-btn:active,
+[data-style="comic"] .zn-tab-pill:active,
+[data-style="comic"] .zn-cat-tab:active{
+  box-shadow:1px 1px 0 0 #000 !important;
+  transform:translate(4px,4px) !important;
+}
+[data-style="comic"] .zn-cat-tab.active,
+[data-style="comic"] .zn-tab-pill.active{
+  background:#ffd93d !important;
+  color:#000 !important;
+  border-color:#000 !important;
+}
+
+[data-style="comic"] .zn-hero{
+  background:#ffd93d !important;
+  border:4px solid #000 !important;
+  border-radius:12px !important;
+  box-shadow:8px 8px 0 0 #000 !important;
+  min-height:200px;
+}
+[data-style="comic"] .zn-hero-bg{display:none !important}
+[data-style="comic"] .zn-hero::before{display:none !important}
+[data-style="comic"] .zn-hero-label{
+  background:#fff !important;color:#000 !important;border:3px solid #000 !important;
+  font-family:'Bangers',cursive !important;letter-spacing:2px !important;font-size:12px !important;
+  padding:4px 12px !important;border-radius:20px !important;box-shadow:3px 3px 0 0 #000 !important;
+}
+[data-style="comic"] .zn-hero-label::before{background:#ff3355 !important}
+[data-style="comic"] .zn-hero-title{
+  font-family:'Bangers',cursive !important;background:none !important;
+  -webkit-text-fill-color:#000 !important;color:#000 !important;
+  font-size:clamp(28px,7vw,42px) !important;letter-spacing:2px !important;
+  text-shadow:3px 3px 0 #fff,5px 5px 0 #000 !important;
+}
+[data-style="comic"] .zn-hero-subtitle,
+[data-style="comic"] .zn-hero-credit-text{
+  color:#000 !important;font-family:'Comic Neue',cursive !important;font-weight:700 !important;
+}
+[data-style="comic"] .zn-hero-credit-badge{border:3px solid #000 !important;box-shadow:3px 3px 0 0 #000 !important;background:#fff !important;color:#000 !important}
+
+[data-style="comic"] .zn-header-name,
+[data-style="comic"] .zn-feat-name,
+[data-style="comic"] .zn-card-title,
+[data-style="comic"] .zn-broadcast-title,
+[data-style="comic"] .review-feature-name,
+[data-style="comic"] .dev-stat-val,
+[data-style="comic"] .dev-section-title,
+[data-style="comic"] .dev-learning-title,
+[data-style="comic"] .zn-dash-value,
+[data-style="comic"] .zn-wallet-balance-value,
+[data-style="comic"] .zn-pro-bubble-label{
+  font-family:'Bangers',cursive !important;letter-spacing:1.5px !important;color:#000 !important;
+}
+[data-style="comic"] .zn-feat-name,
+[data-style="comic"] .zn-card-title{font-size:16px !important;text-shadow:1px 1px 0 #ffd93d}
+[data-style="comic"] .zn-header-name{font-size:16px !important;color:#000 !important}
+[data-style="comic"] .zn-card-title svg{fill:#000 !important}
+[data-style="comic"] .zn-feat-desc,
+[data-style="comic"] .zn-tips-text,
+[data-style="comic"] .zn-info-val,
+[data-style="comic"] .zn-stat-compact-val,
+[data-style="comic"] .zn-stat-box-val,
+[data-style="comic"] .zn-dash-sub{
+  color:#111 !important;
+}
+[data-style="comic"] .zn-stat-compact-val,
+[data-style="comic"] .zn-stat-box-val{font-family:'Bangers',cursive !important}
+
+[data-style="comic"] .zn-btn{
+  border:3px solid #000 !important;box-shadow:4px 4px 0 0 #000 !important;
+  border-radius:8px !important;font-family:'Bangers',cursive !important;
+  letter-spacing:2px !important;color:#000 !important;
+}
+[data-style="comic"] .zn-btn-primary{background:#ffd93d !important;color:#000 !important}
+[data-style="comic"] .zn-btn-soft{background:#fff !important;color:#000 !important}
+[data-style="comic"] .zn-btn-danger{background:#ff3355 !important;color:#fff !important}
+[data-style="comic"] .zn-btn-success{background:#00c853 !important;color:#fff !important}
+[data-style="comic"] .zn-btn-warning{background:#ffab00 !important;color:#000 !important}
+[data-style="comic"] .zn-btn:active{box-shadow:1px 1px 0 0 #000 !important;transform:translate(3px,3px) !important}
+
+[data-style="comic"] .zn-header{
+  background:#fff !important;border-bottom:4px solid #000 !important;
+  box-shadow:0 4px 0 0 #000 !important;
+}
+[data-style="comic"] .zn-header.scrolled{box-shadow:0 4px 0 0 #000 !important}
+[data-style="comic"] .zn-avatar{
+  border:3px solid #000 !important;box-shadow:3px 3px 0 0 #000 !important;
+  border-radius:50% !important;font-family:'Bangers',cursive !important;
+}
+[data-style="comic"] .zn-icon-btn{
+  background:#fff !important;border:3px solid #000 !important;border-radius:8px !important;
+  box-shadow:3px 3px 0 0 #000 !important;color:#000 !important;
+}
+[data-style="comic"] .zn-icon-btn:active{box-shadow:1px 1px 0 0 #000 !important;transform:translate(2px,2px) !important}
+[data-style="comic"] .zn-badge{
+  background:#ffd93d !important;color:#000 !important;border:2px solid #000 !important;
+  border-radius:4px !important;font-family:'Bangers',cursive !important;letter-spacing:1.5px !important;
+}
+[data-style="comic"] .zn-header-hint{background:#ffd93d !important;color:#000 !important;border:2px solid #000 !important}
+
+[data-style="comic"] .zn-bottom-nav{
+  background:#fff !important;border-top:4px solid #000 !important;
+  box-shadow:0 -4px 0 0 rgba(0,0,0,.15) !important;
+}
+[data-style="comic"] .zn-nav-btn{color:#333 !important;border-radius:6px !important}
+[data-style="comic"] .zn-nav-btn.active{
+  background:#ffd93d !important;color:#000 !important;
+  border:2px solid #000 !important;box-shadow:2px 2px 0 0 #000 !important;
+}
+[data-style="comic"] .zn-nav-btn.active::before{display:none !important}
+[data-style="comic"] .zn-nav-label{font-family:'Bangers',cursive !important;letter-spacing:1px !important;font-size:11px !important}
+
+[data-style="comic"] .zn-input,
+[data-style="comic"] .zn-input-number,
+[data-style="comic"] .zn-maint-input,
+[data-style="comic"] .zn-maint-textarea{
+  background:#fff !important;border:3px solid #000 !important;border-radius:8px !important;
+  color:#000 !important;font-family:'Comic Neue',cursive !important;font-weight:700 !important;
+  box-shadow:inset 2px 2px 0 0 rgba(0,0,0,.08) !important;
+}
+[data-style="comic"] .zn-input::placeholder{color:#666 !important}
+[data-style="comic"] .zn-input:focus{border-color:#ff3355 !important;box-shadow:inset 2px 2px 0 0 rgba(255,51,85,.15) !important}
+
+[data-style="comic"] .zn-info-label,
+[data-style="comic"] .zn-stat-compact-label,
+[data-style="comic"] .zn-stat-box-label,
+[data-style="comic"] .zn-quick-label{
+  color:#333 !important;font-family:'Comic Neue',cursive !important;font-weight:700 !important;
+}
+[data-style="comic"] .zn-dash-label,
+[data-style="comic"] .dev-stat-lbl,
+[data-style="comic"] .dev-skill-label{
+  color:#333 !important;font-family:'Bangers',cursive !important;
+}
+[data-style="comic"] .zn-dash-card::before{display:none !important}
+
+[data-style="comic"] .zn-sheet-content{
+  background:#fdf6e3 !important;border-top:5px solid #000 !important;
+  border-radius:24px 24px 0 0 !important;
+}
+[data-style="comic"] .zn-sheet-handle{background:#000 !important;height:5px !important}
+[data-style="comic"] .zn-toast{
+  background:#fff !important;border:3px solid #000 !important;
+  box-shadow:4px 4px 0 0 #000 !important;color:#000 !important;
+}
+[data-style="comic"] .zn-toast-title,
+[data-style="comic"] .zn-toast-msg{color:#000 !important}
+
+[data-style="comic"] .zn-progress{
+  border:3px solid #000 !important;background:#fff !important;
+  border-radius:8px !important;height:22px !important;
+}
+[data-style="comic"] .zn-progress-fill{
+  background:#00c853 !important;color:#000 !important;
+  font-family:'Bangers',cursive !important;
+}
+
+[data-style="comic"] .zn-tips{
+  background:#fff !important;border:3px solid #000 !important;
+  box-shadow:5px 5px 0 0 #000 !important;color:#000 !important;
+}
+[data-style="comic"] .zn-tips-icon{
+  background:#ffd93d !important;border:3px solid #000 !important;border-radius:50% !important;
+}
+[data-style="comic"] .zn-tips-icon svg{fill:#000 !important}
+[data-style="comic"] .zn-tips-label{color:#000 !important;font-family:'Bangers',cursive !important}
+[data-style="comic"] .zn-tips-text{color:#333 !important;font-weight:700 !important}
+
+[data-style="comic"] .zn-feat-icon{
+  background:#fff !important;border:3px solid #000 !important;border-radius:50% !important;
+  box-shadow:3px 3px 0 0 #000 !important;
+}
+[data-style="comic"] .zn-feat-icon svg{fill:#000 !important}
+[data-style="comic"] .zn-feat-badge{
+  background:#ff3355 !important;color:#fff !important;border:2px solid #000 !important;
+  font-family:'Bangers',cursive !important;border-radius:6px !important;
+  box-shadow:2px 2px 0 0 #000 !important;
+}
+[data-style="comic"] .zn-feat-badge.pro{background:#ffd700 !important;color:#000 !important}
+
+[data-style="comic"] .zn-cat-scroll .zn-cat-tab svg{fill:#000 !important}
+
+[data-style="comic"] #loadingScreen{background:#fdf6e3 !important}
+[data-style="comic"] .load-logo{
+  font-family:'Bangers',cursive !important;color:#ff3355 !important;
+  text-shadow:4px 4px 0 #000 !important;letter-spacing:3px !important;
+}
+[data-style="comic"] .load-sub{color:#000 !important;font-weight:700 !important;font-family:'Comic Neue',cursive !important}
+[data-style="comic"] .load-z{
+  color:#000 !important;text-shadow:none !important;
+  font-family:'Bangers',cursive !important;font-size:36px !important;
+}
+[data-style="comic"] .load-pct{color:#000 !important;font-family:'Bangers',cursive !important}
+[data-style="comic"] .load-status{color:#333 !important;font-family:'Comic Neue',cursive !important;font-weight:700 !important}
+[data-style="comic"] .load-bar-wrap{background:#fff !important;border:2px solid #000 !important;height:8px !important}
+[data-style="comic"] .load-bar-fill{background:#ff3355 !important}
+[data-style="comic"] .load-ring-1,
+[data-style="comic"] .load-ring-2,
+[data-style="comic"] .load-ring-3{border-color:#000 transparent transparent #000 !important}
+
+[data-style="comic"] .zn-chat-full{background:#fdf6e3 !important}
+[data-style="comic"] .zn-chat-input-bar{background:#fff !important;border-top:4px solid #000 !important}
+[data-style="comic"] .zn-send-btn{
+  background:#ffd93d !important;border:3px solid #000 !important;
+  box-shadow:3px 3px 0 0 #000 !important;border-radius:8px !important;
+}
+[data-style="comic"] .zn-send-btn svg{fill:#000 !important}
+
+[data-style="comic"] .zn-ai-bubble-btn,
+[data-style="comic"] .zn-music-bubble-btn,
+[data-style="comic"] .zn-music-mini{
+  border:3px solid #000 !important;box-shadow:4px 4px 0 0 #000 !important;
+  background:#ffd93d !important;
+}
+[data-style="comic"] .zn-ai-bubble-btn svg,
+[data-style="comic"] .zn-music-bubble-btn svg,
+[data-style="comic"] .zn-music-mini svg{fill:#000 !important}
+[data-style="comic"] .zn-music-bubble-label,
+[data-style="comic"] .zn-music-bubble-hint{background:#fff !important;color:#000 !important;border:2px solid #000 !important;font-family:'Comic Neue',cursive !important;font-weight:700 !important}
+
+/* ---------- STYLE 3: PIXEL (retro 8-bit) ---------- */
+[data-style="pixel"]{
+  --font-display:'Press Start 2P',monospace;
+  --font-body:'Press Start 2P',monospace;
+  --font-mono:'Press Start 2P',monospace;
+  --radius:0px; --radius-sm:0px; --radius-lg:0px;
+}
+[data-style="pixel"] body,
+[data-style="pixel"] .zn-app{
+  background:#1a1a2e !important;
+  color:#fff !important;
+  font-size:11px !important;
+}
+[data-style="pixel"] .zn-grid-bg{
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 2px,transparent 2px 4px) !important;
+}
+[data-style="pixel"] *{border-radius:0 !important}
+
+[data-style="pixel"] .zn-card,
+[data-style="pixel"] .zn-feat-card,
+[data-style="pixel"] .zn-quick-btn,
+[data-style="pixel"] .zn-info-item,
+[data-style="pixel"] .zn-header,
+[data-style="pixel"] .zn-bottom-nav,
+[data-style="pixel"] .zn-cat-tab,
+[data-style="pixel"] .zn-tab-pill,
+[data-style="pixel"] .zn-btn,
+[data-style="pixel"] .zn-input,
+[data-style="pixel"] .zn-input-number,
+[data-style="pixel"] .zn-stat-box,
+[data-style="pixel"] .zn-stat-compact,
+[data-style="pixel"] .zn-hero,
+[data-style="pixel"] .zn-tips,
+[data-style="pixel"] .zn-sheet-content,
+[data-style="pixel"] .zn-sub-card,
+[data-style="pixel"] .zn-maint-card,
+[data-style="pixel"] .zn-avatar,
+[data-style="pixel"] .zn-icon-btn,
+[data-style="pixel"] .zn-badge,
+[data-style="pixel"] .zn-dash-card{
+  border:3px solid #fff !important;
+  box-shadow:
+    inset -3px -3px 0 0 rgba(0,0,0,.4),
+    inset 3px 3px 0 0 rgba(255,255,255,.2),
+    0 0 0 3px #000 !important;
+  border-radius:0 !important;
+}
+[data-style="pixel"] .zn-hero{
+  background:#2d1b69 !important;
+  border-color:#ffd700 !important;
+  box-shadow:
+    inset -3px -3px 0 0 rgba(0,0,0,.4),
+    inset 3px 3px 0 0 rgba(255,215,0,.3),
+    0 0 0 3px #000 !important;
+}
+[data-style="pixel"] .zn-hero-bg{display:none !important}
+[data-style="pixel"] .zn-hero::before{display:none !important}
+[data-style="pixel"] .zn-hero-title{
+  background:none !important;
+  -webkit-text-fill-color:#ffd700 !important;
+  color:#ffd700 !important;
+  font-size:16px !important;
+  text-shadow:3px 3px 0 #000 !important;
+  line-height:1.6 !important;
+}
+[data-style="pixel"] .zn-hero-label{
+  background:#000 !important;color:#ffd700 !important;border:2px solid #ffd700 !important;
+  font-size:8px !important;padding:6px 10px !important;
+}
+[data-style="pixel"] .zn-hero-label::before{background:#ffd700 !important}
+[data-style="pixel"] .zn-hero-subtitle,
+[data-style="pixel"] .zn-hero-credit-text{
+  font-size:8px !important;color:#fff !important;
+}
+[data-style="pixel"] .zn-hero-credit-badge{background:#ffd700 !important;color:#000 !important;border:2px solid #fff !important}
+
+[data-style="pixel"] .zn-header{
+  background:#000 !important;
+  border-bottom:3px solid #fff !important;
+  box-shadow:none !important;
+}
+[data-style="pixel"] .zn-header-name{font-size:9px !important}
+[data-style="pixel"] .zn-feat-name,
+[data-style="pixel"] .zn-card-title,
+[data-style="pixel"] .zn-nav-label,
+[data-style="pixel"] .zn-btn{
+  font-size:9px !important;
+  line-height:1.5 !important;
+  letter-spacing:0 !important;
+}
+[data-style="pixel"] .zn-feat-desc,
+[data-style="pixel"] .zn-tips-text,
+[data-style="pixel"] .zn-info-label,
+[data-style="pixel"] .zn-stat-compact-label,
+[data-style="pixel"] .zn-stat-box-label,
+[data-style="pixel"] .zn-quick-label{
+  font-size:7px !important;
+  line-height:1.6 !important;
+  letter-spacing:0 !important;
+}
+[data-style="pixel"] .zn-feat-icon{
+  background:#000 !important;border:3px solid #ffd700 !important;
+  box-shadow:0 0 0 3px #000,inset -3px -3px 0 0 rgba(255,215,0,.3) !important;
+  width:42px !important;height:42px !important;
+}
+[data-style="pixel"] .zn-feat-icon svg{fill:#ffd700 !important}
+[data-style="pixel"] .zn-feat-badge{
+  background:#d50000 !important;color:#fff !important;border:2px solid #fff !important;
+  font-size:7px !important;padding:3px 6px !important;
+}
+[data-style="pixel"] .zn-feat-badge.pro{background:#ffd700 !important;color:#000 !important}
+
+[data-style="pixel"] .zn-btn-primary{background:#00c853 !important;color:#000 !important}
+[data-style="pixel"] .zn-btn-soft{background:#1a1a2e !important;color:#fff !important}
+[data-style="pixel"] .zn-btn-danger{background:#d50000 !important;color:#fff !important}
+[data-style="pixel"] .zn-btn-warning{background:#ffab00 !important;color:#000 !important}
+[data-style="pixel"] .zn-btn-success{background:#00c853 !important;color:#000 !important}
+[data-style="pixel"] .zn-btn:active{
+  transform:translate(2px,2px) !important;
+  box-shadow:
+    inset 3px 3px 0 0 rgba(0,0,0,.4),
+    inset -3px -3px 0 0 rgba(255,255,255,.2),
+    0 0 0 3px #000 !important;
+}
+
+[data-style="pixel"] .zn-bottom-nav{
+  background:#000 !important;
+  border-top:3px solid #fff !important;
+  box-shadow:none !important;
+}
+[data-style="pixel"] .zn-nav-btn.active{
+  background:#ffd700 !important;color:#000 !important;
+}
+[data-style="pixel"] .zn-nav-btn.active::before{display:none !important}
+[data-style="pixel"] .zn-nav-btn svg{width:18px !important;height:18px !important}
+
+[data-style="pixel"] .zn-input,
+[data-style="pixel"] .zn-input-number,
+[data-style="pixel"] .zn-maint-input,
+[data-style="pixel"] .zn-maint-textarea{
+  background:#000 !important;color:#00ff00 !important;font-size:11px !important;
+}
+[data-style="pixel"] .zn-input::placeholder{color:#666 !important;font-size:9px !important}
+[data-style="pixel"] .zn-input:focus{border-color:#00ff00 !important;box-shadow:0 0 0 3px #000,0 0 15px #00ff00 !important}
+
+[data-style="pixel"] .zn-progress{
+  background:#000 !important;border:3px solid #fff !important;
+  height:24px !important;box-shadow:0 0 0 3px #000 !important;
+}
+[data-style="pixel"] .zn-progress-fill{
+  background:#00c853 !important;color:#000 !important;font-size:7px !important;
+}
+
+[data-style="pixel"] .zn-cat-tab.active,
+[data-style="pixel"] .zn-tab-pill.active{
+  background:#ffd700 !important;color:#000 !important;
+  box-shadow:0 0 0 3px #000,0 0 15px #ffd700 !important;
+}
+
+[data-style="pixel"] .zn-stat-compact-val,
+[data-style="pixel"] .zn-stat-box-val,
+[data-style="pixel"] .zn-info-val,
+[data-style="pixel"] .zn-dash-value{
+  color:#ffd700 !important;
+  font-size:11px !important;
+  text-shadow:2px 2px 0 #000 !important;
+}
+
+[data-style="pixel"] .zn-sheet-content{
+  background:#1a1a2e !important;
+  border-top:4px solid #ffd700 !important;
+  box-shadow:0 -3px 0 #000,0 -6px 0 #ffd700 !important;
+}
+[data-style="pixel"] .zn-sheet-handle{
+  background:#fff !important;height:6px !important;border:2px solid #000 !important;
+}
+[data-style="pixel"] .zn-toast{
+  background:#000 !important;border:3px solid #fff !important;
+  color:#fff !important;box-shadow:0 0 0 3px #000,0 0 15px #fff !important;
+}
+[data-style="pixel"] .zn-toast-title{color:#ffd700 !important;font-size:9px !important}
+[data-style="pixel"] .zn-toast-msg{color:#fff !important;font-size:8px !important}
+
+[data-style="pixel"] .zn-avatar{background:#ffd700 !important;color:#000 !important}
+[data-style="pixel"] .zn-icon-btn{background:#000 !important;color:#fff !important}
+[data-style="pixel"] .zn-icon-btn:active{background:#ffd700 !important;color:#000 !important}
+
+[data-style="pixel"] .zn-badge{background:#ffd700 !important;color:#000 !important;font-size:6px !important}
+[data-style="pixel"] .zn-badge.vip{background:#ffd700 !important;color:#000 !important}
+[data-style="pixel"] .zn-badge.owner{background:#d50000 !important;color:#fff !important}
+
+[data-style="pixel"] .zn-tips{
+  background:#000 !important;
+  border:3px solid #ffd700 !important;
+}
+[data-style="pixel"] .zn-tips-icon{background:#ffd700 !important;border:2px solid #000 !important}
+[data-style="pixel"] .zn-tips-icon svg{fill:#000 !important}
+[data-style="pixel"] .zn-tips-label{color:#ffd700 !important}
+[data-style="pixel"] .zn-tips-text{color:#fff !important;font-size:8px !important}
+
+[data-style="pixel"] #loadingScreen{background:#1a1a2e !important}
+[data-style="pixel"] .load-logo{
+  color:#00c853 !important;text-shadow:4px 4px 0 #000 !important;font-size:18px !important;
+}
+[data-style="pixel"] .load-z{color:#ffd700 !important;text-shadow:none !important;font-size:20px !important}
+[data-style="pixel"] .load-sub{font-size:8px !important}
+[data-style="pixel"] .load-pct{font-size:10px !important;color:#ffd700 !important}
+[data-style="pixel"] .load-status{font-size:8px !important}
+[data-style="pixel"] .load-bar-wrap{background:#000 !important;border:3px solid #fff !important;height:12px !important}
+[data-style="pixel"] .load-bar-fill{background:#00c853 !important}
+
+[data-style="pixel"] .zn-chat-full{background:#1a1a2e !important}
+[data-style="pixel"] .zn-chat-input-bar{background:#000 !important;border-top:3px solid #ffd700 !important}
+[data-style="pixel"] .zn-send-btn{
+  background:#ffd700 !important;border:3px solid #fff !important;
+  box-shadow:0 0 0 3px #000 !important;
+}
+[data-style="pixel"] .zn-send-btn svg{fill:#000 !important}
+
+[data-style="pixel"] .zn-ai-bubble-btn,
+[data-style="pixel"] .zn-music-bubble-btn,
+[data-style="pixel"] .zn-music-mini{
+  background:#ffd700 !important;
+  border:3px solid #fff !important;
+  box-shadow:0 0 0 3px #000 !important;
+}
+[data-style="pixel"] .zn-ai-bubble-btn svg,
+[data-style="pixel"] .zn-music-bubble-btn svg,
+[data-style="pixel"] .zn-music-mini svg{fill:#000 !important}
+[data-style="pixel"] .zn-music-bubble-label,
+[data-style="pixel"] .zn-music-bubble-hint{
+  background:#000 !important;color:#ffd700 !important;
+  border:2px solid #fff !important;font-size:7px !important;
+}
+
+/* ---------- STYLE 4: MINIMAL (clean, monokrom) ---------- */
+[data-style="minimal"]{
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Space Grotesk',sans-serif;
+  --font-mono:'Space Grotesk',monospace;
+  --radius:14px; --radius-sm:10px; --radius-lg:20px;
+}
+[data-style="minimal"] body,
+[data-style="minimal"] .zn-app{
+  background:#fafafa !important;
+  color:#111 !important;
+}
+[data-style="minimal"] .zn-grid-bg{display:none !important}
+
+[data-style="minimal"] .zn-card,
+[data-style="minimal"] .zn-feat-card,
+[data-style="minimal"] .zn-quick-btn,
+[data-style="minimal"] .zn-info-item,
+[data-style="minimal"] .zn-stat-box,
+[data-style="minimal"] .zn-stat-compact,
+[data-style="minimal"] .zn-cat-tab,
+[data-style="minimal"] .zn-tab-pill,
+[data-style="minimal"] .zn-sub-card,
+[data-style="minimal"] .zn-maint-card,
+[data-style="minimal"] .review-feature-header,
+[data-style="minimal"] .review-summary,
+[data-style="minimal"] .dev-bio-box,
+[data-style="minimal"] .dev-school-card,
+[data-style="minimal"] .dev-learning-item,
+[data-style="minimal"] .dev-project-item,
+[data-style="minimal"] .dev-contact-item{
+  background:#fff !important;
+  border:1px solid #e5e5e5 !important;
+  box-shadow:0 1px 3px rgba(0,0,0,.04) !important;
+  color:#111 !important;
+}
+[data-style="minimal"] .zn-hero{
+  background:#111 !important;border:none !important;min-height:180px;
+  border-radius:20px !important;
+}
+[data-style="minimal"] .zn-hero-bg{display:none !important}
+[data-style="minimal"] .zn-hero::before{display:none !important}
+[data-style="minimal"] .zn-hero-label{
+  background:transparent !important;
+  border:1px solid rgba(255,255,255,.3) !important;
+  color:#fff !important;font-size:9px !important;letter-spacing:2px !important;
+}
+[data-style="minimal"] .zn-hero-label::before{background:#fff !important}
+[data-style="minimal"] .zn-hero-title{
+  background:none !important;
+  -webkit-text-fill-color:#fff !important;
+  color:#fff !important;
+  font-weight:700 !important;
+  font-size:clamp(22px,6vw,32px) !important;
+  letter-spacing:-0.5px !important;
+}
+[data-style="minimal"] .zn-hero-subtitle,
+[data-style="minimal"] .zn-hero-credit-text{
+  color:rgba(255,255,255,.6) !important;
+}
+[data-style="minimal"] .zn-hero-credit-badge{
+  background:#fff !important;color:#111 !important;border:none !important;
+}
+[data-style="minimal"] .zn-stat-compact{
+  background:rgba(255,255,255,.08) !important;
+  border:1px solid rgba(255,255,255,.15) !important;
+}
+[data-style="minimal"] .zn-stat-compact-val{color:#fff !important}
+[data-style="minimal"] .zn-stat-compact-label{color:rgba(255,255,255,.5) !important}
+
+[data-style="minimal"] .zn-header{
+  background:rgba(250,250,250,.85) !important;
+  border-bottom:1px solid #e5e5e5 !important;
+  backdrop-filter:blur(20px) !important;
+}
+[data-style="minimal"] .zn-header.scrolled{box-shadow:0 2px 12px rgba(0,0,0,.06) !important}
+[data-style="minimal"] .zn-header-name{color:#111 !important}
+[data-style="minimal"] .zn-header-hint{background:#f0f0f0 !important;color:#111 !important;border:none !important}
+[data-style="minimal"] .zn-avatar{
+  border:2px solid #111 !important;box-shadow:none !important;
+  background:#111 !important;color:#fff !important;
+}
+[data-style="minimal"] .zn-icon-btn{
+  background:#fff !important;border:1px solid #e5e5e5 !important;
+  color:#111 !important;box-shadow:none !important;
+}
+[data-style="minimal"] .zn-icon-btn:active{
+  background:#f0f0f0 !important;border-color:#111 !important;
+  box-shadow:none !important;transform:scale(.96) !important;
+}
+[data-style="minimal"] .zn-badge{
+  background:#111 !important;color:#fff !important;border:none !important;
+  border-radius:4px !important;
+}
+[data-style="minimal"] .zn-badge.vip{background:#111 !important;color:#ffd700 !important}
+[data-style="minimal"] .zn-badge.owner{background:#111 !important;color:#fff !important}
+
+[data-style="minimal"] .zn-feat-name,
+[data-style="minimal"] .zn-card-title,
+[data-style="minimal"] .zn-feat-desc,
+[data-style="minimal"] .zn-info-val{color:#111 !important}
+[data-style="minimal"] .zn-feat-name{font-weight:600 !important;letter-spacing:-0.2px !important}
+[data-style="minimal"] .zn-feat-desc{color:#888 !important}
+[data-style="minimal"] .zn-card-title{color:#111 !important;font-weight:600 !important;letter-spacing:-0.2px !important}
+[data-style="minimal"] .zn-card-title svg{fill:#111 !important}
+[data-style="minimal"] .zn-feat-icon{
+  background:#111 !important;border:none !important;box-shadow:none !important;
+}
+[data-style="minimal"] .zn-feat-icon svg{fill:#fff !important}
+[data-style="minimal"] .zn-feat-badge{
+  background:#111 !important;color:#fff !important;border:none !important;
+  border-radius:4px !important;font-weight:600 !important;
+}
+[data-style="minimal"] .zn-feat-badge.pro{background:#111 !important;color:#ffd700 !important}
+
+[data-style="minimal"] .zn-btn{
+  border:none !important;box-shadow:none !important;
+  border-radius:12px !important;font-weight:600 !important;
+  letter-spacing:0 !important;text-transform:none !important;
+  font-size:14px !important;
+}
+[data-style="minimal"] .zn-btn-primary{background:#111 !important;color:#fff !important}
+[data-style="minimal"] .zn-btn-soft{background:#f0f0f0 !important;color:#111 !important}
+[data-style="minimal"] .zn-btn-danger{background:#ff3355 !important;color:#fff !important}
+[data-style="minimal"] .zn-btn-success{background:#00c853 !important;color:#fff !important}
+[data-style="minimal"] .zn-btn-warning{background:#ffab00 !important;color:#111 !important}
+[data-style="minimal"] .zn-btn:active{transform:scale(.98) !important}
+
+[data-style="minimal"] .zn-bottom-nav{
+  background:rgba(250,250,250,.95) !important;
+  border-top:1px solid #e5e5e5 !important;
+  backdrop-filter:blur(20px) !important;
+}
+[data-style="minimal"] .zn-nav-btn{color:#888 !important}
+[data-style="minimal"] .zn-nav-btn.active{
+  background:#111 !important;color:#fff !important;
+}
+[data-style="minimal"] .zn-nav-btn.active::before{display:none !important}
+[data-style="minimal"] .zn-nav-label{
+  font-weight:600 !important;letter-spacing:0 !important;
+  text-transform:none !important;font-size:9px !important;
+}
+
+[data-style="minimal"] .zn-input,
+[data-style="minimal"] .zn-input-number,
+[data-style="minimal"] .zn-maint-input,
+[data-style="minimal"] .zn-maint-textarea{
+  background:#fff !important;
+  border:1px solid #e5e5e5 !important;
+  color:#111 !important;border-radius:12px !important;
+  font-weight:500 !important;
+}
+[data-style="minimal"] .zn-input:focus,
+[data-style="minimal"] .zn-input-number:focus{
+  border-color:#111 !important;
+  box-shadow:0 0 0 3px rgba(17,17,17,.08) !important;
+}
+[data-style="minimal"] .zn-input::placeholder{color:#aaa !important}
+
+[data-style="minimal"] .zn-progress{
+  background:#f0f0f0 !important;border:none !important;height:8px !important;
+}
+[data-style="minimal"] .zn-progress-fill{
+  background:#111 !important;color:transparent !important;
+}
+
+[data-style="minimal"] .zn-sheet-content{
+  background:#fafafa !important;
+  border-top:1px solid #e5e5e5 !important;
+  border-radius:20px 20px 0 0 !important;
+}
+[data-style="minimal"] .zn-sheet-handle{background:#ccc !important}
+[data-style="minimal"] .zn-toast{
+  background:#fff !important;border:1px solid #e5e5e5 !important;
+  color:#111 !important;box-shadow:0 4px 20px rgba(0,0,0,.08) !important;
+}
+[data-style="minimal"] .zn-toast-title,
+[data-style="minimal"] .zn-toast-msg{color:#111 !important}
+
+[data-style="minimal"] .zn-tips{
+  background:#fff !important;border:1px solid #e5e5e5 !important;
+  color:#111 !important;
+}
+[data-style="minimal"] .zn-tips-icon{background:#111 !important;border:none !important}
+[data-style="minimal"] .zn-tips-icon svg{fill:#fff !important}
+[data-style="minimal"] .zn-tips-label{color:#111 !important;font-weight:600 !important;letter-spacing:0 !important}
+[data-style="minimal"] .zn-tips-text{color:#888 !important}
+
+[data-style="minimal"] .zn-cat-tab.active,
+[data-style="minimal"] .zn-tab-pill.active{
+  background:#111 !important;color:#fff !important;border-color:#111 !important;
+}
+[data-style="minimal"] .zn-cat-scroll .zn-cat-tab svg{fill:currentColor !important}
+
+[data-style="minimal"] #loadingScreen{background:#fafafa !important}
+[data-style="minimal"] .load-logo{color:#111 !important;text-shadow:none !important;letter-spacing:3px !important}
+[data-style="minimal"] .load-z{color:#111 !important;text-shadow:none !important}
+[data-style="minimal"] .load-sub{color:#aaa !important}
+[data-style="minimal"] .load-pct{color:#111 !important}
+[data-style="minimal"] .load-status{color:#aaa !important}
+[data-style="minimal"] .load-bar-wrap{background:#f0f0f0 !important}
+[data-style="minimal"] .load-bar-fill{background:#111 !important}
+[data-style="minimal"] .load-ring-1,
+[data-style="minimal"] .load-ring-2,
+[data-style="minimal"] .load-ring-3{border-color:#111 transparent transparent #111 !important;box-shadow:none !important}
+[data-style="minimal"] .load-dots span{background:#111 !important;box-shadow:none !important}
+
+[data-style="minimal"] .zn-chat-full{background:#fafafa !important}
+[data-style="minimal"] .zn-chat-input-bar{
+  background:#fff !important;border-top:1px solid #e5e5e5 !important;
+  box-shadow:0 -2px 12px rgba(0,0,0,.04) !important;
+}
+[data-style="minimal"] .zn-send-btn{
+  background:#111 !important;border:none !important;
+  box-shadow:none !important;border-radius:14px !important;
+}
+[data-style="minimal"] .zn-send-btn svg{fill:#fff !important}
+
+[data-style="minimal"] .zn-ai-bubble-btn,
+[data-style="minimal"] .zn-music-bubble-btn,
+[data-style="minimal"] .zn-music-mini{
+  background:#111 !important;border:none !important;
+  box-shadow:0 4px 20px rgba(0,0,0,.25) !important;
+}
+[data-style="minimal"] .zn-ai-bubble-btn svg,
+[data-style="minimal"] .zn-music-bubble-btn svg,
+[data-style="minimal"] .zn-music-mini svg{fill:#fff !important}
+[data-style="minimal"] .zn-music-bubble-label,
+[data-style="minimal"] .zn-music-bubble-hint{
+  background:#fff !important;color:#111 !important;
+  border:1px solid #e5e5e5 !important;
+}
+
+[data-style="minimal"] .zn-dash-card{
+  background:#fff !important;
+  border:1px solid #e5e5e5 !important;
+  box-shadow:0 1px 3px rgba(0,0,0,.04) !important;
+}
+[data-style="minimal"] .zn-dash-card::before{display:none !important}
+[data-style="minimal"] .zn-dash-value{color:#111 !important}
+[data-style="minimal"] .zn-dash-label{color:#888 !important;font-weight:600 !important;letter-spacing:0 !important}
+[data-style="minimal"] .zn-dash-sub{color:#aaa !important}
+
+[data-style="minimal"] .zn-wallet-balance{
+  background:#111 !important;border:none !important;box-shadow:none !important;
+}
+[data-style="minimal"] .zn-wallet-balance-label{color:rgba(255,255,255,.6) !important}
+[data-style="minimal"] .zn-wallet-balance-value{color:#fff !important}
+
+/* AI bubble dasar (selalu ada, apapun stylenya) */
+.zn-ai-bubble{position:fixed;z-index:56;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:grab;user-select:none;touch-action:none;transition:box-shadow .2s}
+.zn-ai-bubble.dragging{cursor:grabbing;opacity:.85;transition:none}
+.zn-ai-bubble-btn{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--primary);box-shadow:0 0 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;pointer-events:none;position:relative}
+.zn-ai-bubble-btn svg{width:28px;height:28px;fill:#050508}
+.zn-ai-bubble-btn::after{content:'';position:absolute;inset:-2px;border-radius:50%;border:2px dashed rgba(255,255,255,.3);animation:znSpin 8s linear infinite;opacity:.6}
+.zn-ai-bubble-label{font-family:var(--font-display);font-size:8px;font-weight:700;letter-spacing:.5px;color:var(--primary);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;border:1px solid var(--primary);white-space:nowrap;pointer-events:none;max-width:120px;overflow:hidden;text-overflow:ellipsis}
+.zn-ai-bubble-hint{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:9px;color:var(--text-mute);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:6px;border:1px solid var(--border);white-space:nowrap;pointer-events:none;animation:znHintPulse 2.5s ease-in-out infinite}
 </style>
-</head>
-<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode"><!-- LOADING SCREEN -->
+</head><body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode">
+
+<!-- LOADING SCREEN -->
 <div id="loadingScreen" x-show="!loadingHidden" x-cloak>
   <div class="load-content">
     <div class="load-logo-anim">
@@ -486,10 +1258,10 @@ select.zn-input{cursor:pointer}
       <div class="web-maint-sub">// ZENKAI TOOLS SEDANG DIPERBAIKI</div>
       
       <div style="padding:20px;border-radius:16px;background:rgba(13,13,24,.8);border:1px solid var(--warning);margin-bottom:20px;text-align:left;backdrop-filter:blur(10px)">
-        <div style="font-size:10px;color:var(--warning);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:8px">// ALASAN</div>
+        <div style="font-size:10px;color:var(--warning);letter-spacing:2px;font-family:var(--font-mono);margin-bottom:8px">// ALASAN</div>
         <div style="font-size:14px;color:var(--text);line-height:1.6;margin-bottom:16px" x-text="webMaintenanceData.alasan || 'Sedang dalam perbaikan sistem'"></div>
         
-        <div style="font-size:10px;color:var(--warning);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:8px">// ESTIMASI SELESAI</div>
+        <div style="font-size:10px;color:var(--warning);letter-spacing:2px;font-family:var(--font-mono);margin-bottom:8px">// ESTIMASI SELESAI</div>
         <div style="font-size:14px;color:var(--text);line-height:1.6" x-text="webMaintenanceData.estimasi || 'Belum diketahui'"></div>
       </div>
       
@@ -524,8 +1296,8 @@ select.zn-input{cursor:pointer}
   <div class="zn-card zn-card-glow" style="width:100%;max-width:380px;padding:28px;position:relative;z-index:1">
     <div style="text-align:center;margin-bottom:24px">
       <div class="zn-avatar" style="width:64px;height:64px;font-size:26px;margin:0 auto 16px;border-radius:18px">Z</div>
-      <h1 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:4px;color:var(--primary);margin-bottom:6px">ZENKAI</h1>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:3px">// Developer: Andika · v1.5</p>
+      <h1 style="font-family:var(--font-display);font-size:22px;font-weight:900;letter-spacing:4px;color:var(--primary);margin-bottom:6px">ZENKAI</h1>
+      <p style="font-family:var(--font-mono);font-size:10px;color:var(--text-mute);letter-spacing:3px">// Developer: Andika · v1.5</p>
     </div>
     <div class="zn-tab-pill" style="margin-bottom:20px;padding:10px" x-text="authMode==='login'?'MASUK AKUN':'DAFTAR AKUN'"></div>
     <div style="display:flex;flex-direction:column;gap:12px">
@@ -549,9 +1321,9 @@ select.zn-input{cursor:pointer}
     <div style="width:56px;height:56px;border-radius:16px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
       <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:var(--primary)"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
     </div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:8px">VERIFIKASI OWNER</h2>
+    <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:8px">VERIFIKASI OWNER</h2>
     <p style="font-size:12px;color:var(--text-dim);margin-bottom:20px">Masukkan PIN 6 digit</p>
-    <input type="password" inputmode="numeric" maxlength="6" x-model="enteredPin" placeholder="••••••" class="zn-input" style="text-align:center;font-size:24px;font-family:'JetBrains Mono',monospace;letter-spacing:12px;font-weight:700">
+    <input type="password" inputmode="numeric" maxlength="6" x-model="enteredPin" placeholder="••••••" class="zn-input" style="text-align:center;font-size:24px;font-family:var(--font-mono);letter-spacing:12px;font-weight:700">
     <button @click="verifyOwnerPin()" :disabled="verifyingPin" class="zn-btn zn-btn-primary" style="margin-top:16px">
       <template x-if="!verifyingPin"><span>VERIFIKASI</span></template>
       <template x-if="verifyingPin"><span><span class="zn-spin"></span> PROSES</span></template>
@@ -656,9 +1428,9 @@ select.zn-input{cursor:pointer}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
         <div style="display:flex;align-items:center;gap:10px">
           <div class="zn-feat-icon" style="width:28px;height:28px;border-radius:8px"><svg viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"/></svg></div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px">All Tools</div>
+          <div style="font-family:var(--font-display);font-size:13px;font-weight:800;letter-spacing:1px">All Tools</div>
         </div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:1px"><span x-text="filteredFitur.length"></span> AKTIF</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-mute);letter-spacing:1px"><span x-text="filteredFitur.length"></span> AKTIF</div>
       </div>
 
       <div class="zn-feat-card" @click="handleProCardClick()" style="border-color:#ffd700;background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(168,85,247,.08));padding-bottom:16px">
@@ -699,16 +1471,16 @@ select.zn-input{cursor:pointer}
     <!-- ============ TAB KEUANGAN ============ -->
     <div x-show="activeTab==='keuangan'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-        <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px">TOTAL SALDO</div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--primary);letter-spacing:1px" x-text="'Rp '+formatRibuan(totalBalance)"></div>
+        <div style="font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px">TOTAL SALDO</div>
+        <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--primary);letter-spacing:1px" x-text="'Rp '+formatRibuan(totalBalance)"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
           <div style="padding:8px;border-radius:8px;background:rgba(0,255,136,.08);border:1px solid var(--success)">
             <div style="font-size:8px;color:var(--text-mute);letter-spacing:1px;margin-bottom:2px">MASUK</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--success)" x-text="'Rp '+formatRibuan(totalIncome)"></div>
+            <div style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--success)" x-text="'Rp '+formatRibuan(totalIncome)"></div>
           </div>
           <div style="padding:8px;border-radius:8px;background:rgba(255,51,85,.08);border:1px solid var(--danger)">
             <div style="font-size:8px;color:var(--text-mute);letter-spacing:1px;margin-bottom:2px">KELUAR</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--danger)" x-text="'Rp '+formatRibuan(totalExpense)"></div>
+            <div style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--danger)" x-text="'Rp '+formatRibuan(totalExpense)"></div>
           </div>
         </div>
       </div>
@@ -730,7 +1502,7 @@ select.zn-input{cursor:pointer}
                   <div style="font-size:10px;color:var(--text-mute);margin-top:2px" x-text="t.date"></div>
                 </div>
                 <div style="display:flex;align-items:center;gap:10px">
-                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700" :style="t.type==='income'?'color:var(--success)':'color:var(--danger)'" x-text="(t.type==='income'?'+':'-')+'Rp'+formatRibuan(t.amount)"></span>
+                  <span style="font-family:var(--font-mono);font-size:12px;font-weight:700" :style="t.type==='income'?'color:var(--success)':'color:var(--danger)'" x-text="(t.type==='income'?'+':'-')+'Rp'+formatRibuan(t.amount)"></span>
                   <button @click="confirmDeleteTx(t.id)" style="color:var(--danger);font-size:20px;line-height:1;padding:0 4px">×</button>
                 </div>
               </div>
@@ -787,7 +1559,7 @@ select.zn-input{cursor:pointer}
     <div x-show="activeTab==='downloader'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15));border-color:#ffd700"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ffd700"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
-        <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:#ffd700;margin-bottom:4px">TIKTOK DOWNLOADER</h2>
+        <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:#ffd700;margin-bottom:4px">TIKTOK DOWNLOADER</h2>
         <p style="font-size:11px;color:var(--text-mute);letter-spacing:1px">NO WATERMARK // HD</p>
       </div>
       <div class="zn-card">
@@ -815,7 +1587,7 @@ select.zn-input{cursor:pointer}
     <div x-show="activeTab==='tools'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
-        <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TOOLS</h2>
+        <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TOOLS</h2>
       </div>
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
         <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="zn-tab-pill">🌍</button>
@@ -834,10 +1606,10 @@ select.zn-input{cursor:pointer}
                 <span style="width:28px;height:20px;border-radius:3px;overflow:hidden;flex-shrink:0;border:1px solid var(--border)" x-html="zone.flagSvg"></span>
                 <div style="min-width:0">
                   <div style="font-size:12px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" x-text="zone.name"></div>
-                  <div style="font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace" x-text="zone.tz"></div>
+                  <div style="font-size:9px;color:var(--text-mute);font-family:var(--font-mono)" x-text="zone.tz"></div>
                 </div>
               </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--primary);flex-shrink:0" x-text="zone.time"></span>
+              <span style="font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--primary);flex-shrink:0" x-text="zone.time"></span>
             </div>
           </template>
         </div>
@@ -867,7 +1639,7 @@ select.zn-input{cursor:pointer}
         <template x-if="bmiResult">
           <div style="margin-top:14px">
             <div style="text-align:center;padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
-              <div style="font-family:'Orbitron',sans-serif;font-size:32px;font-weight:900" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div>
+              <div style="font-family:var(--font-display);font-size:32px;font-weight:900" :style="'color:'+bmiResult.color" x-text="bmiResult.bmi"></div>
               <div style="font-size:12px;margin-top:6px;letter-spacing:1px" :style="'color:'+bmiResult.color" x-text="bmiResult.kategori"></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
@@ -892,12 +1664,13 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- ============ TAB TEMA ============ -->
+    <!-- ============ TAB TEMA (UPDATED — 4 GAYA VISUAL) ============ -->
     <div x-show="activeTab==='tema'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg></div>
-        <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TEMA & GAYA</h2>
+        <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TEMA & GAYA</h2>
       </div>
+
       <div class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg><span>WARNA NEON</span></div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
@@ -909,17 +1682,46 @@ select.zn-input{cursor:pointer}
           </template>
         </div>
       </div>
+
       <div class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg><span>GAYA VISUAL</span></div>
+        <p style="font-size:11px;color:var(--text-mute);margin-bottom:14px;line-height:1.5">Setiap gaya punya tampilan, font, dan nuansa yang beda total. Coba satu-satu!</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div @click="setStyle('neon')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px" :style="styleMode==='neon'?'background:var(--primary-soft);border:1px solid var(--primary)':'background:var(--bg-2);border:1px solid var(--border)'">
-            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto 10px"></div>
-            <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--primary)">ZENKAI NEON</div>
+
+          <!-- NEON -->
+          <div @click="setStyle('neon')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px;transition:all .2s"
+               :style="styleMode==='neon'?'background:var(--primary-soft);border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow)':'background:var(--bg-2);border:1px solid var(--border)'">
+            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#00d9ff,#ff0080);margin:0 auto 10px;box-shadow:0 0 15px rgba(0,217,255,.6)"></div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;color:#00d9ff;letter-spacing:1px">NEON</div>
+            <div style="font-size:9px;color:var(--text-mute);margin-top:4px">Futuristik · glow</div>
           </div>
-          <div @click="setStyle('comic')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px" :style="styleMode==='comic'?'background:var(--primary-soft);border:2px solid var(--border);box-shadow:3px 3px 0 0 var(--border)':'background:var(--bg-2);border:1px solid var(--border)'">
-            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#fbbf24,#a855f7);margin:0 auto 10px;border:2px solid var(--border)"></div>
-            <div style="font-size:12px;font-weight:700">KOMIK</div>
+
+          <!-- KOMIK -->
+          <div @click="setStyle('comic')" style="cursor:pointer;text-align:center;padding:16px;border-radius:14px;transition:all .2s"
+               :style="styleMode==='comic'?'background:#ffd93d;border:3px solid #000;box-shadow:5px 5px 0 0 #000':'background:#fdf6e3;border:3px solid #000;box-shadow:3px 3px 0 0 #000'">
+            <div style="width:40px;height:40px;border-radius:50%;background:#ff3355;margin:0 auto 10px;border:3px solid #000;box-shadow:2px 2px 0 0 #000"></div>
+            <div style="font-family:'Bangers',cursive;font-size:16px;font-weight:400;color:#000;letter-spacing:1px">KOMIK</div>
+            <div style="font-size:9px;color:#333;margin-top:4px;font-family:'Comic Neue',cursive;font-weight:700">Ceria · tebal</div>
           </div>
+
+          <!-- PIXEL -->
+          <div @click="setStyle('pixel')" style="cursor:pointer;text-align:center;padding:16px;transition:all .2s;background:#1a1a2e"
+               :style="styleMode==='pixel'?'border:3px solid #ffd700;box-shadow:0 0 0 3px #000,0 0 20px #ffd700':'border:3px solid #fff;box-shadow:0 0 0 3px #000'">
+            <div style="width:40px;height:40px;background:#00c853;margin:0 auto 10px;border:3px solid #fff;box-shadow:0 0 0 3px #000;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:'Press Start 2P',monospace;font-size:12px;color:#000">8</span>
+            </div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#ffd700;text-shadow:2px 2px 0 #000">PIXEL</div>
+            <div style="font-size:8px;color:#fff;margin-top:6px;font-family:'Press Start 2P',monospace">RETRO · 8BIT</div>
+          </div>
+
+          <!-- MINIMAL -->
+          <div @click="setStyle('minimal')" style="cursor:pointer;text-align:center;padding:16px;transition:all .2s"
+               :style="styleMode==='minimal'?'background:#fff;border:2px solid #111;box-shadow:0 4px 20px rgba(0,0,0,.1)':'background:#fafafa;border:1px solid #e5e5e5'">
+            <div style="width:40px;height:40px;border-radius:50%;background:#111;margin:0 auto 10px"></div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:#111;letter-spacing:-.2px">Minimal</div>
+            <div style="font-size:9px;color:#888;margin-top:4px;font-family:'Space Grotesk',sans-serif">Clean · simpel</div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -928,7 +1730,7 @@ select.zn-input{cursor:pointer}
     <div x-show="activeTab==='pemberitahuan'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 9h10v2H7V9zm6 5H7v-2h6v2zm4-6H7V6h10v2z"/></svg></div>
-        <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--accent)">PEMBERITAHUAN</h2>
+        <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:var(--accent)">PEMBERITAHUAN</h2>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div class="zn-card" style="border-color:var(--primary)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px">Selamat Datang</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Terima kasih sudah pakai Zenkai Tools! Aplikasi ini akan terus berkembang.</div></div></div></div>
@@ -942,7 +1744,7 @@ select.zn-input{cursor:pointer}
       <div x-show="activeTab==='owner'" class="zn-section">
         <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
           <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:var(--primary);border-color:var(--primary)"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#050508"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg></div>
-          <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">OWNER PANEL</h2>
+          <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">OWNER PANEL</h2>
         </div>
 
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
@@ -999,9 +1801,9 @@ select.zn-input{cursor:pointer}
             <div style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto">
               <template x-for="(u,idx) in topUsers" :key="u.id">
                 <div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;background:var(--bg-2);border:1px solid var(--border)">
-                  <span style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:800;color:var(--primary);min-width:24px" x-text="'#'+(idx+1)"></span>
+                  <span style="font-family:var(--font-display);font-size:10px;font-weight:800;color:var(--primary);min-width:24px" x-text="'#'+(idx+1)"></span>
                   <span style="font-size:12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" x-text="u.username"></span>
-                  <span style="font-size:10px;color:var(--accent);font-family:'JetBrains Mono',monospace" x-text="u.count+'tx'"></span>
+                  <span style="font-size:10px;color:var(--accent);font-family:var(--font-mono)" x-text="u.count+'tx'"></span>
                 </div>
               </template>
             </div>
@@ -1017,7 +1819,7 @@ select.zn-input{cursor:pointer}
               <template x-for="u in filteredUsers" :key="u.id">
                 <div style="padding:10px;border-radius:10px" :style="u.is_banned?'background:rgba(255,51,85,.06);border:1px solid var(--danger)':(u.is_vip?'background:rgba(255,215,0,.04);border:1px solid var(--gold)':'background:var(--bg-2);border:1px solid var(--border)')">
                   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:32px;height:32px;border-radius:8px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:800;color:var(--primary)" x-text="u.username?u.username.substring(0,1).toUpperCase():'?'"></div>
+                    <div style="width:32px;height:32px;border-radius:8px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:11px;font-weight:800;color:var(--primary)" x-text="u.username?u.username.substring(0,1).toUpperCase():'?'"></div>
                     <div style="flex:1;min-width:0">
                       <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" x-text="u.username"></div>
                       <div style="font-size:10px;color:var(--text-mute)">
@@ -1082,7 +1884,7 @@ select.zn-input{cursor:pointer}
                 <div class="zn-sub-card" :class="u.is_vip ? 'active' : ''">
                   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
                     <div style="font-size:13px;font-weight:600" x-text="u.username"></div>
-                    <span style="font-size:10px;color:var(--gold);font-family:'JetBrains Mono',monospace">💎 VIP</span>
+                    <span style="font-size:10px;color:var(--gold);font-family:var(--font-mono)">💎 VIP</span>
                   </div>
                   <div style="font-size:10px;color:var(--text-mute);margin-bottom:6px">
                     <template x-if="u.vip_expiry"><span x-text="'Expired: ' + new Date(u.vip_expiry).toLocaleDateString('id-ID')"></span></template>
@@ -1129,7 +1931,7 @@ select.zn-input{cursor:pointer}
                   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px">
                     <div style="flex:1;min-width:0">
                       <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px" x-text="b.judul"></div>
-                      <div style="font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace">
+                      <div style="font-size:9px;color:var(--text-mute);font-family:var(--font-mono)">
                         <span x-text="b.tipe.toUpperCase()"></span> · <span x-text="new Date(b.created_at).toLocaleDateString('id-ID')"></span>
                       </div>
                     </div>
@@ -1240,7 +2042,7 @@ select.zn-input{cursor:pointer}
                 </div>
                 
                 <div style="padding:10px;border-radius:8px;background:rgba(0,217,255,.08);border:1px solid var(--primary)">
-                  <div style="font-size:10px;color:var(--primary);letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// PREVIEW LINK</div>
+                  <div style="font-size:10px;color:var(--primary);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:4px">// PREVIEW LINK</div>
                   <div style="font-size:10px;color:var(--text-dim);word-break:break-all" x-text="getMusicPreviewId() || 'Belum ada link valid'"></div>
                 </div>
                 
@@ -1253,7 +2055,7 @@ select.zn-input{cursor:pointer}
             </template>
             
             <div style="margin-top:14px;padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
-              <div style="font-size:10px;color:var(--primary);letter-spacing:1.5px;margin-bottom:6px;font-family:'JetBrains Mono',monospace">// CATATAN</div>
+              <div style="font-size:10px;color:var(--primary);letter-spacing:1.5px;margin-bottom:6px;font-family:var(--font-mono)">// CATATAN</div>
               <ul style="font-size:10px;color:var(--text-mute);line-height:1.7;padding-left:14px;list-style:disc">
                 <li>Gunakan <b style="color:var(--text)">playlist</b>, bukan video tunggal</li>
                 <li>User bisa play/pause/volume sendiri</li>
@@ -1277,7 +2079,7 @@ select.zn-input{cursor:pointer}
                         <span style="font-size:14px" x-text="b.tipe==='bug'?'🐛':(b.tipe==='saran'?'💡':'📝')"></span>
                         <span style="font-size:12px;font-weight:700;color:var(--text)" x-text="b.judul"></span>
                       </div>
-                      <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace">
+                      <div style="font-size:10px;color:var(--text-mute);font-family:var(--font-mono)">
                         <span x-text="'@'+b.username"></span> · <span x-text="new Date(b.created_at).toLocaleString('id-ID')"></span>
                       </div>
                     </div>
@@ -1341,8 +2143,7 @@ select.zn-input{cursor:pointer}
   </div>
 </template>
 
-<!-- ============ MUSIC BUBBLE (Draggable + Minimize) ============ -->
-<!-- Full bubble (kalau gak minimized) -->
+<!-- ============ MUSIC BUBBLE ============ -->
 <template x-if="isAuthenticated && musicEnabled && musicPlaying && !musicSheetOpen && !musicMinimized">
   <div @mousedown="startDragMusic($event)"
        @touchstart="startDragMusic($event)"
@@ -1359,7 +2160,6 @@ select.zn-input{cursor:pointer}
   </div>
 </template>
 
-<!-- Mini bubble (kalau minimized) -->
 <template x-if="isAuthenticated && musicEnabled && musicPlaying && !musicSheetOpen && musicMinimized">
   <div class="zn-music-mini"
        :style="'left:'+musicMiniPosition.x+'px;top:'+musicMiniPosition.y+'px;right:auto;bottom:auto;'"
@@ -1367,11 +2167,13 @@ select.zn-input{cursor:pointer}
        title="Buka Player">
     <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
   </div>
-</template><!-- MUSIC SHEET -->
+</template>
+
+<!-- MUSIC SHEET -->
 <div x-show="musicSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100011" @click.self="musicSheetOpen=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'musicSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">🎵 MUSIK</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">🎵 MUSIK</h3>
     
     <template x-if="!musicEnabled">
       <div style="text-align:center;padding:40px 20px">
@@ -1400,7 +2202,7 @@ select.zn-input{cursor:pointer}
           <div class="zn-music-volume">
             <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
             <input type="range" min="0" max="100" x-model.number="musicVolume" @input="updateMusicVolume()">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);min-width:28px" x-text="musicVolume+'%'"></span>
+            <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-mute);min-width:28px" x-text="musicVolume+'%'"></span>
           </div>
         </div>
         
@@ -1427,14 +2229,14 @@ select.zn-input{cursor:pointer}
         <div class="dev-status-dot"></div>
       </div>
       <div style="position:relative;z-index:1">
-        <h2 style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;letter-spacing:2px;color:var(--primary);margin-bottom:4px" x-text="developerData.nama.toUpperCase()"></h2>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:2px;margin-bottom:10px" x-text="'// '+developerData.role"></div>
+        <h2 style="font-family:var(--font-display);font-size:20px;font-weight:900;letter-spacing:2px;color:var(--primary);margin-bottom:4px" x-text="developerData.nama.toUpperCase()"></h2>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);letter-spacing:2px;margin-bottom:10px" x-text="'// '+developerData.role"></div>
         <div class="dev-status-badge">
           <span class="dev-status-pulse"></span>
           <span x-text="developerData.status"></span>
         </div>
         <p style="font-size:13px;color:var(--text);line-height:1.6;font-style:italic;max-width:320px;margin:0 auto;font-weight:500" x-text="'&quot;'+developerData.tagline+'&quot;'"></p>
-        <div style="display:inline-flex;align-items:center;gap:4px;margin-top:12px;font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace">
+        <div style="display:inline-flex;align-items:center;gap:4px;margin-top:12px;font-size:10px;color:var(--text-mute);font-family:var(--font-mono)">
           <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:var(--text-mute)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
           <span x-text="developerData.lokasi"></span>
         </div>
@@ -1485,7 +2287,7 @@ select.zn-input{cursor:pointer}
         <div class="dev-school-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div>
         <div style="flex:1;min-width:0">
           <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px" x-text="developerData.sekolah.nama"></div>
-          <div style="font-size:11px;color:var(--primary);font-family:'JetBrains Mono',monospace;margin-bottom:6px" x-text="developerData.sekolah.jurusan + ' · ' + developerData.sekolah.tahun"></div>
+          <div style="font-size:11px;color:var(--primary);font-family:var(--font-mono);margin-bottom:6px" x-text="developerData.sekolah.jurusan + ' · ' + developerData.sekolah.tahun"></div>
           <div style="font-size:11px;color:var(--text-dim);line-height:1.5" x-text="developerData.sekolah.deskripsi"></div>
         </div>
       </div>
@@ -1565,7 +2367,7 @@ select.zn-input{cursor:pointer}
 
     <div class="dev-section">
       <div class="dev-cta-box">
-        <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:6px">MAU NGODING BARENG?</div>
+        <div style="font-family:var(--font-display);font-size:12px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:6px">MAU NGODING BARENG?</div>
         <p style="font-size:11px;color:var(--text-dim);margin-bottom:14px;line-height:1.5">Masih belajar, tapi siap diskusi & kolaborasi. Chat aja lewat WhatsApp!</p>
         <a :href="'https://wa.me/'+developerData.kontak.wa+'?text=Halo%20Andika,%20saya%20tertarik%20ngobrol%20soal%20coding'" target="_blank" class="zn-btn zn-btn-primary" style="text-decoration:none">
           <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
@@ -1575,8 +2377,8 @@ select.zn-input{cursor:pointer}
     </div>
 
     <div class="dev-footer">
-      <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--primary);margin-bottom:4px">ZENKAI TOOLS</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);letter-spacing:1px">© <span x-text="new Date().getFullYear()"></span> Andika Talova Martin · v1.5</div>
+      <div style="font-family:var(--font-display);font-size:10px;font-weight:700;letter-spacing:2px;color:var(--primary);margin-bottom:4px">ZENKAI TOOLS</div>
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-mute);letter-spacing:1px">© <span x-text="new Date().getFullYear()"></span> Andika Talova Martin · v1.5</div>
     </div>
 
     <div style="padding:20px 24px 24px">
@@ -1590,8 +2392,8 @@ select.zn-input{cursor:pointer}
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'welcomePopupOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div style="width:64px;height:64px;border-radius:18px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:6px">HELLO, <span x-text="userName"></span></h3>
-    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-mute);letter-spacing:2px;margin-bottom:16px">// WELCOME BACK</p>
+    <h3 style="font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:6px">HELLO, <span x-text="userName"></span></h3>
+    <p style="font-family:var(--font-mono);font-size:11px;color:var(--text-mute);letter-spacing:2px;margin-bottom:16px">// WELCOME BACK</p>
     <div style="padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-align:left;margin-bottom:16px">
       <p style="font-size:12px;line-height:1.7;white-space:pre-line;color:var(--text-dim)" x-text="welcomeText"></p>
     </div>
@@ -1642,11 +2444,11 @@ select.zn-input{cursor:pointer}
     <div class="zn-broadcast-body">
       <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Fitur ini sedang dalam perbaikan.</p>
       <div x-show="maintenanceSheetData.alasan" style="padding:10px;border-radius:8px;background:rgba(255,170,0,.08);border:1px solid rgba(255,170,0,.3);margin-bottom:8px">
-        <div style="font-size:9px;color:var(--warning);letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:2px">// ALASAN</div>
+        <div style="font-size:9px;color:var(--warning);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:2px">// ALASAN</div>
         <div style="font-size:12px;color:var(--text)" x-text="maintenanceSheetData.alasan"></div>
       </div>
       <div x-show="maintenanceSheetData.estimasi" style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--border)">
-        <div style="font-size:9px;color:var(--primary);letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:2px">// ESTIMASI</div>
+        <div style="font-size:9px;color:var(--primary);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:2px">// ESTIMASI</div>
         <div style="font-size:12px;color:var(--text)" x-text="maintenanceSheetData.estimasi"></div>
       </div>
     </div>
@@ -1658,7 +2460,7 @@ select.zn-input{cursor:pointer}
 <div x-show="banSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100050" @click.self="banSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'banSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--danger);text-align:center;margin-bottom:6px">🚫 BAN USER</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--danger);text-align:center;margin-bottom:6px">🚫 BAN USER</h3>
     <p style="font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:16px">Target: <b style="color:var(--danger)" x-text="banSheetTarget?banSheetTarget.username:''"></b></p>
     <div style="margin-bottom:16px">
       <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Durasi Ban</div>
@@ -1687,13 +2489,13 @@ select.zn-input{cursor:pointer}
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'bannedInfoSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div style="width:72px;height:72px;border-radius:20px;background:rgba(255,51,85,.15);border:2px solid var(--danger);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px">🚫</div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;letter-spacing:2px;color:var(--danger);margin-bottom:12px">AKUN DIBLOKIR</h3>
+    <h3 style="font-family:var(--font-display);font-size:18px;font-weight:900;letter-spacing:2px;color:var(--danger);margin-bottom:12px">AKUN DIBLOKIR</h3>
     <div style="padding:14px;border-radius:12px;background:rgba(255,51,85,.08);border:1px solid rgba(255,51,85,.3);text-align:left;margin-bottom:12px">
-      <div style="font-size:9px;color:var(--danger);letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// ALASAN</div>
+      <div style="font-size:9px;color:var(--danger);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:4px">// ALASAN</div>
       <div style="font-size:13px;color:var(--text)" x-text="bannedInfoData.reason"></div>
     </div>
     <div style="padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-align:left;margin-bottom:16px">
-      <div style="font-size:9px;color:var(--primary);letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// BERAKHIR</div>
+      <div style="font-size:9px;color:var(--primary);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:4px">// BERAKHIR</div>
       <div style="font-size:13px;color:var(--text)">
         <template x-if="bannedInfoData.until"><span x-text="new Date(bannedInfoData.until).toLocaleString('id-ID')"></span></template>
         <template x-if="!bannedInfoData.until"><span style="color:var(--danger);font-weight:700">PERMANEN</span></template>
@@ -1709,7 +2511,7 @@ select.zn-input{cursor:pointer}
     <div class="zn-sheet-handle"></div>
     <template x-if="reviewForFeatureId">
       <div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">⭐ REVIEW FITUR</div>
+        <div style="font-family:var(--font-display);font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">⭐ REVIEW FITUR</div>
         <div class="review-feature-header">
           <div class="review-feature-icon"><svg viewBox="0 0 24 24" x-html="reviewForFeatureId.svg"></svg></div>
           <div class="review-feature-info">
@@ -1729,7 +2531,7 @@ select.zn-input{cursor:pointer}
       </div>
     </template>
     <template x-if="!reviewForFeatureId">
-      <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">⭐ SEMUA REVIEW</h3>
+      <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">⭐ SEMUA REVIEW</h3>
     </template>
     <div style="max-height:50vh;overflow-y:auto">
       <template x-for="r in reviewList" :key="r.id">
@@ -1767,7 +2569,7 @@ select.zn-input{cursor:pointer}
     <div class="zn-sheet-handle"></div>
     <template x-if="reviewTarget">
       <div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">⭐ TULIS REVIEW</div>
+        <div style="font-family:var(--font-display);font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">⭐ TULIS REVIEW</div>
         <div class="review-feature-header">
           <div class="review-feature-icon"><svg viewBox="0 0 24 24" x-html="reviewTarget.svg"></svg></div>
           <div class="review-feature-info">
@@ -1782,12 +2584,12 @@ select.zn-input{cursor:pointer}
               <span class="zn-star" :class="reviewForm.rating>=i?'active':''" @click="reviewForm.rating=i">★</span>
             </template>
           </div>
-          <div style="font-size:12px;color:var(--text-dim);font-family:'JetBrains Mono',monospace" x-text="getRatingLabel(reviewForm.rating)"></div>
+          <div style="font-size:12px;color:var(--text-dim);font-family:var(--font-mono)" x-text="getRatingLabel(reviewForm.rating)"></div>
         </div>
         <div style="margin-bottom:16px">
           <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;font-weight:600">Komentar (Opsional)</div>
           <textarea x-model="reviewForm.komentar" placeholder="Gimana pengalaman lu pakai fitur ini?" class="zn-input" rows="4" maxlength="500"></textarea>
-          <div style="text-align:right;font-size:10px;color:var(--text-mute);margin-top:4px;font-family:'JetBrains Mono',monospace"><span x-text="reviewForm.komentar.length"></span>/500</div>
+          <div style="text-align:right;font-size:10px;color:var(--text-mute);margin-top:4px;font-family:var(--font-mono)"><span x-text="reviewForm.komentar.length"></span>/500</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <button @click="reviewSheetOpen=false" class="zn-btn zn-btn-soft">BATAL</button>
@@ -1802,7 +2604,7 @@ select.zn-input{cursor:pointer}
 <div x-show="bugReportSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100090" @click.self="bugReportSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'bugReportSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:#ff3355;text-align:center;margin-bottom:6px">🐛 LAPOR BUG / SARAN</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:#ff3355;text-align:center;margin-bottom:6px">🐛 LAPOR BUG / SARAN</h3>
     <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:16px">Bantu Zenkai Tools jadi lebih baik!</p>
     <div style="margin-bottom:14px">
       <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;font-weight:600">Tipe Laporan</div>
@@ -1819,7 +2621,7 @@ select.zn-input{cursor:pointer}
     <div style="margin-bottom:16px">
       <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Deskripsi Detail</div>
       <textarea x-model="bugReportForm.deskripsi" placeholder="Ceritain sedetail mungkin..." class="zn-input" rows="6" maxlength="1000"></textarea>
-      <div style="text-align:right;font-size:10px;color:var(--text-mute);margin-top:4px;font-family:'JetBrains Mono',monospace"><span x-text="bugReportForm.deskripsi.length"></span>/1000</div>
+      <div style="text-align:right;font-size:10px;color:var(--text-mute);margin-top:4px;font-family:var(--font-mono)"><span x-text="bugReportForm.deskripsi.length"></span>/1000</div>
     </div>
     <button @click="submitBugReport()" :disabled="bugReportSubmitting" class="zn-btn zn-btn-primary" style="margin-bottom:8px">
       <template x-if="!bugReportSubmitting"><span>KIRIM LAPORAN</span></template>
@@ -1834,7 +2636,7 @@ select.zn-input{cursor:pointer}
 <div x-show="bugReportListSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100091" @click.self="bugReportListSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'bugReportListSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:#ff3355;text-align:center;margin-bottom:16px">📋 RIWAYAT LAPORAN</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:#ff3355;text-align:center;margin-bottom:16px">📋 RIWAYAT LAPORAN</h3>
     <div x-show="bugReportListLoading" style="text-align:center;padding:30px"><span class="zn-spin"></span></div>
     <div x-show="!bugReportListLoading" style="max-height:60vh;overflow-y:auto">
       <template x-for="b in bugReportList" :key="b.id">
@@ -1845,7 +2647,7 @@ select.zn-input{cursor:pointer}
                 <span style="font-size:14px" x-text="b.tipe==='bug'?'🐛':(b.tipe==='saran'?'💡':'📝')"></span>
                 <span style="font-size:12px;font-weight:700;color:var(--text)" x-text="b.judul"></span>
               </div>
-              <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace"><span x-text="new Date(b.created_at).toLocaleString('id-ID')"></span></div>
+              <div style="font-size:10px;color:var(--text-mute);font-family:var(--font-mono)"><span x-text="new Date(b.created_at).toLocaleString('id-ID')"></span></div>
             </div>
             <span style="font-size:9px;padding:3px 8px;border-radius:6px;font-weight:700;flex-shrink:0"
               :style="b.status==='baru'?'background:rgba(0,217,255,.15);color:#00d9ff':(b.status==='dibaca'?'background:rgba(255,170,0,.15);color:#ffaa00':(b.status==='diproses'?'background:rgba(168,85,247,.15);color:#a855f7':'background:rgba(0,255,136,.15);color:#00ff88'))"
@@ -1869,7 +2671,7 @@ select.zn-input{cursor:pointer}
 <div x-show="aboutModalOpen" x-cloak class="zn-sheet-overlay" style="z-index:100004" @click.self="aboutModalOpen=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'aboutModalOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">TENTANG ZENKAI TOOLS</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">TENTANG ZENKAI TOOLS</h3>
     <div style="padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
       <p style="font-size:12px;color:var(--text);margin-bottom:12px"><b style="color:var(--primary)">Zenkai Tools</b> adalah aplikasi web multiguna.</p>
       <ul style="font-size:12px;color:var(--text-dim);line-height:1.9;padding-left:18px;list-style:disc">
@@ -1878,10 +2680,10 @@ select.zn-input{cursor:pointer}
         <li><b style="color:#ffd700">Zenkai AI Pro:</b> AI premium 7 model (VIP unlimited)</li>
         <li><b style="color:var(--primary)">Downloader:</b> TikTok tanpa watermark</li>
         <li><b style="color:var(--accent)">Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
-        <li><b style="color:var(--primary)">Tema:</b> 6 warna + 2 gaya visual</li>
+        <li><b style="color:var(--primary)">Tema:</b> 6 warna + 4 gaya visual</li>
         <li><b style="color:var(--primary)">Musik:</b> YouTube player</li>
       </ul>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--primary);text-align:center;margin-top:14px;letter-spacing:2px">Developer: Andika · v1.5</p>
+      <p style="font-family:var(--font-mono);font-size:11px;color:var(--primary);text-align:center;margin-top:14px;letter-spacing:2px">Developer: Andika · v1.5</p>
     </div>
     <button @click="aboutModalOpen=false" class="zn-btn zn-btn-soft" style="margin-top:16px">TUTUP</button>
   </div>
@@ -1894,7 +2696,7 @@ select.zn-input{cursor:pointer}
     <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,170,0,.15);border:2px solid var(--warning);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
       <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:var(--warning)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
     </div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;color:var(--text);margin-bottom:10px" x-text="confirmModal.title"></h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:1px;color:var(--text);margin-bottom:10px" x-text="confirmModal.title"></h3>
     <p style="font-size:12px;color:var(--text-dim);line-height:1.5;margin-bottom:18px" x-text="confirmModal.message"></p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <button @click="confirmModal.open=false" class="zn-btn zn-btn-soft" style="padding:12px">BATAL</button>
@@ -1907,9 +2709,9 @@ select.zn-input{cursor:pointer}
 <div x-show="promptModal.open" x-cloak class="zn-sheet-overlay" style="z-index:100021" @click.self="promptModal.open=false">
   <div class="zn-sheet-content" style="text-align:center" @touchstart.passive="onSheetTouchStart($event,'promptModal.open')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:8px" x-text="promptModal.title"></h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:8px" x-text="promptModal.title"></h3>
     <p style="font-size:11px;color:var(--text-dim);margin-bottom:14px" x-text="promptModal.message"></p>
-    <input type="number" x-model="promptModal.value" placeholder="Masukkan angka..." class="zn-input" style="text-align:center;font-size:20px;font-family:'Orbitron',sans-serif;font-weight:700">
+    <input type="number" x-model="promptModal.value" placeholder="Masukkan angka..." class="zn-input" style="text-align:center;font-size:20px;font-family:var(--font-display);font-weight:700">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
       <button @click="promptModal.open=false" class="zn-btn zn-btn-soft" style="padding:12px">BATAL</button>
       <button @click="promptModal.onConfirm(promptModal.value)" class="zn-btn zn-btn-primary" style="padding:12px">OK</button>
@@ -1921,7 +2723,7 @@ select.zn-input{cursor:pointer}
 <div x-show="sheetOpen" x-cloak class="zn-sheet-overlay" @click.self="sheetOpen=false">
   <div class="zn-sheet-content" style="text-align:center" @touchstart.passive="onSheetTouchStart($event,'sheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:10px" x-text="sheetTitle"></h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:10px" x-text="sheetTitle"></h3>
     <p style="font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:16px;white-space:pre-line" x-text="sheetMessage"></p>
     <button @click="sheetOpen=false" class="zn-btn zn-btn-primary">OK</button>
   </div>
@@ -1934,10 +2736,10 @@ select.zn-input{cursor:pointer}
     <div style="width:72px;height:72px;border-radius:20px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
       <svg viewBox="0 0 24 24" style="width:40px;height:40px;fill:var(--primary)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
     </div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;letter-spacing:3px;color:var(--primary);margin-bottom:8px">LEVEL UP!</h3>
+    <h3 style="font-family:var(--font-display);font-size:18px;font-weight:900;letter-spacing:3px;color:var(--primary);margin-bottom:8px">LEVEL UP!</h3>
     <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Kamu naik ke:</p>
-    <div style="font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:var(--primary);margin-bottom:6px" x-text="'LV '+userLevel"></div>
-    <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;color:var(--accent)" x-text="getLevelName(userLevel)"></div>
+    <div style="font-family:var(--font-display);font-size:36px;font-weight:900;color:var(--primary);margin-bottom:6px" x-text="'LV '+userLevel"></div>
+    <div style="font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:2px;color:var(--accent)" x-text="getLevelName(userLevel)"></div>
     <button @click="levelUpOpen=false" class="zn-btn zn-btn-primary" style="margin-top:20px">LANJUT SEMANGAT</button>
   </div>
 </div>
@@ -1949,7 +2751,7 @@ select.zn-input{cursor:pointer}
     <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,170,0,.15);border:2px solid var(--warning);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
       <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:var(--warning)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
     </div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;color:var(--text);margin-bottom:12px">ZENKAI AI SIBUK</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:1px;color:var(--text);margin-bottom:12px">ZENKAI AI SIBUK</h3>
     <div style="padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-align:left">
       <p style="font-size:12px;color:var(--text-dim);line-height:1.6">Server AI kadang ramai. Tunggu 1-2 menit, terus coba lagi.</p>
     </div>
@@ -1961,7 +2763,7 @@ select.zn-input{cursor:pointer}
 <div x-show="profileModalOpen" x-cloak class="zn-sheet-overlay" style="z-index:100004" @click.self="profileModalOpen=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'profileModalOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">PROFIL SAYA</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">PROFIL SAYA</h3>
     <div style="text-align:center;margin-bottom:16px">
       <div class="zn-avatar" style="width:88px;height:88px;font-size:32px;margin:0 auto;border-radius:20px">
         <template x-if="userAvatar"><img :src="userAvatar"></template>
@@ -1976,18 +2778,18 @@ select.zn-input{cursor:pointer}
     </div>
     <div style="padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);margin-bottom:14px">
       <div style="text-align:center;margin-bottom:12px">
-        <div style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--primary)" x-text="'LV '+userLevel+' // '+getLevelName(userLevel)"></div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--primary);margin-top:6px" x-text="userPoints"></div>
+        <div style="font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--primary)" x-text="'LV '+userLevel+' // '+getLevelName(userLevel)"></div>
+        <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--primary);margin-top:6px" x-text="userPoints"></div>
         <div style="font-size:10px;color:var(--text-mute);letter-spacing:2px">TOTAL POIN</div>
       </div>
       <div class="zn-progress"><div class="zn-progress-fill" :style="'width:'+getProgressPercent()+'%'" x-text="getProgressPercent()+'%'"></div></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px">
-      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// NAMA</div><div style="font-size:13px;font-weight:600" x-text="userName"></div></div>
-      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// EMAIL</div><div style="font-size:13px;font-weight:600;word-break:break-all" x-text="userEmail"></div></div>
-      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// STATUS</div><div style="font-size:13px;font-weight:600" x-text="isOwner?'OWNER':(isVip?'VIP':'USER')"></div></div>
+      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:var(--font-mono);margin-bottom:4px">// NAMA</div><div style="font-size:13px;font-weight:600" x-text="userName"></div></div>
+      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:var(--font-mono);margin-bottom:4px">// EMAIL</div><div style="font-size:13px;font-weight:600;word-break:break-all" x-text="userEmail"></div></div>
+      <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:var(--font-mono);margin-bottom:4px">// STATUS</div><div style="font-size:13px;font-weight:600" x-text="isOwner?'OWNER':(isVip?'VIP':'USER')"></div></div>
       <template x-if="!isOwner">
-        <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// CHAT BONUS</div><div style="font-size:13px;font-weight:600" x-text="'+'+chatBonus+' chat'"></div></div>
+        <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:var(--font-mono);margin-bottom:4px">// CHAT BONUS</div><div style="font-size:13px;font-weight:600" x-text="'+'+chatBonus+' chat'"></div></div>
       </template>
     </div>
     <button @click="profileModalOpen=false" class="zn-btn zn-btn-soft" style="margin-top:14px">TUTUP</button>
@@ -1999,7 +2801,7 @@ select.zn-input{cursor:pointer}
 <div x-show="txSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="txSheetOpen=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'txSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">TRANSAKSI BARU</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">TRANSAKSI BARU</h3>
     <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:12px">
       <button @click="txCategory='Belanja'" class="zn-btn zn-btn-soft" style="width:auto;padding:8px 14px;font-size:10px">BELANJA</button>
       <button @click="txCategory='Utang'" class="zn-btn zn-btn-soft" style="width:auto;padding:8px 14px;font-size:10px">UTANG</button>
@@ -2020,7 +2822,7 @@ select.zn-input{cursor:pointer}
 <div x-show="targetSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="targetSheetOpen=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'targetSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">TARGET BARU</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">TARGET BARU</h3>
     <input type="text" x-model="targetForm.nama" placeholder="Nama target" class="zn-input" style="margin-bottom:10px">
     <input type="text" inputmode="numeric" x-model="targetForm.target" @input="targetForm.target=formatRibuanInput($event.target.value)" placeholder="Target (Rp)" class="zn-input-number" style="margin-bottom:10px">
     <input type="text" x-model="targetForm.deadline" placeholder="Deadline (opsional)" class="zn-input">
@@ -2033,7 +2835,7 @@ select.zn-input{cursor:pointer}
 <div x-show="budgetSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="budgetSheetOpen=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'budgetSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">BUDGET BARU</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">BUDGET BARU</h3>
     <input type="text" x-model="budgetForm.kategori" placeholder="Kategori" class="zn-input" style="margin-bottom:10px">
     <input type="text" inputmode="numeric" x-model="budgetForm.limit_bulanan" @input="budgetForm.limit_bulanan=formatRibuanInput($event.target.value)" placeholder="Limit (Rp)" class="zn-input-number">
     <button @click="addBudget()" class="zn-btn zn-btn-primary" style="margin-top:14px">SIMPAN</button>
@@ -2045,7 +2847,7 @@ select.zn-input{cursor:pointer}
 <div x-show="addSavingsSheet" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="addSavingsSheet=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'addSavingsSheet')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">TAMBAH TABUNGAN</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">TAMBAH TABUNGAN</h3>
     <input type="text" inputmode="numeric" x-model="addSavingsAmount" @input="addSavingsAmount=formatRibuanInput($event.target.value)" placeholder="Nominal (Rp)" class="zn-input-number">
     <button @click="confirmAddSavings()" class="zn-btn zn-btn-primary" style="margin-top:14px">SIMPAN</button>
     <button @click="addSavingsSheet=false" class="zn-btn zn-btn-soft" style="margin-top:10px">TUTUP</button>
@@ -2056,7 +2858,7 @@ select.zn-input{cursor:pointer}
 <div x-show="movieSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="movieSheetOpen=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'movieSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">FILM TRENDING</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">FILM TRENDING</h3>
     <div x-show="movieLoading" style="text-align:center;padding:20px"><span class="zn-spin"></span></div>
     <div x-show="!movieLoading" style="display:flex;flex-direction:column;gap:8px;max-height:65vh;overflow-y:auto">
       <template x-for="m in movieList" :key="m.id">
@@ -2064,7 +2866,7 @@ select.zn-input{cursor:pointer}
           <template x-if="m.poster"><img :src="m.poster" style="width:70px;height:100px;object-fit:cover;border-radius:8px;flex-shrink:0;border:1px solid var(--border)"></template>
           <div style="flex:1;min-width:0">
             <div style="font-size:12px;font-weight:600;line-height:1.3;margin-bottom:4px" x-text="m.title"></div>
-            <div style="font-size:10px;color:var(--primary);font-family:'JetBrains Mono',monospace;margin-bottom:4px" x-text="m.year+' • ⭐ '+m.rating"></div>
+            <div style="font-size:10px;color:var(--primary);font-family:var(--font-mono);margin-bottom:4px" x-text="m.year+' • ⭐ '+m.rating"></div>
             <div style="font-size:10px;color:var(--text-mute);line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical" x-text="m.overview"></div>
           </div>
         </div>
@@ -2078,7 +2880,7 @@ select.zn-input{cursor:pointer}
 <div x-show="newsSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="newsSheetOpen=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'newsSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">BERITA INDONESIA</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">BERITA INDONESIA</h3>
     <div x-show="newsLoading" style="text-align:center;padding:20px"><span class="zn-spin"></span></div>
     <div x-show="!newsLoading && !selectedNews" style="display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow-y:auto">
       <template x-for="(n,idx) in newsList" :key="idx">
@@ -2086,7 +2888,7 @@ select.zn-input{cursor:pointer}
           <img :src="n.thumbnail || 'https://placehold.co/160x160/0d0d18/00d9ff?text=ZENKAI'" @error="$event.target.src='https://placehold.co/160x160/0d0d18/00d9ff?text=ZENKAI'" style="width:80px;height:80px;object-fit:cover;border-radius:8px;flex-shrink:0;border:1px solid var(--border);background:var(--card)">
           <div style="flex:1;min-width:0">
             <div style="font-size:12px;font-weight:600;line-height:1.3;margin-bottom:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical" x-text="n.title"></div>
-            <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace" x-text="n.pubDate"></div>
+            <div style="font-size:10px;color:var(--text-mute);font-family:var(--font-mono)" x-text="n.pubDate"></div>
           </div>
         </div>
       </template>
@@ -2101,7 +2903,7 @@ select.zn-input{cursor:pointer}
         <button @click="selectedNews=null" class="zn-btn zn-btn-soft">← KEMBALI</button>
         <img :src="selectedNews.thumbnail || 'https://placehold.co/600x300/0d0d18/00d9ff?text=Zenkai+News'" @error="$event.target.src='https://placehold.co/600x300/0d0d18/00d9ff?text=Zenkai+News'" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;border:1px solid var(--border)">
         <h4 style="font-size:14px;font-weight:700;line-height:1.4;color:var(--text)" x-text="selectedNews.title"></h4>
-        <p style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace" x-text="selectedNews.pubDate"></p>
+        <p style="font-size:10px;color:var(--text-mute);font-family:var(--font-mono)" x-text="selectedNews.pubDate"></p>
         <p style="font-size:12px;color:var(--text-dim);line-height:1.6" x-text="selectedNews.description"></p>
         <a :href="selectedNews.link" target="_blank" class="zn-btn zn-btn-primary">BACA SELENGKAPNYA</a>
       </div>
@@ -2115,7 +2917,7 @@ select.zn-input{cursor:pointer}
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary)">CUACA</h3>
+      <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary)">CUACA</h3>
       <button @click="openWeatherPickerDirect()" class="zn-btn zn-btn-soft" style="width:auto;padding:6px 12px;font-size:10px">GANTI</button>
     </div>
     <div x-show="weatherLoading" style="text-align:center;padding:20px"><span class="zn-spin"></span></div>
@@ -2124,15 +2926,15 @@ select.zn-input{cursor:pointer}
         <div style="padding:24px;border-radius:16px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);text-align:center">
           <div style="font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:8px" x-text="weatherData.city"></div>
           <div style="font-size:56px;line-height:1;margin-bottom:8px" x-text="weatherData.emoji"></div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:44px;font-weight:900;color:var(--primary)" x-text="weatherData.temp+'°C'"></div>
+          <div style="font-family:var(--font-display);font-size:44px;font-weight:900;color:var(--primary)" x-text="weatherData.temp+'°C'"></div>
           <div style="font-size:12px;color:var(--text-dim);margin-top:6px;letter-spacing:1px" x-text="weatherData.desc"></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px">
-            <div style="padding:10px;border-radius:10px;background:rgba(0,0,0,.2)"><div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;margin-bottom:4px">HUMIDITY</div><div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;color:var(--primary)" x-text="weatherData.humidity+'%'"></div></div>
-            <div style="padding:10px;border-radius:10px;background:rgba(0,0,0,.2)"><div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;margin-bottom:4px">WIND</div><div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;color:var(--primary)" x-text="weatherData.wind+'km/j'"></div></div>
+            <div style="padding:10px;border-radius:10px;background:rgba(0,0,0,.2)"><div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;margin-bottom:4px">HUMIDITY</div><div style="font-family:var(--font-display);font-size:14px;font-weight:800;color:var(--primary)" x-text="weatherData.humidity+'%'"></div></div>
+            <div style="padding:10px;border-radius:10px;background:rgba(0,0,0,.2)"><div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;margin-bottom:4px">WIND</div><div style="font-family:var(--font-display);font-size:14px;font-weight:800;color:var(--primary)" x-text="weatherData.wind+'km/j'"></div></div>
           </div>
         </div>
         <div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--primary);margin-bottom:10px">PRAKIRAAN 7 HARI</div>
+          <div style="font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:2px;color:var(--primary);margin-bottom:10px">PRAKIRAAN 7 HARI</div>
           <div style="display:flex;flex-direction:column;gap:6px">
             <template x-for="(d,idx) in weatherData.forecast" :key="idx">
               <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)">
@@ -2153,7 +2955,7 @@ select.zn-input{cursor:pointer}
 <div x-show="weatherProvinceSheet" x-cloak class="zn-sheet-overlay" style="z-index:100009" @click.self="weatherProvinceSheet=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherProvinceSheet')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH PROVINSI</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH PROVINSI</h3>
     <input type="text" x-model="provinceSearch" placeholder="Cari provinsi..." class="zn-input" style="margin-bottom:10px">
     <div style="max-height:55vh;overflow-y:auto;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
       <template x-for="p in filteredProvinces" :key="p">
@@ -2172,7 +2974,7 @@ select.zn-input{cursor:pointer}
 <div x-show="weatherCitySheet" x-cloak class="zn-sheet-overlay" style="z-index:100010" @click.self="weatherCitySheet=false">
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherCitySheet')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH KOTA</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH KOTA</h3>
     <input type="text" x-model="citySearch" placeholder="Cari kota..." class="zn-input" style="margin-bottom:10px">
     <div style="max-height:55vh;overflow-y:auto;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
       <template x-for="c in filteredCities" :key="c">
@@ -2196,8 +2998,8 @@ select.zn-input{cursor:pointer}
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
       </button>
       <div style="text-align:center;flex:1">
-        <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:var(--primary)">ZENKAI AI</div>
-        <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px" x-text="(isOwner||isVip)?'// UNLIMITED':('// SISA '+Math.max(0,(10+chatBonus)-chatCount)+'/'+(10+chatBonus))"></div>
+        <div style="font-family:var(--font-display);font-size:13px;font-weight:800;letter-spacing:2px;color:var(--primary)">ZENKAI AI</div>
+        <div style="font-size:10px;color:var(--text-mute);font-family:var(--font-mono);margin-top:2px" x-text="(isOwner||isVip)?'// UNLIMITED':('// SISA '+Math.max(0,(10+chatBonus)-chatCount)+'/'+(10+chatBonus))"></div>
       </div>
       <button @click="confirmClearChat()" style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--danger);display:flex;align-items:center;justify-content:center;color:var(--danger)">
         <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
@@ -2214,7 +3016,7 @@ select.zn-input{cursor:pointer}
         <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
           <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:#050508"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
         </div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:8px">HALO! SAYA ZENKAI AI</div>
+        <div style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:8px">HALO! SAYA ZENKAI AI</div>
         <div style="font-size:11px;color:var(--text-dim);line-height:1.6" x-text="aiModeDesc"></div>
       </div>
       <template x-for="(msg,idx) in chatMessages" :key="idx">
@@ -2223,7 +3025,7 @@ select.zn-input{cursor:pointer}
         </div>
       </template>
       <div x-show="aiThinking" style="display:flex;justify-content:flex-start">
-        <div style="padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--primary);font-size:13px;color:var(--primary);font-family:'JetBrains Mono',monospace" x-text="aiThinkingText"></div>
+        <div style="padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--primary);font-size:13px;color:var(--primary);font-family:var(--font-mono)" x-text="aiThinkingText"></div>
       </div>
     </div>
     <div class="zn-chat-input-bar">
@@ -2247,8 +3049,8 @@ select.zn-input{cursor:pointer}
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
       </button>
       <div style="text-align:center;flex:1">
-        <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700">◆ ZENKAI AI PRO</div>
-        <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px">
+        <div style="font-family:var(--font-display);font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700">◆ ZENKAI AI PRO</div>
+        <div style="font-size:10px;color:var(--text-mute);font-family:var(--font-mono);margin-top:2px">
           <template x-if="isOwner"><span>// UNLIMITED · OWNER</span></template>
           <template x-if="!isOwner&&isVip"><span>// UNLIMITED · VIP</span></template>
         </div>
@@ -2262,7 +3064,7 @@ select.zn-input{cursor:pointer}
         <div style="display:flex;align-items:center;gap:8px">
           <span style="font-size:16px">⚡</span>
           <div style="text-align:left">
-            <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#ffd700" x-text="getProModelName()"></div>
+            <div style="font-family:var(--font-display);font-size:12px;font-weight:700;color:#ffd700" x-text="getProModelName()"></div>
             <div style="font-size:9px;color:var(--text-mute)" x-text="getProModelDesc()"></div>
           </div>
         </div>
@@ -2274,7 +3076,7 @@ select.zn-input{cursor:pointer}
         <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,#ffd700,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
           <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:#050508"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:#ffd700;margin-bottom:8px">ZENKAI AI PRO</div>
+        <div style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:#ffd700;margin-bottom:8px">ZENKAI AI PRO</div>
         <div style="font-size:11px;color:var(--text-dim);line-height:1.6">AI premium dengan 7 model pilihan.</div>
       </div>
       <template x-for="(msg,idx) in proMessages" :key="idx">
@@ -2314,13 +3116,13 @@ select.zn-input{cursor:pointer}
 <div x-show="proModelSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100080" @click.self="proModelSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'proModelSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">PILIH MODEL AI</h3>
+    <h3 style="font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">PILIH MODEL AI</h3>
     <div style="display:flex;flex-direction:column;gap:8px">
       <template x-for="m in proModelList" :key="m.id">
         <button @click="proModel=m.id;proModelManual=true;proModelSheetOpen=false" :style="proModel===m.id?'border-color:#ffd700;background:rgba(255,215,0,.08)':'border-color:var(--border);background:var(--bg-2)'" style="padding:14px;border-radius:12px;border:1px solid;text-align:left;display:flex;justify-content:space-between;align-items:center;cursor:pointer">
           <div style="flex:1">
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-              <span style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700" :style="proModel===m.id?'color:#ffd700':'color:var(--text)'" x-text="m.name"></span>
+              <span style="font-family:var(--font-display);font-size:13px;font-weight:700" :style="proModel===m.id?'color:#ffd700':'color:var(--text)'" x-text="m.name"></span>
               <span x-show="m.vision" class="zn-pro-badge-vision">VISION</span>
             </div>
             <div style="font-size:10px;color:var(--text-mute)" x-text="m.desc"></div>
@@ -2342,9 +3144,9 @@ select.zn-input{cursor:pointer}
         <template x-if="userAvatar"><img :src="userAvatar"></template>
         <template x-if="!userAvatar"><span x-text="userName?userName.substring(0,2).toUpperCase():'ZK'"></span></template>
       </div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:1px;margin-bottom:6px" x-text="userName||'Zenkai User'"></div>
+      <div style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:1px;margin-bottom:6px" x-text="userName||'Zenkai User'"></div>
       <span class="zn-badge" :class="isOwner?'owner':(isVip?'vip':'')" x-text="isOwner?'◆ OWNER':(isVip?'◆ VIP':'◆ USER')"></span>
-      <div style="font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:8px;letter-spacing:1px">// BY ANDIKA · v1.5</div>
+      <div style="font-size:9px;color:var(--text-mute);font-family:var(--font-mono);margin-top:8px;letter-spacing:1px">// BY ANDIKA · v1.5</div>
     </div>
     <div class="zn-drawer-menu">
       <div class="zn-drawer-item" @click="drawerOpen=false;developerProfileOpen=true">
@@ -2377,7 +3179,9 @@ select.zn-input{cursor:pointer}
       </template>
     </div>
   </div>
-</div><script>
+</div>
+
+<!-- [SELANJUTNYA: PESAN 3/3 — <script> Alpine] --><script>
 const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
@@ -2441,7 +3245,6 @@ headerScrolled:false,
 toasts:[],
 toastId:0,
 
-// AI BUBBLE POSITION
 bubblePosition:{x:0,y:0},
 bubbleDragging:false,
 bubbleDragStart:{x:0,y:0},
@@ -2449,7 +3252,6 @@ bubblePosStart:{x:0,y:0},
 bubbleMoved:false,
 showBubbleHint:true,
 
-// MUSIC PLAYER
 musicSheetOpen:false,
 musicEnabled:false,
 musicUrl:'',
@@ -2466,7 +3268,6 @@ musicMoved:false,
 musicMinimized:false,
 showMusicHint:true,
 
-// WEB MAINTENANCE
 webMaintenanceActive:false,
 webMaintScope:'both',
 webMaintenanceData:{alasan:'',estimasi:'',countdown:10},
@@ -3216,7 +4017,6 @@ detectDevice:function(){
 
 init:async function(){
   var self=this;
-  // ⚡ PALING AWAL — set data-ready sebelum apapun
   document.body.setAttribute('data-ready','1');
   
   var savedTheme=localStorage.getItem('zenkai_theme');if(savedTheme)this.theme=savedTheme;
@@ -3797,7 +4597,6 @@ sendProChat:async function(){
 },
 clearProChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat Zenkai AI Pro bakal dihapus.',function(){self.proMessages=[];self.showToast('✅ SUKSES','Chat dihapus.','success');},'🗑️');},
 
-// REVIEW FUNCTIONS
 getFeatureRating:function(fiturId){var cached = this.featureRatingsCache[fiturId];if(!cached) return {avg:'0.0', total:0};return cached;},
 loadAllFeatureRatings:async function(){
   var now = Date.now();
@@ -3845,7 +4644,6 @@ submitReview:async function(){
   }catch(e){this.showToast('❌ GAGAL', e.message, 'error');}
 },
 
-// BUG REPORT
 openBugReportSheet:function(){if(!this.currentUser){return this.showToast('⚠️ PERHATIAN','Login dulu!','warning');}this.bugReportForm = {tipe:'bug', judul:'', deskripsi:''};this.bugReportSheetOpen = true;},
 submitBugReport:async function(){
   if(!this.currentUser) return;
@@ -3879,7 +4677,6 @@ openBugReportList:async function(){
 loadAllBugReports:async function(){try{var {data, error} = await sb.from('bug_reports').select('*').order('created_at', {ascending:false}).limit(100);if(error) throw error;this.bugReportList = data || [];}catch(e){}},
 updateBugStatus:async function(reportId, newStatus){try{var {error} = await sb.from('bug_reports').update({status:newStatus, updated_at:new Date().toISOString()}).eq('id', reportId);if(error) throw error;await this.loadAllBugReports();this.showToast('✅ SUKSES', 'Status diubah ke "'+newStatus+'"', 'success');}catch(e){this.showToast('❌ GAGAL', e.message, 'error');}},
 
-// OWNER FUNCTIONS
 loadAppStats:async function(){try{
   var{count:u}=await sb.from('profiles').select('*',{count:'exact',head:true});
   var{count:t}=await sb.from('transactions').select('*',{count:'exact',head:true});
