@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#050508">
-<title>Zenkai Tools</title>
+<title>Zenkai Tools v1.5</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -30,7 +30,6 @@
 html{overflow-x:hidden;scroll-behavior:smooth}
 body{overflow-x:hidden;background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--text);min-height:100dvh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:auto}
 
-/* Kunci body waktu sheet kebuka — biar layar belakang gak ikut scroll */
 body.sheet-open{overflow:hidden !important;position:fixed;width:100%;touch-action:none}
 body.sheet-open .zn-sheet-content{touch-action:pan-y}
 
@@ -128,7 +127,6 @@ a{color:inherit;text-decoration:none}
 .zn-feat-name{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;letter-spacing:.3px;color:var(--text);line-height:1.2}
 .zn-feat-desc{font-size:11px;color:var(--text-mute);line-height:1.3}
 
-/* TOMBOL REVIEW DI FEAT CARD */
 .zn-feat-review-btn{
   position:absolute;bottom:10px;left:12px;right:12px;
   display:flex;align-items:center;justify-content:center;gap:4px;
@@ -211,12 +209,23 @@ select.zn-input{cursor:pointer}
 .zn-spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:znSpin .6s linear infinite}
 @keyframes znSpin{to{transform:rotate(360deg)}}
 
-.zn-ai-bubble{position:fixed;bottom:88px;right:16px;z-index:60;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
-.zn-ai-bubble-btn{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--primary);box-shadow:0 0 25px var(--primary-glow);display:flex;align-items:center;justify-content:center}
+/* AI BUBBLE — DRAGGABLE */
+.zn-ai-bubble{position:fixed;z-index:60;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:grab;user-select:none;touch-action:none;transition:box-shadow .2s}
+.zn-ai-bubble.dragging{cursor:grabbing;opacity:.85;transition:none}
+.zn-ai-bubble-btn{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--primary);box-shadow:0 0 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;pointer-events:none}
 .zn-ai-bubble-btn svg{width:28px;height:28px;fill:#050508}
-.zn-ai-bubble-label{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:.5px;color:var(--primary);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;border:1px solid var(--primary);white-space:nowrap}
+.zn-ai-bubble-label{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:.5px;color:var(--primary);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;border:1px solid var(--primary);white-space:nowrap;pointer-events:none}
+.zn-ai-bubble-hint{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:6px;border:1px solid var(--border);white-space:nowrap;pointer-events:none;animation:znHintPulse 2.5s ease-in-out infinite}
 
-[x-cloak]{display:none !important}
+/* WEB MAINTENANCE FULL SCREEN */
+.web-maint-screen{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.web-maint-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,170,0,.15),transparent 50%),radial-gradient(circle at 70% 80%,rgba(255,51,85,.15),transparent 50%);pointer-events:none;z-index:0}
+.web-maint-screen::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,170,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,170,0,.04) 1px,transparent 1px);background-size:50px 50px;animation:znGridMove 20s linear infinite;pointer-events:none;z-index:0}
+.web-maint-content{position:relative;z-index:1;text-align:center;max-width:500px;width:100%}
+.web-maint-icon{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,rgba(255,170,0,.2),rgba(255,51,85,.2));border:3px solid var(--warning);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:60px;box-shadow:0 0 60px rgba(255,170,0,.6),inset 0 0 30px rgba(255,170,0,.3);animation:webMaintPulse 2s ease-in-out infinite}
+@keyframes webMaintPulse{0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(255,170,0,.6),inset 0 0 30px rgba(255,170,0,.3)}50%{transform:scale(1.05);box-shadow:0 0 80px rgba(255,170,0,.8),inset 0 0 40px rgba(255,170,0,.4)}}
+.web-maint-title{font-family:'Orbitron',sans-serif;font-size:clamp(28px,8vw,44px);font-weight:900;letter-spacing:4px;color:var(--warning);text-shadow:0 0 30px rgba(255,170,0,.6);margin-bottom:10px}
+.web-maint-sub{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-mute);letter-spacing:3px;margin-bottom:32px}
 
 #loadingScreen{position:fixed;inset:0;z-index:99998;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:hidden;transition:opacity .6s,visibility .6s}
 #loadingScreen.hide{opacity:0;visibility:hidden}
@@ -376,6 +385,26 @@ select.zn-input{cursor:pointer}
 .dev-cta-box{padding:20px;border-radius:14px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);text-align:center}
 .dev-footer{padding:20px 24px;border-top:1px solid var(--border);text-align:center;background:var(--bg-2)}
 
+/* TOAST NOTIFICATION */
+.zn-toast-container{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:999999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:min(400px,90vw)}
+.zn-toast{padding:12px 16px;border-radius:12px;background:rgba(13,13,24,.98);border:1px solid var(--primary);box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px var(--primary-glow);display:flex;align-items:flex-start;gap:10px;animation:znToastIn .3s ease-out;pointer-events:auto;backdrop-filter:blur(10px)}
+.zn-toast.success{border-color:#00ff88;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px rgba(0,255,136,.5)}
+.zn-toast.error{border-color:#ff3355;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px rgba(255,51,85,.5)}
+.zn-toast.warning{border-color:#ffaa00;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px rgba(255,170,0,.5)}
+.zn-toast-icon{width:24px;height:24px;border-radius:50%;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.zn-toast.success .zn-toast-icon{background:rgba(0,255,136,.15)}
+.zn-toast.error .zn-toast-icon{background:rgba(255,51,85,.15)}
+.zn-toast.warning .zn-toast-icon{background:rgba(255,170,0,.15)}
+.zn-toast-body{flex:1;min-width:0}
+.zn-toast-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--text);margin-bottom:2px}
+.zn-toast.success .zn-toast-title{color:#00ff88}
+.zn-toast.error .zn-toast-title{color:#ff3355}
+.zn-toast.warning .zn-toast-title{color:#ffaa00}
+.zn-toast-msg{font-size:11px;color:var(--text-dim);line-height:1.4}
+@keyframes znToastIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes znToastOut{to{opacity:0;transform:translateY(-20px)}}
+.zn-toast.out{animation:znToastOut .3s ease-out forwards}
+
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -391,12 +420,58 @@ select.zn-input{cursor:pointer}
       <div class="load-z">Z</div>
     </div>
     <div class="load-logo">ZENKAI</div>
-    <div class="load-sub">INITIALIZING // v3.6</div>
+    <div class="load-sub">INITIALIZING // v1.5</div>
     <div class="load-bar-wrap"><div class="load-bar-fill" id="loadBar"></div></div>
     <div class="load-pct" id="loadPct">0%</div>
     <div class="load-status" id="loadStatus">Memuat sistem</div>
     <div class="load-dots"><span></span><span></span><span></span></div>
   </div>
+</div>
+
+<!-- WEB MAINTENANCE FULL SCREEN (Owner bypass) -->
+<template x-if="webMaintenanceActive && !isOwner && webMaintShouldBlock">
+  <div class="web-maint-screen">
+    <div class="web-maint-content">
+      <div class="web-maint-icon">🔧</div>
+      <div class="web-maint-title">MAINTENANCE</div>
+      <div class="web-maint-sub">// ZENKAI TOOLS SEDANG DIPERBAIKI</div>
+      
+      <div style="padding:20px;border-radius:16px;background:rgba(13,13,24,.8);border:1px solid var(--warning);margin-bottom:20px;text-align:left;backdrop-filter:blur(10px)">
+        <div style="font-size:10px;color:var(--warning);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:8px">// ALASAN</div>
+        <div style="font-size:14px;color:var(--text);line-height:1.6;margin-bottom:16px" x-text="webMaintenanceData.alasan || 'Sedang dalam perbaikan sistem'"></div>
+        
+        <div style="font-size:10px;color:var(--warning);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:8px">// ESTIMASI SELESAI</div>
+        <div style="font-size:14px;color:var(--text);line-height:1.6;margin-bottom:16px" x-text="webMaintenanceData.estimasi || 'Belum diketahui'"></div>
+        
+        <div style="font-size:10px;color:var(--warning);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:8px">// CAKUPAN</div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.6" x-text="webMaintScopeLabel"></div>
+      </div>
+      
+      <p style="font-size:12px;color:var(--text-mute);line-height:1.6;margin-bottom:20px">
+        Kami minta maaf atas ketidaknyamanannya. Coba lagi nanti ya! 🙏
+      </p>
+      
+      <button @click="logoutFromMaintenance()" class="zn-btn zn-btn-danger" style="max-width:300px;margin:0 auto">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+        <span>KELUAR & TUNGGU</span>
+      </button>
+    </div>
+  </div>
+</template>
+
+<!-- TOAST CONTAINER -->
+<div class="zn-toast-container">
+  <template x-for="toast in toasts" :key="toast.id">
+    <div class="zn-toast" :class="toast.type" :class="{out: toast.out}">
+      <div class="zn-toast-icon">
+        <span x-text="toast.type==='success'?'✓':(toast.type==='error'?'✕':'!')"></span>
+      </div>
+      <div class="zn-toast-body">
+        <div class="zn-toast-title" x-text="toast.title"></div>
+        <div class="zn-toast-msg" x-text="toast.message"></div>
+      </div>
+    </div>
+  </template>
 </div>
 
 <!-- LOGIN SCREEN -->
@@ -406,7 +481,7 @@ select.zn-input{cursor:pointer}
     <div style="text-align:center;margin-bottom:24px">
       <div class="zn-avatar" style="width:64px;height:64px;font-size:26px;margin:0 auto 16px;border-radius:18px">Z</div>
       <h1 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;letter-spacing:4px;color:var(--primary);margin-bottom:6px">ZENKAI</h1>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:3px">// Developer: Andika</p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:3px">// Developer: Andika · v1.5</p>
     </div>
     <div class="zn-tab-pill" style="margin-bottom:20px;padding:10px" x-text="authMode==='login'?'MASUK AKUN':'DAFTAR AKUN'"></div>
     <div style="display:flex;flex-direction:column;gap:12px">
@@ -445,7 +520,6 @@ select.zn-input{cursor:pointer}
 <div x-show="isAuthenticated" x-cloak class="zn-app">
   <div class="zn-grid-bg"></div>
 
-  <!-- HEADER STICKY -->
   <header class="zn-header" :class="{scrolled: headerScrolled}">
     <div class="zn-header-user" @click="profileModalOpen=true">
       <div class="zn-avatar-wrap">
@@ -473,17 +547,16 @@ select.zn-input{cursor:pointer}
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
   <main class="zn-main">
 
-    <!-- ================= TAB HOME ================= -->
+    <!-- HOME -->
     <div x-show="activeTab==='home'" class="zn-section">
       <div class="zn-hero">
         <div class="zn-hero-bg" id="heroBg"></div>
         <div class="zn-hero-content">
           <div class="zn-hero-label">ZENKAI TOOLS</div>
           <div class="zn-hero-title">All Tools in One</div>
-          <div class="zn-hero-subtitle">// Powerful & Fast</div>
+          <div class="zn-hero-subtitle">// Powerful & Fast · v1.5</div>
           <div class="zn-hero-credit">
             <div class="zn-hero-credit-badge">A</div>
             <div class="zn-hero-credit-text">by <b>Andika</b></div>
@@ -499,7 +572,7 @@ select.zn-input{cursor:pointer}
             </div>
             <div class="zn-stat-compact">
               <div class="zn-stat-compact-icon"><svg viewBox="0 0 24 24" fill="#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
-              <div class="zn-stat-compact-text"><div class="zn-stat-compact-val" x-text="(isOwner||isVip)?'∞':Math.max(0,10-chatCount)"></div><div class="zn-stat-compact-label">Chat</div></div>
+              <div class="zn-stat-compact-text"><div class="zn-stat-compact-val" x-text="(isOwner||isVip)?'∞':Math.max(0,(10+chatBonus)-chatCount)"></div><div class="zn-stat-compact-label">Chat</div></div>
             </div>
           </div>
         </div>
@@ -541,7 +614,6 @@ select.zn-input{cursor:pointer}
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:1px"><span x-text="filteredFitur.length"></span> AKTIF</div>
       </div>
 
-      <!-- CARD ZENKAI AI PRO -->
       <div class="zn-feat-card" @click="handleProCardClick()" style="border-color:#ffd700;background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(168,85,247,.08));padding-bottom:16px">
         <span class="zn-feat-badge pro">◆ PRO</span>
         <div class="zn-feat-icon" style="background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(168,85,247,.2));border-color:#ffd700">
@@ -551,7 +623,6 @@ select.zn-input{cursor:pointer}
         <div class="zn-feat-desc">AI premium 7 model + vision</div>
       </div>
 
-      <!-- GRID FITUR + TOMBOL REVIEW -->
       <div class="zn-feat-grid">
         <template x-for="f in filteredFitur" :key="f.id">
           <div class="zn-feat-card" @click="bukaFitur(f)" :style="cardMaintenanceStyle(f)">
@@ -565,11 +636,7 @@ select.zn-input{cursor:pointer}
             <div class="zn-feat-name" x-text="f.nama"></div>
             <div class="zn-feat-desc" x-text="f.desc"></div>
 
-            <!-- TOMBOL REVIEW -->
-            <button 
-              @click.stop="openReviewListForFeature(f)" 
-              class="zn-feat-review-btn"
-              :aria-label="'Lihat review untuk '+f.nama">
+            <button @click.stop="openReviewListForFeature(f)" class="zn-feat-review-btn">
               <svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:currentColor">
                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
               </svg>
@@ -585,7 +652,7 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- ================= TAB KEUANGAN ================= -->
+    <!-- KEUANGAN -->
     <div x-show="activeTab==='keuangan'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px">TOTAL SALDO</div>
@@ -625,7 +692,7 @@ select.zn-input{cursor:pointer}
               </div>
             </template>
             <template x-if="transactions.length===0">
-              <div style="text-align:center;padding:24px;color:var(--text-mute);font-size:12px">Belum ada transaksi. Klik <b style="color:var(--primary)">+ TAMBAH TRANSAKSI</b> di atas.</div>
+              <div style="text-align:center;padding:24px;color:var(--text-mute);font-size:12px">Belum ada transaksi.</div>
             </template>
           </div>
         </div>
@@ -665,14 +732,14 @@ select.zn-input{cursor:pointer}
               </div>
             </template>
             <template x-if="savings.length===0">
-              <div style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">Belum ada target. Klik <b style="color:var(--primary)">+ TAMBAH TARGET</b> di atas.</div>
+              <div style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">Belum ada target.</div>
             </template>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ================= TAB DOWNLOADER ================= -->
+    <!-- DOWNLOADER -->
     <div x-show="activeTab==='downloader'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15));border-color:#ffd700"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ffd700"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
@@ -700,7 +767,7 @@ select.zn-input{cursor:pointer}
       </template>
     </div>
 
-    <!-- ================= TAB TOOLS ================= -->
+    <!-- TOOLS -->
     <div x-show="activeTab==='tools'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
@@ -781,7 +848,7 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- ================= TAB TEMA ================= -->
+    <!-- TEMA -->
     <div x-show="activeTab==='tema'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg></div>
@@ -813,20 +880,20 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- ================= TAB PEMBERITAHUAN ================= -->
+    <!-- PEMBERITAHUAN -->
     <div x-show="activeTab==='pemberitahuan'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 9h10v2H7V9zm6 5H7v-2h6v2zm4-6H7V6h10v2z"/></svg></div>
         <h2 style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:var(--accent)">PEMBERITAHUAN</h2>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
-        <div class="zn-card" style="border-color:var(--primary)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px">Selamat Datang</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Terima kasih sudah pakai Zenkai Tools! Aplikasi ini akan terus berkembang.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU SAJA</div></div></div></div>
-        <div class="zn-card" style="border-color:#ffd700"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid #ffd700;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#ffd700;margin-bottom:4px">◆ ZENKAI AI PRO</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">AI premium dengan 7 model + vision. Khusus member VIP. Cek di Home!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU</div></div></div></div>
-        <div class="zn-card" style="border-color:var(--accent)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--accent)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">Tips & Trik</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Login harian dapat 10 poin gratis. Kumpulkan poin & naik level!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// 1 JAM LALU</div></div></div></div>
+        <div class="zn-card" style="border-color:var(--primary)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px">Selamat Datang</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Terima kasih sudah pakai Zenkai Tools! Aplikasi ini akan terus berkembang.</div></div></div></div>
+        <div class="zn-card" style="border-color:#ffd700"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid #ffd700;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#ffd700;margin-bottom:4px">◆ ZENKAI AI PRO</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">AI premium dengan 7 model + vision. Khusus member VIP. Unlimited chat!</div></div></div></div>
+        <div class="zn-card" style="border-color:var(--accent)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--accent)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">Tips & Trik</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Login harian dapat 10 poin gratis. Kumpulkan poin & naik level!</div></div></div></div>
       </div>
     </div>
 
-    <!-- ================= TAB OWNER ================= -->
+    <!-- OWNER -->
     <template x-if="isOwner">
       <div x-show="activeTab==='owner'" class="zn-section">
         <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
@@ -846,7 +913,7 @@ select.zn-input{cursor:pointer}
           <button @click="ownerSubTab='setelan'" :class="ownerSubTab==='setelan'?'active':''" class="zn-tab-pill" style="font-size:9px">⚙ Set</button>
         </div>
 
-        <!-- TAB LIVE DASHBOARD -->
+        <!-- Dashboard -->
         <div x-show="ownerSubTab==='dashboard'" class="zn-section">
           <div class="zn-dash-card">
             <div class="zn-dash-label">🟢 USER ONLINE SEKARANG</div>
@@ -874,7 +941,7 @@ select.zn-input{cursor:pointer}
           <button @click="loadLiveDashboard()" class="zn-btn zn-btn-soft">🔄 REFRESH</button>
         </div>
 
-        <!-- TAB STATISTIK -->
+        <!-- Statistik -->
         <div x-show="ownerSubTab==='statistik'" class="zn-section">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
             <div class="zn-stat-box"><div class="zn-stat-box-val" x-text="appStats.totalUsers"></div><div class="zn-stat-box-label">Total User</div></div>
@@ -896,7 +963,7 @@ select.zn-input{cursor:pointer}
           </div>
         </div>
 
-        <!-- TAB USERS -->
+        <!-- Users -->
         <div x-show="ownerSubTab==='users'" class="zn-section">
           <input type="text" x-model="userSearch" placeholder="Cari user..." class="zn-input">
           <div class="zn-card">
@@ -912,6 +979,7 @@ select.zn-input{cursor:pointer}
                         <span x-text="u.status"></span>
                         <span x-show="u.is_vip" style="color:var(--gold)"> • VIP</span>
                         <span x-show="u.is_banned" style="color:var(--danger)"> • BANNED</span>
+                        <span x-show="(u.chat_bonus||0) > 0" style="color:#00d9ff"> • +<span x-text="u.chat_bonus"></span>chat</span>
                       </div>
                     </div>
                   </div>
@@ -930,20 +998,17 @@ select.zn-input{cursor:pointer}
           </div>
         </div>
 
-        <!-- TAB OWNER WALLET -->
+        <!-- Wallet -->
         <div x-show="ownerSubTab==='wallet'" class="zn-section">
           <div class="zn-wallet-balance">
             <div class="zn-wallet-balance-label">💰 SALDO OWNER</div>
             <div class="zn-wallet-balance-value" x-text="formatRibuan(ownerWallet.saldo)"></div>
-            <div style="font-size:10px;color:rgba(5,5,8,.7);margin-top:8px;font-family:'JetBrains Mono',monospace">// POIN</div>
           </div>
-
           <div class="zn-card">
             <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>TAMBAH SALDO</span></div>
             <input type="text" inputmode="numeric" x-model="ownerWallet.topupAmount" @input="ownerWallet.topupAmount=formatRibuanInput($event.target.value)" placeholder="Jumlah poin..." class="zn-input-number">
             <button @click="topupWallet()" class="zn-btn zn-btn-primary" style="margin-top:12px">+ TAMBAH SALDO</button>
           </div>
-
           <div class="zn-card">
             <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span>KIRIM HADIAH KE USER</span></div>
             <input type="text" x-model="ownerWallet.targetUsername" placeholder="Username target..." class="zn-input" style="margin-bottom:10px">
@@ -963,7 +1028,7 @@ select.zn-input{cursor:pointer}
           </div>
         </div>
 
-        <!-- TAB SUBSCRIPTION MANAGER -->
+        <!-- Subs -->
         <div x-show="ownerSubTab==='subs'" class="zn-section">
           <div class="zn-card">
             <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg><span>VIP AKTIF</span></div>
@@ -991,7 +1056,7 @@ select.zn-input{cursor:pointer}
           </div>
         </div>
 
-        <!-- TAB BROADCAST -->
+        <!-- Broadcast -->
         <div x-show="ownerSubTab==='broadcast'" class="zn-section">
           <div class="zn-card">
             <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span>KIRIM BROADCAST</span></div>
@@ -1035,10 +1100,50 @@ select.zn-input{cursor:pointer}
           </div>
         </div>
 
-        <!-- TAB MAINTENANCE -->
+        <!-- Maintenance Tools + Web -->
         <div x-show="ownerSubTab==='maintenance'" class="zn-section">
+          
+          <!-- WEB MAINTENANCE -->
+          <div class="zn-card" style="border-color:var(--danger)">
+            <div class="zn-card-title" style="color:var(--danger)">
+              <svg viewBox="0 0 24 24" style="fill:var(--danger)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              <span>🚨 MAINTENANCE WEB</span>
+            </div>
+            <p style="font-size:11px;color:var(--text-mute);margin-bottom:14px;line-height:1.5">Blokir total akses web. Owner tetap bisa akses. Pilih cakupan siapa yang diblokir.</p>
+            
+            <div class="zn-maint-card" :class="webMaintenanceActive ? 'active' : ''" style="margin-bottom:12px">
+              <div class="zn-maint-card-header">
+                <div class="zn-maint-card-name" style="font-weight:700">Aktifkan Maintenance Web</div>
+                <div class="zn-maint-toggle" :class="webMaintenanceActive ? 'on' : ''" @click="toggleWebMaintenance()"></div>
+              </div>
+            </div>
+            
+            <template x-if="webMaintenanceActive">
+              <div style="display:flex;flex-direction:column;gap:10px;animation:znSlideDown .3s ease-out">
+                <div>
+                  <div style="font-size:10px;color:var(--warning);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Cakupan</div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+                    <button @click="webMaintScope='user'" :class="webMaintScope==='user'?'active':''" class="zn-tab-pill" style="font-size:9px">👤 User Biasa</button>
+                    <button @click="webMaintScope='vip'" :class="webMaintScope==='vip'?'active':''" class="zn-tab-pill" style="font-size:9px">💎 VIP</button>
+                    <button @click="webMaintScope='both'" :class="webMaintScope==='both'?'active':''" class="zn-tab-pill" style="font-size:9px">👥 Semua</button>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:10px;color:var(--warning);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Alasan</div>
+                  <textarea x-model="webMaintenanceData.alasan" placeholder="Contoh: Update database, perbaikan server..." class="zn-maint-textarea"></textarea>
+                </div>
+                <div>
+                  <div style="font-size:10px;color:var(--warning);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Estimasi Selesai</div>
+                  <input type="text" x-model="webMaintenanceData.estimasi" placeholder="Contoh: 2 jam, 30 menit, sampai jam 15:00" class="zn-maint-input">
+                </div>
+                <button @click="saveWebMaintenance()" class="zn-btn zn-btn-danger">💾 SIMPAN & AKTIFKAN</button>
+              </div>
+            </template>
+          </div>
+
+          <!-- MAINTENANCE TOOLS (per fitur) -->
           <div class="zn-card">
-            <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg><span>MAINTENANCE FITUR</span></div>
+            <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg><span>MAINTENANCE TOOLS (Per Fitur)</span></div>
             <template x-for="f in maintenanceFeatures" :key="f.id">
               <div class="zn-maint-card" :class="maintenanceForm[f.id] && maintenanceForm[f.id].is_active ? 'active' : ''">
                 <div class="zn-maint-card-header">
@@ -1057,7 +1162,7 @@ select.zn-input{cursor:pointer}
           </div>
         </div>
 
-        <!-- TAB BUG REPORT (Owner) -->
+        <!-- Bug Reports -->
         <div x-show="ownerSubTab==='bug'" class="zn-section">
           <div class="zn-card">
             <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z"/></svg><span>LAPORAN BUG / SARAN</span></div>
@@ -1097,7 +1202,7 @@ select.zn-input{cursor:pointer}
           </div>
         </div>
 
-        <!-- TAB SETELAN -->
+        <!-- Setelan -->
         <div x-show="ownerSubTab==='setelan'" class="zn-section">
           <div class="zn-card">
             <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg><span>EDIT SAMBUTAN</span></div>
@@ -1120,10 +1225,17 @@ select.zn-input{cursor:pointer}
   </nav>
 </div>
 
-<!-- AI BUBBLE -->
-<div x-show="isAuthenticated&&!chatFullscreen&&!proChatFullscreen&&!developerProfileOpen" x-cloak @click="openChatAI()" class="zn-ai-bubble">
+<!-- AI BUBBLE (Draggable) -->
+<div x-show="isAuthenticated&&!chatFullscreen&&!proChatFullscreen&&!developerProfileOpen" x-cloak 
+     @click="handleBubbleClick()"
+     @mousedown="startDragBubble($event)"
+     @touchstart="startDragBubble($event)"
+     class="zn-ai-bubble"
+     :class="{dragging: bubbleDragging}"
+     :style="'right:auto;bottom:auto;left:'+bubblePosition.x+'px;top:'+bubblePosition.y+'px;'">
+  <div class="zn-ai-bubble-hint" x-show="showBubbleHint">↔ Geser aku</div>
   <div class="zn-ai-bubble-btn"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div>
-  <div class="zn-ai-bubble-label">Chat dengan Zenkai AI</div>
+  <div class="zn-ai-bubble-label">Chat Zenkai AI</div>
 </div><!-- ============================================
      DEVELOPER PROFILE SHEET
      ============================================ -->
@@ -1165,9 +1277,7 @@ select.zn-input{cursor:pointer}
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
         <span>TENTANG SAYA</span>
       </div>
-      <div class="dev-bio-box">
-        <p x-text="developerData.bio"></p>
-      </div>
+      <div class="dev-bio-box"><p x-text="developerData.bio"></p></div>
     </div>
 
     <div class="dev-section">
@@ -1183,9 +1293,7 @@ select.zn-input{cursor:pointer}
               <span class="dev-pill" x-text="skill"></span>
             </template>
           </div>
-          <template x-if="group.note">
-            <div class="dev-skill-note" x-text="'* '+group.note"></div>
-          </template>
+          <template x-if="group.note"><div class="dev-skill-note" x-text="'* '+group.note"></div></template>
         </div>
       </template>
     </div>
@@ -1233,9 +1341,7 @@ select.zn-input{cursor:pointer}
       <div style="display:flex;flex-direction:column;gap:8px">
         <template x-for="(proj,idx) in developerData.projects" :key="idx">
           <a :href="proj.link" target="_blank" class="dev-project-item">
-            <div class="dev-project-icon">
-              <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
-            </div>
+            <div class="dev-project-icon"><svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg></div>
             <div style="flex:1;min-width:0">
               <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
                 <span style="font-size:13px;font-weight:700;color:var(--text)" x-text="proj.nama"></span>
@@ -1256,49 +1362,24 @@ select.zn-input{cursor:pointer}
       </div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <a :href="'https://wa.me/'+developerData.kontak.wa" target="_blank" class="dev-contact-item">
-          <div class="dev-contact-icon" style="background:rgba(37,211,102,.15);border:1px solid #25d366">
-            <svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">WHATSAPP</div>
-            <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'+'+developerData.kontak.wa"></div>
-          </div>
+          <div class="dev-contact-icon" style="background:rgba(37,211,102,.15);border:1px solid #25d366"><svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+          <div style="flex:1;min-width:0"><div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">WHATSAPP</div><div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'+'+developerData.kontak.wa"></div></div>
         </a>
         <a :href="'mailto:'+developerData.kontak.email" class="dev-contact-item">
-          <div class="dev-contact-icon" style="background:rgba(255,51,85,.15);border:1px solid #ff3355">
-            <svg viewBox="0 0 24 24" fill="#ff3355"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          </div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">EMAIL</div>
-            <div style="font-size:13px;font-weight:600;color:var(--text);word-break:break-all" x-text="developerData.kontak.email"></div>
-          </div>
+          <div class="dev-contact-icon" style="background:rgba(255,51,85,.15);border:1px solid #ff3355"><svg viewBox="0 0 24 24" fill="#ff3355"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+          <div style="flex:1;min-width:0"><div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">EMAIL</div><div style="font-size:13px;font-weight:600;color:var(--text);word-break:break-all" x-text="developerData.kontak.email"></div></div>
         </a>
         <a :href="'https://instagram.com/'+developerData.kontak.ig" target="_blank" class="dev-contact-item">
-          <div class="dev-contact-icon" style="background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(255,170,0,.15));border:1px solid #ff0080">
-            <svg viewBox="0 0 24 24" fill="#ff0080"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          </div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">INSTAGRAM</div>
-            <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.ig"></div>
-          </div>
+          <div class="dev-contact-icon" style="background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(255,170,0,.15));border:1px solid #ff0080"><svg viewBox="0 0 24 24" fill="#ff0080"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div>
+          <div style="flex:1;min-width:0"><div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">INSTAGRAM</div><div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.ig"></div></div>
         </a>
         <a :href="'https://tiktok.com/@'+developerData.kontak.tiktok" target="_blank" class="dev-contact-item">
-          <div class="dev-contact-icon" style="background:linear-gradient(135deg,rgba(0,0,0,.4),rgba(255,0,128,.2));border:1px solid #00f2ea">
-            <svg viewBox="0 0 24 24" fill="#00f2ea"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-          </div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">TIKTOK</div>
-            <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.tiktok"></div>
-          </div>
+          <div class="dev-contact-icon" style="background:linear-gradient(135deg,rgba(0,0,0,.4),rgba(255,0,128,.2));border:1px solid #00f2ea"><svg viewBox="0 0 24 24" fill="#00f2ea"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></div>
+          <div style="flex:1;min-width:0"><div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">TIKTOK</div><div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.tiktok"></div></div>
         </a>
         <a :href="'https://github.com/'+developerData.kontak.github" target="_blank" class="dev-contact-item">
-          <div class="dev-contact-icon" style="background:rgba(255,255,255,.08);border:1px solid #fff">
-            <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-          </div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">GITHUB</div>
-            <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.github"></div>
-          </div>
+          <div class="dev-contact-icon" style="background:rgba(255,255,255,.08);border:1px solid #fff"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></div>
+          <div style="flex:1;min-width:0"><div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">GITHUB</div><div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.github"></div></div>
         </a>
       </div>
     </div>
@@ -1320,7 +1401,7 @@ select.zn-input{cursor:pointer}
 
     <div class="dev-footer">
       <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--primary);margin-bottom:4px">ZENKAI TOOLS</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);letter-spacing:1px">© <span x-text="new Date().getFullYear()"></span> Andika Talova Martin · v3.6</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);letter-spacing:1px">© <span x-text="new Date().getFullYear()"></span> Andika Talova Martin · v1.5</div>
     </div>
 
     <div style="padding:20px 24px 24px">
@@ -1329,13 +1410,11 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- WELCOME POPUP -->
+<!-- WELCOME -->
 <div x-show="welcomePopupOpen" x-cloak class="zn-sheet-overlay" style="z-index:100003" @click.self="welcomePopupOpen=false">
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'welcomePopupOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <div style="width:64px;height:64px;border-radius:18px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
-      <svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-    </div>
+    <div style="width:64px;height:64px;border-radius:18px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;letter-spacing:2px;color:var(--primary);margin-bottom:6px">HELLO, <span x-text="userName"></span></h3>
     <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-mute);letter-spacing:2px;margin-bottom:16px">// WELCOME BACK</p>
     <div style="padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);text-align:left;margin-bottom:16px">
@@ -1345,7 +1424,7 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- VIP ONLY SHEET -->
+<!-- VIP ONLY -->
 <div x-show="vipOnlySheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100006" @click.self="vipOnlySheetOpen=false">
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'vipOnlySheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
@@ -1355,10 +1434,10 @@ select.zn-input{cursor:pointer}
     <div style="padding:16px;border-radius:14px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:16px;text-align:left">
       <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;line-height:1.6">Upgrade ke VIP untuk nikmati fitur ini:</p>
       <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>7 model AI premium</b> — pilih sesuai kebutuhan</div></div>
-        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>Bisa lihat gambar</b> — kirim screenshot/foto</div></div>
-        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>Unlimited chat</b> — gak ada batas harian</div></div>
-        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>Prioritas server</b> — lebih cepat & stabil</div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>7 model AI premium</b></div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>Bisa lihat gambar</b></div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>Unlimited chat</b></div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>Prioritas server</b></div></div>
       </div>
     </div>
     <button @click="vipOnlySheetOpen=false;window.open('https://wa.me/6285352831643?text=Halo%20Admin,%20saya%20mau%20upgrade%20ke%20VIP%20Zenkai%20AI%20Pro','_blank')" class="zn-btn zn-btn-primary">HUBUNGI ADMIN</button>
@@ -1366,13 +1445,11 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- BROADCAST POPUP -->
+<!-- BROADCAST -->
 <div x-show="broadcastPopupOpen && activeBroadcast" x-cloak class="zn-sheet-overlay" style="z-index:100007" @click.self="closeBroadcast()">
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'broadcastPopupOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <div class="zn-broadcast-icon" :class="activeBroadcast.tipe">
-      <span x-text="activeBroadcast.tipe==='pengumuman'?'📢':(activeBroadcast.tipe==='peringatan'?'⚠️':'🚨')"></span>
-    </div>
+    <div class="zn-broadcast-icon" :class="activeBroadcast.tipe"><span x-text="activeBroadcast.tipe==='pengumuman'?'📢':(activeBroadcast.tipe==='peringatan'?'⚠️':'🚨')"></span></div>
     <div class="zn-broadcast-type-label" :class="activeBroadcast.tipe" x-text="activeBroadcast.tipe==='pengumuman'?'PENGUMUMAN':(activeBroadcast.tipe==='peringatan'?'PERINGATAN':'MAINTENANCE')"></div>
     <div class="zn-broadcast-title" x-text="activeBroadcast.judul"></div>
     <div class="zn-broadcast-body"><p x-text="activeBroadcast.pesan"></p></div>
@@ -1380,7 +1457,7 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- MAINTENANCE SHEET -->
+<!-- MAINTENANCE TOOL SHEET -->
 <div x-show="maintenanceSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100008" @click.self="maintenanceSheetOpen=false">
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'maintenanceSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
@@ -1421,16 +1498,16 @@ select.zn-input{cursor:pointer}
     </div>
     <div style="margin-bottom:16px">
       <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Alasan (Wajib)</div>
-      <textarea x-model="banSheetForm.alasan" placeholder="Contoh: Melanggar aturan, spam chat..." class="zn-input" rows="3"></textarea>
+      <textarea x-model="banSheetForm.alasan" placeholder="Contoh: Melanggar aturan..." class="zn-input" rows="3"></textarea>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <button @click="banSheetOpen=false;banSheetTarget=null" class="zn-btn zn-btn-soft">BATAL</button>
-      <button @click="confirmBan()" class="zn-btn zn-btn-danger">🚫 BAN SEKARANG</button>
+      <button @click="confirmBan()" class="zn-btn zn-btn-danger">🚫 BAN</button>
     </div>
   </div>
 </div>
 
-<!-- BANNED INFO SHEET -->
+<!-- BANNED INFO -->
 <div x-show="bannedInfoSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100060" @click.self="bannedInfoSheetOpen=false">
   <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'bannedInfoSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
@@ -1451,11 +1528,10 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- REVIEW LIST SHEET -->
+<!-- REVIEW LIST -->
 <div x-show="reviewListSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100071" @click.self="reviewListSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'reviewListSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-
     <template x-if="reviewForFeatureId">
       <div>
         <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">⭐ REVIEW FITUR</div>
@@ -1477,11 +1553,9 @@ select.zn-input{cursor:pointer}
         </template>
       </div>
     </template>
-
     <template x-if="!reviewForFeatureId">
-      <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">⭐ SEMUA REVIEW USER</h3>
+      <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">⭐ SEMUA REVIEW</h3>
     </template>
-
     <div style="max-height:50vh;overflow-y:auto">
       <template x-for="r in reviewList" :key="r.id">
         <div class="zn-review-card">
@@ -1489,9 +1563,7 @@ select.zn-input{cursor:pointer}
             <div class="zn-review-user" x-text="'@'+r.username"></div>
             <div class="zn-review-stars" x-text="'★'.repeat(r.rating) + '☆'.repeat(5-r.rating)"></div>
           </div>
-          <template x-if="!reviewForFeatureId">
-            <div style="font-size:11px;color:var(--primary);margin-bottom:4px" x-text="'Fitur: ' + r.fitur_id"></div>
-          </template>
+          <template x-if="!reviewForFeatureId"><div style="font-size:11px;color:var(--primary);margin-bottom:4px" x-text="'Fitur: ' + r.fitur_id"></div></template>
           <div class="zn-review-komentar" x-text="r.komentar || '(tanpa komentar)'"></div>
           <div class="zn-review-date" x-text="new Date(r.created_at).toLocaleString('id-ID')"></div>
         </div>
@@ -1504,23 +1576,20 @@ select.zn-input{cursor:pointer}
         </div>
       </template>
     </div>
-
     <template x-if="reviewForFeatureId && currentUser">
       <button @click="openReviewFromList()" class="zn-btn zn-btn-primary" style="margin-top:14px">
         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
         <span>TULIS REVIEW</span>
       </button>
     </template>
-
     <button @click="reviewListSheetOpen=false;reviewForFeatureId=null" class="zn-btn zn-btn-soft" style="margin-top:8px">TUTUP</button>
   </div>
 </div>
 
-<!-- REVIEW SHEET (form tulis review) -->
+<!-- REVIEW FORM -->
 <div x-show="reviewSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100070" @click.self="reviewSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'reviewSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-
     <template x-if="reviewTarget">
       <div>
         <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">⭐ TULIS REVIEW</div>
@@ -1542,7 +1611,7 @@ select.zn-input{cursor:pointer}
         </div>
         <div style="margin-bottom:16px">
           <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;font-weight:600">Komentar (Opsional)</div>
-          <textarea x-model="reviewForm.komentar" placeholder="Gimana pengalaman lu pakai fitur ini? Ceritain dikit biar user lain terbantu..." class="zn-input" rows="4" maxlength="500"></textarea>
+          <textarea x-model="reviewForm.komentar" placeholder="Gimana pengalaman lu pakai fitur ini?" class="zn-input" rows="4" maxlength="500"></textarea>
           <div style="text-align:right;font-size:10px;color:var(--text-mute);margin-top:4px;font-family:'JetBrains Mono',monospace"><span x-text="reviewForm.komentar.length"></span>/500</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -1554,12 +1623,12 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- BUG REPORT SHEET (user ngelapor) -->
+<!-- BUG REPORT FORM -->
 <div x-show="bugReportSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100090" @click.self="bugReportSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'bugReportSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:#ff3355;text-align:center;margin-bottom:6px">🐛 LAPOR BUG / SARAN</h3>
-    <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:16px">Bantu Zenkai Tools jadi lebih baik! Laporan lu bakal dicek langsung sama developer.</p>
+    <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:16px">Bantu Zenkai Tools jadi lebih baik!</p>
     <div style="margin-bottom:14px">
       <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;font-weight:600">Tipe Laporan</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
@@ -1574,31 +1643,24 @@ select.zn-input{cursor:pointer}
     </div>
     <div style="margin-bottom:16px">
       <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Deskripsi Detail</div>
-      <textarea x-model="bugReportForm.deskripsi" placeholder="Ceritain sedetail mungkin:&#10;- Apa yang lu lakuin&#10;- Apa yang diharapkan&#10;- Apa yang terjadi" class="zn-input" rows="6" maxlength="1000"></textarea>
+      <textarea x-model="bugReportForm.deskripsi" placeholder="Ceritain sedetail mungkin..." class="zn-input" rows="6" maxlength="1000"></textarea>
       <div style="text-align:right;font-size:10px;color:var(--text-mute);margin-top:4px;font-family:'JetBrains Mono',monospace"><span x-text="bugReportForm.deskripsi.length"></span>/1000</div>
     </div>
     <button @click="submitBugReport()" :disabled="bugReportSubmitting" class="zn-btn zn-btn-primary" style="margin-bottom:8px">
-      <template x-if="!bugReportSubmitting">
-        <span>KIRIM LAPORAN</span>
-      </template>
-      <template x-if="bugReportSubmitting">
-        <span><span class="zn-spin"></span> MENGIRIM...</span>
-      </template>
+      <template x-if="!bugReportSubmitting"><span>KIRIM LAPORAN</span></template>
+      <template x-if="bugReportSubmitting"><span><span class="zn-spin"></span> MENGIRIM...</span></template>
     </button>
-    <button @click="bugReportSheetOpen=false;openBugReportList()" class="zn-btn zn-btn-soft" style="margin-bottom:8px">📋 LIHAT RIWAYAT LAPORAN SAYA</button>
+    <button @click="bugReportSheetOpen=false;openBugReportList()" class="zn-btn zn-btn-soft" style="margin-bottom:8px">📋 LIHAT RIWAYAT</button>
     <button @click="bugReportSheetOpen=false" class="zn-btn zn-btn-soft">TUTUP</button>
   </div>
 </div>
 
-<!-- BUG REPORT LIST SHEET (riwayat user) -->
+<!-- BUG REPORT LIST (User) -->
 <div x-show="bugReportListSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100091" @click.self="bugReportListSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'bugReportListSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:#ff3355;text-align:center;margin-bottom:16px">📋 RIWAYAT LAPORAN</h3>
-    <div x-show="bugReportListLoading" style="text-align:center;padding:30px">
-      <span class="zn-spin"></span>
-      <div style="font-size:11px;color:var(--text-mute);margin-top:8px">Memuat...</div>
-    </div>
+    <div x-show="bugReportListLoading" style="text-align:center;padding:30px"><span class="zn-spin"></span></div>
     <div x-show="!bugReportListLoading" style="max-height:60vh;overflow-y:auto">
       <template x-for="b in bugReportList" :key="b.id">
         <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:8px">
@@ -1610,8 +1672,8 @@ select.zn-input{cursor:pointer}
               </div>
               <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace"><span x-text="new Date(b.created_at).toLocaleString('id-ID')"></span></div>
             </div>
-            <span style="font-size:9px;padding:3px 8px;border-radius:6px;font-weight:700;letter-spacing:.5px;flex-shrink:0"
-              :style="b.status==='baru'?'background:rgba(0,217,255,.15);color:#00d9ff;border:1px solid #00d9ff':(b.status==='dibaca'?'background:rgba(255,170,0,.15);color:#ffaa00;border:1px solid #ffaa00':(b.status==='diproses'?'background:rgba(168,85,247,.15);color:#a855f7;border:1px solid #a855f7':'background:rgba(0,255,136,.15);color:#00ff88;border:1px solid #00ff88'))"
+            <span style="font-size:9px;padding:3px 8px;border-radius:6px;font-weight:700;flex-shrink:0"
+              :style="b.status==='baru'?'background:rgba(0,217,255,.15);color:#00d9ff':(b.status==='dibaca'?'background:rgba(255,170,0,.15);color:#ffaa00':(b.status==='diproses'?'background:rgba(168,85,247,.15);color:#a855f7':'background:rgba(0,255,136,.15);color:#00ff88'))"
               x-text="b.status.toUpperCase()"></span>
           </div>
           <div style="font-size:11px;color:var(--text-dim);line-height:1.5;white-space:pre-line" x-text="b.deskripsi"></div>
@@ -1620,8 +1682,7 @@ select.zn-input{cursor:pointer}
       <template x-if="!bugReportListLoading && bugReportList.length === 0">
         <div style="text-align:center;padding:40px 20px">
           <div style="font-size:40px;opacity:.3;margin-bottom:12px">📭</div>
-          <div style="font-size:13px;color:var(--text-dim);margin-bottom:6px">Belum ada laporan</div>
-          <div style="font-size:11px;color:var(--text-mute)">Kalau ketemu bug, jangan ragu lapor ya!</div>
+          <div style="font-size:13px;color:var(--text-dim)">Belum ada laporan</div>
         </div>
       </template>
     </div>
@@ -1644,7 +1705,7 @@ select.zn-input{cursor:pointer}
         <li><b style="color:var(--accent)">Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
         <li><b style="color:var(--primary)">Tema:</b> 6 warna + 2 gaya visual</li>
       </ul>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--primary);text-align:center;margin-top:14px;letter-spacing:2px">Developer: Andika</p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--primary);text-align:center;margin-top:14px;letter-spacing:2px">Developer: Andika · v1.5</p>
     </div>
     <button @click="aboutModalOpen=false" class="zn-btn zn-btn-soft" style="margin-top:16px">TUTUP</button>
   </div>
@@ -1749,6 +1810,9 @@ select.zn-input{cursor:pointer}
       <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// NAMA</div><div style="font-size:13px;font-weight:600" x-text="userName"></div></div>
       <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// EMAIL</div><div style="font-size:13px;font-weight:600;word-break:break-all" x-text="userEmail"></div></div>
       <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// STATUS</div><div style="font-size:13px;font-weight:600" x-text="isOwner?'OWNER':(isVip?'VIP':'USER')"></div></div>
+      <template x-if="!isOwner">
+        <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border)"><div style="font-size:9px;color:var(--primary);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">// CHAT BONUS</div><div style="font-size:13px;font-weight:600" x-text="'+'+chatBonus+' chat'"></div></div>
+      </template>
     </div>
     <button @click="profileModalOpen=false" class="zn-btn zn-btn-soft" style="margin-top:14px">TUTUP</button>
     <button @click="logout()" class="zn-btn zn-btn-danger" style="margin-top:8px">KELUAR</button>
@@ -1839,7 +1903,7 @@ select.zn-input{cursor:pointer}
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'newsSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">BERITA INDONESIA</h3>
-    <div x-show="newsLoading" style="text-align:center;padding:20px"><span class="zn-spin"></span><div style="font-size:11px;color:var(--text-mute);margin-top:8px">Memuat berita...</div></div>
+    <div x-show="newsLoading" style="text-align:center;padding:20px"><span class="zn-spin"></span></div>
     <div x-show="!newsLoading && !selectedNews" style="display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow-y:auto">
       <template x-for="(n,idx) in newsList" :key="idx">
         <div @click="selectedNews=n" style="display:flex;gap:12px;padding:10px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);cursor:pointer">
@@ -1914,7 +1978,6 @@ select.zn-input{cursor:pointer}
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherProvinceSheet')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH PROVINSI</h3>
-    <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:14px"><span x-text="provinces.length"></span> provinsi tersedia</p>
     <input type="text" x-model="provinceSearch" placeholder="Cari provinsi..." class="zn-input" style="margin-bottom:10px">
     <div style="max-height:55vh;overflow-y:auto;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
       <template x-for="p in filteredProvinces" :key="p">
@@ -1934,7 +1997,6 @@ select.zn-input{cursor:pointer}
   <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherCitySheet')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH KOTA</h3>
-    <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:14px">Provinsi: <b style="color:var(--primary)" x-text="weatherProvince"></b></p>
     <input type="text" x-model="citySearch" placeholder="Cari kota..." class="zn-input" style="margin-bottom:10px">
     <div style="max-height:55vh;overflow-y:auto;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
       <template x-for="c in filteredCities" :key="c">
@@ -1949,7 +2011,7 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- ZENKAI AI CHAT -->
+<!-- AI CHAT -->
 <template x-if="chatFullscreen">
   <div class="zn-chat-full">
     <div class="zn-grid-bg"></div>
@@ -1959,7 +2021,7 @@ select.zn-input{cursor:pointer}
       </button>
       <div style="text-align:center;flex:1">
         <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:var(--primary)">ZENKAI AI</div>
-        <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px" x-text="(isOwner||isVip)?'// UNLIMITED':('// SISA '+Math.max(0,10-chatCount)+'/10 HARI INI')"></div>
+        <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px" x-text="(isOwner||isVip)?'// UNLIMITED':('// SISA '+Math.max(0,(10+chatBonus)-chatCount)+'/'+(10+chatBonus))"></div>
       </div>
       <button @click="confirmClearChat()" style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--danger);display:flex;align-items:center;justify-content:center;color:var(--danger)">
         <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
@@ -1994,13 +2056,13 @@ select.zn-input{cursor:pointer}
       </button>
       <input type="text" x-model="chatInput" @keyup.enter="sendChat()" placeholder="Ketik pesan..." class="zn-input" style="flex:1;text-align:left;padding:13px 16px">
       <button @click="sendChat()" :disabled="aiThinking" class="zn-send-btn" :style="aiThinking?'opacity:.5':'opacity:1'">
-        <svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:#050508;filter:drop-shadow(0 1px 2px rgba(255,255,255,.3))"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        <svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:#050508"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
   </div>
 </template>
 
-<!-- ZENKAI AI PRO CHAT -->
+<!-- PRO CHAT -->
 <template x-if="proChatFullscreen">
   <div class="zn-chat-full">
     <div class="zn-grid-bg"></div>
@@ -2037,16 +2099,12 @@ select.zn-input{cursor:pointer}
           <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:#050508"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </div>
         <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:2px;color:#ffd700;margin-bottom:8px">ZENKAI AI PRO</div>
-        <div style="font-size:11px;color:var(--text-dim);line-height:1.6">AI premium dengan 7 model pilihan. Bisa lihat gambar, analisis, coding, dan banyak lagi.</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.6">AI premium dengan 7 model pilihan.</div>
       </div>
       <template x-for="(msg,idx) in proMessages" :key="idx">
         <div :style="msg.role==='user'?'display:flex;justify-content:flex-end':'display:flex;flex-direction:column;align-items:flex-start'">
           <template x-if="msg.role==='assistant'">
-            <div class="zn-pro-bubble-label">
-              <span>◆ ZENKAI AI PRO</span>
-              <span style="opacity:.5">·</span>
-              <span x-text="getProModelName()"></span>
-            </div>
+            <div class="zn-pro-bubble-label"><span>◆ ZENKAI AI PRO</span><span style="opacity:.5">·</span><span x-text="getProModelName()"></span></div>
           </template>
           <div :style="msg.role==='user'?'max-width:82%;padding:12px 16px;border-radius:16px 16px 4px 16px;background:linear-gradient(135deg,#ffd700,#a855f7);color:#050508;font-size:13px;font-weight:500;word-wrap:break-word;line-height:1.5':'max-width:88%;padding:12px 16px;border-radius:4px 16px 16px 16px;background:var(--card);color:var(--text);border:1px solid var(--border);font-size:13px;word-wrap:break-word;white-space:pre-wrap;line-height:1.5'">
             <template x-if="msg.image"><img :src="msg.image" style="max-width:100%;border-radius:8px;margin-bottom:6px"></template>
@@ -2060,10 +2118,7 @@ select.zn-input{cursor:pointer}
     </div>
     <template x-if="proImageData">
       <div style="flex-shrink:0;padding:8px 12px 0 12px;position:relative;z-index:1">
-        <div class="zn-pro-img-preview">
-          <img :src="proImageData">
-          <button @click="removeProImage()">×</button>
-        </div>
+        <div class="zn-pro-img-preview"><img :src="proImageData"><button @click="removeProImage()">×</button></div>
       </div>
     </template>
     <div class="zn-chat-input-bar">
@@ -2071,9 +2126,9 @@ select.zn-input{cursor:pointer}
         <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
         <input type="file" accept="image/*" @change="pickProImage($event)" style="display:none">
       </label>
-      <input type="text" x-model="proInput" @keyup.enter="sendProChat()" placeholder="Tanya apa aja ke Zenkai AI Pro..." class="zn-input" style="flex:1;text-align:left;padding:13px 16px">
+      <input type="text" x-model="proInput" @keyup.enter="sendProChat()" placeholder="Tanya apa aja..." class="zn-input" style="flex:1;text-align:left;padding:13px 16px">
       <button @click="sendProChat()" :disabled="proThinking" class="zn-send-btn" :style="proThinking?'opacity:.5':'opacity:1'">
-        <svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:#050508;filter:drop-shadow(0 1px 2px rgba(255,255,255,.3))"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        <svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:#050508"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
   </div>
@@ -2086,7 +2141,7 @@ select.zn-input{cursor:pointer}
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">PILIH MODEL AI</h3>
     <div style="display:flex;flex-direction:column;gap:8px">
       <template x-for="m in proModelList" :key="m.id">
-        <button @click="proModel=m.id;proModelManual=true;proModelSheetOpen=false" :style="proModel===m.id?'border-color:#ffd700;background:rgba(255,215,0,.08);box-shadow:0 0 15px rgba(255,215,0,.3)':'border-color:var(--border);background:var(--bg-2)'" style="padding:14px;border-radius:12px;border:1px solid;text-align:left;display:flex;justify-content:space-between;align-items:center;cursor:pointer">
+        <button @click="proModel=m.id;proModelManual=true;proModelSheetOpen=false" :style="proModel===m.id?'border-color:#ffd700;background:rgba(255,215,0,.08)':'border-color:var(--border);background:var(--bg-2)'" style="padding:14px;border-radius:12px;border:1px solid;text-align:left;display:flex;justify-content:space-between;align-items:center;cursor:pointer">
           <div style="flex:1">
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
               <span style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700" :style="proModel===m.id?'color:#ffd700':'color:var(--text)'" x-text="m.name"></span>
@@ -2094,17 +2149,14 @@ select.zn-input{cursor:pointer}
             </div>
             <div style="font-size:10px;color:var(--text-mute)" x-text="m.desc"></div>
           </div>
-          <div style="text-align:right">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute)" x-text="m.pengali"></div>
-            <div x-show="proModel===m.id" style="color:#ffd700;font-size:16px;margin-top:2px">✓</div>
-          </div>
+          <div x-show="proModel===m.id" style="color:#ffd700;font-size:16px">✓</div>
         </button>
       </template>
     </div>
   </div>
 </div>
 
-<!-- DRAWER (Tanpa Cuaca, Berita, Film, Review — Ada Lapor Bug) -->
+<!-- DRAWER -->
 <div x-show="drawerOpen" x-cloak>
   <div class="zn-drawer-overlay" @click="drawerOpen=false"></div>
   <div class="zn-drawer">
@@ -2116,7 +2168,7 @@ select.zn-input{cursor:pointer}
       </div>
       <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:1px;margin-bottom:6px" x-text="userName||'Zenkai User'"></div>
       <span class="zn-badge" :class="isOwner?'owner':(isVip?'vip':'')" x-text="isOwner?'◆ OWNER':(isVip?'◆ VIP':'◆ USER')"></span>
-      <div style="font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:8px;letter-spacing:1px">// BY ANDIKA</div>
+      <div style="font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:8px;letter-spacing:1px">// BY ANDIKA · v1.5</div>
     </div>
     <div class="zn-drawer-menu">
       <div class="zn-drawer-item" @click="drawerOpen=false;developerProfileOpen=true">
@@ -2153,7 +2205,7 @@ const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-respon
 const OWNER_EMAIL='andikaatka@gmail.com';
 const DAILY_LIMIT=10;
 
-const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi all-in-one yang siap bantu aktivitas harian lu:\n\n💰 DOMPET DIGITAL\nCatat transaksi, pantau grafik, atur budget, capai target tabungan.\n\n🤖 ZENKAI AI\nChat pintar gratis dengan 4 mode. Limit 10 chat/hari, upgrade VIP buat unlimited!\n\n⚡ ZENKAI AI PRO\nAI premium eksklusif VIP dengan 7 model pilihan + kemampuan analisa gambar. Unlimited chat!\n\n📥 DOWNLOADER\nDownload video TikTok tanpa watermark, HD, dan MP3.\n\n🌤️ CUACA & BERITA\nPrakiraan cuaca 7 hari + berita terkini Indonesia.\n\n🛠️ TOOLS LENGKAP\nJam dunia, text-to-speech, kompres foto, kalkulator BMI, speed test.\n\n🎨 KUSTOMISASI\n6 warna neon + 2 gaya visual (Neon & Komik).\n\n🐛 LAPOR BUG\nKetemu bug atau punya saran? Lapor langsung dari menu!\n\n🎁 BONUS\nLogin harian dapat 10 poin gratis. Kumpulkan poin, naik level!\n\nYuk jelajahi semua fiturnya! 🚀';
+const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi all-in-one yang siap bantu aktivitas harian lu.\n\n💰 DOMPET DIGITAL\nCatat transaksi, grafik, budget, target tabungan.\n\n🤖 ZENKAI AI\nChat pintar gratis 10x/hari (VIP unlimited).\n\n⚡ ZENKAI AI PRO\nAI premium 7 model buat VIP — unlimited chat + vision!\n\n📥 TIKTOK DOWNLOADER\nDownload video tanpa watermark.\n\n🛠️ TOOLS LENGKAP\nJam dunia, TTS, kompres foto, BMI, speed test.\n\n🎨 6 WARNA NEON + 2 GAYA VISUAL\n\n🐛 LAPOR BUG\nKetemu bug? Lapor langsung dari menu.\n\nYuk jelajahi semua fiturnya! 🚀';
 
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
@@ -2207,6 +2259,24 @@ sheetDragY:0,sheetDragStart:0,sheetDragging:false,currentSheetKey:null,
 provinceSearch:'',citySearch:'',
 headerScrolled:false,
 
+// TOAST
+toasts:[],
+toastId:0,
+
+// AI BUBBLE
+bubblePosition:{x:0,y:0},
+bubbleDragging:false,
+bubbleDragStart:{x:0,y:0},
+bubblePosStart:{x:0,y:0},
+bubbleMoved:false,
+showBubbleHint:true,
+
+// WEB MAINTENANCE
+webMaintenanceActive:false,
+webMaintScope:'both',
+webMaintenanceData:{alasan:'',estimasi:''},
+webMaintShouldBlock:false,
+
 developerProfileOpen:false,
 developerData:{
   nama:'Andika Talova Martin',
@@ -2239,7 +2309,7 @@ developerData:{
   ],
   projects:[
     {nama:'Zenkai Tools v1', desc:'Versi pertama — static HTML doang, tapi ini titik awal semuanya', status:'Arsip', link:'#'},
-    {nama:'Zenkai Tools v3.6', desc:'Versi sekarang — full-featured web app dengan AI, dompet digital, downloader, dll', status:'Live', link:'#'}
+    {nama:'Zenkai Tools v1.5', desc:'Versi sekarang — full-featured web app dengan AI, dompet digital, downloader, dll', status:'Live', link:'#'}
   ],
   quote:'Belajar dari nol bukan alasan buat berhenti — justru alasan buat terus maju.',
   kontak:{
@@ -2269,7 +2339,6 @@ featureRatingsCache:{},
 featureRatingsCacheTime:0,
 proModelSheetOpen:false,
 
-// BUG REPORT
 bugReportSheetOpen:false,
 bugReportListSheetOpen:false,
 bugReportForm:{tipe:'bug',judul:'',deskripsi:''},
@@ -2337,7 +2406,6 @@ worldClocks:[
   {name:'INDONESIA (WITA)',time:'',tz:'Asia/Makassar',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="10" fill="#e70011"/><rect y="10" width="30" height="10" fill="#ffffff"/></svg>'},
   {name:'INDONESIA (WIT)',time:'',tz:'Asia/Jayapura',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="10" fill="#e70011"/><rect y="10" width="30" height="10" fill="#ffffff"/></svg>'},
   {name:'JEPANG',time:'',tz:'Asia/Tokyo',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="20" fill="#ffffff"/><circle cx="15" cy="10" r="6" fill="#bc002d"/></svg>'},
-  {name:'KOREA SELATAN',time:'',tz:'Asia/Seoul',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="20" fill="#ffffff"/><circle cx="15" cy="10" r="4" fill="#cd2e3a"/></svg>'},
   {name:'SINGAPURA',time:'',tz:'Asia/Singapore',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="10" fill="#ed2939"/><rect y="10" width="30" height="10" fill="#ffffff"/><circle cx="7" cy="5" r="3" fill="#ffffff"/><circle cx="9" cy="5" r="3" fill="#ed2939"/></svg>'},
   {name:'MALAYSIA',time:'',tz:'Asia/Kuala_Lumpur',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="20" fill="#ffffff"/><g fill="#cc0001"><rect width="30" height="2"/><rect y="4" width="30" height="2"/><rect y="8" width="30" height="2"/><rect y="12" width="30" height="2"/><rect y="16" width="30" height="2"/></g><rect width="15" height="10" fill="#010066"/></svg>'},
   {name:'INGGRIS',time:'',tz:'Europe/London',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="20" fill="#012169"/><path d="M0 0 L30 20 M30 0 L0 20" stroke="#ffffff" stroke-width="4"/><path d="M0 0 L30 20 M30 0 L0 20" stroke="#C8102E" stroke-width="2"/><path d="M15 0 V20 M0 10 H30" stroke="#ffffff" stroke-width="6"/><path d="M15 0 V20 M0 10 H30" stroke="#C8102E" stroke-width="3.5"/></svg>'},
@@ -2359,7 +2427,7 @@ proChatFullscreen:false,proMessages:[],proInput:'',proThinking:false,proThinking
 proModel:'deepseek-v4-pro',proModelManual:false,
 proChatCount:0,proChatDate:'',proImageData:null,
 proEdgeUrl:'https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zenkai-pro',
-proThinkingTexts:['Zenkai AI Pro sedang berpikir...','Memproses pertanyaan lu...','Sebentar ya, lagi mikir...','Lagi nyari jawaban terbaik...','Hmm, menarik nih...','Bentar, loading...','AI-nya lagi mikir nih...','Sabarin dikit ya...','Lagi olah data...','Hampir selesai...','Udah mau kelar...','Dikit lagi...','Lagi baca ulang pertanyaan lu...','Menyusun jawaban...','Fokus sebentar...'],
+proThinkingTexts:['Zenkai AI Pro sedang berpikir...','Memproses pertanyaan lu...','Sebentar ya, lagi mikir...','Lagi nyari jawaban terbaik...','Hmm, menarik nih...','Bentar, loading...','AI-nya lagi mikir nih...','Sabarin dikit ya...','Lagi olah data...','Hampir selesai...','Udah mau kelar...','Dikit lagi...'],
 proModelList:[
   {id:'auto',name:'Zenkai Auto',pengali:'1x',vision:false,desc:'Pilih otomatis terbaik'},
   {id:'deepseek-v4-flash',name:'Zenkai Cepat',pengali:'2x',vision:false,desc:'Chat santai & cepat'},
@@ -2372,6 +2440,7 @@ proModelList:[
 
 get filteredProvinces(){if(!this.provinceSearch)return this.provinces;var q=this.provinceSearch.toLowerCase();return this.provinces.filter(function(p){return p.toLowerCase().indexOf(q)>=0});},
 get filteredCities(){if(!this.citySearch)return this.cities;var q=this.citySearch.toLowerCase();return this.cities.filter(function(c){return c.toLowerCase().indexOf(q)>=0});},
+get webMaintScopeLabel(){var m={user:'Cuma user biasa yang diblokir. VIP tetap bisa akses.',vip:'Cuma VIP yang diblokir. User biasa tetap bisa akses.',both:'Semua user (biasa + VIP) diblokir. Cuma owner yang bisa akses.'};return m[this.webMaintScope]||'';},
 getLevelName:function(lv){var n={1:'PEMULA',2:'RAJIN',3:'AKTIF',4:'AHLI',5:'MASTER',6:'LEGENDA'};return n[lv]||'PEMULA';},
 getNextLevelPoints:function(){var t={1:100,2:300,3:600,4:1000,5:2000,6:0};return t[this.userLevel]||0;},
 getCurrentLevelMin:function(){var t={1:0,2:100,3:300,4:600,5:1000,6:2000};return t[this.userLevel]||0;},
@@ -2395,6 +2464,145 @@ formatRibuanInput:function(val){
   return parseInt(clean,10).toLocaleString('id-ID');
 },
 
+// ============ TOAST ============
+showToast:function(title, message, type){
+  type = type || 'success';
+  var id = ++this.toastId;
+  this.toasts.push({id:id, title:title, message:message, type:type, out:false});
+  var self = this;
+  setTimeout(function(){
+    var t = self.toasts.find(function(x){return x.id === id;});
+    if(t) t.out = true;
+    setTimeout(function(){
+      self.toasts = self.toasts.filter(function(x){return x.id !== id;});
+    }, 300);
+  }, 3500);
+},
+
+// ============ AI BUBBLE DRAG ============
+handleBubbleClick:function(){
+  if(this.bubbleMoved){ this.bubbleMoved = false; return; }
+  this.openChatAI();
+},
+startDragBubble:function(e){
+  var self = this;
+  var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  this.bubbleDragging = true;
+  this.bubbleMoved = false;
+  this.bubbleDragStart = {x:clientX, y:clientY};
+  this.bubblePosStart = {x:this.bubblePosition.x, y:this.bubblePosition.y};
+  this.showBubbleHint = false;
+
+  var onMove = function(ev){
+    if(!self.bubbleDragging) return;
+    var cx = ev.touches ? ev.touches[0].clientX : ev.clientX;
+    var cy = ev.touches ? ev.touches[0].clientY : ev.clientY;
+    var dx = cx - self.bubbleDragStart.x;
+    var dy = cy - self.bubbleDragStart.y;
+    if(Math.abs(dx) > 5 || Math.abs(dy) > 5) self.bubbleMoved = true;
+    
+    var newX = self.bubblePosStart.x + dx;
+    var newY = self.bubblePosStart.y + dy;
+    
+    // Batasi biar gak keluar layar
+    var maxX = window.innerWidth - 70;
+    var maxY = window.innerHeight - 100;
+    if(newX < 10) newX = 10;
+    if(newX > maxX) newX = maxX;
+    if(newY < 70) newY = 70;
+    if(newY > maxY) newY = maxY;
+    
+    self.bubblePosition = {x:newX, y:newY};
+  };
+  var onUp = function(){
+    self.bubbleDragging = false;
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onUp);
+    // Simpan posisi
+    localStorage.setItem('zenkai_bubble_pos', JSON.stringify(self.bubblePosition));
+    setTimeout(function(){ self.bubbleMoved = false; }, 100);
+  };
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+  document.addEventListener('touchmove', onMove, {passive:false});
+  document.addEventListener('touchend', onUp);
+},
+initBubblePosition:function(){
+  var saved = localStorage.getItem('zenkai_bubble_pos');
+  if(saved){
+    try{
+      var pos = JSON.parse(saved);
+      this.bubblePosition = {x:pos.x, y:pos.y};
+      return;
+    }catch(e){}
+  }
+  // Default: kanan bawah
+  this.bubblePosition = {x:window.innerWidth - 80, y:window.innerHeight - 160};
+},
+handleResize:function(){
+  var maxX = window.innerWidth - 70;
+  var maxY = window.innerHeight - 100;
+  var newX = this.bubblePosition.x;
+  var newY = this.bubblePosition.y;
+  if(newX > maxX) newX = maxX;
+  if(newY > maxY) newY = maxY;
+  if(newX < 10) newX = 10;
+  if(newY < 70) newY = 70;
+  this.bubblePosition = {x:newX, y:newY};
+},
+
+// ============ WEB MAINTENANCE ============
+toggleWebMaintenance:function(){
+  this.webMaintenanceActive = !this.webMaintenanceActive;
+  if(!this.webMaintenanceActive){
+    this.webMaintShouldBlock = false;
+  } else {
+    // Langsung cek block
+    this.checkWebMaintenanceBlock();
+  }
+},
+checkWebMaintenanceBlock:function(){
+  if(!this.webMaintenanceActive){ this.webMaintShouldBlock = false; return; }
+  if(this.isOwner){ this.webMaintShouldBlock = false; return; }
+  if(this.webMaintScope === 'both'){ this.webMaintShouldBlock = true; return; }
+  if(this.webMaintScope === 'user' && !this.isVip){ this.webMaintShouldBlock = true; return; }
+  if(this.webMaintScope === 'vip' && this.isVip){ this.webMaintShouldBlock = true; return; }
+  this.webMaintShouldBlock = false;
+},
+saveWebMaintenance:async function(){
+  try{
+    var payload = {
+      web_maintenance_active: this.webMaintenanceActive,
+      web_maintenance_scope: this.webMaintScope,
+      web_maintenance_alasan: this.webMaintenanceData.alasan || '',
+      web_maintenance_estimasi: this.webMaintenanceData.estimasi || ''
+    };
+    var {error} = await sb.from('app_settings').update(payload).eq('id',1);
+    if(error) throw error;
+    this.showToast('✅ TERSIMPAN', 'Maintenance web berhasil di-'+(this.webMaintenanceActive?'AKTIFKAN':'MATIKAN'), this.webMaintenanceActive?'warning':'success');
+    this.checkWebMaintenanceBlock();
+  }catch(e){ this.showToast('❌ GAGAL', e.message, 'error'); }
+},
+loadWebMaintenance:async function(){
+  try{
+    var {data} = await sb.from('app_settings').select('*').eq('id',1).maybeSingle();
+    if(data){
+      this.webMaintenanceActive = data.web_maintenance_active || false;
+      this.webMaintScope = data.web_maintenance_scope || 'both';
+      this.webMaintenanceData.alasan = data.web_maintenance_alasan || '';
+      this.webMaintenanceData.estimasi = data.web_maintenance_estimasi || '';
+    }
+  }catch(e){ console.error(e); }
+  this.checkWebMaintenanceBlock();
+},
+logoutFromMaintenance:async function(){
+  await this.logout();
+},
+
+// ============ FORCE CLEAN LOGOUT ============
 forceCleanLogout:async function(){
   try{
     try{
@@ -2421,7 +2629,6 @@ getCityMap:function(){
     'JAMBI':['Jambi','Sungai Penuh','Muara Bulian','Sarolangun','Bangko','Kuala Tungkal','Muara Sabak','Muara Bungo','Tebo','Muara Tebo'],
     'BENGKULU':['Bengkulu','Curup','Arga Makmur','Manna','Mukomuko'],
     'SUMATERA SELATAN':['Palembang','Prabumulih','Pagar Alam','Lubuklinggau','Kayuagung','Baturaja','Muara Enim','Lahat'],
-    'KEPULAUAN BANGKA BELITUNG':['Pangkalpinang','Sungailiat','Tanjungpandan','Manggar'],
     'LAMPUNG':['Bandar Lampung','Metro','Kalianda','Kotabumi','Gunung Sugih','Liwa'],
     'BANTEN':['Serang','Tangerang','Tangerang Selatan','Cilegon','Pandeglang','Rangkasbitung'],
     'DKI JAKARTA':['Jakarta','Jakarta Pusat','Jakarta Utara','Jakarta Selatan','Jakarta Barat','Jakarta Timur'],
@@ -2436,15 +2643,11 @@ getCityMap:function(){
     'KALIMANTAN TENGAH':['Palangka Raya','Sampit','Pangkalan Bun'],
     'KALIMANTAN SELATAN':['Banjarmasin','Banjarbaru','Martapura','Kotabaru'],
     'KALIMANTAN TIMUR':['Samarinda','Balikpapan','Bontang','Tarakan','Berau'],
-    'KALIMANTAN UTARA':['Tanjung Selor','Tarakan','Malinau','Nunukan'],
     'SULAWESI UTARA':['Manado','Bitung','Tomohon','Kotamobagu','Tondano'],
-    'GORONTALO':['Gorontalo','Limboto','Marisa'],
     'SULAWESI TENGAH':['Palu','Luwuk','Poso','Donggala'],
-    'SULAWESI BARAT':['Mamuju','Majene','Polewali'],
     'SULAWESI SELATAN':['Makassar','Parepare','Palopo','Bulukumba','Gowa','Maros'],
     'SULAWESI TENGGARA':['Kendari','Baubau','Kolaka','Raha'],
     'MALUKU':['Ambon','Tual','Masohi'],
-    'MALUKU UTARA':['Sofifi','Ternate','Tidore','Tobelo'],
     'PAPUA':['Jayapura','Biak','Merauke','Timika','Nabire','Wamena'],
     'PAPUA BARAT':['Manokwari','Sorong','Fakfak','Kaimana']
   };
@@ -2616,7 +2819,7 @@ detectDevice:function(){
   window.addEventListener('online',function(){self.deviceInfo.online=true});
   window.addEventListener('offline',function(){self.deviceInfo.online=false});
   if(navigator.getBattery){navigator.getBattery().then(function(b){var upd=function(){self.deviceInfo.battery=Math.round(b.level*100)+'%'};upd();b.addEventListener('levelchange',upd);});}
-  var tips=['Rajin catat transaksi bikin keuangan lebih terkontrol!','Login harian dapat 10 poin gratis!','Coba Zenkai AI dengan 4 mode berbeda!','Zenkai AI Pro unlimited chat buat VIP!','Download TikTok tanpa watermark!','Kumpulkan poin, naik level!'];
+  var tips=['Rajin catat transaksi bikin keuangan lebih terkontrol!','Login harian dapat 10 poin gratis!','Zenkai AI Pro unlimited buat VIP!','Geser bubble AI ke mana aja!','Kumpulkan poin, naik level!'];
   this.tipsHarian=tips[Math.floor(Math.random()*tips.length)];
 },
 
@@ -2634,6 +2837,14 @@ init:async function(){
   this.voiceSupported=('webkitSpeechRecognition' in window)||('SpeechRecognition' in window);
   this.detectDevice();
   this.initProvinces();
+  this.initBubblePosition();
+  
+  // Sembunyikan hint bubble setelah 6 detik
+  setTimeout(function(){ self.showBubbleHint = false; }, 6000);
+  
+  // Handle window resize
+  window.addEventListener('resize', function(){ self.handleResize(); });
+  
   try{history.replaceState({tab:'home'}, '');}catch(e){}
   window.addEventListener('popstate', function(){
     var handled = self.handleBackButton();
@@ -2642,7 +2853,18 @@ init:async function(){
   window.addEventListener('scroll', function(){
     if(window.scrollY > 10){self.headerScrolled = true;}else{self.headerScrolled = false;}
   }, {passive:true});
-  try{var{data:settings}=await sb.from('app_settings').select('welcome_text').eq('id',1).maybeSingle();if(settings&&settings.welcome_text){this.welcomeText=settings.welcome_text;this.welcomeTextEdit=settings.welcome_text;}}catch(e){}
+  
+  try{var{data:settings}=await sb.from('app_settings').select('*').eq('id',1).maybeSingle();
+    if(settings){
+      if(settings.welcome_text){this.welcomeText=settings.welcome_text;this.welcomeTextEdit=settings.welcome_text;}
+      // Load web maintenance
+      this.webMaintenanceActive = settings.web_maintenance_active || false;
+      this.webMaintScope = settings.web_maintenance_scope || 'both';
+      this.webMaintenanceData.alasan = settings.web_maintenance_alasan || '';
+      this.webMaintenanceData.estimasi = settings.web_maintenance_estimasi || '';
+    }
+  }catch(e){}
+  
   try{
     var {data:mData}=await sb.from('feature_maintenance').select('*');
     if(mData){
@@ -2656,32 +2878,44 @@ init:async function(){
       this.maintenanceForm = fForm;
     }
   }catch(e){}
+  
   try{var{data:{session}}=await sb.auth.getSession();if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}}catch(e){console.error(e);}
   this.chatFullscreen=false;this.proChatFullscreen=false;
   self.setupRealtime();
 
-  // Load ratings cache
   setTimeout(function(){ self.loadAllFeatureRatings(); }, 3000);
 
-  // Fallback polling ban/VIP
+  // Polling ban/vip/maintenance
   setInterval(async function(){
-    if(!self.currentUser || self.isOwner) return;
+    if(!self.currentUser) return;
     try{
       var {data} = await sb.from('profiles').select('is_banned, ban_until, ban_reason, is_vip').eq('id', self.currentUser.id).maybeSingle();
-      if(!data) return;
-      if(self.isVip !== data.is_vip){ self.isVip = data.is_vip || false; }
-      if(data.is_banned){
-        var stillBanned = true;
-        if(data.ban_until && new Date(data.ban_until) < new Date()){ stillBanned = false; }
-        if(stillBanned && !self.bannedInfoSheetOpen){
-          self.bannedInfoData = {reason: data.ban_reason || 'Melanggar aturan', until: data.ban_until};
-          self.bannedInfoSheetOpen = true;
-          self.isAuthenticated = false;
-          setTimeout(function(){ try{ sb.auth.signOut(); }catch(e){} }, 1500);
+      if(data){
+        if(self.isVip !== data.is_vip){ self.isVip = data.is_vip || false; }
+        if(data.is_banned && !self.bannedInfoSheetOpen){
+          var stillBanned = true;
+          if(data.ban_until && new Date(data.ban_until) < new Date()){ stillBanned = false; }
+          if(stillBanned){
+            self.bannedInfoData = {reason: data.ban_reason || 'Melanggar aturan', until: data.ban_until};
+            self.bannedInfoSheetOpen = true;
+            self.isAuthenticated = false;
+            setTimeout(function(){ try{ sb.auth.signOut(); }catch(e){} }, 1500);
+          }
         }
       }
+      // Cek web maintenance
+      if(!self.isOwner){
+        var {data:ws} = await sb.from('app_settings').select('web_maintenance_active, web_maintenance_scope, web_maintenance_alasan, web_maintenance_estimasi').eq('id',1).maybeSingle();
+        if(ws){
+          self.webMaintenanceActive = ws.web_maintenance_active || false;
+          self.webMaintScope = ws.web_maintenance_scope || 'both';
+          self.webMaintenanceData.alasan = ws.web_maintenance_alasan || '';
+          self.webMaintenanceData.estimasi = ws.web_maintenance_estimasi || '';
+        }
+      }
+      self.checkWebMaintenanceBlock();
     }catch(e){}
-  }, 30000);
+  }, 15000);
 
   setTimeout(function(){
     self.loadingHidden=true;
@@ -2689,6 +2923,7 @@ init:async function(){
     self.proChatFullscreen=false;
     if(self.isAuthenticated && !self.isOwner && !self.ownerPinModalOpen){self.welcomePopupOpen=true;}
     if(self.isAuthenticated){self.checkBroadcast();}
+    self.checkWebMaintenanceBlock();
   }, 2500);
 },
 
@@ -2726,7 +2961,7 @@ handleEmailAuth:async function(){
       if(ex){return this.showAlert('PERINGATAN','Nama sudah dipakai!');}
       var{data,error}=await sb.auth.signUp({email:this.authEmail,password:this.authPassword,options:{data:{username:this.authUsername}}});
       if(error)throw error;
-      if(data.user && data.user.identities && data.user.identities.length === 0){return this.showAlert('PERINGATAN','Email sudah terdaftar. Coba masuk.');}
+      if(data.user && data.user.identities && data.user.identities.length === 0){return this.showAlert('PERINGATAN','Email sudah terdaftar.');}
       if(data.user){await sb.from('profiles').upsert({id:data.user.id,username:this.authUsername,status:'user',last_login:new Date().toISOString(),is_vip:false,is_banned:false,chat_count:0,chat_bonus:0});}
       this.showAlert('SUKSES','Berhasil daftar!');this.authMode='login';
     }else{
@@ -2741,30 +2976,14 @@ handleEmailAuth:async function(){
       try{
         var{data,error}=await sb.auth.signInWithPassword({email:self.authEmail,password:self.authPassword});
         if(error)throw error;
-        if(!data || !data.user){ throw new Error('Login gagal: response kosong'); }
+        if(!data || !data.user){ throw new Error('Login gagal'); }
         self.isAuthenticated = false;
         self.bannedInfoSheetOpen = false;
         self.bannedInfoData = {reason:'', until:null};
         await self.checkUserAccessOnLogin(data.user, true);
-      }catch(e){ console.error('Login error:', e); self.showAlert('GAGAL LOGIN', e.message); }
+      }catch(e){ self.showAlert('GAGAL LOGIN', e.message); }
     }
   }catch(e){this.showAlert('GAGAL',e.message);}
-},
-
-checkBanStatus:async function(userId){
-  try{
-    var {data, error} = await sb.from('profiles').select('is_banned, ban_until, ban_reason').eq('id', userId).maybeSingle();
-    if(error){console.error('Ban check error:', error); return false;}
-    if(!data) return false;
-    if(!data.is_banned) return false;
-    if(data.ban_until && new Date(data.ban_until) < new Date()){
-      await sb.from('profiles').update({is_banned:false, ban_until:null, ban_reason:''}).eq('id', userId);
-      return false;
-    }
-    this.bannedInfoData = {reason:data.ban_reason||'Tidak ada alasan',until:data.ban_until};
-    this.bannedInfoSheetOpen = true;
-    return true;
-  }catch(e){ console.error('Ban check err:', e); return false; }
 },
 
 checkUserAccessOnLogin: async function(user, showWelcome){
@@ -2774,16 +2993,12 @@ checkUserAccessOnLogin: async function(user, showWelcome){
   var isOwnerAccount = user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
   if(!isOwnerAccount){
     try{
-      var {data: prof, error} = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
-      if(error){ console.error('Profile fetch error:', error); }
+      var {data: prof} = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
       if(prof && prof.is_banned){
         var stillBanned = true;
-        if(prof.ban_until){
-          var banEnd = new Date(prof.ban_until);
-          if(banEnd < new Date()){
-            stillBanned = false;
-            await sb.from('profiles').update({is_banned: false, ban_until: null, ban_reason: ''}).eq('id', user.id);
-          }
+        if(prof.ban_until && new Date(prof.ban_until) < new Date()){
+          stillBanned = false;
+          await sb.from('profiles').update({is_banned: false, ban_until: null, ban_reason: ''}).eq('id', user.id);
         }
         if(stillBanned){
           this.bannedInfoData = {reason: prof.ban_reason || 'Tidak ada alasan', until: prof.ban_until};
@@ -2793,7 +3008,7 @@ checkUserAccessOnLogin: async function(user, showWelcome){
           return;
         }
       }
-    }catch(e){ console.error('Ban check error:', e); }
+    }catch(e){}
   }
   if(isOwnerAccount){
     this.pendingUser = user;
@@ -2805,17 +3020,12 @@ checkUserAccessOnLogin: async function(user, showWelcome){
   this.isOwner = false;
   this.isAuthenticated = true;
   var prof2 = null;
-  try{
-    var res = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
-    prof2 = res.data;
-  }catch(e){}
+  try{ var res = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle(); prof2 = res.data; }catch(e){}
   if(prof2){
     this.isVip = prof2.is_vip || false;
     this.chatCount = prof2.chat_count || 0;
     this.chatDate = prof2.chat_date || '';
     this.chatBonus = prof2.chat_bonus || 0;
-    this.proChatCount = prof2.pro_chat_count || 0;
-    this.proChatDate = prof2.pro_chat_date || '';
   }
   try{ await sb.from('profiles').update({last_login: new Date().toISOString()}).eq('id', user.id); }catch(e){}
   await this.processUserData();
@@ -2828,6 +3038,8 @@ checkUserAccessOnLogin: async function(user, showWelcome){
     localStorage.setItem('zenkai_last_bonus_' + user.id, today);
     await this.addPoints(10, 'Login harian');
   }
+  // Cek web maintenance
+  this.checkWebMaintenanceBlock();
   if(showWelcome){ this.welcomePopupOpen = true; }
   this.checkBroadcast();
 },
@@ -2857,7 +3069,7 @@ processUserData:async function(){
   if(!this.currentUser)return;
   this.userEmail=this.currentUser.email||'';
   var{data:profile}=await sb.from('profiles').select('*').eq('id',this.currentUser.id).maybeSingle();
-  if(profile){this.userName=profile.username||this.userEmail.split('@')[0];this.userAvatar=profile.avatar_url||'';this.isVip=profile.is_vip||false;this.chatCount=profile.chat_count||0;this.chatDate=profile.chat_date||'';this.chatBonus=profile.chat_bonus||0;this.proChatCount=profile.pro_chat_count||0;this.proChatDate=profile.pro_chat_date||'';}
+  if(profile){this.userName=profile.username||this.userEmail.split('@')[0];this.userAvatar=profile.avatar_url||'';this.isVip=profile.is_vip||false;this.chatCount=profile.chat_count||0;this.chatDate=profile.chat_date||'';this.chatBonus=profile.chat_bonus||0;}
   else{this.userName=this.userEmail.split('@')[0]||'User';}
   try{var{data:pts}=await sb.from('user_points').select('*').eq('user_id',this.currentUser.id).maybeSingle();if(pts){this.userPoints=pts.total_points||0;this.userLevel=pts.level||1;}else{await sb.from('user_points').insert({user_id:this.currentUser.id,total_points:0,level:1});this.userPoints=0;this.userLevel=1;}}catch(e){}
 },
@@ -2886,6 +3098,7 @@ logout:async function(){
   this.isAuthenticated=false;this.currentUser=null;this.isOwner=false;this.isVip=false;
   this.chatFullscreen=false;this.proChatFullscreen=false;
   this.bannedInfoSheetOpen=false;this.bannedInfoData={reason:'',until:null};
+  this.webMaintShouldBlock=false;
   setTimeout(function(){window.location.reload();},200);
 },
 
@@ -2895,13 +3108,13 @@ addTransaction:async function(type){
   var amount=parseFloat(String(this.txAmount).replace(/\./g,''));
   if(isNaN(amount)||amount<=0){return this.showAlert('PERHATIAN','Nominal tidak valid!');}
   var{error}=await sb.from('transactions').insert({user_id:this.currentUser.id,type:type,category:this.txCategory,amount:amount,date:new Date().toLocaleDateString('id-ID'),created_at:new Date().toISOString()});
-  if(!error){this.txCategory='';this.txAmount='';this.txSheetOpen=false;await this.loadTransactions();await this.addPoints(3,'Catat transaksi');this.showAlert('SUKSES','Transaksi ditambahkan!');}
-  else{this.showAlert('GAGAL',error.message);}
+  if(!error){this.txCategory='';this.txAmount='';this.txSheetOpen=false;await this.loadTransactions();await this.addPoints(3,'Catat transaksi');this.showToast('✅ SUKSES','Transaksi ditambahkan!','success');}
+  else{this.showToast('❌ GAGAL',error.message,'error');}
 },
-confirmDeleteTx:function(id){var self=this;this.showConfirm('HAPUS TRANSAKSI?','Data akan dihapus permanen.',async function(){await sb.from('transactions').delete().eq('id',id);await self.loadTransactions();self.showAlert('SUKSES','Transaksi dihapus.');},'🗑️');},
+confirmDeleteTx:function(id){var self=this;this.showConfirm('HAPUS TRANSAKSI?','Data akan dihapus permanen.',async function(){await sb.from('transactions').delete().eq('id',id);await self.loadTransactions();self.showToast('✅ SUKSES','Transaksi dihapus.','success');},'🗑️');},
 
 loadSavings:async function(){if(!this.currentUser)return;var{data}=await sb.from('savings_targets').select('*').eq('user_id',this.currentUser.id).order('id',{ascending:false});if(data)this.savings=data;},
-addSavings:async function(){if(!this.targetForm.nama||!this.targetForm.target){return this.showAlert('PERHATIAN','Isi nama & target!');}var{error}=await sb.from('savings_targets').insert({user_id:this.currentUser.id,nama:this.targetForm.nama,target:parseFloat(String(this.targetForm.target).replace(/\./g,'')),terkumpul:0,deadline:this.targetForm.deadline});if(!error){this.targetSheetOpen=false;await this.loadSavings();await this.addPoints(2,'Bikin target');this.showAlert('SUKSES','Target dibuat!');}},
+addSavings:async function(){if(!this.targetForm.nama||!this.targetForm.target){return this.showAlert('PERHATIAN','Isi nama & target!');}var{error}=await sb.from('savings_targets').insert({user_id:this.currentUser.id,nama:this.targetForm.nama,target:parseFloat(String(this.targetForm.target).replace(/\./g,'')),terkumpul:0,deadline:this.targetForm.deadline});if(!error){this.targetSheetOpen=false;await this.loadSavings();await this.addPoints(2,'Bikin target');this.showToast('✅ SUKSES','Target dibuat!','success');}},
 confirmDeleteSavings:function(id){var self=this;this.showConfirm('HAPUS TARGET?','Target akan dihapus.',async function(){await sb.from('savings_targets').delete().eq('id',id);await self.loadSavings();},'🗑️');},
 addToSavings:function(id){this.currentSavingsId=id;this.addSavingsAmount='';this.addSavingsSheet=true;},
 confirmAddSavings:async function(){
@@ -2915,7 +3128,7 @@ confirmAddSavings:async function(){
   if(error){ return this.showAlert('GAGAL', error.message); }
   this.addSavingsSheet=false;this.addSavingsAmount='';this.currentSavingsId=null;
   await this.loadSavings();await this.addPoints(5,'Setor tabungan');
-  this.showAlert('SUKSES','Tabungan bertambah Rp '+this.formatRibuan(nominal));
+  this.showToast('✅ SUKSES','Tabungan bertambah Rp '+this.formatRibuan(nominal),'success');
 },
 
 loadBudgets:async function(){if(!this.currentUser)return;var bulan=new Date().toISOString().slice(0,7);var{data}=await sb.from('budgets').select('*').eq('user_id',this.currentUser.id).eq('bulan',bulan);if(data)this.budgets=data;},
@@ -2938,8 +3151,7 @@ drawCharts:function(){var self=this;setTimeout(function(){try{
   }
   var barEl=document.getElementById('barChart');
   if(barEl){
-    var income=self.totalIncome;
-    var expense=self.totalExpense;
+    var income=self.totalIncome;var expense=self.totalExpense;
     if(window.barChartInst)window.barChartInst.destroy();
     window.barChartInst=new Chart(barEl,{type:'bar',data:{labels:['MASUK','KELUAR'],datasets:[{data:[income,expense],backgroundColor:['#00ff88','#ff3355'],borderRadius:8,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:'#8888a0',font:{family:'JetBrains Mono',size:10}},grid:{color:'rgba(255,255,255,.05)'}},x:{ticks:{color:'#8888a0',font:{family:'Orbitron',size:10,weight:'700'}},grid:{display:false}}}}});
   }
@@ -2970,7 +3182,7 @@ loadNewsFromRSS:async function(){
         var xmlText = await res.text();
         var items = self.parseRSSItems(xmlText);
         if(items.length > 0){self.newsList = items.slice(0, 20);return;}
-      }catch(e){console.warn('Proxy gagal:', e.message);}
+      }catch(e){}
     }
   }
   throw new Error('Semua sumber berita gagal');
@@ -2996,12 +3208,12 @@ parseRSSItems:function(xmlText){
       if(title&&link){result.push({title:title,link:link,description:desc||'Klik untuk baca selengkapnya...',pubDate:pubDate,thumbnail:thumb});}
     });
     return result;
-  }catch(e){console.error('Parse RSS gagal:',e);return [];}
+  }catch(e){return [];}
 },
 
 speakCustomText:function(){if(!this.customTtsText){return this.showAlert('PERHATIAN','Ketik teks dulu!');}if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(this.customTtsText);u.lang='id-ID';window.speechSynthesis.speak(u);}},
-compressImageFile:function(event){var file=event.target.files[0];if(!file)return;var self=this;var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var canvas=document.createElement('canvas');var ctx=canvas.getContext('2d');var w=img.width,h=img.height;var max=800;if(w>h&&w>max){h*=max/w;w=max;}else if(h>max){w*=max/h;h=max;}canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);self.compressedImageUrl=canvas.toDataURL('image/jpeg',0.6);self.showAlert('BERHASIL','Foto dikompres!');};img.src=e.target.result;};reader.readAsDataURL(file);},
-runSpeedTest:async function(){this.speedTesting=true;this.speedResult=null;try{var start=Date.now();var res=await fetch('https://speed.cloudflare.com/__down?bytes=5000000&r='+Math.random());var blob=await res.blob();var dur=(Date.now()-start)/1000;var mbps=(blob.size*8)/(dur*1000000);this.speedResult={download:mbps.toFixed(1),latency:Math.round(dur*100),quality:mbps>20?'BAGUS':mbps>5?'CUKUP':'LAMBAT'};}catch(e){this.showAlert('GAGAL','Tes gagal.');}this.speedTesting=false;},
+compressImageFile:function(event){var file=event.target.files[0];if(!file)return;var self=this;var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var canvas=document.createElement('canvas');var ctx=canvas.getContext('2d');var w=img.width,h=img.height;var max=800;if(w>h&&w>max){h*=max/w;w=max;}else if(h>max){w*=max/h;h=max;}canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);self.compressedImageUrl=canvas.toDataURL('image/jpeg',0.6);self.showToast('✅ BERHASIL','Foto dikompres!','success');};img.src=e.target.result;};reader.readAsDataURL(file);},
+runSpeedTest:async function(){this.speedTesting=true;this.speedResult=null;try{var start=Date.now();var res=await fetch('https://speed.cloudflare.com/__down?bytes=5000000&r='+Math.random());var blob=await res.blob();var dur=(Date.now()-start)/1000;var mbps=(blob.size*8)/(dur*1000000);this.speedResult={download:mbps.toFixed(1),latency:Math.round(dur*100),quality:mbps>20?'BAGUS':mbps>5?'CUKUP':'LAMBAT'};}catch(e){this.showToast('❌ GAGAL','Tes gagal.','error');}this.speedTesting=false;},
 calcBMI:function(){var w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)/100;if(!w||!h){return this.showAlert('PERHATIAN','Isi berat & tinggi!');}var bmi=w/(h*h);var kategori,color;if(bmi<18.5){kategori='KURUS';color='#00d9ff';}else if(bmi<25){kategori='NORMAL';color='#00ff88';}else if(bmi<30){kategori='GEMUK';color='#ffd700';}else{kategori='OBESITAS';color='#ff3355';}var bbIdeal=(22*h*h).toFixed(1);var age=parseFloat(this.bmiAge)||25;var kalori=this.bmiGender==='male'?Math.round(66+(13.7*w)+(5*h*100)-(6.8*age)):Math.round(655+(9.6*w)+(1.8*h*100)-(4.7*age));this.bmiResult={bmi:bmi.toFixed(1),kategori:kategori,color:color,bbIdeal:bbIdeal,kalori:kalori};},
 
 processMediaDownload:async function(){
@@ -3020,8 +3232,8 @@ processMediaDownload:async function(){
       if(j.data.hdplay)L.push({label:'MP4 HD',url:j.data.hdplay,filename:'tiktok_hd_'+Date.now()+'.mp4'});
       if(j.data.music)L.push({label:'MP3 Audio',url:j.data.music,filename:'tiktok_'+Date.now()+'.mp3'});
       this.downloadResultLinks=L;this.downloadResultReady=true;
-    }else{this.showAlert('GAGAL','Tidak bisa proses.');}
-  }catch(e){this.showAlert('GAGAL','Error: '+e.message);}
+    }else{this.showToast('❌ GAGAL','Tidak bisa proses.','error');}
+  }catch(e){this.showToast('❌ GAGAL','Error: '+e.message,'error');}
   finally{this.downloadLoading=false;}
 },
 downloadBlob:async function(url,filename){
@@ -3035,8 +3247,8 @@ downloadBlob:async function(url,filename){
     a.href=blobUrl;a.download=filename||'video.mp4';
     document.body.appendChild(a);a.click();document.body.removeChild(a);
     setTimeout(function(){URL.revokeObjectURL(blobUrl)},3000);
-    this.showAlert('SUKSES','Berhasil didownload!');
-  }catch(e){window.open(url,'_blank');this.showAlert('INFO','File dibuka di tab baru.');}
+    this.showToast('✅ SUKSES','Berhasil didownload!','success');
+  }catch(e){window.open(url,'_blank');this.showToast('ℹ️ INFO','File dibuka di tab baru.','warning');}
   finally{this.downloadingFile=false;}
 },
 
@@ -3063,7 +3275,7 @@ fetchWeather:async function(){
     var c=codes[wj.current.weather_code]||['🌡️','Cerah'];
     var forecast=wj.daily.time.map(function(t,i){var cc=codes[wj.daily.weather_code[i]]||['🌡️','-'];return{date:new Date(t).toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'}),emoji:cc[0],desc:cc[1],max:Math.round(wj.daily.temperature_2m_max[i]),min:Math.round(wj.daily.temperature_2m_min[i])}});
     this.weatherData={city:name,temp:Math.round(wj.current.temperature_2m),humidity:wj.current.relative_humidity_2m,wind:Math.round(wj.current.wind_speed_10m),emoji:c[0],desc:c[1],forecast:forecast};
-  }catch(e){this.showAlert('GAGAL','Cuaca gagal: '+e.message);}
+  }catch(e){this.showToast('❌ GAGAL','Cuaca gagal: '+e.message,'error');}
   finally{this.weatherLoading=false;}
 },
 
@@ -3074,17 +3286,32 @@ openChatAI:async function(){
 },
 startThinkingMessages:function(){var messages=['Zenkai AI sedang berpikir...','Sabar ya, loading...','Dikit lagi...'];var i=0;this.aiThinkingText=messages[0];clearInterval(this.aiThinkingTimer);var self=this;this.aiThinkingTimer=setInterval(function(){i++;if(i<messages.length){self.aiThinkingText=messages[i]}},3000);},
 stopThinkingMessages:function(){clearInterval(this.aiThinkingTimer);this.aiThinkingTimer=null;this.aiThinkingText='';},
+
 sendChat:async function(){
   if(this.isUnderMaintenance('ai')){return this.showMaintenanceSheet('ai');}
   if(!this.chatInput.trim()||this.aiThinking)return;
   if(!this.currentUser)return this.showAlert('PERHATIAN','Login dulu!');
+  
+  // CEK LIMIT SEBELUM KIRIM
   if(!this.isOwner&&!this.isVip){
     try{var{data:freshData}=await sb.from('profiles').select('chat_count,chat_bonus,chat_date,is_vip').eq('id',this.currentUser.id).maybeSingle();if(freshData){this.chatCount=freshData.chat_count||0;this.chatBonus=freshData.chat_bonus||0;this.chatDate=freshData.chat_date||'';this.isVip=freshData.is_vip||false;}}catch(e){}
     var today=new Date().toISOString().slice(0,10);
-    if(this.chatDate!==today){this.chatCount=0;this.chatDate=today;await sb.from('profiles').update({chat_count:0,chat_date:today}).eq('id',this.currentUser.id);}
-    var maxChat=10;
-    if(this.chatCount>=maxChat){return this.showAlert('LIMIT CHAT','Chat harian gratis udah abis (10/hari). Upgrade VIP buat unlimited, atau coba lagi besok ya! 🚀');}
+    if(this.chatDate!==today){
+      this.chatCount=0;this.chatDate=today;
+      await sb.from('profiles').update({chat_count:0,chat_date:today}).eq('id',this.currentUser.id);
+    }
+    var maxChat=10+this.chatBonus;
+    if(this.chatCount>=maxChat){
+      // Tampilkan alert SEKARANG, jangan tunggu keluar
+      this.chatFullscreen=false;
+      var self=this;
+      setTimeout(function(){
+        self.showAlert('⚠️ LIMIT HABIS','Chat harian gratis udah abis ('+maxChat+'/hari).\n\nUpgrade ke VIP buat chat unlimited, atau coba lagi besok ya! 🚀');
+      }, 350);
+      return;
+    }
   }
+  
   var userMsg=this.chatInput.trim();
   this.chatMessages.push({role:'user',content:userMsg});
   this.chatInput='';this.aiThinking=true;this.startThinkingMessages();
@@ -3110,7 +3337,7 @@ sendChat:async function(){
   finally{this.stopThinkingMessages();clearTimeout(tid);this.aiThinking=false;}
 },
 startVoiceInput:function(){if(!this.voiceSupported){return this.showAlert('INFO','Browser tidak support.');}var SR=window.SpeechRecognition||window.webkitSpeechRecognition;var rec=new SR();rec.lang='id-ID';var self=this;rec.onresult=function(e){self.chatInput=e.results[0][0].transcript;setTimeout(function(){self.sendChat()},300)};rec.onerror=function(e){self.showAlert('GAGAL','Voice error: '+e.error)};rec.start();},
-confirmClearChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat dihapus.',function(){self.chatMessages=[];self.showAlert('SUKSES','Chat dihapus.');},'🗑️');},
+confirmClearChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat dihapus.',function(){self.chatMessages=[];self.showToast('✅ SUKSES','Chat dihapus.','success');},'🗑️');},
 
 handleProCardClick:function(){
   if(this.isUnderMaintenance('ai_pro')){return this.showMaintenanceSheet('ai_pro');}
@@ -3131,7 +3358,7 @@ sendProChat:async function(){
   if((!this.proInput.trim()&&!this.proImageData)||this.proThinking)return;
   if(!this.currentUser)return this.showAlert('PERHATIAN','Login dulu!');
   if(!this.isOwner&&!this.isVip){return this.showAlert('AKSES DITOLAK','Fitur ini cuma buat VIP.');}
-  // VIP UNLIMITED — gak ada cek limit
+  // VIP UNLIMITED - gak ada cek limit
   var userMsg=this.proInput.trim();var imgData=this.proImageData;
   var displayContent=userMsg||'(Kirim gambar)';
   this.proMessages.push({role:'user',content:displayContent,image:imgData});
@@ -3152,7 +3379,7 @@ sendProChat:async function(){
   }catch(e){this.proMessages.push({role:'assistant',content:'Maaf, koneksi ke Zenkai AI Pro lagi bermasalah. Coba lagi ya 😊'});}
   finally{this.stopProThinking();this.proThinking=false;}
 },
-clearProChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat Zenkai AI Pro bakal dihapus.',function(){self.proMessages=[];self.showAlert('SUKSES','Chat dihapus.');},'🗑️');},
+clearProChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat Zenkai AI Pro bakal dihapus.',function(){self.proMessages=[];self.showToast('✅ SUKSES','Chat dihapus.','success');},'🗑️');},
 
 // REVIEW FUNCTIONS
 getFeatureRating:function(fiturId){
@@ -3192,7 +3419,7 @@ loadReviewsForFeature:async function(fiturId){
     var {data, error} = await sb.from('reviews').select('*').eq('fitur_id', fiturId).order('created_at', {ascending:false}).limit(100);
     if(error) throw error;
     this.reviewList = data || [];
-  }catch(e){ console.error('Load reviews error:', e); this.reviewList = []; }
+  }catch(e){ this.reviewList = []; }
 },
 openReviewFromList:function(){
   if(!this.currentUser){return this.showAlert('PERHATIAN','Login dulu!');}
@@ -3226,14 +3453,18 @@ submitReview:async function(){
     await this.addPoints(3,'Review fitur');
     this.featureRatingsCacheTime = 0;
     await this.loadAllFeatureRatings();
+    // Close review sheet dulu, baru tampilkan toast
     this.reviewSheetOpen = false;
     this.reviewTarget = null;
     this.reviewForm = {rating:5,komentar:''};
-    this.showAlert('SUKSES','Makasih! Review lu udah terkirim. ⭐');
-  }catch(e){this.showAlert('GAGAL',e.message);}
+    var self = this;
+    setTimeout(function(){
+      self.showToast('⭐ MAKASIH', 'Review lu udah terkirim! +3 poin 🎉', 'success');
+    }, 350);
+  }catch(e){this.showToast('❌ GAGAL', e.message, 'error');}
 },
 
-// BUG REPORT FUNCTIONS
+// BUG REPORT FUNCTIONS - FIX: Close sheet dulu, baru toast
 openBugReportSheet:function(){
   if(!this.currentUser){return this.showAlert('PERHATIAN','Login dulu!');}
   this.bugReportForm = {tipe:'bug', judul:'', deskripsi:''};
@@ -3241,28 +3472,40 @@ openBugReportSheet:function(){
 },
 submitBugReport:async function(){
   if(!this.currentUser) return;
-  if(!this.bugReportForm.judul.trim()){return this.showAlert('PERHATIAN','Judul wajib diisi!');}
-  if(!this.bugReportForm.deskripsi.trim()){return this.showAlert('PERHATIAN','Deskripsi wajib diisi!');}
-  if(this.bugReportForm.deskripsi.length < 10){return this.showAlert('PERHATIAN','Deskripsi minimal 10 karakter!');}
+  if(!this.bugReportForm.judul.trim()){return this.showToast('⚠️ PERHATIAN','Judul wajib diisi!','warning');}
+  if(!this.bugReportForm.deskripsi.trim()){return this.showToast('⚠️ PERHATIAN','Deskripsi wajib diisi!','warning');}
+  if(this.bugReportForm.deskripsi.length < 10){return this.showToast('⚠️ PERHATIAN','Deskripsi minimal 10 karakter!','warning');}
+  
   this.bugReportSubmitting = true;
+  var savedForm = {...this.bugReportForm};
+  
   try{
     var {error} = await sb.from('bug_reports').insert({
       user_id: this.currentUser.id,
       username: this.userName,
-      tipe: this.bugReportForm.tipe,
-      judul: this.bugReportForm.judul.trim(),
-      deskripsi: this.bugReportForm.deskripsi.trim(),
+      tipe: savedForm.tipe,
+      judul: savedForm.judul.trim(),
+      deskripsi: savedForm.deskripsi.trim(),
       status: 'baru'
     });
     if(error) throw error;
-    await this.addPoints(5, 'Lapor bug');
+    
+    // PENTING: Tutup sheet DULU sebelum tampilkan toast
     this.bugReportSheetOpen = false;
     this.bugReportForm = {tipe:'bug', judul:'', deskripsi:''};
-    this.showAlert('TERKIRIM ✅', 'Makasih udah lapor! Laporan lu bakal segera dicek. Bonus +5 poin buat lu 🎉');
-  }catch(e){
-    this.showAlert('GAGAL', e.message);
-  }finally{
     this.bugReportSubmitting = false;
+    
+    // Add points
+    await this.addPoints(5, 'Lapor bug');
+    
+    // Baru tampilkan toast (setelah sheet ketutup)
+    var self = this;
+    setTimeout(function(){
+      self.showToast('🐛 TERKIRIM', 'Makasih udah lapor! Bonus +5 poin 🎉', 'success');
+    }, 350);
+  }catch(e){
+    this.bugReportSubmitting = false;
+    this.showToast('❌ GAGAL', e.message, 'error');
   }
 },
 openBugReportList:async function(){
@@ -3273,7 +3516,7 @@ openBugReportList:async function(){
     var {data, error} = await sb.from('bug_reports').select('*').eq('user_id', this.currentUser.id).order('created_at', {ascending:false}).limit(50);
     if(error) throw error;
     this.bugReportList = data || [];
-  }catch(e){ console.error(e); this.bugReportList = []; }
+  }catch(e){ this.bugReportList = []; }
   finally{ this.bugReportListLoading = false; }
 },
 loadAllBugReports:async function(){
@@ -3288,8 +3531,8 @@ updateBugStatus:async function(reportId, newStatus){
     var {error} = await sb.from('bug_reports').update({status:newStatus, updated_at:new Date().toISOString()}).eq('id', reportId);
     if(error) throw error;
     await this.loadAllBugReports();
-    this.showAlert('SUKSES', 'Status diubah ke "'+newStatus+'"');
-  }catch(e){this.showAlert('GAGAL', e.message);}
+    this.showToast('✅ SUKSES', 'Status diubah ke "'+newStatus+'"', 'success');
+  }catch(e){this.showToast('❌ GAGAL', e.message, 'error');}
 },
 
 // OWNER FUNCTIONS
@@ -3316,13 +3559,13 @@ loadLiveDashboard:async function(){
     var{data:txs}=await sb.from('transactions').select('amount').gte('created_at',today);
     var txTotal=0;(txs||[]).forEach(function(t){txTotal+=Number(t.amount);});
     this.liveStats={onlineNow:active||0,chatToday:chats||0,newUsersToday:newUsers||0,txToday:txTotal,activeToday:active||0};
-  }catch(e){console.error(e);}
+  }catch(e){}
 },
 loadAllUsers:async function(){try{var{data}=await sb.from('profiles').select('*').order('created_at',{ascending:false});if(data)this.allUsers=data;}catch(e){}},
 openBanSheet:function(u){this.banSheetTarget=u;this.banSheetForm={durasi:'1d',alasan:''};this.banSheetOpen=true;},
 confirmBan:async function(){
   if(!this.banSheetTarget) return;
-  if(!this.banSheetForm.alasan || !this.banSheetForm.alasan.trim()){return this.showAlert('PERHATIAN', 'Alasan wajib diisi!');}
+  if(!this.banSheetForm.alasan || !this.banSheetForm.alasan.trim()){return this.showToast('⚠️ PERHATIAN', 'Alasan wajib diisi!', 'warning');}
   var durasi = this.banSheetForm.durasi;
   var until = null;
   var now = Date.now();
@@ -3335,19 +3578,17 @@ confirmBan:async function(){
   var targetId = this.banSheetTarget.id;
   var targetName = this.banSheetTarget.username;
   try{
-    var sessionRes = await sb.auth.getSession();
-    var email = sessionRes?.data?.session?.user?.email || 'unknown';
     var payload = {is_banned: true, ban_reason: this.banSheetForm.alasan.trim(), ban_until: until ? until.toISOString() : null};
     var {data, error} = await sb.from('profiles').update(payload).eq('id', targetId).select();
     if(error){ throw new Error('Gagal ban: ' + error.message); }
-    if(!data || data.length === 0){ throw new Error('Update gak ngefek. Kemungkinan RLS nolak.'); }
+    if(!data || data.length === 0){ throw new Error('Update gak ngefek. RLS nolak.'); }
     this.banSheetOpen = false;
     this.banSheetTarget = null;
     this.banSheetForm = {durasi:'1d', alasan:''};
     await this.loadAllUsers();
     var durasiText = durasi === 'perm' ? 'PERMANEN' : durasi === '30m' ? '30 Menit' : durasi === '1h' ? '1 Jam' : durasi === '1d' ? '1 Hari' : durasi === '7d' ? '7 Hari' : '30 Hari';
-    this.showAlert('SUKSES', targetName + ' di-ban ' + durasiText);
-  }catch(e){ this.showAlert('GAGAL BAN', e.message); }
+    this.showToast('✅ SUKSES', targetName + ' di-ban ' + durasiText, 'success');
+  }catch(e){ this.showToast('❌ GAGAL BAN', e.message, 'error'); }
 },
 unbanUser:async function(u){
   var self = this;
@@ -3355,10 +3596,10 @@ unbanUser:async function(u){
     try{
       var {data, error} = await sb.from('profiles').update({ is_banned: false, ban_until: null, ban_reason: '' }).eq('id', u.id).select();
       if(error) throw error;
-      if(!data || data.length === 0) throw new Error('RLS nolak update unban');
+      if(!data || data.length === 0) throw new Error('RLS nolak');
       await self.loadAllUsers();
-      self.showAlert('SUKSES', u.username + ' di-unban.');
-    }catch(e){ self.showAlert('GAGAL UNBAN', e.message); }
+      self.showToast('✅ SUKSES', u.username + ' di-unban.', 'success');
+    }catch(e){ self.showToast('❌ GAGAL', e.message, 'error'); }
   }, '✓');
 },
 toggleVip:async function(u,v){
@@ -3366,42 +3607,54 @@ toggleVip:async function(u,v){
   if(v){payload.vip_expiry=new Date(Date.now()+30*24*60*60*1000).toISOString();}
   else{payload.vip_expiry=null;}
   var{error}=await sb.from('profiles').update(payload).eq('id',u.id);
-  if(error){this.showAlert('GAGAL',error.message);return;}
+  if(error){this.showToast('❌ GAGAL',error.message,'error');return;}
   await this.loadAllUsers();
-  this.showAlert('SUKSES', v ? u.username+' jadi VIP' : u.username+' bukan VIP');
+  this.showToast('✅ SUKSES', v ? u.username+' jadi VIP' : u.username+' bukan VIP', 'success');
 },
-promptAddChat:function(u){var self=this;this.showPrompt('TAMBAH BONUS CHAT','Berapa chat tambahan untuk '+u.username+'?',async function(val){var n=parseInt(val)||0;if(n<=0)return;var current=u.chat_bonus||0;var{error}=await sb.from('profiles').update({chat_bonus:current+n}).eq('id',u.id);if(error){self.showAlert('GAGAL',error.message);return;}await self.loadAllUsers();self.showAlert('SUKSES','+'+n+' chat untuk '+u.username);});},
-promptAddPoints:function(u){var self=this;this.showPrompt('TAMBAH POIN','Berapa poin untuk '+u.username+'?',async function(val){var n=parseInt(val)||0;if(n<=0)return;try{var{data:pts}=await sb.from('user_points').select('*').eq('user_id',u.id).maybeSingle();if(!pts){await sb.from('user_points').insert({user_id:u.id,total_points:n,level:1});}else{await sb.from('user_points').update({total_points:(pts.total_points||0)+n}).eq('user_id',u.id);}self.showAlert('SUKSES','+'+n+' poin untuk '+u.username);}catch(e){self.showAlert('GAGAL',e.message);}});},
-confirmDeleteUser:function(u){var self=this;this.showConfirm('HAPUS USER?','Semua data '+u.username+' akan dihapus!',async function(){await sb.from('transactions').delete().eq('user_id',u.id);await sb.from('savings_targets').delete().eq('user_id',u.id);await sb.from('budgets').delete().eq('user_id',u.id);await sb.from('user_points').delete().eq('user_id',u.id);await sb.from('profiles').delete().eq('id',u.id);self.showAlert('SUKSES','User dihapus.');await self.loadAllUsers();},'🗑️');},
+promptAddChat:function(u){
+  var self=this;
+  this.showPrompt('TAMBAH BONUS CHAT','Berapa chat tambahan untuk '+u.username+'?', async function(val){
+    var n=parseInt(val)||0;
+    if(n<=0)return;
+    var current=u.chat_bonus||0;
+    var newBonus = current + n;
+    var {error}=await sb.from('profiles').update({chat_bonus:newBonus}).eq('id',u.id);
+    if(error){self.showToast('❌ GAGAL',error.message,'error');return;}
+    await self.loadAllUsers();
+    self.showToast('✅ SUKSES','+'+n+' chat untuk '+u.username+' (total bonus: '+newBonus+')','success');
+  });
+},
+promptAddPoints:function(u){var self=this;this.showPrompt('TAMBAH POIN','Berapa poin untuk '+u.username+'?',async function(val){var n=parseInt(val)||0;if(n<=0)return;try{var{data:pts}=await sb.from('user_points').select('*').eq('user_id',u.id).maybeSingle();if(!pts){await sb.from('user_points').insert({user_id:u.id,total_points:n,level:1});}else{await sb.from('user_points').update({total_points:(pts.total_points||0)+n}).eq('user_id',u.id);}self.showToast('✅ SUKSES','+'+n+' poin untuk '+u.username,'success');}catch(e){self.showToast('❌ GAGAL',e.message,'error');}});},
+confirmDeleteUser:function(u){var self=this;this.showConfirm('HAPUS USER?','Semua data '+u.username+' akan dihapus!',async function(){await sb.from('transactions').delete().eq('user_id',u.id);await sb.from('savings_targets').delete().eq('user_id',u.id);await sb.from('budgets').delete().eq('user_id',u.id);await sb.from('user_points').delete().eq('user_id',u.id);await sb.from('profiles').delete().eq('id',u.id);self.showToast('✅ SUKSES','User dihapus.','success');await self.loadAllUsers();},'🗑️');},
 
 loadWallet:async function(){
   try{
     var {data} = await sb.from('app_settings').select('*').eq('id',1).maybeSingle();
     if(data && data.owner_wallet !== undefined){this.ownerWallet.saldo = Number(data.owner_wallet) || 0;}
     else {this.ownerWallet.saldo = 0;}
-  }catch(e){console.error(e);}
+  }catch(e){}
 },
 topupWallet:async function(){
   var amount = parseFloat(String(this.ownerWallet.topupAmount||'').replace(/\./g,''));
-  if(!amount || amount <= 0){return this.showAlert('PERHATIAN','Isi jumlah dulu!');}
+  if(!amount || amount <= 0){return this.showToast('⚠️ PERHATIAN','Isi jumlah dulu!','warning');}
   try{
     var newSaldo = this.ownerWallet.saldo + amount;
     var {error} = await sb.from('app_settings').update({owner_wallet:newSaldo}).eq('id',1);
     if(error) throw error;
     this.ownerWallet.saldo = newSaldo;
     this.ownerWallet.topupAmount = '';
-    this.showAlert('SUKSES','Saldo wallet ditambah '+this.formatRibuan(amount));
-  }catch(e){this.showAlert('GAGAL',e.message);}
+    this.showToast('✅ SUKSES','Saldo wallet ditambah '+this.formatRibuan(amount),'success');
+  }catch(e){this.showToast('❌ GAGAL',e.message,'error');}
 },
 sendGift:async function(){
-  if(!this.ownerWallet.targetUsername){return this.showAlert('PERHATIAN','Isi username target!');}
-  if(!this.ownerWallet.giftAmount && this.ownerWallet.giftType!=='vip'){return this.showAlert('PERHATIAN','Isi jumlah!');}
+  if(!this.ownerWallet.targetUsername){return this.showToast('⚠️ PERHATIAN','Isi username target!','warning');}
+  if(!this.ownerWallet.giftAmount && this.ownerWallet.giftType!=='vip'){return this.showToast('⚠️ PERHATIAN','Isi jumlah!','warning');}
   try{
     var {data:targetUser} = await sb.from('profiles').select('*').eq('username',this.ownerWallet.targetUsername).maybeSingle();
-    if(!targetUser){return this.showAlert('GAGAL','User tidak ditemukan.');}
+    if(!targetUser){return this.showToast('❌ GAGAL','User tidak ditemukan.','error');}
     if(this.ownerWallet.giftType==='poin'){
       var amount = parseFloat(String(this.ownerWallet.giftAmount).replace(/\./g,''));
-      if(amount > this.ownerWallet.saldo){return this.showAlert('GAGAL','Saldo tidak cukup!');}
+      if(amount > this.ownerWallet.saldo){return this.showToast('❌ GAGAL','Saldo tidak cukup!','error');}
       var {data:pts} = await sb.from('user_points').select('*').eq('user_id',targetUser.id).maybeSingle();
       if(!pts){await sb.from('user_points').insert({user_id:targetUser.id,total_points:amount,level:1});}
       else{await sb.from('user_points').update({total_points:(pts.total_points||0)+amount}).eq('user_id',targetUser.id);}
@@ -3409,28 +3662,28 @@ sendGift:async function(){
       await sb.from('app_settings').update({owner_wallet:newSaldo}).eq('id',1);
       this.ownerWallet.saldo = newSaldo;
       this.ownerWallet.giftAmount='';this.ownerWallet.targetUsername='';this.ownerWallet.giftNote='';
-      this.showAlert('SUKSES','+'+this.formatRibuan(amount)+' poin ke '+targetUser.username);
+      this.showToast('✅ SUKSES','+'+this.formatRibuan(amount)+' poin ke '+targetUser.username,'success');
     } else if(this.ownerWallet.giftType==='chat'){
       var n = parseInt(String(this.ownerWallet.giftAmount).replace(/\./g,''));
       await sb.from('profiles').update({chat_bonus:(targetUser.chat_bonus||0)+n}).eq('id',targetUser.id);
       this.ownerWallet.giftAmount='';this.ownerWallet.targetUsername='';this.ownerWallet.giftNote='';
-      this.showAlert('SUKSES','+'+n+' chat ke '+targetUser.username);
+      this.showToast('✅ SUKSES','+'+n+' chat ke '+targetUser.username,'success');
     } else if(this.ownerWallet.giftType==='vip'){
       var days = parseInt(this.ownerWallet.giftVipDays)||7;
       var exp = new Date(Date.now() + days*24*60*60*1000).toISOString();
       await sb.from('profiles').update({is_vip:true,vip_expiry:exp}).eq('id',targetUser.id);
       this.ownerWallet.targetUsername='';this.ownerWallet.giftNote='';
-      this.showAlert('SUKSES','VIP '+days+' hari untuk '+targetUser.username);
+      this.showToast('✅ SUKSES','VIP '+days+' hari untuk '+targetUser.username,'success');
     }
     await this.loadAllUsers();
-  }catch(e){this.showAlert('GAGAL',e.message);}
+  }catch(e){this.showToast('❌ GAGAL',e.message,'error');}
 },
 
 loadSubscriptions:async function(){
   try{
     var {data} = await sb.from('profiles').select('id,username,is_vip,vip_expiry,status').eq('is_vip',true).order('vip_expiry',{ascending:true});
     this.vipUsers = data || [];
-  }catch(e){console.error(e);}
+  }catch(e){}
 },
 extendVip:async function(u,days){
   try{
@@ -3441,30 +3694,29 @@ extendVip:async function(u,days){
     var {error} = await sb.from('profiles').update({is_vip:true,vip_expiry:newExp.toISOString()}).eq('id',u.id);
     if(error) throw error;
     await this.loadSubscriptions();
-    this.showAlert('SUKSES',u.username+' VIP diperpanjang +'+days+' hari');
-  }catch(e){this.showAlert('GAGAL',e.message);}
+    this.showToast('✅ SUKSES',u.username+' VIP diperpanjang +'+days+' hari','success');
+  }catch(e){this.showToast('❌ GAGAL',e.message,'error');}
 },
 
 loadBroadcasts:async function(){
-  try{var {data} = await sb.from('broadcasts').select('*').order('created_at',{ascending:false}).limit(10);if(data)this.broadcastList = data;}catch(e){console.error(e);}
+  try{var {data} = await sb.from('broadcasts').select('*').order('created_at',{ascending:false}).limit(10);if(data)this.broadcastList = data;}catch(e){}
 },
 sendBroadcast:async function(){
-  if(!this.broadcastForm.judul || !this.broadcastForm.pesan){return this.showAlert('PERHATIAN','Isi judul & pesan!');}
+  if(!this.broadcastForm.judul || !this.broadcastForm.pesan){return this.showToast('⚠️ PERHATIAN','Isi judul & pesan!','warning');}
   try{
     var payload = {tipe:this.broadcastForm.tipe,judul:this.broadcastForm.judul,pesan:this.broadcastForm.pesan,tombol_text:this.broadcastForm.tombol_text||'OKE, MENGERTI',created_by:this.currentUser?this.currentUser.id:null};
-    if(this.broadcastForm.aktif_sampai){payload.aktif_sampai = new Date(this.broadcastForm.aktif_sampai).toISOString();}
     var {error} = await sb.from('broadcasts').insert(payload);
     if(error) throw error;
     this.broadcastForm = {tipe:'pengumuman',judul:'',pesan:'',tombol_text:'',aktif_sampai:''};
     await this.loadBroadcasts();
-    this.showAlert('SUKSES','Broadcast terkirim ke semua user!');
-  }catch(e){this.showAlert('GAGAL',e.message);}
+    this.showToast('✅ SUKSES','Broadcast terkirim!','success');
+  }catch(e){this.showToast('❌ GAGAL',e.message,'error');}
 },
 deleteBroadcast:async function(id){
   var self=this;
   this.showConfirm('HAPUS BROADCAST?','Broadcast akan dihapus permanen.',async function(){
-    try{await sb.from('broadcasts').delete().eq('id',id);await self.loadBroadcasts();self.showAlert('SUKSES','Broadcast dihapus.');}
-    catch(e){self.showAlert('GAGAL',e.message);}
+    try{await sb.from('broadcasts').delete().eq('id',id);await self.loadBroadcasts();self.showToast('✅ SUKSES','Broadcast dihapus.','success');}
+    catch(e){self.showToast('❌ GAGAL',e.message,'error');}
   },'🗑️');
 },
 checkBroadcast:async function(){
@@ -3473,10 +3725,9 @@ checkBroadcast:async function(){
     if(!data) return;
     var lastSeen = localStorage.getItem('zenkai_last_broadcast_id');
     if(lastSeen && Number(lastSeen)===Number(data.id)) return;
-    if(data.aktif_sampai && new Date(data.aktif_sampai) < new Date()) return;
     this.activeBroadcast = data;
     this.broadcastPopupOpen = true;
-  }catch(e){console.error('Broadcast check error:',e);}
+  }catch(e){}
 },
 closeBroadcast:function(){
   if(this.activeBroadcast){localStorage.setItem('zenkai_last_broadcast_id', this.activeBroadcast.id);}
@@ -3493,7 +3744,8 @@ loadMaintenance:async function(){
       this.maintenanceFeatures.forEach(function(f){fForm[f.id]={is_active:map[f.id]?map[f.id].is_active:false,alasan:map[f.id]?map[f.id].alasan:'',estimasi:map[f.id]?map[f.id].estimasi:''};});
       this.maintenanceForm = fForm;
     }
-  }catch(e){console.error(e);}
+    await this.loadWebMaintenance();
+  }catch(e){}
 },
 toggleMaintenance:function(fiturId){
   if(!this.maintenanceForm[fiturId]) return;
@@ -3511,11 +3763,11 @@ saveMaintenance:async function(){
     });
     await Promise.all(promises);
     await this.loadMaintenance();
-    this.showAlert('SUKSES','Perubahan maintenance disimpan!');
-  }catch(e){this.showAlert('GAGAL',e.message);}
+    this.showToast('✅ SUKSES','Perubahan maintenance tools disimpan!','success');
+  }catch(e){this.showToast('❌ GAGAL',e.message,'error');}
 },
 
-saveWelcomeText:async function(){if(!this.welcomeTextEdit)return;await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit}).eq('id',1);this.welcomeText=this.welcomeTextEdit;this.showAlert('SUKSES','Kata sambutan diperbarui!');},
+saveWelcomeText:async function(){if(!this.welcomeTextEdit)return;await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit}).eq('id',1);this.welcomeText=this.welcomeTextEdit;this.showToast('✅ SUKSES','Kata sambutan diperbarui!','success');},
 
 setupRealtime:function(){
   var self = this;
@@ -3524,25 +3776,18 @@ setupRealtime:function(){
       var n=p.new;
       var last=localStorage.getItem('zenkai_last_broadcast_id');
       if(last && Number(last)===Number(n.id))return;
-      if(n.aktif_sampai && new Date(n.aktif_sampai)<new Date())return;
       self.activeBroadcast=n;
       self.broadcastPopupOpen=true;
     }).subscribe();
-  }catch(e){console.error('RT BC:',e);}
+  }catch(e){}
   try{
     sb.channel('maint-rt').on('postgres_changes',{event:'*',schema:'public',table:'feature_maintenance'},function(p){
       var u=p.new;
       if(!u||!u.fitur_id)return;
       self.maintenanceData[u.fitur_id]=u;
       self.maintenanceData=Object.assign({},self.maintenanceData);
-      if(self.maintenanceForm[u.fitur_id]){
-        self.maintenanceForm[u.fitur_id].is_active=u.is_active||false;
-        self.maintenanceForm[u.fitur_id].alasan=u.alasan||'';
-        self.maintenanceForm[u.fitur_id].estimasi=u.estimasi||'';
-        self.maintenanceForm=Object.assign({},self.maintenanceForm);
-      }
     }).subscribe();
-  }catch(e){console.error('RT MT:',e);}
+  }catch(e){}
   try{
     sb.channel('ban-rt')
       .on('postgres_changes', {event: 'UPDATE', schema: 'public', table: 'profiles'}, function(p){
@@ -3552,9 +3797,7 @@ setupRealtime:function(){
         self.isVip = u.is_vip || false;
         if(u.is_banned === true){
           var stillBanned = true;
-          if(u.ban_until){
-            if(new Date(u.ban_until) < new Date()) stillBanned = false;
-          }
+          if(u.ban_until && new Date(u.ban_until) < new Date()) stillBanned = false;
           if(stillBanned){
             self.bannedInfoData = {reason: u.ban_reason || 'Melanggar aturan', until: u.ban_until};
             self.bannedInfoSheetOpen = true;
@@ -3564,13 +3807,9 @@ setupRealtime:function(){
             setTimeout(function(){ try{ sb.auth.signOut(); }catch(e){} }, 1500);
           }
         }
-        if(u.is_banned === false && self.bannedInfoData.reason){
-          self.bannedInfoSheetOpen = false;
-          self.bannedInfoData = {reason:'', until:null};
-        }
       })
       .subscribe();
-  }catch(e){console.error('RT Ban:',e);}
+  }catch(e){}
 }
 
 };
