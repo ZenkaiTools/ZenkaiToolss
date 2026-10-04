@@ -30,6 +30,10 @@
 html{overflow-x:hidden;scroll-behavior:smooth}
 body{overflow-x:hidden;background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--text);min-height:100dvh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:auto}
 
+/* Kunci body waktu sheet kebuka — biar layar belakang gak ikut scroll */
+body.sheet-open{overflow:hidden !important;position:fixed;width:100%;touch-action:none}
+body.sheet-open .zn-sheet-content{touch-action:pan-y}
+
 body:not([data-ready="1"]) .zn-chat-full{display:none !important}
 body:not([data-ready="1"]) .zn-app{display:none !important}
 
@@ -45,8 +49,6 @@ a{color:inherit;text-decoration:none}
 
 .zn-header{position:sticky;top:0;z-index:50;padding:10px 14px;background:rgba(5,5,8,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;transition:box-shadow .3s ease}
 .zn-header.scrolled{box-shadow:0 4px 20px rgba(0,0,0,.5), 0 0 20px rgba(0,217,255,.15)}
-[data-style="comic"] .zn-header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-bottom:3px solid var(--border);backdrop-filter:none}
-[data-style="comic"] .zn-header.scrolled{box-shadow:0 4px 0 0 var(--border), 0 6px 16px rgba(0,0,0,.2)}
 .zn-header-user{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer;padding:6px 8px;border-radius:12px;transition:all .2s;border:1px solid transparent}
 .zn-header-user:active{background:var(--primary-soft);border-color:var(--primary)}
 .zn-avatar-wrap{position:relative;flex-shrink:0}
@@ -54,26 +56,19 @@ a{color:inherit;text-decoration:none}
 .zn-avatar img{width:100%;height:100%;object-fit:cover}
 .zn-avatar-edit{position:absolute;bottom:-3px;right:-3px;width:18px;height:18px;border-radius:50%;background:var(--primary);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 8px var(--primary-glow);pointer-events:none}
 .zn-avatar-edit svg{width:9px;height:9px;fill:#050508}
-[data-style="comic"] .zn-avatar-edit{background:var(--accent);border:2px solid var(--border);box-shadow:1px 1px 0 0 var(--border)}
-[data-style="comic"] .zn-avatar-edit svg{fill:#fff}
 .zn-header-info{flex:1;min-width:0}
 .zn-header-name{font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;letter-spacing:.3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-[data-style="comic"] .zn-header-name{color:#fff;text-shadow:1px 1px 0 var(--border);font-family:'Inter',sans-serif;font-weight:800}
 .zn-header-hint{font-size:9px;color:var(--primary);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;margin-top:3px;display:inline-flex;align-items:center;gap:3px;background:var(--primary-soft);padding:2px 6px;border-radius:6px;border:1px solid var(--primary);animation:znHintPulse 2.5s ease-in-out infinite}
 @keyframes znHintPulse{0%,100%{opacity:.7}50%{opacity:1}}
-[data-style="comic"] .zn-header-hint{color:#fff;background:rgba(255,255,255,.2);border-color:var(--border);font-family:'Inter',sans-serif;font-weight:700}
 .zn-badge{display:inline-block;font-family:'Orbitron',sans-serif;font-size:7px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary);letter-spacing:1px}
 .zn-badge.vip{background:rgba(255,215,0,.1);color:var(--gold);border-color:var(--gold)}
 .zn-badge.owner{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
-[data-style="comic"] .zn-badge{background:var(--accent);color:#fff;border:2px solid var(--border);font-family:'Inter',sans-serif}
 .zn-header-actions{display:flex;gap:6px;flex-shrink:0}
 .zn-icon-btn{width:38px;height:38px;border-radius:11px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:var(--text-dim)}
 .zn-icon-btn:active{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);box-shadow:0 0 15px var(--primary-glow);transform:scale(.95)}
 .zn-icon-btn svg{width:20px;height:20px;fill:currentColor}
 .zn-icon-btn.danger{color:var(--danger);border-color:rgba(255,51,85,.3)}
 .zn-icon-btn.danger:active{background:rgba(255,51,85,.1);border-color:var(--danger);box-shadow:0 0 15px rgba(255,51,85,.4)}
-[data-style="comic"] .zn-icon-btn{background:var(--card);border:3px solid var(--border);box-shadow:2px 2px 0 0 var(--border);color:var(--primary-dark);border-radius:10px}
-[data-style="comic"] .zn-icon-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 0 var(--border)}
 
 .zn-main{flex:1;padding:14px;padding-bottom:100px;position:relative;z-index:1;display:flex;flex-direction:column;gap:14px}
 .zn-section{display:flex;flex-direction:column;gap:12px}
@@ -92,8 +87,6 @@ a{color:inherit;text-decoration:none}
 .zn-hero-credit-badge{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:900;color:#050508;border:1px solid var(--primary);box-shadow:0 0 8px var(--primary-glow)}
 .zn-hero-credit-text{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:1px}
 .zn-hero-credit-text b{color:var(--primary);text-shadow:0 0 8px var(--primary-glow)}
-[data-style="comic"] .zn-hero-credit-text{color:#fff}
-[data-style="comic"] .zn-hero-credit-text b{color:#fff}
 .zn-hero-stats-compact{display:flex;gap:6px;margin-top:6px}
 .zn-stat-compact{flex:1;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;align-items:center;gap:6px}
 .zn-stat-compact-icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -126,7 +119,7 @@ a{color:inherit;text-decoration:none}
 .zn-cat-tab.active{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);box-shadow:0 0 15px var(--primary-glow)}
 
 .zn-feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.zn-feat-card{position:relative;padding:16px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all .25s;overflow:hidden;min-height:110px;display:flex;flex-direction:column;gap:8px}
+.zn-feat-card{position:relative;padding:16px 16px 40px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all .25s;overflow:hidden;min-height:140px;display:flex;flex-direction:column;gap:8px}
 .zn-feat-card:active{border-color:var(--primary);box-shadow:0 0 25px var(--primary-glow),inset 0 0 20px var(--primary-soft);transform:scale(.97)}
 .zn-feat-badge{position:absolute;top:10px;right:10px;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;padding:3px 7px;border-radius:6px;background:var(--primary-soft);color:var(--primary);border:1px solid var(--primary);letter-spacing:1px}
 .zn-feat-badge.pro{background:rgba(255,215,0,.1);color:var(--gold);border-color:var(--gold)}
@@ -134,6 +127,19 @@ a{color:inherit;text-decoration:none}
 .zn-feat-icon svg{width:20px;height:20px}
 .zn-feat-name{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;letter-spacing:.3px;color:var(--text);line-height:1.2}
 .zn-feat-desc{font-size:11px;color:var(--text-mute);line-height:1.3}
+
+/* TOMBOL REVIEW DI FEAT CARD */
+.zn-feat-review-btn{
+  position:absolute;bottom:10px;left:12px;right:12px;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  padding:5px 8px;border-radius:8px;
+  background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);
+  color:#ffd700;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.5px;
+  transition:all .2s;cursor:pointer;
+}
+.zn-feat-review-btn:hover{background:rgba(255,215,0,.15);border-color:#ffd700;transform:translateY(-1px)}
+.zn-feat-review-btn:active{transform:scale(.96)}
+.zn-feat-review-btn svg{flex-shrink:0}
 
 .zn-tips{display:flex;gap:12px;align-items:flex-start;padding:14px;background:linear-gradient(135deg,var(--primary-soft),transparent);border:1px solid var(--primary);border-radius:var(--radius)}
 .zn-tips-icon{width:32px;height:32px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -197,8 +203,8 @@ select.zn-input{cursor:pointer}
 .zn-drawer-item-icon svg{width:16px;height:16px}
 .zn-drawer-item-label{flex:1}
 
-.zn-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:1000;display:flex;align-items:flex-end;justify-content:center}
-.zn-sheet-content{width:100%;max-width:480px;max-height:90vh;overflow-y:auto;background:var(--bg);border-top:1px solid var(--primary);border-top-left-radius:24px;border-top-right-radius:24px;padding:20px;-webkit-overflow-scrolling:touch}
+.zn-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:1000;display:flex;align-items:flex-end;justify-content:center;overscroll-behavior:contain}
+.zn-sheet-content{width:100%;max-width:480px;max-height:90vh;overflow-y:auto;background:var(--bg);border-top:1px solid var(--primary);border-top-left-radius:24px;border-top-right-radius:24px;padding:20px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
 .zn-sheet-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 12px;cursor:grab;position:relative;touch-action:none}
 .zn-sheet-handle::before{content:'';position:absolute;top:-10px;left:-20px;right:-20px;bottom:-10px}
 
@@ -211,46 +217,6 @@ select.zn-input{cursor:pointer}
 .zn-ai-bubble-label{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:.5px;color:var(--primary);background:rgba(5,5,8,.85);padding:3px 8px;border-radius:8px;border:1px solid var(--primary);white-space:nowrap}
 
 [x-cloak]{display:none !important}
-
-[data-style="comic"]{--bg:#fffbeb;--bg-2:#fef3c7;--card:#fffdf5;--card-2:#ffffff;--border:#1a1a1a;--text:#1a1a1a;--text-dim:#666666;--text-mute:#999999;--radius:14px;--radius-sm:10px;--radius-lg:20px}
-[data-style="comic"][data-theme="cyan"]{--primary:#0ea5e9;--primary-dark:#0369a1;--primary-soft:#e0f2fe;--primary-glow:rgba(14,165,233,.4);--accent:#fbbf24;--accent-dark:#d97706;--accent-soft:#fef3c7;--accent-glow:rgba(251,191,36,.4)}
-[data-style="comic"][data-theme="magenta"]{--primary:#ec4899;--primary-dark:#be185d;--primary-soft:#fce7f3;--primary-glow:rgba(236,72,153,.4);--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:#f3e8ff;--accent-glow:rgba(168,85,247,.4)}
-[data-style="comic"][data-theme="emerald"]{--primary:#10b981;--primary-dark:#047857;--primary-soft:#d1fae5;--primary-glow:rgba(16,185,129,.4);--accent:#f97316;--accent-dark:#c2410c;--accent-soft:#ffedd5;--accent-glow:rgba(249,115,22,.4)}
-[data-style="comic"][data-theme="gold"]{--primary:#f59e0b;--primary-dark:#b45309;--primary-soft:#fef3c7;--primary-glow:rgba(245,158,11,.4);--accent:#dc2626;--accent-dark:#991b1b;--accent-soft:#fee2e2;--accent-glow:rgba(220,38,38,.4)}
-[data-style="comic"][data-theme="orange"]{--primary:#f97316;--primary-dark:#c2410c;--primary-soft:#ffedd5;--primary-glow:rgba(249,115,22,.4);--accent:#eab308;--accent-dark:#a16207;--accent-soft:#fef9c3;--accent-glow:rgba(234,179,8,.4)}
-[data-style="comic"][data-theme="purple"]{--primary:#a855f7;--primary-dark:#7e22ce;--primary-soft:#f3e8ff;--primary-glow:rgba(168,85,247,.4);--accent:#ec4899;--accent-dark:#be185d;--accent-soft:#fce7f3;--accent-glow:rgba(236,72,153,.4)}
-
-[data-style="comic"] body{background:var(--bg);color:var(--text)}
-[data-style="comic"] .zn-grid-bg{display:none}
-[data-style="comic"] .zn-avatar{background:var(--card);color:var(--primary-dark);border:3px solid var(--border);box-shadow:2px 2px 0 0 var(--border);border-radius:10px}
-[data-style="comic"] .zn-hero{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:3px solid var(--border);box-shadow:5px 5px 0 0 var(--border);border-radius:20px}
-[data-style="comic"] .zn-hero::before{display:none}
-[data-style="comic"] .zn-hero-bg{display:none}
-[data-style="comic"] .zn-hero-label{background:rgba(255,255,255,.25);border:2px solid var(--border);color:#fff}
-[data-style="comic"] .zn-hero-label::before{background:#fff}
-[data-style="comic"] .zn-hero-title{background:none;-webkit-text-fill-color:#fff;color:#fff;text-shadow:2px 2px 0 rgba(0,0,0,.2)}
-[data-style="comic"] .zn-hero-subtitle{color:#fff;opacity:.9}
-[data-style="comic"] .zn-stat-compact{background:rgba(255,255,255,.2);border:2px solid var(--border)}
-[data-style="comic"] .zn-stat-compact-val{color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.3)}
-[data-style="comic"] .zn-stat-compact-label{color:#fff}
-[data-style="comic"] .zn-info-item{background:var(--card);border:2.5px solid var(--border);box-shadow:2px 2px 0 0 var(--border);border-radius:12px}
-[data-style="comic"] .zn-quick-btn,
-[data-style="comic"] .zn-cat-tab,
-[data-style="comic"] .zn-feat-card,
-[data-style="comic"] .zn-card,
-[data-style="comic"] .zn-stat-box{background:var(--card);border:3px solid var(--border);box-shadow:3px 3px 0 0 var(--border);border-radius:14px}
-[data-style="comic"] .zn-card-title{color:var(--accent-dark);text-transform:none;letter-spacing:0;font-size:15px}
-[data-style="comic"] .zn-card-title svg{fill:var(--accent-dark)}
-[data-style="comic"] .zn-cat-tab.active,
-[data-style="comic"] .zn-tab-pill.active{background:var(--primary);color:#fff;box-shadow:3px 3px 0 0 var(--border)}
-[data-style="comic"] .zn-btn-primary{background:var(--primary);color:#fff;border:3px solid var(--border);box-shadow:4px 4px 0 0 var(--border)}
-[data-style="comic"] .zn-btn-soft{background:var(--accent-soft);color:var(--accent-dark);border:2.5px solid var(--border);box-shadow:3px 3px 0 0 var(--border)}
-[data-style="comic"] .zn-input,
-[data-style="comic"] .zn-input-number{background:var(--bg-2);border:3px solid var(--border);color:var(--text)}
-[data-style="comic"] .zn-bottom-nav{background:var(--card);border-top:3px solid var(--border)}
-[data-style="comic"] .zn-nav-btn{color:var(--text);opacity:.6}
-[data-style="comic"] .zn-nav-btn.active{background:var(--primary);color:#fff;opacity:1;box-shadow:2px 2px 0 0 var(--border)}
-[data-style="comic"] .zn-nav-btn.active::before{display:none}
 
 #loadingScreen{position:fixed;inset:0;z-index:99998;background:#050508;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:hidden;transition:opacity .6s,visibility .6s}
 #loadingScreen.hide{opacity:0;visibility:hidden}
@@ -288,20 +254,14 @@ select.zn-input{cursor:pointer}
 .zn-send-btn{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--accent));border:2.5px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 22px var(--primary-glow),0 4px 12px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s}
 .zn-send-btn:active{transform:scale(.92)}
 
-.zn-pro-model-chip{display:inline-flex;flex-direction:column;align-items:center;gap:2px;padding:8px 14px;border-radius:14px;background:var(--card);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;white-space:nowrap;transition:all .2s;min-width:110px}
-.zn-pro-model-chip.active{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);box-shadow:0 0 10px var(--primary-glow)}
-.zn-pro-model-chip:active{transform:scale(.95)}
-.zn-pro-model-chip-name{font-size:12px;font-weight:700;font-family:'Orbitron',sans-serif;letter-spacing:.3px;display:flex;align-items:center;gap:4px}
-.zn-pro-model-chip-desc{font-size:9px;color:var(--text-mute);font-weight:500;letter-spacing:0}
-.zn-pro-model-chip.active .zn-pro-model-chip-desc{color:var(--primary);opacity:.8}
-.zn-pro-badge-vision{background:linear-gradient(135deg,#a855f7,#ff0080);color:#fff;font-size:7px;padding:1px 5px;border-radius:4px;font-weight:700;letter-spacing:.5px}
-.zn-pro-img-preview{position:relative;display:inline-block;margin:8px 0}
-.zn-pro-img-preview img{max-height:100px;border-radius:10px;border:2px solid var(--primary)}
-.zn-pro-img-preview button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--danger);color:#fff;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--bg)}
 .zn-pro-thinking{display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--primary);font-size:13px;color:var(--primary);font-family:'JetBrains Mono',monospace;max-width:88%}
 .zn-pro-thinking::before{content:'●';animation:znProBlink 1s infinite}
 @keyframes znProBlink{0%,100%{opacity:.3}50%{opacity:1}}
 .zn-pro-bubble-label{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;color:#ffd700;margin-bottom:4px;display:flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);width:fit-content}
+.zn-pro-badge-vision{background:linear-gradient(135deg,#a855f7,#ff0080);color:#fff;font-size:7px;padding:1px 5px;border-radius:4px;font-weight:700;letter-spacing:.5px}
+.zn-pro-img-preview{position:relative;display:inline-block;margin:8px 0}
+.zn-pro-img-preview img{max-height:100px;border-radius:10px;border:2px solid var(--primary)}
+.zn-pro-img-preview button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--danger);color:#fff;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--bg)}
 
 .zn-broadcast-icon{width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px;line-height:1}
 .zn-broadcast-icon.pengumuman{background:var(--primary-soft);border:2px solid var(--primary);box-shadow:0 0 30px var(--primary-glow)}
@@ -345,6 +305,18 @@ select.zn-input{cursor:pointer}
 .zn-review-komentar{font-size:12px;color:var(--text-dim);line-height:1.5}
 .zn-review-date{font-size:9px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:4px}
 
+.review-feature-header{display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:14px}
+.review-feature-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.review-feature-icon svg{width:22px;height:22px;fill:var(--primary)}
+.review-feature-info{flex:1;min-width:0}
+.review-feature-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
+.review-feature-desc{font-size:11px;color:var(--text-mute)}
+.review-summary{display:flex;align-items:center;gap:16px;padding:16px;border-radius:14px;background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,215,0,.03));border:1px solid rgba(255,215,0,.3);margin-bottom:16px}
+.review-summary-score{font-family:'Orbitron',sans-serif;font-size:42px;font-weight:900;color:#ffd700;line-height:1}
+.review-summary-detail{flex:1;min-width:0}
+.review-summary-stars{color:#ffd700;font-size:16px;letter-spacing:2px;margin-bottom:4px}
+.review-summary-count{font-size:11px;color:var(--text-mute);font-family:'JetBrains Mono',monospace}
+
 .zn-dash-card{padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);position:relative;overflow:hidden}
 .zn-dash-card::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.3;pointer-events:none}
 .zn-dash-label{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px}
@@ -357,15 +329,7 @@ select.zn-input{cursor:pointer}
 
 .zn-sub-card{padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:10px;transition:all .2s}
 .zn-sub-card.active{border-color:var(--gold);background:rgba(255,215,0,.05);box-shadow:0 0 15px rgba(255,215,0,.2)}
-.zn-sub-expire-bar{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin-top:8px}
-.zn-sub-expire-fill{height:100%;background:linear-gradient(90deg,var(--success),var(--warning),var(--danger));border-radius:3px}
 
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-
-/* ===================== DEVELOPER PROFILE STYLES ===================== */
-.dev-sheet{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 100%)}
 .dev-hero{position:relative;padding:30px 24px 24px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border-bottom:1px solid var(--border);text-align:center}
 .dev-hero::before{content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.3;pointer-events:none}
 .dev-avatar{position:relative;display:inline-block;margin-bottom:16px}
@@ -388,7 +352,7 @@ select.zn-input{cursor:pointer}
 .dev-pill{padding:6px 12px;border-radius:16px;background:var(--primary-soft);border:1px solid var(--primary);color:var(--primary);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;transition:all .2s}
 .dev-pill:hover{transform:translateY(-2px);box-shadow:0 4px 12px var(--primary-glow)}
 .dev-skill-group{margin-bottom:10px}
-.dev-skill-label{font-size:10px;color:var(--text-mute);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:600;display:flex;align-items:center;gap:6px}
+.dev-skill-label{font-size:10px;color:var(--text-mute);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:600}
 .dev-skill-note{font-size:10px;color:var(--text-mute);font-style:italic;margin-top:6px;padding-left:2px}
 .dev-school-card{display:flex;gap:14px;padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border);align-items:flex-start}
 .dev-school-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -411,11 +375,13 @@ select.zn-input{cursor:pointer}
 .dev-quote{padding:16px;border-radius:12px;background:var(--bg-2);border:1px dashed var(--border);text-align:center;font-style:italic;color:var(--text-dim);font-size:12px;line-height:1.6}
 .dev-cta-box{padding:20px;border-radius:14px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border:1px solid var(--primary);text-align:center}
 .dev-footer{padding:20px 24px;border-top:1px solid var(--border);text-align:center;background:var(--bg-2)}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 </style>
 </head>
-<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode">
-
-<!-- LOADING SCREEN -->
+<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode"><!-- LOADING SCREEN -->
 <div id="loadingScreen" x-show="!loadingHidden" x-cloak>
   <div class="load-content">
     <div class="load-logo-anim">
@@ -425,7 +391,7 @@ select.zn-input{cursor:pointer}
       <div class="load-z">Z</div>
     </div>
     <div class="load-logo">ZENKAI</div>
-    <div class="load-sub">INITIALIZING // v3.5</div>
+    <div class="load-sub">INITIALIZING // v3.6</div>
     <div class="load-bar-wrap"><div class="load-bar-fill" id="loadBar"></div></div>
     <div class="load-pct" id="loadPct">0%</div>
     <div class="load-status" id="loadStatus">Memuat sistem</div>
@@ -510,7 +476,7 @@ select.zn-input{cursor:pointer}
   <!-- MAIN CONTENT -->
   <main class="zn-main">
 
-    <!-- TAB HOME -->
+    <!-- ================= TAB HOME ================= -->
     <div x-show="activeTab==='home'" class="zn-section">
       <div class="zn-hero">
         <div class="zn-hero-bg" id="heroBg"></div>
@@ -533,7 +499,7 @@ select.zn-input{cursor:pointer}
             </div>
             <div class="zn-stat-compact">
               <div class="zn-stat-compact-icon"><svg viewBox="0 0 24 24" fill="#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
-              <div class="zn-stat-compact-text"><div class="zn-stat-compact-val" x-text="(isOwner||isVip)?'∞':Math.max(0,(10+chatBonus)-chatCount)"></div><div class="zn-stat-compact-label">Chat</div></div>
+              <div class="zn-stat-compact-text"><div class="zn-stat-compact-val" x-text="(isOwner||isVip)?'∞':Math.max(0,10-chatCount)"></div><div class="zn-stat-compact-label">Chat</div></div>
             </div>
           </div>
         </div>
@@ -576,7 +542,7 @@ select.zn-input{cursor:pointer}
       </div>
 
       <!-- CARD ZENKAI AI PRO -->
-      <div class="zn-feat-card" @click="handleProCardClick()" style="border-color:#ffd700;background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(168,85,247,.08))">
+      <div class="zn-feat-card" @click="handleProCardClick()" style="border-color:#ffd700;background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(168,85,247,.08));padding-bottom:16px">
         <span class="zn-feat-badge pro">◆ PRO</span>
         <div class="zn-feat-icon" style="background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(168,85,247,.2));border-color:#ffd700">
           <svg viewBox="0 0 24 24" style="fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -585,18 +551,30 @@ select.zn-input{cursor:pointer}
         <div class="zn-feat-desc">AI premium 7 model + vision</div>
       </div>
 
+      <!-- GRID FITUR + TOMBOL REVIEW -->
       <div class="zn-feat-grid">
         <template x-for="f in filteredFitur" :key="f.id">
           <div class="zn-feat-card" @click="bukaFitur(f)" :style="cardMaintenanceStyle(f)">
             <template x-if="f.badge"><span class="zn-feat-badge" :class="f.badgeClass||''" x-text="f.badge"></span></template>
             <template x-if="isCardUnderMaintenance(f)">
-              <span class="zn-feat-badge" style="background:rgba(255,170,0,.2);color:var(--warning);border-color:var(--warning);top:auto;bottom:10px;right:10px">🔧 MAINT</span>
+              <span class="zn-feat-badge" style="background:rgba(255,170,0,.2);color:var(--warning);border-color:var(--warning);top:auto;bottom:40px;right:10px">🔧 MAINT</span>
             </template>
             <div class="zn-feat-icon" :style="'background:'+(f.iconBg||'linear-gradient(135deg,var(--primary-soft),var(--accent-soft))')">
               <svg viewBox="0 0 24 24" :style="'fill:'+(f.iconColor||'var(--primary)')" x-html="f.svg"></svg>
             </div>
             <div class="zn-feat-name" x-text="f.nama"></div>
             <div class="zn-feat-desc" x-text="f.desc"></div>
+
+            <!-- TOMBOL REVIEW -->
+            <button 
+              @click.stop="openReviewListForFeature(f)" 
+              class="zn-feat-review-btn"
+              :aria-label="'Lihat review untuk '+f.nama">
+              <svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:currentColor">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+              </svg>
+              <span x-text="getFeatureRating(f.id).total > 0 ? getFeatureRating(f.id).avg + ' (' + getFeatureRating(f.id).total + ')' : 'Review'"></span>
+            </button>
           </div>
         </template>
       </div>
@@ -607,7 +585,7 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- TAB KEUANGAN -->
+    <!-- ================= TAB KEUANGAN ================= -->
     <div x-show="activeTab==='keuangan'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:10px">TOTAL SALDO</div>
@@ -694,7 +672,7 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- TAB DOWNLOADER -->
+    <!-- ================= TAB DOWNLOADER ================= -->
     <div x-show="activeTab==='downloader'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15));border-color:#ffd700"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ffd700"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
@@ -722,7 +700,7 @@ select.zn-input{cursor:pointer}
       </template>
     </div>
 
-    <!-- TAB TOOLS -->
+    <!-- ================= TAB TOOLS ================= -->
     <div x-show="activeTab==='tools'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
@@ -803,7 +781,7 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- TAB TEMA -->
+    <!-- ================= TAB TEMA ================= -->
     <div x-show="activeTab==='tema'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg></div>
@@ -835,7 +813,7 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- TAB PEMBERITAHUAN -->
+    <!-- ================= TAB PEMBERITAHUAN ================= -->
     <div x-show="activeTab==='pemberitahuan'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))"><svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ff0080"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 9h10v2H7V9zm6 5H7v-2h6v2zm4-6H7V6h10v2z"/></svg></div>
@@ -845,11 +823,10 @@ select.zn-input{cursor:pointer}
         <div class="zn-card" style="border-color:var(--primary)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--primary-soft);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px">Selamat Datang</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Terima kasih sudah pakai Zenkai Tools! Aplikasi ini akan terus berkembang.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU SAJA</div></div></div></div>
         <div class="zn-card" style="border-color:#ffd700"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid #ffd700;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#ffd700;margin-bottom:4px">◆ ZENKAI AI PRO</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">AI premium dengan 7 model + vision. Khusus member VIP. Cek di Home!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// BARU</div></div></div></div>
         <div class="zn-card" style="border-color:var(--accent)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--accent)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">Tips & Trik</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Login harian dapat 10 poin gratis. Kumpulkan poin & naik level!</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// 1 JAM LALU</div></div></div></div>
-        <div class="zn-card" style="border-color:#00ff88"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(0,255,136,.15);border:1px solid #00ff88;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#00ff88"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#00ff88;margin-bottom:4px">Zenkai AI</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Tanya apa saja dengan 4 mode: Keuangan, Kesehatan, Teknologi, Umum.</div><div style="font-size:10px;color:var(--text-mute);margin-top:6px;font-family:'JetBrains Mono',monospace">// KEMARIN</div></div></div></div>
       </div>
     </div>
 
-    <!-- TAB OWNER -->
+    <!-- ================= TAB OWNER ================= -->
     <template x-if="isOwner">
       <div x-show="activeTab==='owner'" class="zn-section">
         <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
@@ -865,6 +842,7 @@ select.zn-input{cursor:pointer}
           <button @click="ownerSubTab='subs';loadSubscriptions()" :class="ownerSubTab==='subs'?'active':''" class="zn-tab-pill" style="font-size:9px">🔔 Subs</button>
           <button @click="ownerSubTab='broadcast';loadBroadcasts()" :class="ownerSubTab==='broadcast'?'active':''" class="zn-tab-pill" style="font-size:9px">📢 BC</button>
           <button @click="ownerSubTab='maintenance';loadMaintenance()" :class="ownerSubTab==='maintenance'?'active':''" class="zn-tab-pill" style="font-size:9px">🔧 Maint</button>
+          <button @click="ownerSubTab='bug';loadAllBugReports()" :class="ownerSubTab==='bug'?'active':''" class="zn-tab-pill" style="font-size:9px">🐛 Bug</button>
           <button @click="ownerSubTab='setelan'" :class="ownerSubTab==='setelan'?'active':''" class="zn-tab-pill" style="font-size:9px">⚙ Set</button>
         </div>
 
@@ -1079,6 +1057,46 @@ select.zn-input{cursor:pointer}
           </div>
         </div>
 
+        <!-- TAB BUG REPORT (Owner) -->
+        <div x-show="ownerSubTab==='bug'" class="zn-section">
+          <div class="zn-card">
+            <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z"/></svg><span>LAPORAN BUG / SARAN</span></div>
+            <div style="max-height:500px;overflow-y:auto">
+              <template x-for="b in bugReportList" :key="b.id">
+                <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:8px">
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px">
+                    <div style="flex:1;min-width:0">
+                      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+                        <span style="font-size:14px" x-text="b.tipe==='bug'?'🐛':(b.tipe==='saran'?'💡':'📝')"></span>
+                        <span style="font-size:12px;font-weight:700;color:var(--text)" x-text="b.judul"></span>
+                      </div>
+                      <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace">
+                        <span x-text="'@'+b.username"></span> · <span x-text="new Date(b.created_at).toLocaleString('id-ID')"></span>
+                      </div>
+                    </div>
+                    <span style="font-size:9px;padding:3px 8px;border-radius:6px;font-weight:700;letter-spacing:.5px;flex-shrink:0"
+                      :style="b.status==='baru'?'background:rgba(0,217,255,.15);color:#00d9ff;border:1px solid #00d9ff':(b.status==='dibaca'?'background:rgba(255,170,0,.15);color:#ffaa00;border:1px solid #ffaa00':(b.status==='diproses'?'background:rgba(168,85,247,.15);color:#a855f7;border:1px solid #a855f7':'background:rgba(0,255,136,.15);color:#00ff88;border:1px solid #00ff88'))"
+                      x-text="b.status.toUpperCase()"></span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-dim);line-height:1.5;white-space:pre-line;margin-bottom:10px" x-text="b.deskripsi"></div>
+                  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">
+                    <button @click="updateBugStatus(b.id,'baru')" class="zn-btn zn-btn-soft" style="padding:5px;font-size:8px">Baru</button>
+                    <button @click="updateBugStatus(b.id,'dibaca')" class="zn-btn zn-btn-soft" style="padding:5px;font-size:8px">Dibaca</button>
+                    <button @click="updateBugStatus(b.id,'diproses')" class="zn-btn zn-btn-soft" style="padding:5px;font-size:8px">Proses</button>
+                    <button @click="updateBugStatus(b.id,'selesai')" class="zn-btn zn-btn-success" style="padding:5px;font-size:8px">Selesai</button>
+                  </div>
+                </div>
+              </template>
+              <template x-if="bugReportList.length===0">
+                <div style="text-align:center;padding:30px">
+                  <div style="font-size:40px;opacity:.3;margin-bottom:12px">📭</div>
+                  <div style="font-size:12px;color:var(--text-mute)">Belum ada laporan bug</div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+
         <!-- TAB SETELAN -->
         <div x-show="ownerSubTab==='setelan'" class="zn-section">
           <div class="zn-card">
@@ -1106,40 +1124,26 @@ select.zn-input{cursor:pointer}
 <div x-show="isAuthenticated&&!chatFullscreen&&!proChatFullscreen&&!developerProfileOpen" x-cloak @click="openChatAI()" class="zn-ai-bubble">
   <div class="zn-ai-bubble-btn"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></div>
   <div class="zn-ai-bubble-label">Chat dengan Zenkai AI</div>
-</div>
-
-<!-- ============================
-     DEVELOPER PROFILE SHEET (BARU)
-     ============================ -->
+</div><!-- ============================================
+     DEVELOPER PROFILE SHEET
+     ============================================ -->
 <div x-show="developerProfileOpen" x-cloak class="zn-sheet-overlay" style="z-index:100085" @click.self="developerProfileOpen=false">
-  <div class="zn-sheet-content dev-sheet" style="padding:0;overflow-y:auto" @touchstart.passive="onSheetTouchStart($event,'developerProfileOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="padding:0;overflow-y:auto" @touchstart.passive="onSheetTouchStart($event,'developerProfileOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle" style="margin:12px auto 0"></div>
 
-    <!-- HERO SECTION -->
     <div class="dev-hero">
-      <!-- Avatar -->
       <div class="dev-avatar">
-        <div class="dev-avatar-img">
-          <span>ATM</span>
-        </div>
+        <div class="dev-avatar-img"><span>ATM</span></div>
         <div class="dev-status-dot"></div>
       </div>
-
-      <!-- Nama & Role -->
       <div style="position:relative;z-index:1">
         <h2 style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;letter-spacing:2px;color:var(--primary);margin-bottom:4px" x-text="developerData.nama.toUpperCase()"></h2>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:2px;margin-bottom:10px" x-text="'// '+developerData.role"></div>
-
-        <!-- Status Badge -->
         <div class="dev-status-badge">
           <span class="dev-status-pulse"></span>
           <span x-text="developerData.status"></span>
         </div>
-
-        <!-- Tagline -->
         <p style="font-size:13px;color:var(--text);line-height:1.6;font-style:italic;max-width:320px;margin:0 auto;font-weight:500" x-text="'&quot;'+developerData.tagline+'&quot;'"></p>
-
-        <!-- Lokasi -->
         <div style="display:inline-flex;align-items:center;gap:4px;margin-top:12px;font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace">
           <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:var(--text-mute)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
           <span x-text="developerData.lokasi"></span>
@@ -1147,7 +1151,6 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- STATISTIK -->
     <div class="dev-stats">
       <template x-for="(stat,idx) in developerData.statistik" :key="idx">
         <div class="dev-stat">
@@ -1157,7 +1160,6 @@ select.zn-input{cursor:pointer}
       </template>
     </div>
 
-    <!-- TENTANG SAYA -->
     <div class="dev-section" style="padding-top:20px">
       <div class="dev-section-title">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
@@ -1168,7 +1170,6 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- SKILLS -->
     <div class="dev-section">
       <div class="dev-section-title">
         <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
@@ -1176,9 +1177,7 @@ select.zn-input{cursor:pointer}
       </div>
       <template x-for="(group,idx) in developerData.skills" :key="idx">
         <div class="dev-skill-group">
-          <div class="dev-skill-label">
-            <span x-text="group.label"></span>
-          </div>
+          <div class="dev-skill-label"><span x-text="group.label"></span></div>
           <div style="display:flex;flex-wrap:wrap;gap:6px">
             <template x-for="skill in group.items" :key="skill">
               <span class="dev-pill" x-text="skill"></span>
@@ -1191,7 +1190,6 @@ select.zn-input{cursor:pointer}
       </template>
     </div>
 
-    <!-- SEKOLAH -->
     <div class="dev-section">
       <div class="dev-section-title">
         <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
@@ -1209,7 +1207,6 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- YANG LAGI DIPELAJARI -->
     <div class="dev-section">
       <div class="dev-section-title">
         <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
@@ -1228,7 +1225,6 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- PROJECT -->
     <div class="dev-section">
       <div class="dev-section-title">
         <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
@@ -1253,14 +1249,12 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- KONTAK -->
     <div class="dev-section">
       <div class="dev-section-title">
         <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
         <span>HUBUNGI SAYA</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px">
-        <!-- WhatsApp -->
         <a :href="'https://wa.me/'+developerData.kontak.wa" target="_blank" class="dev-contact-item">
           <div class="dev-contact-icon" style="background:rgba(37,211,102,.15);border:1px solid #25d366">
             <svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -1269,9 +1263,7 @@ select.zn-input{cursor:pointer}
             <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">WHATSAPP</div>
             <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'+'+developerData.kontak.wa"></div>
           </div>
-          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
         </a>
-        <!-- Email -->
         <a :href="'mailto:'+developerData.kontak.email" class="dev-contact-item">
           <div class="dev-contact-icon" style="background:rgba(255,51,85,.15);border:1px solid #ff3355">
             <svg viewBox="0 0 24 24" fill="#ff3355"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
@@ -1280,9 +1272,7 @@ select.zn-input{cursor:pointer}
             <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">EMAIL</div>
             <div style="font-size:13px;font-weight:600;color:var(--text);word-break:break-all" x-text="developerData.kontak.email"></div>
           </div>
-          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
         </a>
-        <!-- Instagram -->
         <a :href="'https://instagram.com/'+developerData.kontak.ig" target="_blank" class="dev-contact-item">
           <div class="dev-contact-icon" style="background:linear-gradient(135deg,rgba(255,0,128,.15),rgba(255,170,0,.15));border:1px solid #ff0080">
             <svg viewBox="0 0 24 24" fill="#ff0080"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -1291,9 +1281,7 @@ select.zn-input{cursor:pointer}
             <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">INSTAGRAM</div>
             <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.ig"></div>
           </div>
-          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
         </a>
-        <!-- TikTok -->
         <a :href="'https://tiktok.com/@'+developerData.kontak.tiktok" target="_blank" class="dev-contact-item">
           <div class="dev-contact-icon" style="background:linear-gradient(135deg,rgba(0,0,0,.4),rgba(255,0,128,.2));border:1px solid #00f2ea">
             <svg viewBox="0 0 24 24" fill="#00f2ea"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
@@ -1302,9 +1290,7 @@ select.zn-input{cursor:pointer}
             <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">TIKTOK</div>
             <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.tiktok"></div>
           </div>
-          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
         </a>
-        <!-- GitHub -->
         <a :href="'https://github.com/'+developerData.kontak.github" target="_blank" class="dev-contact-item">
           <div class="dev-contact-icon" style="background:rgba(255,255,255,.08);border:1px solid #fff">
             <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
@@ -1313,17 +1299,14 @@ select.zn-input{cursor:pointer}
             <div style="font-size:10px;color:var(--text-mute);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">GITHUB</div>
             <div style="font-size:13px;font-weight:600;color:var(--text)" x-text="'@'+developerData.kontak.github"></div>
           </div>
-          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--text-mute);flex-shrink:0"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
         </a>
       </div>
     </div>
 
-    <!-- QUOTE -->
     <div class="dev-section">
       <div class="dev-quote" x-text="'&quot;'+developerData.quote+'&quot;'"></div>
     </div>
 
-    <!-- CTA -->
     <div class="dev-section">
       <div class="dev-cta-box">
         <div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:6px">MAU NGODING BARENG?</div>
@@ -1335,13 +1318,11 @@ select.zn-input{cursor:pointer}
       </div>
     </div>
 
-    <!-- FOOTER -->
     <div class="dev-footer">
       <div style="font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--primary);margin-bottom:4px">ZENKAI TOOLS</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);letter-spacing:1px">© <span x-text="new Date().getFullYear()"></span> Andika Talova Martin · v3.5</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);letter-spacing:1px">© <span x-text="new Date().getFullYear()"></span> Andika Talova Martin · v3.6</div>
     </div>
 
-    <!-- CLOSE BUTTON -->
     <div style="padding:20px 24px 24px">
       <button @click="developerProfileOpen=false" class="zn-btn zn-btn-soft">TUTUP</button>
     </div>
@@ -1350,7 +1331,7 @@ select.zn-input{cursor:pointer}
 
 <!-- WELCOME POPUP -->
 <div x-show="welcomePopupOpen" x-cloak class="zn-sheet-overlay" style="z-index:100003" @click.self="welcomePopupOpen=false">
-  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'welcomePopupOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'welcomePopupOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div style="width:64px;height:64px;border-radius:18px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
       <svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
@@ -1366,7 +1347,7 @@ select.zn-input{cursor:pointer}
 
 <!-- VIP ONLY SHEET -->
 <div x-show="vipOnlySheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100006" @click.self="vipOnlySheetOpen=false">
-  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'vipOnlySheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'vipOnlySheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div class="zn-broadcast-icon pengumuman" style="background:rgba(255,215,0,.15);border-color:#ffd700;box-shadow:0 0 30px rgba(255,215,0,.5)">◆</div>
     <div class="zn-broadcast-type-label pengumuman" style="color:#ffd700">ZENKAI AI PRO</div>
@@ -1376,7 +1357,7 @@ select.zn-input{cursor:pointer}
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>7 model AI premium</b> — pilih sesuai kebutuhan</div></div>
         <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>Bisa lihat gambar</b> — kirim screenshot/foto</div></div>
-        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>150 chat/hari</b> — lebih banyak dari user biasa</div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>Unlimited chat</b> — gak ada batas harian</div></div>
         <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#ffd700;font-size:14px;line-height:1">✦</span><div style="font-size:12px;color:var(--text);line-height:1.4"><b>Prioritas server</b> — lebih cepat & stabil</div></div>
       </div>
     </div>
@@ -1387,7 +1368,7 @@ select.zn-input{cursor:pointer}
 
 <!-- BROADCAST POPUP -->
 <div x-show="broadcastPopupOpen && activeBroadcast" x-cloak class="zn-sheet-overlay" style="z-index:100007" @click.self="closeBroadcast()">
-  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'broadcastPopupOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'broadcastPopupOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div class="zn-broadcast-icon" :class="activeBroadcast.tipe">
       <span x-text="activeBroadcast.tipe==='pengumuman'?'📢':(activeBroadcast.tipe==='peringatan'?'⚠️':'🚨')"></span>
@@ -1401,7 +1382,7 @@ select.zn-input{cursor:pointer}
 
 <!-- MAINTENANCE SHEET -->
 <div x-show="maintenanceSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100008" @click.self="maintenanceSheetOpen=false">
-  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'maintenanceSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'maintenanceSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div style="width:64px;height:64px;border-radius:18px;background:rgba(255,170,0,.15);border:2px solid var(--warning);box-shadow:0 0 30px rgba(255,170,0,.5);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:30px">🔧</div>
     <div class="zn-broadcast-type-label" style="color:var(--warning)">MAINTENANCE</div>
@@ -1423,7 +1404,7 @@ select.zn-input{cursor:pointer}
 
 <!-- BAN SHEET -->
 <div x-show="banSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100050" @click.self="banSheetOpen=false">
-  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'banSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'banSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--danger);text-align:center;margin-bottom:6px">🚫 BAN USER</h3>
     <p style="font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:16px">Target: <b style="color:var(--danger)" x-text="banSheetTarget?banSheetTarget.username:''"></b></p>
@@ -1451,7 +1432,7 @@ select.zn-input{cursor:pointer}
 
 <!-- BANNED INFO SHEET -->
 <div x-show="bannedInfoSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100060" @click.self="bannedInfoSheetOpen=false">
-  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'bannedInfoSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'bannedInfoSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div style="width:72px;height:72px;border-radius:20px;background:rgba(255,51,85,.15);border:2px solid var(--danger);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px">🚫</div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;letter-spacing:2px;color:var(--danger);margin-bottom:12px">AKUN DIBLOKIR</h3>
@@ -1470,66 +1451,195 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- REVIEW SHEET -->
-<div x-show="reviewSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100070" @click.self="reviewSheetOpen=false">
-  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'reviewSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
-    <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">⭐ REVIEW <span x-text="reviewTarget?reviewTarget.nama:''"></span></h3>
-    <div style="text-align:center;margin-bottom:20px">
-      <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Kasih Rating</div>
-      <div style="display:flex;justify-content:center;gap:8px">
-        <template x-for="i in [1,2,3,4,5]" :key="i">
-          <span class="zn-star" :class="reviewForm.rating>=i?'active':''" @click="reviewForm.rating=i">★</span>
-        </template>
-      </div>
-    </div>
-    <div style="margin-bottom:16px">
-      <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Komentar (Opsional)</div>
-      <textarea x-model="reviewForm.komentar" placeholder="Bagaimana pengalaman lu?" class="zn-input" rows="4"></textarea>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <button @click="reviewSheetOpen=false" class="zn-btn zn-btn-soft">BATAL</button>
-      <button @click="submitReview()" class="zn-btn zn-btn-primary">KIRIM REVIEW</button>
-    </div>
-  </div>
-</div>
-
 <!-- REVIEW LIST SHEET -->
 <div x-show="reviewListSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100071" @click.self="reviewListSheetOpen=false">
-  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'reviewListSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'reviewListSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">⭐ SEMUA REVIEW</h3>
-    <div style="max-height:60vh;overflow-y:auto">
+
+    <template x-if="reviewForFeatureId">
+      <div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">⭐ REVIEW FITUR</div>
+        <div class="review-feature-header">
+          <div class="review-feature-icon"><svg viewBox="0 0 24 24" x-html="reviewForFeatureId.svg"></svg></div>
+          <div class="review-feature-info">
+            <div class="review-feature-name" x-text="reviewForFeatureId.nama"></div>
+            <div class="review-feature-desc" x-text="reviewForFeatureId.desc"></div>
+          </div>
+        </div>
+        <template x-if="reviewList.length > 0">
+          <div class="review-summary">
+            <div class="review-summary-score" x-text="getAverageRating(reviewList)"></div>
+            <div class="review-summary-detail">
+              <div class="review-summary-stars" x-text="getStarString(getAverageRating(reviewList))"></div>
+              <div class="review-summary-count"><span x-text="reviewList.length"></span> review dari user</div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <template x-if="!reviewForFeatureId">
+      <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">⭐ SEMUA REVIEW USER</h3>
+    </template>
+
+    <div style="max-height:50vh;overflow-y:auto">
       <template x-for="r in reviewList" :key="r.id">
         <div class="zn-review-card">
           <div class="zn-review-header">
             <div class="zn-review-user" x-text="'@'+r.username"></div>
             <div class="zn-review-stars" x-text="'★'.repeat(r.rating) + '☆'.repeat(5-r.rating)"></div>
           </div>
-          <div style="font-size:11px;color:var(--primary);margin-bottom:4px" x-text="'Review: ' + r.fitur_id"></div>
+          <template x-if="!reviewForFeatureId">
+            <div style="font-size:11px;color:var(--primary);margin-bottom:4px" x-text="'Fitur: ' + r.fitur_id"></div>
+          </template>
           <div class="zn-review-komentar" x-text="r.komentar || '(tanpa komentar)'"></div>
           <div class="zn-review-date" x-text="new Date(r.created_at).toLocaleString('id-ID')"></div>
         </div>
       </template>
-      <template x-if="reviewList.length===0">
-        <div style="text-align:center;padding:30px;color:var(--text-mute);font-size:12px">Belum ada review</div>
+      <template x-if="reviewList.length === 0">
+        <div style="text-align:center;padding:30px 20px">
+          <div style="font-size:40px;margin-bottom:12px;opacity:.5">📝</div>
+          <div style="font-size:13px;color:var(--text-dim);margin-bottom:6px">Belum ada review</div>
+          <div style="font-size:11px;color:var(--text-mute)">Jadi yang pertama review fitur ini!</div>
+        </div>
       </template>
     </div>
-    <button @click="reviewListSheetOpen=false" class="zn-btn zn-btn-soft" style="margin-top:14px">TUTUP</button>
+
+    <template x-if="reviewForFeatureId && currentUser">
+      <button @click="openReviewFromList()" class="zn-btn zn-btn-primary" style="margin-top:14px">
+        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <span>TULIS REVIEW</span>
+      </button>
+    </template>
+
+    <button @click="reviewListSheetOpen=false;reviewForFeatureId=null" class="zn-btn zn-btn-soft" style="margin-top:8px">TUTUP</button>
+  </div>
+</div>
+
+<!-- REVIEW SHEET (form tulis review) -->
+<div x-show="reviewSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100070" @click.self="reviewSheetOpen=false">
+  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'reviewSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+    <div class="zn-sheet-handle"></div>
+
+    <template x-if="reviewTarget">
+      <div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">⭐ TULIS REVIEW</div>
+        <div class="review-feature-header">
+          <div class="review-feature-icon"><svg viewBox="0 0 24 24" x-html="reviewTarget.svg"></svg></div>
+          <div class="review-feature-info">
+            <div class="review-feature-name" x-text="reviewTarget.nama"></div>
+            <div class="review-feature-desc" x-text="reviewTarget.desc"></div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-bottom:20px;padding:20px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase;font-weight:600">Kasih Rating</div>
+          <div style="display:flex;justify-content:center;gap:8px;margin-bottom:8px">
+            <template x-for="i in [1,2,3,4,5]" :key="i">
+              <span class="zn-star" :class="reviewForm.rating>=i?'active':''" @click="reviewForm.rating=i">★</span>
+            </template>
+          </div>
+          <div style="font-size:12px;color:var(--text-dim);font-family:'JetBrains Mono',monospace" x-text="getRatingLabel(reviewForm.rating)"></div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;font-weight:600">Komentar (Opsional)</div>
+          <textarea x-model="reviewForm.komentar" placeholder="Gimana pengalaman lu pakai fitur ini? Ceritain dikit biar user lain terbantu..." class="zn-input" rows="4" maxlength="500"></textarea>
+          <div style="text-align:right;font-size:10px;color:var(--text-mute);margin-top:4px;font-family:'JetBrains Mono',monospace"><span x-text="reviewForm.komentar.length"></span>/500</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <button @click="reviewSheetOpen=false" class="zn-btn zn-btn-soft">BATAL</button>
+          <button @click="submitReview()" class="zn-btn zn-btn-primary">KIRIM REVIEW</button>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+
+<!-- BUG REPORT SHEET (user ngelapor) -->
+<div x-show="bugReportSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100090" @click.self="bugReportSheetOpen=false">
+  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'bugReportSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+    <div class="zn-sheet-handle"></div>
+    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:#ff3355;text-align:center;margin-bottom:6px">🐛 LAPOR BUG / SARAN</h3>
+    <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:16px">Bantu Zenkai Tools jadi lebih baik! Laporan lu bakal dicek langsung sama developer.</p>
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;font-weight:600">Tipe Laporan</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+        <button @click="bugReportForm.tipe='bug'" :class="bugReportForm.tipe==='bug'?'active':''" class="zn-tab-pill" style="font-size:10px">🐛 Bug</button>
+        <button @click="bugReportForm.tipe='saran'" :class="bugReportForm.tipe==='saran'?'active':''" class="zn-tab-pill" style="font-size:10px">💡 Saran</button>
+        <button @click="bugReportForm.tipe='lainnya'" :class="bugReportForm.tipe==='lainnya'?'active':''" class="zn-tab-pill" style="font-size:10px">📝 Lainnya</button>
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Judul</div>
+      <input type="text" x-model="bugReportForm.judul" placeholder="Contoh: Tombol download gak jalan" class="zn-input" maxlength="100">
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;font-weight:600">Deskripsi Detail</div>
+      <textarea x-model="bugReportForm.deskripsi" placeholder="Ceritain sedetail mungkin:&#10;- Apa yang lu lakuin&#10;- Apa yang diharapkan&#10;- Apa yang terjadi" class="zn-input" rows="6" maxlength="1000"></textarea>
+      <div style="text-align:right;font-size:10px;color:var(--text-mute);margin-top:4px;font-family:'JetBrains Mono',monospace"><span x-text="bugReportForm.deskripsi.length"></span>/1000</div>
+    </div>
+    <button @click="submitBugReport()" :disabled="bugReportSubmitting" class="zn-btn zn-btn-primary" style="margin-bottom:8px">
+      <template x-if="!bugReportSubmitting">
+        <span>KIRIM LAPORAN</span>
+      </template>
+      <template x-if="bugReportSubmitting">
+        <span><span class="zn-spin"></span> MENGIRIM...</span>
+      </template>
+    </button>
+    <button @click="bugReportSheetOpen=false;openBugReportList()" class="zn-btn zn-btn-soft" style="margin-bottom:8px">📋 LIHAT RIWAYAT LAPORAN SAYA</button>
+    <button @click="bugReportSheetOpen=false" class="zn-btn zn-btn-soft">TUTUP</button>
+  </div>
+</div>
+
+<!-- BUG REPORT LIST SHEET (riwayat user) -->
+<div x-show="bugReportListSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100091" @click.self="bugReportListSheetOpen=false">
+  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'bugReportListSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+    <div class="zn-sheet-handle"></div>
+    <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:#ff3355;text-align:center;margin-bottom:16px">📋 RIWAYAT LAPORAN</h3>
+    <div x-show="bugReportListLoading" style="text-align:center;padding:30px">
+      <span class="zn-spin"></span>
+      <div style="font-size:11px;color:var(--text-mute);margin-top:8px">Memuat...</div>
+    </div>
+    <div x-show="!bugReportListLoading" style="max-height:60vh;overflow-y:auto">
+      <template x-for="b in bugReportList" :key="b.id">
+        <div style="padding:12px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+                <span style="font-size:14px" x-text="b.tipe==='bug'?'🐛':(b.tipe==='saran'?'💡':'📝')"></span>
+                <span style="font-size:12px;font-weight:700;color:var(--text)" x-text="b.judul"></span>
+              </div>
+              <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace"><span x-text="new Date(b.created_at).toLocaleString('id-ID')"></span></div>
+            </div>
+            <span style="font-size:9px;padding:3px 8px;border-radius:6px;font-weight:700;letter-spacing:.5px;flex-shrink:0"
+              :style="b.status==='baru'?'background:rgba(0,217,255,.15);color:#00d9ff;border:1px solid #00d9ff':(b.status==='dibaca'?'background:rgba(255,170,0,.15);color:#ffaa00;border:1px solid #ffaa00':(b.status==='diproses'?'background:rgba(168,85,247,.15);color:#a855f7;border:1px solid #a855f7':'background:rgba(0,255,136,.15);color:#00ff88;border:1px solid #00ff88'))"
+              x-text="b.status.toUpperCase()"></span>
+          </div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.5;white-space:pre-line" x-text="b.deskripsi"></div>
+        </div>
+      </template>
+      <template x-if="!bugReportListLoading && bugReportList.length === 0">
+        <div style="text-align:center;padding:40px 20px">
+          <div style="font-size:40px;opacity:.3;margin-bottom:12px">📭</div>
+          <div style="font-size:13px;color:var(--text-dim);margin-bottom:6px">Belum ada laporan</div>
+          <div style="font-size:11px;color:var(--text-mute)">Kalau ketemu bug, jangan ragu lapor ya!</div>
+        </div>
+      </template>
+    </div>
+    <button @click="bugReportListSheetOpen=false" class="zn-btn zn-btn-soft" style="margin-top:14px">TUTUP</button>
   </div>
 </div>
 
 <!-- ABOUT -->
 <div x-show="aboutModalOpen" x-cloak class="zn-sheet-overlay" style="z-index:100004" @click.self="aboutModalOpen=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'aboutModalOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'aboutModalOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">TENTANG ZENKAI TOOLS</h3>
     <div style="padding:16px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
       <p style="font-size:12px;color:var(--text);margin-bottom:12px"><b style="color:var(--primary)">Zenkai Tools</b> adalah aplikasi web multiguna.</p>
       <ul style="font-size:12px;color:var(--text-dim);line-height:1.9;padding-left:18px;list-style:disc">
         <li><b style="color:var(--primary)">Dompet:</b> Transaksi, grafik, target, budget</li>
-        <li><b style="color:var(--accent)">AI Chat:</b> Chatbot pintar 4 mode</li>
-        <li><b style="color:#ffd700">Zenkai AI Pro:</b> AI premium 7 model (VIP)</li>
+        <li><b style="color:var(--accent)">AI Chat:</b> Chatbot pintar 4 mode (limit 10/hari)</li>
+        <li><b style="color:#ffd700">Zenkai AI Pro:</b> AI premium 7 model (VIP unlimited)</li>
         <li><b style="color:var(--primary)">Downloader:</b> TikTok tanpa watermark</li>
         <li><b style="color:var(--accent)">Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
         <li><b style="color:var(--primary)">Tema:</b> 6 warna + 2 gaya visual</li>
@@ -1542,7 +1652,7 @@ select.zn-input{cursor:pointer}
 
 <!-- CONFIRM -->
 <div x-show="confirmModal.open" x-cloak class="zn-sheet-overlay" style="z-index:100020" @click.self="confirmModal.open=false">
-  <div class="zn-sheet-content" style="text-align:center" @touchstart.passive="onSheetTouchStart($event,'confirmModal.open')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="text-align:center" @touchstart.passive="onSheetTouchStart($event,'confirmModal.open')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div style="width:56px;height:56px;border-radius:16px;background:rgba(255,170,0,.15);border:2px solid var(--warning);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
       <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:var(--warning)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
@@ -1558,7 +1668,7 @@ select.zn-input{cursor:pointer}
 
 <!-- PROMPT -->
 <div x-show="promptModal.open" x-cloak class="zn-sheet-overlay" style="z-index:100021" @click.self="promptModal.open=false">
-  <div class="zn-sheet-content" style="text-align:center" @touchstart.passive="onSheetTouchStart($event,'promptModal.open')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="text-align:center" @touchstart.passive="onSheetTouchStart($event,'promptModal.open')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:8px" x-text="promptModal.title"></h3>
     <p style="font-size:11px;color:var(--text-dim);margin-bottom:14px" x-text="promptModal.message"></p>
@@ -1572,7 +1682,7 @@ select.zn-input{cursor:pointer}
 
 <!-- ALERT -->
 <div x-show="sheetOpen" x-cloak class="zn-sheet-overlay" @click.self="sheetOpen=false">
-  <div class="zn-sheet-content" style="text-align:center" @touchstart.passive="onSheetTouchStart($event,'sheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="text-align:center" @touchstart.passive="onSheetTouchStart($event,'sheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;color:var(--primary);margin-bottom:10px" x-text="sheetTitle"></h3>
     <p style="font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:16px;white-space:pre-line" x-text="sheetMessage"></p>
@@ -1582,7 +1692,7 @@ select.zn-input{cursor:pointer}
 
 <!-- LEVEL UP -->
 <div x-show="levelUpOpen" x-cloak class="zn-sheet-overlay" style="z-index:100030" @click.self="levelUpOpen=false">
-  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'levelUpOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="text-align:center;padding:28px" @touchstart.passive="onSheetTouchStart($event,'levelUpOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div style="width:72px;height:72px;border-radius:20px;background:var(--primary-soft);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
       <svg viewBox="0 0 24 24" style="width:40px;height:40px;fill:var(--primary)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -1612,7 +1722,7 @@ select.zn-input{cursor:pointer}
 
 <!-- PROFILE -->
 <div x-show="profileModalOpen" x-cloak class="zn-sheet-overlay" style="z-index:100004" @click.self="profileModalOpen=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'profileModalOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'profileModalOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:16px">PROFIL SAYA</h3>
     <div style="text-align:center;margin-bottom:16px">
@@ -1647,7 +1757,7 @@ select.zn-input{cursor:pointer}
 
 <!-- TX SHEET -->
 <div x-show="txSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="txSheetOpen=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'txSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'txSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">TRANSAKSI BARU</h3>
     <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:12px">
@@ -1668,7 +1778,7 @@ select.zn-input{cursor:pointer}
 
 <!-- TARGET SHEET -->
 <div x-show="targetSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="targetSheetOpen=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'targetSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'targetSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">TARGET BARU</h3>
     <input type="text" x-model="targetForm.nama" placeholder="Nama target" class="zn-input" style="margin-bottom:10px">
@@ -1681,7 +1791,7 @@ select.zn-input{cursor:pointer}
 
 <!-- BUDGET SHEET -->
 <div x-show="budgetSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="budgetSheetOpen=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'budgetSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'budgetSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">BUDGET BARU</h3>
     <input type="text" x-model="budgetForm.kategori" placeholder="Kategori" class="zn-input" style="margin-bottom:10px">
@@ -1693,7 +1803,7 @@ select.zn-input{cursor:pointer}
 
 <!-- ADD SAVINGS -->
 <div x-show="addSavingsSheet" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="addSavingsSheet=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'addSavingsSheet')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'addSavingsSheet')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">TAMBAH TABUNGAN</h3>
     <input type="text" inputmode="numeric" x-model="addSavingsAmount" @input="addSavingsAmount=formatRibuanInput($event.target.value)" placeholder="Nominal (Rp)" class="zn-input-number">
@@ -1704,7 +1814,7 @@ select.zn-input{cursor:pointer}
 
 <!-- MOVIE -->
 <div x-show="movieSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="movieSheetOpen=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'movieSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'movieSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">FILM TRENDING</h3>
     <div x-show="movieLoading" style="text-align:center;padding:20px"><span class="zn-spin"></span></div>
@@ -1726,7 +1836,7 @@ select.zn-input{cursor:pointer}
 
 <!-- NEWS -->
 <div x-show="newsSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100005" @click.self="newsSheetOpen=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'newsSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'newsSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:14px">BERITA INDONESIA</h3>
     <div x-show="newsLoading" style="text-align:center;padding:20px"><span class="zn-spin"></span><div style="font-size:11px;color:var(--text-mute);margin-top:8px">Memuat berita...</div></div>
@@ -1762,7 +1872,7 @@ select.zn-input{cursor:pointer}
 
 <!-- CUACA -->
 <div x-show="weatherSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100008" @click.self="weatherSheetOpen=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
       <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary)">CUACA</h3>
@@ -1801,7 +1911,7 @@ select.zn-input{cursor:pointer}
 
 <!-- WEATHER PROVINCE -->
 <div x-show="weatherProvinceSheet" x-cloak class="zn-sheet-overlay" style="z-index:100009" @click.self="weatherProvinceSheet=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherProvinceSheet')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherProvinceSheet')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH PROVINSI</h3>
     <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:14px"><span x-text="provinces.length"></span> provinsi tersedia</p>
@@ -1821,7 +1931,7 @@ select.zn-input{cursor:pointer}
 
 <!-- WEATHER CITY -->
 <div x-show="weatherCitySheet" x-cloak class="zn-sheet-overlay" style="z-index:100010" @click.self="weatherCitySheet=false">
-  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherCitySheet')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" @touchstart.passive="onSheetTouchStart($event,'weatherCitySheet')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:var(--primary);text-align:center;margin-bottom:6px">PILIH KOTA</h3>
     <p style="font-size:11px;color:var(--text-mute);text-align:center;margin-bottom:14px">Provinsi: <b style="color:var(--primary)" x-text="weatherProvince"></b></p>
@@ -1849,7 +1959,7 @@ select.zn-input{cursor:pointer}
       </button>
       <div style="text-align:center;flex:1">
         <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:var(--primary)">ZENKAI AI</div>
-        <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px" x-text="(isOwner||isVip)?'// UNLIMITED':('// SISA '+Math.max(0,(10+chatBonus)-chatCount))"></div>
+        <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px" x-text="(isOwner||isVip)?'// UNLIMITED':('// SISA '+Math.max(0,10-chatCount)+'/10 HARI INI')"></div>
       </div>
       <button @click="confirmClearChat()" style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--danger);display:flex;align-items:center;justify-content:center;color:var(--danger)">
         <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
@@ -1902,7 +2012,7 @@ select.zn-input{cursor:pointer}
         <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:2px;color:#ffd700">◆ ZENKAI AI PRO</div>
         <div style="font-size:10px;color:var(--text-mute);font-family:'JetBrains Mono',monospace;margin-top:2px">
           <template x-if="isOwner"><span>// UNLIMITED · OWNER</span></template>
-          <template x-if="!isOwner&&isVip"><span>// SISA <span x-text="150-proChatCount"></span>/150 HARI INI</span></template>
+          <template x-if="!isOwner&&isVip"><span>// UNLIMITED · VIP</span></template>
         </div>
       </div>
       <button @click="clearProChat()" style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--danger);display:flex;align-items:center;justify-content:center;color:var(--danger)">
@@ -1971,7 +2081,7 @@ select.zn-input{cursor:pointer}
 
 <!-- PRO MODEL SHEET -->
 <div x-show="proModelSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100080" @click.self="proModelSheetOpen=false">
-  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'proModelSheetOpen')" @touchmove.passive="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+  <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'proModelSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
     <h3 style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;color:#ffd700;text-align:center;margin-bottom:16px">PILIH MODEL AI</h3>
     <div style="display:flex;flex-direction:column;gap:8px">
@@ -1994,7 +2104,7 @@ select.zn-input{cursor:pointer}
   </div>
 </div>
 
-<!-- DRAWER -->
+<!-- DRAWER (Tanpa Cuaca, Berita, Film, Review — Ada Lapor Bug) -->
 <div x-show="drawerOpen" x-cloak>
   <div class="zn-drawer-overlay" @click="drawerOpen=false"></div>
   <div class="zn-drawer">
@@ -2013,25 +2123,13 @@ select.zn-input{cursor:pointer}
         <div class="zn-drawer-item-icon" style="border-color:#a855f7"><svg viewBox="0 0 24 24" style="fill:#a855f7"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
         <span class="zn-drawer-item-label">👨‍💻 Developer</span>
       </div>
-      <div class="zn-drawer-item" @click="drawerOpen=false;openNews()">
-        <div class="zn-drawer-item-icon" style="border-color:#00d9ff"><svg viewBox="0 0 24 24" style="fill:#00d9ff"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
-        <span class="zn-drawer-item-label">Berita</span>
-      </div>
-      <div class="zn-drawer-item" @click="drawerOpen=false;openWeatherSheet()">
-        <div class="zn-drawer-item-icon" style="border-color:#ffd700"><svg viewBox="0 0 24 24" style="fill:#ffd700"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55z"/></svg></div>
-        <span class="zn-drawer-item-label">Cuaca</span>
-      </div>
-      <div class="zn-drawer-item" @click="drawerOpen=false;openMovieSheet()">
-        <div class="zn-drawer-item-icon" style="border-color:#ff0080"><svg viewBox="0 0 24 24" style="fill:#ff0080"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg></div>
-        <span class="zn-drawer-item-label">Film Trending</span>
-      </div>
       <div class="zn-drawer-item" @click="drawerOpen=false;handleProCardClick()">
         <div class="zn-drawer-item-icon" style="border-color:#ffd700"><svg viewBox="0 0 24 24" style="fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
         <span class="zn-drawer-item-label">◆ Zenkai AI Pro</span>
       </div>
-      <div class="zn-drawer-item" @click="drawerOpen=false;reviewListSheetOpen=true;loadReviews()">
-        <div class="zn-drawer-item-icon" style="border-color:#ffd700"><svg viewBox="0 0 24 24" style="fill:#ffd700"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
-        <span class="zn-drawer-item-label">⭐ Review User</span>
+      <div class="zn-drawer-item" @click="drawerOpen=false;openBugReportSheet()">
+        <div class="zn-drawer-item-icon" style="border-color:#ff3355"><svg viewBox="0 0 24 24" style="fill:#ff3355"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z"/></svg></div>
+        <span class="zn-drawer-item-label">🐛 Lapor Bug / Saran</span>
       </div>
       <div class="zn-drawer-item" @click="drawerOpen=false;aboutModalOpen=true">
         <div class="zn-drawer-item-icon" style="border-color:#00ff88"><svg viewBox="0 0 24 24" style="fill:#00ff88"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
@@ -2046,16 +2144,16 @@ select.zn-input{cursor:pointer}
     </div>
   </div>
 </div>
+
 <script>
 const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
 const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-responder';
 const OWNER_EMAIL='andikaatka@gmail.com';
-const OWNER_WA='6285352831643';
 const DAILY_LIMIT=10;
 
-const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi all-in-one yang siap bantu aktivitas harian lu:\n\n💰 DOMPET DIGITAL\nCatat transaksi, pantau grafik, atur budget, capai target tabungan.\n\n🤖 ZENKAI AI\nChat pintar gratis dengan 4 mode: Keuangan, Kesehatan, Teknologi, dan Umum.\n\n⚡ ZENKAI AI PRO\nAI premium eksklusif VIP dengan 7 model pilihan + kemampuan analisa gambar.\n\n📥 DOWNLOADER\nDownload video TikTok tanpa watermark, HD, dan MP3.\n\n🌤️ CUACA & BERITA\nPrakiraan cuaca 7 hari + berita terkini Indonesia.\n\n🛠️ TOOLS LENGKAP\nJam dunia, text-to-speech, kompres foto, kalkulator BMI, speed test.\n\n🎨 KUSTOMISASI\n6 warna neon + 2 gaya visual (Neon & Komik).\n\n🎁 BONUS\nLogin harian dapat 10 poin gratis. Kumpulkan poin, naik level!\n\nYuk jelajahi semua fiturnya! 🚀';
+const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi all-in-one yang siap bantu aktivitas harian lu:\n\n💰 DOMPET DIGITAL\nCatat transaksi, pantau grafik, atur budget, capai target tabungan.\n\n🤖 ZENKAI AI\nChat pintar gratis dengan 4 mode. Limit 10 chat/hari, upgrade VIP buat unlimited!\n\n⚡ ZENKAI AI PRO\nAI premium eksklusif VIP dengan 7 model pilihan + kemampuan analisa gambar. Unlimited chat!\n\n📥 DOWNLOADER\nDownload video TikTok tanpa watermark, HD, dan MP3.\n\n🌤️ CUACA & BERITA\nPrakiraan cuaca 7 hari + berita terkini Indonesia.\n\n🛠️ TOOLS LENGKAP\nJam dunia, text-to-speech, kompres foto, kalkulator BMI, speed test.\n\n🎨 KUSTOMISASI\n6 warna neon + 2 gaya visual (Neon & Komik).\n\n🐛 LAPOR BUG\nKetemu bug atau punya saran? Lapor langsung dari menu!\n\n🎁 BONUS\nLogin harian dapat 10 poin gratis. Kumpulkan poin, naik level!\n\nYuk jelajahi semua fiturnya! 🚀';
 
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
@@ -2109,7 +2207,6 @@ sheetDragY:0,sheetDragStart:0,sheetDragging:false,currentSheetKey:null,
 provinceSearch:'',citySearch:'',
 headerScrolled:false,
 
-// ============ DEVELOPER PROFILE (BARU) ============
 developerProfileOpen:false,
 developerData:{
   nama:'Andika Talova Martin',
@@ -2124,19 +2221,9 @@ developerData:{
     {value:'∞', label:'Semangat Belajar', color:'#00ff88'}
   ],
   skills:[
-    {
-      label:'FRONTEND',
-      items:['HTML','CSS','JavaScript']
-    },
-    {
-      label:'BACKEND',
-      items:['Supabase','PHP']
-    },
-    {
-      label:'DATABASE',
-      items:['MySQL'],
-      note:'Masih belajar, baru ngerti dikit 😅'
-    }
+    {label:'FRONTEND', items:['HTML','CSS','JavaScript']},
+    {label:'BACKEND', items:['Supabase','PHP']},
+    {label:'DATABASE', items:['MySQL'], note:'Masih belajar, baru ngerti dikit 😅'}
   ],
   sekolah:{
     nama:'SMK Negeri 2 Tebo',
@@ -2152,7 +2239,7 @@ developerData:{
   ],
   projects:[
     {nama:'Zenkai Tools v1', desc:'Versi pertama — static HTML doang, tapi ini titik awal semuanya', status:'Arsip', link:'#'},
-    {nama:'Zenkai Tools v3.5', desc:'Versi sekarang — full-featured web app dengan AI, dompet digital, downloader, dll', status:'Live', link:'#'}
+    {nama:'Zenkai Tools v3.6', desc:'Versi sekarang — full-featured web app dengan AI, dompet digital, downloader, dll', status:'Live', link:'#'}
   ],
   quote:'Belajar dari nol bukan alasan buat berhenti — justru alasan buat terus maju.',
   kontak:{
@@ -2177,7 +2264,18 @@ reviewTarget:null,
 reviewForm:{rating:5,komentar:''},
 reviewListSheetOpen:false,
 reviewList:[],
+reviewForFeatureId:null,
+featureRatingsCache:{},
+featureRatingsCacheTime:0,
 proModelSheetOpen:false,
+
+// BUG REPORT
+bugReportSheetOpen:false,
+bugReportListSheetOpen:false,
+bugReportForm:{tipe:'bug',judul:'',deskripsi:''},
+bugReportList:[],
+bugReportSubmitting:false,
+bugReportListLoading:false,
 
 liveStats:{onlineNow:0,chatToday:0,newUsersToday:0,txToday:0,activeToday:0},
 ownerWallet:{saldo:0,topupAmount:'',targetUsername:'',giftType:'poin',giftAmount:'',giftVipDays:7,giftNote:''},
@@ -2206,20 +2304,20 @@ kategoriList:[
   {id:'hiburan',nama:'Hiburan',svg:'<path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>'}
 ],
 fiturList:[
-  {id:'transaksi',nama:'Transaksi',desc:'Catat masuk & keluar',svg:'<path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>',badge:'FULL',badgeClass:'',iconColor:'#00ff88',iconBg:'linear-gradient(135deg,rgba(0,255,136,.15),rgba(0,217,255,.15))',kategori:'keuangan',tab:'keuangan',sub:'transaksi'},
-  {id:'grafik',nama:'Grafik',desc:'Statistik keuangan',svg:'<path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/>',badge:'LIVE',badgeClass:'',iconColor:'#00d9ff',iconBg:'linear-gradient(135deg,rgba(0,217,255,.15),rgba(157,0,255,.15))',kategori:'keuangan',tab:'keuangan',sub:'grafik'},
-  {id:'target',nama:'Target',desc:'Rencana keuangan',svg:'<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',badge:'',badgeClass:'',iconColor:'#ffd700',iconBg:'linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15))',kategori:'keuangan',tab:'keuangan',sub:'target'},
-  {id:'downloader',nama:'Downloader',desc:'TikTok no watermark',svg:'<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>',badge:'NEW',badgeClass:'',iconColor:'#ffd700',iconBg:'linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15))',kategori:'tools',tab:'downloader'},
-  {id:'tts',nama:'Text Speech',desc:'Teks jadi suara',svg:'<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>',badge:'',badgeClass:'',iconColor:'#a855f7',iconBg:'linear-gradient(135deg,rgba(168,85,247,.15),rgba(255,0,128,.15))',kategori:'tools',tab:'tools',sub:'tts'},
-  {id:'kompres',nama:'Kompres',desc:'Perkecil gambar',svg:'<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>',badge:'',badgeClass:'',iconColor:'#00d9ff',iconBg:'linear-gradient(135deg,rgba(0,217,255,.15),rgba(0,255,136,.15))',kategori:'tools',tab:'tools',sub:'kompres'},
-  {id:'bmi',nama:'BMI Kalkulator',desc:'Hitung berat ideal',svg:'<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>',badge:'',badgeClass:'',iconColor:'#ff0080',iconBg:'linear-gradient(135deg,rgba(255,0,128,.15),rgba(255,102,0,.15))',kategori:'tools',tab:'tools',sub:'bmi'},
-  {id:'jam',nama:'Jam Dunia',desc:'Waktu global',svg:'<path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>',badge:'',badgeClass:'',iconColor:'#ffd700',iconBg:'linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.15))',kategori:'tools',tab:'tools',sub:'jam'},
-  {id:'speed',nama:'Speed Test',desc:'Cek kecepatan internet',svg:'<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>',badge:'',badgeClass:'',iconColor:'#00ff88',iconBg:'linear-gradient(135deg,rgba(0,255,136,.15),rgba(0,217,255,.15))',kategori:'tools',tab:'tools',sub:'speed'},
-  {id:'cuaca',nama:'Cuaca',desc:'Prakiraan 7 hari',svg:'<path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55z"/>',badge:'7D',badgeClass:'',iconColor:'#00d9ff',iconBg:'linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.15))',kategori:'tools',tab:'cuaca'},
-  {id:'berita',nama:'Berita',desc:'Berita terkini',svg:'<path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>',badge:'',badgeClass:'',iconColor:'#ff0080',iconBg:'linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))',kategori:'hiburan',tab:'berita'},
-  {id:'film',nama:'Film Trending',desc:'Film populer',svg:'<path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>',badge:'',badgeClass:'',iconColor:'#a855f7',iconBg:'linear-gradient(135deg,rgba(168,85,247,.15),rgba(255,0,128,.15))',kategori:'hiburan',tab:'film'},
-  {id:'ai',nama:'Zenkai AI',desc:'Chat pintar 4 mode',svg:'<path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>',badge:'',badgeClass:'',iconColor:'#ff0080',iconBg:'linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))',kategori:'hiburan',tab:'ai'},
-  {id:'tema',nama:'Ganti Tema',desc:'6 warna neon',svg:'<path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/>',badge:'6',badgeClass:'',iconColor:'#a855f7',iconBg:'linear-gradient(135deg,rgba(168,85,247,.15),rgba(0,217,255,.15))',kategori:'tools',tab:'tema'}
+  {id:'transaksi',nama:'Transaksi',desc:'Catat masuk & keluar',svg:'<path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>',badge:'FULL',iconColor:'#00ff88',iconBg:'linear-gradient(135deg,rgba(0,255,136,.15),rgba(0,217,255,.15))',kategori:'keuangan',tab:'keuangan',sub:'transaksi'},
+  {id:'grafik',nama:'Grafik',desc:'Statistik keuangan',svg:'<path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/>',badge:'LIVE',iconColor:'#00d9ff',iconBg:'linear-gradient(135deg,rgba(0,217,255,.15),rgba(157,0,255,.15))',kategori:'keuangan',tab:'keuangan',sub:'grafik'},
+  {id:'target',nama:'Target',desc:'Rencana keuangan',svg:'<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',iconColor:'#ffd700',iconBg:'linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15))',kategori:'keuangan',tab:'keuangan',sub:'target'},
+  {id:'downloader',nama:'Downloader',desc:'TikTok no watermark',svg:'<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>',badge:'NEW',iconColor:'#ffd700',iconBg:'linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15))',kategori:'tools',tab:'downloader'},
+  {id:'tts',nama:'Text Speech',desc:'Teks jadi suara',svg:'<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>',iconColor:'#a855f7',iconBg:'linear-gradient(135deg,rgba(168,85,247,.15),rgba(255,0,128,.15))',kategori:'tools',tab:'tools',sub:'tts'},
+  {id:'kompres',nama:'Kompres',desc:'Perkecil gambar',svg:'<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>',iconColor:'#00d9ff',iconBg:'linear-gradient(135deg,rgba(0,217,255,.15),rgba(0,255,136,.15))',kategori:'tools',tab:'tools',sub:'kompres'},
+  {id:'bmi',nama:'BMI Kalkulator',desc:'Hitung berat ideal',svg:'<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>',iconColor:'#ff0080',iconBg:'linear-gradient(135deg,rgba(255,0,128,.15),rgba(255,102,0,.15))',kategori:'tools',tab:'tools',sub:'bmi'},
+  {id:'jam',nama:'Jam Dunia',desc:'Waktu global',svg:'<path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>',iconColor:'#ffd700',iconBg:'linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.15))',kategori:'tools',tab:'tools',sub:'jam'},
+  {id:'speed',nama:'Speed Test',desc:'Cek kecepatan internet',svg:'<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>',iconColor:'#00ff88',iconBg:'linear-gradient(135deg,rgba(0,255,136,.15),rgba(0,217,255,.15))',kategori:'tools',tab:'tools',sub:'speed'},
+  {id:'cuaca',nama:'Cuaca',desc:'Prakiraan 7 hari',svg:'<path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55z"/>',badge:'7D',iconColor:'#00d9ff',iconBg:'linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.15))',kategori:'tools',tab:'cuaca'},
+  {id:'berita',nama:'Berita',desc:'Berita terkini',svg:'<path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>',iconColor:'#ff0080',iconBg:'linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))',kategori:'hiburan',tab:'berita'},
+  {id:'film',nama:'Film Trending',desc:'Film populer',svg:'<path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>',iconColor:'#a855f7',iconBg:'linear-gradient(135deg,rgba(168,85,247,.15),rgba(255,0,128,.15))',kategori:'hiburan',tab:'film'},
+  {id:'ai',nama:'Zenkai AI',desc:'Chat pintar 4 mode',svg:'<path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>',iconColor:'#ff0080',iconBg:'linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))',kategori:'hiburan',tab:'ai'},
+  {id:'tema',nama:'Ganti Tema',desc:'6 warna neon',svg:'<path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/>',badge:'6',iconColor:'#a855f7',iconBg:'linear-gradient(135deg,rgba(168,85,247,.15),rgba(0,217,255,.15))',kategori:'tools',tab:'tema'}
 ],
 deviceInfo:{os:'Unknown',browser:'Unknown',online:true,battery:'—'},
 themes:[
@@ -2242,7 +2340,6 @@ worldClocks:[
   {name:'KOREA SELATAN',time:'',tz:'Asia/Seoul',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="20" fill="#ffffff"/><circle cx="15" cy="10" r="4" fill="#cd2e3a"/></svg>'},
   {name:'SINGAPURA',time:'',tz:'Asia/Singapore',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="10" fill="#ed2939"/><rect y="10" width="30" height="10" fill="#ffffff"/><circle cx="7" cy="5" r="3" fill="#ffffff"/><circle cx="9" cy="5" r="3" fill="#ed2939"/></svg>'},
   {name:'MALAYSIA',time:'',tz:'Asia/Kuala_Lumpur',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="20" fill="#ffffff"/><g fill="#cc0001"><rect width="30" height="2"/><rect y="4" width="30" height="2"/><rect y="8" width="30" height="2"/><rect y="12" width="30" height="2"/><rect y="16" width="30" height="2"/></g><rect width="15" height="10" fill="#010066"/></svg>'},
-  {name:'ARAB SAUDI',time:'',tz:'Asia/Riyadh',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="20" fill="#006c35"/><rect x="4" y="6" width="22" height="1.5" fill="#ffffff" rx="0.3"/><rect x="4" y="13" width="22" height="1.5" fill="#ffffff" rx="0.3"/></svg>'},
   {name:'INGGRIS',time:'',tz:'Europe/London',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="20" fill="#012169"/><path d="M0 0 L30 20 M30 0 L0 20" stroke="#ffffff" stroke-width="4"/><path d="M0 0 L30 20 M30 0 L0 20" stroke="#C8102E" stroke-width="2"/><path d="M15 0 V20 M0 10 H30" stroke="#ffffff" stroke-width="6"/><path d="M15 0 V20 M0 10 H30" stroke="#C8102E" stroke-width="3.5"/></svg>'},
   {name:'AMERIKA (NY)',time:'',tz:'America/New_York',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="20" fill="#ffffff"/><g fill="#b22234"><rect width="30" height="1.5"/><rect y="3" width="30" height="1.5"/><rect y="6" width="30" height="1.5"/><rect y="9" width="30" height="1.5"/><rect y="12" width="30" height="1.5"/><rect y="15" width="30" height="1.5"/><rect y="18" width="30" height="1.5"/></g><rect width="13" height="10.5" fill="#3c3b6e"/></svg>'},
   {name:'AUSTRALIA (SYD)',time:'',tz:'Australia/Sydney',flagSvg:'<svg viewBox="0 0 30 20" style="width:100%;height:100%;display:block"><rect width="30" height="20" fill="#012169"/><path d="M0 0 L15 10 M15 0 L0 10" stroke="#ffffff" stroke-width="2"/><path d="M7.5 0 V10 M0 5 H15" stroke="#ffffff" stroke-width="3"/><path d="M7.5 0 V10 M0 5 H15" stroke="#C8102E" stroke-width="2"/><circle cx="20" cy="5" r="1" fill="#ffffff"/><circle cx="24" cy="10" r="1" fill="#ffffff"/><circle cx="22" cy="15" r="1" fill="#ffffff"/></svg>'}
@@ -2302,22 +2399,16 @@ forceCleanLogout:async function(){
   try{
     try{
       var channels = sb.getChannels();
-      channels.forEach(function(ch){
-        try{ sb.removeChannel(ch); }catch(e){}
-      });
+      channels.forEach(function(ch){ try{ sb.removeChannel(ch); }catch(e){} });
     }catch(e){}
     await sb.auth.signOut();
     try{
       var keys = Object.keys(localStorage);
       keys.forEach(function(k){
-        if(k.startsWith('sb-') && k.endsWith('-auth-token')){
-          localStorage.removeItem(k);
-        }
+        if(k.startsWith('sb-') && k.endsWith('-auth-token')){ localStorage.removeItem(k); }
       });
     }catch(e){}
-  }catch(e){
-    console.error('forceCleanLogout error:', e);
-  }
+  }catch(e){ console.error('forceCleanLogout error:', e); }
 },
 
 getCityMap:function(){
@@ -2360,12 +2451,6 @@ getCityMap:function(){
 },
 initProvinces:function(){this.provinces=Object.keys(this.getCityMap());this.weatherProvince='JAMBI';this.cities=this.getCityMap()['JAMBI'];this.weatherCity='Jambi';},
 
-gate:function(fiturId,nextAction){
-  if(this.isUnderMaintenance(fiturId)){return this.showMaintenanceSheet(fiturId);}
-  if(typeof nextAction === 'function') nextAction();
-  return true;
-},
-
 switchTab:function(tab){
   if(tab==='owner' && !this.isOwner) return;
   var maintId = null;
@@ -2395,6 +2480,7 @@ onSheetTouchStart:function(e,sheetKey){
     this.sheetDragY = 0;
     this.currentSheetKey = sheetKey;
     target.style.transition = 'none';
+    document.body.classList.add('sheet-open');
   }
 },
 onSheetTouchMove:function(e){
@@ -2404,6 +2490,7 @@ onSheetTouchMove:function(e){
   var touchY = e.touches[0].clientY;
   var diff = touchY - this.sheetDragStart;
   if(diff > 0){
+    if(e.cancelable) e.preventDefault();
     this.sheetDragY = diff;
     target.style.transform = 'translateY(' + diff + 'px)';
   }
@@ -2412,7 +2499,7 @@ onSheetTouchEnd:function(e){
   if(!this.sheetDragging)return;
   this.sheetDragging = false;
   var target = e.target.closest('.zn-sheet-content');
-  if(!target){ this.sheetDragY=0; return; }
+  if(!target){ this.sheetDragY=0; document.body.classList.remove('sheet-open'); return; }
   target.style.transition = 'transform .3s ease-out';
   if(this.sheetDragY > 100){
     target.style.transform = 'translateY(100%)';
@@ -2424,10 +2511,11 @@ onSheetTouchEnd:function(e){
       else if(key === 'broadcastPopupOpen'){ self.closeBroadcast(); }
       else { self[key] = false; }
       target.style.transform = '';
+      document.body.classList.remove('sheet-open');
     }, 300);
   } else {
     target.style.transform = 'translateY(0)';
-    setTimeout(function(){ target.style.transform = ''; }, 300);
+    setTimeout(function(){ target.style.transform = ''; document.body.classList.remove('sheet-open'); }, 300);
   }
   this.sheetDragY = 0;
   this.currentSheetKey = null;
@@ -2450,6 +2538,8 @@ handleBackButton:function(){
   if(this.bannedInfoSheetOpen){this.bannedInfoSheetOpen=false;return true;}
   if(this.reviewSheetOpen){this.reviewSheetOpen=false;return true;}
   if(this.reviewListSheetOpen){this.reviewListSheetOpen=false;return true;}
+  if(this.bugReportSheetOpen){this.bugReportSheetOpen=false;return true;}
+  if(this.bugReportListSheetOpen){this.bugReportListSheetOpen=false;return true;}
   if(this.proModelSheetOpen){this.proModelSheetOpen=false;return true;}
   if(this.txSheetOpen){this.txSheetOpen=false;return true;}
   if(this.targetSheetOpen){this.targetSheetOpen=false;return true;}
@@ -2486,7 +2576,6 @@ cardMaintenanceStyle:function(f){if(this.isCardUnderMaintenance(f)){return 'opac
 showMaintenanceSheet:function(fiturId){
   var m = this.maintenanceData[fiturId] || {};
   var nama = '';
-  var self = this;
   this.maintenanceFeatures.forEach(function(f){if(f.id === fiturId) nama = f.nama;});
   this.maintenanceSheetData = {nama:nama,alasan:m.alasan||'Sedang diperbaiki',estimasi:m.estimasi||''};
   this.maintenanceSheetOpen = true;
@@ -2527,7 +2616,7 @@ detectDevice:function(){
   window.addEventListener('online',function(){self.deviceInfo.online=true});
   window.addEventListener('offline',function(){self.deviceInfo.online=false});
   if(navigator.getBattery){navigator.getBattery().then(function(b){var upd=function(){self.deviceInfo.battery=Math.round(b.level*100)+'%'};upd();b.addEventListener('levelchange',upd);});}
-  var tips=['Rajin catat transaksi bikin keuangan lebih terkontrol!','Login harian dapat 10 poin gratis!','Coba Zenkai AI dengan 4 mode berbeda!','Coba Zenkai AI Pro dengan 7 model premium!','Download TikTok tanpa watermark!','Kumpulkan poin, naik level!'];
+  var tips=['Rajin catat transaksi bikin keuangan lebih terkontrol!','Login harian dapat 10 poin gratis!','Coba Zenkai AI dengan 4 mode berbeda!','Zenkai AI Pro unlimited chat buat VIP!','Download TikTok tanpa watermark!','Kumpulkan poin, naik level!'];
   this.tipsHarian=tips[Math.floor(Math.random()*tips.length)];
 },
 
@@ -2570,14 +2659,15 @@ init:async function(){
   try{var{data:{session}}=await sb.auth.getSession();if(session&&session.user){this.currentUser=session.user;await this.checkUserAccessOnLogin(session.user,false);}}catch(e){console.error(e);}
   this.chatFullscreen=false;this.proChatFullscreen=false;
   self.setupRealtime();
-  
+
+  // Load ratings cache
+  setTimeout(function(){ self.loadAllFeatureRatings(); }, 3000);
+
+  // Fallback polling ban/VIP
   setInterval(async function(){
     if(!self.currentUser || self.isOwner) return;
     try{
-      var {data} = await sb.from('profiles')
-        .select('is_banned, ban_until, ban_reason, is_vip')
-        .eq('id', self.currentUser.id)
-        .maybeSingle();
+      var {data} = await sb.from('profiles').select('is_banned, ban_until, ban_reason, is_vip').eq('id', self.currentUser.id).maybeSingle();
       if(!data) return;
       if(self.isVip !== data.is_vip){ self.isVip = data.is_vip || false; }
       if(data.is_banned){
@@ -2592,7 +2682,7 @@ init:async function(){
       }
     }catch(e){}
   }, 30000);
-  
+
   setTimeout(function(){
     self.loadingHidden=true;
     self.chatFullscreen=false;
@@ -2644,27 +2734,19 @@ handleEmailAuth:async function(){
       try{
         var keys = Object.keys(localStorage);
         keys.forEach(function(k){
-          if(k.startsWith('sb-') && k.endsWith('-auth-token')){
-            localStorage.removeItem(k);
-          }
+          if(k.startsWith('sb-') && k.endsWith('-auth-token')){ localStorage.removeItem(k); }
         });
       }catch(e){}
       await new Promise(function(r){ setTimeout(r, 300); });
-      
       try{
         var{data,error}=await sb.auth.signInWithPassword({email:self.authEmail,password:self.authPassword});
         if(error)throw error;
         if(!data || !data.user){ throw new Error('Login gagal: response kosong'); }
-        
         self.isAuthenticated = false;
         self.bannedInfoSheetOpen = false;
         self.bannedInfoData = {reason:'', until:null};
-        
         await self.checkUserAccessOnLogin(data.user, true);
-      }catch(e){
-        console.error('Login error:', e);
-        self.showAlert('GAGAL LOGIN', e.message);
-      }
+      }catch(e){ console.error('Login error:', e); self.showAlert('GAGAL LOGIN', e.message); }
     }
   }catch(e){this.showAlert('GAGAL',e.message);}
 },
@@ -2687,65 +2769,46 @@ checkBanStatus:async function(userId){
 
 checkUserAccessOnLogin: async function(user, showWelcome){
   if(!user || !user.email) return;
-  
   this.chatFullscreen = false;
   this.proChatFullscreen = false;
-  
   var isOwnerAccount = user.email.toLowerCase() === OWNER_EMAIL.toLowerCase();
-  
   if(!isOwnerAccount){
     try{
-      var {data: prof, error} = await sb.from('profiles')
-        .select('*').eq('id', user.id).maybeSingle();
-      
+      var {data: prof, error} = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
       if(error){ console.error('Profile fetch error:', error); }
-      
       if(prof && prof.is_banned){
         var stillBanned = true;
         if(prof.ban_until){
           var banEnd = new Date(prof.ban_until);
           if(banEnd < new Date()){
             stillBanned = false;
-            await sb.from('profiles').update({
-              is_banned: false, ban_until: null, ban_reason: ''
-            }).eq('id', user.id);
+            await sb.from('profiles').update({is_banned: false, ban_until: null, ban_reason: ''}).eq('id', user.id);
           }
         }
-        
         if(stillBanned){
-          this.bannedInfoData = {
-            reason: prof.ban_reason || 'Tidak ada alasan',
-            until: prof.ban_until
-          };
+          this.bannedInfoData = {reason: prof.ban_reason || 'Tidak ada alasan', until: prof.ban_until};
           this.bannedInfoSheetOpen = true;
           this.isAuthenticated = false;
-          
-          setTimeout(function(){
-            try{ sb.auth.signOut(); }catch(e){}
-          }, 200);
+          setTimeout(function(){ try{ sb.auth.signOut(); }catch(e){} }, 200);
           return;
         }
       }
     }catch(e){ console.error('Ban check error:', e); }
   }
-  
   if(isOwnerAccount){
     this.pendingUser = user;
     this.enteredPin = '';
     this.ownerPinModalOpen = true;
     return;
   }
-  
   this.currentUser = user;
   this.isOwner = false;
   this.isAuthenticated = true;
-  
   var prof2 = null;
   try{
     var res = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
     prof2 = res.data;
   }catch(e){}
-  
   if(prof2){
     this.isVip = prof2.is_vip || false;
     this.chatCount = prof2.chat_count || 0;
@@ -2754,29 +2817,18 @@ checkUserAccessOnLogin: async function(user, showWelcome){
     this.proChatCount = prof2.pro_chat_count || 0;
     this.proChatDate = prof2.pro_chat_date || '';
   }
-  
-  try{
-    await sb.from('profiles').update({
-      last_login: new Date().toISOString()
-    }).eq('id', user.id);
-  }catch(e){}
-  
+  try{ await sb.from('profiles').update({last_login: new Date().toISOString()}).eq('id', user.id); }catch(e){}
   await this.processUserData();
   await this.loadTransactions();
   await this.loadSavings();
   await this.loadBudgets();
-  
   var today = new Date().toISOString().slice(0,10);
   var lastLogin = localStorage.getItem('zenkai_last_bonus_' + user.id);
   if(lastLogin !== today){
     localStorage.setItem('zenkai_last_bonus_' + user.id, today);
     await this.addPoints(10, 'Login harian');
   }
-  
-  if(showWelcome){
-    this.welcomePopupOpen = true;
-  }
-  
+  if(showWelcome){ this.welcomePopupOpen = true; }
   this.checkBroadcast();
 },
 
@@ -2895,6 +2947,7 @@ drawCharts:function(){var self=this;setTimeout(function(){try{
 
 fetchMovies:async function(){this.movieLoading=true;try{var res=await fetch('https://api.themoviedb.org/3/trending/movie/week?api_key='+TMDB_KEY+'&language=id-ID');var json=await res.json();if(json.results){this.movieList=json.results.slice(0,15).map(function(m){return{id:m.id,title:m.title,year:m.release_date?m.release_date.slice(0,4):'-',rating:m.vote_average?m.vote_average.toFixed(1):'-',overview:m.overview||'-',poster:m.poster_path?'https://image.tmdb.org/t/p/w200'+m.poster_path:''}});}}catch(e){}this.movieLoading=false;},
 openMovieSheet:function(){if(this.isUnderMaintenance('film')){return this.showMaintenanceSheet('film');}this.movieSheetOpen=true;if(this.movieList.length===0)this.fetchMovies();},
+
 openNews:async function(){
   if(this.isUnderMaintenance('berita')){return this.showMaintenanceSheet('berita');}
   this.newsSheetOpen=true;this.selectedNews=null;
@@ -3029,8 +3082,8 @@ sendChat:async function(){
     try{var{data:freshData}=await sb.from('profiles').select('chat_count,chat_bonus,chat_date,is_vip').eq('id',this.currentUser.id).maybeSingle();if(freshData){this.chatCount=freshData.chat_count||0;this.chatBonus=freshData.chat_bonus||0;this.chatDate=freshData.chat_date||'';this.isVip=freshData.is_vip||false;}}catch(e){}
     var today=new Date().toISOString().slice(0,10);
     if(this.chatDate!==today){this.chatCount=0;this.chatDate=today;await sb.from('profiles').update({chat_count:0,chat_date:today}).eq('id',this.currentUser.id);}
-    var maxChat=DAILY_LIMIT+this.chatBonus;
-    if(this.chatCount>=maxChat){return this.showAlert('LIMIT','Chat harian habis.');}
+    var maxChat=10;
+    if(this.chatCount>=maxChat){return this.showAlert('LIMIT CHAT','Chat harian gratis udah abis (10/hari). Upgrade VIP buat unlimited, atau coba lagi besok ya! 🚀');}
   }
   var userMsg=this.chatInput.trim();
   this.chatMessages.push({role:'user',content:userMsg});
@@ -3069,10 +3122,6 @@ getProModelDesc:function(){var self=this;var found='';this.proModelList.forEach(
 openProChat:async function(){
   if(!this.isOwner&&!this.isVip){return this.showAlert('AKSES DITOLAK','Fitur Zenkai AI Pro cuma buat VIP.');}
   this.proChatFullscreen=true;this.proImageData=null;
-  if(this.isVip&&!this.isOwner&&this.currentUser){
-    try{var{data}=await sb.from('profiles').select('pro_chat_count,pro_chat_date').eq('id',this.currentUser.id).maybeSingle();
-    if(data){this.proChatCount=data.pro_chat_count||0;this.proChatDate=data.pro_chat_date||'';}}catch(e){}
-  }
 },
 startProThinking:function(){var self=this;var idx=0;this.proThinkingText=this.proThinkingTexts[0];clearInterval(this.proThinkingTimer);this.proThinkingTimer=setInterval(function(){idx=(idx+1)%self.proThinkingTexts.length;self.proThinkingText=self.proThinkingTexts[idx];},1500+Math.random()*2500);},
 stopProThinking:function(){clearInterval(this.proThinkingTimer);this.proThinkingTimer=null;this.proThinkingText='';},
@@ -3082,11 +3131,7 @@ sendProChat:async function(){
   if((!this.proInput.trim()&&!this.proImageData)||this.proThinking)return;
   if(!this.currentUser)return this.showAlert('PERHATIAN','Login dulu!');
   if(!this.isOwner&&!this.isVip){return this.showAlert('AKSES DITOLAK','Fitur ini cuma buat VIP.');}
-  if(this.isVip&&!this.isOwner){
-    var today=new Date().toISOString().slice(0,10);
-    if(this.proChatDate!==today){this.proChatCount=0;this.proChatDate=today;}
-    if(this.proChatCount>=150){return this.showAlert('LIMIT HABIS','Limit VIP 150 chat/hari udah kepake. Coba lagi besok ya! 😊');}
-  }
+  // VIP UNLIMITED — gak ada cek limit
   var userMsg=this.proInput.trim();var imgData=this.proImageData;
   var displayContent=userMsg||'(Kirim gambar)';
   this.proMessages.push({role:'user',content:displayContent,image:imgData});
@@ -3104,12 +3149,150 @@ sendProChat:async function(){
     var reply=data.reply||'Maaf, Zenkai AI Pro tidak bisa menjawab saat ini.';
     this.proMessages.push({role:'assistant',content:reply});
     await this.addPoints(2,'Chat Zenkai AI Pro');
-    if(this.isVip&&!this.isOwner&&this.currentUser){this.proChatCount++;try{await sb.from('profiles').update({pro_chat_count:this.proChatCount,pro_chat_date:this.proChatDate}).eq('id',this.currentUser.id);}catch(e){}}
   }catch(e){this.proMessages.push({role:'assistant',content:'Maaf, koneksi ke Zenkai AI Pro lagi bermasalah. Coba lagi ya 😊'});}
   finally{this.stopProThinking();this.proThinking=false;}
 },
 clearProChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat Zenkai AI Pro bakal dihapus.',function(){self.proMessages=[];self.showAlert('SUKSES','Chat dihapus.');},'🗑️');},
 
+// REVIEW FUNCTIONS
+getFeatureRating:function(fiturId){
+  var cached = this.featureRatingsCache[fiturId];
+  if(!cached) return {avg:'0.0', total:0};
+  return cached;
+},
+loadAllFeatureRatings:async function(){
+  var now = Date.now();
+  if(now - this.featureRatingsCacheTime < 5*60*1000) return;
+  try{
+    var {data, error} = await sb.from('reviews').select('fitur_id, rating');
+    if(error) throw error;
+    var map = {};
+    (data||[]).forEach(function(r){
+      if(!map[r.fitur_id]) map[r.fitur_id] = {sum:0, count:0};
+      map[r.fitur_id].sum += Number(r.rating) || 0;
+      map[r.fitur_id].count += 1;
+    });
+    var result = {};
+    Object.keys(map).forEach(function(fid){
+      var avg = (map[fid].sum / map[fid].count).toFixed(1);
+      result[fid] = {avg:avg, total:map[fid].count};
+    });
+    this.featureRatingsCache = result;
+    this.featureRatingsCacheTime = now;
+  }catch(e){ console.error('Load ratings error:', e); }
+},
+openReviewListForFeature:async function(f){
+  this.reviewForFeatureId = f;
+  this.reviewListSheetOpen = true;
+  this.reviewList = [];
+  await this.loadReviewsForFeature(f.id);
+},
+loadReviewsForFeature:async function(fiturId){
+  try{
+    var {data, error} = await sb.from('reviews').select('*').eq('fitur_id', fiturId).order('created_at', {ascending:false}).limit(100);
+    if(error) throw error;
+    this.reviewList = data || [];
+  }catch(e){ console.error('Load reviews error:', e); this.reviewList = []; }
+},
+openReviewFromList:function(){
+  if(!this.currentUser){return this.showAlert('PERHATIAN','Login dulu!');}
+  if(!this.reviewForFeatureId){return;}
+  var f = this.reviewForFeatureId;
+  this.reviewTarget = f;
+  this.reviewForm = {rating:5, komentar:''};
+  this.reviewListSheetOpen = false;
+  var self = this;
+  setTimeout(function(){ self.reviewSheetOpen = true; }, 200);
+},
+getAverageRating:function(reviews){
+  if(!reviews || reviews.length === 0) return '0.0';
+  var sum = reviews.reduce(function(acc, r){ return acc + (Number(r.rating)||0); }, 0);
+  return (sum / reviews.length).toFixed(1);
+},
+getStarString:function(rating){
+  var r = Math.round(parseFloat(rating)) || 0;
+  return '★'.repeat(r) + '☆'.repeat(5-r);
+},
+getRatingLabel:function(rating){
+  var labels = {1:'😞 Jelek',2:'🙁 Kurang',3:'😐 Cukup',4:'🙂 Bagus',5:'🤩 Keren Banget!'};
+  return labels[rating] || 'Pilih rating';
+},
+submitReview:async function(){
+  if(!this.reviewTarget) return;
+  if(!this.reviewForm.rating || this.reviewForm.rating < 1){return this.showAlert('PERHATIAN','Kasih rating dulu!');}
+  try{
+    var {error} = await sb.from('reviews').insert({user_id:this.currentUser.id,username:this.userName,fitur_id:this.reviewTarget.id,rating:this.reviewForm.rating,komentar:this.reviewForm.komentar||'',created_at:new Date().toISOString()});
+    if(error) throw error;
+    await this.addPoints(3,'Review fitur');
+    this.featureRatingsCacheTime = 0;
+    await this.loadAllFeatureRatings();
+    this.reviewSheetOpen = false;
+    this.reviewTarget = null;
+    this.reviewForm = {rating:5,komentar:''};
+    this.showAlert('SUKSES','Makasih! Review lu udah terkirim. ⭐');
+  }catch(e){this.showAlert('GAGAL',e.message);}
+},
+
+// BUG REPORT FUNCTIONS
+openBugReportSheet:function(){
+  if(!this.currentUser){return this.showAlert('PERHATIAN','Login dulu!');}
+  this.bugReportForm = {tipe:'bug', judul:'', deskripsi:''};
+  this.bugReportSheetOpen = true;
+},
+submitBugReport:async function(){
+  if(!this.currentUser) return;
+  if(!this.bugReportForm.judul.trim()){return this.showAlert('PERHATIAN','Judul wajib diisi!');}
+  if(!this.bugReportForm.deskripsi.trim()){return this.showAlert('PERHATIAN','Deskripsi wajib diisi!');}
+  if(this.bugReportForm.deskripsi.length < 10){return this.showAlert('PERHATIAN','Deskripsi minimal 10 karakter!');}
+  this.bugReportSubmitting = true;
+  try{
+    var {error} = await sb.from('bug_reports').insert({
+      user_id: this.currentUser.id,
+      username: this.userName,
+      tipe: this.bugReportForm.tipe,
+      judul: this.bugReportForm.judul.trim(),
+      deskripsi: this.bugReportForm.deskripsi.trim(),
+      status: 'baru'
+    });
+    if(error) throw error;
+    await this.addPoints(5, 'Lapor bug');
+    this.bugReportSheetOpen = false;
+    this.bugReportForm = {tipe:'bug', judul:'', deskripsi:''};
+    this.showAlert('TERKIRIM ✅', 'Makasih udah lapor! Laporan lu bakal segera dicek. Bonus +5 poin buat lu 🎉');
+  }catch(e){
+    this.showAlert('GAGAL', e.message);
+  }finally{
+    this.bugReportSubmitting = false;
+  }
+},
+openBugReportList:async function(){
+  if(!this.currentUser) return;
+  this.bugReportListSheetOpen = true;
+  this.bugReportListLoading = true;
+  try{
+    var {data, error} = await sb.from('bug_reports').select('*').eq('user_id', this.currentUser.id).order('created_at', {ascending:false}).limit(50);
+    if(error) throw error;
+    this.bugReportList = data || [];
+  }catch(e){ console.error(e); this.bugReportList = []; }
+  finally{ this.bugReportListLoading = false; }
+},
+loadAllBugReports:async function(){
+  try{
+    var {data, error} = await sb.from('bug_reports').select('*').order('created_at', {ascending:false}).limit(100);
+    if(error) throw error;
+    this.bugReportList = data || [];
+  }catch(e){console.error(e);}
+},
+updateBugStatus:async function(reportId, newStatus){
+  try{
+    var {error} = await sb.from('bug_reports').update({status:newStatus, updated_at:new Date().toISOString()}).eq('id', reportId);
+    if(error) throw error;
+    await this.loadAllBugReports();
+    this.showAlert('SUKSES', 'Status diubah ke "'+newStatus+'"');
+  }catch(e){this.showAlert('GAGAL', e.message);}
+},
+
+// OWNER FUNCTIONS
 loadAppStats:async function(){try{
   var{count:u}=await sb.from('profiles').select('*',{count:'exact',head:true});
   var{count:t}=await sb.from('transactions').select('*',{count:'exact',head:true});
@@ -3135,16 +3318,11 @@ loadLiveDashboard:async function(){
     this.liveStats={onlineNow:active||0,chatToday:chats||0,newUsersToday:newUsers||0,txToday:txTotal,activeToday:active||0};
   }catch(e){console.error(e);}
 },
-
 loadAllUsers:async function(){try{var{data}=await sb.from('profiles').select('*').order('created_at',{ascending:false});if(data)this.allUsers=data;}catch(e){}},
-
 openBanSheet:function(u){this.banSheetTarget=u;this.banSheetForm={durasi:'1d',alasan:''};this.banSheetOpen=true;},
 confirmBan:async function(){
   if(!this.banSheetTarget) return;
-  if(!this.banSheetForm.alasan || !this.banSheetForm.alasan.trim()){
-    return this.showAlert('PERHATIAN', 'Alasan wajib diisi!');
-  }
-  
+  if(!this.banSheetForm.alasan || !this.banSheetForm.alasan.trim()){return this.showAlert('PERHATIAN', 'Alasan wajib diisi!');}
   var durasi = this.banSheetForm.durasi;
   var until = null;
   var now = Date.now();
@@ -3154,73 +3332,33 @@ confirmBan:async function(){
   else if(durasi === '7d') until = new Date(now + 7*24*60*60*1000);
   else if(durasi === '30d') until = new Date(now + 30*24*60*60*1000);
   else if(durasi === 'perm') until = null;
-  
   var targetId = this.banSheetTarget.id;
   var targetName = this.banSheetTarget.username;
-  
   try{
     var sessionRes = await sb.auth.getSession();
     var email = sessionRes?.data?.session?.user?.email || 'unknown';
-    
-    var payload = {
-      is_banned: true,
-      ban_reason: this.banSheetForm.alasan.trim(),
-      ban_until: until ? until.toISOString() : null
-    };
-    
-    console.log('Ban attempt:', { targetId, payload, byEmail: email });
-    
-    var {data, error} = await sb.from('profiles')
-      .update(payload)
-      .eq('id', targetId)
-      .select();
-    
-    if(error){
-      console.error('Ban error:', error);
-      throw new Error('Gagal ban: ' + error.message);
-    }
-    
-    if(!data || data.length === 0){
-      throw new Error('Update gak ngefek. Kemungkinan RLS nolak. Cek policy SQL-nya.');
-    }
-    
-    console.log('Ban success:', data);
-    
+    var payload = {is_banned: true, ban_reason: this.banSheetForm.alasan.trim(), ban_until: until ? until.toISOString() : null};
+    var {data, error} = await sb.from('profiles').update(payload).eq('id', targetId).select();
+    if(error){ throw new Error('Gagal ban: ' + error.message); }
+    if(!data || data.length === 0){ throw new Error('Update gak ngefek. Kemungkinan RLS nolak.'); }
     this.banSheetOpen = false;
     this.banSheetTarget = null;
     this.banSheetForm = {durasi:'1d', alasan:''};
-    
     await this.loadAllUsers();
-    
-    var durasiText = durasi === 'perm' ? 'PERMANEN' :
-                     durasi === '30m' ? '30 Menit' :
-                     durasi === '1h' ? '1 Jam' :
-                     durasi === '1d' ? '1 Hari' :
-                     durasi === '7d' ? '7 Hari' : '30 Hari';
-    
+    var durasiText = durasi === 'perm' ? 'PERMANEN' : durasi === '30m' ? '30 Menit' : durasi === '1h' ? '1 Jam' : durasi === '1d' ? '1 Hari' : durasi === '7d' ? '7 Hari' : '30 Hari';
     this.showAlert('SUKSES', targetName + ' di-ban ' + durasiText);
-  }catch(e){
-    console.error('confirmBan catch:', e);
-    this.showAlert('GAGAL BAN', e.message);
-  }
+  }catch(e){ this.showAlert('GAGAL BAN', e.message); }
 },
 unbanUser:async function(u){
   var self = this;
   this.showConfirm('UNBAN USER?', u.username + ' akan diaktifkan kembali.', async function(){
     try{
-      var {data, error} = await sb.from('profiles')
-        .update({ is_banned: false, ban_until: null, ban_reason: '' })
-        .eq('id', u.id)
-        .select();
-      
+      var {data, error} = await sb.from('profiles').update({ is_banned: false, ban_until: null, ban_reason: '' }).eq('id', u.id).select();
       if(error) throw error;
       if(!data || data.length === 0) throw new Error('RLS nolak update unban');
-      
       await self.loadAllUsers();
       self.showAlert('SUKSES', u.username + ' di-unban.');
-    }catch(e){
-      self.showAlert('GAGAL UNBAN', e.message);
-    }
+    }catch(e){ self.showAlert('GAGAL UNBAN', e.message); }
   }, '✓');
 },
 toggleVip:async function(u,v){
@@ -3379,30 +3517,8 @@ saveMaintenance:async function(){
 
 saveWelcomeText:async function(){if(!this.welcomeTextEdit)return;await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit}).eq('id',1);this.welcomeText=this.welcomeTextEdit;this.showAlert('SUKSES','Kata sambutan diperbarui!');},
 
-loadReviews:async function(){
-  try{var {data} = await sb.from('reviews').select('*').order('created_at',{ascending:false}).limit(50);this.reviewList = data || [];}catch(e){console.error(e);}
-},
-openReviewSheet:function(f){
-  if(!this.currentUser){return this.showAlert('PERHATIAN','Login dulu!');}
-  this.reviewTarget = f;
-  this.reviewForm = {rating:5,komentar:''};
-  this.reviewSheetOpen = true;
-},
-submitReview:async function(){
-  if(!this.reviewTarget) return;
-  if(!this.reviewForm.rating || this.reviewForm.rating < 1){return this.showAlert('PERHATIAN','Kasih rating dulu!');}
-  try{
-    var {error} = await sb.from('reviews').insert({user_id:this.currentUser.id,username:this.userName,fitur_id:this.reviewTarget.id,rating:this.reviewForm.rating,komentar:this.reviewForm.komentar||'',created_at:new Date().toISOString()});
-    if(error) throw error;
-    await this.addPoints(3,'Review fitur');
-    this.reviewSheetOpen = false;this.reviewTarget = null;this.reviewForm = {rating:5,komentar:''};
-    this.showAlert('SUKSES','Terima kasih! Review lu udah terkirim.');
-  }catch(e){this.showAlert('GAGAL',e.message);}
-},
-
 setupRealtime:function(){
   var self = this;
-  
   try{
     sb.channel('bc-rt').on('postgres_changes',{event:'INSERT',schema:'public',table:'broadcasts'},function(p){
       var n=p.new;
@@ -3413,7 +3529,6 @@ setupRealtime:function(){
       self.broadcastPopupOpen=true;
     }).subscribe();
   }catch(e){console.error('RT BC:',e);}
-  
   try{
     sb.channel('maint-rt').on('postgres_changes',{event:'*',schema:'public',table:'feature_maintenance'},function(p){
       var u=p.new;
@@ -3428,42 +3543,27 @@ setupRealtime:function(){
       }
     }).subscribe();
   }catch(e){console.error('RT MT:',e);}
-  
   try{
     sb.channel('ban-rt')
-      .on('postgres_changes', {
-        event: 'UPDATE',
-        schema: 'public',
-        table: 'profiles'
-      }, function(p){
+      .on('postgres_changes', {event: 'UPDATE', schema: 'public', table: 'profiles'}, function(p){
         var u = p.new;
         if(!self.currentUser) return;
         if(u.id !== self.currentUser.id) return;
-        
         self.isVip = u.is_vip || false;
-        
         if(u.is_banned === true){
           var stillBanned = true;
           if(u.ban_until){
             if(new Date(u.ban_until) < new Date()) stillBanned = false;
           }
-          
           if(stillBanned){
-            self.bannedInfoData = {
-              reason: u.ban_reason || 'Melanggar aturan',
-              until: u.ban_until
-            };
+            self.bannedInfoData = {reason: u.ban_reason || 'Melanggar aturan', until: u.ban_until};
             self.bannedInfoSheetOpen = true;
             self.isAuthenticated = false;
             self.chatFullscreen = false;
             self.proChatFullscreen = false;
-            
-            setTimeout(function(){
-              try{ sb.auth.signOut(); }catch(e){}
-            }, 1500);
+            setTimeout(function(){ try{ sb.auth.signOut(); }catch(e){} }, 1500);
           }
         }
-        
         if(u.is_banned === false && self.bannedInfoData.reason){
           self.bannedInfoSheetOpen = false;
           self.bannedInfoData = {reason:'', until:null};
