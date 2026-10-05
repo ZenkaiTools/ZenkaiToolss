@@ -1045,6 +1045,46 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-style="comic"][data-darkmode="light"] .zn-hero-title{text-shadow:3px 3px 0 var(--primary) !important}
 [data-style="minimal"][data-darkmode="light"] .zn-hero-bg{opacity:.05}
 [data-style="minimal"][data-darkmode="light"] .zn-hero-bg::after{background:linear-gradient(180deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,.6) 100%)}
+
+/* Cinema rotate */
+.zn-cinema-player.rotated {
+  transform: rotate(90deg);
+  transform-origin: center;
+  width: 100vh;
+  height: 100vw;
+  position: fixed;
+  top: calc((100vh - 100vw) / 2);
+  left: calc((100vw - 100vh) / 2);
+}
+.zn-cinema-scrub-wrap { position: relative; padding: 12px 0; cursor: pointer; }
+.zn-cinema-scrub-wrap .zn-cinema-progress { margin-bottom: 0; height: 6px; }
+.zn-cinema-progress-thumb {
+  position: absolute; right: -8px; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 16px; border-radius: 50%; background: #ff0000;
+  box-shadow: 0 0 10px rgba(255,0,0,.9);
+  opacity: 0; transition: opacity .2s;
+}
+.zn-cinema-scrub-wrap:hover .zn-cinema-progress-thumb,
+.zn-cinema-scrub-wrap:active .zn-cinema-progress-thumb { opacity: 1; }
+.zn-cinema-scrub-bubble {
+  position: absolute; top: -30px; transform: translateX(-50%);
+  background: rgba(0,0,0,.85); color: #fff; padding: 4px 10px;
+  border-radius: 8px; font-family: var(--font-mono); font-size: 12px;
+  white-space: nowrap; pointer-events: none; z-index: 5;
+}
+.zn-cinema-chapter {
+  position: absolute; top: -130px; transform: translateX(-50%);
+  background: #000; border: 2px solid #fff; border-radius: 8px;
+  overflow: hidden; width: 160px; z-index: 5;
+  box-shadow: 0 4px 20px rgba(0,0,0,.8);
+}
+.zn-cinema-chapter-thumb { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+.zn-cinema-chapter-time {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,.75); color: #fff;
+  font-family: var(--font-mono); font-size: 11px;
+  padding: 3px 6px; text-align: center;
+}
 </style></head>
 <body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode" :data-darkmode="darkMode">
 
@@ -2111,20 +2151,30 @@ select.zn-input option{background:var(--card);color:var(--text)}
 
           <!-- Strikes list -->
           <div class="zn-card" style="border-color:var(--danger)">
-            <div class="zn-card-title" style="color:var(--danger)">⚠️ USER TOXIC (STRIKE)</div>
-            <div style="max-height:300px;overflow-y:auto">
-              <template x-for="s in toxicStrikesList" :key="s.id">
-                <div style="padding:10px;border-radius:10px;background:rgba(255,51,85,.08);border:1px solid var(--danger);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px">
-                  <div style="flex:1;min-width:0">
-                    <div style="font-size:12px;font-weight:700;color:var(--text)" x-text="s.username || s.user_id"></div>
-                    <div style="font-size:10px;color:var(--danger);font-family:var(--font-mono)">Strike: <b x-text="s.strike_count"></b>/3 <span x-show="s.banned_permanent"> • 🚫 BANNED PERMANENT</span></div>
-                  </div>
-                  <button @click="resetStrikeById(s.user_id)" class="zn-btn zn-btn-success" style="padding:6px 10px;font-size:9px;width:auto">↺ RESET</button>
-                </div>
-              </template>
-              <template x-if="toxicStrikesList.length===0"><div style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">Belum ada user toxic 👍</div></template>
-            </div>
+  <div class="zn-card-title" style="color:var(--danger)">⚠️ USER TOXIC (STRIKE)</div>
+  <div style="max-height:300px;overflow-y:auto">
+    <template x-for="s in toxicStrikesList" :key="s.id">
+      <div style="padding:10px;border-radius:10px;background:rgba(255,51,85,.08);border:1px solid var(--danger);margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;font-weight:700;color:var(--text)" x-text="s.username || s.user_id"></div>
+            <div style="font-size:10px;color:var(--danger);font-family:var(--font-mono)">Strike: <b x-text="s.strike_count"></b>/3 <span x-show="s.banned_permanent"> • 🚫 BANNED PERMANENT</span></div>
           </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <button @click="resetStrikeById(s.user_id)" class="zn-btn zn-btn-success" style="padding:6px;font-size:9px">↺ RESET STRIKE</button>
+          <template x-if="s.banned_permanent">
+            <button @click="unbanGlobalChat(s.user_id)" class="zn-btn zn-btn-warning" style="padding:6px;font-size:9px">✓ UNBAN</button>
+          </template>
+          <template x-if="!s.banned_permanent">
+            <div style="font-size:9px;color:var(--text-mute);text-align:center;padding:6px">Belum banned</div>
+          </template>
+        </div>
+      </div>
+    </template>
+    <template x-if="toxicStrikesList.length===0"><div style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">Belum ada user toxic 👍</div></template>
+  </div>
+</div>
 
           <!-- Global chat messages -->
           <div class="zn-card">
@@ -3021,10 +3071,13 @@ select.zn-input option{background:var(--card);color:var(--text)}
 
 <!-- CINEMA PLAYER -->
 <template x-if="cinemaPlayerOpen && cinemaCurrentFilm">
-  <div class="zn-cinema-player">
+  <div class="zn-cinema-player" :class="cinemaRotated ? 'rotated' : ''">
     <div class="zn-cinema-header" :class="{hidden: cinemaControlsHidden}">
       <button class="zn-cinema-close" @click="closeCinemaPlayer()"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
       <div class="zn-cinema-title" x-text="cinemaCurrentFilm.judul"></div>
+      <button class="zn-cinema-close" @click="toggleCinemaRotate()" style="margin-left:auto" title="Putar layar">
+        <svg viewBox="0 0 24 24"><path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zm-6.25-.77c-.59-.59-1.54-.59-2.12 0L1.75 8.11c-.59.59-.59 1.54 0 2.12l12.02 12.02c.59.59 1.54.59 2.12 0l6.36-6.36c.59-.59.59-1.54 0-2.12L10.23 1.75zm4.6 19.44L2.81 9.17l6.36-6.36 12.02 12.02-6.36 6.36zm-7.31.29C4.25 19.94 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32z"/></svg>
+      </button>
     </div>
     <div class="zn-cinema-video-wrap">
       <iframe :src="cinemaIframeUrl" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
@@ -3040,7 +3093,18 @@ select.zn-input option{background:var(--card);color:var(--text)}
       <div class="zn-cinema-seek-hint" :class="{show: cinemaSeekHintShow}" x-text="cinemaSeekHint"></div>
     </div>
     <div class="zn-cinema-controls" :class="{hidden: cinemaControlsHidden}">
-      <div class="zn-cinema-progress" @click="cinemaSeekClick($event)"><div class="zn-cinema-progress-fill" :style="'width:'+cinemaProgress+'%'"></div></div>
+      <div class="zn-cinema-scrub-wrap" @mousedown="startCinemaScrub($event)" @touchstart.prevent="startCinemaScrub($event)">
+        <div class="zn-cinema-progress">
+          <div class="zn-cinema-progress-fill" :style="'width:'+cinemaScrubPercent+'%'">
+            <div class="zn-cinema-progress-thumb"></div>
+          </div>
+        </div>
+        <div class="zn-cinema-scrub-bubble" :style="'left:'+cinemaScrubPercent+'%'" x-show="cinemaScrubbing" x-text="cinemaScrubTimeText"></div>
+        <div class="zn-cinema-chapter" :style="'left:'+cinemaScrubPercent+'%'" x-show="cinemaScrubbing">
+          <img :src="cinemaCurrentFilm.thumbnail || ('https://img.youtube.com/vi/'+cinemaCurrentFilm.youtube_id+'/mqdefault.jpg')" class="zn-cinema-chapter-thumb">
+          <div class="zn-cinema-chapter-time" x-text="cinemaScrubTimeText"></div>
+        </div>
+      </div>
       <div class="zn-cinema-buttons">
         <button class="zn-cinema-btn" @click="cinemaSeekBack()"><svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg></button>
         <button class="zn-cinema-btn" @click="cinemaTogglePlay()">
@@ -3108,20 +3172,23 @@ select.zn-input option{background:var(--card);color:var(--text)}
         <div style="font-size:11px;color:var(--text-dim);line-height:1.6">Ngobrol sama semua user Zenkai. Jaga sopan santun ya! 🙏</div>
       </div>
       <template x-for="(msg,idx) in globalChatMessages" :key="msg.id || idx">
-        <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'display:flex;gap:8px;align-items:flex-start;flex-direction:row-reverse;' : 'display:flex;gap:8px;align-items:flex-start;'">
-          <div class="zn-avatar" style="width:32px;height:32px;font-size:11px;border-radius:8px;flex-shrink:0">
-            <template x-if="msg.avatar_url"><img :src="msg.avatar_url"></template>
-            <template x-if="!msg.avatar_url"><span x-text="msg.username?msg.username.substring(0,2).toUpperCase():'ZK'"></span></template>
-          </div>
-          <div style="flex:1;min-width:0;max-width:78%">
-            <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'display:flex;align-items:center;gap:6px;margin-bottom:3px;justify-content:flex-end;' : 'display:flex;align-items:center;gap:6px;margin-bottom:3px;'">
-              <span style="font-size:11px;font-weight:700;color:var(--primary)" x-text="msg.username"></span>
-              <span style="font-size:9px;color:var(--text-mute);font-family:var(--font-mono)" x-text="formatTimeAgo(msg.created_at)"></span>
-            </div>
-            <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'padding:10px 14px;border-radius:14px 4px 14px 14px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#050508;font-size:13px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap;' : 'padding:10px 14px;border-radius:4px 14px 14px 14px;background:var(--card);border:1px solid var(--border);font-size:13px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap;'" x-text="msg.message"></div>
-          </div>
-        </div>
-      </template>
+  <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'display:flex;gap:8px;align-items:flex-start;flex-direction:row-reverse;' : 'display:flex;gap:8px;align-items:flex-start;'">
+    <div class="zn-avatar" style="width:32px;height:32px;font-size:11px;border-radius:8px;flex-shrink:0">
+      <template x-if="msg.avatar_url"><img :src="msg.avatar_url"></template>
+      <template x-if="!msg.avatar_url"><span x-text="msg.username?msg.username.substring(0,2).toUpperCase():'ZK'"></span></template>
+    </div>
+    <div style="flex:1;min-width:0;max-width:78%">
+      <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'display:flex;align-items:center;gap:6px;margin-bottom:3px;justify-content:flex-end;' : 'display:flex;align-items:center;gap:6px;margin-bottom:3px;'">
+        <span style="font-size:11px;font-weight:700;color:var(--primary)" x-text="msg.username"></span>
+        <span style="font-size:9px;color:var(--text-mute);font-family:var(--font-mono)" x-text="formatTimeAgo(msg.created_at)"></span>
+        <template x-if="isOwner || msg.user_id === (currentUser ? currentUser.id : '')">
+          <button @click.stop="deleteGlobalMessage(msg.id, msg.user_id)" style="background:rgba(255,51,85,.15);border:1px solid var(--danger);color:var(--danger);border-radius:6px;padding:2px 6px;font-size:10px;line-height:1;cursor:pointer">×</button>
+        </template>
+      </div>
+      <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'padding:10px 14px;border-radius:14px 4px 14px 14px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#050508;font-size:13px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap;' : 'padding:10px 14px;border-radius:4px 14px 14px 14px;background:var(--card);border:1px solid var(--border);font-size:13px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap;'" x-text="msg.message"></div>
+    </div>
+  </div>
+</template>
     </div>
 
     <div class="zn-chat-input-bar">
@@ -3532,6 +3599,12 @@ cinemaSeekRightShow:false,
 cinemaSeekLeftTimer:null,
 cinemaSeekRightTimer:null,
 cinemaSeekHintTimer:null,
+cinemaLastTapLeft:0,
+cinemaLastTapRight:0,
+cinemaRotated:false,
+cinemaScrubbing:false,
+cinemaScrubPercent:0,
+cinemaScrubTimeText:'00:00',
 cinemaProgressTimer:null,
 cinemaSubmitting:false,
 cinemaForm:{judul:'',youtube_id:'',kategori:'drama',tahun:'',durasi:'',deskripsi:''},
@@ -4670,7 +4743,7 @@ openGlobalChat:async function(){
 
 loadGlobalChat:async function(){
   try{
-    var {data,error} = await sb.from('global_chat').select('*').order('created_at',{ascending:true}).limit(200);
+    var {data,error} = await sb.from('global_chat').select('*').eq('is_deleted', false).order('created_at',{ascending:true}).limit(200);
     if(error) throw error;
     this.globalChatMessages = data || [];
   }catch(e){
@@ -4774,6 +4847,7 @@ setupGlobalChatRealtime:function(){
       .on('postgres_changes', {event:'INSERT', schema:'public', table:'global_chat'}, function(p){
         var msg = p.new;
         if(!msg || !msg.id) return;
+        if(msg.is_deleted) return;
         var exists = self.globalChatMessages.some(function(m){ return m.id === msg.id; });
         if(exists) return;
         self.globalChatMessages.push(msg);
@@ -4781,6 +4855,13 @@ setupGlobalChatRealtime:function(){
           var body = document.getElementById('globalChatBody');
           if(body) body.scrollTop = body.scrollHeight;
         }, 100);
+      })
+      .on('postgres_changes', {event:'UPDATE', schema:'public', table:'global_chat'}, function(p){
+        var msg = p.new;
+        if(!msg || !msg.id) return;
+        if(msg.is_deleted){
+          self.globalChatMessages = self.globalChatMessages.filter(function(m){ return m.id !== msg.id; });
+        }
       })
       .subscribe();
   }catch(e){}
@@ -4807,16 +4888,39 @@ loadGlobalChatAdmin:async function(){
   }
 },
 
-deleteGlobalMessage:async function(msgId){
+deleteGlobalMessage:async function(msgId, ownerId){
+  if(!this.currentUser) return;
+  if(!this.isOwner && ownerId !== this.currentUser.id){
+    return this.showToast('🚫 DITOLAK','Kamu cuma bisa hapus chat sendiri.','error');
+  }
   var self = this;
-  this.showConfirm('HAPUS PESAN?','Pesan akan dihapus dari Chat Global.', async function(){
+  var title = this.isOwner ? 'HAPUS PESAN INI?' : 'HAPUS CHAT KAMU?';
+  var msg = this.isOwner ? 'Pesan ini bakal kehapus buat semua user.' : 'Chat kamu bakal kehapus.';
+  this.showConfirm(title, msg, async function(){
     try{
-      var {error} = await sb.from('global_chat').delete().eq('id', msgId);
+      var {error} = await sb.from('global_chat').update({
+        is_deleted: true,
+        deleted_by: self.currentUser.id,
+        deleted_at: new Date().toISOString(),
+        deleted_reason: self.isOwner ? 'Owner hapus' : 'User hapus sendiri'
+      }).eq('id', msgId);
       if(error) throw error;
       self.globalChatMessages = self.globalChatMessages.filter(function(m){ return m.id !== msgId; });
       self.showToast('✅ SUKSES','Pesan dihapus.','success');
     }catch(e){ self.showToast('❌ GAGAL', e.message, 'error'); }
   }, '🗑️');
+},
+
+unbanGlobalChat:async function(userId){
+  var self = this;
+  this.showConfirm('UNBAN DARI CHAT GLOBAL?','User ini bakal bisa chat global lagi & strike di-reset.', async function(){
+    try{
+      var {error} = await sb.from('toxic_strikes').delete().eq('user_id', userId);
+      if(error) throw error;
+      await self.loadGlobalChatAdmin();
+      self.showToast('✅ SUKSES','User di-unban dari chat global.','success');
+    }catch(e){ self.showToast('❌ GAGAL', e.message, 'error'); }
+  }, '✓');
 },
 
 resetStrikeById:async function(userId){
@@ -5036,25 +5140,11 @@ cinemaSeekClick:function(e){
 },
 cinemaTapSeek:function(side){
   if(!this.cinemaPlayer) return;
-  try{
-    var t = this.cinemaPlayer.getCurrentTime() || 0;
-    if(side === 'right'){
-      this.cinemaPlayer.seekTo(t + 10, true);
-      this.showCinemaSeekHint('+10s');
-      this.cinemaSeekRightShow = true;
-      var self1 = this;
-      clearTimeout(this.cinemaSeekRightTimer);
-      this.cinemaSeekRightTimer = setTimeout(function(){ self1.cinemaSeekRightShow = false; }, 400);
-    } else {
-      this.cinemaPlayer.seekTo(Math.max(0, t - 10), true);
-      this.showCinemaSeekHint('-10s');
-      this.cinemaSeekLeftShow = true;
-      var self2 = this;
-      clearTimeout(this.cinemaSeekLeftTimer);
-      this.cinemaSeekLeftTimer = setTimeout(function(){ self2.cinemaSeekLeftShow = false; }, 400);
-    }
-  }catch(e){}
-},
+  var now = Date.now();
+  var DOUBLE_TAP_DELAY = 350;
+  var self = this;
+  if(side === 'right'){
+    if(this.cinemaLastTap
 showCinemaSeekHint:function(txt){
   var self = this;
   this.cinemaSeekHint = txt;
@@ -5518,7 +5608,9 @@ sendProChat:async function(){
   try{
     var{data:sessionData}=await sb.auth.getSession();
     var token=sessionData&&sessionData.session?sessionData.session.access_token:'';
-    var res=await fetch(this.proEdgeUrl,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_ANON_KEY},body:JSON.stringify({messages:apiMessages,model:this.proModelManual?this.proModel:null,hasImage:!!imgData})});
+    var modelToUse = this.proModelManual ? this.proModel : 'deepseek-v4-flash';
+if(this.proModel === 'auto'){ modelToUse = 'deepseek-v4-flash'; }
+var res=await fetch(this.proEdgeUrl,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_ANON_KEY},body:JSON.stringify({messages:apiMessages,model:modelToUse,hasImage:!!imgData})});
     var data=await res.json();
     var reply='';
     var isFallback=false;
