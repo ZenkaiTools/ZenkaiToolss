@@ -24,7 +24,6 @@
   --font-body:'Inter',system-ui,sans-serif;
   --font-mono:'JetBrains Mono',monospace;
 }
-/* Warna tema - default dark */
 [data-theme="cyan"]{--primary:#00d9ff;--primary-dark:#0099bb;--primary-soft:rgba(0,217,255,.15);--primary-glow:rgba(0,217,255,.5);--accent:#ff0080;--accent-dark:#cc0066;--accent-soft:rgba(255,0,128,.15);--accent-glow:rgba(255,0,128,.5)}
 [data-theme="magenta"]{--primary:#ff0080;--primary-dark:#cc0066;--primary-soft:rgba(255,0,128,.15);--primary-glow:rgba(255,0,128,.5);--accent:#00d9ff;--accent-dark:#0099bb;--accent-soft:rgba(0,217,255,.15);--accent-glow:rgba(0,217,255,.5)}
 [data-theme="emerald"]{--primary:#00ff88;--primary-dark:#00bb66;--primary-soft:rgba(0,255,136,.15);--primary-glow:rgba(0,255,136,.5);--accent:#a855f7;--accent-dark:#7e22ce;--accent-soft:rgba(168,85,247,.15);--accent-glow:rgba(168,85,247,.5)}
@@ -34,7 +33,6 @@
 [data-theme="red"]{--primary:#ff3355;--primary-dark:#cc2244;--primary-soft:rgba(255,51,85,.15);--primary-glow:rgba(255,51,85,.5);--accent:#ffaa00;--accent-dark:#cc8800;--accent-soft:rgba(255,170,0,.15);--accent-glow:rgba(255,170,0,.5)}
 [data-theme="blue"]{--primary:#3b82f6;--primary-dark:#1e40af;--primary-soft:rgba(59,130,246,.15);--primary-glow:rgba(59,130,246,.5);--accent:#06b6d4;--accent-dark:#0891b2;--accent-soft:rgba(6,182,212,.15);--accent-glow:rgba(6,182,212,.5)}
 
-/* ========== MODE TERANG (Light Mode) ========== */
 [data-darkmode="light"]{
   --bg:#f0f0f5;--bg-2:#ffffff;--card:#ffffff;--card-2:#fafafa;
   --border:#d8d8e0;--text:#12121a;--text-dim:#444455;--text-mute:#888899;
@@ -480,12 +478,12 @@ select.zn-input option{background:var(--card);color:var(--text)}
 .zn-cinema-notice-icon{font-size:20px;line-height:1;flex-shrink:0}
 .zn-cinema-notice-text{flex:1;font-size:11px;color:var(--text-dim);line-height:1.5}
 .zn-cinema-notice-text b{color:var(--primary)}
-.zn-home-dev-badge{position:absolute;top:12px;right:12px;z-index:3;display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:12px;background:var(--primary-soft);border:1px solid var(--primary);cursor:pointer;transition:all .2s}
+.zn-home-dev-badge{position:absolute;top:12px;right:12px;z-index:3;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:14px;background:var(--primary-soft);border:1px solid var(--primary);cursor:pointer;transition:all .2s}
 .zn-home-dev-badge:active{transform:scale(.95)}
-.zn-home-dev-badge svg{width:12px;height:12px;fill:var(--primary)}
-.zn-home-dev-badge span{font-family:var(--font-display);font-size:8px;font-weight:700;letter-spacing:1px;color:var(--primary);text-transform:uppercase}
+.zn-home-dev-badge svg{width:14px;height:14px;fill:var(--primary)}
+.zn-home-dev-badge span{font-family:var(--font-display);font-size:9px;font-weight:700;letter-spacing:1px;color:var(--primary);text-transform:uppercase}
 </style>
-<!-- [LANJUT PESAN 2: Gaya visual 4 styles + layout reorder] --><style>
+<style>
 /* ============================================================
    LAYOUT REORDER — SETIAP STYLE PUNYA TATA LETAK BEDA
    ============================================================ */
@@ -558,11 +556,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-style="minimal"] .zn-home-fiturs .zn-feat-card .zn-feat-review-icon{display:none}
 [data-style="minimal"] .zn-home-fiturs .zn-feat-badge{position:static;margin-left:8px;padding:3px 8px;border-radius:6px;font-size:8px}
 
-/* ============================================================
-   GAYA VISUAL — SEMUA DEFAULT DARK, WARNA TEMA TETAP BEKERJA
-   ============================================================ */
-
-/* ---------- STYLE 1: NEON (default) ---------- */
+/* ---------- STYLE 1: NEON ---------- */
 [data-style="neon"]{
   --font-display:'Orbitron',sans-serif;
   --font-body:'Inter',system-ui,sans-serif;
@@ -570,7 +564,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
   --radius:16px;--radius-sm:10px;--radius-lg:22px;
 }
 
-/* ---------- STYLE 2: KOMIK (dark, warna tema) ---------- */
+/* ---------- STYLE 2: KOMIK ---------- */
 [data-style="comic"]{
   --font-display:'Bangers',cursive;
   --font-body:'Comic Neue',cursive;
@@ -821,7 +815,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
   box-shadow:5px 5px 0 0 var(--primary) !important;
 }
 
-/* ---------- STYLE 3: PIXEL (dark, 8-bit) ---------- */
+/* ---------- STYLE 3: PIXEL (8-bit) ---------- */
 [data-style="pixel"]{
   --font-display:'Press Start 2P',monospace;
   --font-body:'Press Start 2P',monospace;
@@ -950,7 +944,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-style="pixel"] .zn-cinema-card-meta{font-size:7px !important}
 [data-style="pixel"] .zn-cinema-cat-chip{font-size:7px !important}
 
-/* ---------- STYLE 4: MINIMAL (dark, clean, gak norak) ---------- */
+/* ---------- STYLE 4: MINIMAL ---------- */
 [data-style="minimal"]{
   --font-display:'Space Grotesk',sans-serif;
   --font-body:'Space Grotesk',sans-serif;
@@ -1043,7 +1037,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-style="minimal"] .zn-music-bubble-label,
 [data-style="minimal"] .zn-music-bubble-hint{border:1px solid var(--border) !important}
 
-/* ============ DARK MODE OVERRIDES (light theme adjustments) ============ */
 [data-darkmode="light"] .zn-header{background:rgba(240,240,245,.95)}
 [data-darkmode="light"] .zn-bottom-nav{background:rgba(240,240,245,.95)}
 [data-darkmode="light"] .zn-hero-bg{opacity:.15}
@@ -1056,15 +1049,11 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-darkmode="light"] .zn-toast-msg{color:#555}
 [data-darkmode="light"] .load-sub{color:#888}
 [data-darkmode="light"] .load-status{color:#888}
-
-/* Dark mode comic support */
 [data-style="comic"][data-darkmode="light"] .zn-hero-title{text-shadow:3px 3px 0 var(--primary) !important}
-
-/* Dark mode minimal support */
 [data-style="minimal"][data-darkmode="light"] .zn-hero-bg{opacity:.05}
 [data-style="minimal"][data-darkmode="light"] .zn-hero-bg::after{background:linear-gradient(180deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,.6) 100%)}
 </style>
-<!-- [LANJUT PESAN 3: HTML Body lengkap] --><body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode" :data-darkmode="darkMode">
+<body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode" :data-darkmode="darkMode">
 
 <!-- LOADING SCREEN -->
 <div id="loadingScreen" x-show="!loadingHidden" x-cloak>
@@ -1208,10 +1197,9 @@ select.zn-input option{background:var(--card);color:var(--text)}
     <!-- HOME -->
     <div x-show="activeTab==='home'" class="zn-section">
       <div class="zn-home-hero" style="position:relative">
-        <!-- Developer shortcut badge (kecil) -->
         <div class="zn-home-dev-badge" @click.stop="developerProfileOpen=true">
           <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-          <span>Dev</span>
+          <span>Tentang Developer</span>
         </div>
         <div class="zn-hero">
           <div class="zn-hero-bg" id="heroBg"></div>
@@ -1347,7 +1335,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
       </div>
       <div x-show="!cinemaLoading && filteredCinema.length > 0" class="zn-cinema-grid">
         <template x-for="film in filteredCinema" :key="film.id">
-          <div class="zn-cinema-card" @click="openCinemaPlayer(film)">
+          <div class="zn-cinema-card" @click="showFilmDetail(film)">
             <div class="zn-cinema-card-thumb">
               <img :src="film.thumbnail || ('https://img.youtube.com/vi/'+film.youtube_id+'/mqdefault.jpg')" @error="$event.target.src='https://placehold.co/320x180/0d0d18/ff0080?text=ZENKAI'">
               <div class="zn-cinema-card-play">
@@ -1372,6 +1360,33 @@ select.zn-input option{background:var(--card);color:var(--text)}
           <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
           <span>REQUEST FILM</span>
         </button>
+      </div>
+    </div>
+
+    <!-- FILM DETAIL SHEET -->
+    <div x-show="filmDetailOpen" x-cloak class="zn-sheet-overlay" style="z-index:100010" @click.self="filmDetailOpen=false">
+      <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'filmDetailOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+        <div class="zn-sheet-handle"></div>
+        <template x-if="filmDetailData">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <img :src="filmDetailData.thumbnail || ('https://img.youtube.com/vi/'+filmDetailData.youtube_id+'/mqdefault.jpg')" @error="$event.target.src='https://placehold.co/480x270/0d0d18/ff0080?text=ZENKAI'" style="width:100%;border-radius:12px;border:1px solid var(--border);aspect-ratio:16/9;object-fit:cover">
+            <h2 style="font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--text);line-height:1.3" x-text="filmDetailData.judul"></h2>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <span class="zn-cinema-cat-chip" x-text="filmDetailData.kategori || 'Umum'"></span>
+              <span x-show="filmDetailData.tahun" style="font-size:11px;color:var(--text-mute);font-family:var(--font-mono);display:flex;align-items:center">📅 <span x-text="filmDetailData.tahun" style="margin-left:4px"></span></span>
+              <span x-show="filmDetailData.durasi" style="font-size:11px;color:var(--text-mute);font-family:var(--font-mono);display:flex;align-items:center">⏱ <span x-text="filmDetailData.durasi" style="margin-left:4px"></span></span>
+            </div>
+            <div style="padding:14px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)">
+              <div style="font-size:10px;color:var(--primary);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:6px">// DESKRIPSI</div>
+              <p style="font-size:13px;color:var(--text-dim);line-height:1.6" x-text="filmDetailData.deskripsi || 'Belum ada deskripsi untuk film ini.'"></p>
+            </div>
+            <button @click="openCinemaPlayer(filmDetailData)" class="zn-btn zn-btn-primary" style="margin-top:4px">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <span>TONTON SEKARANG</span>
+            </button>
+            <button @click="filmDetailOpen=false" class="zn-btn zn-btn-soft">TUTUP</button>
+          </div>
+        </template>
       </div>
     </div>
 
@@ -1490,20 +1505,33 @@ select.zn-input option{background:var(--card);color:var(--text)}
       </template>
     </div>
 
-    <!-- TOOLS -->
+    <!-- TOOLS (DENGAN FITUR BARU) -->
     <div x-show="activeTab==='tools'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
         <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TOOLS</h2>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
-        <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="zn-tab-pill">🌍</button>
-        <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="zn-tab-pill">🗣</button>
-        <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'active':''" class="zn-tab-pill">🖼</button>
-        <button @click="toolsSubTab='bmi'" :class="toolsSubTab==='bmi'?'active':''" class="zn-tab-pill">⚖</button>
-        <button @click="toolsSubTab='speed'" :class="toolsSubTab==='speed'?'active':''" class="zn-tab-pill">🌐</button>
+
+      <!-- Tool Navigation -->
+      <div class="zn-cat-scroll" style="padding-bottom:8px">
+        <button @click="toolsSubTab='jam'" :class="toolsSubTab==='jam'?'active':''" class="zn-cat-tab">🌍 Jam Dunia</button>
+        <button @click="toolsSubTab='tts'" :class="toolsSubTab==='tts'?'active':''" class="zn-cat-tab">🗣 Text to Speech</button>
+        <button @click="toolsSubTab='kompres'" :class="toolsSubTab==='kompres'?'active':''" class="zn-cat-tab">🖼 Kompres Foto</button>
+        <button @click="toolsSubTab='bmi'" :class="toolsSubTab==='bmi'?'active':''" class="zn-cat-tab">⚖ BMI & Kalori</button>
+        <button @click="toolsSubTab='speed'" :class="toolsSubTab==='speed'?'active':''" class="zn-cat-tab">🌐 Speed Test</button>
+        <button @click="toolsSubTab='prompt'" :class="toolsSubTab==='prompt'?'active':''" class="zn-cat-tab">🎨 Prompt Generator</button>
+        <button @click="toolsSubTab='fakta'" :class="toolsSubTab==='fakta'?'active':''" class="zn-cat-tab">🔍 Cek Fakta</button>
+        <button @click="toolsSubTab='password'" :class="toolsSubTab==='password'?'active':''" class="zn-cat-tab">🔐 Password Gen</button>
+        <button @click="toolsSubTab='morse'" :class="toolsSubTab==='morse'?'active':''" class="zn-cat-tab">📡 Morse Code</button>
       </div>
 
+      <!-- Penjelasan Fitur -->
+      <div class="zn-card" style="background:var(--primary-soft);border-color:var(--primary);padding:14px">
+        <div style="font-size:11px;color:var(--primary);font-weight:700;letter-spacing:1px;margin-bottom:4px" x-text="getToolTitle(toolsSubTab)"></div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.5" x-text="getToolDesc(toolsSubTab)"></div>
+      </div>
+
+      <!-- Jam Dunia -->
       <div x-show="toolsSubTab==='jam'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><span>JAM DUNIA (<span x-text="worldClocks.length"></span>)</span></div>
         <div style="display:flex;flex-direction:column;gap:6px;max-height:450px;overflow-y:auto">
@@ -1522,18 +1550,21 @@ select.zn-input option{background:var(--card);color:var(--text)}
         </div>
       </div>
 
+      <!-- TTS -->
       <div x-show="toolsSubTab==='tts'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg><span>TEXT TO SPEECH</span></div>
         <textarea x-model="customTtsText" rows="3" placeholder="Ketik teks..." class="zn-input"></textarea>
         <button @click="speakCustomText()" class="zn-btn zn-btn-primary" style="margin-top:10px">UCAPKAN</button>
       </div>
 
+      <!-- Kompres -->
       <div x-show="toolsSubTab==='kompres'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>KOMPRES FOTO</span></div>
         <input type="file" accept="image/*" @change="compressImageFile($event)" class="zn-input">
         <template x-if="compressedImageUrl"><div style="text-align:center;margin-top:12px"><img :src="compressedImageUrl" style="max-height:160px;border-radius:10px;border:1px solid var(--border);margin:0 auto"><a :href="compressedImageUrl" download="compressed.jpg" class="zn-btn zn-btn-primary" style="margin-top:10px;display:flex">DOWNLOAD</a></div></template>
       </div>
 
+      <!-- BMI -->
       <div x-show="toolsSubTab==='bmi'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg><span>BMI & KALORI</span></div>
         <div style="display:flex;flex-direction:column;gap:10px">
@@ -1557,6 +1588,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
         </template>
       </div>
 
+      <!-- Speed Test -->
       <div x-show="toolsSubTab==='speed'" class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg><span>SPEED TEST</span></div>
         <button @click="runSpeedTest()" class="zn-btn zn-btn-primary">
@@ -1569,6 +1601,104 @@ select.zn-input option{background:var(--card);color:var(--text)}
           <div class="zn-stat-box"><div class="zn-stat-box-val" style="font-size:11px" x-text="speedResult?speedResult.quality:''"></div><div class="zn-stat-box-label">Kualitas</div></div>
         </div>
       </div>
+
+      <!-- PROMPT GENERATOR -->
+      <div x-show="toolsSubTab==='prompt'" class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>PROMPT GENERATOR</span></div>
+        <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;line-height:1.5">Upload gambar referensi + tulis keinginan Anda. AI akan generate prompt panjang & detail untuk gambar AI.</p>
+        <div style="margin-bottom:10px">
+          <input type="file" accept="image/*" @change="pickPromptImage($event)" class="zn-input" style="font-size:12px">
+          <template x-if="promptImageData">
+            <div style="margin-top:8px;position:relative;display:inline-block">
+              <img :src="promptImageData" style="max-height:100px;border-radius:8px;border:2px solid var(--primary)">
+              <button @click="promptImageData=null" style="position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:var(--danger);color:#fff;font-size:14px;border:2px solid var(--bg)">×</button>
+            </div>
+          </template>
+        </div>
+        <textarea x-model="promptInput" rows="3" placeholder="Contoh: buat gambar kucing lucu pakai topi..." class="zn-input" style="margin-bottom:10px"></textarea>
+        <button @click="generatePrompt()" :disabled="promptLoading" class="zn-btn zn-btn-primary">
+          <template x-if="!promptLoading"><span>GENERATE PROMPT</span></template>
+          <template x-if="promptLoading"><span><span class="zn-spin"></span> MEMPROSES</span></template>
+        </button>
+        <template x-if="promptLoading">
+          <div style="margin-top:12px">
+            <div class="zn-progress"><div class="zn-progress-fill" :style="'width:'+promptProgress+'%'" x-text="promptProgress+'%'"></div></div>
+          </div>
+        </template>
+        <template x-if="promptResult">
+          <div style="margin-top:12px;padding:14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--primary)">
+            <div style="font-size:10px;color:var(--primary);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:6px">// HASIL PROMPT</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.6;white-space:pre-wrap" x-text="promptResult"></div>
+            <button @click="copyPromptResult()" class="zn-btn zn-btn-soft" style="margin-top:10px;padding:8px;font-size:11px">COPY PROMPT</button>
+          </div>
+        </template>
+      </div>
+
+      <!-- CEK FAKTA -->
+      <div x-show="toolsSubTab==='fakta'" class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><span>CEK FAKTA</span></div>
+        <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;line-height:1.5">Tulis klaim atau berita yang mau dicek. AI akan cari tahu apakah itu fakta atau hoax.</p>
+        <textarea x-model="factInput" rows="3" placeholder="Contoh: Apakah benar minum air lemon bisa sembuhkan kanker?" class="zn-input" style="margin-bottom:10px"></textarea>
+        <button @click="checkFact()" :disabled="factLoading" class="zn-btn zn-btn-primary">
+          <template x-if="!factLoading"><span>CEK FAKTA</span></template>
+          <template x-if="factLoading"><span><span class="zn-spin"></span> MENCARI</span></template>
+        </button>
+        <template x-if="factLoading">
+          <div style="margin-top:12px">
+            <div class="zn-progress"><div class="zn-progress-fill" :style="'width:'+factProgress+'%'" x-text="factProgress+'%'"></div></div>
+            <div style="font-size:11px;color:var(--text-mute);margin-top:6px;font-family:var(--font-mono)" x-text="factStatus"></div>
+          </div>
+        </template>
+        <template x-if="factResult">
+          <div style="margin-top:12px;padding:14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--primary)">
+            <div style="font-size:10px;color:var(--primary);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:6px">// HASIL CEK</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.6;white-space:pre-wrap" x-text="factResult"></div>
+          </div>
+        </template>
+      </div>
+
+      <!-- PASSWORD GENERATOR -->
+      <div x-show="toolsSubTab==='password'" class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg><span>PASSWORD GENERATOR</span></div>
+        <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;line-height:1.5">Buat password aman sesuka hati. Pilih panjang dan jenis karakter.</p>
+        <div style="margin-bottom:12px">
+          <label style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:6px;display:block">PANJANG: <span x-text="passLength" style="color:var(--primary);font-weight:700"></span></label>
+          <input type="range" min="6" max="50" x-model.number="passLength" style="width:100%;accent-color:var(--primary)">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" x-model="passIncludeUpper" style="width:18px;height:18px;accent-color:var(--primary)"><span style="font-size:12px">Huruf Besar (A-Z)</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" x-model="passIncludeLower" style="width:18px;height:18px;accent-color:var(--primary)"><span style="font-size:12px">Huruf Kecil (a-z)</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" x-model="passIncludeNumber" style="width:18px;height:18px;accent-color:var(--primary)"><span style="font-size:12px">Angka (0-9)</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" x-model="passIncludeSymbol" style="width:18px;height:18px;accent-color:var(--primary)"><span style="font-size:12px">Simbol (!@#$%^&*)</span></label>
+        </div>
+        <button @click="generatePassword()" class="zn-btn zn-btn-primary">GENERATE PASSWORD</button>
+        <template x-if="passResult">
+          <div style="margin-top:14px;padding:14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--primary);text-align:center">
+            <div style="font-family:var(--font-mono);font-size:16px;font-weight:700;color:var(--primary);letter-spacing:1px;word-break:break-all;margin-bottom:10px" x-text="passResult"></div>
+            <div style="font-size:11px;margin-bottom:10px" x-text="passStrengthText" :style="'color:'+passStrengthColor"></div>
+            <button @click="copyPassword()" class="zn-btn zn-btn-soft" style="padding:8px;font-size:11px">COPY</button>
+          </div>
+        </template>
+      </div>
+
+      <!-- MORSE CODE -->
+      <div x-show="toolsSubTab==='morse'" class="zn-card">
+        <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span>MORSE CODE</span></div>
+        <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;line-height:1.5">Konversi teks ke morse, atau morse ke teks. Berguna buat belajar sandi morse.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+          <button @click="morseMode='text2morse'" :class="morseMode==='text2morse'?'active':''" class="zn-tab-pill" style="font-size:10px">Teks → Morse</button>
+          <button @click="morseMode='morse2text'" :class="morseMode==='morse2text'?'active':''" class="zn-tab-pill" style="font-size:10px">Morse → Teks</button>
+        </div>
+        <textarea x-model="morseInput" rows="3" :placeholder="morseMode==='text2morse'?'Ketik teks...':'Ketik morse (pisah spasi, contoh: .... . .-.. .-.. ---)'" class="zn-input" style="margin-bottom:10px"></textarea>
+        <button @click="convertMorse()" class="zn-btn zn-btn-primary">KONVERSI</button>
+        <template x-if="morseResult">
+          <div style="margin-top:12px;padding:14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--primary)">
+            <div style="font-size:10px;color:var(--primary);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:6px">// HASIL</div>
+            <div style="font-size:13px;color:var(--text);line-height:1.6;word-break:break-all;font-family:var(--font-mono)" x-text="morseResult"></div>
+            <button @click="copyMorseResult()" class="zn-btn zn-btn-soft" style="margin-top:10px;padding:8px;font-size:11px">COPY</button>
+          </div>
+        </template>
+      </div>
     </div>
 
     <!-- TEMA -->
@@ -1578,7 +1708,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
         <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:var(--primary)">TEMA & GAYA</h2>
       </div>
 
-      <!-- MODE GELAP/TERANG -->
       <div class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg><span>MODE TAMPILAN</span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -1601,7 +1730,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
         </div>
       </div>
 
-      <!-- WARNA TEMA -->
       <div class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg><span>WARNA TEMA (<span x-text="themes.length"></span>)</span></div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
@@ -1614,7 +1742,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
         </div>
       </div>
 
-      <!-- GAYA VISUAL -->
       <div class="zn-card">
         <div class="zn-card-title"><svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg><span>GAYA VISUAL (4)</span></div>
         <p style="font-size:11px;color:var(--text-mute);margin-bottom:14px;line-height:1.5">Beda font, bentuk, dan nuansa. Kombinasikan dengan mode gelap/terang!</p>
@@ -2013,7 +2140,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
   </nav>
 </div>
 
-<!-- [LANJUT KE 3B: sheet, modal, drawer, chat, player] --><!-- ============ AI BUBBLE (Draggable) ============ -->
+<!-- AI BUBBLE -->
 <template x-if="isAuthenticated && !chatFullscreen && !proChatFullscreen && !developerProfileOpen">
   <div @click="handleBubbleClick()"
        @mousedown="startDragBubble($event)"
@@ -2027,7 +2154,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
   </div>
 </template>
 
-<!-- ============ MUSIC BUBBLE ============ -->
+<!-- MUSIC BUBBLE -->
 <template x-if="isAuthenticated && musicEnabled && musicPlaying && !musicSheetOpen && !musicMinimized">
   <div @mousedown="startDragMusic($event)"
        @touchstart="startDragMusic($event)"
@@ -2536,8 +2663,8 @@ select.zn-input option{background:var(--card);color:var(--text)}
         <li><b style="color:var(--accent)">AI Chat:</b> Chatbot pintar 4 mode (limit 10/hari)</li>
         <li><b style="color:#ffd700">Zenkai AI Pro:</b> AI premium 7 model (VIP unlimited)</li>
         <li><b style="color:var(--primary)">Downloader:</b> TikTok tanpa watermark</li>
-        <li><b style="color:var(--accent)">Tools:</b> Jam dunia, TTS, kompres, BMI, speed test</li>
-        <li><b style="color:#ff0080">Cinema:</b> Nonton film + double-tap seek ±10s</li>
+        <li><b style="color:var(--accent)">Tools:</b> Jam dunia, TTS, kompres, BMI, speed test, prompt generator, cek fakta, password gen, morse</li>
+        <li><b style="color:#ff0080">Cinema:</b> Nonton film + detail film + double-tap seek ±10s</li>
         <li><b style="color:var(--primary)">Tema:</b> <span x-text="themes.length"></span> warna + 4 gaya visual + mode gelap/terang</li>
         <li><b style="color:var(--primary)">Musik:</b> YouTube player</li>
       </ul>
@@ -3056,14 +3183,16 @@ select.zn-input option{background:var(--card);color:var(--text)}
       </template>
     </div>
   </div>
-</div><script>
+</div>
+
+<script>
 const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
 const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-responder';
 const OWNER_EMAIL='andikaatka@gmail.com';
 
-const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi all-in-one yang siap bantu aktivitas harian lu.\n\n💰 DOMPET DIGITAL\nCatat transaksi, grafik, budget, target tabungan.\n\n🤖 ZENKAI AI\nChat pintar gratis 10x/hari (VIP unlimited).\n\n⚡ ZENKAI AI PRO\nAI premium 7 model buat VIP — unlimited + vision!\n\n🎬 ZENKAI CINEMA\nNonton film, tap kiri/kanan buat maju-mundur 10 detik.\n\n🎵 MUSIK\nDengerin playlist lagu favorit sambil pakai app.\n\n📥 TIKTOK DOWNLOADER\nDownload video tanpa watermark.\n\n🛠️ TOOLS LENGKAP\nJam dunia, TTS, kompres foto, BMI, speed test.\n\n🐛 LAPOR BUG\nKetemu bug? Lapor langsung dari menu.\n\nYuk jelajahi semua fiturnya! 🚀';
+const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi all-in-one yang siap bantu aktivitas harian lu.\n\n💰 DOMPET DIGITAL\nCatat transaksi, grafik, budget, target tabungan.\n\n🤖 ZENKAI AI\nChat pintar gratis 10x/hari (VIP unlimited).\n\n⚡ ZENKAI AI PRO\nAI premium 7 model buat VIP — unlimited + vision!\n\n🎬 ZENKAI CINEMA\nNonton film, tap kiri/kanan buat maju-mundur 10 detik.\n\n🎵 MUSIK\nDengerin playlist lagu favorit sambil pakai app.\n\n📥 TIKTOK DOWNLOADER\nDownload video tanpa watermark.\n\n🛠️ TOOLS LENGKAP\nJam dunia, TTS, kompres foto, BMI, speed test, prompt generator, cek fakta, password gen, morse.\n\n🐛 LAPOR BUG\nKetemu bug? Lapor langsung dari menu.\n\nYuk jelajahi semua fiturnya! 🚀';
 
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
@@ -3254,6 +3383,9 @@ cinemaProgressTimer:null,
 cinemaSubmitting:false,
 cinemaForm:{judul:'',youtube_id:'',kategori:'drama',tahun:'',durasi:'',deskripsi:''},
 
+filmDetailOpen:false,
+filmDetailData:null,
+
 requestFilmSheetOpen:false,
 requestFilmForm:{judul:'',tahun:'',notes:''},
 requestFilmSubmitting:false,
@@ -3354,6 +3486,35 @@ proModelList:[
   {id:'gpt-5.6',name:'Zenkai Ultimate',pengali:'5x',vision:true,desc:'Paling pintar'}
 ],
 
+// PROMPT GENERATOR
+promptImageData:null,
+promptInput:'',
+promptResult:'',
+promptLoading:false,
+promptProgress:0,
+
+// CEK FAKTA
+factInput:'',
+factResult:'',
+factLoading:false,
+factProgress:0,
+factStatus:'',
+
+// PASSWORD GEN
+passLength:16,
+passIncludeUpper:true,
+passIncludeLower:true,
+passIncludeNumber:true,
+passIncludeSymbol:true,
+passResult:'',
+passStrengthText:'',
+passStrengthColor:'',
+
+// MORSE
+morseMode:'text2morse',
+morseInput:'',
+morseResult:'',
+
 // ============ GETTERS ============
 get filteredProvinces(){if(!this.provinceSearch)return this.provinces;var q=this.provinceSearch.toLowerCase();return this.provinces.filter(function(p){return p.toLowerCase().indexOf(q)>=0});},
 get filteredCities(){if(!this.citySearch)return this.cities;var q=this.citySearch.toLowerCase();return this.cities.filter(function(c){return c.toLowerCase().indexOf(q)>=0});},
@@ -3377,6 +3538,35 @@ getNextLevelPoints:function(){var t={1:100,2:300,3:600,4:1000,5:2000,6:0};return
 getCurrentLevelMin:function(){var t={1:0,2:100,3:300,4:600,5:1000,6:2000};return t[this.userLevel]||0;},
 getProgressPercent:function(){var min=this.getCurrentLevelMin();var max=this.getNextLevelPoints();if(max===0)return 100;return Math.min(100,Math.round(((this.userPoints-min)/(max-min))*100));},
 calcLevelFromPoints:function(pts){if(pts>=2000)return 6;if(pts>=1000)return 5;if(pts>=600)return 4;if(pts>=300)return 3;if(pts>=100)return 2;return 1;},
+
+getToolTitle:function(tab){
+  var titles={
+    jam:'🌍 Jam Dunia',
+    tts:'🗣 Text to Speech',
+    kompres:'🖼 Kompres Foto',
+    bmi:'⚖ BMI & Kalori',
+    speed:'🌐 Speed Test',
+    prompt:'🎨 Prompt Generator',
+    fakta:'🔍 Cek Fakta',
+    password:'🔐 Password Generator',
+    morse:'📡 Morse Code'
+  };
+  return titles[tab]||'Tools';
+},
+getToolDesc:function(tab){
+  var descs={
+    jam:'Lihat waktu di berbagai kota dunia secara real-time.',
+    tts:'Ubah teks menjadi suara. Berguna buat belajar atau bikin konten.',
+    kompres:'Perkecil ukuran foto tanpa mengurangi kualitas secara signifikan.',
+    bmi:'Hitung Body Mass Index (BMI), berat badan ideal, dan kebutuhan kalori harian.',
+    speed:'Ukur kecepatan internet kamu (download, ping, kualitas).',
+    prompt:'Upload gambar referensi + tulis keinginan. AI akan generate prompt panjang & detail untuk gambar AI.',
+    fakta:'Tulis klaim atau berita yang mau dicek. AI akan cari tahu apakah itu fakta atau hoax.',
+    password:'Buat password aman sesuka hati. Pilih panjang dan jenis karakter.',
+    morse:'Konversi teks ke morse, atau morse ke teks. Berguna buat belajar sandi morse.'
+  };
+  return descs[tab]||'Pilih tool yang mau dipakai.';
+},
 
 formatRibuan:function(num){
   if(num===null||num===undefined||num==='')return '0';
@@ -3412,7 +3602,6 @@ showToast:function(title, message, type){
   }, 3500);
 },
 
-// ============ AI BUBBLE DRAG ============
 handleBubbleClick:function(){
   if(this.bubbleMoved){ this.bubbleMoved = false; return; }
   this.openChatAI();
@@ -3475,7 +3664,6 @@ initBubblePosition:function(){
   this.bubblePosition = {x:window.innerWidth - 80, y:window.innerHeight - 220};
 },
 
-// ============ MUSIC BUBBLE DRAG ============
 startDragMusic:function(e){
   var self = this;
   var clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -3797,7 +3985,6 @@ onSheetTouchEnd:function(e){
   if(!target){ this.sheetDragY=0; this.currentSheetTarget=null; document.body.classList.remove('sheet-open'); return; }
   target.style.transition = 'transform .3s cubic-bezier(.4,0,.2,1)';
   if(this.sheetDragY > 100){
-    // Geser turun cukup jauh → CLOSE
     target.style.transform = 'translateY(100%)';
     var key = this.currentSheetKey;
     setTimeout(function(){
@@ -3810,7 +3997,6 @@ onSheetTouchEnd:function(e){
       self.currentSheetTarget = null;
     }, 300);
   } else {
-    // Geser dikit → balik ke atas smooth
     target.style.transform = 'translateY(0)';
     setTimeout(function(){
       target.style.transform = '';
@@ -3825,6 +4011,7 @@ onSheetTouchEnd:function(e){
 handleBackButton:function(){
   if(this.musicSheetOpen){this.musicSheetOpen=false;return true;}
   if(this.developerProfileOpen){this.developerProfileOpen=false;return true;}
+  if(this.filmDetailOpen){this.filmDetailOpen=false;return true;}
   if(this.welcomePopupOpen){this.welcomePopupOpen=false;return true;}
   if(this.aboutModalOpen){this.aboutModalOpen=false;return true;}
   if(this.profileModalOpen){this.profileModalOpen=false;return true;}
@@ -3926,7 +4113,6 @@ detectDevice:function(){
   this.tipsHarian=tips[Math.floor(Math.random()*tips.length)];
 },
 
-// ============ INIT ============
 init:async function(){
   var self=this;
   document.body.setAttribute('data-ready','1');
@@ -4340,8 +4526,14 @@ confirmDeleteCinema:function(film){
   }, '🗑️');
 },
 
+showFilmDetail:function(film){
+  this.filmDetailData = film;
+  this.filmDetailOpen = true;
+},
+
 openCinemaPlayer:function(film){
   if(!film || !film.youtube_id) return;
+  this.filmDetailOpen = false;
   this.cinemaCurrentFilm = film;
   this.cinemaPlayerOpen = true;
   this.cinemaPlaying = false;
@@ -4431,7 +4623,6 @@ cinemaTogglePlay:function(){
     if(this.cinemaPlaying){ this.cinemaPlayer.pauseVideo(); this.cinemaPlaying = false; }
     else { this.cinemaPlayer.playVideo(); this.cinemaPlaying = true; }
   }catch(e){}
-  // Langsung sembunyikan kontrol setelah play/pause
   var self = this;
   this.cinemaControlsHidden = true;
   if(this.cinemaControlsTimer) clearTimeout(this.cinemaControlsTimer);
@@ -4463,7 +4654,6 @@ cinemaSeekClick:function(e){
     this.cinemaPlayer.seekTo(this.cinemaDuration * pct, true);
   }catch(e){}
 },
-// 1x tap = langsung skip 10 detik
 cinemaTapSeek:function(side){
   if(!this.cinemaPlayer) return;
   try{
@@ -4593,12 +4783,217 @@ parseRSSItems:function(xmlText){
   }catch(e){return [];}
 },
 
-// ============ TOOLS ============
+// ============ TOOLS (LAMA) ============
 speakCustomText:function(){if(!this.customTtsText){return this.showToast('⚠️ PERHATIAN','Ketik teks dulu!','warning');}if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(this.customTtsText);u.lang='id-ID';window.speechSynthesis.speak(u);}},
 compressImageFile:function(event){var file=event.target.files[0];if(!file)return;var self=this;var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var canvas=document.createElement('canvas');var ctx=canvas.getContext('2d');var w=img.width,h=img.height;var max=800;if(w>h&&w>max){h*=max/w;w=max;}else if(h>max){w*=max/h;h=max;}canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);self.compressedImageUrl=canvas.toDataURL('image/jpeg',0.6);self.showToast('✅ BERHASIL','Foto dikompres!','success');};img.src=e.target.result;};reader.readAsDataURL(file);},
 runSpeedTest:async function(){this.speedTesting=true;this.speedResult=null;try{var start=Date.now();var res=await fetch('https://speed.cloudflare.com/__down?bytes=5000000&r='+Math.random());var blob=await res.blob();var dur=(Date.now()-start)/1000;var mbps=(blob.size*8)/(dur*1000000);this.speedResult={download:mbps.toFixed(1),latency:Math.round(dur*100),quality:mbps>20?'BAGUS':mbps>5?'CUKUP':'LAMBAT'};}catch(e){this.showToast('❌ GAGAL','Tes gagal.','error');}this.speedTesting=false;},
 calcBMI:function(){var w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)/100;if(!w||!h){return this.showToast('⚠️ PERHATIAN','Isi berat & tinggi!','warning');}var bmi=w/(h*h);var kategori,color;if(bmi<18.5){kategori='KURUS';color='#00d9ff';}else if(bmi<25){kategori='NORMAL';color='#00ff88';}else if(bmi<30){kategori='GEMUK';color='#ffd700';}else{kategori='OBESITAS';color='#ff3355';}var bbIdeal=(22*h*h).toFixed(1);var age=parseFloat(this.bmiAge)||25;var kalori=this.bmiGender==='male'?Math.round(66+(13.7*w)+(5*h*100)-(6.8*age)):Math.round(655+(9.6*w)+(1.8*h*100)-(4.7*age));this.bmiResult={bmi:bmi.toFixed(1),kategori:kategori,color:color,bbIdeal:bbIdeal,kalori:kalori};},
 
+// ============ TOOLS BARU ============
+// PROMPT GENERATOR
+pickPromptImage:function(event){
+  var file = event.target.files[0];
+  if(!file) return;
+  if(file.size > 5*1024*1024){ return this.showToast('⚠️ PERHATIAN','Max gambar 5MB!','warning'); }
+  var self = this;
+  var reader = new FileReader();
+  reader.onload = function(e){ self.promptImageData = e.target.result; };
+  reader.readAsDataURL(file);
+},
+generatePrompt:async function(){
+  if(!this.promptInput.trim() && !this.promptImageData){
+    return this.showToast('⚠️ PERHATIAN','Tulis keinginan atau upload gambar dulu!','warning');
+  }
+  this.promptLoading = true;
+  this.promptResult = '';
+  this.promptProgress = 0;
+  var self = this;
+  var progressInterval = setInterval(function(){
+    if(self.promptProgress < 90){ self.promptProgress += Math.random() * 15; if(self.promptProgress > 90) self.promptProgress = 90; }
+  }, 400);
+  try{
+    var { data:sessionData } = await sb.auth.getSession();
+    var token = sessionData && sessionData.session ? sessionData.session.access_token : '';
+    var payload = {
+      action: 'prompt_generator',
+      prompt: this.promptInput.trim() || 'Buat prompt detail untuk gambar ini',
+      image: this.promptImageData || null
+    };
+    var res = await fetch(AI_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_ANON_KEY},
+      body: JSON.stringify({
+        messages:[
+          {role:'system',content:'Kamu adalah Prompt Generator AI. Tugasmu: buat prompt yang SANGAT DETAIL dan PANJANG untuk AI image generator (Midjourney, DALL-E, Stable Diffusion). Sertakan: subjek, gaya, pencahayaan, komposisi, warna, mood, detail teknis. Jawab dalam Bahasa Indonesia + English prompt.'},
+          {role:'user',content:payload.prompt + (payload.image ? ' [Gambar dilampirkan]' : '')}
+        ],
+        mode:'umum'
+      })
+    });
+    var data = await res.json();
+    clearInterval(progressInterval);
+    this.promptProgress = 100;
+    this.promptResult = data.reply || data.text || 'Gagal generate prompt.';
+    await this.addPoints(3, 'Prompt Generator');
+  }catch(e){
+    clearInterval(progressInterval);
+    this.promptResult = 'ERROR: ' + e.message;
+  }finally{
+    this.promptLoading = false;
+    setTimeout(function(){ self.promptProgress = 0; }, 1500);
+  }
+},
+copyPromptResult:function(){
+  if(!this.promptResult) return;
+  var self = this;
+  navigator.clipboard.writeText(this.promptResult).then(function(){
+    self.showToast('✅ COPIED','Prompt berhasil dicopy!','success');
+  }).catch(function(){
+    self.showToast('❌ GAGAL','Gagal copy.','error');
+  });
+},
+
+// CEK FAKTA
+checkFact:async function(){
+  if(!this.factInput.trim()){
+    return this.showToast('⚠️ PERHATIAN','Tulis klaim yang mau dicek!','warning');
+  }
+  this.factLoading = true;
+  this.factResult = '';
+  this.factProgress = 0;
+  this.factStatus = 'Mencari informasi...';
+  var self = this;
+  var progressInterval = setInterval(function(){
+    if(self.factProgress < 90){
+      self.factProgress += Math.random() * 10;
+      if(self.factProgress > 90) self.factProgress = 90;
+      if(self.factProgress < 30) self.factStatus = 'Mencari sumber...';
+      else if(self.factProgress < 60) self.factStatus = 'Menganalisis klaim...';
+      else self.factStatus = 'Menyusun kesimpulan...';
+    }
+  }, 500);
+  try{
+    var { data:sessionData } = await sb.auth.getSession();
+    var token = sessionData && sessionData.session ? sessionData.session.access_token : '';
+    var res = await fetch(AI_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_ANON_KEY},
+      body: JSON.stringify({
+        messages:[
+          {role:'system',content:'Kamu adalah Fact Checker AI. Tugasmu: cek apakah klaim/berita yang diberikan itu FAKTA atau HOAX. Berikan analisis: 1) Status: FAKTA/HOAX/MERAGUKAN, 2) Penjelasan, 3) Sumber atau bukti. Jawab dalam Bahasa Indonesia.'},
+          {role:'user',content:this.factInput.trim()}
+        ],
+        mode:'umum'
+      })
+    });
+    var data = await res.json();
+    clearInterval(progressInterval);
+    this.factProgress = 100;
+    this.factStatus = 'Selesai!';
+    this.factResult = data.reply || data.text || 'Gagal cek fakta.';
+    await this.addPoints(5, 'Cek Fakta');
+  }catch(e){
+    clearInterval(progressInterval);
+    this.factResult = 'ERROR: ' + e.message;
+  }finally{
+    this.factLoading = false;
+    setTimeout(function(){ self.factProgress = 0; self.factStatus = ''; }, 2000);
+  }
+},
+
+// PASSWORD GENERATOR
+generatePassword:function(){
+  var chars = '';
+  if(this.passIncludeUpper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if(this.passIncludeLower) chars += 'abcdefghijklmnopqrstuvwxyz';
+  if(this.passIncludeNumber) chars += '0123456789';
+  if(this.passIncludeSymbol) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+  if(!chars){ return this.showToast('⚠️ PERHATIAN','Pilih minimal satu jenis karakter!','warning'); }
+  var len = this.passLength;
+  var password = '';
+  for(var i=0; i<len; i++){
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  this.passResult = password;
+  var strength = 0;
+  if(len >= 8) strength++;
+  if(len >= 12) strength++;
+  if(len >= 16) strength++;
+  if(this.passIncludeUpper && this.passIncludeLower) strength++;
+  if(this.passIncludeNumber) strength++;
+  if(this.passIncludeSymbol) strength++;
+  if(strength <= 2){ this.passStrengthText = '🔴 LEMAH'; this.passStrengthColor = '#ff3355'; }
+  else if(strength <= 4){ this.passStrengthText = '🟡 SEDANG'; this.passStrengthColor = '#ffd700'; }
+  else if(strength <= 5){ this.passStrengthText = '🟢 KUAT'; this.passStrengthColor = '#00ff88'; }
+  else { this.passStrengthText = '💪 SANGAT KUAT'; this.passStrengthColor = '#00d9ff'; }
+  this.showToast('🔐 PASSWORD','Password berhasil dibuat!','success');
+},
+copyPassword:function(){
+  if(!this.passResult) return;
+  var self = this;
+  navigator.clipboard.writeText(this.passResult).then(function(){
+    self.showToast('✅ COPIED','Password berhasil dicopy!','success');
+  }).catch(function(){
+    self.showToast('❌ GAGAL','Gagal copy.','error');
+  });
+},
+
+// MORSE CODE
+convertMorse:function(){
+  if(!this.morseInput.trim()){ return this.showToast('⚠️ PERHATIAN','Isi teks atau morse dulu!','warning'); }
+  if(this.morseMode === 'text2morse'){
+    this.morseResult = this.textToMorse(this.morseInput.trim().toUpperCase());
+  } else {
+    this.morseResult = this.morseToText(this.morseInput.trim());
+  }
+},
+textToMorse:function(text){
+  var morseMap = {
+    'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---',
+    'K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-',
+    'U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..',
+    '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',
+    '.':'.-.-.-',',':'--..--','?':'..--..','!':'-.-.--','/':'-..-.','(':'-.--.',')':'-.--.-','&':'.-...',':':'---...',';':'-.-.-.','=':'-...-','+':'.-.-.','-':'-....-','_':'..--.-','"':'.-..-.','$':'...-..-','@':'.--.-.',' ':'/'
+  };
+  var result = '';
+  for(var i=0; i<text.length; i++){
+    var c = text[i];
+    if(morseMap[c]){ result += morseMap[c] + ' '; }
+    else { result += '? '; }
+  }
+  return result.trim();
+},
+morseToText:function(morse){
+  var morseMap = {
+    '.-':'A','-...':'B','-.-.':'C','-..':'D','.':'E','..-.':'F','--.':'G','....':'H','..':'I','.---':'J',
+    '-.-':'K','.-..':'L','--':'M','-.':'N','---':'O','.--.':'P','--.-':'Q','.-.':'R','...':'S','-':'T',
+    '..-':'U','...-':'V','.--':'W','-..-':'X','-.--':'Y','--..':'Z',
+    '-----':'0','.----':'1','..---':'2','...--':'3','....-':'4','.....':'5','-....':'6','--...':'7','---..':'8','----.':'9',
+    '.-.-.-':'.','--..--':',','..--..':'?','-.-.--':'!','-..-.':'/','-.--.':'(','-.--.-':')','.-...':'&','---...':':','-.-.-.':';','-...-':'=','.-.-.':'+','-....-':'-','..--.-':'_','.-..-.':'"','...-..-':'$','.--.-.':'@','/':' '
+  };
+  var words = morse.split(' / ');
+  var result = '';
+  for(var w=0; w<words.length; w++){
+    var chars = words[w].split(' ');
+    for(var c=0; c<chars.length; c++){
+      if(morseMap[chars[c]]){ result += morseMap[chars[c]]; }
+      else { result += '?'; }
+    }
+    if(w < words.length - 1) result += ' ';
+  }
+  return result;
+},
+copyMorseResult:function(){
+  if(!this.morseResult) return;
+  var self = this;
+  navigator.clipboard.writeText(this.morseResult).then(function(){
+    self.showToast('✅ COPIED','Morse berhasil dicopy!','success');
+  }).catch(function(){
+    self.showToast('❌ GAGAL','Gagal copy.','error');
+  });
+},
+
+// ============ PROCESS DOWNLOAD ============
 processMediaDownload:async function(){
   if(this.isUnderMaintenance('downloader')){return this.showMaintenanceSheet('downloader');}
   var url=this.downloadLinkInput.trim();
@@ -4759,7 +5154,6 @@ sendProChat:async function(){
     var isFallback=false;
     if(data && data.reply && data.reply.trim()){
       reply = data.reply;
-      // Deteksi kalau reply isinya "tidak bisa menjawab" atau error
       var lowerReply = reply.toLowerCase();
       if(lowerReply.indexOf('tidak bisa menjawab')>=0 || lowerReply.indexOf('tidak dapat menjawab')>=0 || lowerReply.indexOf('server sibuk')>=0 || lowerReply.indexOf('error')===0 || lowerReply.indexOf('model sibuk')>=0 || lowerReply.indexOf('coba lagi')>=0 && lowerReply.indexOf('model')>=0){
         isFallback = true;
