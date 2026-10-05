@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#050508">
-<title>Zenkai Tools v1.6</title>
+<title>Zenkai Tools v1.7</title>
 <style>[x-cloak]{display:none !important}</style>
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -441,17 +441,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
 .zn-cinema-title{flex:1;min-width:0;color:#fff;font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .zn-cinema-video-wrap{flex:1;position:relative;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:manipulation}
 .zn-cinema-video-wrap iframe{width:100%;height:100%;border:none;pointer-events:none}
-.zn-cinema-tap-overlay{position:absolute;inset:0;z-index:5;display:flex}
-.zn-cinema-tap-zone{flex:1;display:flex;align-items:center;justify-content:center;transition:background .15s;position:relative}
-.zn-cinema-tap-zone:active{background:rgba(255,255,255,.08)}
-.zn-cinema-tap-center{width:36%;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
-.zn-cinema-tap-center:active{background:rgba(255,255,255,.05)}
-.zn-cinema-seek-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.75);color:#fff;padding:14px 22px;border-radius:14px;font-family:var(--font-display);font-size:18px;font-weight:900;letter-spacing:2px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20;backdrop-filter:blur(10px)}
-.zn-cinema-seek-hint.show{opacity:1}
-.zn-cinema-seek-side{position:absolute;top:0;bottom:0;width:40%;display:flex;align-items:center;justify-content:center;font-size:60px;color:#fff;opacity:0;transition:opacity .3s;pointer-events:none;z-index:15;text-shadow:0 0 20px rgba(0,0,0,.8)}
-.zn-cinema-seek-side.show{opacity:1}
-.zn-cinema-seek-side.left{left:0}
-.zn-cinema-seek-side.right{right:0}
 .zn-cinema-controls{position:absolute;bottom:0;left:0;right:0;z-index:10;padding:14px;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);transition:opacity .3s}
 .zn-cinema-controls.hidden{opacity:0;pointer-events:none}
 .zn-cinema-progress{width:100%;height:4px;background:rgba(255,255,255,.2);border-radius:2px;position:relative;cursor:pointer;margin-bottom:12px}
@@ -482,8 +471,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
 .zn-home-dev-badge:active{transform:scale(.95)}
 .zn-home-dev-badge svg{width:14px;height:14px;fill:var(--primary)}
 .zn-home-dev-badge span{font-family:var(--font-display);font-size:9px;font-weight:700;letter-spacing:1px;color:var(--primary);text-transform:uppercase}
-</style>
-<style>
 /* ============================================================
    LAYOUT REORDER — SETIAP STYLE PUNYA TATA LETAK BEDA
    ============================================================ */
@@ -508,7 +495,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-style="comic"] .zn-home-quick .zn-quick-grid{grid-template-columns:repeat(2,1fr)}
 [data-style="comic"] .zn-home-quick .zn-quick-btn{padding:18px 10px}
 
-/* PIXEL — nav di BAWAH lagi (dikembalikan) */
 [data-style="pixel"] .zn-app{flex-direction:column}
 [data-style="pixel"] .zn-home-info{order:1}
 [data-style="pixel"] .zn-home-quick{order:2}
@@ -554,7 +540,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-style="minimal"] .zn-home-fiturs .zn-feat-card .zn-feat-review-icon{display:none}
 [data-style="minimal"] .zn-home-fiturs .zn-feat-badge{position:static;margin-left:8px;padding:3px 8px;border-radius:6px;font-size:8px}
 
-/* ---------- STYLE 1: NEON ---------- */
 [data-style="neon"]{
   --font-display:'Orbitron',sans-serif;
   --font-body:'Inter',system-ui,sans-serif;
@@ -562,7 +547,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
   --radius:16px;--radius-sm:10px;--radius-lg:22px;
 }
 
-/* ---------- STYLE 2: KOMIK ---------- */
 [data-style="comic"]{
   --font-display:'Bangers',cursive;
   --font-body:'Comic Neue',cursive;
@@ -808,7 +792,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
   box-shadow:5px 5px 0 0 var(--primary) !important;
 }
 
-/* ---------- STYLE 3: PIXEL (8-bit) ---------- */
 [data-style="pixel"]{
   --font-display:'Press Start 2P',monospace;
   --font-body:'Press Start 2P',monospace;
@@ -937,7 +920,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-style="pixel"] .zn-cinema-card-meta{font-size:7px !important}
 [data-style="pixel"] .zn-cinema-cat-chip{font-size:7px !important}
 
-/* ---------- STYLE 4: MINIMAL ---------- */
 [data-style="minimal"]{
   --font-display:'Space Grotesk',sans-serif;
   --font-body:'Space Grotesk',sans-serif;
@@ -1045,6 +1027,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-style="comic"][data-darkmode="light"] .zn-hero-title{text-shadow:3px 3px 0 var(--primary) !important}
 [data-style="minimal"][data-darkmode="light"] .zn-hero-bg{opacity:.05}
 [data-style="minimal"][data-darkmode="light"] .zn-hero-bg::after{background:linear-gradient(180deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,.6) 100%)}
+
 /* ============================================================
    ZENKAI KOMIK — STYLES
    ============================================================ */
@@ -1128,7 +1111,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
   letter-spacing: .5px;
 }
 
-/* DETAIL KOMIK */
 .zn-komik-detail-header {
   display: flex;
   gap: 14px;
@@ -1246,7 +1228,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
   margin-left: 6px;
 }
 
-/* READER KOMIK */
 .zn-komik-reader {
   position: fixed;
   inset: 0;
@@ -1373,7 +1354,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
   fill: currentColor;
 }
 
-/* Filter Tipe */
 .zn-komik-type-tabs {
   display: flex;
   gap: 6px;
@@ -1407,7 +1387,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
   box-shadow: 0 0 12px var(--primary-glow);
 }
 
-/* Loading skeleton */
 .zn-komik-skeleton {
   background: linear-gradient(90deg, var(--card) 25%, var(--card-2) 50%, var(--card) 75%);
   background-size: 200% 100%;
@@ -1432,7 +1411,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
   animation: znSpin .8s linear infinite;
 }
 
-/* Empty state */
 .zn-komik-empty {
   text-align: center;
   padding: 60px 20px;
@@ -1453,7 +1431,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
   color: var(--text-dim);
   line-height: 1.6;
 }
-/* Cinema rotate — pakai fullscreen biar gak balik sendiri */
 .zn-cinema-player.rotated {
   transform: rotate(90deg);
   transform-origin: center center;
@@ -1623,7 +1600,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
       </div>
     </div>
     <div class="zn-header-actions">
-      <!-- CHAT GLOBAL BUTTON -->
       <button class="zn-icon-btn" @click="openGlobalChat()" title="Chat Global">
         <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
       </button>
@@ -1644,7 +1620,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
     <!-- HOME -->
     <div x-show="activeTab==='home'" class="zn-section">
       <div class="zn-home-hero" style="position:relative">
-        <!-- Dev badge KECIL -->
         <div class="zn-home-dev-badge" @click.stop="developerProfileOpen=true" title="Tentang Developer">
           <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
           <span>Dev</span>
@@ -1689,7 +1664,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
         </div>
       </div>
 
-      <!-- QUICK ACTIONS -->
       <div class="zn-home-quick">
         <div class="zn-quick-grid">
           <div class="zn-quick-btn" @click="openTxSheet()">
@@ -1824,6 +1798,63 @@ select.zn-input option{background:var(--card);color:var(--text)}
       </div>
     </div>
 
+    <!-- KOMIK -->
+    <div x-show="activeTab==='komik'" class="zn-section">
+      <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
+        <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.2),rgba(168,85,247,.2));border-color:#ff0080">
+          <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ff0080"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+        </div>
+        <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:#ff0080">ZENKAI KOMIK</h2>
+        <p style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-top:4px">// BACA MANGA · MANHWA · MANHUA</p>
+      </div>
+
+      <div class="zn-card" style="padding:12px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="text" x-model="komikSearch" @input.debounce.500ms="searchKomik()" placeholder="🔍 Cari judul komik..." class="zn-input" style="flex:1">
+        </div>
+      </div>
+
+      <div class="zn-komik-type-tabs">
+        <button @click="komikTipe='semua';filterKomikByType()" :class="komikTipe==='semua'?'active':''" class="zn-komik-type-tab">Semua</button>
+        <button @click="komikTipe='manga';filterKomikByType()" :class="komikTipe==='manga'?'active':''" class="zn-komik-type-tab">🇯🇵 Manga</button>
+        <button @click="komikTipe='manhwa';filterKomikByType()" :class="komikTipe==='manhwa'?'active':''" class="zn-komik-type-tab">🇰🇷 Manhwa</button>
+        <button @click="komikTipe='manhua';filterKomikByType()" :class="komikTipe==='manhua'?'active':''" class="zn-komik-type-tab">🇨🇳 Manhua</button>
+      </div>
+
+      <div x-show="komikLoading" class="zn-komik-loading">
+        <div class="zn-komik-loading-spinner"></div>
+        <div style="font-size:12px;color:var(--text-mute);margin-top:12px">Memuat komik...</div>
+      </div>
+
+      <div x-show="!komikLoading && filteredKomik.length > 0" class="zn-komik-grid">
+        <template x-for="k in filteredKomik" :key="k.id">
+          <div class="zn-komik-card" @click="openKomikDetail(k)">
+            <div class="zn-komik-cover">
+              <template x-if="k.cover">
+                <img :src="k.cover" @error="$event.target.style.display='none'">
+              </template>
+              <template x-if="!k.cover">
+                <div class="zn-komik-cover-placeholder">📖</div>
+              </template>
+              <template x-if="k.chapter_terakhir">
+                <span class="zn-komik-chapter-badge" x-text="'Ch. '+k.chapter_terakhir"></span>
+              </template>
+            </div>
+            <div class="zn-komik-body">
+              <div class="zn-komik-title" x-text="k.judul"></div>
+              <div class="zn-komik-type" x-text="k.tipe"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <div x-show="!komikLoading && filteredKomik.length === 0" class="zn-komik-empty">
+        <div class="zn-komik-empty-icon">📚</div>
+        <div class="zn-komik-empty-title">Komik Tidak Ditemukan</div>
+        <div class="zn-komik-empty-desc">Coba cari dengan kata kunci lain, atau pilih tipe komik lain.</div>
+      </div>
+    </div>
+
     <!-- KEUANGAN -->
     <div x-show="activeTab==='keuangan'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
@@ -1939,7 +1970,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
       </template>
     </div>
 
-    <!-- TOOLS (DENGAN FITUR BARU) -->
+    <!-- TOOLS -->
     <div x-show="activeTab==='tools'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
@@ -2131,7 +2162,9 @@ select.zn-input option{background:var(--card);color:var(--text)}
           </div>
         </template>
       </div>
-    </div>    <!-- TEMA -->
+    </div>
+
+    <!-- TEMA -->
     <div x-show="activeTab==='tema'" class="zn-section">
       <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
         <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg></div>
@@ -2223,6 +2256,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
         <div class="zn-card" style="border-color:#ffd700"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid #ffd700;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ffd700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#ffd700;margin-bottom:4px">◆ ZENKAI AI PRO</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">AI premium dengan 7 model + vision. Khusus member VIP. Unlimited chat!</div></div></div></div>
         <div class="zn-card" style="border-color:var(--accent)"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px">🛠</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">TOOLS BARU</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Prompt Generator, Cek Fakta, Password Generator, & Morse Code. Cek di menu Tools!</div></div></div></div>
         <div class="zn-card" style="border-color:#ff0080"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(255,0,128,.15);border:1px solid #ff0080;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ff0080"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#ff0080;margin-bottom:4px">🎬 ZENKAI CINEMA</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Nonton film di Zenkai! Koleksi masih dikit tapi bakal terus ditambah. Request film favorit kamu!</div></div></div></div>
+        <div class="zn-card" style="border-color:#a855f7"><div style="display:flex;align-items:flex-start;gap:12px"><div style="width:40px;height:40px;border-radius:10px;background:rgba(168,85,247,.15);border:1px solid #a855f7;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px">📚</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#a855f7;margin-bottom:4px">ZENKAI KOMIK BARU!</div><div style="font-size:12px;color:var(--text-dim);line-height:1.5">Baca manga, manhwa, manhua langsung dari MangaDex! Cek tab Komik di bawah.</div></div></div></div>
       </div>
     </div>
 
@@ -2551,7 +2585,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
           </div>
         </div>
 
-        <!-- OWNER: CHAT GLOBAL ADMIN -->
         <div x-show="ownerSubTab==='chat'" class="zn-section">
           <div class="zn-card">
             <div class="zn-card-title" style="color:#ff3355"><svg viewBox="0 0 24 24" style="fill:#ff3355"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span>💬 KELOLA CHAT GLOBAL</span></div>
@@ -2559,34 +2592,32 @@ select.zn-input option{background:var(--card);color:var(--text)}
             <button @click="loadGlobalChatAdmin()" class="zn-btn zn-btn-soft" style="margin-bottom:10px">🔄 REFRESH</button>
           </div>
 
-          <!-- Strikes list -->
           <div class="zn-card" style="border-color:var(--danger)">
-  <div class="zn-card-title" style="color:var(--danger)">⚠️ USER TOXIC (STRIKE)</div>
-  <div style="max-height:300px;overflow-y:auto">
-    <template x-for="s in toxicStrikesList" :key="s.id">
-      <div style="padding:10px;border-radius:10px;background:rgba(255,51,85,.08);border:1px solid var(--danger);margin-bottom:8px">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
-          <div style="flex:1;min-width:0">
-            <div style="font-size:12px;font-weight:700;color:var(--text)" x-text="s.username || s.user_id"></div>
-            <div style="font-size:10px;color:var(--danger);font-family:var(--font-mono)">Strike: <b x-text="s.strike_count"></b>/3 <span x-show="s.banned_permanent"> • 🚫 BANNED PERMANENT</span></div>
+            <div class="zn-card-title" style="color:var(--danger)">⚠️ USER TOXIC (STRIKE)</div>
+            <div style="max-height:300px;overflow-y:auto">
+              <template x-for="s in toxicStrikesList" :key="s.id">
+                <div style="padding:10px;border-radius:10px;background:rgba(255,51,85,.08);border:1px solid var(--danger);margin-bottom:8px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px;font-weight:700;color:var(--text)" x-text="s.username || s.user_id"></div>
+                      <div style="font-size:10px;color:var(--danger);font-family:var(--font-mono)">Strike: <b x-text="s.strike_count"></b>/3 <span x-show="s.banned_permanent"> • 🚫 BANNED PERMANENT</span></div>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                    <button @click="resetStrikeById(s.user_id)" class="zn-btn zn-btn-success" style="padding:6px;font-size:9px">↺ RESET STRIKE</button>
+                    <template x-if="s.banned_permanent">
+                      <button @click="unbanGlobalChat(s.user_id)" class="zn-btn zn-btn-warning" style="padding:6px;font-size:9px">✓ UNBAN</button>
+                    </template>
+                    <template x-if="!s.banned_permanent">
+                      <div style="font-size:9px;color:var(--text-mute);text-align:center;padding:6px">Belum banned</div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+              <template x-if="toxicStrikesList.length===0"><div style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">Belum ada user toxic 👍</div></template>
+            </div>
           </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-          <button @click="resetStrikeById(s.user_id)" class="zn-btn zn-btn-success" style="padding:6px;font-size:9px">↺ RESET STRIKE</button>
-          <template x-if="s.banned_permanent">
-            <button @click="unbanGlobalChat(s.user_id)" class="zn-btn zn-btn-warning" style="padding:6px;font-size:9px">✓ UNBAN</button>
-          </template>
-          <template x-if="!s.banned_permanent">
-            <div style="font-size:9px;color:var(--text-mute);text-align:center;padding:6px">Belum banned</div>
-          </template>
-        </div>
-      </div>
-    </template>
-    <template x-if="toxicStrikesList.length===0"><div style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">Belum ada user toxic 👍</div></template>
-  </div>
-</div>
 
-          <!-- Global chat messages -->
           <div class="zn-card">
             <div class="zn-card-title">📝 SEMUA CHAT</div>
             <div style="max-height:400px;overflow-y:auto">
@@ -2624,8 +2655,10 @@ select.zn-input option{background:var(--card);color:var(--text)}
     <button @click="switchTab('tema')" :class="activeTab==='tema'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg><span class="zn-nav-label">Tema</span></button>
     <button @click="switchTab('pemberitahuan')" :class="activeTab==='pemberitahuan'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg><span class="zn-nav-label">Info</span></button>
   </nav>
-</div><!-- AI BUBBLE -->
-<template x-if="isAuthenticated && !chatFullscreen && !proChatFullscreen && !globalChatOpen && !developerProfileOpen">
+</div>
+
+<!-- AI BUBBLE -->
+<template x-if="isAuthenticated && !chatFullscreen && !proChatFullscreen && !globalChatOpen && !developerProfileOpen && !komikReaderOpen">
   <div @click="handleBubbleClick()"
        @mousedown="startDragBubble($event)"
        @touchstart="startDragBubble($event)"
@@ -2639,7 +2672,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
 </template>
 
 <!-- MUSIC BUBBLE -->
-<template x-if="isAuthenticated && musicEnabled && musicPlaying && !musicSheetOpen && !musicMinimized && !globalChatOpen">
+<template x-if="isAuthenticated && musicEnabled && musicPlaying && !musicSheetOpen && !musicMinimized && !globalChatOpen && !komikReaderOpen">
   <div @mousedown="startDragMusic($event)"
        @touchstart="startDragMusic($event)"
        class="zn-music-bubble"
@@ -2655,7 +2688,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
   </div>
 </template>
 
-<template x-if="isAuthenticated && musicEnabled && musicPlaying && !musicSheetOpen && musicMinimized && !globalChatOpen">
+<template x-if="isAuthenticated && musicEnabled && musicPlaying && !musicSheetOpen && musicMinimized && !globalChatOpen && !komikReaderOpen">
   <div class="zn-music-mini"
        :style="'left:'+musicMiniPosition.x+'px;top:'+musicMiniPosition.y+'px;right:auto;bottom:auto;'"
        @click="expandMusic()"
@@ -3149,7 +3182,8 @@ select.zn-input option{background:var(--card);color:var(--text)}
         <li><b style="color:#ffd700">Zenkai AI Pro:</b> AI premium 7 model (VIP)</li>
         <li><b style="color:var(--primary)">Downloader:</b> TikTok tanpa watermark</li>
         <li><b style="color:var(--accent)">Tools:</b> Jam dunia, TTS, kompres, BMI, speed, prompt gen, cek fakta, password gen, morse</li>
-        <li><b style="color:#ff0080">Cinema:</b> Nonton film + detail + tap kiri/kanan seek 10s</li>
+        <li><b style="color:#ff0080">Cinema:</b> Nonton film + detail</li>
+        <li><b style="color:#a855f7">Komik:</b> Baca manga/manhwa/manhua via MangaDex</li>
         <li><b style="color:var(--primary)">Tema:</b> 8 warna + 4 gaya visual + mode gelap/terang</li>
       </ul>
       <p style="font-family:var(--font-mono);font-size:11px;color:var(--primary);text-align:center;margin-top:14px;letter-spacing:2px">Developer: Andika · v1.7</p>
@@ -3486,119 +3520,43 @@ select.zn-input option{background:var(--card);color:var(--text)}
     <div class="zn-cinema-header" :class="{hidden: cinemaControlsHidden}">
       <button class="zn-cinema-close" @click="closeCinemaPlayer()"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
       <div class="zn-cinema-title" x-text="cinemaCurrentFilm.judul"></div>
-      <button class="zn-cinema-close" @click="toggleCinemaRotate()" style="margin-left:auto" title="Putar layar">
-        <svg viewBox="0 0 24 24"><path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zm-6.25-.77c-.59-.59-1.54-.59-2.12 0L1.75 8.11c-.59.59-.59 1.54 0 2.12l12.02 12.02c.59.59 1.54.59 2.12 0l6.36-6.36c.59-.59.59-1.54 0-2.12L10.23 1.75zm4.6 19.44L2.81 9.17l6.36-6.36 12.02 12.02-6.36 6.36zm-7.31.29C4.25 19.94 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32z"/></svg>
-      </button>
     </div>
     <div class="zn-cinema-video-wrap" @click="toggleCinemaControls()">
       <iframe :src="cinemaIframeUrl" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-      <div class="zn-cinema-tap-overlay" style="pointer-events:none"></div>
     </div>
     <div class="zn-cinema-controls" :class="{hidden: cinemaControlsHidden}">
       <div class="zn-cinema-scrub-wrap" @mousedown="startCinemaScrub($event)" @touchstart.prevent="startCinemaScrub($event)">
         <div class="zn-cinema-progress">
-          <div class="zn-cinema-progress-fill" :style="'width:'+cinemaScrubPercent+'%'">
-            <div class="zn-cinema-progress-thumb"></div>
-          </div>
-        </div>
-        <div class="zn-cinema-scrub-bubble" :style="'left:'+cinemaScrubPercent+'%'" x-show="cinemaScrubbing" x-text="cinemaScrubTimeText"></div>
-        <div class="zn-cinema-chapter" :style="'left:'+cinemaScrubPercent+'%'" x-show="cinemaScrubbing">
-          <img :src="cinemaCurrentFilm.thumbnail || ('https://img.youtube.com/vi/'+cinemaCurrentFilm.youtube_id+'/mqdefault.jpg')" class="zn-cinema-chapter-thumb">
-          <div class="zn-cinema-chapter-time" x-text="cinemaScrubTimeText"></div>
+          <div class="zn-cinema-progress-fill" :style="'width:'+cinemaScrubPercent+'%'"></div>
         </div>
       </div>
       <div class="zn-cinema-buttons">
-        <button class="zn-cinema-btn" @click.stop="cinemaSeekBack()" title="-10s">
+        <button class="zn-cinema-btn" @click.stop="cinemaSeekBack()">
           <svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
-          <span style="position:absolute;bottom:2px;right:2px;font-size:9px;font-family:var(--font-mono);color:#fff;background:rgba(0,0,0,.6);padding:1px 3px;border-radius:3px;">-10s</span>
         </button>
-        <button class="zn-cinema-btn" @click.stop="cinemaTogglePlay()" title="Play/Pause">
+        <button class="zn-cinema-btn" @click.stop="cinemaTogglePlay()">
           <svg x-show="!cinemaPlaying" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           <svg x-show="cinemaPlaying" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
-        <button class="zn-cinema-btn" @click.stop="cinemaSeekForward()" title="+10s">
+        <button class="zn-cinema-btn" @click.stop="cinemaSeekForward()">
           <svg viewBox="0 0 24 24"><path d="M13 6v12l8.5-6L13 6zM4 18l8.5-6L4 6v12z"/></svg>
-          <span style="position:absolute;bottom:2px;right:2px;font-size:9px;font-family:var(--font-mono);color:#fff;background:rgba(0,0,0,.6);padding:1px 3px;border-radius:3px;">+10s</span>
         </button>
         <span class="zn-cinema-time" x-text="cinemaTimeText"></span>
-        <button class="zn-cinema-btn zn-cinema-fullscreen" @click.stop="cinemaToggleFullscreen()" title="Fullscreen">
+        <button class="zn-cinema-btn zn-cinema-fullscreen" @click.stop="cinemaToggleFullscreen()">
           <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
         </button>
       </div>
     </div>
   </div>
 </template>
-<!-- ============ KOMIK TAB ============ -->
-<div x-show="activeTab==='komik'" class="zn-section">
-  <!-- Header Komik -->
-  <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
-    <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.2),rgba(168,85,247,.2));border-color:#ff0080">
-      <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ff0080"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
-    </div>
-    <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:#ff0080">ZENKAI KOMIK</h2>
-    <p style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-top:4px">// BACA MANGA · MANHWA · MANHUA</p>
-  </div>
 
-  <!-- Search Bar -->
-  <div class="zn-card" style="padding:12px">
-    <div style="display:flex;gap:8px;align-items:center">
-      <input type="text" x-model="komikSearch" @input.debounce.500ms="searchKomik()" placeholder="🔍 Cari judul komik..." class="zn-input" style="flex:1">
-    </div>
-  </div>
-
-  <!-- Filter Tipe -->
-  <div class="zn-komik-type-tabs">
-    <button @click="komikTipe='semua';filterKomikByType()" :class="komikTipe==='semua'?'active':''" class="zn-komik-type-tab">Semua</button>
-    <button @click="komikTipe='manga';filterKomikByType()" :class="komikTipe==='manga'?'active':''" class="zn-komik-type-tab">🇯🇵 Manga</button>
-    <button @click="komikTipe='manhwa';filterKomikByType()" :class="komikTipe==='manhwa'?'active':''" class="zn-komik-type-tab">🇰🇷 Manhwa</button>
-    <button @click="komikTipe='manhua';filterKomikByType()" :class="komikTipe==='manhua'?'active':''" class="zn-komik-type-tab">🇨🇳 Manhua</button>
-  </div>
-
-  <!-- Loading -->
-  <div x-show="komikLoading" class="zn-komik-loading">
-    <div class="zn-komik-loading-spinner"></div>
-    <div style="font-size:12px;color:var(--text-mute);margin-top:12px">Memuat komik...</div>
-  </div>
-
-  <!-- Grid Komik -->
-  <div x-show="!komikLoading && filteredKomik.length > 0" class="zn-komik-grid">
-    <template x-for="k in filteredKomik" :key="k.id">
-      <div class="zn-komik-card" @click="openKomikDetail(k)">
-        <div class="zn-komik-cover">
-          <template x-if="k.cover">
-            <img :src="k.cover" @error="$event.target.style.display='none'">
-          </template>
-          <template x-if="!k.cover">
-            <div class="zn-komik-cover-placeholder">📖</div>
-          </template>
-          <template x-if="k.chapter_terakhir">
-            <span class="zn-komik-chapter-badge" x-text="'Ch. '+k.chapter_terakhir"></span>
-          </template>
-        </div>
-        <div class="zn-komik-body">
-          <div class="zn-komik-title" x-text="k.judul"></div>
-          <div class="zn-komik-type" x-text="k.tipe"></div>
-        </div>
-      </div>
-    </template>
-  </div>
-
-  <!-- Empty -->
-  <div x-show="!komikLoading && filteredKomik.length === 0" class="zn-komik-empty">
-    <div class="zn-komik-empty-icon">📚</div>
-    <div class="zn-komik-empty-title">Komik Tidak Ditemukan</div>
-    <div class="zn-komik-empty-desc">Coba cari dengan kata kunci lain, atau pilih tipe komik lain.</div>
-  </div>
-</div>
-
-<!-- ============ DETAIL KOMIK SHEET ============ -->
+<!-- DETAIL KOMIK SHEET -->
 <div x-show="komikDetailOpen" x-cloak class="zn-sheet-overlay" style="z-index:100250" @click.self="komikDetailOpen=false">
   <div class="zn-sheet-content" style="padding:20px" @touchstart.passive="onSheetTouchStart($event,'komikDetailOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
     <div class="zn-sheet-handle"></div>
 
     <template x-if="komikDetail">
       <div>
-        <!-- Header Detail -->
         <div class="zn-komik-detail-header">
           <div class="zn-komik-detail-cover">
             <template x-if="komikDetail.cover">
@@ -3631,7 +3589,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
           </div>
         </div>
 
-        <!-- Tombol Lanjut Baca -->
         <template x-if="komikDetail.chapter_terakhir">
           <button @click="lanjutBacaKomik()" class="zn-btn zn-btn-primary" style="margin-bottom:10px">
             <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -3639,19 +3596,16 @@ select.zn-input option{background:var(--card);color:var(--text)}
           </button>
         </template>
 
-        <!-- Tombol Favorite -->
         <button @click="toggleFavoriteKomik()" class="zn-btn" :class="isKomikFavorited ? 'zn-btn-warning' : 'zn-btn-soft'" style="margin-bottom:14px">
           <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
           <span x-text="isKomikFavorited ? 'HAPUS FAVORITE' : 'TAMBAH FAVORITE'"></span>
         </button>
 
-        <!-- Sinopsis -->
         <div class="zn-card" style="margin-bottom:12px;padding:14px">
           <div style="font-size:10px;color:var(--primary);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:6px">// SINOPSIS</div>
           <p style="font-size:12px;color:var(--text-dim);line-height:1.6;white-space:pre-line" x-text="komikDetail.deskripsi || 'Belum ada sinopsis.'"></p>
         </div>
 
-        <!-- Daftar Chapter -->
         <div class="zn-card">
           <div class="zn-card-title">
             <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
@@ -3680,10 +3634,9 @@ select.zn-input option{background:var(--card);color:var(--text)}
   </div>
 </div>
 
-<!-- ============ KOMIK READER (FULL SCREEN) ============ -->
+<!-- KOMIK READER (FULL SCREEN) -->
 <template x-if="komikReaderOpen">
   <div class="zn-komik-reader">
-    <!-- Header -->
     <div class="zn-komik-reader-header" :class="{hidden: komikReaderControlsHidden}">
       <button class="zn-komik-reader-close" @click="closeKomikReader()">
         <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
@@ -3695,7 +3648,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
       </div>
     </div>
 
-    <!-- Body (Gambar) -->
     <div class="zn-komik-reader-body" @click="toggleKomikReaderControls()">
       <template x-if="komikReaderLoading">
         <div class="zn-komik-page-loading">
@@ -3722,7 +3674,6 @@ select.zn-input option{background:var(--card);color:var(--text)}
       </template>
     </div>
 
-    <!-- Footer Navigasi -->
     <div class="zn-komik-reader-footer" :class="{hidden: komikReaderControlsHidden}">
       <button class="zn-komik-reader-btn" @click.stop="prevKomikChapter()" :disabled="!komikHasPrevChapter">
         <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
@@ -3738,6 +3689,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
     </div>
   </div>
 </template>
+
 <!-- REQUEST FILM SHEET -->
 <div x-show="requestFilmSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100200" @click.self="requestFilmSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'requestFilmSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
@@ -3791,23 +3743,23 @@ select.zn-input option{background:var(--card);color:var(--text)}
         <div style="font-size:11px;color:var(--text-dim);line-height:1.6">Ngobrol sama semua user Zenkai. Jaga sopan santun ya! 🙏</div>
       </div>
       <template x-for="(msg,idx) in globalChatMessages" :key="msg.id || idx">
-  <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'display:flex;gap:8px;align-items:flex-start;flex-direction:row-reverse;' : 'display:flex;gap:8px;align-items:flex-start;'">
-    <div class="zn-avatar" style="width:32px;height:32px;font-size:11px;border-radius:8px;flex-shrink:0">
-      <template x-if="msg.avatar_url"><img :src="msg.avatar_url"></template>
-      <template x-if="!msg.avatar_url"><span x-text="msg.username?msg.username.substring(0,2).toUpperCase():'ZK'"></span></template>
-    </div>
-    <div style="flex:1;min-width:0;max-width:78%">
-      <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'display:flex;align-items:center;gap:6px;margin-bottom:3px;justify-content:flex-end;' : 'display:flex;align-items:center;gap:6px;margin-bottom:3px;'">
-        <span style="font-size:11px;font-weight:700;color:var(--primary)" x-text="msg.username"></span>
-        <span style="font-size:9px;color:var(--text-mute);font-family:var(--font-mono)" x-text="formatTimeAgo(msg.created_at)"></span>
-        <template x-if="isOwner || msg.user_id === (currentUser ? currentUser.id : '')">
-          <button @click.stop="deleteGlobalMessage(msg.id, msg.user_id)" style="background:rgba(255,51,85,.15);border:1px solid var(--danger);color:var(--danger);border-radius:6px;padding:2px 6px;font-size:10px;line-height:1;cursor:pointer">×</button>
-        </template>
-      </div>
-      <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'padding:10px 14px;border-radius:14px 4px 14px 14px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#050508;font-size:13px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap;' : 'padding:10px 14px;border-radius:4px 14px 14px 14px;background:var(--card);border:1px solid var(--border);font-size:13px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap;'" x-text="msg.message"></div>
-    </div>
-  </div>
-</template>
+        <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'display:flex;gap:8px;align-items:flex-start;flex-direction:row-reverse;' : 'display:flex;gap:8px;align-items:flex-start;'">
+          <div class="zn-avatar" style="width:32px;height:32px;font-size:11px;border-radius:8px;flex-shrink:0">
+            <template x-if="msg.avatar_url"><img :src="msg.avatar_url"></template>
+            <template x-if="!msg.avatar_url"><span x-text="msg.username?msg.username.substring(0,2).toUpperCase():'ZK'"></span></template>
+          </div>
+          <div style="flex:1;min-width:0;max-width:78%">
+            <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'display:flex;align-items:center;gap:6px;margin-bottom:3px;justify-content:flex-end;' : 'display:flex;align-items:center;gap:6px;margin-bottom:3px;'">
+              <span style="font-size:11px;font-weight:700;color:var(--primary)" x-text="msg.username"></span>
+              <span style="font-size:9px;color:var(--text-mute);font-family:var(--font-mono)" x-text="formatTimeAgo(msg.created_at)"></span>
+              <template x-if="isOwner || msg.user_id === (currentUser ? currentUser.id : '')">
+                <button @click.stop="deleteGlobalMessage(msg.id, msg.user_id)" style="background:rgba(255,51,85,.15);border:1px solid var(--danger);color:var(--danger);border-radius:6px;padding:2px 6px;font-size:10px;line-height:1;cursor:pointer">×</button>
+              </template>
+            </div>
+            <div :style="msg.user_id === (currentUser ? currentUser.id : '') ? 'padding:10px 14px;border-radius:14px 4px 14px 14px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#050508;font-size:13px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap;' : 'padding:10px 14px;border-radius:4px 14px 14px 14px;background:var(--card);border:1px solid var(--border);font-size:13px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap;'" x-text="msg.message"></div>
+          </div>
+        </div>
+      </template>
     </div>
 
     <div class="zn-chat-input-bar">
@@ -3987,6 +3939,10 @@ select.zn-input option{background:var(--card);color:var(--text)}
         <div class="zn-drawer-item-icon" style="border-color:#ff0080"><svg viewBox="0 0 24 24" style="fill:#ff0080"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg></div>
         <span class="zn-drawer-item-label">🎬 Zenkai Cinema</span>
       </div>
+      <div class="zn-drawer-item" @click="drawerOpen=false;switchTab('komik')">
+        <div class="zn-drawer-item-icon" style="border-color:#a855f7"><svg viewBox="0 0 24 24" style="fill:#a855f7"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg></div>
+        <span class="zn-drawer-item-label">📚 Zenkai Komik</span>
+      </div>
       <div class="zn-drawer-item" @click="drawerOpen=false;openBugReportSheet()">
         <div class="zn-drawer-item-icon" style="border-color:#ff3355"><svg viewBox="0 0 24 24" style="fill:#ff3355"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z"/></svg></div>
         <span class="zn-drawer-item-label">🐛 Lapor Bug / Saran</span>
@@ -4009,14 +3965,16 @@ select.zn-input option{background:var(--card);color:var(--text)}
       </template>
     </div>
   </div>
-</div><script>
+</div>
+
+<script>
 const SUPABASE_URL='https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const TMDB_KEY='3ed9f7d277aa67202285813736a67ae0';
 const AI_URL='https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/rapid-responder';
 const OWNER_EMAIL='andikaatka@gmail.com';
 
-const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi all-in-one yang siap bantu aktivitas harian lu.\n\n💰 DOMPET DIGITAL\nCatat transaksi, grafik, budget, target tabungan.\n\n💬 CHAT GLOBAL\nNgobrol sama semua user Zenkai. Jaga sopan santun!\n\n🤖 ZENKAI AI\nChat pintar gratis 10x/hari (VIP unlimited).\n\n⚡ ZENKAI AI PRO\nAI premium 7 model buat VIP — unlimited + vision!\n\n🎬 ZENKAI CINEMA\nNonton film, tap kiri/kanan buat maju-mundur 10 detik.\n\n🎵 MUSIK\nDengerin playlist lagu favorit sambil pakai app.\n\n📥 TIKTOK DOWNLOADER\nDownload video tanpa watermark.\n\n🛠️ TOOLS LENGKAP\nJam dunia, TTS, kompres foto, BMI, speed test, prompt generator, cek fakta, password gen, morse.\n\n🐛 LAPOR BUG\nKetemu bug? Lapor langsung dari menu.\n\nYuk jelajahi semua fiturnya! 🚀';
+const DEFAULT_WELCOME='Selamat datang di Zenkai Tools! 🎉\n\nAplikasi all-in-one yang siap bantu aktivitas harian lu.\n\n💰 DOMPET DIGITAL\nCatat transaksi, grafik, budget, target tabungan.\n\n💬 CHAT GLOBAL\nNgobrol sama semua user Zenkai. Jaga sopan santun!\n\n🤖 ZENKAI AI\nChat pintar gratis 10x/hari (VIP unlimited).\n\n⚡ ZENKAI AI PRO\nAI premium 7 model buat VIP — unlimited + vision!\n\n🎬 ZENKAI CINEMA\nNonton film di Zenkai!\n\n📚 ZENKAI KOMIK\nBaca manga, manhwa, manhua via MangaDex!\n\n🎵 MUSIK\nDengerin playlist lagu favorit sambil pakai app.\n\n📥 TIKTOK DOWNLOADER\nDownload video tanpa watermark.\n\n🛠️ TOOLS LENGKAP\nJam dunia, TTS, kompres foto, BMI, speed test, prompt generator, cek fakta, password gen, morse.\n\n🐛 LAPOR BUG\nKetemu bug? Lapor langsung dari menu.\n\nYuk jelajahi semua fiturnya! 🚀';
 
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
@@ -4135,7 +4093,7 @@ developerData:{
   ],
   projects:[
     {nama:'Zenkai Tools v1', desc:'Project pertama — static HTML doang, tapi ini titik awal semuanya', status:'Arsip', link:'#'},
-    {nama:'Zenkai Tools v1.7', desc:'Project kedua — versi sekarang, full-featured web app dengan AI, dompet digital, cinema, global chat, dll', status:'Live', link:'#'}
+    {nama:'Zenkai Tools v1.7', desc:'Project kedua — versi sekarang, full-featured web app dengan AI, dompet digital, cinema, global chat, komik, dll', status:'Live', link:'#'}
   ],
   quote:'Belajar dari nol bukan alasan buat berhenti — justru alasan buat terus maju.',
   kontak:{
@@ -4172,7 +4130,6 @@ bugReportList:[],
 bugReportSubmitting:false,
 bugReportListLoading:false,
 
-// GLOBAL CHAT
 globalChatOpen:false,
 globalChatMessages:[],
 globalChatInput:'',
@@ -4187,7 +4144,6 @@ toxicWarningMessage:'',
 toxicStrikesList:[],
 badWords:['anjing','anjir','anjeng','bangsat','bajingan','kontol','kntl','memek','mmk','pepek','ngentot','ngentod','entot','ngehe','tai','tahi','setan','babi','monyet','kampret','goblok','goblog','tolol','bodoh','idiot','bego','sialan','keparat','jancok','jancuk','cok','cuk','asu','kimak','pukimak','brengsek','bencong','banci','pelacur','sundal','perek','lonte','jablay','pantek','peler','titit','meki','ngaceng','colmek','bokep','porno','sange','berahi','kelamin','vagina','penis','testis','sperma','masturbasi','fuck','shit','bitch','asshole','dick','pussy','bastard'],
 
-// CINEMA
 cinemaList:[],
 cinemaLoading:false,
 cinemaKategoriAktif:'semua',
@@ -4250,6 +4206,7 @@ maintenanceFeatures:[
   {id:'berita',nama:'Berita'},
   {id:'film',nama:'Film Trending'},
   {id:'cinema',nama:'Zenkai Cinema'},
+  {id:'komik',nama:'Zenkai Komik'},
   {id:'tools',nama:'Tools'},
   {id:'tema',nama:'Ganti Tema'},
   {id:'global_chat',nama:'Chat Global'}
@@ -4269,6 +4226,7 @@ fiturList:[
   {id:'target',nama:'Target',desc:'Rencana keuangan',svg:'<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',iconColor:'#ffd700',iconBg:'linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15))',kategori:'keuangan',tab:'keuangan',sub:'target'},
   {id:'global_chat',nama:'Chat Global',desc:'Ngobrol semua user',svg:'<path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>',badge:'NEW',iconColor:'#00d9ff',iconBg:'linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,0,128,.15))',kategori:'hiburan',tab:'chat_global'},
   {id:'cinema',nama:'Cinema',desc:'Nonton film',svg:'<path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>',badge:'NEW',iconColor:'#ff0080',iconBg:'linear-gradient(135deg,rgba(255,0,128,.15),rgba(168,85,247,.15))',kategori:'hiburan',tab:'cinema'},
+  {id:'komik',nama:'Komik',desc:'Baca manga/manhwa',svg:'<path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>',badge:'NEW',iconColor:'#a855f7',iconBg:'linear-gradient(135deg,rgba(168,85,247,.15),rgba(255,0,128,.15))',kategori:'hiburan',tab:'komik'},
   {id:'downloader',nama:'Downloader',desc:'TikTok no watermark',svg:'<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>',badge:'NEW',iconColor:'#ffd700',iconBg:'linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.15))',kategori:'tools',tab:'downloader'},
   {id:'prompt_gen',nama:'Prompt Gen',desc:'Buat prompt gambar AI',svg:'<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>',badge:'AI',iconColor:'#00d9ff',iconBg:'linear-gradient(135deg,rgba(0,217,255,.15),rgba(168,85,247,.15))',kategori:'tools',tab:'tools',sub:'prompt'},
   {id:'cek_fakta',nama:'Cek Fakta',desc:'Verifikasi klaim/berita',svg:'<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>',badge:'AI',iconColor:'#00ff88',iconBg:'linear-gradient(135deg,rgba(0,255,136,.15),rgba(0,217,255,.15))',kategori:'tools',tab:'tools',sub:'fakta'},
@@ -4337,21 +4295,18 @@ proModelList:[
   {id:'gpt-5.6',name:'Zenkai Ultimate',pengali:'5x',vision:true,desc:'Paling pintar'}
 ],
 
-// PROMPT GENERATOR
 promptImageData:null,
 promptInput:'',
 promptResult:'',
 promptLoading:false,
 promptProgress:0,
 
-// CEK FAKTA
 factInput:'',
 factResult:'',
 factLoading:false,
 factProgress:0,
 factStatus:'',
 
-// PASSWORD GEN
 passLength:16,
 passIncludeUpper:true,
 passIncludeLower:true,
@@ -4360,7 +4315,7 @@ passIncludeSymbol:true,
 passResult:'',
 passStrengthText:'',
 passStrengthColor:'',
-// ============ KOMIK STATE ============
+
 komikSearch:'',
 komikTipe:'semua',
 komikList:[],
@@ -4382,12 +4337,11 @@ komikHasNextChapter:false,
 isKomikFavorited:false,
 komikFavorites:[],
 komikMangadexProxy:'https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/mangadex-proxy',
-// MORSE
+
 morseMode:'text2morse',
 morseInput:'',
 morseResult:'',
 
-// ============ GETTERS ============
 get filteredProvinces(){if(!this.provinceSearch)return this.provinces;var q=this.provinceSearch.toLowerCase();return this.provinces.filter(function(p){return p.toLowerCase().indexOf(q)>=0});},
 get filteredCities(){if(!this.citySearch)return this.cities;var q=this.citySearch.toLowerCase();return this.cities.filter(function(c){return c.toLowerCase().indexOf(q)>=0});},
 get filteredFitur(){if(this.kategoriAktif==='semua')return this.fiturList;var kat=this.kategoriAktif;return this.fiturList.filter(function(f){return f.kategori===kat;});},
@@ -4395,13 +4349,6 @@ get filteredUsers(){if(!this.userSearch)return this.allUsers;var q=this.userSear
 get totalBalance(){return this.transactions.reduce(function(a,t){return t.type==='income'?a+Number(t.amount):a-Number(t.amount)},0);},
 get totalIncome(){return this.transactions.filter(function(t){return t.type==='income'}).reduce(function(a,t){return a+Number(t.amount)},0);},
 get totalExpense(){return this.transactions.filter(function(t){return t.type==='expense'}).reduce(function(a,t){return a+Number(t.amount)},0);},
-get komikFilteredList(){
-  if(!this.komikSearch || this.komikSearch.trim()==='') return this.filteredKomik;
-  var q = this.komikSearch.toLowerCase().trim();
-  return this.filteredKomik.filter(function(k){
-    return k.judul && k.judul.toLowerCase().indexOf(q) >= 0;
-  });
-},
 get filteredCinema(){if(this.cinemaKategoriAktif==='semua')return this.cinemaList;var k=this.cinemaKategoriAktif;return this.cinemaList.filter(function(f){return f.kategori===k;});},
 get cinemaNoticeText(){
   var n=this.cinemaList.length;
@@ -4411,7 +4358,6 @@ get cinemaNoticeText(){
   return '<b>Total '+n+' film</b> siap ditonton. Koleksi bakal terus bertambah! 🍿';
 },
 
-// ============ UTILS ============
 getLevelName:function(lv){var n={1:'PEMULA',2:'RAJIN',3:'AKTIF',4:'AHLI',5:'MASTER',6:'LEGENDA'};return n[lv]||'PEMULA';},
 getNextLevelPoints:function(){var t={1:100,2:300,3:600,4:1000,5:2000,6:0};return t[this.userLevel]||0;},
 getCurrentLevelMin:function(){var t={1:0,2:100,3:300,4:600,5:1000,6:2000};return t[this.userLevel]||0;},
@@ -4619,7 +4565,6 @@ handleResize:function(){
   }, this);
 },
 
-// ============ WEB MAINTENANCE ============
 toggleWebMaintenance:function(){this.webMaintenanceActive = !this.webMaintenanceActive;this.checkWebMaintenanceBlock();},
 checkWebMaintenanceBlock:function(){
   if(!this.isAuthenticated){ this.webMaintShouldBlock = false; this.stopCountdown(); return; }
@@ -4688,7 +4633,6 @@ quickDisableWebMaintenance:async function(){
   }catch(e){ this.showToast('❌ GAGAL', e.message, 'error'); }
 },
 
-// ============ MUSIC ============
 getMusicPreviewId:function(){
   if(!this.musicUrl) return '';
   var listMatch = this.musicUrl.match(/[?&]list=([a-zA-Z0-9_-]+)/);
@@ -4741,7 +4685,6 @@ saveMusicSettings:async function(){
   }catch(e){ this.showToast('❌ GAGAL', e.message, 'error'); }
 },
 
-// ============ FORCE CLEAN LOGOUT ============
 forceCleanLogout:async function(){
   try{
     try{ var channels = sb.getChannels(); channels.forEach(function(ch){ try{ sb.removeChannel(ch); }catch(e){} }); }catch(e){}
@@ -4816,6 +4759,7 @@ switchTab:function(tab){
   else if(tab==='tema') maintId='tema';
   else if(tab==='downloader') maintId='downloader';
   else if(tab==='cinema') maintId='cinema';
+  else if(tab==='komik') maintId='komik';
   if(maintId && this.isUnderMaintenance(maintId)){return this.showMaintenanceSheet(maintId);}
   if(this.activeTab !== tab){
     this.tabHistory.push(this.activeTab);
@@ -4824,10 +4768,10 @@ switchTab:function(tab){
   }
   this.activeTab = tab;
   if(tab==='cinema'){ this.loadCinema(); }
+  if(tab==='komik'){ this.loadKomik(); }
   window.scrollTo({top:0,behavior:'smooth'});
 },
 
-// ============ SHEET SWIPE-TO-CLOSE ============
 onSheetTouchStart:function(e,sheetKey){
   var target = e.target.closest('.zn-sheet-content');
   if(!target)return;
@@ -4920,6 +4864,8 @@ handleBackButton:function(){
   if(this.weatherSheetOpen){this.weatherSheetOpen=false;return true;}
   if(this.requestFilmSheetOpen){this.requestFilmSheetOpen=false;return true;}
   if(this.cinemaPlayerOpen){this.closeCinemaPlayer();return true;}
+  if(this.komikReaderOpen){this.closeKomikReader();return true;}
+  if(this.komikDetailOpen){this.komikDetailOpen=false;return true;}
   if(this.chatFullscreen){this.chatFullscreen=false;return true;}
   if(this.proChatFullscreen){this.proChatFullscreen=false;return true;}
   if(this.globalChatOpen){this.globalChatOpen=false;return true;}
@@ -4940,6 +4886,7 @@ mapFiturToMaintenance:function(f){
   if(f.tab === 'berita') return 'berita';
   if(f.tab === 'film') return 'film';
   if(f.tab === 'cinema') return 'cinema';
+  if(f.tab === 'komik') return 'komik';
   if(f.tab === 'tools') return 'tools';
   if(f.tab === 'tema') return 'tema';
   return null;
@@ -4966,6 +4913,7 @@ bukaFitur:function(f){
   else if(f.tab==='berita'){this.openNews();}
   else if(f.tab==='film'){this.openMovieSheet();}
   else if(f.tab==='cinema'){this.switchTab('cinema');}
+  else if(f.tab==='komik'){this.switchTab('komik');}
   else if(f.tab==='downloader'||f.tab==='tema'){this.switchTab(f.tab);}
 },
 
@@ -4996,7 +4944,7 @@ detectDevice:function(){
   window.addEventListener('online',function(){self.deviceInfo.online=true});
   window.addEventListener('offline',function(){self.deviceInfo.online=false});
   if(navigator.getBattery){navigator.getBattery().then(function(b){var upd=function(){self.deviceInfo.battery=Math.round(b.level*100)+'%'};upd();b.addEventListener('levelchange',upd);});}
-  var tips=['Rajin catat transaksi bikin keuangan lebih terkontrol!','Login harian dapat 10 poin gratis!','Zenkai AI Pro unlimited buat VIP!','Geser bubble AI & musik ke mana aja!','Nonton film di Zenkai Cinema, tap kiri/kanan buat seek!','Chat global jaga sopan santun ya!','Kumpulkan poin, naik level!','Coba mode gelap biar mata gak capek!'];
+  var tips=['Rajin catat transaksi bikin keuangan lebih terkontrol!','Login harian dapat 10 poin gratis!','Zenkai AI Pro unlimited buat VIP!','Geser bubble AI & musik ke mana aja!','Nonton film di Zenkai Cinema!','Chat global jaga sopan santun ya!','Kumpulkan poin, naik level!','Coba mode gelap biar mata gak capek!','Baca komik favorit di Zenkai Komik!'];
   this.tipsHarian=tips[Math.floor(Math.random()*tips.length)];
 },
 
@@ -5151,7 +5099,6 @@ addPoints:async function(amount,reason){
   }catch(e){}
 },
 
-// ============ AUTH ============
 handleEmailAuth:async function(){
   var self = this;
   if(!this.authEmail||!this.authPassword){return this.showToast('⚠️ PERHATIAN','Isi email dan password!','warning');}
@@ -5295,7 +5242,6 @@ logout:async function(){
   setTimeout(function(){window.location.reload();},200);
 },
 
-// ============ TRANSACTIONS ============
 loadTransactions:async function(){if(!this.currentUser)return;var{data}=await sb.from('transactions').select('*').eq('user_id',this.currentUser.id).order('id',{ascending:false});if(data){this.transactions=data;var s=this;setTimeout(function(){s.drawCharts()},300);}},
 addTransaction:async function(type){
   if(!this.currentUser||!this.txCategory||!this.txAmount){return this.showToast('⚠️ PERHATIAN','Isi kategori dan nominal!','warning');}
@@ -5351,7 +5297,6 @@ drawCharts:function(){var self=this;setTimeout(function(){try{
   }
 }catch(e){}},200);},
 
-// ============ GLOBAL CHAT ============
 normalizeText:function(text){
   return String(text||'').toLowerCase()
     .replace(/[0@]/g,'o')
@@ -5514,7 +5459,6 @@ setupGlobalChatRealtime:function(){
   }catch(e){}
 },
 
-// ============ OWNER CHAT ADMIN ============
 loadGlobalChatAdmin:async function(){
   await this.loadGlobalChat();
   try{
@@ -5594,7 +5538,6 @@ resetUserStrike:function(u){
   }, '↺');
 },
 
-// ============ CINEMA ============
 loadCinema:async function(){
   if(this.isUnderMaintenance('cinema')){return this.showMaintenanceSheet('cinema');}
   this.cinemaLoading=true;
@@ -5864,7 +5807,6 @@ cinemaToggleFullscreen:function(){
   }catch(e){}
 },
 
-// ============ REQUEST FILM ============
 openRequestFilmSheet:function(){
   if(!this.currentUser){ return this.showToast('⚠️ PERHATIAN','Login dulu!','warning'); }
   this.requestFilmForm = {judul:'', tahun:'', notes:''};
@@ -5897,11 +5839,9 @@ submitRequestFilm:async function(){
   finally{ this.requestFilmSubmitting = false; }
 },
 
-// ============ MOVIES (TMDB) ============
 fetchMovies:async function(){this.movieLoading=true;try{var res=await fetch('https://api.themoviedb.org/3/trending/movie/week?api_key='+TMDB_KEY+'&language=id-ID');var json=await res.json();if(json.results){this.movieList=json.results.slice(0,15).map(function(m){return{id:m.id,title:m.title,year:m.release_date?m.release_date.slice(0,4):'-',rating:m.vote_average?m.vote_average.toFixed(1):'-',overview:m.overview||'-',poster:m.poster_path?'https://image.tmdb.org/t/p/w200'+m.poster_path:''}});}}catch(e){}this.movieLoading=false;},
 openMovieSheet:function(){if(this.isUnderMaintenance('film')){return this.showMaintenanceSheet('film');}this.movieSheetOpen=true;if(this.movieList.length===0)this.fetchMovies();},
 
-// ============ NEWS ============
 openNews:async function(){
   if(this.isUnderMaintenance('berita')){return this.showMaintenanceSheet('berita');}
   this.newsSheetOpen=true;this.selectedNews=null;
@@ -5953,13 +5893,11 @@ parseRSSItems:function(xmlText){
   }catch(e){return [];}
 },
 
-// ============ TOOLS LAMA ============
 speakCustomText:function(){if(!this.customTtsText){return this.showToast('⚠️ PERHATIAN','Ketik teks dulu!','warning');}if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(this.customTtsText);u.lang='id-ID';window.speechSynthesis.speak(u);}},
 compressImageFile:function(event){var file=event.target.files[0];if(!file)return;var self=this;var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var canvas=document.createElement('canvas');var ctx=canvas.getContext('2d');var w=img.width,h=img.height;var max=800;if(w>h&&w>max){h*=max/w;w=max;}else if(h>max){w*=max/h;h=max;}canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h);self.compressedImageUrl=canvas.toDataURL('image/jpeg',0.6);self.showToast('✅ BERHASIL','Foto dikompres!','success');};img.src=e.target.result;};reader.readAsDataURL(file);},
 runSpeedTest:async function(){this.speedTesting=true;this.speedResult=null;try{var start=Date.now();var res=await fetch('https://speed.cloudflare.com/__down?bytes=5000000&r='+Math.random());var blob=await res.blob();var dur=(Date.now()-start)/1000;var mbps=(blob.size*8)/(dur*1000000);this.speedResult={download:mbps.toFixed(1),latency:Math.round(dur*100),quality:mbps>20?'BAGUS':mbps>5?'CUKUP':'LAMBAT'};}catch(e){this.showToast('❌ GAGAL','Tes gagal.','error');}this.speedTesting=false;},
 calcBMI:function(){var w=parseFloat(this.bmiWeight),h=parseFloat(this.bmiHeight)/100;if(!w||!h){return this.showToast('⚠️ PERHATIAN','Isi berat & tinggi!','warning');}var bmi=w/(h*h);var kategori,color;if(bmi<18.5){kategori='KURUS';color='#00d9ff';}else if(bmi<25){kategori='NORMAL';color='#00ff88';}else if(bmi<30){kategori='GEMUK';color='#ffd700';}else{kategori='OBESITAS';color='#ff3355';}var bbIdeal=(22*h*h).toFixed(1);var age=parseFloat(this.bmiAge)||25;var kalori=this.bmiGender==='male'?Math.round(66+(13.7*w)+(5*h*100)-(6.8*age)):Math.round(655+(9.6*w)+(1.8*h*100)-(4.7*age));this.bmiResult={bmi:bmi.toFixed(1),kategori:kategori,color:color,bbIdeal:bbIdeal,kalori:kalori};},
 
-// ============ TOOLS BARU ============
 pickPromptImage:function(event){
   var file = event.target.files[0];
   if(!file) return;
@@ -6218,7 +6156,6 @@ fetchWeather:async function(){
   finally{this.weatherLoading=false;}
 },
 
-// ============ AI CHAT ============
 openChatAI:async function(){
   if(this.isUnderMaintenance('ai')){return this.showMaintenanceSheet('ai');}
   this.chatFullscreen=true;
@@ -6269,7 +6206,6 @@ sendChat:async function(){
 startVoiceInput:function(){if(!this.voiceSupported){return this.showToast('ℹ️ INFO','Browser tidak support.','warning');}var SR=window.SpeechRecognition||window.webkitSpeechRecognition;var rec=new SR();rec.lang='id-ID';var self=this;rec.onresult=function(e){self.chatInput=e.results[0][0].transcript;setTimeout(function(){self.sendChat()},300)};rec.onerror=function(e){self.showToast('❌ GAGAL','Voice error: '+e.error,'error');};rec.start();},
 confirmClearChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat dihapus.',function(){self.chatMessages=[];self.showToast('✅ SUKSES','Chat dihapus.','success');},'🗑️');},
 
-// ============ PRO CHAT ============
 handleProCardClick:function(){
   if(this.isUnderMaintenance('ai_pro')){return this.showMaintenanceSheet('ai_pro');}
   if(this.isOwner || this.isVip){ return this.openProChat(); }
@@ -6309,8 +6245,8 @@ sendProChat:async function(){
     var{data:sessionData}=await sb.auth.getSession();
     var token=sessionData&&sessionData.session?sessionData.session.access_token:'';
     var modelToUse = this.proModelManual ? this.proModel : 'deepseek-v4-flash';
-if(this.proModel === 'auto'){ modelToUse = 'deepseek-v4-flash'; }
-var res=await fetch(this.proEdgeUrl,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_ANON_KEY},body:JSON.stringify({messages:apiMessages,model:modelToUse,hasImage:!!imgData})});
+    if(this.proModel === 'auto'){ modelToUse = 'deepseek-v4-flash'; }
+    var res=await fetch(this.proEdgeUrl,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_ANON_KEY},body:JSON.stringify({messages:apiMessages,model:modelToUse,hasImage:!!imgData})});
     var data=await res.json();
     var reply='';
     var isFallback=false;
@@ -6335,6 +6271,7 @@ var res=await fetch(this.proEdgeUrl,{method:'POST',headers:{'Content-Type':'appl
   finally{this.stopProThinking();this.proThinking=false;}
 },
 clearProChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat Zenkai AI Pro bakal dihapus.',function(){self.proMessages=[];self.showToast('✅ SUKSES','Chat dihapus.','success');},'🗑️');},
+
 // ============ ZENKAI KOMIK ============
 loadKomik:async function(){
   this.komikLoading = true;
@@ -6343,7 +6280,8 @@ loadKomik:async function(){
     var res = await fetch(url);
     var json = await res.json();
     if(json.data && Array.isArray(json.data)){
-      this.komikList = json.data.map(function(m){ return this.parseMangaData(m); }, this);
+      var self = this;
+      this.komikList = json.data.map(function(m){ return self.parseMangaData(m); });
       this.filteredKomik = this.komikList.slice();
     } else {
       this.komikList = [];
@@ -6364,7 +6302,6 @@ parseMangaData:function(m){
   if(m.attributes && m.attributes.title){
     judul = m.attributes.title.en || Object.values(m.attributes.title)[0] || 'Tanpa Judul';
   }
-  
   var cover = '';
   var author = '';
   var artist = '';
@@ -6432,8 +6369,9 @@ searchKomik:async function(){
     var url = this.komikMangadexProxy + '?path=/manga&query=' + encodeURIComponent('limit=30&title=' + q + '&includes[]=cover_art&includes[]=author&includes[]=artist&contentRating[]=safe&contentRating[]=suggestive');
     var res = await fetch(url);
     var json = await res.json();
+    var self = this;
     if(json.data && Array.isArray(json.data)){
-      this.filteredKomik = json.data.map(function(m){ return this.parseMangaData(m); }, this);
+      this.filteredKomik = json.data.map(function(m){ return self.parseMangaData(m); });
     } else {
       this.filteredKomik = [];
     }
@@ -6580,7 +6518,8 @@ updateKomikNavButtons:function(){
 
 prevKomikChapter:function(){
   if(!this.komikHasPrevChapter) return;
-  var idx = this.komikChapters.findIndex(function(c){ return c.id === this.komikCurrentChapter.id; }, this);
+  var self = this;
+  var idx = this.komikChapters.findIndex(function(c){ return c.id === self.komikCurrentChapter.id; });
   if(idx > 0){
     this.openKomikReader(this.komikChapters[idx - 1]);
   }
@@ -6588,7 +6527,8 @@ prevKomikChapter:function(){
 
 nextKomikChapter:function(){
   if(!this.komikHasNextChapter) return;
-  var idx = this.komikChapters.findIndex(function(c){ return c.id === this.komikCurrentChapter.id; }, this);
+  var self = this;
+  var idx = this.komikChapters.findIndex(function(c){ return c.id === self.komikCurrentChapter.id; });
   if(idx >= 0 && idx < this.komikChapters.length - 1){
     this.openKomikReader(this.komikChapters[idx + 1]);
   }
@@ -6606,7 +6546,6 @@ formatKomikDate:function(iso){
   }catch(e){ return ''; }
 },
 
-// ============ BOOKMARK & FAVORITE ============
 checkFavoriteKomik:async function(){
   if(!this.currentUser || !this.komikDetail) return;
   try{
@@ -6707,10 +6646,12 @@ lanjutBacaKomik:function(){
     this.openKomikReader(this.komikChapters[0]);
     return;
   }
-  var target = this.komikChapters.find(function(c){ return c.chapter_number === this.komikDetail.chapter_terakhir; }, this);
+  var self = this;
+  var target = this.komikChapters.find(function(c){ return c.chapter_number === self.komikDetail.chapter_terakhir; });
   if(!target) target = this.komikChapters[0];
   this.openKomikReader(target);
 },
+
 // ============ REVIEW ============
 getFeatureRating:function(fiturId){var cached = this.featureRatingsCache[fiturId];if(!cached) return {avg:'0.0', total:0};return cached;},
 loadAllFeatureRatings:async function(){
@@ -6757,7 +6698,6 @@ submitReview:async function(){
   }catch(e){this.showToast('❌ GAGAL', e.message, 'error');}
 },
 
-// ============ BUG REPORT ============
 openBugReportSheet:function(){if(!this.currentUser){return this.showToast('⚠️ PERHATIAN','Login dulu!','warning');}this.bugReportForm = {tipe:'bug', judul:'', deskripsi:''};this.bugReportSheetOpen = true;},
 submitBugReport:async function(){
   if(!this.currentUser) return;
@@ -6791,7 +6731,6 @@ openBugReportList:async function(){
 loadAllBugReports:async function(){try{var {data, error} = await sb.from('bug_reports').select('*').order('created_at', {ascending:false}).limit(100);if(error) throw error;this.bugReportList = data || [];}catch(e){}},
 updateBugStatus:async function(reportId, newStatus){try{var {error} = await sb.from('bug_reports').update({status:newStatus, updated_at:new Date().toISOString()}).eq('id', reportId);if(error) throw error;await this.loadAllBugReports();this.showToast('✅ SUKSES', 'Status diubah ke "'+newStatus+'"', 'success');}catch(e){this.showToast('❌ GAGAL', e.message, 'error');}},
 
-// ============ OWNER ============
 loadAppStats:async function(){try{
   var{count:u}=await sb.from('profiles').select('*',{count:'exact',head:true});
   var{count:t}=await sb.from('transactions').select('*',{count:'exact',head:true});
@@ -7003,7 +6942,6 @@ saveMaintenance:async function(){
 },
 saveWelcomeText:async function(){if(!this.welcomeTextEdit)return;await sb.from('app_settings').update({welcome_text:this.welcomeTextEdit}).eq('id',1);this.welcomeText=this.welcomeTextEdit;this.showToast('✅ SUKSES','Kata sambutan diperbarui!','success');},
 
-// ============ REALTIME ============
 setupRealtime:function(){
   var self = this;
   try{
