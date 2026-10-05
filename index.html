@@ -1046,15 +1046,17 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-style="minimal"][data-darkmode="light"] .zn-hero-bg{opacity:.05}
 [data-style="minimal"][data-darkmode="light"] .zn-hero-bg::after{background:linear-gradient(180deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,.6) 100%)}
 
-/* Cinema rotate */
+/* Cinema rotate — pakai fullscreen biar gak balik sendiri */
 .zn-cinema-player.rotated {
   transform: rotate(90deg);
-  transform-origin: center;
+  transform-origin: center center;
   width: 100vh;
   height: 100vw;
   position: fixed;
-  top: calc((100vh - 100vw) / 2);
-  left: calc((100vw - 100vh) / 2);
+  top: 50%;
+  left: 50%;
+  margin-top: -50vw;
+  margin-left: -50vh;
 }
 .zn-cinema-scrub-wrap { position: relative; padding: 12px 0; cursor: pointer; }
 .zn-cinema-scrub-wrap .zn-cinema-progress { margin-bottom: 0; height: 6px; }
@@ -1085,6 +1087,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
   font-family: var(--font-mono); font-size: 11px;
   padding: 3px 6px; text-align: center;
 }
+.zn-cinema-btn { position: relative; }
 </style></head>
 <body x-data="zenkaiCloudApp()" x-init="init()" x-cloak :data-theme="theme" :data-style="styleMode" :data-darkmode="darkMode">
 
@@ -3079,18 +3082,9 @@ select.zn-input option{background:var(--card);color:var(--text)}
         <svg viewBox="0 0 24 24"><path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zm-6.25-.77c-.59-.59-1.54-.59-2.12 0L1.75 8.11c-.59.59-.59 1.54 0 2.12l12.02 12.02c.59.59 1.54.59 2.12 0l6.36-6.36c.59-.59.59-1.54 0-2.12L10.23 1.75zm4.6 19.44L2.81 9.17l6.36-6.36 12.02 12.02-6.36 6.36zm-7.31.29C4.25 19.94 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32z"/></svg>
       </button>
     </div>
-    <div class="zn-cinema-video-wrap">
+    <div class="zn-cinema-video-wrap" @click="toggleCinemaControls()">
       <iframe :src="cinemaIframeUrl" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-      <div class="zn-cinema-tap-overlay">
-        <div class="zn-cinema-tap-zone" @click.stop="cinemaTapSeek('left')">
-          <div class="zn-cinema-seek-side left" :class="{show: cinemaSeekLeftShow}"><svg viewBox="0 0 24 24" style="width:70px;height:70px;fill:#fff;filter:drop-shadow(0 0 10px rgba(0,0,0,.7))"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg></div>
-        </div>
-        <div class="zn-cinema-tap-center" @click.stop="toggleCinemaControls()"></div>
-        <div class="zn-cinema-tap-zone" @click.stop="cinemaTapSeek('right')">
-          <div class="zn-cinema-seek-side right" :class="{show: cinemaSeekRightShow}"><svg viewBox="0 0 24 24" style="width:70px;height:70px;fill:#fff;filter:drop-shadow(0 0 10px rgba(0,0,0,.7))"><path d="M13 6v12l8.5-6L13 6zM4 18l8.5-6L4 6v12z"/></svg></div>
-        </div>
-      </div>
-      <div class="zn-cinema-seek-hint" :class="{show: cinemaSeekHintShow}" x-text="cinemaSeekHint"></div>
+      <div class="zn-cinema-tap-overlay" style="pointer-events:none"></div>
     </div>
     <div class="zn-cinema-controls" :class="{hidden: cinemaControlsHidden}">
       <div class="zn-cinema-scrub-wrap" @mousedown="startCinemaScrub($event)" @touchstart.prevent="startCinemaScrub($event)">
@@ -3106,14 +3100,22 @@ select.zn-input option{background:var(--card);color:var(--text)}
         </div>
       </div>
       <div class="zn-cinema-buttons">
-        <button class="zn-cinema-btn" @click="cinemaSeekBack()"><svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg></button>
-        <button class="zn-cinema-btn" @click="cinemaTogglePlay()">
+        <button class="zn-cinema-btn" @click.stop="cinemaSeekBack()" title="-10s">
+          <svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+          <span style="position:absolute;bottom:2px;right:2px;font-size:9px;font-family:var(--font-mono);color:#fff;background:rgba(0,0,0,.6);padding:1px 3px;border-radius:3px;">-10s</span>
+        </button>
+        <button class="zn-cinema-btn" @click.stop="cinemaTogglePlay()" title="Play/Pause">
           <svg x-show="!cinemaPlaying" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           <svg x-show="cinemaPlaying" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
-        <button class="zn-cinema-btn" @click="cinemaSeekForward()"><svg viewBox="0 0 24 24"><path d="M13 6v12l8.5-6L13 6zM4 18l8.5-6L4 6v12z"/></svg></button>
+        <button class="zn-cinema-btn" @click.stop="cinemaSeekForward()" title="+10s">
+          <svg viewBox="0 0 24 24"><path d="M13 6v12l8.5-6L13 6zM4 18l8.5-6L4 6v12z"/></svg>
+          <span style="position:absolute;bottom:2px;right:2px;font-size:9px;font-family:var(--font-mono);color:#fff;background:rgba(0,0,0,.6);padding:1px 3px;border-radius:3px;">+10s</span>
+        </button>
         <span class="zn-cinema-time" x-text="cinemaTimeText"></span>
-        <button class="zn-cinema-btn zn-cinema-fullscreen" @click="cinemaToggleFullscreen()"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
+        <button class="zn-cinema-btn zn-cinema-fullscreen" @click.stop="cinemaToggleFullscreen()" title="Fullscreen">
+          <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+        </button>
       </div>
     </div>
   </div>
@@ -5075,7 +5077,10 @@ startCinemaProgressLoop:function(){
       var dur = self.cinemaPlayer.getDuration() || 0;
       self.cinemaCurrentTime = cur;
       self.cinemaDuration = dur;
-      if(dur > 0){ self.cinemaProgress = Math.min(100,(cur/dur)*100); }
+      if(dur > 0 && !self.cinemaScrubbing){
+        self.cinemaProgress = Math.min(100,(cur/dur)*100);
+        self.cinemaScrubPercent = self.cinemaProgress;
+      }
       self.cinemaTimeText = self.formatDuration(cur)+' / '+self.formatDuration(dur);
     }catch(e){}
   }, 500);
@@ -5140,11 +5145,61 @@ cinemaSeekClick:function(e){
 },
 cinemaTapSeek:function(side){
   if(!this.cinemaPlayer) return;
-  var now = Date.now();
-  var DOUBLE_TAP_DELAY = 350;
+  try{
+    var t = this.cinemaPlayer.getCurrentTime() || 0;
+    if(side === 'right'){
+      this.cinemaPlayer.seekTo(t + 10, true);
+      this.showCinemaSeekHint('+10s');
+    } else {
+      this.cinemaPlayer.seekTo(Math.max(0, t - 10), true);
+      this.showCinemaSeekHint('-10s');
+    }
+  }catch(e){}
+},
+startCinemaScrub:function(e){
+  if(!this.cinemaPlayer) return;
+  this.cinemaScrubbing = true;
   var self = this;
-  if(side === 'right'){
-    if(this.cinemaLastTapRight && (now - this.cinemaLastTapRight) < DOUBLE_TAP_DELAY){
+  var wrap = e.currentTarget;
+  var updateScrub = function(ev){
+    if(!self.cinemaScrubbing) return;
+    var rect = wrap.getBoundingClientRect();
+    var cx = ev.touches ? ev.touches[0].clientX : ev.clientX;
+    var pct = Math.max(0, Math.min(100, ((cx - rect.left) / rect.width) * 100));
+    self.cinemaScrubPercent = pct;
+    var dur = self.cinemaDuration || 0;
+    var newTime = (pct / 100) * dur;
+    self.cinemaScrubTimeText = self.formatDuration(newTime);
+  };
+  updateScrub(e);
+  var onMove = function(ev){ if(ev.cancelable) ev.preventDefault(); updateScrub(ev); };
+  var onUp = function(ev){
+    self.cinemaScrubbing = false;
+    var rect = wrap.getBoundingClientRect();
+    var cx = ev.changedTouches ? ev.changedTouches[0].clientX : (ev.clientX || 0);
+    var pct = Math.max(0, Math.min(100, ((cx - rect.left) / rect.width) * 100));
+    try{ self.cinemaPlayer.seekTo((pct / 100) * self.cinemaDuration, true); }catch(e){}
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onUp);
+  };
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+  document.addEventListener('touchmove', onMove, {passive:false});
+  document.addEventListener('touchend', onUp);
+},
+toggleCinemaRotate:function(){
+  this.cinemaRotated = !this.cinemaRotated;
+  if(this.cinemaRotated){
+    try{
+      var el = document.querySelector('.zn-cinema-player');
+      if(el && el.requestFullscreen) el.requestFullscreen();
+    }catch(e){}
+  } else {
+    try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
+  }
+},Right && (now - this.cinemaLastTapRight) < DOUBLE_TAP_DELAY){
       try{
         var t = this.cinemaPlayer.getCurrentTime() || 0;
         this.cinemaPlayer.seekTo(t + 10, true);
