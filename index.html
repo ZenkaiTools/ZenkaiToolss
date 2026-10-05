@@ -1045,7 +1045,414 @@ select.zn-input option{background:var(--card);color:var(--text)}
 [data-style="comic"][data-darkmode="light"] .zn-hero-title{text-shadow:3px 3px 0 var(--primary) !important}
 [data-style="minimal"][data-darkmode="light"] .zn-hero-bg{opacity:.05}
 [data-style="minimal"][data-darkmode="light"] .zn-hero-bg::after{background:linear-gradient(180deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,.6) 100%)}
+/* ============================================================
+   ZENKAI KOMIK — STYLES
+   ============================================================ */
+.zn-komik-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.zn-komik-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  flex-direction: column;
+}
+.zn-komik-card:active {
+  transform: scale(.96);
+  border-color: var(--primary);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+.zn-komik-cover {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--bg-2);
+  overflow: hidden;
+  position: relative;
+}
+.zn-komik-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.zn-komik-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: var(--text-mute);
+  background: linear-gradient(135deg, var(--card-2), var(--bg-2));
+}
+.zn-komik-chapter-badge {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  background: rgba(0,0,0,.8);
+  color: #fff;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  padding: 2px 6px;
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+}
+.zn-komik-body {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.zn-komik-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  min-height: 2.6em;
+}
+.zn-komik-type {
+  font-size: 9px;
+  color: var(--primary);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
 
+/* DETAIL KOMIK */
+.zn-komik-detail-header {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.zn-komik-detail-cover {
+  width: 110px;
+  aspect-ratio: 3/4;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 20px var(--primary-glow);
+  background: var(--bg-2);
+}
+.zn-komik-detail-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.zn-komik-detail-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.zn-komik-detail-judul {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.3;
+}
+.zn-komik-detail-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #ffd700;
+}
+.zn-komik-detail-meta {
+  font-size: 10px;
+  color: var(--text-mute);
+  line-height: 1.5;
+}
+.zn-komik-detail-meta b {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.zn-komik-genre-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+.zn-komik-genre-chip {
+  padding: 3px 9px;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.zn-komik-chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.zn-komik-chapter-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all .15s;
+}
+.zn-komik-chapter-item:active {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+}
+.zn-komik-chapter-item.read {
+  opacity: .5;
+}
+.zn-komik-chapter-num {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.zn-komik-chapter-title {
+  font-size: 11px;
+  color: var(--text-dim);
+  flex: 1;
+  margin-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zn-komik-chapter-date {
+  font-size: 9px;
+  color: var(--text-mute);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+  margin-left: 6px;
+}
+
+/* READER KOMIK */
+.zn-komik-reader {
+  position: fixed;
+  inset: 0;
+  z-index: 100150;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+}
+.zn-komik-reader-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(180deg, rgba(0,0,0,.95), transparent);
+  transition: opacity .3s;
+}
+.zn-komik-reader-header.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.zn-komik-reader-title {
+  flex: 1;
+  min-width: 0;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zn-komik-reader-body {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #0a0a0a;
+  padding: 50px 0 80px 0;
+}
+.zn-komik-page {
+  width: 100%;
+  max-width: 800px;
+  display: block;
+  background: #1a1a1a;
+  min-height: 200px;
+  position: relative;
+}
+.zn-komik-page img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.zn-komik-page-loading {
+  padding: 40px;
+  text-align: center;
+  color: #666;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.zn-komik-reader-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 12px 14px;
+  display: flex;
+  gap: 8px;
+  background: linear-gradient(0deg, rgba(0,0,0,.95), transparent);
+  transition: opacity .3s;
+}
+.zn-komik-reader-footer.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.zn-komik-reader-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all .15s;
+}
+.zn-komik-reader-btn:active {
+  background: rgba(255,255,255,.25);
+  transform: scale(.96);
+}
+.zn-komik-reader-btn:disabled {
+  opacity: .3;
+  cursor: not-allowed;
+}
+.zn-komik-reader-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.6);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.zn-komik-reader-close svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Filter Tipe */
+.zn-komik-type-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin: 0 -14px;
+  padding-left: 14px;
+  padding-right: 14px;
+  scrollbar-width: none;
+}
+.zn-komik-type-tabs::-webkit-scrollbar {
+  display: none;
+}
+.zn-komik-type-tab {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.zn-komik-type-tab.active {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+/* Loading skeleton */
+.zn-komik-skeleton {
+  background: linear-gradient(90deg, var(--card) 25%, var(--card-2) 50%, var(--card) 75%);
+  background-size: 200% 100%;
+  animation: znKomikShimmer 1.5s infinite;
+  border-radius: 10px;
+}
+@keyframes znKomikShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.zn-komik-loading {
+  text-align: center;
+  padding: 40px 20px;
+}
+.zn-komik-loading-spinner {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--primary-soft);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: znSpin .8s linear infinite;
+}
+
+/* Empty state */
+.zn-komik-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+.zn-komik-empty-icon {
+  font-size: 60px;
+  margin-bottom: 16px;
+  opacity: .4;
+}
+.zn-komik-empty-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.zn-komik-empty-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
 /* Cinema rotate — pakai fullscreen biar gak balik sendiri */
 .zn-cinema-player.rotated {
   transform: rotate(90deg);
@@ -2212,6 +2619,7 @@ select.zn-input option{background:var(--card);color:var(--text)}
   <nav class="zn-bottom-nav">
     <button @click="switchTab('home')" :class="activeTab==='home'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span class="zn-nav-label">Home</span></button>
     <button @click="switchTab('cinema')" :class="activeTab==='cinema'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg><span class="zn-nav-label">Film</span></button>
+    <button @click="switchTab('komik')" :class="activeTab==='komik'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg><span class="zn-nav-label">Komik</span></button>
     <button @click="switchTab('tools')" :class="activeTab==='tools'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg><span class="zn-nav-label">Tools</span></button>
     <button @click="switchTab('tema')" :class="activeTab==='tema'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg><span class="zn-nav-label">Tema</span></button>
     <button @click="switchTab('pemberitahuan')" :class="activeTab==='pemberitahuan'?'active':''" class="zn-nav-btn"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg><span class="zn-nav-label">Info</span></button>
@@ -3120,7 +3528,216 @@ select.zn-input option{background:var(--card);color:var(--text)}
     </div>
   </div>
 </template>
+<!-- ============ KOMIK TAB ============ -->
+<div x-show="activeTab==='komik'" class="zn-section">
+  <!-- Header Komik -->
+  <div class="zn-card zn-card-glow" style="text-align:center;padding:24px">
+    <div class="zn-feat-icon" style="width:56px;height:56px;margin:0 auto 12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,128,.2),rgba(168,85,247,.2));border-color:#ff0080">
+      <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#ff0080"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+    </div>
+    <h2 style="font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:2px;color:#ff0080">ZENKAI KOMIK</h2>
+    <p style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-top:4px">// BACA MANGA · MANHWA · MANHUA</p>
+  </div>
 
+  <!-- Search Bar -->
+  <div class="zn-card" style="padding:12px">
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="text" x-model="komikSearch" @input.debounce.500ms="searchKomik()" placeholder="🔍 Cari judul komik..." class="zn-input" style="flex:1">
+    </div>
+  </div>
+
+  <!-- Filter Tipe -->
+  <div class="zn-komik-type-tabs">
+    <button @click="komikTipe='semua';filterKomikByType()" :class="komikTipe==='semua'?'active':''" class="zn-komik-type-tab">Semua</button>
+    <button @click="komikTipe='manga';filterKomikByType()" :class="komikTipe==='manga'?'active':''" class="zn-komik-type-tab">🇯🇵 Manga</button>
+    <button @click="komikTipe='manhwa';filterKomikByType()" :class="komikTipe==='manhwa'?'active':''" class="zn-komik-type-tab">🇰🇷 Manhwa</button>
+    <button @click="komikTipe='manhua';filterKomikByType()" :class="komikTipe==='manhua'?'active':''" class="zn-komik-type-tab">🇨🇳 Manhua</button>
+  </div>
+
+  <!-- Loading -->
+  <div x-show="komikLoading" class="zn-komik-loading">
+    <div class="zn-komik-loading-spinner"></div>
+    <div style="font-size:12px;color:var(--text-mute);margin-top:12px">Memuat komik...</div>
+  </div>
+
+  <!-- Grid Komik -->
+  <div x-show="!komikLoading && filteredKomik.length > 0" class="zn-komik-grid">
+    <template x-for="k in filteredKomik" :key="k.id">
+      <div class="zn-komik-card" @click="openKomikDetail(k)">
+        <div class="zn-komik-cover">
+          <template x-if="k.cover">
+            <img :src="k.cover" @error="$event.target.style.display='none'">
+          </template>
+          <template x-if="!k.cover">
+            <div class="zn-komik-cover-placeholder">📖</div>
+          </template>
+          <template x-if="k.chapter_terakhir">
+            <span class="zn-komik-chapter-badge" x-text="'Ch. '+k.chapter_terakhir"></span>
+          </template>
+        </div>
+        <div class="zn-komik-body">
+          <div class="zn-komik-title" x-text="k.judul"></div>
+          <div class="zn-komik-type" x-text="k.tipe"></div>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <!-- Empty -->
+  <div x-show="!komikLoading && filteredKomik.length === 0" class="zn-komik-empty">
+    <div class="zn-komik-empty-icon">📚</div>
+    <div class="zn-komik-empty-title">Komik Tidak Ditemukan</div>
+    <div class="zn-komik-empty-desc">Coba cari dengan kata kunci lain, atau pilih tipe komik lain.</div>
+  </div>
+</div>
+
+<!-- ============ DETAIL KOMIK SHEET ============ -->
+<div x-show="komikDetailOpen" x-cloak class="zn-sheet-overlay" style="z-index:100250" @click.self="komikDetailOpen=false">
+  <div class="zn-sheet-content" style="padding:20px" @touchstart.passive="onSheetTouchStart($event,'komikDetailOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
+    <div class="zn-sheet-handle"></div>
+
+    <template x-if="komikDetail">
+      <div>
+        <!-- Header Detail -->
+        <div class="zn-komik-detail-header">
+          <div class="zn-komik-detail-cover">
+            <template x-if="komikDetail.cover">
+              <img :src="komikDetail.cover" @error="$event.target.style.display='none'">
+            </template>
+            <template x-if="!komikDetail.cover">
+              <div class="zn-komik-cover-placeholder">📖</div>
+            </template>
+          </div>
+          <div class="zn-komik-detail-info">
+            <div class="zn-komik-detail-judul" x-text="komikDetail.judul"></div>
+            <template x-if="komikDetail.rating > 0">
+              <div class="zn-komik-detail-rating">
+                <span>⭐</span>
+                <span x-text="Number(komikDetail.rating).toFixed(1)"></span>
+              </div>
+            </template>
+            <div class="zn-komik-detail-meta">
+              <template x-if="komikDetail.author">
+                <div>✍️ <b x-text="komikDetail.author"></b></div>
+              </template>
+              <div>📌 <b x-text="komikDetail.status || 'Ongoing'"></b></div>
+              <div>🎌 <b x-text="komikDetail.tipe || 'Manga'"></b></div>
+            </div>
+            <div class="zn-komik-genre-list">
+              <template x-for="g in (komikDetail.genres || [])" :key="g">
+                <span class="zn-komik-genre-chip" x-text="g"></span>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tombol Lanjut Baca -->
+        <template x-if="komikDetail.chapter_terakhir">
+          <button @click="lanjutBacaKomik()" class="zn-btn zn-btn-primary" style="margin-bottom:10px">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span>LANJUT BACA</span>
+          </button>
+        </template>
+
+        <!-- Tombol Favorite -->
+        <button @click="toggleFavoriteKomik()" class="zn-btn" :class="isKomikFavorited ? 'zn-btn-warning' : 'zn-btn-soft'" style="margin-bottom:14px">
+          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span x-text="isKomikFavorited ? 'HAPUS FAVORITE' : 'TAMBAH FAVORITE'"></span>
+        </button>
+
+        <!-- Sinopsis -->
+        <div class="zn-card" style="margin-bottom:12px;padding:14px">
+          <div style="font-size:10px;color:var(--primary);letter-spacing:1px;font-family:var(--font-mono);margin-bottom:6px">// SINOPSIS</div>
+          <p style="font-size:12px;color:var(--text-dim);line-height:1.6;white-space:pre-line" x-text="komikDetail.deskripsi || 'Belum ada sinopsis.'"></p>
+        </div>
+
+        <!-- Daftar Chapter -->
+        <div class="zn-card">
+          <div class="zn-card-title">
+            <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+            <span>DAFTAR CHAPTER (<span x-text="komikChapters.length"></span>)</span>
+          </div>
+          <div x-show="komikChaptersLoading" style="text-align:center;padding:20px">
+            <div class="zn-komik-loading-spinner"></div>
+          </div>
+          <div x-show="!komikChaptersLoading" class="zn-komik-chapter-list">
+            <template x-for="ch in komikChapters" :key="ch.id">
+              <div class="zn-komik-chapter-item" :class="ch.is_read ? 'read' : ''" @click="openKomikReader(ch)">
+                <div class="zn-komik-chapter-num" x-text="'Ch. '+ch.chapter_number"></div>
+                <div class="zn-komik-chapter-title" x-text="ch.judul_chapter || 'Chapter '+ch.chapter_number"></div>
+                <div class="zn-komik-chapter-date" x-text="formatKomikDate(ch.tanggal_rilis)"></div>
+              </div>
+            </template>
+            <template x-if="komikChapters.length===0">
+              <div style="text-align:center;padding:20px;color:var(--text-mute);font-size:11px">Belum ada chapter tersedia.</div>
+            </template>
+          </div>
+        </div>
+
+        <button @click="komikDetailOpen=false" class="zn-btn zn-btn-soft" style="margin-top:14px">TUTUP</button>
+      </div>
+    </template>
+  </div>
+</div>
+
+<!-- ============ KOMIK READER (FULL SCREEN) ============ -->
+<template x-if="komikReaderOpen">
+  <div class="zn-komik-reader">
+    <!-- Header -->
+    <div class="zn-komik-reader-header" :class="{hidden: komikReaderControlsHidden}">
+      <button class="zn-komik-reader-close" @click="closeKomikReader()">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      </button>
+      <div class="zn-komik-reader-title">
+        <span x-text="komikCurrent.judul"></span>
+        <span style="opacity:.5"> · </span>
+        <span x-text="'Ch. '+(komikCurrentChapter?komikCurrentChapter.chapter_number:'')"></span>
+      </div>
+    </div>
+
+    <!-- Body (Gambar) -->
+    <div class="zn-komik-reader-body" @click="toggleKomikReaderControls()">
+      <template x-if="komikReaderLoading">
+        <div class="zn-komik-page-loading">
+          <div class="zn-komik-loading-spinner"></div>
+          <div style="margin-top:12px">Memuat chapter...</div>
+        </div>
+      </template>
+
+      <template x-if="!komikReaderLoading">
+        <div style="width:100%;display:flex;flex-direction:column;align-items:center">
+          <template x-for="(page, idx) in komikReaderPages" :key="idx">
+            <div class="zn-komik-page">
+              <img :src="page" loading="lazy" @error="$event.target.style.opacity='.3'" @click.stop="toggleKomikReaderControls()">
+            </div>
+          </template>
+
+          <template x-if="komikReaderPages.length === 0 && !komikReaderLoading">
+            <div class="zn-komik-page-loading">
+              <div style="font-size:40px;margin-bottom:12px">😢</div>
+              <div>Chapter tidak tersedia.</div>
+            </div>
+          </template>
+        </div>
+      </template>
+    </div>
+
+    <!-- Footer Navigasi -->
+    <div class="zn-komik-reader-footer" :class="{hidden: komikReaderControlsHidden}">
+      <button class="zn-komik-reader-btn" @click.stop="prevKomikChapter()" :disabled="!komikHasPrevChapter">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        <span>PREV</span>
+      </button>
+      <button class="zn-komik-reader-btn" @click.stop="closeKomikReader()">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      </button>
+      <button class="zn-komik-reader-btn" @click.stop="nextKomikChapter()" :disabled="!komikHasNextChapter">
+        <span>NEXT</span>
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+      </button>
+    </div>
+  </div>
+</template>
 <!-- REQUEST FILM SHEET -->
 <div x-show="requestFilmSheetOpen" x-cloak class="zn-sheet-overlay" style="z-index:100200" @click.self="requestFilmSheetOpen=false">
   <div class="zn-sheet-content" style="padding:24px" @touchstart.passive="onSheetTouchStart($event,'requestFilmSheetOpen')" @touchmove="onSheetTouchMove($event)" @touchend="onSheetTouchEnd($event)">
@@ -3743,7 +4360,28 @@ passIncludeSymbol:true,
 passResult:'',
 passStrengthText:'',
 passStrengthColor:'',
-
+// ============ KOMIK STATE ============
+komikSearch:'',
+komikTipe:'semua',
+komikList:[],
+filteredKomik:[],
+komikLoading:false,
+komikDetailOpen:false,
+komikDetail:null,
+komikChapters:[],
+komikChaptersLoading:false,
+komikReaderOpen:false,
+komikReaderLoading:false,
+komikReaderPages:[],
+komikCurrent:null,
+komikCurrentChapter:null,
+komikReaderControlsHidden:false,
+komikReaderControlsTimer:null,
+komikHasPrevChapter:false,
+komikHasNextChapter:false,
+isKomikFavorited:false,
+komikFavorites:[],
+komikMangadexProxy:'https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/mangadex-proxy',
 // MORSE
 morseMode:'text2morse',
 morseInput:'',
@@ -3757,6 +4395,13 @@ get filteredUsers(){if(!this.userSearch)return this.allUsers;var q=this.userSear
 get totalBalance(){return this.transactions.reduce(function(a,t){return t.type==='income'?a+Number(t.amount):a-Number(t.amount)},0);},
 get totalIncome(){return this.transactions.filter(function(t){return t.type==='income'}).reduce(function(a,t){return a+Number(t.amount)},0);},
 get totalExpense(){return this.transactions.filter(function(t){return t.type==='expense'}).reduce(function(a,t){return a+Number(t.amount)},0);},
+get komikFilteredList(){
+  if(!this.komikSearch || this.komikSearch.trim()==='') return this.filteredKomik;
+  var q = this.komikSearch.toLowerCase().trim();
+  return this.filteredKomik.filter(function(k){
+    return k.judul && k.judul.toLowerCase().indexOf(q) >= 0;
+  });
+},
 get filteredCinema(){if(this.cinemaKategoriAktif==='semua')return this.cinemaList;var k=this.cinemaKategoriAktif;return this.cinemaList.filter(function(f){return f.kategori===k;});},
 get cinemaNoticeText(){
   var n=this.cinemaList.length;
@@ -5690,7 +6335,382 @@ var res=await fetch(this.proEdgeUrl,{method:'POST',headers:{'Content-Type':'appl
   finally{this.stopProThinking();this.proThinking=false;}
 },
 clearProChat:function(){var self=this;this.showConfirm('HAPUS CHAT?','Semua chat Zenkai AI Pro bakal dihapus.',function(){self.proMessages=[];self.showToast('✅ SUKSES','Chat dihapus.','success');},'🗑️');},
+// ============ ZENKAI KOMIK ============
+loadKomik:async function(){
+  this.komikLoading = true;
+  try{
+    var url = this.komikMangadexProxy + '?path=/manga&query=' + encodeURIComponent('limit=30&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&availableTranslatedLanguage[]=en&order[followedCount]=desc');
+    var res = await fetch(url);
+    var json = await res.json();
+    if(json.data && Array.isArray(json.data)){
+      this.komikList = json.data.map(function(m){ return this.parseMangaData(m); }, this);
+      this.filteredKomik = this.komikList.slice();
+    } else {
+      this.komikList = [];
+      this.filteredKomik = [];
+    }
+  }catch(e){
+    console.error('Load komik error:', e);
+    this.komikList = [];
+    this.filteredKomik = [];
+    this.showToast('❌ GAGAL','Gagal memuat komik: '+e.message,'error');
+  }finally{
+    this.komikLoading = false;
+  }
+},
 
+parseMangaData:function(m){
+  var judul = 'Tanpa Judul';
+  if(m.attributes && m.attributes.title){
+    judul = m.attributes.title.en || Object.values(m.attributes.title)[0] || 'Tanpa Judul';
+  }
+  
+  var cover = '';
+  var author = '';
+  var artist = '';
+  var status = 'ongoing';
+  var deskripsi = '';
+  var tahun = '';
+  var rating = 0;
+  var genres = [];
+  
+  if(m.attributes){
+    if(m.attributes.description && m.attributes.description.en){
+      deskripsi = m.attributes.description.en;
+    }
+    if(m.attributes.status) status = m.attributes.status;
+    if(m.attributes.year) tahun = m.attributes.year;
+    if(m.attributes.contentRating) rating = m.attributes.contentRating === 'safe' ? 8 : 7;
+    if(m.attributes.tags && Array.isArray(m.attributes.tags)){
+      m.attributes.tags.forEach(function(t){
+        if(t.attributes && t.attributes.name && t.attributes.name.en){
+          genres.push(t.attributes.name.en);
+        }
+      });
+    }
+  }
+  
+  if(m.relationships && Array.isArray(m.relationships)){
+    m.relationships.forEach(function(r){
+      if(r.type === 'cover_art' && r.attributes && r.attributes.fileName){
+        cover = 'https://uploads.mangadex.org/covers/' + m.id + '/' + r.attributes.fileName + '.512.jpg';
+      }
+      if(r.type === 'author' && r.attributes && r.attributes.name){
+        author = r.attributes.name;
+      }
+      if(r.type === 'artist' && r.attributes && r.attributes.name){
+        artist = r.attributes.name;
+      }
+    });
+  }
+  
+  return {
+    id: m.id,
+    mangadex_id: m.id,
+    judul: judul,
+    tipe: 'manga',
+    author: author,
+    artist: artist,
+    status: status,
+    deskripsi: deskripsi,
+    cover: cover,
+    rating: rating,
+    genres: genres,
+    tahun: tahun,
+    chapter_terakhir: ''
+  };
+},
+
+searchKomik:async function(){
+  var q = (this.komikSearch || '').trim();
+  if(!q){
+    this.filteredKomik = this.komikList.slice();
+    return;
+  }
+  this.komikLoading = true;
+  try{
+    var url = this.komikMangadexProxy + '?path=/manga&query=' + encodeURIComponent('limit=30&title=' + q + '&includes[]=cover_art&includes[]=author&includes[]=artist&contentRating[]=safe&contentRating[]=suggestive');
+    var res = await fetch(url);
+    var json = await res.json();
+    if(json.data && Array.isArray(json.data)){
+      this.filteredKomik = json.data.map(function(m){ return this.parseMangaData(m); }, this);
+    } else {
+      this.filteredKomik = [];
+    }
+  }catch(e){
+    this.showToast('❌ GAGAL','Search error: '+e.message,'error');
+    this.filteredKomik = [];
+  }finally{
+    this.komikLoading = false;
+  }
+},
+
+filterKomikByType:function(){
+  var tipe = this.komikTipe;
+  if(tipe === 'semua'){
+    this.filteredKomik = this.komikList.slice();
+  } else {
+    this.filteredKomik = this.komikList.filter(function(k){
+      return k.tipe === tipe;
+    });
+  }
+},
+
+openKomikDetail:async function(komik){
+  this.komikDetail = komik;
+  this.komikDetailOpen = true;
+  this.komikChapters = [];
+  this.isKomikFavorited = false;
+  this.komikChaptersLoading = true;
+  try{
+    var url = this.komikMangadexProxy + '?path=/manga/' + komik.mangadex_id + '/feed&query=' + encodeURIComponent('limit=100&translatedLanguage[]=en&order[chapter]=desc&includes[]=scanlation_group');
+    var res = await fetch(url);
+    var json = await res.json();
+    if(json.data && Array.isArray(json.data)){
+      this.komikChapters = json.data.map(function(ch){
+        var chNum = ch.attributes && ch.attributes.chapter ? ch.attributes.chapter : '?';
+        var chTitle = ch.attributes && ch.attributes.title ? ch.attributes.title : '';
+        var chDate = ch.attributes && ch.attributes.publishAt ? ch.attributes.publishAt : '';
+        return {
+          id: ch.id,
+          mangadex_chapter_id: ch.id,
+          chapter_number: chNum,
+          judul_chapter: chTitle,
+          tanggal_rilis: chDate,
+          is_read: false
+        };
+      });
+      this.komikDetail.chapter_terakhir = this.komikChapters[0] ? this.komikChapters[0].chapter_number : '';
+    } else {
+      this.komikChapters = [];
+    }
+    await this.checkFavoriteKomik();
+    await this.loadBookmarkKomik();
+  }catch(e){
+    this.showToast('❌ GAGAL','Gagal load chapter: '+e.message,'error');
+    this.komikChapters = [];
+  }finally{
+    this.komikChaptersLoading = false;
+  }
+},
+
+openKomikReader:async function(chapter){
+  if(!chapter || !this.komikDetail) return;
+  this.komikCurrent = this.komikDetail;
+  this.komikCurrentChapter = chapter;
+  this.komikReaderOpen = true;
+  this.komikReaderLoading = true;
+  this.komikReaderPages = [];
+  this.komikReaderControlsHidden = false;
+  document.body.classList.add('sheet-open');
+  
+  try{
+    var url = this.komikMangadexProxy + '?path=/at-home/server/' + chapter.mangadex_chapter_id;
+    var res = await fetch(url);
+    var json = await res.json();
+    if(json.baseUrl && json.chapter && json.chapter.data){
+      var baseUrl = json.baseUrl;
+      var hash = json.chapter.hash;
+      var pages = json.chapter.data.map(function(filename){
+        return baseUrl + '/data/' + hash + '/' + filename;
+      });
+      this.komikReaderPages = pages;
+    } else if(json.baseUrl && json.chapter && json.chapter.dataSaver){
+      var baseUrl2 = json.baseUrl;
+      var hash2 = json.chapter.hash;
+      var pages2 = json.chapter.dataSaver.map(function(filename){
+        return baseUrl2 + '/data-saver/' + hash2 + '/' + filename;
+      });
+      this.komikReaderPages = pages2;
+    } else {
+      this.komikReaderPages = [];
+    }
+    
+    this.updateKomikNavButtons();
+    await this.saveBookmarkKomik(chapter);
+    
+    setTimeout(function(){
+      var body = document.querySelector('.zn-komik-reader-body');
+      if(body) body.scrollTop = 0;
+    }, 300);
+  }catch(e){
+    this.showToast('❌ GAGAL','Gagal load halaman: '+e.message,'error');
+    this.komikReaderPages = [];
+  }finally{
+    this.komikReaderLoading = false;
+  }
+},
+
+closeKomikReader:function(){
+  this.komikReaderOpen = false;
+  this.komikCurrentChapter = null;
+  this.komikReaderPages = [];
+  document.body.classList.remove('sheet-open');
+  if(this.komikReaderControlsTimer) clearTimeout(this.komikReaderControlsTimer);
+  this.komikReaderControlsHidden = false;
+},
+
+toggleKomikReaderControls:function(){
+  this.komikReaderControlsHidden = !this.komikReaderControlsHidden;
+  var self = this;
+  if(this.komikReaderControlsTimer) clearTimeout(this.komikReaderControlsTimer);
+  if(!this.komikReaderControlsHidden){
+    this.komikReaderControlsTimer = setTimeout(function(){
+      self.komikReaderControlsHidden = true;
+    }, 3000);
+  }
+},
+
+updateKomikNavButtons:function(){
+  if(!this.komikCurrentChapter || !this.komikChapters.length){
+    this.komikHasPrevChapter = false;
+    this.komikHasNextChapter = false;
+    return;
+  }
+  var idx = -1;
+  for(var i=0;i<this.komikChapters.length;i++){
+    if(this.komikChapters[i].id === this.komikCurrentChapter.id){
+      idx = i;
+      break;
+    }
+  }
+  this.komikHasPrevChapter = idx > 0;
+  this.komikHasNextChapter = idx >= 0 && idx < this.komikChapters.length - 1;
+},
+
+prevKomikChapter:function(){
+  if(!this.komikHasPrevChapter) return;
+  var idx = this.komikChapters.findIndex(function(c){ return c.id === this.komikCurrentChapter.id; }, this);
+  if(idx > 0){
+    this.openKomikReader(this.komikChapters[idx - 1]);
+  }
+},
+
+nextKomikChapter:function(){
+  if(!this.komikHasNextChapter) return;
+  var idx = this.komikChapters.findIndex(function(c){ return c.id === this.komikCurrentChapter.id; }, this);
+  if(idx >= 0 && idx < this.komikChapters.length - 1){
+    this.openKomikReader(this.komikChapters[idx + 1]);
+  }
+},
+
+formatKomikDate:function(iso){
+  if(!iso) return '';
+  try{
+    var d = new Date(iso);
+    var diff = Math.floor((Date.now() - d.getTime()) / 1000);
+    if(diff < 3600) return Math.floor(diff/60) + 'm';
+    if(diff < 86400) return Math.floor(diff/3600) + 'j';
+    if(diff < 2592000) return Math.floor(diff/86400) + 'h';
+    return d.toLocaleDateString('id-ID', { day:'numeric', month:'short' });
+  }catch(e){ return ''; }
+},
+
+// ============ BOOKMARK & FAVORITE ============
+checkFavoriteKomik:async function(){
+  if(!this.currentUser || !this.komikDetail) return;
+  try{
+    var res = await sb.from('zenkai_komik_favorite')
+      .select('id')
+      .eq('user_id', this.currentUser.id)
+      .eq('komik_id', this.komikDetail.mangadex_id)
+      .maybeSingle();
+    this.isKomikFavorited = !!(res.data);
+  }catch(e){
+    this.isKomikFavorited = false;
+  }
+},
+
+toggleFavoriteKomik:async function(){
+  if(!this.currentUser){ return this.showToast('⚠️ PERHATIAN','Login dulu!','warning'); }
+  if(!this.komikDetail) return;
+  try{
+    var komikDbId = await this.getOrCreateKomikDb(this.komikDetail);
+    if(this.isKomikFavorited){
+      await sb.from('zenkai_komik_favorite')
+        .delete()
+        .eq('user_id', this.currentUser.id)
+        .eq('komik_id', komikDbId);
+      this.isKomikFavorited = false;
+      this.showToast('✅ SUKSES','Dihapus dari favorite.','success');
+    } else {
+      await sb.from('zenkai_komik_favorite').insert({
+        user_id: this.currentUser.id,
+        komik_id: komikDbId
+      });
+      this.isKomikFavorited = true;
+      this.showToast('⭐ FAVORITE','Ditambah ke favorite!','success');
+    }
+  }catch(e){
+    this.showToast('❌ GAGAL', e.message, 'error');
+  }
+},
+
+getOrCreateKomikDb:async function(komik){
+  try{
+    var res = await sb.from('zenkai_komik').select('id').eq('mangadex_id', komik.mangadex_id).maybeSingle();
+    if(res.data) return res.data.id;
+    var ins = await sb.from('zenkai_komik').insert({
+      mangadex_id: komik.mangadex_id,
+      judul: komik.judul,
+      tipe: komik.tipe,
+      author: komik.author || '',
+      artist: komik.artist || '',
+      status: komik.status || 'ongoing',
+      deskripsi: komik.deskripsi || '',
+      cover_url: komik.cover || '',
+      rating: komik.rating || 0,
+      genres: komik.genres || []
+    }).select('id').single();
+    return ins.data.id;
+  }catch(e){
+    throw new Error('Gagal simpan komik ke database: ' + e.message);
+  }
+},
+
+saveBookmarkKomik:async function(chapter){
+  if(!this.currentUser || !this.komikDetail) return;
+  try{
+    var komikDbId = await this.getOrCreateKomikDb(this.komikDetail);
+    await sb.from('zenkai_komik_bookmark').upsert({
+      user_id: this.currentUser.id,
+      komik_id: komikDbId,
+      chapter_terakhir: chapter.chapter_number,
+      halaman_terakhir: 0,
+      updated_at: new Date().toISOString()
+    }, { onConflict:'user_id,komik_id' });
+  }catch(e){
+    console.warn('Save bookmark error:', e);
+  }
+},
+
+loadBookmarkKomik:async function(){
+  if(!this.currentUser || !this.komikDetail) return;
+  try{
+    var komikDbId = await this.getOrCreateKomikDb(this.komikDetail);
+    var res = await sb.from('zenkai_komik_bookmark')
+      .select('chapter_terakhir')
+      .eq('user_id', this.currentUser.id)
+      .eq('komik_id', komikDbId)
+      .maybeSingle();
+    if(res.data && res.data.chapter_terakhir){
+      this.komikChapters.forEach(function(ch){
+        if(ch.chapter_number === res.data.chapter_terakhir) ch.is_read = true;
+      });
+    }
+  }catch(e){}
+},
+
+lanjutBacaKomik:function(){
+  if(!this.komikChapters.length) return this.showToast('⚠️ INFO','Belum ada chapter.','warning');
+  if(!this.komikDetail || !this.komikDetail.chapter_terakhir){
+    this.openKomikReader(this.komikChapters[0]);
+    return;
+  }
+  var target = this.komikChapters.find(function(c){ return c.chapter_number === this.komikDetail.chapter_terakhir; }, this);
+  if(!target) target = this.komikChapters[0];
+  this.openKomikReader(target);
+},
 // ============ REVIEW ============
 getFeatureRating:function(fiturId){var cached = this.featureRatingsCache[fiturId];if(!cached) return {avg:'0.0', total:0};return cached;},
 loadAllFeatureRatings:async function(){
