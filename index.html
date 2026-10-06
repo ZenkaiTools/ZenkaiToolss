@@ -4043,7 +4043,7 @@ passStrengthColor:'',
 // ============ STATE KOMIK PRO v1.8 ============
 komikSearch:'',
 komikTipe:'semua',
-komikBahasa:'en',
+komikBahasa:'id',
 komikKategori:'populer',
 komikHuruf:'',
 komikList:[],
@@ -4271,7 +4271,7 @@ handleResize:function(){
 parseMangaData:function(m){
   var judul = 'Tanpa Judul';
   if(m.attributes && m.attributes.title){
-    judul = m.attributes.title.en || m.attributes.title.ja || m.attributes.title['ja-ro'] || Object.values(m.attributes.title)[0] || 'Tanpa Judul';
+    judul = m.attributes.title.en || m.attributes.title.id || m.attributes.title.ja || m.attributes.title['ja-ro'] || Object.values(m.attributes.title)[0] || 'Tanpa Judul';
   }
   var tipe = 'manga';
   var lang = (m.attributes && m.attributes.originalLanguage) ? m.attributes.originalLanguage : 'ja';
@@ -4281,7 +4281,7 @@ parseMangaData:function(m){
   var cover = '', author = '', artist = '', status = 'ongoing', deskripsi = '', tahun = '', rating = 0, genres = [], lastUpdate = '';
   if(m.attributes){
     if(m.attributes.description){
-      deskripsi = m.attributes.description.en || m.attributes.description.id || Object.values(m.attributes.description)[0] || '';
+      deskripsi = m.attributes.description.id || m.attributes.description.en || Object.values(m.attributes.description)[0] || '';
     }
     if(m.attributes.status) status = m.attributes.status;
     if(m.attributes.year) tahun = m.attributes.year;
@@ -4306,22 +4306,17 @@ parseMangaData:function(m){
 },
 
 buildKomikQuery:function(offset){
-  var lang = this.komikBahasa || 'en';
+  var lang = this.komikBahasa || 'id';
   var base = 'limit=40&offset=' + (offset||0)
     + '&includes[]=cover_art&includes[]=author&includes[]=artist'
     + '&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica'
     + '&availableTranslatedLanguage[]=' + lang;
   var kat = this.komikKategori;
-  if(kat === 'populer') return base + '&order[followedCount]=desc';
+  if(kat === 'populer') return base + '&order[followedCount]=desc&hasAvailableChapters=true';
   if(kat === 'latest') return base + '&order[latestUploadedChapter]=desc&hasAvailableChapters=true';
   if(kat === 'recommended') return base + '&order[rating]=desc&hasAvailableChapters=true';
-  if(kat === 'az'){
-    if(this.komikHuruf && this.komikHuruf !== '#'){
-      return base + '&title=' + encodeURIComponent(this.komikHuruf) + '&order[title]=asc';
-    }
-    return base + '&order[title]=asc';
-  }
-  return base + '&order[followedCount]=desc';
+  if(kat === 'az') return base + '&order[title]=asc&hasAvailableChapters=true';
+  return base + '&order[followedCount]=desc&hasAvailableChapters=true';
 },
 
 loadKomik:async function(append){
@@ -4335,16 +4330,18 @@ loadKomik:async function(append){
     var self = this;
     if(json.data && Array.isArray(json.data)){
       var parsed = json.data.map(function(m){ return self.parseMangaData(m); });
-      if(this.komikKategori === 'az' && this.komikHuruf && this.komikHuruf !== '#'){
-        parsed = parsed.filter(function(k){ return k.judul.toUpperCase().charAt(0) === self.komikHuruf; });
-      }
+      parsed = parsed.filter(function(k){ return k.chapter_terakhir || k.last_update; });
       if(append) this.komikList = this.komikList.concat(parsed);
       else this.komikList = parsed;
       this.komikTotal = json.total || this.komikList.length;
       this.komikHasMore = (this.komikOffset + 40) < this.komikTotal;
       this.komikOffset += 40;
-      if(this.komikTipe === 'semua') this.filteredKomik = this.komikList.slice();
-      else this.filteredKomik = this.komikList.filter(function(k){ return k.tipe === self.komikTipe; });
+      var filtered = this.komikList.slice();
+      if(this.komikTipe !== 'semua') filtered = filtered.filter(function(k){ return k.tipe === self.komikTipe; });
+      if(this.komikKategori === 'az' && this.komikHuruf && this.komikHuruf !== '#'){
+        filtered = filtered.filter(function(k){ return k.judul.toUpperCase().charAt(0) === self.komikHuruf; });
+      }
+      this.filteredKomik = filtered;
     } else {
       if(!append) this.komikList = [];
       this.komikHasMore = false;
@@ -4365,13 +4362,21 @@ loadMoreKomik:function(){
 },
 
 changeKomikKategori:function(kat){
-  this.komikKategori = kat;this.komikSearch = '';this.komikHuruf = '';
+  this.komikKategori = kat;
+  this.komikSearch = '';
+  this.komikHuruf = '';
   this.loadKomik(false);
 },
 
 pilihHurufKomik:function(huruf){
   this.komikHuruf = huruf;
-  this.loadKomik(false);
+  var self = this;
+  var filtered = this.komikList.slice();
+  if(this.komikTipe !== 'semua') filtered = filtered.filter(function(k){ return k.tipe === self.komikTipe; });
+  if(huruf && huruf !== '#'){
+    filtered = filtered.filter(function(k){ return k.judul.toUpperCase().charAt(0) === huruf; });
+  }
+  this.filteredKomik = filtered;
 },
 
 searchKomik:async function(){
@@ -4401,8 +4406,12 @@ searchKomik:async function(){
 
 filterKomikByType:function(){
   var self = this;
-  if(this.komikTipe === 'semua') this.filteredKomik = this.komikList.slice();
-  else this.filteredKomik = this.komikList.filter(function(k){ return k.tipe === self.komikTipe; });
+  var filtered = this.komikList.slice();
+  if(this.komikTipe !== 'semua') filtered = filtered.filter(function(k){ return k.tipe === self.komikTipe; });
+  if(this.komikKategori === 'az' && this.komikHuruf && this.komikHuruf !== '#'){
+    filtered = filtered.filter(function(k){ return k.judul.toUpperCase().charAt(0) === self.komikHuruf; });
+  }
+  this.filteredKomik = filtered;
 },
 
 changeKomikBahasa:function(lang){
@@ -4454,7 +4463,7 @@ openKomikDetail:async function(komik){
   this.isKomikFavorited = false;
   this.komikChaptersLoading = true;
   try{
-    var lang = this.komikBahasa || 'en';
+    var lang = this.komikBahasa || 'id';
     var q = 'limit=500&translatedLanguage[]=' + lang + '&order[chapter]=desc&includes[]=scanlation_group';
     var url = this.komikMangadexProxy + '?path=/manga/' + komik.mangadex_id + '/feed&query=' + encodeURIComponent(q);
     var res = await fetch(url);
@@ -4475,6 +4484,7 @@ openKomikDetail:async function(komik){
 
 openKomikReader:async function(chapter){
   if(!chapter || !this.komikDetail) return;
+  this.komikDetailOpen = false;
   this.komikCurrent = this.komikDetail;
   this.komikCurrentChapter = chapter;
   this.komikReaderOpen = true;
@@ -4625,11 +4635,11 @@ loadBookmarkKomik:async function(){
 
 lanjutBacaKomik:function(){
   if(!this.komikChapters.length) return this.showToast('⚠️ INFO','Belum ada chapter.','warning');
-  if(!this.komikDetail || !this.komikDetail.chapter_terakhir){
-    this.openKomikReader(this.komikChapters[0]);return;
-  }
   var self = this;
-  var target = this.komikChapters.find(function(c){ return c.chapter_number === self.komikDetail.chapter_terakhir; });
+  var target = null;
+  if(this.komikDetail && this.komikDetail.chapter_terakhir){
+    target = this.komikChapters.find(function(c){ return c.chapter_number === self.komikDetail.chapter_terakhir; });
+  }
   if(!target) target = this.komikChapters[0];
   this.openKomikReader(target);
 },
