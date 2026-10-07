@@ -31,7 +31,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:12px;color:var(--primary-2);font-family:monospace;letter-spacing:2px;font-weight:700}
 
-/* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
 .login-card{width:100%;max-width:420px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:24px;padding:32px 24px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 50px rgba(168,85,247,.15);position:relative;overflow:hidden}
 .login-card::before{content:'';position:absolute;top:-40%;right:-30%;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.5;pointer-events:none}
@@ -39,13 +38,10 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 @keyframes pulseGlow{0%,100%{box-shadow:0 0 40px var(--primary-glow)}50%{box-shadow:0 0 60px var(--primary-glow),0 0 90px var(--accent-glow)}}
 .login-title{font-size:26px;font-weight:900;letter-spacing:6px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:6px;position:relative;z-index:1}
 .login-sub{font-size:11px;color:var(--text-mute);letter-spacing:3px;text-align:center;margin-bottom:10px;font-family:monospace;position:relative;z-index:1}
-
-/* CREDIT BADGE */
 .credit-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:linear-gradient(135deg,rgba(251,191,36,.15),rgba(244,114,182,.15));border:1px solid var(--gold);border-radius:20px;margin:0 auto 18px;position:relative;z-index:1;left:50%;transform:translateX(-50%)}
 .credit-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:var(--bg);box-shadow:0 0 10px rgba(251,191,36,.6)}
 .credit-text{font-size:10px;color:var(--gold);letter-spacing:1.5px;font-family:monospace;font-weight:800}
 .credit-text b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:900}
-
 .login-tag{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:24px;font-style:italic;position:relative;z-index:1;line-height:1.6}
 .login-tag b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .field{margin-bottom:14px;position:relative;z-index:1}
@@ -61,7 +57,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .btn-primary:active{transform:scale(.97)}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
 
-/* HEADER */
 .header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(244,114,182,.15));border:1px solid var(--primary);border-radius:20px;margin-bottom:10px;position:relative;overflow:hidden}
 .header::before{content:'';position:absolute;top:-50%;right:-20%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.35;pointer-events:none}
 .header-left{display:flex;align-items:center;gap:12px;position:relative;z-index:1;flex:1;min-width:0}
@@ -75,19 +70,16 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .icon-btn{width:38px;height:38px;border-radius:11px;background:rgba(18,10,30,.6);border:1px solid var(--border-2);display:flex;align-items:center;justify-content:center;color:var(--text-dim);cursor:pointer;transition:all .2s;font-size:18px}
 .icon-btn:active{background:rgba(168,85,247,.2);border-color:var(--primary);color:var(--primary-2);transform:scale(.92)}
 
-/* CREDIT BAR (di bawah header) */
 .credit-bar{padding:10px 14px;background:linear-gradient(90deg,rgba(251,191,36,.08),rgba(244,114,182,.08));border:1px solid rgba(251,191,36,.3);border-radius:12px;margin-bottom:14px;display:flex;align-items:center;gap:10px;justify-content:center}
 .credit-bar-avatar{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:var(--bg);box-shadow:0 0 10px rgba(251,191,36,.6);flex-shrink:0}
 .credit-bar-text{font-size:10px;color:var(--gold);letter-spacing:1.5px;font-family:monospace;font-weight:700}
 .credit-bar-text b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:900}
 
-/* CARD */
 .card{background:var(--bg-2);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;position:relative}
 .card::before{content:'';position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent);opacity:.5}
 .card-label{font-size:10px;color:var(--primary-2);letter-spacing:2px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-family:monospace;text-transform:uppercase}
 .card-label::before{content:'//';color:var(--accent);font-weight:700}
 
-/* HERO */
 .hero{padding:20px;background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(244,114,182,.18));border:1px solid var(--primary);border-radius:18px;margin-bottom:14px;position:relative;overflow:hidden;animation:slideIn .4s ease-out}
 @keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .hero::before{content:'';position:absolute;top:-40%;right:-15%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);pointer-events:none;animation:float 5s ease-in-out infinite}
@@ -104,7 +96,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .hero-credit-text{font-size:10px;color:var(--text-dim);font-family:monospace;letter-spacing:1px}
 .hero-credit-text b{color:var(--gold);font-weight:900}
 
-/* TARGET */
 .target-value{font-size:40px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:8px 0;font-family:monospace;text-shadow:0 0 30px var(--primary-glow)}
 .target-slider{width:100%;-webkit-appearance:none;height:8px;border-radius:4px;background:var(--bg-3);outline:none;margin:10px 0}
 .target-slider::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));cursor:pointer;box-shadow:0 0 20px var(--primary-glow);border:2px solid var(--bg)}
@@ -145,7 +136,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .footer-credit b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:900}
 .footer-tengil{font-size:9px;color:var(--text-mute);margin-top:8px;font-style:italic;letter-spacing:1px}
 
-/* DEVELOPER SHEET */
 .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:100;display:flex;align-items:flex-end;justify-content:center}
 .sheet{width:100%;max-width:640px;background:var(--bg);border-top:1px solid var(--primary);border-radius:24px 24px 0 0;padding:20px;max-height:90vh;overflow-y:auto;animation:sheetIn .3s cubic-bezier(.4,0,.2,1)}
 @keyframes sheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -177,7 +167,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .dev-project-status{padding:4px 10px;background:rgba(34,211,164,.15);border:1px solid var(--success);border-radius:8px;font-size:9px;font-weight:800;color:var(--success);font-family:monospace;flex-shrink:0}
 .dev-quote{padding:14px;background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(244,114,182,.08));border:1px dashed var(--gold);border-radius:12px;text-align:center;font-style:italic;color:var(--gold);font-size:12px;line-height:1.6}
 
-/* TOAST */
 .toast-wrap{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:min(360px,90vw)}
 .toast{padding:12px 16px;border-radius:12px;background:rgba(18,10,30,.98);border:1px solid var(--primary);color:var(--text);font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 25px var(--primary-glow);animation:toastIn .3s ease-out;display:flex;align-items:center;gap:10px;font-weight:600}
 .toast.success{border-color:var(--success)}
@@ -262,13 +251,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </div>
   </header>
 
-  <!-- CREDIT BAR -->
   <div class="credit-bar">
     <div class="credit-bar-avatar">A</div>
     <div class="credit-bar-text">Dibuat oleh <b>Andika</b> · v1 · Powered by Zenkai AI Pro</div>
   </div>
 
-  <!-- HERO -->
   <div class="hero">
     <div class="hero-badge">ZENKAI AUTOFLOW v1</div>
     <div class="hero-title">Yo, <span x-text="userName"></span>! 👋</div>
@@ -364,9 +351,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
 </div>
 
-<!-- DEVELOPER SHEET -->
+<!-- DEV SHEET -->
 <div x-show="devSheetOpen" @click.self="devSheetOpen=false" class="sheet-overlay">
-  <div class="sheet">
+  <div class="sheet" style="position:relative">
     <div class="sheet-handle"></div>
     <button class="sheet-close" @click="devSheetOpen=false">×</button>
 
@@ -374,22 +361,13 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="dev-avatar">A</div>
       <div class="dev-name">ANDIKA</div>
       <div class="dev-role">// FOUNDER ZENKAI TOOLS</div>
-      <div class="dev-tagline" x-text="devTagline"></div>
+      <div class="dev-tagline">"Banyak Belajar, Banyak Ngoding, Banyak Project Jadi"</div>
     </div>
 
     <div class="dev-stat-row">
-      <div class="dev-stat">
-        <div class="dev-stat-val">2 Bln</div>
-        <div class="dev-stat-lbl">Belajar</div>
-      </div>
-      <div class="dev-stat">
-        <div class="dev-stat-val">∞</div>
-        <div class="dev-stat-lbl">Semangat</div>
-      </div>
-      <div class="dev-stat">
-        <div class="dev-stat-val">v1</div>
-        <div class="dev-stat-lbl">AutoFlow</div>
-      </div>
+      <div class="dev-stat"><div class="dev-stat-val">2 Bln</div><div class="dev-stat-lbl">Belajar</div></div>
+      <div class="dev-stat"><div class="dev-stat-val">∞</div><div class="dev-stat-lbl">Semangat</div></div>
+      <div class="dev-stat"><div class="dev-stat-val">v1</div><div class="dev-stat-lbl">AutoFlow</div></div>
     </div>
 
     <div class="dev-section">
@@ -405,68 +383,44 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
     <div class="dev-section">
       <div class="dev-section-title">🛠️ Skill & Tech</div>
-
       <div class="dev-skill-group">
         <div class="dev-skill-label">FRONTEND</div>
         <div class="dev-skill-list">
-          <span class="dev-pill">HTML</span>
-          <span class="dev-pill">CSS</span>
-          <span class="dev-pill">JavaScript</span>
-          <span class="dev-pill">Alpine.js</span>
+          <span class="dev-pill">HTML</span><span class="dev-pill">CSS</span><span class="dev-pill">JavaScript</span><span class="dev-pill">Alpine.js</span>
         </div>
       </div>
-
       <div class="dev-skill-group">
         <div class="dev-skill-label">BACKEND</div>
         <div class="dev-skill-list">
-          <span class="dev-pill">Supabase</span>
-          <span class="dev-pill">Edge Functions</span>
-          <span class="dev-pill">PHP (dasar)</span>
+          <span class="dev-pill">Supabase</span><span class="dev-pill">Edge Functions</span><span class="dev-pill">PHP (dasar)</span>
         </div>
       </div>
-
       <div class="dev-skill-group">
         <div class="dev-skill-label">DATABASE</div>
         <div class="dev-skill-list">
-          <span class="dev-pill">PostgreSQL</span>
-          <span class="dev-pill">MySQL</span>
+          <span class="dev-pill">PostgreSQL</span><span class="dev-pill">MySQL</span>
         </div>
       </div>
-
       <div class="dev-skill-group">
         <div class="dev-skill-label">TOOLS</div>
         <div class="dev-skill-list">
-          <span class="dev-pill">Vercel</span>
-          <span class="dev-pill">GitHub</span>
-          <span class="dev-pill">Chrome Extension</span>
+          <span class="dev-pill">Vercel</span><span class="dev-pill">GitHub</span><span class="dev-pill">Chrome Extension</span>
         </div>
       </div>
     </div>
 
     <div class="dev-section">
       <div class="dev-section-title">🚀 Project</div>
-
       <div class="dev-project">
-        <div class="dev-project-info">
-          <div class="dev-project-name">Zenkai Tools</div>
-          <div class="dev-project-desc">Web all-in-one: dompet, cinema, komik, AI chat, dll</div>
-        </div>
+        <div class="dev-project-info"><div class="dev-project-name">Zenkai Tools</div><div class="dev-project-desc">Web all-in-one: dompet, cinema, komik, AI chat, dll</div></div>
         <div class="dev-project-status">LIVE</div>
       </div>
-
       <div class="dev-project">
-        <div class="dev-project-info">
-          <div class="dev-project-name">Zenkai AutoFlow v1</div>
-          <div class="dev-project-desc">Auto-isi Google Form pakai AI Zenkai Pro</div>
-        </div>
+        <div class="dev-project-info"><div class="dev-project-name">Zenkai AutoFlow v1</div><div class="dev-project-desc">Auto-isi Google Form pakai AI Zenkai Pro</div></div>
         <div class="dev-project-status">BARU</div>
       </div>
-
       <div class="dev-project">
-        <div class="dev-project-info">
-          <div class="dev-project-name">Zenkai Tutor</div>
-          <div class="dev-project-desc">AI tutor buat jawab soal pelajaran</div>
-        </div>
+        <div class="dev-project-info"><div class="dev-project-name">Zenkai Tutor</div><div class="dev-project-desc">AI tutor buat jawab soal pelajaran</div></div>
         <div class="dev-project-status">BETA</div>
       </div>
     </div>
@@ -482,26 +436,20 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </div>
 
     <div class="dev-section">
-      <div class="dev-quote">
-        "Belajar dari nol bukan alasan buat berhenti — justru alasan buat terus maju."
-      </div>
+      <div class="dev-quote">"Belajar dari nol bukan alasan buat berhenti — justru alasan buat terus maju."</div>
     </div>
 
     <div class="dev-section">
       <div class="dev-section-title">📱 Kontak</div>
       <div class="dev-bio" style="text-align:center">
-        <a href="https://wa.me/6285352831643" target="_blank" style="display:inline-block;padding:10px 18px;background:rgba(37,211,102,.15);border:1px solid #25d366;color:#25d366;border-radius:10px;font-size:11px;font-weight:800;text-decoration:none;margin:4px">
-          💬 WhatsApp
-        </a>
-        <a href="https://instagram.com/andik4.tm" target="_blank" style="display:inline-block;padding:10px 18px;background:rgba(255,0,128,.15);border:1px solid #ff0080;color:#ff0080;border-radius:10px;font-size:11px;font-weight:800;text-decoration:none;margin:4px">
-          📷 Instagram
-        </a>
+        <a href="https://wa.me/6285352831643" target="_blank" style="display:inline-block;padding:10px 18px;background:rgba(37,211,102,.15);border:1px solid #25d366;color:#25d366;border-radius:10px;font-size:11px;font-weight:800;text-decoration:none;margin:4px">💬 WhatsApp</a>
+        <a href="https://instagram.com/andik4.tm" target="_blank" style="display:inline-block;padding:10px 18px;background:rgba(255,0,128,.15);border:1px solid #ff0080;color:#ff0080;border-radius:10px;font-size:11px;font-weight:800;text-decoration:none;margin:4px">📷 Instagram</a>
       </div>
     </div>
 
     <div style="text-align:center;padding:16px 0;font-family:monospace;font-size:10px;color:var(--text-mute);letter-spacing:1.5px">
       <div style="font-weight:800;color:var(--primary-2);margin-bottom:4px">⚡ ZENKAI TOOLS ⚡</div>
-      <div>© <span x-text="new Date().getFullYear()"></span> Andika · v1</div>
+      <div>© 2026 Andika · v1</div>
     </div>
   </div>
 </div>
@@ -538,7 +486,6 @@ function zenkaiWeb() {
     devSheetOpen: false,
     heroTengil: '"Santai bre, lu duduk manis. Gw yang hajar semua soal. 🤙"',
     tipsText: 'Set target 90 doang biar gak ketara. 100 juga bisa kalo lu pede. 😎',
-    devTagline: '"Banyak Belajar, Banyak Ngoding, Banyak Project Jadi"',
 
     heroList: [
       '"Santai bre, lu duduk manis. Gw yang hajar semua soal. 🤙"',
@@ -546,18 +493,13 @@ function zenkaiWeb() {
       '"Gausah mikir kaya mau ngerjain sendiri. Gw yang mikir. 💪"',
       '"Otak lu capek? Pake otak gw aja. Gratis kok. 🤖"',
       '"Satu soal satu langkah, kelar deh. 🚀"',
-      '"Yang penting target set, sisanya gw yang kerja. 😎"',
-      '"Guru tidur? Gw gak tidur. 24 jam standby. 🌙"',
-      '"Nilai bagus itu hak semua orang. Termasuk lu. 🎯"'
+      '"Yang penting target set, sisanya gw yang kerja. 😎"'
     ],
     tipsList: [
       'Set target 90 doang biar gak ketara. 100 juga bisa kalo lu pede. 😎',
       'Target 0-100, atur sesuka hati. Gausah takut kena guru. 🤙',
       'Soal 50 nomer? Chill, AI gw kuat sampe 100. 🔥',
-      'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw. 😂',
-      'Nilai jelek bukan akhir dunia. Yang penting lu udah coba. 😌',
-      'Gw gak pernah ngeluh, gak pernah ngantuk. Perfect employee. 🤖',
-      'Kerjain sampe kelar, gausah mikir. Gw yang mikir. 💪'
+      'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw. 😂'
     ],
 
     async init() {
@@ -631,15 +573,11 @@ function zenkaiWeb() {
       }
 
       try {
-        const { data: existing, error: checkError } = await sb
+        const { data: existing } = await sb
           .from('profiles')
           .select('id, username')
           .ilike('username', name)
           .maybeSingle();
-
-        if (checkError && checkError.code !== 'PGRST116') {
-          console.log('Check error:', checkError);
-        }
 
         if (existing) {
           this.nameError = '❌ Nama sudah digunakan! Coba nama lain bre.';
@@ -658,11 +596,7 @@ function zenkaiWeb() {
         });
 
         if (signupError) {
-          if (signupError.message.toLowerCase().includes('already')) {
-            this.nameError = '❌ Nama sudah digunakan! Coba nama lain.';
-          } else {
-            this.nameError = 'Gagal daftar: ' + signupError.message;
-          }
+          this.nameError = 'Gagal daftar: ' + signupError.message;
           this.loggingIn = false;
           return;
         }
@@ -673,12 +607,10 @@ function zenkaiWeb() {
           return;
         }
 
-        const { error: profileError } = await sb.from('profiles').insert({
+        await sb.from('profiles').insert({
           id: authData.user.id,
           username: name
         });
-
-        if (profileError) console.log('Profile error:', profileError);
 
         this.userName = name;
         localStorage.setItem('zenkai_name', name);
