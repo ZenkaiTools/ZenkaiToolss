@@ -3,1025 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#050508">
-<title>Zenkai Tutor AI — by Andika</title>
+<meta name="theme-color" content="#0a0612">
+<title>Zenkai AutoFill — by Andika</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 <style>
 [x-cloak]{display:none!important}
-
 :root{
-  --bg:#050508;
-  --bg-2:#0d0d18;
-  --bg-3:#12121e;
-  --border:#1a1a2e;
-  --border-2:#252540;
-  --text:#e8e8f0;
-  --text-dim:#8888a0;
-  --text-mute:#555568;
-  --primary:#00d9ff;
-  --primary-glow:rgba(0,217,255,.5);
-  --accent:#ff0080;
-  --accent-glow:rgba(255,0,128,.5);
-  --gold:#ffd700;
-  --gold-glow:rgba(255,215,0,.5);
-  --success:#00ff88;
-  --danger:#ff3355;
-  --warning:#ffaa00;
+  --bg:#0a0612;--bg-2:#120a1e;--bg-3:#1a0f2e;
+  --border:#26183f;--border-2:#33204f;
+  --text:#f0e8ff;--text-dim:#9b8cba;--text-mute:#665a80;
+  --primary:#a855f7;--primary-2:#c084fc;--primary-glow:rgba(168,85,247,.5);
+  --accent:#f472b6;--accent-glow:rgba(244,114,182,.5);
+  --success:#22d3a4;--danger:#f43f5e;--warning:#fbbf24;--gold:#fbbf24;
 }
-
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{overflow-x:hidden;-webkit-text-size-adjust:100%}
-
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-}
-
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:
-    radial-gradient(circle at 15% 20%,rgba(0,217,255,.1),transparent 45%),
-    radial-gradient(circle at 85% 80%,rgba(255,0,128,.1),transparent 45%);
-  pointer-events:none;
-  z-index:0;
-}
-
-body::after{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:
-    linear-gradient(rgba(0,217,255,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,217,255,.03) 1px,transparent 1px);
-  background-size:44px 44px;
-  pointer-events:none;
-  z-index:0;
-  animation:gridMove 22s linear infinite;
-}
-
-@keyframes gridMove{
-  0%{background-position:0 0}
-  100%{background-position:44px 44px}
-}
-
-.app{
-  max-width:700px;
-  margin:0 auto;
-  padding:16px;
-  position:relative;
-  z-index:1;
-  min-height:100vh;
-  padding-bottom:40px;
-}
-
-/* ============ LOADING ============ */
-.loading-screen{
-  position:fixed;
-  inset:0;
-  background:var(--bg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:99999;
-  flex-direction:column;
-  gap:16px;
-}
-
-.spinner{
-  width:48px;
-  height:48px;
-  border:3px solid rgba(0,217,255,.2);
-  border-top-color:var(--primary);
-  border-radius:50%;
-  animation:spin .8s linear infinite;
-}
-
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 10% 10%,rgba(168,85,247,.12),transparent 40%),radial-gradient(circle at 90% 90%,rgba(244,114,182,.1),transparent 40%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(168,85,247,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(168,85,247,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;animation:gridMove 20s linear infinite}
+@keyframes gridMove{0%{background-position:0 0}100%{background-position:40px 40px}}
+.app{max-width:640px;margin:0 auto;padding:16px;position:relative;z-index:1;min-height:100vh}
+.loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
+.spinner{width:44px;height:44px;border:3px solid rgba(168,85,247,.2);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:12px;color:var(--primary-2);font-family:monospace;letter-spacing:2px;font-weight:700}
 
-.loading-text{
-  font-size:12px;
-  color:var(--primary);
-  font-family:monospace;
-  letter-spacing:2px;
-  font-weight:700;
-}
-
-/* ============ LOGIN ============ */
-.login-wrap{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  position:relative;
-  z-index:1;
-}
-
-.login-card{
-  width:100%;
-  max-width:400px;
-  background:var(--bg-2);
-  border:1px solid var(--border-2);
-  border-radius:24px;
-  padding:32px 24px;
-  box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(0,217,255,.1);
-  position:relative;
-  overflow:hidden;
-}
-
-.login-card::before{
-  content:'';
-  position:absolute;
-  top:-40%;
-  right:-30%;
-  width:220px;
-  height:220px;
-  border-radius:50%;
-  background:radial-gradient(circle,var(--primary-glow),transparent 70%);
-  opacity:.4;
-  pointer-events:none;
-}
-
-.login-icon{
-  width:70px;
-  height:70px;
-  border-radius:20px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 18px;
-  font-size:34px;
-  box-shadow:0 0 35px var(--primary-glow);
-  position:relative;
-  z-index:1;
-  animation:pulseGlow 2.5s ease-in-out infinite;
-}
-
-@keyframes pulseGlow{
-  0%,100%{box-shadow:0 0 35px var(--primary-glow)}
-  50%{box-shadow:0 0 55px var(--primary-glow),0 0 80px var(--accent-glow)}
-}
-
-.login-title{
-  font-size:24px;
-  font-weight:900;
-  letter-spacing:5px;
-  color:var(--primary);
-  text-align:center;
-  margin-bottom:6px;
-  position:relative;
-  z-index:1;
-  text-shadow:0 0 20px var(--primary-glow);
-}
-
-.login-sub{
-  font-size:10px;
-  color:var(--text-mute);
-  letter-spacing:3px;
-  text-align:center;
-  margin-bottom:6px;
-  font-family:monospace;
-  position:relative;
-  z-index:1;
-}
-
-.login-tag{
-  font-size:11px;
-  color:var(--text-dim);
-  text-align:center;
-  margin-bottom:24px;
-  font-style:italic;
-  position:relative;
-  z-index:1;
-}
-
-.tab-row{
-  display:flex;
-  gap:6px;
-  margin-bottom:18px;
-  background:var(--bg);
-  padding:4px;
-  border-radius:12px;
-  position:relative;
-  z-index:1;
-}
-
-.tab-btn{
-  flex:1;
-  padding:10px;
-  background:transparent;
-  border:none;
-  border-radius:9px;
-  color:var(--text-dim);
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:1px;
-  cursor:pointer;
-  transition:all .2s;
-  font-family:inherit;
-}
-
-.tab-btn.active{
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  color:var(--bg);
-  font-weight:800;
-  box-shadow:0 4px 12px var(--primary-glow);
-}
-
-.field{
-  margin-bottom:12px;
-  position:relative;
-  z-index:1;
-}
-
-.field input{
-  width:100%;
-  padding:14px 16px;
-  background:var(--bg);
-  border:1px solid var(--border-2);
-  border-radius:12px;
-  color:var(--text);
-  font-size:14px;
-  font-family:inherit;
-  transition:all .2s;
-}
-
-.field input:focus{
-  outline:none;
-  border-color:var(--primary);
-  box-shadow:0 0 0 3px rgba(0,217,255,.12);
-}
-
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+.login-card{width:100%;max-width:400px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:24px;padding:32px 24px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 50px rgba(168,85,247,.15);position:relative;overflow:hidden}
+.login-card::before{content:'';position:absolute;top:-40%;right:-30%;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.5;pointer-events:none}
+.login-icon{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:34px;box-shadow:0 0 40px var(--primary-glow);position:relative;z-index:1;animation:pulseGlow 2.5s ease-in-out infinite}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 40px var(--primary-glow)}50%{box-shadow:0 0 60px var(--primary-glow),0 0 90px var(--accent-glow)}}
+.login-title{font-size:26px;font-weight:900;letter-spacing:6px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:6px;position:relative;z-index:1}
+.login-sub{font-size:11px;color:var(--text-mute);letter-spacing:3px;text-align:center;margin-bottom:8px;font-family:monospace;position:relative;z-index:1}
+.login-tag{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:24px;font-style:italic;position:relative;z-index:1;line-height:1.5}
+.login-tag b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.tab-row{display:flex;gap:6px;margin-bottom:18px;background:var(--bg);padding:4px;border-radius:12px;position:relative;z-index:1}
+.tab-btn{flex:1;padding:11px;background:transparent;border:none;border-radius:9px;color:var(--text-dim);font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;font-family:inherit}
+.tab-btn.active{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-weight:800;box-shadow:0 4px 15px var(--primary-glow)}
+.field{margin-bottom:12px;position:relative;z-index:1}
+.field input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border-2);border-radius:12px;color:var(--text);font-size:14px;font-family:inherit;transition:all .2s}
+.field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
 .field input::placeholder{color:var(--text-mute)}
-
-.btn-primary{
-  width:100%;
-  padding:15px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  border:none;
-  border-radius:12px;
-  color:var(--bg);
-  font-size:14px;
-  font-weight:800;
-  letter-spacing:1.5px;
-  cursor:pointer;
-  transition:transform .15s;
-  margin-top:6px;
-  position:relative;
-  z-index:1;
-  font-family:inherit;
-}
-
+.btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;margin-top:6px;position:relative;z-index:1;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow)}
 .btn-primary:active{transform:scale(.97)}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
 
-/* ============ HEADER ============ */
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px 16px;
-  background:var(--bg-2);
-  border:1px solid var(--border);
-  border-radius:16px;
-  margin-bottom:14px;
-  position:relative;
-  overflow:hidden;
-}
+/* HEADER */
+.header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(244,114,182,.15));border:1px solid var(--primary);border-radius:20px;margin-bottom:14px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50%;right:-20%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.35;pointer-events:none}
+.header-left{position:relative;z-index:1}
+.header-title{font-size:16px;font-weight:900;letter-spacing:3px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.header-sub{font-size:11px;color:var(--text-dim);font-family:monospace;letter-spacing:1px;display:flex;align-items:center;gap:6px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.btn-logout{padding:8px 14px;background:rgba(244,63,94,.15);border:1px solid var(--danger);border-radius:10px;color:var(--danger);font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;position:relative;z-index:1;letter-spacing:.5px}
+.btn-logout:active{background:var(--danger);color:#fff}
 
-.header::before{
-  content:'';
-  position:absolute;
-  top:-50%;
-  right:-20%;
-  width:150px;
-  height:150px;
-  border-radius:50%;
-  background:radial-gradient(circle,var(--primary-glow),transparent 70%);
-  opacity:.25;
-  pointer-events:none;
-}
+/* CARD */
+.card{background:var(--bg-2);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;position:relative}
+.card::before{content:'';position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent);opacity:.5}
+.card-label{font-size:10px;color:var(--primary-2);letter-spacing:2px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-family:monospace;text-transform:uppercase}
+.card-label::before{content:'//';color:var(--accent);font-weight:700}
 
-.header-user{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  cursor:pointer;
-  position:relative;
-  z-index:1;
-}
+/* SETTING */
+.setting-row{margin-bottom:14px}
+.setting-label{font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-bottom:6px;font-weight:700;font-family:monospace}
+.setting-input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border-2);border-radius:12px;color:var(--text);font-size:15px;font-family:inherit;font-weight:700}
+.setting-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
+.target-slider{width:100%;-webkit-appearance:none;height:8px;border-radius:4px;background:var(--bg-3);outline:none;margin:10px 0}
+.target-slider::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));cursor:pointer;box-shadow:0 0 15px var(--primary-glow);border:2px solid var(--bg)}
+.target-value{font-size:32px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:8px 0;font-family:monospace}
+.mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mode-btn{padding:10px 6px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;color:var(--text-dim);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center;transition:all .2s}
+.mode-btn.active{background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(244,114,182,.2));border-color:var(--primary);color:var(--primary-2)}
+.btn-save{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:900;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow);margin-top:8px}
+.btn-save:active{transform:scale(.97)}
+.btn-save:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
 
-.avatar{
-  width:42px;
-  height:42px;
-  border-radius:13px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:var(--bg);
-  font-weight:900;
-  font-size:15px;
-  flex-shrink:0;
-  overflow:hidden;
-  box-shadow:0 0 15px var(--primary-glow);
-}
+/* GUIDE */
+.guide-item{display:flex;gap:12px;padding:12px;background:var(--bg);border-radius:10px;margin-bottom:8px;align-items:flex-start}
+.guide-num{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff;flex-shrink:0}
+.guide-text{flex:1;font-size:12px;color:var(--text-dim);line-height:1.6}
+.guide-text b{color:var(--primary-2)}
 
-.avatar img{width:100%;height:100%;object-fit:cover}
+/* STATUS */
+.status-badge{padding:10px 14px;background:rgba(34,211,164,.15);border:1px solid var(--success);border-radius:10px;color:var(--success);font-size:12px;font-weight:700;text-align:center;font-family:monospace;letter-spacing:1px;margin-bottom:12px}
+.status-badge.warn{background:rgba(251,191,36,.15);border-color:var(--warning);color:var(--warning)}
 
-.user-info{min-width:0}
-.user-name{
-  font-size:13px;
-  font-weight:800;
-  color:var(--text);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  max-width:150px;
-}
-
-.user-status{
-  font-size:10px;
-  color:var(--primary);
-  font-family:monospace;
-  letter-spacing:1px;
-  font-weight:700;
-}
-
-.header-actions{display:flex;gap:6px;position:relative;z-index:1}
-
-.icon-btn{
-  width:38px;
-  height:38px;
-  border-radius:11px;
-  background:var(--bg);
-  border:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:var(--text-dim);
-  cursor:pointer;
-  transition:all .2s;
-}
-
-.icon-btn:active{
-  background:rgba(0,217,255,.1);
-  border-color:var(--primary);
-  color:var(--primary);
-}
-
-.icon-btn svg{width:18px;height:18px;fill:currentColor}
-
-/* ============ HERO ============ */
-.hero{
-  padding:24px 20px;
-  background:linear-gradient(135deg,rgba(0,217,255,.12),rgba(255,0,128,.12));
-  border:1px solid var(--primary);
-  border-radius:20px;
-  margin-bottom:14px;
-  position:relative;
-  overflow:hidden;
-  box-shadow:0 8px 32px rgba(0,0,0,.4),0 0 30px rgba(0,217,255,.1);
-}
-
-.hero::before{
-  content:'';
-  position:absolute;
-  top:-30%;
-  right:-15%;
-  width:200px;
-  height:200px;
-  border-radius:50%;
-  background:radial-gradient(circle,var(--primary-glow),transparent 70%);
-  opacity:.35;
-  pointer-events:none;
-  animation:float 6s ease-in-out infinite;
-}
-
-@keyframes float{
-  0%,100%{transform:translate(0,0)}
-  50%{transform:translate(-15px,15px)}
-}
-
-.hero-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  font-size:9px;
-  font-weight:800;
-  letter-spacing:2px;
-  padding:5px 12px;
-  border-radius:20px;
-  background:rgba(0,217,255,.15);
-  border:1px solid var(--primary);
-  color:var(--primary);
-  margin-bottom:12px;
-  position:relative;
-  z-index:1;
-  font-family:monospace;
-}
-
-.hero-badge::before{
-  content:'';
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:var(--primary);
-  box-shadow:0 0 10px var(--primary);
-  animation:blink 2s infinite;
-}
-
-@keyframes blink{
-  0%,100%{opacity:1;transform:scale(1)}
-  50%{opacity:.5;transform:scale(1.3)}
-}
-
-.hero-title{
-  font-size:26px;
-  font-weight:900;
-  letter-spacing:1px;
-  line-height:1.15;
-  background:linear-gradient(135deg,var(--text),var(--primary),var(--accent));
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-  margin-bottom:8px;
-  position:relative;
-  z-index:1;
-}
-
-.hero-sub{
-  font-size:13px;
-  color:var(--text-dim);
-  line-height:1.7;
-  margin-bottom:10px;
-  position:relative;
-  z-index:1;
-}
-
-.hero-sub b{color:var(--primary);font-weight:800}
-
-.hero-tengil{
-  font-size:12px;
-  color:var(--gold);
-  font-style:italic;
-  padding:10px 12px;
-  background:rgba(255,215,0,.08);
-  border-left:3px solid var(--gold);
-  border-radius:6px;
-  margin-top:12px;
-  position:relative;
-  z-index:1;
-  font-weight:600;
-}
-
-/* ============ MODE TABS ============ */
-.mode-tabs{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
-  margin-bottom:14px;
-}
-
-.mode-tab{
-  padding:12px 6px;
-  background:var(--bg-2);
-  border:1px solid var(--border);
-  border-radius:12px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-  color:var(--text-dim);
-  cursor:pointer;
-  transition:all .2s;
-  font-family:inherit;
-}
-
-.mode-tab.active{
-  background:linear-gradient(135deg,rgba(0,217,255,.18),rgba(255,0,128,.18));
-  border-color:var(--primary);
-  color:var(--primary);
-  box-shadow:0 0 20px rgba(0,217,255,.25);
-  transform:translateY(-2px);
-}
-
-.mode-tab-icon{font-size:20px;line-height:1}
-.mode-tab-label{font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
-
-/* ============ INPUT AREA ============ */
-.input-card{
-  background:var(--bg-2);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:14px;
-  position:relative;
-}
-
-.input-card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:20px;
-  right:20px;
-  height:1px;
-  background:linear-gradient(90deg,transparent,var(--primary),transparent);
-  opacity:.5;
-}
-
-.input-label{
-  font-size:10px;
-  color:var(--primary);
-  letter-spacing:2px;
-  font-weight:800;
-  margin-bottom:10px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-family:monospace;
-  text-transform:uppercase;
-}
-
-.input-label::before{content:'//';color:var(--accent);font-weight:700}
-
-textarea{
-  width:100%;
-  min-height:150px;
-  padding:14px;
-  background:var(--bg);
-  border:1px solid var(--border-2);
-  border-radius:12px;
-  color:var(--text);
-  font-size:14px;
-  font-family:inherit;
-  resize:vertical;
-  line-height:1.6;
-  transition:all .2s;
-}
-
-textarea:focus{
-  outline:none;
-  border-color:var(--primary);
-  box-shadow:0 0 0 3px rgba(0,217,255,.12);
-}
-
-textarea::placeholder{color:var(--text-mute);font-style:italic}
-
-.char-count{
-  text-align:right;
-  font-size:10px;
-  color:var(--text-mute);
-  font-family:monospace;
-  margin-top:6px;
-}
-
-/* Action Buttons */
-.action-row{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
-}
-
-.btn-solve{
-  flex:2;
-  padding:15px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  border:none;
-  border-radius:12px;
-  color:var(--bg);
-  font-size:14px;
-  font-weight:900;
-  letter-spacing:1.5px;
-  cursor:pointer;
-  transition:transform .15s;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  font-family:inherit;
-  box-shadow:0 0 25px var(--primary-glow);
-}
-
-.btn-solve:active{transform:scale(.97)}
-.btn-solve:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
-
-.btn-clear{
-  flex:1;
-  padding:15px;
-  background:var(--bg-3);
-  border:1px solid var(--border-2);
-  border-radius:12px;
-  color:var(--text-dim);
-  font-size:12px;
-  font-weight:700;
-  cursor:pointer;
-  font-family:inherit;
-}
-
-.btn-clear:active{
-  background:rgba(255,51,85,.15);
-  border-color:var(--danger);
-  color:var(--danger);
-}
-
-/* ============ ANSWER ============ */
-.answer-card{
-  background:var(--bg-2);
-  border:1px solid var(--primary);
-  border-radius:16px;
-  padding:18px;
-  box-shadow:0 0 30px rgba(0,217,255,.15);
-  animation:answerIn .3s ease-out;
-  position:relative;
-  overflow:hidden;
-  margin-bottom:14px;
-}
-
-.answer-card::before{
-  content:'';
-  position:absolute;
-  top:-50%;
-  right:-20%;
-  width:200px;
-  height:200px;
-  border-radius:50%;
-  background:radial-gradient(circle,var(--primary-glow),transparent 70%);
-  opacity:.15;
-  pointer-events:none;
-}
-
-@keyframes answerIn{
-  from{opacity:0;transform:translateY(15px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-.answer-label{
-  font-size:10px;
-  color:var(--primary);
-  letter-spacing:2px;
-  font-weight:800;
-  margin-bottom:12px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-family:monospace;
-  text-transform:uppercase;
-  position:relative;
-  z-index:1;
-}
-
-.answer-label::before{content:'//';color:var(--accent)}
-
-.answer-text{
-  font-size:14px;
-  line-height:1.7;
-  color:var(--text);
-  white-space:pre-wrap;
-  word-break:break-word;
-  position:relative;
-  z-index:1;
-}
-
-.answer-text code{
-  background:rgba(0,217,255,.1);
-  padding:2px 6px;
-  border-radius:4px;
-  font-family:monospace;
-  font-size:13px;
-  color:var(--primary);
-}
-
-.answer-text strong{color:var(--primary);font-weight:800}
-
-.answer-actions{
-  display:flex;
-  gap:8px;
-  margin-top:14px;
-  position:relative;
-  z-index:1;
-}
-
-.btn-copy{
-  flex:1;
-  padding:11px;
-  background:var(--bg);
-  border:1px solid var(--primary);
-  border-radius:10px;
-  color:var(--primary);
-  font-size:11px;
-  font-weight:800;
-  cursor:pointer;
-  letter-spacing:.5px;
-  font-family:inherit;
-  transition:all .2s;
-}
-
-.btn-copy:active{background:var(--primary);color:var(--bg)}
-
-/* ============ THINKING ============ */
-.thinking-card{
-  background:var(--bg-2);
-  border:1px solid var(--primary);
-  border-radius:16px;
-  padding:24px;
-  text-align:center;
-  margin-bottom:14px;
-}
-
-.thinking-spinner{
-  display:inline-block;
-  width:32px;
-  height:32px;
-  border:3px solid rgba(0,217,255,.2);
-  border-top-color:var(--primary);
-  border-radius:50%;
-  animation:spin .8s linear infinite;
-  margin-bottom:12px;
-}
-
-.thinking-text{
-  font-size:13px;
-  color:var(--primary);
-  font-family:monospace;
-  letter-spacing:1px;
-  font-weight:700;
-  min-height:20px;
-}
-
-.thinking-sub{
-  font-size:10px;
-  color:var(--text-mute);
-  margin-top:6px;
-  font-family:monospace;
-  letter-spacing:1px;
-  font-style:italic;
-}
-
-/* ============ TIPS ============ */
-.tips{
-  padding:14px;
-  background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,0,128,.08));
-  border:1px solid rgba(255,215,0,.3);
-  border-radius:14px;
-  margin-bottom:14px;
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-}
-
-.tips-icon{
-  width:34px;
-  height:34px;
-  border-radius:10px;
-  background:linear-gradient(135deg,var(--gold),var(--warning));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  flex-shrink:0;
-  box-shadow:0 0 15px var(--gold-glow);
-}
-
+/* TIPS */
+.tips{padding:14px;background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(244,114,182,.08));border:1px solid rgba(251,191,36,.3);border-radius:14px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start}
+.tips-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 15px rgba(251,191,36,.4)}
 .tips-content{flex:1;min-width:0}
+.tips-label{font-size:9px;color:var(--gold);letter-spacing:2px;font-family:monospace;font-weight:800;margin-bottom:4px}
+.tips-text{font-size:11px;color:var(--text-dim);line-height:1.6;font-style:italic}
 
-.tips-label{
-  font-size:9px;
-  color:var(--gold);
-  letter-spacing:2px;
-  font-family:monospace;
-  font-weight:800;
-  margin-bottom:4px;
-}
+/* FOOTER */
+.footer{text-align:center;padding:24px 10px 10px;font-family:monospace;font-size:10px;color:var(--text-mute);letter-spacing:1.5px;position:relative;z-index:1}
+.footer-title{font-size:12px;font-weight:800;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;margin-bottom:6px}
+.footer-credit{color:var(--gold);font-weight:700;letter-spacing:1px;margin-top:4px}
+.footer-credit b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:900}
+.footer-tengil{font-size:9px;color:var(--text-mute);margin-top:8px;font-style:italic;letter-spacing:1px}
 
-.tips-text{
-  font-size:11px;
-  color:var(--text-dim);
-  line-height:1.6;
-  font-style:italic;
-}
-
-/* ============ FOOTER ============ */
-.footer{
-  text-align:center;
-  padding:24px 10px 10px;
-  font-family:monospace;
-  font-size:10px;
-  color:var(--text-mute);
-  letter-spacing:1.5px;
-  position:relative;
-  z-index:1;
-}
-
-.footer-title{
-  font-size:12px;
-  font-weight:800;
-  color:var(--primary);
-  letter-spacing:3px;
-  margin-bottom:6px;
-  text-shadow:0 0 15px var(--primary-glow);
-}
-
-.footer-credit{
-  color:var(--gold);
-  font-weight:700;
-  letter-spacing:1px;
-  margin-top:4px;
-}
-
-.footer-credit b{color:var(--accent);font-weight:900}
-
-.footer-tengil{
-  font-size:9px;
-  color:var(--text-mute);
-  margin-top:8px;
-  font-style:italic;
-  letter-spacing:1px;
-}
-
-/* ============ TOAST ============ */
-.toast-wrap{
-  position:fixed;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:9999;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  pointer-events:none;
-  width:min(360px,90vw);
-}
-
-.toast{
-  padding:12px 16px;
-  border-radius:12px;
-  background:rgba(13,13,24,.98);
-  border:1px solid var(--primary);
-  color:var(--text);
-  font-size:13px;
-  box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px var(--primary-glow);
-  animation:toastIn .3s ease-out;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:600;
-}
-
-.toast.success{border-color:var(--success);box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px rgba(0,255,136,.4)}
-.toast.error{border-color:var(--danger);box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 20px rgba(255,51,85,.4)}
-
-@keyframes toastIn{
-  from{opacity:0;transform:translateY(-20px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* ============ SHEET ============ */
-.sheet-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.75);
-  backdrop-filter:blur(8px);
-  z-index:100;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-}
-
-.sheet{
-  width:100%;
-  max-width:700px;
-  background:var(--bg);
-  border-top:1px solid var(--primary);
-  border-radius:24px 24px 0 0;
-  padding:20px;
-  max-height:85vh;
-  overflow-y:auto;
-  animation:sheetIn .3s cubic-bezier(.4,0,.2,1);
-}
-
-@keyframes sheetIn{
-  from{transform:translateY(100%)}
-  to{transform:translateY(0)}
-}
-
-.sheet-handle{
-  width:40px;
-  height:4px;
-  background:var(--border-2);
-  border-radius:2px;
-  margin:0 auto 16px;
-}
-
-.sheet-title{
-  font-size:14px;
-  font-weight:800;
-  letter-spacing:2px;
-  color:var(--primary);
-  text-align:center;
-  margin-bottom:18px;
-  font-family:monospace;
-}
-
-.profile-avatar{
-  width:90px;
-  height:90px;
-  border-radius:24px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 16px;
-  color:var(--bg);
-  font-size:32px;
-  font-weight:900;
-  box-shadow:0 0 30px var(--primary-glow);
-  overflow:hidden;
-}
-
-.profile-avatar img{width:100%;height:100%;object-fit:cover}
-
-.info-row{
-  padding:14px;
-  background:var(--bg-2);
-  border:1px solid var(--border);
-  border-radius:12px;
-  margin-bottom:8px;
-}
-
-.info-label{
-  font-size:9px;
-  color:var(--primary);
-  letter-spacing:2px;
-  font-family:monospace;
-  margin-bottom:4px;
-  font-weight:800;
-}
-
-.info-value{
-  font-size:14px;
-  font-weight:600;
-  color:var(--text);
-  word-break:break-all;
-}
-
-.btn-logout{
-  width:100%;
-  padding:14px;
-  background:rgba(255,51,85,.15);
-  border:1px solid var(--danger);
-  border-radius:12px;
-  color:var(--danger);
-  font-size:13px;
-  font-weight:800;
-  letter-spacing:1px;
-  cursor:pointer;
-  margin-top:14px;
-  font-family:inherit;
-}
-
-.btn-close{
-  width:100%;
-  padding:14px;
-  background:var(--bg-2);
-  border:1px solid var(--border);
-  border-radius:12px;
-  color:var(--text-dim);
-  font-size:13px;
-  font-weight:700;
-  cursor:pointer;
-  margin-top:8px;
-  font-family:inherit;
-}
+/* TOAST */
+.toast-wrap{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:min(360px,90vw)}
+.toast{padding:12px 16px;border-radius:12px;background:rgba(18,10,30,.98);border:1px solid var(--primary);color:var(--text);font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 25px var(--primary-glow);animation:toastIn .3s ease-out;display:flex;align-items:center;gap:10px;font-weight:600}
+.toast.success{border-color:var(--success)}
+.toast.error{border-color:var(--danger)}
+@keyframes toastIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 
 @media (max-width:480px){
   .app{padding:12px}
-  .header{padding:12px}
+  .header{padding:14px}
   .login-card{padding:24px 20px}
-  .hero{padding:18px 16px}
-  .hero-title{font-size:22px}
-  .mode-tabs{grid-template-columns:repeat(2,1fr)}
+  .header-title{font-size:14px}
 }
 </style>
 </head>
 
-<body x-data="zenkaiTutor()" x-init="init()" x-cloak>
+<body x-data="zenkaiWeb()" x-init="init()" x-cloak>
 
-<!-- LOADING -->
 <div x-show="!ready" class="loading-screen">
   <div class="spinner"></div>
-  <div class="loading-text">BOOTING ZENKAI...</div>
+  <div class="loading-text">LOADING ZENKAI...</div>
 </div>
 
 <!-- LOGIN -->
@@ -1029,132 +136,97 @@ textarea::placeholder{color:var(--text-mute);font-style:italic}
   <div class="login-card">
     <div class="login-icon">⚡</div>
     <div class="login-title">ZENKAI</div>
-    <div class="login-sub">// TUTOR AI</div>
-    <div class="login-tag">Gausah panik, gw yang jawab 🤙</div>
-
+    <div class="login-sub">// AUTOFILL CONTROL</div>
+    <div class="login-tag">
+      Atur target di sini, <b>extension</b> yang hajar di Google Form 🔥
+    </div>
     <div class="tab-row">
       <button class="tab-btn" :class="{active: authMode==='login'}" @click="authMode='login'">MASUK</button>
       <button class="tab-btn" :class="{active: authMode==='register'}" @click="authMode='register'">DAFTAR</button>
     </div>
-
     <div class="field">
       <input type="email" x-model="form.email" placeholder="Email lu" autocomplete="email">
     </div>
-
     <div x-show="authMode==='register'" class="field">
-      <input type="text" x-model="form.username" placeholder="Username kece lu">
+      <input type="text" x-model="form.username" placeholder="Username kece">
     </div>
-
     <div class="field">
       <input type="password" x-model="form.password" placeholder="Password rahasia" autocomplete="current-password">
     </div>
-
     <button class="btn-primary" @click="submitAuth()" :disabled="authLoading">
       <span x-text="authLoading ? 'BENTAR YA...' : (authMode==='login' ? '🚀 GAS MASUK' : '✨ GAS DAFTAR')"></span>
     </button>
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- MAIN -->
 <div x-show="ready && user" class="app">
-
-  <!-- HEADER -->
   <header class="header">
-    <div class="header-user" @click="profileOpen=true">
-      <div class="avatar">
-        <template x-if="profile?.avatar_url">
-          <img :src="profile.avatar_url">
-        </template>
-        <template x-if="!profile?.avatar_url">
-          <span x-text="(profile?.username || 'ZK').substring(0,2).toUpperCase()"></span>
-        </template>
-      </div>
-      <div class="user-info">
-        <div class="user-name" x-text="profile?.username || 'Sobat Zenkai'"></div>
-        <div class="user-status">● ONLINE · SIAP 24 JAM</div>
+    <div class="header-left">
+      <div class="header-title">⚡ ZENKAI AUTOFILL</div>
+      <div class="header-sub">
+        <span class="dot"></span>
+        <span x-text="profile?.username || 'Sobat Zenkai'"></span>
       </div>
     </div>
-    <div class="header-actions">
-      <button class="icon-btn" @click="clearAll()" title="Reset">
-        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-      </button>
-      <button class="icon-btn" @click="profileOpen=true">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-      </button>
-    </div>
+    <button class="btn-logout" @click="logout()">KELUAR</button>
   </header>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-badge">ZENKAI PRO · SIAP</div>
-    <div class="hero-title">Yo, Sobat Zenkai! 👋</div>
-    <div class="hero-sub">
-      Gw <b>Zenkai Tutor</b> — asisten belajar lu yang siap hajar semua soal. 
-      Mau MTK, Fisika, Kimia, apapun — <b>paste aja, gw kelarin</b>.
-    </div>
-    <div class="hero-tengil">
-      "Gausah mikir kaya mau ngerjain sendiri. Lu tinggal duduk manis, gw yang kerja. 😎"
-    </div>
+  <div class="status-badge" :class="{warn: !extensionConnected}">
+    <span x-text="extensionConnected ? '✓ EXTENSION TERHUBUNG' : '⚠ BUKA LEMUR + INSTALL EXTENSION'"></span>
   </div>
 
-  <!-- MODE TABS -->
-  <div class="mode-tabs">
-    <button class="mode-tab" :class="{active: mode==='umum'}" @click="mode='umum'">
-      <div class="mode-tab-icon">💡</div>
-      <div class="mode-tab-label">Umum</div>
-    </button>
-    <button class="mode-tab" :class="{active: mode==='matematika'}" @click="mode='matematika'">
-      <div class="mode-tab-icon">🧮</div>
-      <div class="mode-tab-label">MTK</div>
-    </button>
-    <button class="mode-tab" :class="{active: mode==='fisika'}" @click="mode='fisika'">
-      <div class="mode-tab-icon">⚛️</div>
-      <div class="mode-tab-label">Fisika</div>
-    </button>
-    <button class="mode-tab" :class="{active: mode==='kimia'}" @click="mode='kimia'">
-      <div class="mode-tab-icon">🧪</div>
-      <div class="mode-tab-label">Kimia</div>
+  <div class="card">
+    <div class="card-label">PENGATURAN AUTO-FILL</div>
+
+    <div class="setting-row">
+      <div class="setting-label">🎯 TARGET NILAI (0-100)</div>
+      <div class="target-value" x-text="targetScore + ' / 100'"></div>
+      <input type="range" min="0" max="100" x-model.number="targetScore" class="target-slider">
+      <div style="font-size:11px;color:var(--text-mute);text-align:center;margin-top:4px;font-style:italic">
+        <span x-text="getTargetDesc()"></span>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <div class="setting-label">📚 MATA PELAJARAN</div>
+      <div class="mode-grid">
+        <button class="mode-btn" :class="{active: mode==='umum'}" @click="mode='umum'">💡 Umum</button>
+        <button class="mode-btn" :class="{active: mode==='mtk'}" @click="mode='mtk'">🧮 MTK</button>
+        <button class="mode-btn" :class="{active: mode==='fisika'}" @click="mode='fisika'">⚛️ Fisika</button>
+        <button class="mode-btn" :class="{active: mode==='kimia'}" @click="mode='kimia'">🧪 Kimia</button>
+      </div>
+    </div>
+
+    <button class="btn-save" @click="saveSettings()" :disabled="saving">
+      <span x-text="saving ? '⏳ MENYIMPAN...' : '💾 SIMPAN PENGATURAN'"></span>
     </button>
   </div>
 
-  <!-- INPUT CARD -->
-  <div class="input-card">
-    <div class="input-label">PASTE SOAL LU DI SINI</div>
-    <textarea 
-      x-model="input" 
-      :placeholder="placeholderText"
-      rows="6"></textarea>
-    <div class="char-count">
-      <span x-text="input.length"></span> karakter · 
-      <span x-text="input.length > 0 ? 'siap dihajar 🔥' : 'kosong nih'"></span>
+  <div class="card">
+    <div class="card-label">CARA PAKAI</div>
+    <div class="guide-item">
+      <div class="guide-num">1</div>
+      <div class="guide-text">Buka <b>Lemur Browser</b>, install extension <b>Zenkai AutoFill</b> (sekali aja)</div>
     </div>
-
-    <div class="action-row">
-      <button class="btn-clear" @click="clearAll()">RESET</button>
-      <button class="btn-solve" @click="solve()" :disabled="thinking || !input.trim()">
-        <span x-text="thinking ? '⏳ MIKIR...' : '🚀 HAJAR SOAL'"></span>
-      </button>
+    <div class="guide-item">
+      <div class="guide-num">2</div>
+      <div class="guide-text">Atur <b>target nilai</b> & <b>mata pelajaran</b> di atas, terus tap <b>SIMPAN</b></div>
     </div>
-  </div>
-
-  <!-- THINKING -->
-  <div x-show="thinking" class="thinking-card">
-    <div class="thinking-spinner"></div>
-    <div class="thinking-text" x-text="thinkingText"></div>
-    <div class="thinking-sub" x-text="thinkingSub"></div>
-  </div>
-
-  <!-- ANSWER -->
-  <div x-show="!thinking && answer" class="answer-card">
-    <div class="answer-label">JAWABAN ZENKAI</div>
-    <div class="answer-text" x-html="formatAnswer(answer)"></div>
-    <div class="answer-actions">
-      <button class="btn-copy" @click="copyAnswer()">📋 COPY JAWABAN</button>
-      <button class="btn-copy" @click="solve()">🔄 ULANGI</button>
+    <div class="guide-item">
+      <div class="guide-num">3</div>
+      <div class="guide-text">Buka <b>Google Form</b> yang mau dijawab</div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-num">4</div>
+      <div class="guide-text">Tap icon <b>Zenkai</b> di toolbar Lemur → tap <b>AUTO-FILL</b></div>
+    </div>
+    <div class="guide-item">
+      <div class="guide-num">5</div>
+      <div class="guide-text">Tunggu 15-30 detik → <b>semua soal keisi otomatis</b> ✨</div>
     </div>
   </div>
 
-  <!-- TIPS -->
   <div class="tips">
     <div class="tips-icon">💡</div>
     <div class="tips-content">
@@ -1163,51 +235,13 @@ textarea::placeholder{color:var(--text-mute);font-style:italic}
     </div>
   </div>
 
-  <!-- FOOTER -->
   <div class="footer">
-    <div class="footer-title">⚡ ZENKAI TUTOR AI</div>
+    <div class="footer-title">⚡ ZENKAI AUTOFILL</div>
     <div class="footer-credit">Dibikin sambil ngopi sama <b>Andika</b> ☕</div>
-    <div class="footer-tengil">"Kalau lu bisa, kenapa harus gw? Tapi karena gw bisa, ya udah gw aja."</div>
-  </div>
-
-</div>
-
-<!-- PROFILE SHEET -->
-<div x-show="profileOpen" @click.self="profileOpen=false" class="sheet-overlay">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-title">// PROFIL LU</div>
-
-    <div class="profile-avatar">
-      <template x-if="profile?.avatar_url">
-        <img :src="profile.avatar_url">
-      </template>
-      <template x-if="!profile?.avatar_url">
-        <span x-text="(profile?.username || 'ZK').substring(0,2).toUpperCase()"></span>
-      </template>
-    </div>
-
-    <div class="info-row">
-      <div class="info-label">// USERNAME</div>
-      <div class="info-value" x-text="profile?.username || 'Sobat Zenkai'"></div>
-    </div>
-
-    <div class="info-row">
-      <div class="info-label">// EMAIL</div>
-      <div class="info-value" x-text="user?.email || '-'"></div>
-    </div>
-
-    <div class="info-row">
-      <div class="info-label">// STATUS</div>
-      <div class="info-value" style="color:var(--success)">● Aktif · Siap Bantu</div>
-    </div>
-
-    <button class="btn-close" @click="profileOpen=false">TUTUP</button>
-    <button class="btn-logout" @click="logout()">KELUAR</button>
+    <div class="footer-tengil">"Kerjain sampe kelar, gausah mikir. Gw yang mikir."</div>
   </div>
 </div>
 
-<!-- TOASTS -->
 <div class="toast-wrap">
   <template x-for="t in toasts" :key="t.id">
     <div class="toast" :class="t.type">
@@ -1218,79 +252,50 @@ textarea::placeholder{color:var(--text-mute);font-style:italic}
 </div>
 
 <script>
-// ============================================
-// KONFIGURASI — GANTI 2 BARIS INI SAJA
-// ============================================
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ============================================
-// APP
-// ============================================
-function zenkaiTutor() {
+function zenkaiWeb() {
   return {
     ready: false,
     user: null,
     profile: null,
-
     authMode: 'login',
     authLoading: false,
     form: { email: '', username: '', password: '' },
-
+    targetScore: 90,
     mode: 'umum',
-    input: '',
-    answer: '',
-    thinking: false,
-    thinkingText: 'Bentar bre, gw lagi mikir...',
-    thinkingSub: '// sabar dikit, otak gw panas nih 🔥',
-
-    profileOpen: false,
+    saving: false,
+    extensionConnected: false,
     toasts: [],
     toastId: 0,
-
-    placeholderText: 'Paste soal lu di sini bre... mau 1 soal, 10 soal, 100 soal — santai, gw kuat. 🗿',
-    tipsText: 'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw. Pakai Zenkai aja. 😂',
-
-    // Placeholder & tips random
-    placeholders: [
-      'Paste soal lu di sini bre... mau 1 soal, 10 soal, 100 soal — santai, gw kuat. 🗿',
-      'Tulis soal lu... gausah malu, gw gak nge-judge kok 🤙',
-      'Soal numpuk? Paste aja semua, gw hajar satu-satu 🔥',
-      'Jangan mikir kaya mau ngerjain sendiri, paste aja 🗿',
-      'Soal apapun, dari yang gampang sampe bikin nangis — gw siap 🫡',
-      'Yo, taro soal lu di sini. Gw bakal jawab sampe lu ngerti 💪'
-    ],
-
+    tipsText: 'Paste URL soal lu, gw hajar sampe kelar. Gausah mikir. 🗿',
     tipsList: [
-      'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw. Pakai Zenkai aja. 😂',
-      'Guru lu tidur? Gw gak tidur. Paste aja, gw jaga 24 jam. 🌙',
-      'PR numpuk? Chill bro. Gw jawab sampe lu bisa bilang "gampang ternyata". 😎',
-      'Belajar itu gak harus nangis. Kadang cuma butuh paste soal ke gw. 🤝',
-      'Otak lu capek? Pake otak gw aja. Gratis kok. 🔥',
-      'Nilai jelek itu bukan akhir dunia. Yang penting lu udah coba. Tapi kalo bisa pake Zenkai, kenapa nggak? 😏',
-      'Gw gak pernah ngantuk, gak pernah ngeluh, gak minta gaji. Perfect employee. 🤖'
+      'Set target 90 doang biar gak ketara. 100 juga bisa kalo lu pede. 😎',
+      'Target 0-100, atur sesuka hati. Gausah takut kena guru. 🤙',
+      'Soal 50 nomer? Chill, AI gw kuat sampe 100. 🔥',
+      'Yang penting setting target, sisanya gw yang kerja. 💪',
+      'Gw gak pernah ngeluh, gak pernah ngantuk. Perfect employee. 🤖'
     ],
 
     async init() {
-      // Random placeholder & tips
-      this.placeholderText = this.placeholders[Math.floor(Math.random() * this.placeholders.length)];
       this.tipsText = this.tipsList[Math.floor(Math.random() * this.tipsList.length)];
-
       try {
         const { data: { session } } = await sb.auth.getSession();
         if (session?.user) {
           this.user = session.user;
           await this.loadProfile();
+          await this.loadSettings();
         }
       } catch (e) { console.error(e); }
       this.ready = true;
-
       sb.auth.onAuthStateChange(async (event, session) => {
         if (session?.user) {
           this.user = session.user;
           await this.loadProfile();
+          await this.loadSettings();
         } else {
           this.user = null;
           this.profile = null;
@@ -1302,6 +307,39 @@ function zenkaiTutor() {
       if (!this.user) return;
       const { data } = await sb.from('profiles').select('*').eq('id', this.user.id).maybeSingle();
       this.profile = data || { username: this.user.email?.split('@')[0] || 'User' };
+    },
+
+    async loadSettings() {
+      if (!this.user) return;
+      try {
+        const { data } = await sb.from('zenkai_autofill_settings').select('*').eq('user_id', this.user.id).maybeSingle();
+        if (data) {
+          this.targetScore = data.target_score || 90;
+          this.mode = data.mode || 'umum';
+        }
+      } catch (e) { console.log('Setting belum ada, pakai default'); }
+    },
+
+    async saveSettings() {
+      if (!this.user) return;
+      this.saving = true;
+      try {
+        const { error } = await sb.from('zenkai_autofill_settings').upsert({
+          user_id: this.user.id,
+          target_score: this.targetScore,
+          mode: this.mode,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'user_id' });
+        if (error) throw error;
+        this.showToast('Setting tersimpan! Extension bakal pake ini 🔥', 'success');
+      } catch (e) {
+        // Kalau tabel belum ada, simpan ke localStorage sebagai fallback
+        localStorage.setItem('zenkai_target', this.targetScore);
+        localStorage.setItem('zenkai_mode', this.mode);
+        this.showToast('Setting tersimpan (local)', 'success');
+      } finally {
+        this.saving = false;
+      }
     },
 
     async submitAuth() {
@@ -1339,134 +377,16 @@ function zenkaiTutor() {
 
     async logout() {
       await sb.auth.signOut();
-      this.profileOpen = false;
       this.user = null;
       this.profile = null;
-      this.input = '';
-      this.answer = '';
     },
 
-    // ============================================
-    // SOLVE
-    // ============================================
-    async solve() {
-      if (this.thinking) return;
-      const text = this.input.trim();
-      if (!text) {
-        this.showToast('Soalnya masih kosong bre 🗿', 'error');
-        return;
-      }
-
-      this.thinking = true;
-      this.answer = '';
-      this.rotateThinkingText();
-
-      const thinkingMessages = [
-        'Bentar bre, gw lagi mikir...',
-        'Sabar ya, otak gw panas...',
-        'Lagi ngerjain nih, santai...',
-        'Hampir kelar, jangan kemana-mana...',
-        'Dikit lagi bre, sabar...',
-        'Nah ini dia, lagi difinalisasi...'
-      ];
-      let thinkIdx = 0;
-      const thinkTimer = setInterval(() => {
-        thinkIdx = (thinkIdx + 1) % thinkingMessages.length;
-        this.thinkingText = thinkingMessages[thinkIdx];
-      }, 2500);
-
-      try {
-        const { data: sessionData } = await sb.auth.getSession();
-        const token = sessionData?.session?.access_token || '';
-
-        const modeNames = {
-          umum: 'Umum',
-          matematika: 'Matematika',
-          fisika: 'Fisika',
-          kimia: 'Kimia'
-        };
-
-        const systemPrompt = `Kamu adalah Zenkai Tutor AI, tutor pintar yang santai, asik, dan to-the-point.
-
-MODE: ${modeNames[this.mode]}
-
-ATURAN MENJAWAB:
-1. Jawab SEMUA soal yang di-paste user. Kalau banyak soal (ada nomor), pisahkan dan jawab satu-satu.
-2. Format: "**Soal 1:** ... [soal]" → "[jawaban + langkah]"
-3. Untuk MTK/Fisika/Kimia: kasih langkah step-by-step, rumus jelas, jangan langsung jawaban akhir.
-4. Bahasa: santai tapi sopan, kayak kakak yang ngajarin adiknya.
-5. Boleh kasih tips/analogi biar gampang dipahami.
-6. Kalau soal ambigu, tanya balik atau kasih asumsi.
-7. Jangan pakai bahasa kaku. Pakai "lu/gw" kalau sesuai.`;
-
-        const res = await fetch(`${SUPABASE_URL}/functions/v1/zenkai-pro`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-            'apikey': SUPABASE_ANON_KEY
-          },
-          body: JSON.stringify({
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: text }
-            ],
-            model: 'deepseek-v4-pro',
-            hasImage: false
-          })
-        });
-
-        if (!res.ok) {
-          const t = await res.text();
-          throw new Error(`Error ${res.status}: ${t.substring(0, 100)}`);
-        }
-
-        const data = await res.json();
-        const reply = data.reply || data.text || data.message || 'AI gak jawab.';
-
-        this.answer = reply;
-      } catch (e) {
-        this.answer = '❌ Waduh error bre: ' + e.message + '\n\nCoba cek token/koneksi lu, terus ulang lagi.';
-      } finally {
-        clearInterval(thinkTimer);
-        this.thinking = false;
-      }
-    },
-
-    rotateThinkingText() {
-      const subs = [
-        '// sabar dikit, otak gw panas nih 🔥',
-        '// jangan kemana-mana, lagi loading...',
-        '// gausah panik, gw hajar nih soal',
-        '// bentar ya bre, gw fokus dulu',
-        '// nah ini, lagi dikerjain serius 🫡'
-      ];
-      this.thinkingSub = subs[Math.floor(Math.random() * subs.length)];
-    },
-
-    formatAnswer(text) {
-      if (!text) return '';
-      let safe = text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-      safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-      safe = safe.replace(/`([^`]+)`/g, '<code>$1</code>');
-      return safe;
-    },
-
-    copyAnswer() {
-      if (!this.answer) return;
-      navigator.clipboard.writeText(this.answer)
-        .then(() => this.showToast('Jawaban dicopy! 📋', 'success'))
-        .catch(() => this.showToast('Gagal copy 😅', 'error'));
-    },
-
-    clearAll() {
-      this.input = '';
-      this.answer = '';
-      this.placeholderText = this.placeholders[Math.floor(Math.random() * this.placeholders.length)];
-      this.tipsText = this.tipsList[Math.floor(Math.random() * this.tipsList.length)];
+    getTargetDesc() {
+      if (this.targetScore >= 95) return 'Nilai sempurna, semua bener 😎';
+      if (this.targetScore >= 80) return 'Nilai bagus, sengaja salah dikit 🤙';
+      if (this.targetScore >= 60) return 'Nilai cukup, biar keliatan natural 👍';
+      if (this.targetScore >= 40) return 'Nilai pas-pasan, santai aja 😅';
+      return 'Target rendah, buat eksperimen doang 🧪';
     },
 
     showToast(msg, type = 'success') {
@@ -1479,6 +399,5 @@ ATURAN MENJAWAB:
   };
 }
 </script>
-
 </body>
 </html>
