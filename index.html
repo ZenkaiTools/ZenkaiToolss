@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0a0612">
-<title>Zenkai AutoFill — by Andika</title>
+<title>Zenkai AutoFlow — by Andika</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -30,8 +30,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .spinner{width:44px;height:44px;border:3px solid rgba(168,85,247,.2);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:12px;color:var(--primary-2);font-family:monospace;letter-spacing:2px;font-weight:700}
-
-/* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
 .login-card{width:100%;max-width:420px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:24px;padding:32px 24px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 50px rgba(168,85,247,.15);position:relative;overflow:hidden}
 .login-card::before{content:'';position:absolute;top:-40%;right:-30%;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.5;pointer-events:none}
@@ -52,8 +50,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;margin-top:6px;position:relative;z-index:1;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow)}
 .btn-primary:active{transform:scale(.97)}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
-
-/* HEADER */
 .header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(244,114,182,.15));border:1px solid var(--primary);border-radius:20px;margin-bottom:14px;position:relative;overflow:hidden}
 .header::before{content:'';position:absolute;top:-50%;right:-20%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.35;pointer-events:none}
 .header-left{position:relative;z-index:1}
@@ -63,22 +59,16 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 .btn-logout{padding:8px 14px;background:rgba(244,63,94,.15);border:1px solid var(--danger);border-radius:10px;color:var(--danger);font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;position:relative;z-index:1;letter-spacing:.5px}
 .btn-logout:active{background:var(--danger);color:#fff}
-
-/* WELCOME BANNER */
 .welcome{padding:18px;background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(244,114,182,.12));border:1px solid var(--gold);border-radius:18px;margin-bottom:14px;position:relative;overflow:hidden;animation:slideIn .4s ease-out}
 @keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .welcome::before{content:'';position:absolute;top:-40%;right:-15%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,.4),transparent 70%);pointer-events:none}
 .welcome-title{font-size:16px;font-weight:900;color:var(--gold);letter-spacing:1px;margin-bottom:6px;position:relative;z-index:1}
 .welcome-title span{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .welcome-text{font-size:12px;color:var(--text-dim);line-height:1.6;font-style:italic;position:relative;z-index:1}
-
-/* CARD */
 .card{background:var(--bg-2);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;position:relative}
 .card::before{content:'';position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent);opacity:.5}
 .card-label{font-size:10px;color:var(--primary-2);letter-spacing:2px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-family:monospace;text-transform:uppercase}
 .card-label::before{content:'//';color:var(--accent);font-weight:700}
-
-/* SETTING */
 .setting-row{margin-bottom:14px}
 .setting-label{font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-bottom:6px;font-weight:700;font-family:monospace}
 .target-value{font-size:36px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:8px 0;font-family:monospace;text-shadow:0 0 30px var(--primary-glow)}
@@ -91,33 +81,38 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .btn-save{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:900;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow);margin-top:8px}
 .btn-save:active{transform:scale(.97)}
 .btn-save:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
-
-/* GUIDE */
+.url-input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border-2);border-radius:12px;color:var(--text);font-size:13px;font-family:inherit;margin-bottom:10px}
+.url-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
+.url-input::placeholder{color:var(--text-mute);font-style:italic}
+.btn-flow{width:100%;padding:16px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:900;letter-spacing:2px;cursor:pointer;transition:transform .15s;font-family:inherit;box-shadow:0 8px 30px var(--primary-glow)}
+.btn-flow:active{transform:scale(.97)}
+.btn-flow:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.hint{font-size:10px;color:var(--text-mute);line-height:1.6;padding:10px 12px;background:rgba(168,85,247,.06);border-left:3px solid var(--primary);border-radius:6px;margin-top:8px;font-style:italic}
+.hint b{color:var(--primary-2)}
 .guide-item{display:flex;gap:12px;padding:12px;background:var(--bg);border-radius:10px;margin-bottom:8px;align-items:flex-start}
 .guide-num{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff;flex-shrink:0}
 .guide-text{flex:1;font-size:12px;color:var(--text-dim);line-height:1.6}
 .guide-text b{color:var(--primary-2)}
-
 .status-badge{padding:12px 14px;background:rgba(34,211,164,.15);border:1px solid var(--success);border-radius:12px;color:var(--success);font-size:12px;font-weight:700;text-align:center;font-family:monospace;letter-spacing:1px;margin-bottom:14px}
-
 .tips{padding:14px;background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(244,114,182,.08));border:1px solid rgba(251,191,36,.3);border-radius:14px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start}
 .tips-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 15px rgba(251,191,36,.4)}
 .tips-content{flex:1;min-width:0}
 .tips-label{font-size:9px;color:var(--gold);letter-spacing:2px;font-family:monospace;font-weight:800;margin-bottom:4px}
 .tips-text{font-size:11px;color:var(--text-dim);line-height:1.6;font-style:italic}
-
+.history-item{padding:12px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.history-title{font-size:12px;font-weight:700;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-meta{font-size:10px;color:var(--text-mute);font-family:monospace}
+.history-status{padding:4px 10px;background:rgba(34,211,164,.15);border:1px solid var(--success);border-radius:8px;font-size:10px;font-weight:700;color:var(--success);font-family:monospace}
 .footer{text-align:center;padding:24px 10px 10px;font-family:monospace;font-size:10px;color:var(--text-mute);letter-spacing:1.5px;position:relative;z-index:1}
 .footer-title{font-size:12px;font-weight:800;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;margin-bottom:6px}
 .footer-credit{color:var(--gold);font-weight:700;letter-spacing:1px;margin-top:4px}
 .footer-credit b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:900}
 .footer-tengil{font-size:9px;color:var(--text-mute);margin-top:8px;font-style:italic;letter-spacing:1px}
-
 .toast-wrap{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:min(360px,90vw)}
 .toast{padding:12px 16px;border-radius:12px;background:rgba(18,10,30,.98);border:1px solid var(--primary);color:var(--text);font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 25px var(--primary-glow);animation:toastIn .3s ease-out;display:flex;align-items:center;gap:10px;font-weight:600}
 .toast.success{border-color:var(--success)}
 .toast.error{border-color:var(--danger)}
 @keyframes toastIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-
 @media (max-width:480px){
   .app{padding:12px}
   .header{padding:14px}
@@ -134,15 +129,14 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   <div class="loading-text">BENTAR BRE, LAGI LOAD...</div>
 </div>
 
-<!-- LOGIN -->
 <div x-show="ready && !user" class="login-wrap">
   <div class="login-card">
     <div class="login-icon">⚡</div>
     <div class="login-title">ZENKAI</div>
-    <div class="login-sub">// AUTOFILL CONTROL</div>
+    <div class="login-sub">// AUTOFLOW v2.0</div>
     <div class="login-by">⚡ DIBIKIN SAMA ANDIKA ⚡</div>
     <div class="login-tag">
-      Kasih gw <b>target nilai</b>, gw hajar di <b>Google Form</b> 🔥
+      Kasih gw <b>URL Google Form</b>, gw hajar semua soal. Lu duduk manis 🔥
     </div>
     <div class="tab-row">
       <button class="tab-btn" :class="{active: authMode==='login'}" @click="authMode='login'">MASUK</button>
@@ -163,78 +157,101 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
 </div>
 
-<!-- MAIN -->
 <div x-show="ready && user" class="app">
   <header class="header">
     <div class="header-left">
-      <div class="header-title">⚡ ZENKAI AUTOFILL</div>
+      <div class="header-title">⚡ ZENKAI AUTOFLOW</div>
       <div class="header-sub">
         <span class="dot"></span>
         <span x-text="profile?.username || 'Sobat'"></span>
         <span>·</span>
-        <span>v1.0</span>
+        <span>v2.0</span>
       </div>
     </div>
     <button class="btn-logout" @click="logout()">KELUAR</button>
   </header>
 
-  <!-- WELCOME -->
   <div class="welcome">
-    <div class="welcome-title">👋 Halo, <span x-text="profile?.username || 'Sobat Zenkai'"></span>!</div>
+    <div class="welcome-title">👋 Halo, <span x-text="profile?.username || 'Sobat'"></span>!</div>
     <div class="welcome-text" x-text="welcomeText"></div>
   </div>
 
-  <div class="status-badge">
-    <span>✓ SISTEM AKTIF · EXTENSION SIAP DIPASANG</span>
-  </div>
-
   <div class="card">
-    <div class="card-label">PENGATURAN AUTO-FILL</div>
-
+    <div class="card-label">🎯 TARGET NILAI</div>
     <div class="setting-row">
-      <div class="setting-label">🎯 TARGET NILAI (0-100)</div>
       <div class="target-value" x-text="targetScore"></div>
       <input type="range" min="0" max="100" x-model.number="targetScore" class="target-slider">
       <div class="target-desc" x-text="getTargetDesc()"></div>
     </div>
-
-    <div class="setting-row">
-      <div class="setting-label">📚 MATA PELAJARAN</div>
-      <div class="mode-grid">
-        <button class="mode-btn" :class="{active: mode==='umum'}" @click="mode='umum'">💡 Umum</button>
-        <button class="mode-btn" :class="{active: mode==='mtk'}" @click="mode='mtk'">🧮 MTK</button>
-        <button class="mode-btn" :class="{active: mode==='fisika'}" @click="mode='fisika'">⚛️ Fisika</button>
-        <button class="mode-btn" :class="{active: mode==='kimia'}" @click="mode='kimia'">🧪 Kimia</button>
-      </div>
-    </div>
-
-    <button class="btn-save" @click="saveSettings()" :disabled="saving">
-      <span x-text="saving ? '⏳ MENYIMPAN...' : '💾 SIMPAN PENGATURAN'"></span>
-    </button>
   </div>
 
   <div class="card">
-    <div class="card-label">CARA PAKAI</div>
+    <div class="card-label">📚 MATA PELAJARAN</div>
+    <div class="mode-grid">
+      <button class="mode-btn" :class="{active: mode==='umum'}" @click="mode='umum'">💡 Umum</button>
+      <button class="mode-btn" :class="{active: mode==='mtk'}" @click="mode='mtk'">🧮 MTK</button>
+      <button class="mode-btn" :class="{active: mode==='fisika'}" @click="mode='fisika'">⚛️ Fisika</button>
+      <button class="mode-btn" :class="{active: mode==='kimia'}" @click="mode='kimia'">🧪 Kimia</button>
+    </div>
+    <button class="btn-save" @click="saveSettings()" :disabled="saving" style="margin-top:14px">
+      <span x-text="saving ? '⏳ MENYIMPAN...' : '💾 SIMPAN SETTING'"></span>
+    </button>
+  </div>
+
+  <div class="card" style="border-color:var(--primary)">
+    <div class="card-label">🚀 MULAI AUTO-FLOW</div>
+    <input type="text" x-model="formUrl" class="url-input" placeholder="Paste URL Google Form di sini...">
+    <button class="btn-flow" @click="startAutoFlow()" :disabled="starting">
+      <span x-text="starting ? '⏳ MEMBUKA FORM...' : '🚀 MULAI AUTO-FLOW'"></span>
+    </button>
+    <div class="hint">
+      <b>💡 Cara pakai:</b><br>
+      1. Paste URL Google Form di atas<br>
+      2. Tap <b>MULAI AUTO-FLOW</b><br>
+      3. Form bakal kebuka otomatis + overlay progress muncul<br>
+      4. Tunggu AI isi soal satu-satu<br>
+      5. Tap <b>SELESAI</b> → balik ke web
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📖 CARA PAKAI</div>
     <div class="guide-item">
       <div class="guide-num">1</div>
-      <div class="guide-text">Buka <b>Lemur Browser</b>, install extension <b>Zenkai AutoFill</b></div>
+      <div class="guide-text">Set <b>target nilai</b> & <b>mapel</b> di atas</div>
     </div>
     <div class="guide-item">
       <div class="guide-num">2</div>
-      <div class="guide-text">Atur <b>target nilai</b> & <b>mapel</b> di atas, tap <b>SIMPAN</b></div>
+      <div class="guide-text">Paste <b>URL Google Form</b> di kolom atas</div>
     </div>
     <div class="guide-item">
       <div class="guide-num">3</div>
-      <div class="guide-text">Buka <b>Google Form</b> yang mau dijawab</div>
+      <div class="guide-text">Tap <b>MULAI AUTO-FLOW</b> → form kebuka otomatis</div>
     </div>
     <div class="guide-item">
       <div class="guide-num">4</div>
-      <div class="guide-text">Tap icon <b>Zenkai</b> di toolbar → <b>AUTO-FILL</b></div>
+      <div class="guide-text">Tunggu overlay selesai → tap <b>SELESAI</b></div>
     </div>
     <div class="guide-item">
       <div class="guide-num">5</div>
-      <div class="guide-text">Tunggu 15-30 detik → <b>semua soal keisi</b> ✨</div>
+      <div class="guide-text">Balik ke web, cek <b>history</b></div>
     </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📜 HISTORY AUTO-FLOW</div>
+    <div x-show="history.length===0" style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">
+      Belum ada history. Mulai auto-flow pertama lu! 🚀
+    </div>
+    <template x-for="(h, i) in history" :key="i">
+      <div class="history-item">
+        <div style="flex:1;min-width:0">
+          <div class="history-title" x-text="h.title"></div>
+          <div class="history-meta" x-text="h.time"></div>
+        </div>
+        <div class="history-status" x-text="h.filled + '/' + h.total"></div>
+      </div>
+    </template>
   </div>
 
   <div class="tips">
@@ -246,7 +263,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
 
   <div class="footer">
-    <div class="footer-title">⚡ ZENKAI AUTOFILL</div>
+    <div class="footer-title">⚡ ZENKAI AUTOFLOW</div>
     <div class="footer-credit">Dibikin sambil ngopi sama <b>Andika</b> ☕</div>
     <div class="footer-tengil">"Kerjain sampe kelar, gausah mikir. Gw yang mikir."</div>
   </div>
@@ -278,16 +295,19 @@ function zenkaiWeb() {
     targetScore: 90,
     mode: 'umum',
     saving: false,
+    starting: false,
+    formUrl: '',
+    history: [],
     toasts: [],
     toastId: 0,
-    welcomeText: 'Siap hajar soal hari ini? Atur target, buka Google Form, tap AUTO-FILL. Sisanya gw yang kerja. 😎',
+    welcomeText: 'Siap hajar soal hari ini? Atur target, paste URL form, tap MULAI. Sisanya gw yang kerja. 😎',
     welcomeList: [
-      'Siap hajar soal hari ini? Atur target, buka Google Form, tap AUTO-FILL. Sisanya gw yang kerja. 😎',
+      'Siap hajar soal hari ini? Atur target, paste URL form, tap MULAI. Sisanya gw yang kerja. 😎',
       'PR numpuk? Chill, paste aja. Gw hajar sampe kelar. 🗿',
       'Nilai jelek bukan akhir dunia. Yang penting lu udah coba. 😌',
       'Otak lu capek? Pake otak gw aja. Gratis kok. 🔥',
       'Gw gak pernah ngantuk, gak pernah ngeluh, gak minta gaji. Perfect employee. 🤖',
-      'Gausah mikir kaya mau ngerjain sendiri. Gw yang mikir, lu tinggal duduk manis. 💪',
+      'Gausah mikir kaya mau ngerjain sendiri. Gw yang mikir, lu duduk manis. 💪',
       'Semangat bre! Satu soal satu langkah, kelar deh. 🚀'
     ],
     tipsText: 'Set target 90 doang biar gak ketara. 100 juga bisa kalo lu pede. 😎',
@@ -296,14 +316,18 @@ function zenkaiWeb() {
       'Target 0-100, atur sesuka hati. Gausah takut kena guru. 🤙',
       'Soal 50 nomer? Chill, AI gw kuat sampe 100. 🔥',
       'Yang penting setting target, sisanya gw yang kerja. 💪',
-      'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw. Pakai Zenkai aja. 😂',
-      'Nilai jelek itu bukan akhir dunia. Yang penting lu udah coba. Tapi kalo bisa pake Zenkai, kenapa nggak? 😏'
+      'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw. Pakai Zenkai aja. 😂'
     ],
 
     async init() {
-      // Random welcome & tips
       this.welcomeText = this.welcomeList[Math.floor(Math.random() * this.welcomeList.length)];
       this.tipsText = this.tipsList[Math.floor(Math.random() * this.tipsList.length)];
+
+      // Load history dari localStorage
+      try {
+        const saved = localStorage.getItem('zenkai_history');
+        if (saved) this.history = JSON.parse(saved);
+      } catch (e) {}
 
       try {
         const { data: { session } } = await sb.auth.getSession();
@@ -311,6 +335,7 @@ function zenkaiWeb() {
           this.user = session.user;
           await this.loadProfile();
           await this.loadSettings();
+          this.syncToExtension();
         }
       } catch (e) { console.error(e); }
       this.ready = true;
@@ -320,26 +345,43 @@ function zenkaiWeb() {
           this.user = session.user;
           await this.loadProfile();
           await this.loadSettings();
+          this.syncToExtension();
         } else {
           this.user = null;
           this.profile = null;
         }
       });
+
+      // Listen pesan dari extension
+      if (window.chrome && chrome.runtime && chrome.runtime.onMessage) {
+        chrome.runtime.onMessage.addListener((msg) => {
+          if (msg.action === 'flowCompleted') {
+            this.addHistory({
+              title: msg.url ? 'Form: ' + msg.url.split('/').pop().substring(0, 20) : 'Google Form',
+              time: new Date().toLocaleString('id-ID'),
+              total: msg.total,
+              filled: msg.filled
+            });
+            this.showToast('🎉 Auto-flow selesai! ' + msg.filled + '/' + msg.total, 'success');
+          }
+          if (msg.action === 'requestSync') {
+            this.syncToExtension();
+          }
+        });
+      }
     },
 
     async loadProfile() {
       if (!this.user) return;
       try {
         const { data } = await sb.from('profiles').select('*').eq('id', this.user.id).maybeSingle();
-        if (data) {
-          this.profile = data;
-        } else {
-          // Kalau user baru, coba ambil dari metadata auth
+        if (data) this.profile = data;
+        else {
           const metaName = this.user.user_metadata?.username;
           this.profile = { username: metaName || this.user.email?.split('@')[0] || 'Sobat Zenkai' };
         }
       } catch (e) {
-        this.profile = { username: this.user.email?.split('@')[0] || 'Sobat Zenkai' };
+        this.profile = { username: this.user.email?.split('@')[0] || 'Sobat' };
       }
     },
 
@@ -362,12 +404,8 @@ function zenkaiWeb() {
     async saveSettings() {
       if (!this.user) return;
       this.saving = true;
-
-      // Selalu simpan ke localStorage
       localStorage.setItem('zenkai_target', this.targetScore);
       localStorage.setItem('zenkai_mode', this.mode);
-
-      // Coba simpan ke Supabase
       try {
         const { error } = await sb.from('zenkai_autofill_settings').upsert({
           user_id: this.user.id,
@@ -376,12 +414,94 @@ function zenkaiWeb() {
           updated_at: new Date().toISOString()
         }, { onConflict: 'user_id' });
         if (error) throw error;
-        this.showToast('🔥 Setting tersimpan! Extension bakal pake ini', 'success');
+        this.showToast('🔥 Setting tersimpan!', 'success');
       } catch (e) {
-        this.showToast('✅ Setting tersimpan di HP lu', 'success');
+        this.showToast('✅ Setting tersimpan di HP', 'success');
       } finally {
         this.saving = false;
+        this.syncToExtension();
       }
+    },
+
+    // Kirim setting ke extension via localStorage
+    async syncToExtension() {
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const token = session?.session?.access_token || '';
+        const payload = {
+          zenkai_target: this.targetScore,
+          zenkai_mode: this.mode,
+          zenkai_token: token,
+          zenkai_username: this.profile?.username || 'User'
+        };
+        localStorage.setItem('zenkai_sync', JSON.stringify(payload));
+
+        // Kirim pesan ke extension (kalau ada)
+        if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
+          chrome.runtime.sendMessage({
+            action: 'syncSettings',
+            target: this.targetScore,
+            mode: this.mode,
+            token: token,
+            username: payload.zenkai_username
+          }).catch(() => {});
+        }
+      } catch (e) {}
+    },
+
+    // Mulai auto-flow
+    async startAutoFlow() {
+      if (!this.formUrl.trim()) {
+        this.showToast('❌ Paste URL Google Form dulu bre!', 'error');
+        return;
+      }
+      if (!this.formUrl.includes('docs.google.com/forms')) {
+        this.showToast('❌ Itu bukan URL Google Form bre!', 'error');
+        return;
+      }
+
+      this.starting = true;
+      try {
+        await this.saveSettings();
+
+        const { data: { session } } = await sb.auth.getSession();
+        const token = session?.session?.access_token || '';
+
+        // Kirim ke extension via chrome.runtime (kalau web dibuka di Lemur)
+        if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
+          chrome.runtime.sendMessage({
+            action: 'startAutoFlow',
+            url: this.formUrl,
+            target: this.targetScore,
+            mode: this.mode,
+            token: token,
+            username: this.profile?.username || 'User'
+          }, (res) => {
+            if (res && res.ok) {
+              this.showToast('🚀 Form kebuka! Tunggu overlay muncul.', 'success');
+            } else {
+              this.showToast('⚠️ Extension belum aktif. Buka manual di tab baru.', 'warning');
+              window.open(this.formUrl, '_blank');
+            }
+          });
+        } else {
+          // Fallback: buka di tab baru biasa
+          window.open(this.formUrl, '_blank');
+          this.showToast('🚀 Form kebuka! Tap icon Zenkai → AUTO-FLOW', 'success');
+        }
+      } catch (e) {
+        this.showToast('❌ ' + e.message, 'error');
+      } finally {
+        this.starting = false;
+      }
+    },
+
+    addHistory(item) {
+      this.history.unshift(item);
+      if (this.history.length > 20) this.history = this.history.slice(0, 20);
+      try {
+        localStorage.setItem('zenkai_history', JSON.stringify(this.history));
+      } catch (e) {}
     },
 
     async submitAuth() {
