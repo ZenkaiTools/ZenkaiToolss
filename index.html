@@ -33,13 +33,14 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
 /* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
-.login-card{width:100%;max-width:400px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:24px;padding:32px 24px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 50px rgba(168,85,247,.15);position:relative;overflow:hidden}
+.login-card{width:100%;max-width:420px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:24px;padding:32px 24px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 50px rgba(168,85,247,.15);position:relative;overflow:hidden}
 .login-card::before{content:'';position:absolute;top:-40%;right:-30%;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.5;pointer-events:none}
 .login-icon{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:34px;box-shadow:0 0 40px var(--primary-glow);position:relative;z-index:1;animation:pulseGlow 2.5s ease-in-out infinite}
 @keyframes pulseGlow{0%,100%{box-shadow:0 0 40px var(--primary-glow)}50%{box-shadow:0 0 60px var(--primary-glow),0 0 90px var(--accent-glow)}}
 .login-title{font-size:26px;font-weight:900;letter-spacing:6px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:6px;position:relative;z-index:1}
 .login-sub{font-size:11px;color:var(--text-mute);letter-spacing:3px;text-align:center;margin-bottom:8px;font-family:monospace;position:relative;z-index:1}
-.login-tag{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:24px;font-style:italic;position:relative;z-index:1;line-height:1.5}
+.login-by{font-size:11px;color:var(--gold);letter-spacing:2px;text-align:center;margin-bottom:14px;font-weight:700;font-family:monospace;position:relative;z-index:1}
+.login-tag{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:24px;font-style:italic;position:relative;z-index:1;line-height:1.6}
 .login-tag b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .tab-row{display:flex;gap:6px;margin-bottom:18px;background:var(--bg);padding:4px;border-radius:12px;position:relative;z-index:1}
 .tab-btn{flex:1;padding:11px;background:transparent;border:none;border-radius:9px;color:var(--text-dim);font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;font-family:inherit}
@@ -47,7 +48,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .field{margin-bottom:12px;position:relative;z-index:1}
 .field input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border-2);border-radius:12px;color:var(--text);font-size:14px;font-family:inherit;transition:all .2s}
 .field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
-.field input::placeholder{color:var(--text-mute)}
+.field input::placeholder{color:var(--text-mute);font-style:italic}
 .btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;margin-top:6px;position:relative;z-index:1;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow)}
 .btn-primary:active{transform:scale(.97)}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
@@ -56,12 +57,20 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(244,114,182,.15));border:1px solid var(--primary);border-radius:20px;margin-bottom:14px;position:relative;overflow:hidden}
 .header::before{content:'';position:absolute;top:-50%;right:-20%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.35;pointer-events:none}
 .header-left{position:relative;z-index:1}
-.header-title{font-size:16px;font-weight:900;letter-spacing:3px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.header-title{font-size:15px;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
 .header-sub{font-size:11px;color:var(--text-dim);font-family:monospace;letter-spacing:1px;display:flex;align-items:center;gap:6px}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 .btn-logout{padding:8px 14px;background:rgba(244,63,94,.15);border:1px solid var(--danger);border-radius:10px;color:var(--danger);font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;position:relative;z-index:1;letter-spacing:.5px}
 .btn-logout:active{background:var(--danger);color:#fff}
+
+/* WELCOME BANNER */
+.welcome{padding:18px;background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(244,114,182,.12));border:1px solid var(--gold);border-radius:18px;margin-bottom:14px;position:relative;overflow:hidden;animation:slideIn .4s ease-out}
+@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.welcome::before{content:'';position:absolute;top:-40%;right:-15%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,.4),transparent 70%);pointer-events:none}
+.welcome-title{font-size:16px;font-weight:900;color:var(--gold);letter-spacing:1px;margin-bottom:6px;position:relative;z-index:1}
+.welcome-title span{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.welcome-text{font-size:12px;color:var(--text-dim);line-height:1.6;font-style:italic;position:relative;z-index:1}
 
 /* CARD */
 .card{background:var(--bg-2);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;position:relative}
@@ -72,14 +81,13 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 /* SETTING */
 .setting-row{margin-bottom:14px}
 .setting-label{font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-bottom:6px;font-weight:700;font-family:monospace}
-.setting-input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border-2);border-radius:12px;color:var(--text);font-size:15px;font-family:inherit;font-weight:700}
-.setting-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
+.target-value{font-size:36px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:8px 0;font-family:monospace;text-shadow:0 0 30px var(--primary-glow)}
 .target-slider{width:100%;-webkit-appearance:none;height:8px;border-radius:4px;background:var(--bg-3);outline:none;margin:10px 0}
-.target-slider::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));cursor:pointer;box-shadow:0 0 15px var(--primary-glow);border:2px solid var(--bg)}
-.target-value{font-size:32px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:8px 0;font-family:monospace}
+.target-slider::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));cursor:pointer;box-shadow:0 0 20px var(--primary-glow);border:2px solid var(--bg)}
+.target-desc{font-size:11px;color:var(--text-mute);text-align:center;margin-top:4px;font-style:italic;min-height:18px}
 .mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .mode-btn{padding:10px 6px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;color:var(--text-dim);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center;transition:all .2s}
-.mode-btn.active{background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(244,114,182,.2));border-color:var(--primary);color:var(--primary-2)}
+.mode-btn.active{background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(244,114,182,.2));border-color:var(--primary);color:var(--primary-2);transform:scale(1.05)}
 .btn-save{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:900;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow);margin-top:8px}
 .btn-save:active{transform:scale(.97)}
 .btn-save:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
@@ -90,25 +98,20 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .guide-text{flex:1;font-size:12px;color:var(--text-dim);line-height:1.6}
 .guide-text b{color:var(--primary-2)}
 
-/* STATUS */
-.status-badge{padding:10px 14px;background:rgba(34,211,164,.15);border:1px solid var(--success);border-radius:10px;color:var(--success);font-size:12px;font-weight:700;text-align:center;font-family:monospace;letter-spacing:1px;margin-bottom:12px}
-.status-badge.warn{background:rgba(251,191,36,.15);border-color:var(--warning);color:var(--warning)}
+.status-badge{padding:12px 14px;background:rgba(34,211,164,.15);border:1px solid var(--success);border-radius:12px;color:var(--success);font-size:12px;font-weight:700;text-align:center;font-family:monospace;letter-spacing:1px;margin-bottom:14px}
 
-/* TIPS */
 .tips{padding:14px;background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(244,114,182,.08));border:1px solid rgba(251,191,36,.3);border-radius:14px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start}
 .tips-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 15px rgba(251,191,36,.4)}
 .tips-content{flex:1;min-width:0}
 .tips-label{font-size:9px;color:var(--gold);letter-spacing:2px;font-family:monospace;font-weight:800;margin-bottom:4px}
 .tips-text{font-size:11px;color:var(--text-dim);line-height:1.6;font-style:italic}
 
-/* FOOTER */
 .footer{text-align:center;padding:24px 10px 10px;font-family:monospace;font-size:10px;color:var(--text-mute);letter-spacing:1.5px;position:relative;z-index:1}
 .footer-title{font-size:12px;font-weight:800;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;margin-bottom:6px}
 .footer-credit{color:var(--gold);font-weight:700;letter-spacing:1px;margin-top:4px}
 .footer-credit b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:900}
 .footer-tengil{font-size:9px;color:var(--text-mute);margin-top:8px;font-style:italic;letter-spacing:1px}
 
-/* TOAST */
 .toast-wrap{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:min(360px,90vw)}
 .toast{padding:12px 16px;border-radius:12px;background:rgba(18,10,30,.98);border:1px solid var(--primary);color:var(--text);font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 25px var(--primary-glow);animation:toastIn .3s ease-out;display:flex;align-items:center;gap:10px;font-weight:600}
 .toast.success{border-color:var(--success)}
@@ -119,7 +122,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   .app{padding:12px}
   .header{padding:14px}
   .login-card{padding:24px 20px}
-  .header-title{font-size:14px}
+  .header-title{font-size:13px}
 }
 </style>
 </head>
@@ -128,7 +131,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
 <div x-show="!ready" class="loading-screen">
   <div class="spinner"></div>
-  <div class="loading-text">LOADING ZENKAI...</div>
+  <div class="loading-text">BENTAR BRE, LAGI LOAD...</div>
 </div>
 
 <!-- LOGIN -->
@@ -137,21 +140,22 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="login-icon">⚡</div>
     <div class="login-title">ZENKAI</div>
     <div class="login-sub">// AUTOFILL CONTROL</div>
+    <div class="login-by">⚡ DIBIKIN SAMA ANDIKA ⚡</div>
     <div class="login-tag">
-      Atur target di sini, <b>extension</b> yang hajar di Google Form 🔥
+      Kasih gw <b>target nilai</b>, gw hajar di <b>Google Form</b> 🔥
     </div>
     <div class="tab-row">
       <button class="tab-btn" :class="{active: authMode==='login'}" @click="authMode='login'">MASUK</button>
       <button class="tab-btn" :class="{active: authMode==='register'}" @click="authMode='register'">DAFTAR</button>
     </div>
     <div class="field">
-      <input type="email" x-model="form.email" placeholder="Email lu" autocomplete="email">
+      <input type="email" x-model="form.email" placeholder="Email lu bre..." autocomplete="email">
     </div>
     <div x-show="authMode==='register'" class="field">
-      <input type="text" x-model="form.username" placeholder="Username kece">
+      <input type="text" x-model="form.username" placeholder="Nama keren lu..." maxlength="20">
     </div>
     <div class="field">
-      <input type="password" x-model="form.password" placeholder="Password rahasia" autocomplete="current-password">
+      <input type="password" x-model="form.password" placeholder="Password rahasia..." autocomplete="current-password">
     </div>
     <button class="btn-primary" @click="submitAuth()" :disabled="authLoading">
       <span x-text="authLoading ? 'BENTAR YA...' : (authMode==='login' ? '🚀 GAS MASUK' : '✨ GAS DAFTAR')"></span>
@@ -166,14 +170,22 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="header-title">⚡ ZENKAI AUTOFILL</div>
       <div class="header-sub">
         <span class="dot"></span>
-        <span x-text="profile?.username || 'Sobat Zenkai'"></span>
+        <span x-text="profile?.username || 'Sobat'"></span>
+        <span>·</span>
+        <span>v1.0</span>
       </div>
     </div>
     <button class="btn-logout" @click="logout()">KELUAR</button>
   </header>
 
-  <div class="status-badge" :class="{warn: !extensionConnected}">
-    <span x-text="extensionConnected ? '✓ EXTENSION TERHUBUNG' : '⚠ BUKA LEMUR + INSTALL EXTENSION'"></span>
+  <!-- WELCOME -->
+  <div class="welcome">
+    <div class="welcome-title">👋 Halo, <span x-text="profile?.username || 'Sobat Zenkai'"></span>!</div>
+    <div class="welcome-text" x-text="welcomeText"></div>
+  </div>
+
+  <div class="status-badge">
+    <span>✓ SISTEM AKTIF · EXTENSION SIAP DIPASANG</span>
   </div>
 
   <div class="card">
@@ -181,11 +193,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
     <div class="setting-row">
       <div class="setting-label">🎯 TARGET NILAI (0-100)</div>
-      <div class="target-value" x-text="targetScore + ' / 100'"></div>
+      <div class="target-value" x-text="targetScore"></div>
       <input type="range" min="0" max="100" x-model.number="targetScore" class="target-slider">
-      <div style="font-size:11px;color:var(--text-mute);text-align:center;margin-top:4px;font-style:italic">
-        <span x-text="getTargetDesc()"></span>
-      </div>
+      <div class="target-desc" x-text="getTargetDesc()"></div>
     </div>
 
     <div class="setting-row">
@@ -207,11 +217,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="card-label">CARA PAKAI</div>
     <div class="guide-item">
       <div class="guide-num">1</div>
-      <div class="guide-text">Buka <b>Lemur Browser</b>, install extension <b>Zenkai AutoFill</b> (sekali aja)</div>
+      <div class="guide-text">Buka <b>Lemur Browser</b>, install extension <b>Zenkai AutoFill</b></div>
     </div>
     <div class="guide-item">
       <div class="guide-num">2</div>
-      <div class="guide-text">Atur <b>target nilai</b> & <b>mata pelajaran</b> di atas, terus tap <b>SIMPAN</b></div>
+      <div class="guide-text">Atur <b>target nilai</b> & <b>mapel</b> di atas, tap <b>SIMPAN</b></div>
     </div>
     <div class="guide-item">
       <div class="guide-num">3</div>
@@ -219,11 +229,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </div>
     <div class="guide-item">
       <div class="guide-num">4</div>
-      <div class="guide-text">Tap icon <b>Zenkai</b> di toolbar Lemur → tap <b>AUTO-FILL</b></div>
+      <div class="guide-text">Tap icon <b>Zenkai</b> di toolbar → <b>AUTO-FILL</b></div>
     </div>
     <div class="guide-item">
       <div class="guide-num">5</div>
-      <div class="guide-text">Tunggu 15-30 detik → <b>semua soal keisi otomatis</b> ✨</div>
+      <div class="guide-text">Tunggu 15-30 detik → <b>semua soal keisi</b> ✨</div>
     </div>
   </div>
 
@@ -268,20 +278,33 @@ function zenkaiWeb() {
     targetScore: 90,
     mode: 'umum',
     saving: false,
-    extensionConnected: false,
     toasts: [],
     toastId: 0,
-    tipsText: 'Paste URL soal lu, gw hajar sampe kelar. Gausah mikir. 🗿',
+    welcomeText: 'Siap hajar soal hari ini? Atur target, buka Google Form, tap AUTO-FILL. Sisanya gw yang kerja. 😎',
+    welcomeList: [
+      'Siap hajar soal hari ini? Atur target, buka Google Form, tap AUTO-FILL. Sisanya gw yang kerja. 😎',
+      'PR numpuk? Chill, paste aja. Gw hajar sampe kelar. 🗿',
+      'Nilai jelek bukan akhir dunia. Yang penting lu udah coba. 😌',
+      'Otak lu capek? Pake otak gw aja. Gratis kok. 🔥',
+      'Gw gak pernah ngantuk, gak pernah ngeluh, gak minta gaji. Perfect employee. 🤖',
+      'Gausah mikir kaya mau ngerjain sendiri. Gw yang mikir, lu tinggal duduk manis. 💪',
+      'Semangat bre! Satu soal satu langkah, kelar deh. 🚀'
+    ],
+    tipsText: 'Set target 90 doang biar gak ketara. 100 juga bisa kalo lu pede. 😎',
     tipsList: [
       'Set target 90 doang biar gak ketara. 100 juga bisa kalo lu pede. 😎',
       'Target 0-100, atur sesuka hati. Gausah takut kena guru. 🤙',
       'Soal 50 nomer? Chill, AI gw kuat sampe 100. 🔥',
       'Yang penting setting target, sisanya gw yang kerja. 💪',
-      'Gw gak pernah ngeluh, gak pernah ngantuk. Perfect employee. 🤖'
+      'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw. Pakai Zenkai aja. 😂',
+      'Nilai jelek itu bukan akhir dunia. Yang penting lu udah coba. Tapi kalo bisa pake Zenkai, kenapa nggak? 😏'
     ],
 
     async init() {
+      // Random welcome & tips
+      this.welcomeText = this.welcomeList[Math.floor(Math.random() * this.welcomeList.length)];
       this.tipsText = this.tipsList[Math.floor(Math.random() * this.tipsList.length)];
+
       try {
         const { data: { session } } = await sb.auth.getSession();
         if (session?.user) {
@@ -291,6 +314,7 @@ function zenkaiWeb() {
         }
       } catch (e) { console.error(e); }
       this.ready = true;
+
       sb.auth.onAuthStateChange(async (event, session) => {
         if (session?.user) {
           this.user = session.user;
@@ -305,8 +329,18 @@ function zenkaiWeb() {
 
     async loadProfile() {
       if (!this.user) return;
-      const { data } = await sb.from('profiles').select('*').eq('id', this.user.id).maybeSingle();
-      this.profile = data || { username: this.user.email?.split('@')[0] || 'User' };
+      try {
+        const { data } = await sb.from('profiles').select('*').eq('id', this.user.id).maybeSingle();
+        if (data) {
+          this.profile = data;
+        } else {
+          // Kalau user baru, coba ambil dari metadata auth
+          const metaName = this.user.user_metadata?.username;
+          this.profile = { username: metaName || this.user.email?.split('@')[0] || 'Sobat Zenkai' };
+        }
+      } catch (e) {
+        this.profile = { username: this.user.email?.split('@')[0] || 'Sobat Zenkai' };
+      }
     },
 
     async loadSettings() {
@@ -316,13 +350,24 @@ function zenkaiWeb() {
         if (data) {
           this.targetScore = data.target_score || 90;
           this.mode = data.mode || 'umum';
+          return;
         }
-      } catch (e) { console.log('Setting belum ada, pakai default'); }
+      } catch (e) {}
+      const t = localStorage.getItem('zenkai_target');
+      const m = localStorage.getItem('zenkai_mode');
+      if (t) this.targetScore = parseInt(t);
+      if (m) this.mode = m;
     },
 
     async saveSettings() {
       if (!this.user) return;
       this.saving = true;
+
+      // Selalu simpan ke localStorage
+      localStorage.setItem('zenkai_target', this.targetScore);
+      localStorage.setItem('zenkai_mode', this.mode);
+
+      // Coba simpan ke Supabase
       try {
         const { error } = await sb.from('zenkai_autofill_settings').upsert({
           user_id: this.user.id,
@@ -331,12 +376,9 @@ function zenkaiWeb() {
           updated_at: new Date().toISOString()
         }, { onConflict: 'user_id' });
         if (error) throw error;
-        this.showToast('Setting tersimpan! Extension bakal pake ini 🔥', 'success');
+        this.showToast('🔥 Setting tersimpan! Extension bakal pake ini', 'success');
       } catch (e) {
-        // Kalau tabel belum ada, simpan ke localStorage sebagai fallback
-        localStorage.setItem('zenkai_target', this.targetScore);
-        localStorage.setItem('zenkai_mode', this.mode);
-        this.showToast('Setting tersimpan (local)', 'success');
+        this.showToast('✅ Setting tersimpan di HP lu', 'success');
       } finally {
         this.saving = false;
       }
@@ -351,25 +393,29 @@ function zenkaiWeb() {
             password: this.form.password
           });
           if (error) throw error;
-          this.showToast('Gas! Selamat datang 👋', 'success');
+          this.showToast('Gas! Selamat datang bre 👋', 'success');
         } else {
-          if (!this.form.username) throw new Error('Username wajib diisi');
+          if (!this.form.username || !this.form.username.trim()) {
+            throw new Error('Nama wajib diisi bre!');
+          }
           const { data, error } = await sb.auth.signUp({
             email: this.form.email,
             password: this.form.password,
-            options: { data: { username: this.form.username } }
+            options: { data: { username: this.form.username.trim() } }
           });
           if (error) throw error;
           if (data.user) {
-            await sb.from('profiles').upsert({
-              id: data.user.id,
-              username: this.form.username
-            });
+            try {
+              await sb.from('profiles').upsert({
+                id: data.user.id,
+                username: this.form.username.trim()
+              });
+            } catch (e) {}
           }
           this.showToast('Akun jadi! Gas masuk 🚀', 'success');
         }
       } catch (e) {
-        this.showToast(e.message || 'Gagal', 'error');
+        this.showToast(e.message || 'Gagal bre', 'error');
       } finally {
         this.authLoading = false;
       }
@@ -379,14 +425,15 @@ function zenkaiWeb() {
       await sb.auth.signOut();
       this.user = null;
       this.profile = null;
+      this.welcomeText = this.welcomeList[Math.floor(Math.random() * this.welcomeList.length)];
     },
 
     getTargetDesc() {
-      if (this.targetScore >= 95) return 'Nilai sempurna, semua bener 😎';
-      if (this.targetScore >= 80) return 'Nilai bagus, sengaja salah dikit 🤙';
-      if (this.targetScore >= 60) return 'Nilai cukup, biar keliatan natural 👍';
-      if (this.targetScore >= 40) return 'Nilai pas-pasan, santai aja 😅';
-      return 'Target rendah, buat eksperimen doang 🧪';
+      if (this.targetScore >= 95) return '😎 Nilai sempurna, semua bener';
+      if (this.targetScore >= 80) return '🤙 Nilai bagus, sengaja salah dikit';
+      if (this.targetScore >= 60) return '👍 Nilai cukup, biar keliatan natural';
+      if (this.targetScore >= 40) return '😅 Nilai pas-pasan, santai aja';
+      return '🧪 Target rendah, buat eksperimen doang';
     },
 
     showToast(msg, type = 'success') {
@@ -394,7 +441,7 @@ function zenkaiWeb() {
       this.toasts.push({ id, msg, type });
       setTimeout(() => {
         this.toasts = this.toasts.filter(t => t.id !== id);
-      }, 3000);
+      }, 3500);
     }
   };
 }
