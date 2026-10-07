@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#0a0612">
 <title>Zenkai AutoFlow — by Andika</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 <style>
@@ -47,6 +48,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .field input{width:100%;padding:16px 18px;background:var(--bg);border:1px solid var(--border-2);border-radius:12px;color:var(--text);font-size:16px;font-weight:700;font-family:inherit;transition:all .2s;text-align:center;letter-spacing:1px}
 .field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.2)}
 .field input::placeholder{color:var(--text-mute);font-style:italic;font-weight:400;letter-spacing:0}
+.field input.error{border-color:var(--danger);box-shadow:0 0 0 3px rgba(244,63,94,.2)}
+.error-msg{font-size:11px;color:var(--danger);text-align:center;margin-top:8px;font-family:monospace;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
+.error-msg::before{content:'⚠';font-size:14px}
 .btn-primary{width:100%;padding:16px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;margin-top:6px;position:relative;z-index:1;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow)}
 .btn-primary:active{transform:scale(.97)}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
@@ -94,7 +98,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .btn-save{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:900;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow);margin-top:12px}
 .btn-save:active{transform:scale(.97)}
 
-/* URL INPUT */
 .url-input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border-2);border-radius:12px;color:var(--text);font-size:13px;font-family:inherit;margin-bottom:10px}
 .url-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
 .url-input::placeholder{color:var(--text-mute);font-style:italic}
@@ -102,33 +105,28 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .btn-flow:active{transform:scale(.97)}
 .btn-flow:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
 
-/* GUIDE */
 .guide-item{display:flex;gap:12px;padding:12px;background:var(--bg);border-radius:10px;margin-bottom:8px;align-items:flex-start}
 .guide-num{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff;flex-shrink:0}
 .guide-text{flex:1;font-size:12px;color:var(--text-dim);line-height:1.6}
 .guide-text b{color:var(--primary-2)}
 
-/* TIPS */
 .tips{padding:14px;background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(244,114,182,.08));border:1px solid rgba(251,191,36,.3);border-radius:14px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start}
 .tips-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 15px rgba(251,191,36,.4)}
 .tips-content{flex:1;min-width:0}
 .tips-label{font-size:9px;color:var(--gold);letter-spacing:2px;font-family:monospace;font-weight:800;margin-bottom:4px}
 .tips-text{font-size:11px;color:var(--text-dim);line-height:1.6;font-style:italic}
 
-/* HISTORY */
 .history-item{padding:12px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .history-title{font-size:12px;font-weight:700;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .history-meta{font-size:10px;color:var(--text-mute);font-family:monospace}
 .history-status{padding:4px 10px;background:rgba(34,211,164,.15);border:1px solid var(--success);border-radius:8px;font-size:10px;font-weight:700;color:var(--success);font-family:monospace}
 
-/* FOOTER */
 .footer{text-align:center;padding:24px 10px 10px;font-family:monospace;font-size:10px;color:var(--text-mute);letter-spacing:1.5px;position:relative;z-index:1}
 .footer-title{font-size:12px;font-weight:800;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;margin-bottom:6px}
 .footer-credit{color:var(--gold);font-weight:700;letter-spacing:1px;margin-top:4px}
 .footer-credit b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:900}
 .footer-tengil{font-size:9px;color:var(--text-mute);margin-top:8px;font-style:italic;letter-spacing:1px}
 
-/* TOAST */
 .toast-wrap{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:min(360px,90vw)}
 .toast{padding:12px 16px;border-radius:12px;background:rgba(18,10,30,.98);border:1px solid var(--primary);color:var(--text);font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 25px var(--primary-glow);animation:toastIn .3s ease-out;display:flex;align-items:center;gap:10px;font-weight:600}
 .toast.success{border-color:var(--success)}
@@ -159,10 +157,10 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   <div class="login-card">
     <div class="login-icon">⚡</div>
     <div class="login-title">ZENKAI</div>
-    <div class="login-sub">// AUTOFLOW v3.0</div>
+    <div class="login-sub">// AUTOFLOW v3.3</div>
     <div class="login-by">⚡ DIBIKIN SAMA ANDIKA ⚡</div>
     <div class="login-tag">
-      Gausah ribet. Masukin <b>nama lu</b>, langsung gas. 🔥
+      Masukin <b>nama lu</b>, langsung gas. Gausah ribet. 🔥
     </div>
 
     <div class="field">
@@ -170,21 +168,27 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <input 
         type="text" 
         x-model="nameInput" 
+        :class="{error: nameError}"
         placeholder="Ketik nama lu bre..." 
         maxlength="20"
-        @keyup.enter="login()">
+        @keyup.enter="login()"
+        @input="nameError = ''">
+      <div x-show="nameError" class="error-msg" x-text="nameError"></div>
     </div>
 
-    <button class="btn-primary" @click="login()" :disabled="!nameInput.trim()">
-      <span>🚀 GAS MASUK</span>
+    <button class="btn-primary" @click="login()" :disabled="!nameInput.trim() || loggingIn">
+      <span x-text="loggingIn ? '⏳ MASUK...' : '🚀 GAS MASUK'"></span>
     </button>
+
+    <div style="text-align:center;margin-top:14px;font-size:10px;color:var(--text-mute);font-family:monospace;line-height:1.5">
+      ⚠️ Nama hanya bisa dipakai <b style="color:var(--primary-2)">1x</b>. Kalau udah dipakai orang lain, ganti nama lain.
+    </div>
   </div>
 </div>
 
 <!-- MAIN APP -->
 <div x-show="ready && userName" class="app">
 
-  <!-- HEADER -->
   <header class="header">
     <div class="header-left">
       <div class="avatar" x-text="userName.substring(0,2).toUpperCase()"></div>
@@ -199,12 +203,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <button class="btn-logout" @click="logout()">KELUAR</button>
   </header>
 
-  <!-- HERO -->
   <div class="hero">
-    <div class="hero-badge">ZENKAI AUTOFLOW v3.0</div>
-    <div class="hero-title">
-      Yo, <span x-text="userName"></span>! 👋
-    </div>
+    <div class="hero-badge">ZENKAI AUTOFLOW v3.3</div>
+    <div class="hero-title">Yo, <span x-text="userName"></span>! 👋</div>
     <div class="hero-sub">
       Gw <b>Zenkai AutoFlow</b> — asisten lu yang siap hajar semua soal Google Form.
       <b>Paste URL</b>, tap <b>MULAI</b>, terus duduk manis. 😎
@@ -212,7 +213,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="hero-tengil" x-text="heroTengil"></div>
   </div>
 
-  <!-- TARGET -->
   <div class="card">
     <div class="card-label">🎯 TARGET NILAI</div>
     <div class="target-value" x-text="targetScore"></div>
@@ -220,7 +220,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="target-desc" x-text="getTargetDesc()"></div>
   </div>
 
-  <!-- MAPEL -->
   <div class="card">
     <div class="card-label">📚 MATA PELAJARAN</div>
     <div class="mode-grid">
@@ -232,7 +231,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <button class="btn-save" @click="saveAndToast()">💾 SIMPAN SETTING</button>
   </div>
 
-  <!-- AUTO-FLOW -->
   <div class="card" style="border-color:var(--primary)">
     <div class="card-label">🚀 MULAI AUTO-FLOW</div>
     <input type="text" x-model="formUrl" class="url-input" placeholder="Paste URL Google Form di sini bre...">
@@ -240,11 +238,10 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <span x-text="starting ? '⏳ MEMBUKA FORM...' : '🚀 MULAI AUTO-FLOW'"></span>
     </button>
     <div style="font-size:10px;color:var(--text-mute);line-height:1.6;padding:10px 12px;background:rgba(168,85,247,.06);border-left:3px solid var(--primary);border-radius:6px;margin-top:10px;font-style:italic">
-      <b style="color:var(--primary-2)">💡 Tips:</b> Habis form kebuka, bakal muncul <b style="color:var(--primary-2)">tombol ⚡ AUTO-FLOW</b> di pojok kanan bawah form. Tap sekali, gw hajar semua soal! 🔥
+      <b style="color:var(--primary-2)">💡 Tips:</b> Habis form kebuka, bakal muncul tombol <b style="color:var(--primary-2)">⚡ AUTO-FLOW</b> di pojok kanan bawah form. Tap sekali, gw hajar semua soal! 🔥
     </div>
   </div>
 
-  <!-- GUIDE -->
   <div class="card">
     <div class="card-label">📖 CARA PAKAI (4 STEP DOANG)</div>
     <div class="guide-item">
@@ -257,7 +254,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </div>
     <div class="guide-item">
       <div class="guide-num">3</div>
-      <div class="guide-text">Form kebuka → tap tombol <b>⚡ AUTO-FLOW</b> (pojok kanan bawah form)</div>
+      <div class="guide-text">Form kebuka → tap tombol <b>⚡ AUTO-FLOW</b> (pojok kanan bawah)</div>
     </div>
     <div class="guide-item">
       <div class="guide-num">4</div>
@@ -265,7 +262,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </div>
   </div>
 
-  <!-- HISTORY -->
   <div class="card">
     <div class="card-label">📜 HISTORY</div>
     <div x-show="history.length===0" style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px;font-style:italic">
@@ -282,7 +278,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </template>
   </div>
 
-  <!-- TIPS -->
   <div class="tips">
     <div class="tips-icon">💡</div>
     <div class="tips-content">
@@ -291,7 +286,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </div>
   </div>
 
-  <!-- FOOTER -->
   <div class="footer">
     <div class="footer-title">⚡ ZENKAI AUTOFLOW</div>
     <div class="footer-credit">Dibikin sambil ngopi sama <b>Andika</b> ☕</div>
@@ -299,7 +293,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
 </div>
 
-<!-- TOASTS -->
 <div class="toast-wrap">
   <template x-for="t in toasts" :key="t.id">
     <div class="toast" :class="t.type">
@@ -310,11 +303,21 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 </div>
 
 <script>
+// ============================================
+// KONFIGURASI SUPABASE
+// ============================================
+const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 function zenkaiWeb() {
   return {
     ready: false,
     userName: '',
     nameInput: '',
+    nameError: '',
+    loggingIn: false,
     targetScore: 90,
     mode: 'umum',
     formUrl: '',
@@ -338,31 +341,29 @@ function zenkaiWeb() {
       'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw. 😂'
     ],
 
-    init() {
+    async init() {
       this.heroTengil = this.heroList[Math.floor(Math.random() * this.heroList.length)];
       this.tipsText = this.tipsList[Math.floor(Math.random() * this.tipsList.length)];
 
-      // Load dari localStorage
-      const savedName = localStorage.getItem('zenkai_name');
-      const savedTarget = localStorage.getItem('zenkai_target');
-      const savedMode = localStorage.getItem('zenkai_mode');
-      const savedHistory = localStorage.getItem('zenkai_history');
-
-      if (savedName) this.userName = savedName;
-      if (savedTarget) this.targetScore = parseInt(savedTarget);
-      if (savedMode) this.mode = savedMode;
-      if (savedHistory) {
-        try { this.history = JSON.parse(savedHistory); } catch (e) {}
-      }
+      // Cek session Supabase
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        if (session?.user) {
+          const savedName = localStorage.getItem('zenkai_name') || session.user.user_metadata?.username || '';
+          if (savedName) {
+            this.userName = savedName;
+            this.loadLocalSettings();
+          }
+        }
+      } catch (e) { console.error(e); }
 
       this.ready = true;
 
-      // Sync ke extension setelah ready
       if (this.userName) {
         setTimeout(() => this.syncToExtension(), 1500);
       }
 
-      // Listen pesan dari extension
+      // Listen dari extension
       if (window.chrome && chrome.runtime && chrome.runtime.onMessage) {
         try {
           chrome.runtime.onMessage.addListener((msg) => {
@@ -383,16 +384,117 @@ function zenkaiWeb() {
       }
     },
 
-    login() {
-      const name = this.nameInput.trim();
-      if (!name) return;
-      this.userName = name;
-      localStorage.setItem('zenkai_name', name);
-      this.showToast('Gas, ' + name + '! Selamat datang 👋', 'success');
-      setTimeout(() => this.syncToExtension(), 500);
+    loadLocalSettings() {
+      const savedTarget = localStorage.getItem('zenkai_target');
+      const savedMode = localStorage.getItem('zenkai_mode');
+      const savedHistory = localStorage.getItem('zenkai_history');
+      if (savedTarget) this.targetScore = parseInt(savedTarget);
+      if (savedMode) this.mode = savedMode;
+      if (savedHistory) {
+        try { this.history = JSON.parse(savedHistory); } catch (e) {}
+      }
     },
 
-    logout() {
+    // ============================================
+    // LOGIN ANONIM — Cek nama dulu, baru auto-register
+    // ============================================
+    async login() {
+      const name = this.nameInput.trim();
+      if (!name) return;
+
+      this.nameError = '';
+      this.loggingIn = true;
+
+      // Validasi nama
+      if (name.length < 3) {
+        this.nameError = 'Nama minimal 3 huruf bre!';
+        this.loggingIn = false;
+        return;
+      }
+      if (!/^[a-zA-Z0-9 _.-]+$/.test(name)) {
+        this.nameError = 'Nama cuma boleh huruf, angka, spasi, titik, minus';
+        this.loggingIn = false;
+        return;
+      }
+
+      try {
+        // ⚡ STEP 1: Cek nama udah dipakai atau belum di tabel profiles
+        const { data: existing, error: checkError } = await sb
+          .from('profiles')
+          .select('id, username')
+          .ilike('username', name)
+          .maybeSingle();
+
+        if (checkError && checkError.code !== 'PGRST116') {
+          // Error selain "not found"
+          console.log('Check error:', checkError);
+        }
+
+        if (existing) {
+          this.nameError = '❌ Nama sudah digunakan! Coba nama lain bre.';
+          this.loggingIn = false;
+          return;
+        }
+
+        // ⚡ STEP 2: Auto-generate email + password random
+        const randomStr = Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+        const email = `zenkai_${randomStr}@zenkai.local`;
+        const password = `zk_${randomStr}_${Math.random().toString(36).substring(2, 10)}`;
+
+        // ⚡ STEP 3: Register ke Supabase
+        const { data: authData, error: signupError } = await sb.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: { username: name }
+          }
+        });
+
+        if (signupError) {
+          if (signupError.message.toLowerCase().includes('already')) {
+            this.nameError = '❌ Nama sudah digunakan! Coba nama lain.';
+          } else {
+            this.nameError = 'Gagal daftar: ' + signupError.message;
+          }
+          this.loggingIn = false;
+          return;
+        }
+
+        if (!authData.user) {
+          this.nameError = 'Gagal bikin akun. Coba lagi.';
+          this.loggingIn = false;
+          return;
+        }
+
+        // ⚡ STEP 4: Insert ke tabel profiles
+        const { error: profileError } = await sb.from('profiles').insert({
+          id: authData.user.id,
+          username: name,
+          created_at: new Date().toISOString()
+        });
+
+        if (profileError) {
+          console.log('Profile insert error:', profileError);
+          // Lanjut aja, karena auth udah jalan
+        }
+
+        // ⚡ STEP 5: Sukses!
+        this.userName = name;
+        localStorage.setItem('zenkai_name', name);
+        this.loadLocalSettings();
+        this.showToast('Gas, ' + name + '! Selamat datang 🔥', 'success');
+        
+        setTimeout(() => this.syncToExtension(), 800);
+
+      } catch (e) {
+        this.nameError = 'Error: ' + e.message;
+      } finally {
+        this.loggingIn = false;
+      }
+    },
+
+    async logout() {
+      try { await sb.auth.signOut(); } catch (e) {}
       this.userName = '';
       this.nameInput = '';
       localStorage.removeItem('zenkai_name');
@@ -406,17 +508,25 @@ function zenkaiWeb() {
       this.showToast('🔥 Setting tersimpan!', 'success');
     },
 
-    syncToExtension() {
+    async syncToExtension() {
       try {
         localStorage.setItem('zenkai_target', this.targetScore);
         localStorage.setItem('zenkai_mode', this.mode);
         localStorage.setItem('zenkai_username', this.userName);
+
+        // Ambil token
+        let token = '';
+        try {
+          const { data: { session } } = await sb.auth.getSession();
+          token = session?.access_token || '';
+        } catch (e) {}
 
         if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
           chrome.runtime.sendMessage({
             action: 'syncSettings',
             target: this.targetScore,
             mode: this.mode,
+            token: token,
             username: this.userName
           }, () => {
             if (chrome.runtime.lastError) {}
