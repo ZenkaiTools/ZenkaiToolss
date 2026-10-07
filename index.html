@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#0a0612">
 <title>Zenkai AutoFlow — by Andika</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 <style>
@@ -22,7 +21,7 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{overflow-x:hidden;-webkit-text-size-adjust:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.5;-webkit-font-smoothing:antialiased}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 10% 10%,rgba(168,85,247,.12),transparent 40%),radial-gradient(circle at 90% 90%,rgba(244,114,182,.1),transparent 40%);pointer-events:none;z-index:0}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 10% 10%,rgba(168,85,247,.15),transparent 40%),radial-gradient(circle at 90% 90%,rgba(244,114,182,.12),transparent 40%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(168,85,247,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(168,85,247,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;animation:gridMove 20s linear infinite}
 @keyframes gridMove{0%{background-position:0 0}100%{background-position:40px 40px}}
 .app{max-width:640px;margin:0 auto;padding:16px;position:relative;z-index:1;min-height:100vh}
@@ -30,6 +29,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .spinner{width:44px;height:44px;border:3px solid rgba(168,85,247,.2);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:12px;color:var(--primary-2);font-family:monospace;letter-spacing:2px;font-weight:700}
+
+/* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
 .login-card{width:100%;max-width:420px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:24px;padding:32px 24px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 50px rgba(168,85,247,.15);position:relative;overflow:hidden}
 .login-card::before{content:'';position:absolute;top:-40%;right:-30%;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.5;pointer-events:none}
@@ -37,153 +38,189 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 @keyframes pulseGlow{0%,100%{box-shadow:0 0 40px var(--primary-glow)}50%{box-shadow:0 0 60px var(--primary-glow),0 0 90px var(--accent-glow)}}
 .login-title{font-size:26px;font-weight:900;letter-spacing:6px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:6px;position:relative;z-index:1}
 .login-sub{font-size:11px;color:var(--text-mute);letter-spacing:3px;text-align:center;margin-bottom:8px;font-family:monospace;position:relative;z-index:1}
-.login-by{font-size:11px;color:var(--gold);letter-spacing:2px;text-align:center;margin-bottom:14px;font-weight:700;font-family:monospace;position:relative;z-index:1}
+.login-by{font-size:11px;color:var(--gold);letter-spacing:2px;text-align:center;margin-bottom:16px;font-weight:700;font-family:monospace;position:relative;z-index:1}
 .login-tag{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:24px;font-style:italic;position:relative;z-index:1;line-height:1.6}
 .login-tag b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.tab-row{display:flex;gap:6px;margin-bottom:18px;background:var(--bg);padding:4px;border-radius:12px;position:relative;z-index:1}
-.tab-btn{flex:1;padding:11px;background:transparent;border:none;border-radius:9px;color:var(--text-dim);font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;font-family:inherit}
-.tab-btn.active{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-weight:800;box-shadow:0 4px 15px var(--primary-glow)}
-.field{margin-bottom:12px;position:relative;z-index:1}
-.field input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border-2);border-radius:12px;color:var(--text);font-size:14px;font-family:inherit;transition:all .2s}
-.field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
-.field input::placeholder{color:var(--text-mute);font-style:italic}
-.btn-primary{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;margin-top:6px;position:relative;z-index:1;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow)}
+.field{margin-bottom:14px;position:relative;z-index:1}
+.field-label{font-size:10px;color:var(--primary-2);letter-spacing:2px;font-family:monospace;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.field-label::before{content:'//';color:var(--accent)}
+.field input{width:100%;padding:16px 18px;background:var(--bg);border:1px solid var(--border-2);border-radius:12px;color:var(--text);font-size:16px;font-weight:700;font-family:inherit;transition:all .2s;text-align:center;letter-spacing:1px}
+.field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.2)}
+.field input::placeholder{color:var(--text-mute);font-style:italic;font-weight:400;letter-spacing:0}
+.btn-primary{width:100%;padding:16px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;margin-top:6px;position:relative;z-index:1;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow)}
 .btn-primary:active{transform:scale(.97)}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+
+/* HEADER */
 .header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(244,114,182,.15));border:1px solid var(--primary);border-radius:20px;margin-bottom:14px;position:relative;overflow:hidden}
 .header::before{content:'';position:absolute;top:-50%;right:-20%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.35;pointer-events:none}
-.header-left{position:relative;z-index:1}
-.header-title{font-size:15px;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
-.header-sub{font-size:11px;color:var(--text-dim);font-family:monospace;letter-spacing:1px;display:flex;align-items:center;gap:6px}
+.header-left{display:flex;align-items:center;gap:12px;position:relative;z-index:1;flex:1;min-width:0}
+.avatar{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#fff;flex-shrink:0;box-shadow:0 0 15px var(--primary-glow)}
+.header-info{min-width:0}
+.header-title{font-size:15px;font-weight:900;letter-spacing:1.5px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:2px}
+.header-sub{font-size:10px;color:var(--text-dim);font-family:monospace;letter-spacing:1px;display:flex;align-items:center;gap:5px}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 .btn-logout{padding:8px 14px;background:rgba(244,63,94,.15);border:1px solid var(--danger);border-radius:10px;color:var(--danger);font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;position:relative;z-index:1;letter-spacing:.5px}
 .btn-logout:active{background:var(--danger);color:#fff}
-.welcome{padding:18px;background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(244,114,182,.12));border:1px solid var(--gold);border-radius:18px;margin-bottom:14px;position:relative;overflow:hidden;animation:slideIn .4s ease-out}
-@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.welcome::before{content:'';position:absolute;top:-40%;right:-15%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,.4),transparent 70%);pointer-events:none}
-.welcome-title{font-size:16px;font-weight:900;color:var(--gold);letter-spacing:1px;margin-bottom:6px;position:relative;z-index:1}
-.welcome-title span{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.welcome-text{font-size:12px;color:var(--text-dim);line-height:1.6;font-style:italic;position:relative;z-index:1}
+
+/* CARD */
 .card{background:var(--bg-2);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;position:relative}
 .card::before{content:'';position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent);opacity:.5}
 .card-label{font-size:10px;color:var(--primary-2);letter-spacing:2px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-family:monospace;text-transform:uppercase}
 .card-label::before{content:'//';color:var(--accent);font-weight:700}
-.setting-row{margin-bottom:14px}
-.target-value{font-size:36px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:8px 0;font-family:monospace;text-shadow:0 0 30px var(--primary-glow)}
+
+/* HERO */
+.hero{padding:20px;background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(244,114,182,.18));border:1px solid var(--primary);border-radius:18px;margin-bottom:14px;position:relative;overflow:hidden;animation:slideIn .4s ease-out}
+@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.hero::before{content:'';position:absolute;top:-40%;right:-15%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);pointer-events:none;animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(-10px,10px)}}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:800;letter-spacing:2px;padding:5px 12px;border-radius:20px;background:rgba(168,85,247,.2);border:1px solid var(--primary);color:var(--primary-2);margin-bottom:10px;position:relative;z-index:1;font-family:monospace}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--primary);box-shadow:0 0 10px var(--primary);animation:blink 2s infinite}
+.hero-title{font-size:22px;font-weight:900;letter-spacing:.5px;line-height:1.2;background:linear-gradient(135deg,var(--text),var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;position:relative;z-index:1}
+.hero-title span{background:none;-webkit-text-fill-color:var(--gold);color:var(--gold)}
+.hero-sub{font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:8px;position:relative;z-index:1}
+.hero-tengil{font-size:11px;color:var(--gold);font-style:italic;padding:10px 12px;background:rgba(251,191,36,.08);border-left:3px solid var(--gold);border-radius:6px;margin-top:10px;position:relative;z-index:1;font-weight:600;line-height:1.5}
+
+/* TARGET */
+.target-value{font-size:40px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:8px 0;font-family:monospace;text-shadow:0 0 30px var(--primary-glow)}
 .target-slider{width:100%;-webkit-appearance:none;height:8px;border-radius:4px;background:var(--bg-3);outline:none;margin:10px 0}
 .target-slider::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));cursor:pointer;box-shadow:0 0 20px var(--primary-glow);border:2px solid var(--bg)}
 .target-desc{font-size:11px;color:var(--text-mute);text-align:center;margin-top:4px;font-style:italic;min-height:18px}
+
 .mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .mode-btn{padding:10px 6px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;color:var(--text-dim);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center;transition:all .2s}
-.mode-btn.active{background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(244,114,182,.2));border-color:var(--primary);color:var(--primary-2);transform:scale(1.05)}
-.btn-save{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:900;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow);margin-top:8px}
+.mode-btn.active{background:linear-gradient(135deg,rgba(168,85,247,.25),rgba(244,114,182,.25));border-color:var(--primary);color:var(--primary-2);transform:scale(1.05)}
+.btn-save{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:900;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow);margin-top:12px}
 .btn-save:active{transform:scale(.97)}
-.btn-save:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+
+/* URL INPUT */
 .url-input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border-2);border-radius:12px;color:var(--text);font-size:13px;font-family:inherit;margin-bottom:10px}
 .url-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
 .url-input::placeholder{color:var(--text-mute);font-style:italic}
 .btn-flow{width:100%;padding:16px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:900;letter-spacing:2px;cursor:pointer;transition:transform .15s;font-family:inherit;box-shadow:0 8px 30px var(--primary-glow)}
 .btn-flow:active{transform:scale(.97)}
 .btn-flow:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
-.hint{font-size:10px;color:var(--text-mute);line-height:1.6;padding:10px 12px;background:rgba(168,85,247,.06);border-left:3px solid var(--primary);border-radius:6px;margin-top:8px;font-style:italic}
-.hint b{color:var(--primary-2)}
+
+/* GUIDE */
 .guide-item{display:flex;gap:12px;padding:12px;background:var(--bg);border-radius:10px;margin-bottom:8px;align-items:flex-start}
 .guide-num{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff;flex-shrink:0}
 .guide-text{flex:1;font-size:12px;color:var(--text-dim);line-height:1.6}
 .guide-text b{color:var(--primary-2)}
+
+/* TIPS */
 .tips{padding:14px;background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(244,114,182,.08));border:1px solid rgba(251,191,36,.3);border-radius:14px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start}
 .tips-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 15px rgba(251,191,36,.4)}
 .tips-content{flex:1;min-width:0}
 .tips-label{font-size:9px;color:var(--gold);letter-spacing:2px;font-family:monospace;font-weight:800;margin-bottom:4px}
 .tips-text{font-size:11px;color:var(--text-dim);line-height:1.6;font-style:italic}
+
+/* HISTORY */
 .history-item{padding:12px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .history-title{font-size:12px;font-weight:700;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .history-meta{font-size:10px;color:var(--text-mute);font-family:monospace}
 .history-status{padding:4px 10px;background:rgba(34,211,164,.15);border:1px solid var(--success);border-radius:8px;font-size:10px;font-weight:700;color:var(--success);font-family:monospace}
+
+/* FOOTER */
 .footer{text-align:center;padding:24px 10px 10px;font-family:monospace;font-size:10px;color:var(--text-mute);letter-spacing:1.5px;position:relative;z-index:1}
 .footer-title{font-size:12px;font-weight:800;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;margin-bottom:6px}
 .footer-credit{color:var(--gold);font-weight:700;letter-spacing:1px;margin-top:4px}
 .footer-credit b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:900}
 .footer-tengil{font-size:9px;color:var(--text-mute);margin-top:8px;font-style:italic;letter-spacing:1px}
+
+/* TOAST */
 .toast-wrap{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:min(360px,90vw)}
 .toast{padding:12px 16px;border-radius:12px;background:rgba(18,10,30,.98);border:1px solid var(--primary);color:var(--text);font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 25px var(--primary-glow);animation:toastIn .3s ease-out;display:flex;align-items:center;gap:10px;font-weight:600}
 .toast.success{border-color:var(--success)}
 .toast.error{border-color:var(--danger)}
 .toast.warning{border-color:var(--warning)}
 @keyframes toastIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+
 @media (max-width:480px){
   .app{padding:12px}
   .header{padding:14px}
   .login-card{padding:24px 20px}
   .header-title{font-size:13px}
+  .hero-title{font-size:19px}
 }
 </style>
 </head>
 
 <body x-data="zenkaiWeb()" x-init="init()" x-cloak>
 
+<!-- LOADING -->
 <div x-show="!ready" class="loading-screen">
   <div class="spinner"></div>
   <div class="loading-text">BENTAR BRE, LAGI LOAD...</div>
 </div>
 
-<div x-show="ready && !user" class="login-wrap">
+<!-- LOGIN (CUMA NAMA) -->
+<div x-show="ready && !userName" class="login-wrap">
   <div class="login-card">
     <div class="login-icon">⚡</div>
     <div class="login-title">ZENKAI</div>
-    <div class="login-sub">// AUTOFLOW v2.1</div>
+    <div class="login-sub">// AUTOFLOW v3.0</div>
     <div class="login-by">⚡ DIBIKIN SAMA ANDIKA ⚡</div>
     <div class="login-tag">
-      Kasih gw <b>URL Google Form</b>, gw hajar semua soal. Lu duduk manis 🔥
+      Gausah ribet. Masukin <b>nama lu</b>, langsung gas. 🔥
     </div>
-    <div class="tab-row">
-      <button class="tab-btn" :class="{active: authMode==='login'}" @click="authMode='login'">MASUK</button>
-      <button class="tab-btn" :class="{active: authMode==='register'}" @click="authMode='register'">DAFTAR</button>
-    </div>
+
     <div class="field">
-      <input type="email" x-model="form.email" placeholder="Email lu bre..." autocomplete="email">
+      <div class="field-label">SIAPA NAMA LU?</div>
+      <input 
+        type="text" 
+        x-model="nameInput" 
+        placeholder="Ketik nama lu bre..." 
+        maxlength="20"
+        @keyup.enter="login()">
     </div>
-    <div x-show="authMode==='register'" class="field">
-      <input type="text" x-model="form.username" placeholder="Nama keren lu..." maxlength="20">
-    </div>
-    <div class="field">
-      <input type="password" x-model="form.password" placeholder="Password rahasia..." autocomplete="current-password">
-    </div>
-    <button class="btn-primary" @click="submitAuth()" :disabled="authLoading">
-      <span x-text="authLoading ? 'BENTAR YA...' : (authMode==='login' ? '🚀 GAS MASUK' : '✨ GAS DAFTAR')"></span>
+
+    <button class="btn-primary" @click="login()" :disabled="!nameInput.trim()">
+      <span>🚀 GAS MASUK</span>
     </button>
   </div>
 </div>
 
-<div x-show="ready && user" class="app">
+<!-- MAIN APP -->
+<div x-show="ready && userName" class="app">
+
+  <!-- HEADER -->
   <header class="header">
     <div class="header-left">
-      <div class="header-title">⚡ ZENKAI AUTOFLOW</div>
-      <div class="header-sub">
-        <span class="dot"></span>
-        <span x-text="profile?.username || 'Sobat'"></span>
-        <span>·</span>
-        <span>v2.1</span>
+      <div class="avatar" x-text="userName.substring(0,2).toUpperCase()"></div>
+      <div class="header-info">
+        <div class="header-title">⚡ ZENKAI AUTOFLOW</div>
+        <div class="header-sub">
+          <span class="dot"></span>
+          <span x-text="userName"></span>
+        </div>
       </div>
     </div>
     <button class="btn-logout" @click="logout()">KELUAR</button>
   </header>
 
-  <div class="welcome">
-    <div class="welcome-title">👋 Halo, <span x-text="profile?.username || 'Sobat'"></span>!</div>
-    <div class="welcome-text" x-text="welcomeText"></div>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">ZENKAI AUTOFLOW v3.0</div>
+    <div class="hero-title">
+      Yo, <span x-text="userName"></span>! 👋
+    </div>
+    <div class="hero-sub">
+      Gw <b>Zenkai AutoFlow</b> — asisten lu yang siap hajar semua soal Google Form.
+      <b>Paste URL</b>, tap <b>MULAI</b>, terus duduk manis. 😎
+    </div>
+    <div class="hero-tengil" x-text="heroTengil"></div>
   </div>
 
+  <!-- TARGET -->
   <div class="card">
     <div class="card-label">🎯 TARGET NILAI</div>
-    <div class="setting-row">
-      <div class="target-value" x-text="targetScore"></div>
-      <input type="range" min="0" max="100" x-model.number="targetScore" class="target-slider" @change="syncToExtension()">
-      <div class="target-desc" x-text="getTargetDesc()"></div>
-    </div>
+    <div class="target-value" x-text="targetScore"></div>
+    <input type="range" min="0" max="100" x-model.number="targetScore" class="target-slider" @change="syncToExtension()">
+    <div class="target-desc" x-text="getTargetDesc()"></div>
   </div>
 
+  <!-- MAPEL -->
   <div class="card">
     <div class="card-label">📚 MATA PELAJARAN</div>
     <div class="mode-grid">
@@ -192,55 +229,47 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <button class="mode-btn" :class="{active: mode==='fisika'}" @click="mode='fisika';syncToExtension()">⚛️ Fisika</button>
       <button class="mode-btn" :class="{active: mode==='kimia'}" @click="mode='kimia';syncToExtension()">🧪 Kimia</button>
     </div>
-    <button class="btn-save" @click="saveSettings()" :disabled="saving" style="margin-top:14px">
-      <span x-text="saving ? '⏳ MENYIMPAN...' : '💾 SIMPAN SETTING'"></span>
-    </button>
+    <button class="btn-save" @click="saveAndToast()">💾 SIMPAN SETTING</button>
   </div>
 
+  <!-- AUTO-FLOW -->
   <div class="card" style="border-color:var(--primary)">
     <div class="card-label">🚀 MULAI AUTO-FLOW</div>
-    <input type="text" x-model="formUrl" class="url-input" placeholder="Paste URL Google Form di sini...">
+    <input type="text" x-model="formUrl" class="url-input" placeholder="Paste URL Google Form di sini bre...">
     <button class="btn-flow" @click="startAutoFlow()" :disabled="starting">
       <span x-text="starting ? '⏳ MEMBUKA FORM...' : '🚀 MULAI AUTO-FLOW'"></span>
     </button>
-    <div class="hint">
-      <b>💡 Cara pakai:</b><br>
-      1. Paste URL Google Form di atas<br>
-      2. Tap <b>MULAI AUTO-FLOW</b><br>
-      3. Form kebuka otomatis + overlay progress muncul<br>
-      4. Tunggu AI isi soal satu-satu<br>
-      5. Tap <b>SELESAI</b> → balik ke web
+    <div style="font-size:10px;color:var(--text-mute);line-height:1.6;padding:10px 12px;background:rgba(168,85,247,.06);border-left:3px solid var(--primary);border-radius:6px;margin-top:10px;font-style:italic">
+      <b style="color:var(--primary-2)">💡 Tips:</b> Habis form kebuka, bakal muncul <b style="color:var(--primary-2)">tombol ⚡ AUTO-FLOW</b> di pojok kanan bawah form. Tap sekali, gw hajar semua soal! 🔥
     </div>
   </div>
 
+  <!-- GUIDE -->
   <div class="card">
-    <div class="card-label">📖 CARA PAKAI</div>
+    <div class="card-label">📖 CARA PAKAI (4 STEP DOANG)</div>
     <div class="guide-item">
       <div class="guide-num">1</div>
-      <div class="guide-text">Set <b>target nilai</b> & <b>mapel</b> di atas</div>
+      <div class="guide-text">Set <b>target</b> & <b>mapel</b> di atas</div>
     </div>
     <div class="guide-item">
       <div class="guide-num">2</div>
-      <div class="guide-text">Paste <b>URL Google Form</b> di kolom atas</div>
+      <div class="guide-text">Paste <b>URL Google Form</b> → tap <b>MULAI AUTO-FLOW</b></div>
     </div>
     <div class="guide-item">
       <div class="guide-num">3</div>
-      <div class="guide-text">Tap <b>MULAI AUTO-FLOW</b> → form kebuka otomatis</div>
+      <div class="guide-text">Form kebuka → tap tombol <b>⚡ AUTO-FLOW</b> (pojok kanan bawah form)</div>
     </div>
     <div class="guide-item">
       <div class="guide-num">4</div>
-      <div class="guide-text">Tunggu overlay selesai → tap <b>SELESAI</b></div>
-    </div>
-    <div class="guide-item">
-      <div class="guide-num">5</div>
-      <div class="guide-text">Balik ke web, cek <b>history</b></div>
+      <div class="guide-text">Tunggu 30 detik → <b>semua soal keisi</b> ✨</div>
     </div>
   </div>
 
+  <!-- HISTORY -->
   <div class="card">
-    <div class="card-label">📜 HISTORY AUTO-FLOW</div>
-    <div x-show="history.length===0" style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px">
-      Belum ada history. Mulai auto-flow pertama lu! 🚀
+    <div class="card-label">📜 HISTORY</div>
+    <div x-show="history.length===0" style="text-align:center;padding:20px;color:var(--text-mute);font-size:12px;font-style:italic">
+      Belum ada history. Gas auto-flow pertama lu! 🚀
     </div>
     <template x-for="(h, i) in history" :key="i">
       <div class="history-item">
@@ -253,6 +282,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </template>
   </div>
 
+  <!-- TIPS -->
   <div class="tips">
     <div class="tips-icon">💡</div>
     <div class="tips-content">
@@ -261,6 +291,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </div>
   </div>
 
+  <!-- FOOTER -->
   <div class="footer">
     <div class="footer-title">⚡ ZENKAI AUTOFLOW</div>
     <div class="footer-credit">Dibikin sambil ngopi sama <b>Andika</b> ☕</div>
@@ -268,6 +299,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
 </div>
 
+<!-- TOASTS -->
 <div class="toast-wrap">
   <template x-for="t in toasts" :key="t.id">
     <div class="toast" :class="t.type">
@@ -278,84 +310,65 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 </div>
 
 <script>
-const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
-
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 function zenkaiWeb() {
   return {
     ready: false,
-    user: null,
-    profile: null,
-    authMode: 'login',
-    authLoading: false,
-    form: { email: '', username: '', password: '' },
+    userName: '',
+    nameInput: '',
     targetScore: 90,
     mode: 'umum',
-    saving: false,
-    starting: false,
     formUrl: '',
+    starting: false,
     history: [],
     toasts: [],
     toastId: 0,
-    welcomeText: 'Siap hajar soal hari ini? Atur target, paste URL form, tap MULAI. Sisanya gw yang kerja. 😎',
-    welcomeList: [
-      'Siap hajar soal hari ini? Atur target, paste URL form, tap MULAI. Sisanya gw yang kerja. 😎',
-      'PR numpuk? Chill, paste aja. Gw hajar sampe kelar. 🗿',
-      'Nilai jelek bukan akhir dunia. Yang penting lu udah coba. 😌',
-      'Otak lu capek? Pake otak gw aja. Gratis kok. 🔥',
-      'Gw gak pernah ngantuk, gak pernah ngeluh, gak minta gaji. Perfect employee. 🤖',
-      'Gausah mikir kaya mau ngerjain sendiri. Gw yang mikir, lu duduk manis. 💪',
-      'Semangat bre! Satu soal satu langkah, kelar deh. 🚀'
-    ],
+    heroTengil: '"Santai bre, lu duduk manis. Gw yang hajar semua soal. 🤙"',
     tipsText: 'Set target 90 doang biar gak ketara. 100 juga bisa kalo lu pede. 😎',
+    heroList: [
+      '"Santai bre, lu duduk manis. Gw yang hajar semua soal. 🤙"',
+      '"PR numpuk? Chill. Gw kuat sampe 100 soal. 🔥"',
+      '"Gausah mikir kaya mau ngerjain sendiri. Gw yang mikir. 💪"',
+      '"Otak lu capek? Pake otak gw aja. Gratis kok. 🤖"',
+      '"Satu soal satu langkah, kelar deh. 🚀"'
+    ],
     tipsList: [
       'Set target 90 doang biar gak ketara. 100 juga bisa kalo lu pede. 😎',
       'Target 0-100, atur sesuka hati. Gausah takut kena guru. 🤙',
       'Soal 50 nomer? Chill, AI gw kuat sampe 100. 🔥',
-      'Yang penting setting target, sisanya gw yang kerja. 💪',
-      'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw. Pakai Zenkai aja. 😂'
+      'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw. 😂'
     ],
 
-    async init() {
-      this.welcomeText = this.welcomeList[Math.floor(Math.random() * this.welcomeList.length)];
+    init() {
+      this.heroTengil = this.heroList[Math.floor(Math.random() * this.heroList.length)];
       this.tipsText = this.tipsList[Math.floor(Math.random() * this.tipsList.length)];
 
-      try {
-        const saved = localStorage.getItem('zenkai_history');
-        if (saved) this.history = JSON.parse(saved);
-      } catch (e) {}
+      // Load dari localStorage
+      const savedName = localStorage.getItem('zenkai_name');
+      const savedTarget = localStorage.getItem('zenkai_target');
+      const savedMode = localStorage.getItem('zenkai_mode');
+      const savedHistory = localStorage.getItem('zenkai_history');
 
-      try {
-        const { data: { session } } = await sb.auth.getSession();
-        if (session?.user) {
-          this.user = session.user;
-          await this.loadProfile();
-          await this.loadSettings();
-          setTimeout(() => this.syncToExtension(), 500);
-        }
-      } catch (e) { console.error(e); }
+      if (savedName) this.userName = savedName;
+      if (savedTarget) this.targetScore = parseInt(savedTarget);
+      if (savedMode) this.mode = savedMode;
+      if (savedHistory) {
+        try { this.history = JSON.parse(savedHistory); } catch (e) {}
+      }
+
       this.ready = true;
 
-      sb.auth.onAuthStateChange(async (event, session) => {
-        if (session?.user) {
-          this.user = session.user;
-          await this.loadProfile();
-          await this.loadSettings();
-          setTimeout(() => this.syncToExtension(), 500);
-        } else {
-          this.user = null;
-          this.profile = null;
-        }
-      });
+      // Sync ke extension setelah ready
+      if (this.userName) {
+        setTimeout(() => this.syncToExtension(), 1500);
+      }
 
+      // Listen pesan dari extension
       if (window.chrome && chrome.runtime && chrome.runtime.onMessage) {
         try {
           chrome.runtime.onMessage.addListener((msg) => {
             if (msg.action === 'flowCompleted') {
               this.addHistory({
-                title: msg.url ? 'Form: ' + msg.url.split('/').slice(-2, -1)[0] : 'Google Form',
+                title: 'Google Form',
                 time: new Date().toLocaleString('id-ID'),
                 total: msg.total,
                 filled: msg.filled
@@ -370,92 +383,49 @@ function zenkaiWeb() {
       }
     },
 
-    async loadProfile() {
-      if (!this.user) return;
-      try {
-        const { data } = await sb.from('profiles').select('*').eq('id', this.user.id).maybeSingle();
-        if (data) this.profile = data;
-        else {
-          const metaName = this.user.user_metadata?.username;
-          this.profile = { username: metaName || this.user.email?.split('@')[0] || 'Sobat' };
-        }
-      } catch (e) {
-        this.profile = { username: this.user.email?.split('@')[0] || 'Sobat' };
-      }
+    login() {
+      const name = this.nameInput.trim();
+      if (!name) return;
+      this.userName = name;
+      localStorage.setItem('zenkai_name', name);
+      this.showToast('Gas, ' + name + '! Selamat datang 👋', 'success');
+      setTimeout(() => this.syncToExtension(), 500);
     },
 
-    async loadSettings() {
-      if (!this.user) return;
-      try {
-        const { data } = await sb.from('zenkai_autofill_settings').select('*').eq('user_id', this.user.id).maybeSingle();
-        if (data) {
-          this.targetScore = data.target_score || 90;
-          this.mode = data.mode || 'umum';
-          return;
-        }
-      } catch (e) {}
-      const t = localStorage.getItem('zenkai_target');
-      const m = localStorage.getItem('zenkai_mode');
-      if (t) this.targetScore = parseInt(t);
-      if (m) this.mode = m;
+    logout() {
+      this.userName = '';
+      this.nameInput = '';
+      localStorage.removeItem('zenkai_name');
+      this.showToast('Sampai jumpa bre 👋', 'success');
     },
 
-    async saveSettings() {
-      if (!this.user) return;
-      this.saving = true;
+    saveAndToast() {
       localStorage.setItem('zenkai_target', this.targetScore);
       localStorage.setItem('zenkai_mode', this.mode);
-      try {
-        const { error } = await sb.from('zenkai_autofill_settings').upsert({
-          user_id: this.user.id,
-          target_score: this.targetScore,
-          mode: this.mode,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'user_id' });
-        if (error) throw error;
-        this.showToast('🔥 Setting tersimpan!', 'success');
-      } catch (e) {
-        this.showToast('✅ Setting tersimpan di HP', 'success');
-      } finally {
-        this.saving = false;
-        this.syncToExtension();
-      }
+      this.syncToExtension();
+      this.showToast('🔥 Setting tersimpan!', 'success');
     },
 
     syncToExtension() {
       try {
-        // Simpan ke localStorage — ini yang dibaca web-bridge.js
         localStorage.setItem('zenkai_target', this.targetScore);
         localStorage.setItem('zenkai_mode', this.mode);
+        localStorage.setItem('zenkai_username', this.userName);
 
-        const payload = {
-          zenkai_target: this.targetScore,
-          zenkai_mode: this.mode,
-          zenkai_username: this.profile?.username || 'User'
-        };
-        localStorage.setItem('zenkai_sync', JSON.stringify(payload));
-
-        // Juga coba kirim via chrome.runtime (buat fallback)
         if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
-          sb.auth.getSession().then(({ data: { session } }) => {
-            const token = session?.session?.access_token || '';
-            try {
-              chrome.runtime.sendMessage({
-                action: 'syncSettings',
-                target: this.targetScore,
-                mode: this.mode,
-                token: token,
-                username: payload.zenkai_username
-              }, () => {
-                if (chrome.runtime.lastError) {}
-              });
-            } catch (e) {}
+          chrome.runtime.sendMessage({
+            action: 'syncSettings',
+            target: this.targetScore,
+            mode: this.mode,
+            username: this.userName
+          }, () => {
+            if (chrome.runtime.lastError) {}
           });
         }
       } catch (e) {}
     },
 
-    async startAutoFlow() {
+    startAutoFlow() {
       if (!this.formUrl.trim()) {
         this.showToast('❌ Paste URL Google Form dulu bre!', 'error');
         return;
@@ -466,94 +436,35 @@ function zenkaiWeb() {
       }
 
       this.starting = true;
-      try {
-        await this.saveSettings();
+      this.syncToExtension();
 
-        const { data: { session } } = await sb.auth.getSession();
-        const token = session?.session?.access_token || '';
-
-        if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
-          chrome.runtime.sendMessage({
-            action: 'startAutoFlow',
-            url: this.formUrl,
-            target: this.targetScore,
-            mode: this.mode,
-            token: token,
-            username: this.profile?.username || 'User'
-          }, (res) => {
-            if (chrome.runtime.lastError) {
-              this.showToast('⚠️ Extension belum aktif. Buka manual di tab baru.', 'warning');
-              window.open(this.formUrl, '_blank');
-              return;
-            }
-            if (res && res.ok) {
-              this.showToast('🚀 Form kebuka! Tunggu overlay muncul.', 'success');
-            } else {
-              this.showToast('⚠️ Fallback: buka manual di tab baru.', 'warning');
-              window.open(this.formUrl, '_blank');
-            }
-          });
-        } else {
-          window.open(this.formUrl, '_blank');
-          this.showToast('🚀 Form kebuka! Tunggu overlay muncul.', 'success');
-        }
-      } catch (e) {
-        this.showToast('❌ ' + e.message, 'error');
-      } finally {
+      if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
+        chrome.runtime.sendMessage({
+          action: 'startAutoFlow',
+          url: this.formUrl,
+          target: this.targetScore,
+          mode: this.mode,
+          username: this.userName
+        }, (res) => {
+          this.starting = false;
+          if (chrome.runtime.lastError || !res || !res.ok) {
+            this.showToast('⚠️ Extension belum aktif. Buka manual.', 'warning');
+            window.open(this.formUrl, '_blank');
+          } else {
+            this.showToast('🚀 Form kebuka! Tunggu tombol AUTO-FLOW.', 'success');
+          }
+        });
+      } else {
+        window.open(this.formUrl, '_blank');
         this.starting = false;
+        this.showToast('🚀 Form kebuka! Tap tombol AUTO-FLOW di form.', 'success');
       }
     },
 
     addHistory(item) {
       this.history.unshift(item);
       if (this.history.length > 20) this.history = this.history.slice(0, 20);
-      try {
-        localStorage.setItem('zenkai_history', JSON.stringify(this.history));
-      } catch (e) {}
-    },
-
-    async submitAuth() {
-      this.authLoading = true;
-      try {
-        if (this.authMode === 'login') {
-          const { error } = await sb.auth.signInWithPassword({
-            email: this.form.email,
-            password: this.form.password
-          });
-          if (error) throw error;
-          this.showToast('Gas! Selamat datang bre 👋', 'success');
-        } else {
-          if (!this.form.username || !this.form.username.trim()) {
-            throw new Error('Nama wajib diisi bre!');
-          }
-          const { data, error } = await sb.auth.signUp({
-            email: this.form.email,
-            password: this.form.password,
-            options: { data: { username: this.form.username.trim() } }
-          });
-          if (error) throw error;
-          if (data.user) {
-            try {
-              await sb.from('profiles').upsert({
-                id: data.user.id,
-                username: this.form.username.trim()
-              });
-            } catch (e) {}
-          }
-          this.showToast('Akun jadi! Gas masuk 🚀', 'success');
-        }
-      } catch (e) {
-        this.showToast(e.message || 'Gagal bre', 'error');
-      } finally {
-        this.authLoading = false;
-      }
-    },
-
-    async logout() {
-      await sb.auth.signOut();
-      this.user = null;
-      this.profile = null;
-      this.welcomeText = this.welcomeList[Math.floor(Math.random() * this.welcomeList.length)];
+      try { localStorage.setItem('zenkai_history', JSON.stringify(this.history)); } catch (e) {}
     },
 
     getTargetDesc() {
