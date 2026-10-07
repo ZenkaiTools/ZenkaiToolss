@@ -279,15 +279,27 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
 
   <div class="card">
-    <div class="card-label">📚 MATA PELAJARAN</div>
-    <div class="mode-grid">
-      <button class="mode-btn" :class="{active: mode==='umum'}" @click="mode='umum';syncToExtension()">💡 Umum</button>
-      <button class="mode-btn" :class="{active: mode==='mtk'}" @click="mode='mtk';syncToExtension()">🧮 MTK</button>
-      <button class="mode-btn" :class="{active: mode==='fisika'}" @click="mode='fisika';syncToExtension()">⚛️ Fisika</button>
-      <button class="mode-btn" :class="{active: mode==='kimia'}" @click="mode='kimia';syncToExtension()">🧪 Kimia</button>
-    </div>
-    <button class="btn-save" @click="saveAndToast()">💾 SIMPAN SETTING</button>
+  <div class="card-label">📚 MATA PELAJARAN (14 MODE)</div>
+  <div class="mode-grid" style="grid-template-columns: repeat(3, 1fr); gap: 6px;">
+    <button class="mode-btn" :class="{active: mode==='umum'}" @click="mode='umum';syncToExtension()">💡 Umum</button>
+    <button class="mode-btn" :class="{active: mode==='mtk'}" @click="mode='mtk';syncToExtension()">🧮 MTK</button>
+    <button class="mode-btn" :class="{active: mode==='fisika'}" @click="mode='fisika';syncToExtension()">⚛️ Fisika</button>
+    <button class="mode-btn" :class="{active: mode==='kimia'}" @click="mode='kimia';syncToExtension()">🧪 Kimia</button>
+    <button class="mode-btn" :class="{active: mode==='biologi'}" @click="mode='biologi';syncToExtension()">🧬 Biologi</button>
+    <button class="mode-btn" :class="{active: mode==='bing'}" @click="mode='bing';syncToExtension()">🇬🇧 B. Inggris</button>
+    <button class="mode-btn" :class="{active: mode==='bindo'}" @click="mode='bindo';syncToExtension()">🇮🇩 B. Indo</button>
+    <button class="mode-btn" :class="{active: mode==='sejarah'}" @click="mode='sejarah';syncToExtension()">📜 Sejarah</button>
+    <button class="mode-btn" :class="{active: mode==='pkn'}" @click="mode='pkn';syncToExtension()">⚖️ PKN</button>
+    <button class="mode-btn" :class="{active: mode==='ekonomi'}" @click="mode='ekonomi';syncToExtension()">💰 Ekonomi</button>
+    <button class="mode-btn" :class="{active: mode==='geografi'}" @click="mode='geografi';syncToExtension()">🌍 Geografi</button>
+    <button class="mode-btn" :class="{active: mode==='sosiologi'}" @click="mode='sosiologi';syncToExtension()">👥 Sosiologi</button>
+    <button class="mode-btn" :class="{active: mode==='seni'}" @click="mode='seni';syncToExtension()">🎨 Seni</button>
+    <button class="mode-btn" :class="{active: mode==='penjas'}" @click="mode='penjas';syncToExtension()">⚽ Penjas</button>
+    <button class="mode-btn" :class="{active: mode==='ips'}" @click="mode='ips';syncToExtension()">🌏 IPS</button>
+    <button class="mode-btn" :class="{active: mode==='agama'}" @click="mode='agama';syncToExtension()">🕌 Agama</button>
   </div>
+  <button class="btn-save" @click="saveAndToast()" style="margin-top:14px">💾 SIMPAN SETTING</button>
+</div>
 
   <div class="card" style="border-color:var(--primary)">
     <div class="card-label">🚀 MULAI AUTO-FLOW</div>
