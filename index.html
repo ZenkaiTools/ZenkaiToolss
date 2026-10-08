@@ -4,21 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0a0612">
-<title>Zenkai AutoFlow v1 — by Andika</title>
-
+<title>Zenkai AutoFlow v1.2 — by Andika</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
 <style>
 [x-cloak]{display:none!important}
-:root{
-  --bg:#0a0612;--bg-2:#120a1e;--bg-3:#1a0f2e;
-  --border:#26183f;--border-2:#33204f;
-  --text:#f0e8ff;--text-dim:#9b8cba;--text-mute:#665a80;
-  --primary:#a855f7;--primary-2:#c084fc;--primary-glow:rgba(168,85,247,.5);
-  --accent:#f472b6;--accent-glow:rgba(244,114,182,.5);
-  --success:#22d3a4;--danger:#f43f5e;--warning:#fbbf24;--gold:#fbbf24;
-}
+:root{--bg:#0a0612;--bg-2:#120a1e;--bg-3:#1a0f2e;--border:#26183f;--border-2:#33204f;--text:#f0e8ff;--text-dim:#9b8cba;--text-mute:#665a80;--primary:#a855f7;--primary-2:#c084fc;--primary-glow:rgba(168,85,247,.5);--accent:#f472b6;--accent-glow:rgba(244,114,182,.5);--success:#22d3a4;--danger:#f43f5e;--warning:#fbbf24;--gold:#fbbf24}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{overflow-x:hidden;-webkit-text-size-adjust:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.4;font-size:13px;-webkit-font-smoothing:antialiased}
@@ -30,7 +21,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .spinner{width:44px;height:44px;border:3px solid rgba(168,85,247,.2);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:11px;color:var(--primary-2);font-family:monospace;letter-spacing:2px;font-weight:700}
-
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
 .login-card{width:100%;max-width:400px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:22px;padding:26px 22px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 50px rgba(168,85,247,.15);position:relative;overflow:hidden}
 .login-card::before{content:'';position:absolute;top:-40%;right:-30%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.5;pointer-events:none}
@@ -40,446 +30,416 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .login-title{font-size:22px;font-weight:900;letter-spacing:5px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:5px;position:relative;z-index:1}
 .login-sub{font-size:10px;color:var(--text-mute);letter-spacing:3px;text-align:center;margin-bottom:8px;font-family:monospace;position:relative;z-index:1}
 .credit-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(244,114,182,.12));border:1px solid rgba(251,191,36,.4);border-radius:20px;margin:0 auto 14px;position:relative;z-index:1;left:50%;transform:translateX(-50%)}
-.credit-avatar{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:9px;color:var(--bg);box-shadow:0 0 8px rgba(251,191,36,.5)}
+.credit-avatar{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:9px;color:var(--bg)}
 .credit-text{font-size:10px;color:var(--gold);letter-spacing:1.5px;font-family:monospace;font-weight:700}
-.credit-text b{font-weight:900}
 .login-tag{font-size:11px;color:var(--text-dim);text-align:center;margin-bottom:18px;font-style:italic;position:relative;z-index:1;line-height:1.5}
-.login-tag b{background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.login-tag b{color:var(--primary-2)}
+.tab-row{display:flex;gap:6px;margin-bottom:14px;background:var(--bg);padding:4px;border-radius:10px;position:relative;z-index:1}
+.tab-btn{flex:1;padding:9px;background:transparent;border:none;border-radius:8px;color:var(--text-dim);font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;font-family:inherit}
+.tab-btn.active{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-weight:800}
 .field{margin-bottom:10px;position:relative;z-index:1}
 .field-label{font-size:10px;color:var(--primary-2);letter-spacing:2px;font-family:monospace;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:6px}
 .field-label svg{width:11px;height:11px;fill:var(--accent)}
-.field input{width:100%;padding:13px 16px;background:var(--bg);border:1px solid var(--border-2);border-radius:11px;color:var(--text);font-size:15px;font-weight:700;font-family:inherit;transition:all .2s;text-align:center;letter-spacing:1px}
+.field input{width:100%;padding:13px 16px;background:var(--bg);border:1px solid var(--border-2);border-radius:11px;color:var(--text);font-size:14px;font-weight:600;font-family:inherit;transition:all .2s}
 .field input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.2)}
-.field input::placeholder{color:var(--text-mute);font-style:italic;font-weight:400;letter-spacing:0}
-.field input.error{border-color:var(--danger);box-shadow:0 0 0 3px rgba(244,63,94,.2)}
+.field input::placeholder{color:var(--text-mute);font-style:italic;font-weight:400}
+.field input.error{border-color:var(--danger)}
 .error-msg{font-size:10px;color:var(--danger);text-align:center;margin-top:6px;font-family:monospace;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
 .error-msg svg{width:12px;height:12px;fill:var(--danger)}
+.success-msg{font-size:10px;color:var(--success);text-align:center;margin-top:6px;font-family:monospace;font-weight:700}
 .btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:11px;color:#fff;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;margin-top:4px;position:relative;z-index:1;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-primary:active{transform:scale(.97)}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
 .btn-primary svg{width:15px;height:15px;fill:#fff}
-
 .header{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(244,114,182,.15));border:1px solid var(--primary);border-radius:16px;margin-bottom:10px;position:relative;overflow:hidden}
 .header::before{content:'';position:absolute;top:-50%;right:-20%;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.35;pointer-events:none}
 .header-left{display:flex;align-items:center;gap:10px;position:relative;z-index:1;flex:1;min-width:0}
-.avatar{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;flex-shrink:0;box-shadow:0 0 12px var(--primary-glow)}
-.header-info{min-width:0}
+.avatar{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;flex-shrink:0;position:relative}
+.avatar.owner::after{content:'★';position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--bg);border:2px solid var(--bg-2)}
+.avatar.vip::after{content:'◆';position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--bg);border:2px solid var(--bg-2)}
+.header-info{min-width:0;flex:1}
 .header-title{font-size:12px;font-weight:900;letter-spacing:1.5px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:2px}
-.header-sub{font-size:9px;color:var(--text-dim);font-family:monospace;letter-spacing:.8px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.header-sub{font-size:9px;color:var(--text-dim);font-family:monospace;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
 .header-sub .dot{width:5px;height:5px;border-radius:50%;background:var(--success);box-shadow:0 0 6px var(--success);animation:blink 2s infinite;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-.header-sub .credit-name{color:var(--gold);font-weight:800;letter-spacing:.8px}
+.header-sub .credit-name{color:var(--gold);font-weight:800}
+.header-sub .badge-role{padding:1px 6px;border-radius:6px;font-size:8px;font-weight:900}
+.header-sub .badge-role.owner{background:rgba(255,215,0,.15);color:var(--gold);border:1px solid var(--gold)}
+.header-sub .badge-role.vip{background:rgba(255,215,0,.15);color:var(--gold);border:1px solid var(--gold)}
 .header-actions{display:flex;gap:5px;position:relative;z-index:1}
 .icon-btn{width:32px;height:32px;border-radius:9px;background:rgba(18,10,30,.6);border:1px solid var(--border-2);display:flex;align-items:center;justify-content:center;color:var(--text-dim);cursor:pointer;transition:all .2s}
 .icon-btn:active{background:rgba(168,85,247,.2);border-color:var(--primary);color:var(--primary-2);transform:scale(.92)}
 .icon-btn svg{width:16px;height:16px;fill:currentColor}
-
-/* BANNER PENGEMBANGAN — TIPIS */
-.dev-banner{display:flex;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(255,102,0,.06));border:1px solid rgba(251,191,36,.35);border-radius:10px;margin-bottom:10px;position:relative;z-index:1}
-.dev-banner-icon{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px rgba(251,191,36,.4)}
+.icon-btn.owner{border-color:var(--gold);color:var(--gold)}
+.dev-banner{display:flex;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(255,102,0,.06));border:1px solid rgba(251,191,36,.35);border-radius:10px;margin-bottom:10px}
+.dev-banner-icon{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .dev-banner-icon svg{width:13px;height:13px;fill:#0a0612}
-.dev-banner-text{flex:1;font-size:10px;color:var(--text-dim);line-height:1.4;font-family:monospace;letter-spacing:.2px}
+.dev-banner-text{flex:1;font-size:10px;color:var(--text-dim);line-height:1.4;font-family:monospace}
 .dev-banner-text b{color:var(--gold);font-weight:800}
-
+.limit-banner{display:flex;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(135deg,rgba(168,85,247,.12),rgba(244,114,182,.08));border:1px solid var(--primary);border-radius:10px;margin-bottom:10px}
+.limit-banner-icon{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.limit-banner-icon svg{width:13px;height:13px;fill:#fff}
+.limit-banner-text{flex:1;font-size:10px;color:var(--text-dim);line-height:1.4;font-family:monospace}
+.limit-banner-text b{color:var(--primary-2);font-weight:800}
+.limit-banner-text .count{color:var(--gold);font-weight:900}
+.limit-banner-text .count.empty{color:var(--danger)}
 .card{background:var(--bg-2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;position:relative}
 .card::before{content:'';position:absolute;top:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent);opacity:.5}
 .card-label{font-size:9px;color:var(--primary-2);letter-spacing:1.8px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px;font-family:monospace;text-transform:uppercase}
 .card-label svg{width:12px;height:12px;fill:var(--accent)}
-
-.hero{padding:16px;background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(244,114,182,.18));border:1px solid var(--primary);border-radius:16px;margin-bottom:10px;position:relative;overflow:hidden;animation:slideIn .4s ease-out}
-@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-.hero::before{content:'';position:absolute;top:-40%;right:-15%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);pointer-events:none;animation:float 5s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(-8px,8px)}}
+.hero{padding:16px;background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(244,114,182,.18));border:1px solid var(--primary);border-radius:16px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;right:-15%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);pointer-events:none}
 .hero-badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:4px 10px;border-radius:16px;background:rgba(168,85,247,.2);border:1px solid var(--primary);color:var(--primary-2);margin-bottom:8px;position:relative;z-index:1;font-family:monospace}
-.hero-badge svg{width:9px;height:9px;fill:var(--primary)}
-.hero-title{font-size:18px;font-weight:900;letter-spacing:.3px;line-height:1.2;background:linear-gradient(135deg,var(--text),var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;position:relative;z-index:1}
+.hero-title{font-size:18px;font-weight:900;line-height:1.2;background:linear-gradient(135deg,var(--text),var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;position:relative;z-index:1}
 .hero-title span{background:none;-webkit-text-fill-color:var(--gold);color:var(--gold)}
 .hero-sub{font-size:11px;color:var(--text-dim);line-height:1.5;margin-bottom:10px;position:relative;z-index:1}
 .hero-sub b{color:var(--primary-2)}
-.hero-tengil{font-size:10px;color:var(--gold);font-style:italic;padding:8px 10px;background:rgba(251,191,36,.08);border-left:3px solid var(--gold);border-radius:5px;position:relative;z-index:1;font-weight:600;line-height:1.4}
-
-.dev-cta{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(18,10,30,.6);border:1.5px solid var(--gold);border-radius:12px;cursor:pointer;transition:all .2s;position:relative;z-index:1;margin-top:10px}
-.dev-cta:active{transform:scale(.98);background:rgba(251,191,36,.12)}
-.dev-cta-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:var(--bg);flex-shrink:0;box-shadow:0 0 12px rgba(251,191,36,.5);position:relative}
-.dev-cta-avatar::after{content:'';position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:var(--success);border:2px solid var(--bg-2);box-shadow:0 0 5px var(--success)}
-.dev-cta-info{flex:1;min-width:0}
-.dev-cta-title{font-size:12px;font-weight:900;color:var(--gold);margin-bottom:1px;letter-spacing:.3px}
-.dev-cta-desc{font-size:9px;color:var(--text-dim);font-family:monospace;letter-spacing:.3px}
-.dev-cta-arrow{width:20px;height:20px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.hero-tengil{font-size:10px;color:var(--gold);font-style:italic;padding:8px 10px;background:rgba(251,191,36,.08);border-left:3px solid var(--gold);border-radius:5px;position:relative;z-index:1;font-weight:600}
+.dev-cta{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(18,10,30,.6);border:1.5px solid var(--gold);border-radius:12px;cursor:pointer;margin-top:10px;position:relative;z-index:1}
+.dev-cta-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:var(--bg);flex-shrink:0;position:relative}
+.dev-cta-avatar::after{content:'';position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:var(--success);border:2px solid var(--bg-2)}
+.dev-cta-info{flex:1}
+.dev-cta-title{font-size:12px;font-weight:900;color:var(--gold);margin-bottom:1px}
+.dev-cta-desc{font-size:9px;color:var(--text-dim);font-family:monospace}
+.dev-cta-arrow{width:20px;height:20px}
 .dev-cta-arrow svg{width:18px;height:18px;fill:var(--gold);animation:arrowBounce 1.5s ease-in-out infinite}
 @keyframes arrowBounce{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
-
-.target-value{font-size:34px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:4px 0;font-family:monospace;text-shadow:0 0 25px var(--primary-glow)}
+.target-value{font-size:34px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:4px 0;font-family:monospace}
 .target-slider{width:100%;-webkit-appearance:none;height:7px;border-radius:4px;background:var(--bg-3);outline:none;margin:6px 0}
-.target-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));cursor:pointer;box-shadow:0 0 15px var(--primary-glow);border:2px solid var(--bg)}
+.target-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--bg)}
 .target-desc{font-size:10px;color:var(--text-mute);text-align:center;margin-top:2px;font-style:italic;min-height:14px}
-
 .mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.mode-btn{padding:7px 3px;background:var(--bg);border:1px solid var(--border-2);border-radius:8px;color:var(--text-dim);font-size:9px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:3px}
-.mode-btn svg{width:14px;height:14px;fill:currentColor}
+.mode-btn{padding:7px 3px;background:var(--bg);border:1px solid var(--border-2);border-radius:8px;color:var(--text-dim);font-size:9px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .2s}
 .mode-btn.active{background:linear-gradient(135deg,rgba(168,85,247,.25),rgba(244,114,182,.25));border-color:var(--primary);color:var(--primary-2);transform:scale(1.05)}
-.btn-save{width:100%;padding:12px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:900;letter-spacing:1.2px;cursor:pointer;transition:transform .15s;font-family:inherit;box-shadow:0 6px 20px var(--primary-glow);margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-save:active{transform:scale(.97)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;margin-top:10px}
+.toggle-title{font-size:12px;font-weight:800;color:var(--text);margin-bottom:2px}
+.toggle-desc{font-size:9px;color:var(--text-mute);font-family:monospace}
+.toggle-switch{position:relative;width:44px;height:24px;border-radius:12px;background:var(--bg-3);border:1px solid var(--border-2);cursor:pointer;transition:all .3s;flex-shrink:0}
+.toggle-switch.on{background:linear-gradient(135deg,var(--primary),var(--accent));border-color:var(--primary)}
+.toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:all .3s}
+.toggle-switch.on::after{left:22px}
+.btn-save{width:100%;padding:12px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:900;letter-spacing:1.2px;cursor:pointer;font-family:inherit;box-shadow:0 6px 20px var(--primary-glow);margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px}
 .btn-save svg{width:14px;height:14px;fill:#fff}
-
 .url-input{width:100%;padding:11px 14px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;color:var(--text);font-size:12px;font-family:inherit;margin-bottom:8px}
-.url-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
+.url-input:focus{outline:none;border-color:var(--primary)}
 .url-input::placeholder{color:var(--text-mute);font-style:italic}
-.btn-flow{width:100%;padding:13px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:900;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;font-family:inherit;box-shadow:0 6px 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-flow:active{transform:scale(.97)}
-.btn-flow:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.btn-flow{width:100%;padding:13px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:900;letter-spacing:1.5px;cursor:pointer;font-family:inherit;box-shadow:0 6px 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-flow:disabled{opacity:.5;cursor:not-allowed}
 .btn-flow svg{width:16px;height:16px;fill:#fff}
-
-.hint{font-size:9px;color:var(--text-mute);line-height:1.4;padding:8px 10px;background:rgba(168,85,247,.06);border-left:2px solid var(--primary);border-radius:5px;margin-top:8px;font-style:italic;display:flex;gap:6px;align-items:flex-start}
-.hint svg{width:12px;height:12px;fill:var(--primary-2);flex-shrink:0;margin-top:1px}
+.hint{font-size:9px;color:var(--text-mute);line-height:1.4;padding:8px 10px;background:rgba(168,85,247,.06);border-left:2px solid var(--primary);border-radius:5px;margin-top:8px;font-style:italic;display:flex;gap:6px}
+.hint svg{width:12px;height:12px;fill:var(--primary-2);flex-shrink:0}
 .hint b{color:var(--primary-2)}
-
 .guide-item{display:flex;gap:9px;padding:8px 10px;background:var(--bg);border-radius:8px;margin-bottom:5px;align-items:center}
 .guide-num{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10px;color:#fff;flex-shrink:0}
 .guide-text{flex:1;font-size:11px;color:var(--text-dim);line-height:1.4}
 .guide-text b{color:var(--primary-2)}
-
 .tips{padding:10px 12px;background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(244,114,182,.08));border:1px solid rgba(251,191,36,.3);border-radius:12px;margin-bottom:10px;display:flex;gap:10px;align-items:center}
-.tips-icon{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 12px rgba(251,191,36,.4)}
+.tips-icon{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .tips-icon svg{width:16px;height:16px;fill:#0a0612}
-.tips-content{flex:1;min-width:0}
+.tips-content{flex:1}
 .tips-label{font-size:8px;color:var(--gold);letter-spacing:1.8px;font-family:monospace;font-weight:800;margin-bottom:3px}
 .tips-text{font-size:10px;color:var(--text-dim);line-height:1.4;font-style:italic}
-
 .history-item{padding:9px 11px;background:var(--bg);border:1px solid var(--border-2);border-radius:8px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .history-title{font-size:11px;font-weight:700;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .history-meta{font-size:9px;color:var(--text-mute);font-family:monospace}
 .history-status{padding:3px 8px;background:rgba(34,211,164,.15);border:1px solid var(--success);border-radius:6px;font-size:9px;font-weight:700;color:var(--success);font-family:monospace}
-
-.footer{text-align:center;padding:16px 10px 8px;font-family:monospace;font-size:9px;color:var(--text-mute);letter-spacing:1.2px;position:relative;z-index:1}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat-box{padding:10px 8px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;text-align:center}
+.stat-val{font-size:18px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-family:monospace}
+.stat-lbl{font-size:8px;color:var(--text-mute);letter-spacing:1px;margin-top:2px;text-transform:uppercase;font-family:monospace}
+.vip-card{padding:14px;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(244,114,182,.08));border:1.5px solid var(--gold);border-radius:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.vip-card::before{content:'';position:absolute;top:-40%;right:-15%;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,0,.3),transparent 70%);pointer-events:none}
+.vip-title{font-size:14px;font-weight:900;color:var(--gold);letter-spacing:1px;margin-bottom:4px;position:relative;z-index:1}
+.vip-sub{font-size:10px;color:var(--text-dim);line-height:1.5;margin-bottom:10px;position:relative;z-index:1}
+.vip-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold),var(--warning));border:none;border-radius:10px;color:var(--bg);font-size:12px;font-weight:900;letter-spacing:1.5px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;z-index:1;margin-top:8px}
+.vip-btn svg{width:16px;height:16px;fill:var(--bg)}
+.price-grid{display:flex;flex-direction:column;gap:6px;position:relative;z-index:1}
+.price-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(18,10,30,.6);border:1px solid rgba(255,215,0,.3);border-radius:8px;font-size:11px;font-family:monospace;cursor:pointer;transition:all .2s}
+.price-item:active{background:rgba(255,215,0,.1)}
+.price-item .dur{color:var(--text-dim)}
+.price-item .pri{color:var(--gold);font-weight:900}
+.footer{text-align:center;padding:16px 10px 8px;font-family:monospace;font-size:9px;color:var(--text-mute);letter-spacing:1.2px}
 .footer-title{font-size:11px;font-weight:800;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2.5px;margin-bottom:4px}
-.footer-tengil{font-size:8px;color:var(--text-mute);margin-top:6px;font-style:italic;letter-spacing:.8px}
-
-.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:100;display:flex;align-items:flex-end;justify-content:center}
-.sheet{width:100%;max-width:640px;background:var(--bg);border-top:1px solid var(--primary);border-radius:22px 22px 0 0;padding:18px;max-height:90vh;overflow-y:auto;animation:sheetIn .3s cubic-bezier(.4,0,.2,1);position:relative}
-@keyframes sheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);z-index:100;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:640px;background:var(--bg);border-top:1px solid var(--primary);border-radius:22px 22px 0 0;padding:18px;max-height:90vh;overflow-y:auto;position:relative}
 .sheet-handle{width:36px;height:4px;background:var(--border-2);border-radius:2px;margin:0 auto 14px}
 .sheet-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:10px;background:rgba(244,63,94,.15);border:1px solid var(--danger);color:var(--danger);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:900}
-
-.dev-hero{text-align:center;padding:20px 14px;background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(244,114,182,.15));border:1px solid var(--primary);border-radius:16px;margin-bottom:12px;position:relative;overflow:hidden}
-.dev-hero::before{content:'';position:absolute;top:-40%;right:-20%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);pointer-events:none}
-.dev-avatar{width:76px;height:76px;border-radius:20px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:30px;font-weight:900;color:#fff;box-shadow:0 0 25px var(--primary-glow);position:relative;z-index:1}
-.dev-name{font-size:17px;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px;position:relative;z-index:1}
-.dev-role{font-size:10px;color:var(--gold);letter-spacing:1.8px;font-family:monospace;font-weight:700;margin-bottom:8px;position:relative;z-index:1}
-.dev-tagline{font-size:11px;color:var(--text-dim);font-style:italic;line-height:1.5;position:relative;z-index:1;max-width:320px;margin:0 auto}
-.dev-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px}
-.dev-stat{background:var(--bg-2);padding:11px 6px;text-align:center}
-.dev-stat-val{font-size:16px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-family:monospace}
-.dev-stat-lbl{font-size:8px;color:var(--text-mute);letter-spacing:1px;margin-top:3px;text-transform:uppercase;font-family:monospace}
+.dev-hero{text-align:center;padding:20px 14px;background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(244,114,182,.15));border:1px solid var(--primary);border-radius:16px;margin-bottom:12px}
+.dev-avatar-big{width:76px;height:76px;border-radius:20px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:30px;font-weight:900;color:#fff}
+.dev-name-big{font-size:17px;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}
+.dev-role-big{font-size:10px;color:var(--gold);letter-spacing:1.8px;font-family:monospace;font-weight:700;margin-bottom:8px}
+.dev-tagline-big{font-size:11px;color:var(--text-dim);font-style:italic;line-height:1.5}
 .dev-section{margin-bottom:12px}
 .dev-section-title{font-size:10px;color:var(--primary-2);letter-spacing:1.3px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:6px;font-family:monospace;text-transform:uppercase}
 .dev-section-title svg{width:12px;height:12px;fill:var(--accent)}
 .dev-bio{padding:12px;background:var(--bg-2);border:1px solid var(--border);border-radius:10px;font-size:11px;color:var(--text-dim);line-height:1.6}
-.dev-skill-group{margin-bottom:8px}
-.dev-skill-label{font-size:9px;color:var(--text-mute);letter-spacing:1.3px;text-transform:uppercase;margin-bottom:5px;font-weight:700;font-family:monospace}
-.dev-skill-list{display:flex;flex-wrap:wrap;gap:5px}
-.dev-pill{padding:5px 10px;background:rgba(168,85,247,.15);border:1px solid var(--primary);color:var(--primary-2);border-radius:14px;font-size:9px;font-weight:700;font-family:monospace}
-.dev-project{padding:10px;background:var(--bg-2);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.dev-project-info{flex:1;min-width:0}
-.dev-project-name{font-size:12px;font-weight:800;color:var(--text);margin-bottom:1px}
-.dev-project-desc{font-size:9px;color:var(--text-mute);line-height:1.4}
-.dev-project-status{padding:3px 8px;background:rgba(34,211,164,.15);border:1px solid var(--success);border-radius:6px;font-size:8px;font-weight:800;color:var(--success);font-family:monospace;flex-shrink:0}
+.dev-pill{display:inline-block;padding:5px 10px;background:rgba(168,85,247,.15);border:1px solid var(--primary);color:var(--primary-2);border-radius:14px;font-size:9px;font-weight:700;font-family:monospace;margin:2px}
 .dev-quote{padding:12px;background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(244,114,182,.08));border:1px dashed var(--gold);border-radius:10px;text-align:center;font-style:italic;color:var(--gold);font-size:11px;line-height:1.5}
-
+.admin-hero{text-align:center;padding:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(244,114,182,.1));border:1.5px solid var(--gold);border-radius:14px;margin-bottom:12px}
+.admin-title{font-size:16px;font-weight:900;letter-spacing:2px;color:var(--gold);margin-bottom:4px}
+.admin-sub{font-size:10px;color:var(--text-dim);font-family:monospace}
+.admin-user{padding:10px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:10px;margin-bottom:6px}
+.admin-user-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.admin-user-name{font-size:12px;font-weight:800;color:var(--text)}
+.admin-user-meta{font-size:9px;color:var(--text-mute);font-family:monospace}
+.admin-user-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.admin-btn{padding:6px;border-radius:6px;font-size:9px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid var(--border-2);background:var(--bg);color:var(--text-dim)}
+.admin-btn.danger{border-color:var(--danger);color:var(--danger)}
+.admin-btn.success{border-color:var(--success);color:var(--success)}
+.admin-btn.gold{border-color:var(--gold);color:var(--gold)}
+.changelog-item{padding:10px 12px;background:var(--bg-2);border-left:3px solid var(--primary);border-radius:8px;margin-bottom:8px;font-size:11px;color:var(--text-dim);line-height:1.5}
+.changelog-item b{color:var(--primary-2)}
+.changelog-version{font-size:13px;font-weight:900;color:var(--gold);margin-bottom:6px;font-family:monospace}
 .toast-wrap{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:6px;pointer-events:none;width:min(340px,88vw)}
-.toast{padding:10px 14px;border-radius:10px;background:rgba(18,10,30,.98);border:1px solid var(--primary);color:var(--text);font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 25px var(--primary-glow);animation:toastIn .3s ease-out;display:flex;align-items:center;gap:8px;font-weight:600}
+.toast{padding:10px 14px;border-radius:10px;background:rgba(18,10,30,.98);border:1px solid var(--primary);color:var(--text);font-size:12px;display:flex;align-items:center;gap:8px;font-weight:600}
 .toast.success{border-color:var(--success)}
 .toast.error{border-color:var(--danger)}
 .toast.warning{border-color:var(--warning)}
-@keyframes toastIn{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-
-@media (max-width:480px){
-  .app{padding:10px}
-  .header{padding:10px 12px}
-  .login-card{padding:22px 18px}
-  .header-title{font-size:11px}
-  .hero-title{font-size:17px}
-  .mode-grid{grid-template-columns:repeat(4,1fr)}
-}
+@media (max-width:480px){.app{padding:10px}.header{padding:10px 12px}.login-card{padding:22px 18px}}
 </style>
 </head>
+<body x-data="zenkaiApp()" x-init="init()" x-cloak>
 
-<body x-data="zenkaiWeb()" x-init="init()" x-cloak>
-
-<!-- LOADING -->
 <div x-show="!ready" class="loading-screen">
   <div class="spinner"></div>
-  <div class="loading-text">BENTAR BRE, LAGI LOAD...</div>
+  <div class="loading-text">LOADING...</div>
 </div>
 
 <!-- LOGIN -->
-<div x-show="ready && !userName" class="login-wrap">
+<div x-show="ready && !user" class="login-wrap">
   <div class="login-card">
-    <div class="login-icon">
-      <svg viewBox="0 0 24 24"><path d="M13 2L4.5 12.5H11L9.5 22L19.5 10.5H13L13 2Z"/></svg>
-    </div>
+    <div class="login-icon"><svg viewBox="0 0 24 24"><path d="M13 2L4.5 12.5H11L9.5 22L19.5 10.5H13L13 2Z"/></svg></div>
     <div class="login-title">ZENKAI</div>
-    <div class="login-sub">// AUTOFLOW v1</div>
-
-    <div class="credit-badge">
-      <div class="credit-avatar">A</div>
-      <div class="credit-text">by <b>Andika</b></div>
+    <div class="login-sub">// AUTOFLOW v1.2</div>
+    <div class="credit-badge"><div class="credit-avatar">A</div><div class="credit-text">by <b>Andika</b></div></div>
+    <div class="login-tag">Masukin <b>nama + password</b> lu bre</div>
+    <div class="tab-row">
+      <button class="tab-btn" :class="{active: authMode==='login'}" @click="authMode='login'">MASUK</button>
+      <button class="tab-btn" :class="{active: authMode==='register'}" @click="authMode='register'">DAFTAR</button>
     </div>
-
-    <div class="login-tag" x-text="loginTagline"></div>
-
     <div class="field">
-      <div class="field-label">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        SIAPA NAMA LU?
-      </div>
-      <input 
-        type="text" 
-        x-model="nameInput" 
-        :class="{error: nameError}"
-        placeholder="Ketik nama lu bre..." 
-        maxlength="20"
-        @keyup.enter="login()"
-        @input="nameError = ''">
-      <div x-show="nameError" class="error-msg">
-        <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 15h-2v-2h2v2zm0-4h-2V9h2v4z"/></svg>
-        <span x-text="nameError"></span>
-      </div>
+      <div class="field-label"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> NAMA LU</div>
+      <input type="text" x-model="form.username" :class="{error: errMsg}" placeholder="Ketik nama lu..." maxlength="20" @input="errMsg=''">
     </div>
-
-    <button class="btn-primary" @click="login()" :disabled="!nameInput.trim() || loggingIn">
+    <div class="field">
+      <div class="field-label"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> PASSWORD</div>
+      <input type="password" x-model="form.password" :class="{error: errMsg}" placeholder="Ketik password lu..." @input="errMsg=''">
+    </div>
+    <div x-show="errMsg" class="error-msg">
+      <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 15h-2v-2h2v2zm0-4h-2V9h2v4z"/></svg>
+      <span x-text="errMsg"></span>
+    </div>
+    <button class="btn-primary" @click="submitAuth()" :disabled="loading">
       <svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg>
-      <span x-text="loggingIn ? 'MASUK...' : 'GAS MASUK'"></span>
+      <span x-text="loading ? 'LOADING...' : (authMode==='login' ? 'MASUK' : 'DAFTAR')"></span>
     </button>
-
-    <div style="text-align:center;margin-top:10px;font-size:9px;color:var(--text-mute);font-family:monospace;line-height:1.4">
-      Nama hanya bisa dipakai <b style="color:var(--primary-2)">1x</b>. Kalau udah dipakai orang lain, ganti nama lain.
-    </div>
+    <div style="text-align:center;margin-top:10px;font-size:9px;color:var(--text-mute);font-family:monospace">Nama cuma bisa dipakai 1x</div>
   </div>
 </div>
 
-<!-- MAIN -->
-<div x-show="ready && userName" class="app">
+<!-- MAIN APP -->
+<div x-show="ready && user" class="app">
 
-  <header class="header">
-    <div class="header-left">
-      <div class="avatar" x-text="userName.substring(0,2).toUpperCase()"></div>
-      <div class="header-info">
-        <div class="header-title">ZENKAI AUTOFLOW</div>
-        <div class="header-sub">
-          <span class="dot"></span>
-          <span x-text="userName"></span>
-          <span style="color:var(--text-mute)">·</span>
-          <span class="credit-name">by Andika</span>
-        </div>
-      </div>
-    </div>
-    <div class="header-actions">
-      <button class="icon-btn" @click="logout()" title="Keluar" style="color:var(--danger);border-color:rgba(244,63,94,.3)">
-        <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- BANNER PENGEMBANGAN — TIPIS -->
-  <div class="dev-banner">
-    <div class="dev-banner-icon">
-      <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-    </div>
-    <div class="dev-banner-text">
-      <b>v1 masih pengembangan.</b> Baru support Google Forms — Quizizz, Kahoot, dll belum tersedia.
-    </div>
-  </div>
-
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-badge">
-      <svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg>
-      ZENKAI AUTOFLOW v1
-    </div>
-    <div class="hero-title">Yo, <span x-text="userName"></span>!</div>
-    <div class="hero-sub">
-      Gw <b>Zenkai AutoFlow</b> — asisten lu yang siap hajar semua soal Google Form.
-      <b>Paste URL</b>, tap <b>MULAI</b>, terus duduk manis.
-    </div>
-    <div class="hero-tengil" x-text="heroTengil"></div>
-
-    <div class="dev-cta" @click="devSheetOpen=true">
-      <div class="dev-cta-avatar">A</div>
-      <div class="dev-cta-info">
-        <div class="dev-cta-title">Baca Tentang Developer</div>
-        <div class="dev-cta-desc">Kenalan sama Andika</div>
-      </div>
-      <div class="dev-cta-arrow">
-        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+<header class="header">
+  <div class="header-left">
+    <div class="avatar" :class="{owner: isOwner, vip: isVip && !isOwner}" x-text="profile.username ? profile.username.substring(0,2).toUpperCase() : 'ZK'"></div>
+    <div class="header-info">
+      <div class="header-title">ZENKAI AUTOFLOW</div>
+      <div class="header-sub">
+        <span class="dot"></span>
+        <span x-text="profile.username"></span>
+        <span style="color:var(--text-mute)">·</span>
+        <span class="credit-name">by Andika</span>
+        <template x-if="isOwner"><span class="badge-role owner">★ OWNER</span></template>
+        <template x-if="isVip && !isOwner"><span class="badge-role vip">◆ VIP</span></template>
       </div>
     </div>
   </div>
-
-  <!-- TARGET -->
-  <div class="card">
-    <div class="card-label">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-13c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
-      TARGET NILAI
-    </div>
-    <div class="target-value" x-text="targetScore"></div>
-    <input type="range" min="0" max="100" x-model.number="targetScore" class="target-slider" @change="syncToExtension()">
-    <div class="target-desc" x-text="getTargetDesc()"></div>
-  </div>
-
-  <!-- MAPEL -->
-  <div class="card">
-    <div class="card-label">
-      <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
-      MATA PELAJARAN
-    </div>
-    <div class="mode-grid">
-      <button class="mode-btn" :class="{active: mode==='umum'}" @click="mode='umum';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
-        <span>Umum</span>
+  <div class="header-actions">
+    <template x-if="isOwner">
+      <button class="icon-btn owner" @click="adminOpen=true" title="Admin Panel">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
       </button>
-      <button class="mode-btn" :class="{active: mode==='mtk'}" @click="mode='mtk';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
-        <span>MTK</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='fisika'}" @click="mode='fisika';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm1.75-6.26l-1.5 4.5c-.1.29-.35.48-.63.48-.14 0-.29-.05-.4-.14L9 13.5l-2.22 2.22c-.2.2-.5.2-.7 0s-.2-.5 0-.7L8.5 12.5l-2.22-2.22c-.2-.2-.2-.5 0-.7s.5-.2.7 0L9 11.5l2.22-2.22c.11-.11.26-.14.4-.14.28 0 .53.19.63.48l1.5 4.5z"/></svg>
-        <span>Fisika</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='kimia'}" @click="mode='kimia';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M9 3v2H8v2h1v13c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2V7h1V5h-1V3H9zm0 4h6v11c0 .55-.45 1-1 1h-4c-.55 0-1-.45-1-1V7z"/></svg>
-        <span>Kimia</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='biologi'}" @click="mode='biologi';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-        <span>Biologi</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='bing'}" @click="mode='bing';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
-        <span>B.Ing</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='bindo'}" @click="mode='bindo';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-        <span>B.Indo</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='sejarah'}" @click="mode='sejarah';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
-        <span>Sejarah</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='pkn'}" @click="mode='pkn';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-        <span>PKN</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='ekonomi'}" @click="mode='ekonomi';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
-        <span>Ekonomi</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='geografi'}" @click="mode='geografi';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-        <span>Geografi</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='sosiologi'}" @click="mode='sosiologi';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-        <span>Sosiologi</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='seni'}" @click="mode='seni';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/></svg>
-        <span>Seni</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='penjas'}" @click="mode='penjas';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93V18c0-1.1-.9-2-2-2s-2 .9-2 2v1.93C5.06 19.44 2 16.08 2 12c0-5.51 4.49-10 10-10 5.51 0 10 4.49 10 10 0 4.08-3.06 7.44-7 7.93z"/></svg>
-        <span>Penjas</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='ips'}" @click="mode='ips';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.93 6h-2.95a15.65 15.65 0 00-1.38-3.56c1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
-        <span>IPS</span>
-      </button>
-      <button class="mode-btn" :class="{active: mode==='agama'}" @click="mode='agama';syncToExtension()">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-2-5.5c0-1.5 2-3 2-3s2 1.5 2 3c0 1.1-.9 2-2 2s-2-.9-2-2z"/></svg>
-        <span>Agama</span>
-      </button>
-    </div>
-    <button class="btn-save" @click="saveAndToast()">
-      <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
-      SIMPAN SETTING
-    </button>
-  </div>
-
-  <!-- AUTO FLOW -->
-  <div class="card" style="border-color:var(--primary)">
-    <div class="card-label">
-      <svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg>
-      MULAI AUTO-FLOW
-    </div>
-    <input type="text" x-model="formUrl" class="url-input" placeholder="Paste URL Google Form di sini bre...">
-    <button class="btn-flow" @click="startAutoFlow()" :disabled="starting">
-      <svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg>
-      <span x-text="starting ? 'MEMBUKA FORM...' : 'MULAI AUTO-FLOW'"></span>
-    </button>
-    <div class="hint">
-      <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
-      <div><b>Tips:</b> Habis form kebuka, muncul tombol <b>AUTO-FLOW</b> di pojok kanan bawah form. Tap sekali, gw hajar semua soal!</div>
-    </div>
-  </div>
-
-  <!-- GUIDE -->
-  <div class="card">
-    <div class="card-label">
-      <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
-      CARA PAKAI
-    </div>
-    <div class="guide-item">
-      <div class="guide-num">1</div>
-      <div class="guide-text">Set <b>target</b> & <b>mapel</b></div>
-    </div>
-    <div class="guide-item">
-      <div class="guide-num">2</div>
-      <div class="guide-text">Paste <b>URL Form</b> → <b>MULAI</b></div>
-    </div>
-    <div class="guide-item">
-      <div class="guide-num">3</div>
-      <div class="guide-text">Tap tombol <b>AUTO-FLOW</b> di form</div>
-    </div>
-    <div class="guide-item">
-      <div class="guide-num">4</div>
-      <div class="guide-text">Tunggu → <b>soal keisi</b></div>
-    </div>
-  </div>
-
-  <!-- HISTORY -->
-  <div class="card">
-    <div class="card-label">
-      <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
-      HISTORY
-    </div>
-    <div x-show="history.length===0" style="text-align:center;padding:14px;color:var(--text-mute);font-size:11px;font-style:italic">
-      Belum ada history. Gas auto-flow pertama lu!
-    </div>
-    <template x-for="(h, i) in history" :key="i">
-      <div class="history-item">
-        <div style="flex:1;min-width:0">
-          <div class="history-title" x-text="h.title"></div>
-          <div class="history-meta" x-text="h.time"></div>
-        </div>
-        <div class="history-status" x-text="h.filled + '/' + h.total"></div>
-      </div>
     </template>
+    <button class="icon-btn" @click="changelogOpen=true" title="Apa yang baru">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+    </button>
+    <button class="icon-btn" @click="logout()" style="color:var(--danger);border-color:rgba(244,63,94,.3)" title="Keluar">
+      <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+    </button>
   </div>
+</header>
 
-  <!-- TIPS -->
-  <div class="tips">
-    <div class="tips-icon">
-      <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
-    </div>
-    <div class="tips-content">
-      <div class="tips-label">TIPS DARI ANDIKA</div>
-      <div class="tips-text" x-text="tipsText"></div>
-    </div>
+<div class="dev-banner">
+  <div class="dev-banner-icon"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+  <div class="dev-banner-text"><b>v1.2 masih pengembangan.</b> Baru support Google Forms.</div>
+</div>
+
+<div class="limit-banner">
+  <div class="limit-banner-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+  <div class="limit-banner-text">
+    <template x-if="isVip || isOwner"><span><b>UNLIMITED</b> · VIP aktif</span></template>
+    <template x-if="!isVip && !isOwner"><span>Sisa limit hari ini: <span class="count" :class="{empty: remainingLimit <= 0}" x-text="remainingLimit"></span>/10</span></template>
   </div>
+</div>
 
-  <div class="footer">
-    <div class="footer-title">ZENKAI AUTOFLOW v1</div>
-    <div class="footer-tengil">"Kerjain sampe kelar, gausah mikir."</div>
+<template x-if="!isVip && !isOwner">
+  <div class="vip-card">
+    <div class="vip-title">◆ UPGRADE KE VIP</div>
+    <div class="vip-sub">Unlimited auto-fill + prioritas server</div>
+    <div class="price-grid">
+      <div class="price-item" @click="openWaVip('1 hari','Rp 2.000')"><span class="dur">1 hari</span><span class="pri">Rp 2.000</span></div>
+      <div class="price-item" @click="openWaVip('3 hari','Rp 5.000')"><span class="dur">3 hari</span><span class="pri">Rp 5.000</span></div>
+      <div class="price-item" @click="openWaVip('1 minggu','Rp 8.000')"><span class="dur">1 minggu</span><span class="pri">Rp 8.000</span></div>
+      <div class="price-item" @click="openWaVip('1 bulan','Rp 10.000')"><span class="dur">1 bulan</span><span class="pri">Rp 10.000</span></div>
+      <div class="price-item" @click="openWaVip('permanen','Rp 30.000')"><span class="dur">PERMANEN</span><span class="pri">Rp 30.000</span></div>
+    </div>
+    <button class="vip-btn" @click="openWaVip('belum pilih','')">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      HUBUNGI ADMIN
+    </button>
+  </div>
+</template>
+
+<div class="hero">
+  <div class="hero-badge"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg> ZENKAI AUTOFLOW v1.2</div>
+  <div class="hero-title">Yo, <span x-text="profile.username"></span>!</div>
+  <div class="hero-sub">Gw <b>Zenkai AutoFlow</b> — asisten lu yang siap hajar soal Google Form.</div>
+  <div class="hero-tengil" x-text="heroTengil"></div>
+  <div class="dev-cta" @click="devSheetOpen=true">
+    <div class="dev-cta-avatar">A</div>
+    <div class="dev-cta-info">
+      <div class="dev-cta-title">Baca Tentang Developer</div>
+      <div class="dev-cta-desc">Kenalan sama Andika</div>
+    </div>
+    <div class="dev-cta-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg> STATISTIK LU</div>
+  <div class="stats-grid">
+    <div class="stat-box"><div class="stat-val" x-text="stats.total_soal"></div><div class="stat-lbl">Soal</div></div>
+    <div class="stat-box"><div class="stat-val" x-text="stats.total_forms"></div><div class="stat-lbl">Form</div></div>
+    <div class="stat-box"><div class="stat-val" x-text="remainingLimit"></div><div class="stat-lbl">Sisa</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-13c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg> TARGET NILAI</div>
+  <div class="target-value" x-text="targetScore"></div>
+  <input type="range" min="0" max="100" x-model.number="targetScore" class="target-slider">
+  <div class="target-desc" x-text="getTargetDesc()"></div>
+</div>
+
+<div class="card">
+  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> MATA PELAJARAN</div>
+  <div class="mode-grid">
+    <button class="mode-btn" :class="{active: mode==='umum'}" @click="mode='umum'">💡<span>Umum</span></button>
+    <button class="mode-btn" :class="{active: mode==='mtk'}" @click="mode='mtk'">🧮<span>MTK</span></button>
+    <button class="mode-btn" :class="{active: mode==='fisika'}" @click="mode='fisika'">⚛️<span>Fisika</span></button>
+    <button class="mode-btn" :class="{active: mode==='kimia'}" @click="mode='kimia'">🧪<span>Kimia</span></button>
+    <button class="mode-btn" :class="{active: mode==='biologi'}" @click="mode='biologi'">🧬<span>Biologi</span></button>
+    <button class="mode-btn" :class="{active: mode==='bing'}" @click="mode='bing'">🇬🇧<span>B.Ing</span></button>
+    <button class="mode-btn" :class="{active: mode==='bindo'}" @click="mode='bindo'">🇮🇩<span>B.Indo</span></button>
+    <button class="mode-btn" :class="{active: mode==='sejarah'}" @click="mode='sejarah'">📜<span>Sejarah</span></button>
+    <button class="mode-btn" :class="{active: mode==='pkn'}" @click="mode='pkn'">⚖️<span>PKN</span></button>
+    <button class="mode-btn" :class="{active: mode==='ekonomi'}" @click="mode='ekonomi'">💰<span>Ekonomi</span></button>
+    <button class="mode-btn" :class="{active: mode==='geografi'}" @click="mode='geografi'">🌍<span>Geografi</span></button>
+    <button class="mode-btn" :class="{active: mode==='sosiologi'}" @click="mode='sosiologi'">👥<span>Sosiologi</span></button>
+    <button class="mode-btn" :class="{active: mode==='seni'}" @click="mode='seni'">🎨<span>Seni</span></button>
+    <button class="mode-btn" :class="{active: mode==='penjas'}" @click="mode='penjas'">⚽<span>Penjas</span></button>
+    <button class="mode-btn" :class="{active: mode==='ips'}" @click="mode='ips'">🌏<span>IPS</span></button>
+    <button class="mode-btn" :class="{active: mode==='agama'}" @click="mode='agama'">🕌<span>Agama</span></button>
+  </div>
+  <div class="toggle-row">
+    <div class="toggle-info">
+      <div class="toggle-title">Auto-Submit</div>
+      <div class="toggle-desc">Auto kirim form setelah keisi</div>
+    </div>
+    <div class="toggle-switch" :class="{on: autoSubmit}" @click="autoSubmit=!autoSubmit;saveSettings()"></div>
+  </div>
+  <button class="btn-save" @click="saveSettings()">
+    <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+    SIMPAN SETTING
+  </button>
+</div>
+
+<div class="card" style="border-color:var(--primary)">
+  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg> MULAI AUTO-FLOW</div>
+  <input type="text" x-model="formUrl" class="url-input" placeholder="Paste URL Google Form di sini...">
+  <button class="btn-flow" @click="startAutoFlow()" :disabled="starting || remainingLimit <= 0">
+    <svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg>
+    <span x-text="starting ? 'MEMBUKA FORM...' : (remainingLimit <= 0 ? 'LIMIT HABIS' : 'MULAI AUTO-FLOW')"></span>
+  </button>
+  <div class="hint">
+    <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
+    <div><b>Tips:</b> Habis form kebuka, muncul tombol <b>AUTO-FLOW</b> di pojok kanan bawah form.</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> CARA PAKAI</div>
+  <div class="guide-item"><div class="guide-num">1</div><div class="guide-text">Set <b>target</b> & <b>mapel</b></div></div>
+  <div class="guide-item"><div class="guide-num">2</div><div class="guide-text">Paste <b>URL Form</b> → <b>MULAI</b></div></div>
+  <div class="guide-item"><div class="guide-num">3</div><div class="guide-text">Tap tombol <b>AUTO-FLOW</b> di form</div></div>
+  <div class="guide-item"><div class="guide-num">4</div><div class="guide-text">Tunggu → <b>soal keisi</b></div></div>
+</div>
+
+<div class="card">
+  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg> HISTORY</div>
+  <div x-show="history.length===0" style="text-align:center;padding:14px;color:var(--text-mute);font-size:11px;font-style:italic">Belum ada history.</div>
+  <template x-for="(h, i) in history" :key="i">
+    <div class="history-item">
+      <div style="flex:1;min-width:0">
+        <div class="history-title" x-text="h.title"></div>
+        <div class="history-meta" x-text="h.time"></div>
+      </div>
+      <div class="history-status" x-text="h.filled + '/' + h.total"></div>
+    </div>
+  </template>
+</div>
+
+<div class="tips">
+  <div class="tips-icon"><svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
+  <div class="tips-content">
+    <div class="tips-label">TIPS DARI ANDIKA</div>
+    <div class="tips-text" x-text="tipsText"></div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-title">ZENKAI AUTOFLOW v1.2</div>
+</div>
+</div>
+
+<!-- CHANGELOG SHEET -->
+<div x-show="changelogOpen" @click.self="changelogOpen=false" class="sheet-overlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" @click="changelogOpen=false">×</button>
+    <div class="admin-hero">
+      <div class="admin-title">WHAT'S NEW</div>
+      <div class="admin-sub">// CHANGELOG</div>
+    </div>
+    <div class="changelog-item">
+      <div class="changelog-version">v1.2 (CURRENT)</div>
+      <b>BARU:</b><br>
+      • Login nama + password<br>
+      • Session persisten (gak logout pas refresh)<br>
+      • Sistem VIP (5 paket harga)<br>
+      • Owner Panel (akun Zenkai)<br>
+      • Statistik user<br>
+      • Auto-Submit toggle<br>
+      • Changelog page<br>
+      • Rate limit 10x/hari (free)
+    </div>
+    <div class="changelog-item" style="border-color:var(--text-mute)">
+      <div class="changelog-version" style="color:var(--text-mute)">v1.0 (LAMA)</div>
+      • Login cuma nama<br>
+      • 16 mata pelajaran<br>
+      • Auto-fill Google Form
+    </div>
   </div>
 </div>
 
@@ -488,101 +448,80 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   <div class="sheet">
     <div class="sheet-handle"></div>
     <button class="sheet-close" @click="devSheetOpen=false">×</button>
-
     <div class="dev-hero">
-      <div class="dev-avatar">A</div>
-      <div class="dev-name">ANDIKA</div>
-      <div class="dev-role">// FOUNDER ZENKAI TOOLS</div>
-      <div class="dev-tagline">"Banyak Belajar, Banyak Ngoding, Banyak Project Jadi"</div>
+      <div class="dev-avatar-big">A</div>
+      <div class="dev-name-big">ANDIKA</div>
+      <div class="dev-role-big">// FOUNDER ZENKAI TOOLS</div>
+      <div class="dev-tagline-big">"Banyak Belajar, Banyak Ngoding, Banyak Project Jadi"</div>
     </div>
-
-    <div class="dev-stat-row">
-      <div class="dev-stat"><div class="dev-stat-val">2 Bln</div><div class="dev-stat-lbl">Belajar</div></div>
-      <div class="dev-stat"><div class="dev-stat-val">∞</div><div class="dev-stat-lbl">Semangat</div></div>
-      <div class="dev-stat"><div class="dev-stat-val">v1</div><div class="dev-stat-lbl">AutoFlow</div></div>
-    </div>
-
     <div class="dev-section">
-      <div class="dev-section-title">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        Tentang Gw
-      </div>
-      <div class="dev-bio">
-        Yo bre! Gw <b style="color:var(--primary-2)">Andika</b>, developer asal <b style="color:var(--gold)">Jambi, Indonesia</b>. 
-        Baru belajar coding sekitar 2 bulan, tapi udah nekat bikin project. 
-        <b style="color:var(--primary-2)">Zenkai AutoFlow v1</b> ini project paling baru gw. 
-        Masih banyak kurangnya, tapi gw bakal terus update.
+      <div class="dev-section-title"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> Tentang</div>
+      <div class="dev-bio">Yo bre! Gw <b style="color:var(--primary-2)">Andika</b>, developer asal <b style="color:var(--gold)">Jambi, Indonesia</b>. Baru belajar coding ~2 bulan. Zenkai AutoFlow v1.2 ini project baru gw.</div>
+    </div>
+    <div class="dev-section">
+      <div class="dev-section-title"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg> Skill</div>
+      <div style="text-align:center">
+        <span class="dev-pill">HTML</span><span class="dev-pill">CSS</span><span class="dev-pill">JavaScript</span><span class="dev-pill">Alpine.js</span><span class="dev-pill">Supabase</span><span class="dev-pill">Vercel</span><span class="dev-pill">Chrome Ext</span>
       </div>
     </div>
-
     <div class="dev-section">
-      <div class="dev-section-title">
-        <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
-        Skill & Tech
-      </div>
-      <div class="dev-skill-group">
-        <div class="dev-skill-label">FRONTEND</div>
-        <div class="dev-skill-list">
-          <span class="dev-pill">HTML</span><span class="dev-pill">CSS</span><span class="dev-pill">JavaScript</span><span class="dev-pill">Alpine.js</span>
-        </div>
-      </div>
-      <div class="dev-skill-group">
-        <div class="dev-skill-label">BACKEND</div>
-        <div class="dev-skill-list">
-          <span class="dev-pill">Supabase</span><span class="dev-pill">Edge Functions</span><span class="dev-pill">PHP (dasar)</span>
-        </div>
-      </div>
-      <div class="dev-skill-group">
-        <div class="dev-skill-label">DATABASE</div>
-        <div class="dev-skill-list">
-          <span class="dev-pill">PostgreSQL</span><span class="dev-pill">MySQL</span>
-        </div>
-      </div>
-      <div class="dev-skill-group">
-        <div class="dev-skill-label">TOOLS</div>
-        <div class="dev-skill-list">
-          <span class="dev-pill">Vercel</span><span class="dev-pill">GitHub</span><span class="dev-pill">Chrome Extension</span>
-        </div>
-      </div>
+      <div class="dev-section-title"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg> Project</div>
+      <div class="dev-bio" style="margin-bottom:6px"><b style="color:var(--primary-2)">Zenkai Tools</b><br>Web all-in-one <span style="color:var(--success);font-size:9px">● LIVE</span></div>
+      <div class="dev-bio" style="margin-bottom:6px"><b style="color:var(--primary-2)">Zenkai AutoFlow v1.2</b><br>Auto-isi Google Form <span style="color:var(--gold);font-size:9px">● BARU</span></div>
     </div>
-
     <div class="dev-section">
-      <div class="dev-section-title">
-        <svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg>
-        Project
-      </div>
-      <div class="dev-project">
-        <div class="dev-project-info"><div class="dev-project-name">Zenkai Tools</div><div class="dev-project-desc">Web all-in-one: dompet, cinema, komik, AI chat</div></div>
-        <div class="dev-project-status">LIVE</div>
-      </div>
-      <div class="dev-project">
-        <div class="dev-project-info"><div class="dev-project-name">Zenkai AutoFlow v1</div><div class="dev-project-desc">Auto-isi Google Form pakai AI</div></div>
-        <div class="dev-project-status">BARU</div>
-      </div>
-      <div class="dev-project">
-        <div class="dev-project-info"><div class="dev-project-name">Zenkai Tutor</div><div class="dev-project-desc">AI tutor buat jawab soal pelajaran</div></div>
-        <div class="dev-project-status">BETA</div>
-      </div>
+      <div class="dev-quote">"Belajar dari nol bukan alasan buat berhenti."</div>
     </div>
-
     <div class="dev-section">
-      <div class="dev-quote">"Belajar dari nol bukan alasan buat berhenti — justru alasan buat terus maju."</div>
-    </div>
-
-    <div class="dev-section">
-      <div class="dev-section-title">
-        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-        Kontak
-      </div>
-      <div class="dev-bio" style="text-align:center">
+      <div class="dev-section-title"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg> Kontak</div>
+      <div style="text-align:center">
         <a href="https://wa.me/6285352831643" target="_blank" style="display:inline-block;padding:8px 16px;background:rgba(37,211,102,.15);border:1px solid #25d366;color:#25d366;border-radius:8px;font-size:10px;font-weight:800;text-decoration:none;margin:3px">WhatsApp</a>
         <a href="https://instagram.com/andik4.tm" target="_blank" style="display:inline-block;padding:8px 16px;background:rgba(255,0,128,.15);border:1px solid #ff0080;color:#ff0080;border-radius:8px;font-size:10px;font-weight:800;text-decoration:none;margin:3px">Instagram</a>
       </div>
     </div>
+  </div>
+</div>
 
-    <div style="text-align:center;padding:12px 0;font-family:monospace;font-size:9px;color:var(--text-mute);letter-spacing:1.2px">
-      <div style="font-weight:800;color:var(--primary-2);margin-bottom:3px">ZENKAI TOOLS</div>
-      <div>© 2026 Andika · v1</div>
+<!-- ADMIN SHEET -->
+<div x-show="adminOpen" @click.self="adminOpen=false" class="sheet-overlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" @click="adminOpen=false">×</button>
+    <div class="admin-hero">
+      <div class="admin-title">★ OWNER PANEL</div>
+      <div class="admin-sub">// ZENKAI ADMIN</div>
+    </div>
+    <div class="card">
+      <div class="card-label">📊 STATISTIK GLOBAL</div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-val" x-text="adminStats.total_users"></div><div class="stat-lbl">Users</div></div>
+        <div class="stat-box"><div class="stat-val" x-text="adminStats.total_vip"></div><div class="stat-lbl">VIP</div></div>
+        <div class="stat-box"><div class="stat-val" x-text="adminStats.total_banned"></div><div class="stat-lbl">Banned</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">👥 KELOLA USER</div>
+      <input type="text" x-model="userSearch" placeholder="Cari user..." class="url-input">
+      <div style="max-height:400px;overflow-y:auto">
+        <template x-for="u in filteredUsers" :key="u.id">
+          <div class="admin-user">
+            <div class="admin-user-header">
+              <div class="admin-user-name" x-text="u.username"></div>
+              <div class="admin-user-meta">
+                <span x-show="u.is_vip" style="color:var(--gold)">◆ VIP</span>
+                <span x-show="u.is_banned" style="color:var(--danger)">● BANNED</span>
+              </div>
+            </div>
+            <div class="admin-user-actions">
+              <template x-if="!u.is_banned"><button class="admin-btn danger" @click="banUser(u)">Ban</button></template>
+              <template x-if="u.is_banned"><button class="admin-btn success" @click="unbanUser(u)">Unban</button></template>
+              <template x-if="!u.is_vip"><button class="admin-btn gold" @click="giveVip(u)">+VIP</button></template>
+              <template x-if="u.is_vip"><button class="admin-btn" @click="removeVip(u)">-VIP</button></template>
+              <button class="admin-btn danger" @click="deleteUser(u)">Hapus</button>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 </div>
@@ -599,270 +538,303 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <script>
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
+const WA_ADMIN = '6285352831643';
+const OWNER_USERNAME = 'Zenkai';
+const OWNER_PASSWORD = '763097';
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function zenkaiWeb() {
+function zenkaiApp() {
   return {
-    ready: false,
-    userName: '',
-    nameInput: '',
-    nameError: '',
-    loggingIn: false,
-    targetScore: 90,
-    mode: 'umum',
-    formUrl: '',
-    starting: false,
+    ready: false, user: null, profile: { username: '' },
+    isOwner: false, isVip: false,
+    authMode: 'login', loading: false,
+    form: { username: '', password: '' },
+    errMsg: '',
+    targetScore: 90, mode: 'umum', autoSubmit: false,
+    formUrl: '', starting: false,
+    remainingLimit: 10,
+    stats: { total_soal: 0, total_forms: 0 },
     history: [],
-    toasts: [],
-    toastId: 0,
-    devSheetOpen: false,
-    heroTengil: '"Otak lu capek? Pake otak gw aja. Gratis kok."',
-    tipsText: 'Set target 90 doang biar gak ketara. 100 juga bisa kalo lu pede.',
-    loginTagline: 'Masukin <b>nama lu</b>, langsung gas.',
-
-    heroList: [
-      '"Otak lu capek? Pake otak gw aja. Gratis kok."',
-      '"PR numpuk? Chill. Gw kuat sampe 100 soal."',
-      '"Gausah mikir kaya mau ngerjain sendiri. Gw yang mikir."',
-      '"Yang penting target set, sisanya gw yang kerja."',
-      '"Satu soal satu langkah, kelar deh."'
-    ],
-    tipsList: [
-      'Set target 90 doang biar gak ketara. 100 juga bisa kalo lu pede.',
-      'Target 0-100, atur sesuka hati. Gausah takut kena guru.',
-      'Soal 50 nomer? Chill, AI gw kuat sampe 100.',
-      'Pas SMA gw pernah ketiduran waktu ulangan. Lu jangan kaya gw.',
-      'Nilai jelek bukan akhir dunia. Yang penting lu udah coba.'
-    ],
-    loginList: [
-      'Masukin <b>nama lu</b>, langsung gas.',
-      'Nama doang, gak perlu email/password.',
-      'Ketik nama, tap masuk. Sisanya gw yang kerja.'
-    ],
+    toasts: [], toastId: 0,
+    devSheetOpen: false, changelogOpen: false, adminOpen: false,
+    allUsers: [], userSearch: '',
+    adminStats: { total_users: 0, total_vip: 0, total_banned: 0 },
+    heroTengil: '"Otak lu capek? Pake otak gw aja."',
+    tipsText: 'Set target 90 doang biar gak ketara.',
+    heroList: ['"Otak lu capek? Pake otak gw aja."', '"PR numpuk? Chill."', '"Yang penting target set."', '"Satu soal satu langkah."'],
+    tipsList: ['Set target 90 doang biar gak ketara.', 'PR numpuk? Chill, paste aja.', 'Yang penting target set, sisanya gw yang kerja.'],
 
     async init() {
       this.heroTengil = this.heroList[Math.floor(Math.random() * this.heroList.length)];
       this.tipsText = this.tipsList[Math.floor(Math.random() * this.tipsList.length)];
-      this.loginTagline = this.loginList[Math.floor(Math.random() * this.loginList.length)];
-
       try {
         const { data: { session } } = await sb.auth.getSession();
         if (session?.user) {
-          const savedName = localStorage.getItem('zenkai_name') || session.user.user_metadata?.username || '';
-          if (savedName) {
-            this.userName = savedName;
-            this.loadLocalSettings();
-          }
+          this.user = session.user;
+          await this.loadProfile();
+          await this.loadSettings();
+          await this.loadStats();
+          await this.loadLimit();
+          await this.loadHistory();
+          this.checkChangelogPopup();
         }
       } catch (e) { console.error(e); }
-
       this.ready = true;
-
-      if (this.userName) {
-        setTimeout(() => this.syncToExtension(), 1500);
-      }
 
       if (window.chrome && chrome.runtime && chrome.runtime.onMessage) {
         try {
           chrome.runtime.onMessage.addListener((msg) => {
             if (msg.action === 'flowCompleted') {
-              this.addHistory({
-                title: 'Google Form',
-                time: new Date().toLocaleString('id-ID'),
-                total: msg.total,
-                filled: msg.filled
-              });
+              this.addHistory({ title: 'Google Form', time: new Date().toLocaleString('id-ID'), total: msg.total, filled: msg.filled });
               this.showToast('Selesai! ' + msg.filled + '/' + msg.total, 'success');
-            }
-            if (msg.action === 'requestSync') {
-              this.syncToExtension();
+              this.updateStatsAfterFlow(msg.total);
+              this.loadLimit();
             }
           });
         } catch (e) {}
       }
     },
 
-    loadLocalSettings() {
-      const savedTarget = localStorage.getItem('zenkai_target');
-      const savedMode = localStorage.getItem('zenkai_mode');
-      const savedHistory = localStorage.getItem('zenkai_history');
-      if (savedTarget) this.targetScore = parseInt(savedTarget);
-      if (savedMode) this.mode = savedMode;
-      if (savedHistory) {
-        try { this.history = JSON.parse(savedHistory); } catch (e) {}
+    checkChangelogPopup() {
+      const seen = localStorage.getItem('zenkai_changelog_v12');
+      if (!seen) {
+        setTimeout(() => { this.changelogOpen = true; localStorage.setItem('zenkai_changelog_v12', '1'); }, 1500);
       }
     },
 
-    async login() {
-      const name = this.nameInput.trim();
-      if (!name) return;
-
-      this.nameError = '';
-      this.loggingIn = true;
-
-      if (name.length < 3) {
-        this.nameError = 'Nama minimal 3 huruf bre!';
-        this.loggingIn = false;
-        return;
+    async loadProfile() {
+      if (!this.user) return;
+      const { data } = await sb.from('profiles').select('*').eq('id', this.user.id).maybeSingle();
+      if (data) {
+        this.profile = data;
+        this.isOwner = data.role === 'owner' || data.username === OWNER_USERNAME;
+        this.isVip = data.is_vip || false;
       }
-      if (!/^[a-zA-Z0-9 _.-]+$/.test(name)) {
-        this.nameError = 'Nama cuma boleh huruf, angka, spasi, titik, minus';
-        this.loggingIn = false;
-        return;
-      }
+    },
 
+    async loadSettings() {
+      if (!this.user) return;
       try {
-        const { data: existing } = await sb
-          .from('profiles')
-          .select('id, username')
-          .ilike('username', name)
-          .maybeSingle();
-
-        if (existing) {
-          this.nameError = 'Nama sudah digunakan! Coba nama lain bre.';
-          this.loggingIn = false;
-          return;
-        }
-
-        const randomStr = Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
-        const email = `zenkai_${randomStr}@zenkai.local`;
-        const password = `zk_${randomStr}_${Math.random().toString(36).substring(2, 10)}`;
-
-        const { data: authData, error: signupError } = await sb.auth.signUp({
-          email: email,
-          password: password,
-          options: { data: { username: name } }
-        });
-
-        if (signupError) {
-          this.nameError = 'Gagal daftar: ' + signupError.message;
-          this.loggingIn = false;
-          return;
-        }
-
-        if (!authData.user) {
-          this.nameError = 'Gagal bikin akun. Coba lagi.';
-          this.loggingIn = false;
-          return;
-        }
-
-        await sb.from('profiles').insert({
-          id: authData.user.id,
-          username: name
-        });
-
-        this.userName = name;
-        localStorage.setItem('zenkai_name', name);
-        this.loadLocalSettings();
-        this.showToast('Gas, ' + name + '!', 'success');
-        
-        setTimeout(() => this.syncToExtension(), 800);
-
-      } catch (e) {
-        this.nameError = 'Error: ' + e.message;
-      } finally {
-        this.loggingIn = false;
-      }
-    },
-
-    async logout() {
-      try { await sb.auth.signOut(); } catch (e) {}
-      this.userName = '';
-      this.nameInput = '';
-      localStorage.removeItem('zenkai_name');
-      this.showToast('Sampai jumpa bre', 'success');
-    },
-
-    saveAndToast() {
-      localStorage.setItem('zenkai_target', this.targetScore);
-      localStorage.setItem('zenkai_mode', this.mode);
-      this.syncToExtension();
-      this.showToast('Setting tersimpan!', 'success');
-    },
-
-    async syncToExtension() {
-      try {
-        localStorage.setItem('zenkai_target', this.targetScore);
-        localStorage.setItem('zenkai_mode', this.mode);
-        localStorage.setItem('zenkai_username', this.userName);
-
-        let token = '';
-        try {
-          const { data: { session } } = await sb.auth.getSession();
-          token = session?.access_token || '';
-        } catch (e) {}
-
-        if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
-          chrome.runtime.sendMessage({
-            action: 'syncSettings',
-            target: this.targetScore,
-            mode: this.mode,
-            token: token,
-            username: this.userName
-          }, () => {
-            if (chrome.runtime.lastError) {}
-          });
-        }
+        const { data } = await sb.from('zenkai_autofill_settings').select('*').eq('user_id', this.user.id).maybeSingle();
+        if (data) { this.targetScore = data.target_score || 90; this.mode = data.mode || 'umum'; this.autoSubmit = data.auto_submit || false; }
       } catch (e) {}
     },
 
-    startAutoFlow() {
-      if (!this.formUrl.trim()) {
-        this.showToast('Paste URL Google Form dulu bre!', 'error');
-        return;
-      }
-      if (!this.formUrl.includes('docs.google.com/forms')) {
-        this.showToast('Itu bukan URL Google Form bre!', 'error');
-        return;
-      }
+    async loadStats() {
+      if (!this.user) return;
+      try {
+        const { data } = await sb.from('zenkai_autofill_stats').select('*').eq('user_id', this.user.id).maybeSingle();
+        if (data) { this.stats = { total_soal: data.total_soal || 0, total_forms: data.total_forms || 0 }; }
+      } catch (e) {}
+    },
 
-      this.starting = true;
-      this.syncToExtension();
+    async loadLimit() {
+      if (!this.user) return;
+      if (this.isVip || this.isOwner) { this.remainingLimit = 999; return; }
+      const today = new Date().toISOString().slice(0,10);
+      try {
+        const { data } = await sb.from('zenkai_autofill_rate_limit').select('*').eq('user_id', this.user.id).eq('date', today).maybeSingle();
+        const used = data ? data.count : 0;
+        this.remainingLimit = Math.max(0, 10 - used);
+      } catch (e) { this.remainingLimit = 10; }
+    },
 
-      if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
-        chrome.runtime.sendMessage({
-          action: 'startAutoFlow',
-          url: this.formUrl,
-          target: this.targetScore,
-          mode: this.mode,
-          username: this.userName
-        }, (res) => {
-          this.starting = false;
-          if (chrome.runtime.lastError || !res || !res.ok) {
-            this.showToast('Extension belum aktif.', 'warning');
-            window.open(this.formUrl, '_blank');
-          } else {
-            this.showToast('Form kebuka!', 'success');
-          }
-        });
-      } else {
-        window.open(this.formUrl, '_blank');
-        this.starting = false;
-        this.showToast('Form kebuka!', 'success');
-      }
+    async loadHistory() {
+      try {
+        const saved = localStorage.getItem('zenkai_history_' + (this.user?.id || 'anon'));
+        if (saved) this.history = JSON.parse(saved);
+      } catch (e) {}
     },
 
     addHistory(item) {
       this.history.unshift(item);
       if (this.history.length > 20) this.history = this.history.slice(0, 20);
-      try { localStorage.setItem('zenkai_history', JSON.stringify(this.history)); } catch (e) {}
+      try { localStorage.setItem('zenkai_history_' + this.user.id, JSON.stringify(this.history)); } catch (e) {}
     },
 
+    async updateStatsAfterFlow(totalSoal) {
+      if (!this.user) return;
+      try {
+        const { data } = await sb.from('zenkai_autofill_stats').select('*').eq('user_id', this.user.id).maybeSingle();
+        if (data) {
+          await sb.from('zenkai_autofill_stats').update({ total_soal: (data.total_soal||0) + totalSoal, total_forms: (data.total_forms||0) + 1, last_used: new Date().toISOString() }).eq('user_id', this.user.id);
+        } else {
+          await sb.from('zenkai_autofill_stats').insert({ user_id: this.user.id, total_soal: totalSoal, total_forms: 1 });
+        }
+        await this.loadStats();
+      } catch (e) {}
+    },
+
+    async incrementLimit() {
+      if (this.isVip || this.isOwner) return true;
+      const today = new Date().toISOString().slice(0,10);
+      try {
+        const { data } = await sb.from('zenkai_autofill_rate_limit').select('*').eq('user_id', this.user.id).eq('date', today).maybeSingle();
+        if (data) {
+          if (data.count >= 10) return false;
+          await sb.from('zenkai_autofill_rate_limit').update({ count: data.count + 1 }).eq('user_id', this.user.id).eq('date', today);
+        } else {
+          await sb.from('zenkai_autofill_rate_limit').insert({ user_id: this.user.id, date: today, count: 1 });
+        }
+        await this.loadLimit();
+        return true;
+      } catch (e) { return true; }
+    },
+
+    async submitAuth() {
+      this.errMsg = '';
+      if (!this.form.username || !this.form.password) { this.errMsg = 'Isi nama & password!'; return; }
+      if (this.form.username.length < 3) { this.errMsg = 'Nama minimal 3 huruf!'; return; }
+      if (this.form.password.length < 4) { this.errMsg = 'Password minimal 4 karakter!'; return; }
+      this.loading = true;
+      try {
+        if (this.authMode === 'register') {
+          if (this.form.username === OWNER_USERNAME) { this.errMsg = 'Nama ini sudah dipakai!'; this.loading = false; return; }
+          const { data: ex } = await sb.from('profiles').select('id').ilike('username', this.form.username).maybeSingle();
+          if (ex) { this.errMsg = 'Nama sudah digunakan!'; this.loading = false; return; }
+          const email = 'zenkai_' + Date.now() + '_' + Math.random().toString(36).substring(2,8) + '@zenkai.local';
+          const { data: authData, error } = await sb.auth.signUp({ email, password: this.form.password, options: { data: { username: this.form.username } } });
+          if (error) throw error;
+          if (!authData.user) throw new Error('Gagal bikin akun');
+          await sb.from('profiles').insert({ id: authData.user.id, username: this.form.username, role: 'user', is_vip: false });
+          this.user = authData.user;
+          this.showToast('Berhasil daftar!', 'success');
+          await this.loadProfile();
+        } else {
+          if (this.form.username === OWNER_USERNAME && this.form.password === OWNER_PASSWORD) {
+            const { data: ownerProfile } = await sb.from('profiles').select('*').ilike('username', OWNER_USERNAME).maybeSingle();
+            if (ownerProfile) {
+              const email = 'zenkai_owner_' + OWNER_USERNAME.toLowerCase() + '@zenkai.local';
+              const { data: signInData, error: signInError } = await sb.auth.signInWithPassword({ email, password: OWNER_PASSWORD });
+              if (signInError) {
+                const { data: newOwner, error: regError } = await sb.auth.signUp({ email, password: OWNER_PASSWORD, options: { data: { username: OWNER_USERNAME } } });
+                if (regError) throw regError;
+                this.user = newOwner.user;
+              } else {
+                this.user = signInData.user;
+              }
+              await sb.from('profiles').upsert({ id: this.user.id, username: OWNER_USERNAME, role: 'owner', is_vip: true });
+              await this.loadProfile();
+              this.showToast('Welcome, Owner!', 'success');
+            } else {
+              this.errMsg = 'Owner belum di-setup. Daftar dulu pakai nama Zenkai.';
+              this.loading = false;
+              return;
+            }
+          } else {
+            const { data: prof } = await sb.from('profiles').select('*').ilike('username', this.form.username).maybeSingle();
+            if (!prof) { this.errMsg = 'User tidak ditemukan!'; this.loading = false; return; }
+            if (prof.is_banned) { this.errMsg = 'Akun di-ban! Hubungi admin.'; this.loading = false; return; }
+            const { data: sessionData } = await sb.auth.getSession();
+            const email = 'user_' + prof.id.substring(0,8) + '@zenkai.local';
+            const { data: signInData, error: signInError } = await sb.auth.signInWithPassword({ email, password: this.form.password });
+            if (signInError) {
+              const { data: newUser, error: regError } = await sb.auth.signUp({ email, password: this.form.password, options: { data: { username: this.form.username } } });
+              if (regError) throw regError;
+              this.user = newUser.user;
+            } else {
+              this.user = signInData.user;
+            }
+            await this.loadProfile();
+          }
+        }
+        await this.loadSettings();
+        await this.loadStats();
+        await this.loadLimit();
+        await this.loadHistory();
+        this.checkChangelogPopup();
+      } catch (e) {
+        this.errMsg = e.message || 'Error';
+      } finally { this.loading = false; }
+    },
+
+    async logout() {
+      await sb.auth.signOut();
+      this.user = null; this.profile = { username: '' }; this.isOwner = false; this.isVip = false;
+      this.showToast('Sampai jumpa bre', 'success');
+    },
+
+    async saveSettings() {
+      if (!this.user) return;
+      try {
+        await sb.from('zenkai_autofill_settings').upsert({ user_id: this.user.id, target_score: this.targetScore, mode: this.mode, auto_submit: this.autoSubmit, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+        localStorage.setItem('zenkai_target', this.targetScore);
+        localStorage.setItem('zenkai_mode', this.mode);
+        localStorage.setItem('zenkai_autosubmit', this.autoSubmit ? '1' : '0');
+        this.syncToExtension();
+        this.showToast('Setting tersimpan!', 'success');
+      } catch (e) { this.showToast('Gagal simpan', 'error'); }
+    },
+
+    async syncToExtension() {
+      try {
+        let token = '';
+        try { const { data: { session } } = await sb.auth.getSession(); token = session?.access_token || ''; } catch (e) {}
+        if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
+          chrome.runtime.sendMessage({ action: 'syncSettings', target: this.targetScore, mode: this.mode, token, username: this.profile.username, autoSubmit: this.autoSubmit }, () => {});
+        }
+      } catch (e) {}
+    },
+
+    async startAutoFlow() {
+      if (!this.formUrl.trim()) { this.showToast('Paste URL dulu!', 'error'); return; }
+      if (!this.formUrl.includes('docs.google.com/forms')) { this.showToast('Bukan URL Google Form!', 'error'); return; }
+      if (this.remainingLimit <= 0 && !this.isVip && !this.isOwner) { this.showToast('Limit habis! Upgrade VIP.', 'error'); return; }
+      const ok = await this.incrementLimit();
+      if (!ok) { this.showToast('Limit habis! Upgrade VIP.', 'error'); return; }
+      this.starting = true;
+      this.syncToExtension();
+      if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
+        chrome.runtime.sendMessage({ action: 'startAutoFlow', url: this.formUrl, target: this.targetScore, mode: this.mode, username: this.profile.username, autoSubmit: this.autoSubmit }, (res) => {
+          this.starting = false;
+          if (chrome.runtime.lastError || !res || !res.ok) { window.open(this.formUrl, '_blank'); }
+          else { this.showToast('Form kebuka!', 'success'); }
+        });
+      } else {
+        window.open(this.formUrl, '_blank');
+        this.starting = false;
+      }
+    },
+
+    openWaVip(dur, price) {
+      const msg = encodeURIComponent('Halo Admin, gw mau beli VIP Zenkai AutoFlow.\n\nNama: ' + (this.profile.username||'-') + '\nDurasi: ' + dur + '\nHarga: ' + price + '\n\nMohon info pembayaran. Thanks!');
+      window.open('https://wa.me/' + WA_ADMIN + '?text=' + msg, '_blank');
+    },
+
+    async loadAllUsers() {
+      try {
+        const { data } = await sb.from('profiles').select('*').order('created_at', { ascending: false });
+        this.allUsers = data || [];
+        this.adminStats.total_users = this.allUsers.length;
+        this.adminStats.total_vip = this.allUsers.filter(u => u.is_vip).length;
+        this.adminStats.total_banned = this.allUsers.filter(u => u.is_banned).length;
+      } catch (e) {}
+    },
+
+    get filteredUsers() {
+      if (!this.userSearch) return this.allUsers;
+      const q = this.userSearch.toLowerCase();
+      return this.allUsers.filter(u => u.username && u.username.toLowerCase().includes(q));
+    },
+
+    async banUser(u) { await sb.from('profiles').update({ is_banned: true }).eq('id', u.id); await this.loadAllUsers(); this.showToast(u.username + ' di-ban', 'success'); },
+    async unbanUser(u) { await sb.from('profiles').update({ is_banned: false }).eq('id', u.id); await this.loadAllUsers(); this.showToast(u.username + ' di-unban', 'success'); },
+    async giveVip(u) { await sb.from('profiles').update({ is_vip: true }).eq('id', u.id); await this.loadAllUsers(); this.showToast(u.username + ' jadi VIP', 'success'); },
+    async removeVip(u) { await sb.from('profiles').update({ is_vip: false }).eq('id', u.id); await this.loadAllUsers(); this.showToast(u.username + ' bukan VIP', 'success'); },
+    async deleteUser(u) { if (!confirm('Hapus ' + u.username + '?')) return; await sb.from('profiles').delete().eq('id', u.id); await this.loadAllUsers(); this.showToast('User dihapus', 'success'); },
+
     getTargetDesc() {
-      if (this.targetScore >= 95) return 'Nilai sempurna, semua bener';
-      if (this.targetScore >= 80) return 'Nilai bagus, sengaja salah dikit';
-      if (this.targetScore >= 60) return 'Nilai cukup, biar keliatan natural';
-      if (this.targetScore >= 40) return 'Nilai pas-pasan, santai aja';
-      return 'Target rendah, buat eksperimen doang';
+      if (this.targetScore >= 95) return 'Nilai sempurna';
+      if (this.targetScore >= 80) return 'Nilai bagus';
+      if (this.targetScore >= 60) return 'Nilai cukup';
+      return 'Target rendah';
     },
 
     showToast(msg, type = 'success') {
       const id = ++this.toastId;
       this.toasts.push({ id, msg, type });
-      setTimeout(() => {
-        this.toasts = this.toasts.filter(t => t.id !== id);
-      }, 3500);
+      setTimeout(() => { this.toasts = this.toasts.filter(t => t.id !== id); }, 3000);
     }
   };
 }
