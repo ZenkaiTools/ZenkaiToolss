@@ -46,11 +46,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .field input.error{border-color:var(--danger)}
 .error-msg{font-size:10px;color:var(--danger);text-align:center;margin-top:6px;font-family:monospace;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
 .error-msg svg{width:12px;height:12px;fill:var(--danger)}
-.success-msg{font-size:10px;color:var(--success);text-align:center;margin-top:6px;font-family:monospace;font-weight:700}
 .btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:11px;color:#fff;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:transform .15s;margin-top:4px;position:relative;z-index:1;font-family:inherit;box-shadow:0 8px 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-primary:active{transform:scale(.97)}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed}
 .btn-primary svg{width:15px;height:15px;fill:#fff}
+
 .header{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(244,114,182,.15));border:1px solid var(--primary);border-radius:16px;margin-bottom:10px;position:relative;overflow:hidden}
 .header::before{content:'';position:absolute;top:-50%;right:-20%;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);opacity:.35;pointer-events:none}
 .header-left{display:flex;align-items:center;gap:10px;position:relative;z-index:1;flex:1;min-width:0}
@@ -63,19 +63,28 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .header-sub .dot{width:5px;height:5px;border-radius:50%;background:var(--success);box-shadow:0 0 6px var(--success);animation:blink 2s infinite;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 .header-sub .credit-name{color:var(--gold);font-weight:800}
-.header-sub .badge-role{padding:1px 6px;border-radius:6px;font-size:8px;font-weight:900}
-.header-sub .badge-role.owner{background:rgba(255,215,0,.15);color:var(--gold);border:1px solid var(--gold)}
-.header-sub .badge-role.vip{background:rgba(255,215,0,.15);color:var(--gold);border:1px solid var(--gold)}
 .header-actions{display:flex;gap:5px;position:relative;z-index:1}
 .icon-btn{width:32px;height:32px;border-radius:9px;background:rgba(18,10,30,.6);border:1px solid var(--border-2);display:flex;align-items:center;justify-content:center;color:var(--text-dim);cursor:pointer;transition:all .2s}
 .icon-btn:active{background:rgba(168,85,247,.2);border-color:var(--primary);color:var(--primary-2);transform:scale(.92)}
 .icon-btn svg{width:16px;height:16px;fill:currentColor}
 .icon-btn.owner{border-color:var(--gold);color:var(--gold)}
+
+/* ROLE BANNER */
+.role-banner{display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 12px;background:linear-gradient(135deg,rgba(168,85,247,.1),rgba(244,114,182,.08));border:1px solid var(--border-2);border-radius:10px;margin-bottom:10px;font-family:monospace}
+.role-banner.owner{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,102,0,.1));border-color:var(--gold)}
+.role-banner.vip{background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(244,114,182,.1));border-color:var(--gold)}
+.role-label{font-size:10px;color:var(--text-mute);letter-spacing:1.5px;font-weight:700}
+.role-value{font-size:11px;font-weight:900;letter-spacing:1.5px;padding:2px 10px;border-radius:6px}
+.role-value.user{color:var(--primary-2);background:rgba(168,85,247,.15);border:1px solid var(--primary)}
+.role-value.vip{color:var(--gold);background:rgba(255,215,0,.15);border:1px solid var(--gold)}
+.role-value.owner{color:var(--gold);background:rgba(255,215,0,.2);border:1px solid var(--gold);text-shadow:0 0 10px rgba(255,215,0,.5)}
+
 .dev-banner{display:flex;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(255,102,0,.06));border:1px solid rgba(251,191,36,.35);border-radius:10px;margin-bottom:10px}
 .dev-banner-icon{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .dev-banner-icon svg{width:13px;height:13px;fill:#0a0612}
 .dev-banner-text{flex:1;font-size:10px;color:var(--text-dim);line-height:1.4;font-family:monospace}
 .dev-banner-text b{color:var(--gold);font-weight:800}
+
 .limit-banner{display:flex;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(135deg,rgba(168,85,247,.12),rgba(244,114,182,.08));border:1px solid var(--primary);border-radius:10px;margin-bottom:10px}
 .limit-banner-icon{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .limit-banner-icon svg{width:13px;height:13px;fill:#fff}
@@ -83,10 +92,17 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .limit-banner-text b{color:var(--primary-2);font-weight:800}
 .limit-banner-text .count{color:var(--gold);font-weight:900}
 .limit-banner-text .count.empty{color:var(--danger)}
+
+/* VIP MINI BUTTON (pojok) */
+.vip-mini{position:fixed;bottom:20px;right:16px;z-index:50;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--warning));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(255,215,0,.5);cursor:pointer;animation:vipPulse 2s ease-in-out infinite}
+@keyframes vipPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.vip-mini svg{width:22px;height:22px;fill:var(--bg)}
+
 .card{background:var(--bg-2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;position:relative}
 .card::before{content:'';position:absolute;top:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent);opacity:.5}
 .card-label{font-size:9px;color:var(--primary-2);letter-spacing:1.8px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px;font-family:monospace;text-transform:uppercase}
 .card-label svg{width:12px;height:12px;fill:var(--accent)}
+
 .hero{padding:16px;background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(244,114,182,.18));border:1px solid var(--primary);border-radius:16px;margin-bottom:10px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-40%;right:-15%;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--primary-glow),transparent 70%);pointer-events:none}
 .hero-badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:4px 10px;border-radius:16px;background:rgba(168,85,247,.2);border:1px solid var(--primary);color:var(--primary-2);margin-bottom:8px;position:relative;z-index:1;font-family:monospace}
@@ -96,14 +112,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .hero-sub b{color:var(--primary-2)}
 .hero-tengil{font-size:10px;color:var(--gold);font-style:italic;padding:8px 10px;background:rgba(251,191,36,.08);border-left:3px solid var(--gold);border-radius:5px;position:relative;z-index:1;font-weight:600}
 .dev-cta{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(18,10,30,.6);border:1.5px solid var(--gold);border-radius:12px;cursor:pointer;margin-top:10px;position:relative;z-index:1}
-.dev-cta-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:var(--bg);flex-shrink:0;position:relative}
-.dev-cta-avatar::after{content:'';position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:var(--success);border:2px solid var(--bg-2)}
+.dev-cta-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:var(--bg);flex-shrink:0}
 .dev-cta-info{flex:1}
 .dev-cta-title{font-size:12px;font-weight:900;color:var(--gold);margin-bottom:1px}
 .dev-cta-desc{font-size:9px;color:var(--text-dim);font-family:monospace}
-.dev-cta-arrow{width:20px;height:20px}
-.dev-cta-arrow svg{width:18px;height:18px;fill:var(--gold);animation:arrowBounce 1.5s ease-in-out infinite}
-@keyframes arrowBounce{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+.dev-cta-arrow svg{width:18px;height:18px;fill:var(--gold)}
 .target-value{font-size:34px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:4px 0;font-family:monospace}
 .target-slider{width:100%;-webkit-appearance:none;height:7px;border-radius:4px;background:var(--bg-3);outline:none;margin:6px 0}
 .target-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:2px solid var(--bg)}
@@ -119,16 +132,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:all .3s}
 .toggle-switch.on::after{left:22px}
 .btn-save{width:100%;padding:12px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:900;letter-spacing:1.2px;cursor:pointer;font-family:inherit;box-shadow:0 6px 20px var(--primary-glow);margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-save svg{width:14px;height:14px;fill:#fff}
 .url-input{width:100%;padding:11px 14px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;color:var(--text);font-size:12px;font-family:inherit;margin-bottom:8px}
 .url-input:focus{outline:none;border-color:var(--primary)}
-.url-input::placeholder{color:var(--text-mute);font-style:italic}
 .btn-flow{width:100%;padding:13px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:900;letter-spacing:1.5px;cursor:pointer;font-family:inherit;box-shadow:0 6px 25px var(--primary-glow);display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-flow:disabled{opacity:.5;cursor:not-allowed}
-.btn-flow svg{width:16px;height:16px;fill:#fff}
 .hint{font-size:9px;color:var(--text-mute);line-height:1.4;padding:8px 10px;background:rgba(168,85,247,.06);border-left:2px solid var(--primary);border-radius:5px;margin-top:8px;font-style:italic;display:flex;gap:6px}
-.hint svg{width:12px;height:12px;fill:var(--primary-2);flex-shrink:0}
-.hint b{color:var(--primary-2)}
 .guide-item{display:flex;gap:9px;padding:8px 10px;background:var(--bg);border-radius:8px;margin-bottom:5px;align-items:center}
 .guide-num{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10px;color:#fff;flex-shrink:0}
 .guide-text{flex:1;font-size:11px;color:var(--text-dim);line-height:1.4}
@@ -147,19 +155,31 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .stat-box{padding:10px 8px;background:var(--bg);border:1px solid var(--border-2);border-radius:10px;text-align:center}
 .stat-val{font-size:18px;font-weight:900;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-family:monospace}
 .stat-lbl{font-size:8px;color:var(--text-mute);letter-spacing:1px;margin-top:2px;text-transform:uppercase;font-family:monospace}
-.vip-card{padding:14px;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(244,114,182,.08));border:1.5px solid var(--gold);border-radius:14px;margin-bottom:10px;position:relative;overflow:hidden}
-.vip-card::before{content:'';position:absolute;top:-40%;right:-15%;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,0,.3),transparent 70%);pointer-events:none}
-.vip-title{font-size:14px;font-weight:900;color:var(--gold);letter-spacing:1px;margin-bottom:4px;position:relative;z-index:1}
-.vip-sub{font-size:10px;color:var(--text-dim);line-height:1.5;margin-bottom:10px;position:relative;z-index:1}
-.vip-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold),var(--warning));border:none;border-radius:10px;color:var(--bg);font-size:12px;font-weight:900;letter-spacing:1.5px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;z-index:1;margin-top:8px}
-.vip-btn svg{width:16px;height:16px;fill:var(--bg)}
-.price-grid{display:flex;flex-direction:column;gap:6px;position:relative;z-index:1}
-.price-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(18,10,30,.6);border:1px solid rgba(255,215,0,.3);border-radius:8px;font-size:11px;font-family:monospace;cursor:pointer;transition:all .2s}
-.price-item:active{background:rgba(255,215,0,.1)}
+
+/* VIP SHEET */
+.vip-hero{text-align:center;padding:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(244,114,182,.1));border:1.5px solid var(--gold);border-radius:14px;margin-bottom:12px}
+.vip-hero-title{font-size:16px;font-weight:900;letter-spacing:2px;color:var(--gold);margin-bottom:4px}
+.vip-hero-sub{font-size:10px;color:var(--text-dim);font-family:monospace;line-height:1.5}
+.price-grid{display:flex;flex-direction:column;gap:6px}
+.price-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg-2);border:1px solid rgba(255,215,0,.3);border-radius:10px;font-size:12px;font-family:monospace;cursor:pointer;transition:all .2s}
+.price-item:active{background:rgba(255,215,0,.1);border-color:var(--gold)}
 .price-item .dur{color:var(--text-dim)}
 .price-item .pri{color:var(--gold);font-weight:900}
-.footer{text-align:center;padding:16px 10px 8px;font-family:monospace;font-size:9px;color:var(--text-mute);letter-spacing:1.2px}
-.footer-title{font-size:11px;font-weight:800;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2.5px;margin-bottom:4px}
+.vip-wa-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--warning));border:none;border-radius:10px;color:var(--bg);font-size:13px;font-weight:900;letter-spacing:1.5px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px}
+.vip-wa-btn svg{width:18px;height:18px;fill:var(--bg)}
+
+/* SOCIAL FOOTER */
+.social-footer{display:flex;justify-content:center;gap:12px;padding:16px 10px 8px;flex-wrap:wrap}
+.social-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:10px;text-decoration:none;font-family:monospace;font-size:10px;font-weight:700;transition:all .2s}
+.social-btn:active{transform:scale(.95)}
+.social-btn.wa{border-color:#25d366;color:#25d366}
+.social-btn.tiktok{border-color:#00f2ea;color:#00f2ea}
+.social-btn.ig{border-color:#ff0080;color:#ff0080}
+.social-btn svg{width:16px;height:16px}
+
+.footer{text-align:center;padding:8px 10px 16px;font-family:monospace;font-size:9px;color:var(--text-mute);letter-spacing:1.2px}
+.footer-title{font-size:10px;font-weight:800;background:linear-gradient(135deg,var(--primary-2),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
+
 .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);z-index:100;display:flex;align-items:flex-end;justify-content:center}
 .sheet{width:100%;max-width:640px;background:var(--bg);border-top:1px solid var(--primary);border-radius:22px 22px 0 0;padding:18px;max-height:90vh;overflow-y:auto;position:relative}
 .sheet-handle{width:36px;height:4px;background:var(--border-2);border-radius:2px;margin:0 auto 14px}
@@ -171,10 +191,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .dev-tagline-big{font-size:11px;color:var(--text-dim);font-style:italic;line-height:1.5}
 .dev-section{margin-bottom:12px}
 .dev-section-title{font-size:10px;color:var(--primary-2);letter-spacing:1.3px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:6px;font-family:monospace;text-transform:uppercase}
-.dev-section-title svg{width:12px;height:12px;fill:var(--accent)}
 .dev-bio{padding:12px;background:var(--bg-2);border:1px solid var(--border);border-radius:10px;font-size:11px;color:var(--text-dim);line-height:1.6}
 .dev-pill{display:inline-block;padding:5px 10px;background:rgba(168,85,247,.15);border:1px solid var(--primary);color:var(--primary-2);border-radius:14px;font-size:9px;font-weight:700;font-family:monospace;margin:2px}
 .dev-quote{padding:12px;background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(244,114,182,.08));border:1px dashed var(--gold);border-radius:10px;text-align:center;font-style:italic;color:var(--gold);font-size:11px;line-height:1.5}
+.changelog-item{padding:10px 12px;background:var(--bg-2);border-left:3px solid var(--primary);border-radius:8px;margin-bottom:8px;font-size:11px;color:var(--text-dim);line-height:1.5}
+.changelog-version{font-size:13px;font-weight:900;color:var(--gold);margin-bottom:6px;font-family:monospace}
 .admin-hero{text-align:center;padding:16px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(244,114,182,.1));border:1.5px solid var(--gold);border-radius:14px;margin-bottom:12px}
 .admin-title{font-size:16px;font-weight:900;letter-spacing:2px;color:var(--gold);margin-bottom:4px}
 .admin-sub{font-size:10px;color:var(--text-dim);font-family:monospace}
@@ -187,15 +208,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .admin-btn.danger{border-color:var(--danger);color:var(--danger)}
 .admin-btn.success{border-color:var(--success);color:var(--success)}
 .admin-btn.gold{border-color:var(--gold);color:var(--gold)}
-.changelog-item{padding:10px 12px;background:var(--bg-2);border-left:3px solid var(--primary);border-radius:8px;margin-bottom:8px;font-size:11px;color:var(--text-dim);line-height:1.5}
-.changelog-item b{color:var(--primary-2)}
-.changelog-version{font-size:13px;font-weight:900;color:var(--gold);margin-bottom:6px;font-family:monospace}
 .toast-wrap{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:6px;pointer-events:none;width:min(340px,88vw)}
 .toast{padding:10px 14px;border-radius:10px;background:rgba(18,10,30,.98);border:1px solid var(--primary);color:var(--text);font-size:12px;display:flex;align-items:center;gap:8px;font-weight:600}
 .toast.success{border-color:var(--success)}
 .toast.error{border-color:var(--danger)}
 .toast.warning{border-color:var(--warning)}
-@media (max-width:480px){.app{padding:10px}.header{padding:10px 12px}.login-card{padding:22px 18px}}
 </style>
 </head>
 <body x-data="zenkaiApp()" x-init="init()" x-cloak>
@@ -240,177 +257,204 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <!-- MAIN APP -->
 <div x-show="ready && user" class="app">
 
-<header class="header">
-  <div class="header-left">
-    <div class="avatar" :class="{owner: isOwner, vip: isVip && !isOwner}" x-text="profile.username ? profile.username.substring(0,2).toUpperCase() : 'ZK'"></div>
-    <div class="header-info">
-      <div class="header-title">ZENKAI AUTOFLOW</div>
-      <div class="header-sub">
-        <span class="dot"></span>
-        <span x-text="profile.username"></span>
-        <span style="color:var(--text-mute)">·</span>
-        <span class="credit-name">by Andika</span>
-        <template x-if="isOwner"><span class="badge-role owner">★ OWNER</span></template>
-        <template x-if="isVip && !isOwner"><span class="badge-role vip">◆ VIP</span></template>
+  <!-- VIP MINI (pojok, muncul kalau limit habis & bukan VIP) -->
+  <template x-if="!isVip && !isOwner && remainingLimit <= 0">
+    <div class="vip-mini" @click="vipSheetOpen=true" title="Upgrade VIP">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    </div>
+  </template>
+
+  <header class="header">
+    <div class="header-left">
+      <div class="avatar" :class="{owner: isOwner, vip: isVip && !isOwner}" x-text="profile.username ? profile.username.substring(0,2).toUpperCase() : 'ZK'"></div>
+      <div class="header-info">
+        <div class="header-title">ZENKAI AUTOFLOW</div>
+        <div class="header-sub">
+          <span class="dot"></span>
+          <span x-text="profile.username"></span>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="header-actions">
-    <template x-if="isOwner">
-      <button class="icon-btn owner" @click="adminOpen=true" title="Admin Panel">
-        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+    <div class="header-actions">
+      <template x-if="isOwner">
+        <button class="icon-btn owner" @click="adminOpen=true;loadAllUsers()" title="Admin Panel">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </button>
+      </template>
+      <button class="icon-btn" @click="changelogOpen=true" title="Info versi">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
       </button>
-    </template>
-    <button class="icon-btn" @click="changelogOpen=true" title="Apa yang baru">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-    </button>
-    <button class="icon-btn" @click="logout()" style="color:var(--danger);border-color:rgba(244,63,94,.3)" title="Keluar">
-      <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
-    </button>
-  </div>
-</header>
-
-<div class="dev-banner">
-  <div class="dev-banner-icon"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
-  <div class="dev-banner-text"><b>v1.2 masih pengembangan.</b> Baru support Google Forms.</div>
-</div>
-
-<div class="limit-banner">
-  <div class="limit-banner-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
-  <div class="limit-banner-text">
-    <template x-if="isVip || isOwner"><span><b>UNLIMITED</b> · VIP aktif</span></template>
-    <template x-if="!isVip && !isOwner"><span>Sisa limit hari ini: <span class="count" :class="{empty: remainingLimit <= 0}" x-text="remainingLimit"></span>/10</span></template>
-  </div>
-</div>
-
-<template x-if="!isVip && !isOwner">
-  <div class="vip-card">
-    <div class="vip-title">◆ UPGRADE KE VIP</div>
-    <div class="vip-sub">Unlimited auto-fill + prioritas server</div>
-    <div class="price-grid">
-      <div class="price-item" @click="openWaVip('1 hari','Rp 2.000')"><span class="dur">1 hari</span><span class="pri">Rp 2.000</span></div>
-      <div class="price-item" @click="openWaVip('3 hari','Rp 5.000')"><span class="dur">3 hari</span><span class="pri">Rp 5.000</span></div>
-      <div class="price-item" @click="openWaVip('1 minggu','Rp 8.000')"><span class="dur">1 minggu</span><span class="pri">Rp 8.000</span></div>
-      <div class="price-item" @click="openWaVip('1 bulan','Rp 10.000')"><span class="dur">1 bulan</span><span class="pri">Rp 10.000</span></div>
-      <div class="price-item" @click="openWaVip('permanen','Rp 30.000')"><span class="dur">PERMANEN</span><span class="pri">Rp 30.000</span></div>
+      <button class="icon-btn" @click="logout()" style="color:var(--danger);border-color:rgba(244,63,94,.3)" title="Keluar">
+        <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+      </button>
     </div>
-    <button class="vip-btn" @click="openWaVip('belum pilih','')">
+  </header>
+
+  <!-- ROLE BANNER -->
+  <div class="role-banner" :class="{owner: isOwner, vip: isVip && !isOwner}">
+    <span class="role-label">Kamu:</span>
+    <span class="role-value" :class="isOwner ? 'owner' : (isVip ? 'vip' : 'user')" x-text="isOwner ? '★ OWNER' : (isVip ? '◆ VIP' : '● USER' )"></span>
+  </div>
+
+  <div class="dev-banner">
+    <div class="dev-banner-icon"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+    <div class="dev-banner-text"><b>v1.2 masih pengembangan.</b> Baru support Google Forms.</div>
+  </div>
+
+  <div class="limit-banner">
+    <div class="limit-banner-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+    <div class="limit-banner-text">
+      <template x-if="isVip || isOwner"><span><b>UNLIMITED</b> · VIP aktif</span></template>
+      <template x-if="!isVip && !isOwner"><span>Sisa limit hari ini: <span class="count" :class="{empty: remainingLimit <= 0}" x-text="remainingLimit"></span>/10</span></template>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-badge"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg> ZENKAI AUTOFLOW v1.2</div>
+    <div class="hero-title">Yo, <span x-text="profile.username"></span>!</div>
+    <div class="hero-sub">Gw <b>Zenkai AutoFlow</b> — asisten lu yang siap hajar soal Google Form.</div>
+    <div class="hero-tengil" x-text="heroTengil"></div>
+    <div class="dev-cta" @click="devSheetOpen=true">
+      <div class="dev-cta-avatar">A</div>
+      <div class="dev-cta-info">
+        <div class="dev-cta-title">Baca Tentang Developer</div>
+        <div class="dev-cta-desc">Kenalan sama Andika</div>
+      </div>
+      <div class="dev-cta-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg> STATISTIK LU</div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-val" x-text="stats.total_soal"></div><div class="stat-lbl">Soal</div></div>
+      <div class="stat-box"><div class="stat-val" x-text="stats.total_forms"></div><div class="stat-lbl">Form</div></div>
+      <div class="stat-box"><div class="stat-val" x-text="remainingLimit"></div><div class="stat-lbl">Sisa</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-13c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg> TARGET NILAI</div>
+    <div class="target-value" x-text="targetScore"></div>
+    <input type="range" min="0" max="100" x-model.number="targetScore" class="target-slider">
+    <div class="target-desc" x-text="getTargetDesc()"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label"><svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> MATA PELAJARAN</div>
+    <div class="mode-grid">
+      <button class="mode-btn" :class="{active: mode==='umum'}" @click="mode='umum'">💡<span>Umum</span></button>
+      <button class="mode-btn" :class="{active: mode==='mtk'}" @click="mode='mtk'">🧮<span>MTK</span></button>
+      <button class="mode-btn" :class="{active: mode==='fisika'}" @click="mode='fisika'">⚛️<span>Fisika</span></button>
+      <button class="mode-btn" :class="{active: mode==='kimia'}" @click="mode='kimia'">🧪<span>Kimia</span></button>
+      <button class="mode-btn" :class="{active: mode==='biologi'}" @click="mode='biologi'">🧬<span>Biologi</span></button>
+      <button class="mode-btn" :class="{active: mode==='bing'}" @click="mode='bing'">🇬🇧<span>B.Ing</span></button>
+      <button class="mode-btn" :class="{active: mode==='bindo'}" @click="mode='bindo'">🇮🇩<span>B.Indo</span></button>
+      <button class="mode-btn" :class="{active: mode==='sejarah'}" @click="mode='sejarah'">📜<span>Sejarah</span></button>
+      <button class="mode-btn" :class="{active: mode==='pkn'}" @click="mode='pkn'">⚖️<span>PKN</span></button>
+      <button class="mode-btn" :class="{active: mode==='ekonomi'}" @click="mode='ekonomi'">💰<span>Ekonomi</span></button>
+      <button class="mode-btn" :class="{active: mode==='geografi'}" @click="mode='geografi'">🌍<span>Geografi</span></button>
+      <button class="mode-btn" :class="{active: mode==='sosiologi'}" @click="mode='sosiologi'">👥<span>Sosiologi</span></button>
+      <button class="mode-btn" :class="{active: mode==='seni'}" @click="mode='seni'">🎨<span>Seni</span></button>
+      <button class="mode-btn" :class="{active: mode==='penjas'}" @click="mode='penjas'">⚽<span>Penjas</span></button>
+      <button class="mode-btn" :class="{active: mode==='ips'}" @click="mode='ips'">🌏<span>IPS</span></button>
+      <button class="mode-btn" :class="{active: mode==='agama'}" @click="mode='agama'">🕌<span>Agama</span></button>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-title">Auto-Submit</div>
+        <div class="toggle-desc">Auto kirim form setelah keisi</div>
+      </div>
+      <div class="toggle-switch" :class="{on: autoSubmit}" @click="autoSubmit=!autoSubmit;saveSettings()"></div>
+    </div>
+    <button class="btn-save" @click="saveSettings()">💾 SIMPAN SETTING</button>
+  </div>
+
+  <div class="card" style="border-color:var(--primary)">
+    <div class="card-label"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg> MULAI AUTO-FLOW</div>
+    <input type="text" x-model="formUrl" class="url-input" placeholder="Paste URL Google Form di sini...">
+    <button class="btn-flow" @click="startAutoFlow()" :disabled="starting || remainingLimit <= 0">
+      <svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg>
+      <span x-text="starting ? 'MEMBUKA...' : (remainingLimit <= 0 ? 'LIMIT HABIS' : 'MULAI AUTO-FLOW')"></span>
+    </button>
+    <div class="hint">
+      <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
+      <div><b>Tips:</b> Habis form kebuka, muncul tombol <b>AUTO-FLOW</b> di pojok kanan bawah form.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label"><svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> CARA PAKAI</div>
+    <div class="guide-item"><div class="guide-num">1</div><div class="guide-text">Set <b>target</b> & <b>mapel</b></div></div>
+    <div class="guide-item"><div class="guide-num">2</div><div class="guide-text">Paste <b>URL Form</b> → <b>MULAI</b></div></div>
+    <div class="guide-item"><div class="guide-num">3</div><div class="guide-text">Tap tombol <b>AUTO-FLOW</b> di form</div></div>
+    <div class="guide-item"><div class="guide-num">4</div><div class="guide-text">Tunggu → <b>soal keisi</b></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg> HISTORY</div>
+    <div x-show="history.length===0" style="text-align:center;padding:14px;color:var(--text-mute);font-size:11px;font-style:italic">Belum ada history.</div>
+    <template x-for="(h, i) in history" :key="i">
+      <div class="history-item">
+        <div style="flex:1;min-width:0">
+          <div class="history-title" x-text="h.title"></div>
+          <div class="history-meta" x-text="h.time"></div>
+        </div>
+        <div class="history-status" x-text="h.filled + '/' + h.total"></div>
+      </div>
+    </template>
+  </div>
+
+  <div class="tips">
+    <div class="tips-icon"><svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
+    <div class="tips-content">
+      <div class="tips-label">TIPS DARI ANDIKA</div>
+      <div class="tips-text" x-text="tipsText"></div>
+    </div>
+  </div>
+
+  <!-- SOCIAL FOOTER -->
+  <div class="social-footer">
+    <a href="https://wa.me/6285352831643" target="_blank" class="social-btn wa">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+    <a href="https://tiktok.com/@diktherh" target="_blank" class="social-btn tiktok">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+      TikTok
+    </a>
+    <a href="https://instagram.com/andik4.tm" target="_blank" class="social-btn ig">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      Instagram
+    </a>
+  </div>
+
+  <div class="footer">
+    <div class="footer-title">ZENKAI AUTOFLOW v1.2</div>
+  </div>
+</div>
+
+<!-- VIP SHEET -->
+<div x-show="vipSheetOpen" @click.self="vipSheetOpen=false" class="sheet-overlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" @click="vipSheetOpen=false">×</button>
+    <div class="vip-hero">
+      <div class="vip-hero-title">◆ UPGRADE VIP</div>
+      <div class="vip-hero-sub">Unlimited auto-fill · Prioritas server</div>
+    </div>
+    <div class="price-grid">
+      <div class="price-item" @click="buyVip('1 hari','Rp 2.000')"><span class="dur">1 hari</span><span class="pri">Rp 2.000</span></div>
+      <div class="price-item" @click="buyVip('3 hari','Rp 5.000')"><span class="dur">3 hari</span><span class="pri">Rp 5.000</span></div>
+      <div class="price-item" @click="buyVip('1 minggu','Rp 8.000')"><span class="dur">1 minggu</span><span class="pri">Rp 8.000</span></div>
+      <div class="price-item" @click="buyVip('1 bulan','Rp 10.000')"><span class="dur">1 bulan</span><span class="pri">Rp 10.000</span></div>
+      <div class="price-item" @click="buyVip('PERMANEN','Rp 30.000')"><span class="dur">PERMANEN</span><span class="pri">Rp 30.000</span></div>
+    </div>
+    <button class="vip-wa-btn" @click="buyVip('belum pilih','')">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       HUBUNGI ADMIN
     </button>
   </div>
-</template>
-
-<div class="hero">
-  <div class="hero-badge"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg> ZENKAI AUTOFLOW v1.2</div>
-  <div class="hero-title">Yo, <span x-text="profile.username"></span>!</div>
-  <div class="hero-sub">Gw <b>Zenkai AutoFlow</b> — asisten lu yang siap hajar soal Google Form.</div>
-  <div class="hero-tengil" x-text="heroTengil"></div>
-  <div class="dev-cta" @click="devSheetOpen=true">
-    <div class="dev-cta-avatar">A</div>
-    <div class="dev-cta-info">
-      <div class="dev-cta-title">Baca Tentang Developer</div>
-      <div class="dev-cta-desc">Kenalan sama Andika</div>
-    </div>
-    <div class="dev-cta-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg></div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg> STATISTIK LU</div>
-  <div class="stats-grid">
-    <div class="stat-box"><div class="stat-val" x-text="stats.total_soal"></div><div class="stat-lbl">Soal</div></div>
-    <div class="stat-box"><div class="stat-val" x-text="stats.total_forms"></div><div class="stat-lbl">Form</div></div>
-    <div class="stat-box"><div class="stat-val" x-text="remainingLimit"></div><div class="stat-lbl">Sisa</div></div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-13c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg> TARGET NILAI</div>
-  <div class="target-value" x-text="targetScore"></div>
-  <input type="range" min="0" max="100" x-model.number="targetScore" class="target-slider">
-  <div class="target-desc" x-text="getTargetDesc()"></div>
-</div>
-
-<div class="card">
-  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> MATA PELAJARAN</div>
-  <div class="mode-grid">
-    <button class="mode-btn" :class="{active: mode==='umum'}" @click="mode='umum'">💡<span>Umum</span></button>
-    <button class="mode-btn" :class="{active: mode==='mtk'}" @click="mode='mtk'">🧮<span>MTK</span></button>
-    <button class="mode-btn" :class="{active: mode==='fisika'}" @click="mode='fisika'">⚛️<span>Fisika</span></button>
-    <button class="mode-btn" :class="{active: mode==='kimia'}" @click="mode='kimia'">🧪<span>Kimia</span></button>
-    <button class="mode-btn" :class="{active: mode==='biologi'}" @click="mode='biologi'">🧬<span>Biologi</span></button>
-    <button class="mode-btn" :class="{active: mode==='bing'}" @click="mode='bing'">🇬🇧<span>B.Ing</span></button>
-    <button class="mode-btn" :class="{active: mode==='bindo'}" @click="mode='bindo'">🇮🇩<span>B.Indo</span></button>
-    <button class="mode-btn" :class="{active: mode==='sejarah'}" @click="mode='sejarah'">📜<span>Sejarah</span></button>
-    <button class="mode-btn" :class="{active: mode==='pkn'}" @click="mode='pkn'">⚖️<span>PKN</span></button>
-    <button class="mode-btn" :class="{active: mode==='ekonomi'}" @click="mode='ekonomi'">💰<span>Ekonomi</span></button>
-    <button class="mode-btn" :class="{active: mode==='geografi'}" @click="mode='geografi'">🌍<span>Geografi</span></button>
-    <button class="mode-btn" :class="{active: mode==='sosiologi'}" @click="mode='sosiologi'">👥<span>Sosiologi</span></button>
-    <button class="mode-btn" :class="{active: mode==='seni'}" @click="mode='seni'">🎨<span>Seni</span></button>
-    <button class="mode-btn" :class="{active: mode==='penjas'}" @click="mode='penjas'">⚽<span>Penjas</span></button>
-    <button class="mode-btn" :class="{active: mode==='ips'}" @click="mode='ips'">🌏<span>IPS</span></button>
-    <button class="mode-btn" :class="{active: mode==='agama'}" @click="mode='agama'">🕌<span>Agama</span></button>
-  </div>
-  <div class="toggle-row">
-    <div class="toggle-info">
-      <div class="toggle-title">Auto-Submit</div>
-      <div class="toggle-desc">Auto kirim form setelah keisi</div>
-    </div>
-    <div class="toggle-switch" :class="{on: autoSubmit}" @click="autoSubmit=!autoSubmit;saveSettings()"></div>
-  </div>
-  <button class="btn-save" @click="saveSettings()">
-    <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
-    SIMPAN SETTING
-  </button>
-</div>
-
-<div class="card" style="border-color:var(--primary)">
-  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg> MULAI AUTO-FLOW</div>
-  <input type="text" x-model="formUrl" class="url-input" placeholder="Paste URL Google Form di sini...">
-  <button class="btn-flow" @click="startAutoFlow()" :disabled="starting || remainingLimit <= 0">
-    <svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg>
-    <span x-text="starting ? 'MEMBUKA FORM...' : (remainingLimit <= 0 ? 'LIMIT HABIS' : 'MULAI AUTO-FLOW')"></span>
-  </button>
-  <div class="hint">
-    <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
-    <div><b>Tips:</b> Habis form kebuka, muncul tombol <b>AUTO-FLOW</b> di pojok kanan bawah form.</div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> CARA PAKAI</div>
-  <div class="guide-item"><div class="guide-num">1</div><div class="guide-text">Set <b>target</b> & <b>mapel</b></div></div>
-  <div class="guide-item"><div class="guide-num">2</div><div class="guide-text">Paste <b>URL Form</b> → <b>MULAI</b></div></div>
-  <div class="guide-item"><div class="guide-num">3</div><div class="guide-text">Tap tombol <b>AUTO-FLOW</b> di form</div></div>
-  <div class="guide-item"><div class="guide-num">4</div><div class="guide-text">Tunggu → <b>soal keisi</b></div></div>
-</div>
-
-<div class="card">
-  <div class="card-label"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg> HISTORY</div>
-  <div x-show="history.length===0" style="text-align:center;padding:14px;color:var(--text-mute);font-size:11px;font-style:italic">Belum ada history.</div>
-  <template x-for="(h, i) in history" :key="i">
-    <div class="history-item">
-      <div style="flex:1;min-width:0">
-        <div class="history-title" x-text="h.title"></div>
-        <div class="history-meta" x-text="h.time"></div>
-      </div>
-      <div class="history-status" x-text="h.filled + '/' + h.total"></div>
-    </div>
-  </template>
-</div>
-
-<div class="tips">
-  <div class="tips-icon"><svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
-  <div class="tips-content">
-    <div class="tips-label">TIPS DARI ANDIKA</div>
-    <div class="tips-text" x-text="tipsText"></div>
-  </div>
-</div>
-
-<div class="footer">
-  <div class="footer-title">ZENKAI AUTOFLOW v1.2</div>
-</div>
 </div>
 
 <!-- CHANGELOG SHEET -->
@@ -423,22 +467,12 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="admin-sub">// CHANGELOG</div>
     </div>
     <div class="changelog-item">
-      <div class="changelog-version">v1.2 (CURRENT)</div>
-      <b>BARU:</b><br>
-      • Login nama + password<br>
-      • Session persisten (gak logout pas refresh)<br>
-      • Sistem VIP (5 paket harga)<br>
-      • Owner Panel (akun Zenkai)<br>
-      • Statistik user<br>
-      • Auto-Submit toggle<br>
-      • Changelog page<br>
-      • Rate limit 10x/hari (free)
+      <div class="changelog-version">v1.2</div>
+      <b>BARU:</b><br>• Login nama + password<br>• Session persisten<br>• Sistem VIP (5 paket)<br>• Owner Panel<br>• Statistik user<br>• Auto-Submit toggle<br>• Rate limit 10x/hari
     </div>
     <div class="changelog-item" style="border-color:var(--text-mute)">
-      <div class="changelog-version" style="color:var(--text-mute)">v1.0 (LAMA)</div>
-      • Login cuma nama<br>
-      • 16 mata pelajaran<br>
-      • Auto-fill Google Form
+      <div class="changelog-version" style="color:var(--text-mute)">v1.0</div>
+      • Login cuma nama<br>• 16 mata pelajaran<br>• Auto-fill Google Form
     </div>
   </div>
 </div>
@@ -455,29 +489,17 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="dev-tagline-big">"Banyak Belajar, Banyak Ngoding, Banyak Project Jadi"</div>
     </div>
     <div class="dev-section">
-      <div class="dev-section-title"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> Tentang</div>
-      <div class="dev-bio">Yo bre! Gw <b style="color:var(--primary-2)">Andika</b>, developer asal <b style="color:var(--gold)">Jambi, Indonesia</b>. Baru belajar coding ~2 bulan. Zenkai AutoFlow v1.2 ini project baru gw.</div>
+      <div class="dev-section-title">Tentang</div>
+      <div class="dev-bio">Yo bre! Gw <b style="color:var(--primary-2)">Andika</b>, developer asal <b style="color:var(--gold)">Jambi, Indonesia</b>. Baru belajar coding ~2 bulan.</div>
     </div>
     <div class="dev-section">
-      <div class="dev-section-title"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg> Skill</div>
+      <div class="dev-section-title">Skill</div>
       <div style="text-align:center">
-        <span class="dev-pill">HTML</span><span class="dev-pill">CSS</span><span class="dev-pill">JavaScript</span><span class="dev-pill">Alpine.js</span><span class="dev-pill">Supabase</span><span class="dev-pill">Vercel</span><span class="dev-pill">Chrome Ext</span>
+        <span class="dev-pill">HTML</span><span class="dev-pill">CSS</span><span class="dev-pill">JavaScript</span><span class="dev-pill">Alpine.js</span><span class="dev-pill">Supabase</span><span class="dev-pill">Vercel</span>
       </div>
-    </div>
-    <div class="dev-section">
-      <div class="dev-section-title"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 12.5H11L9.5 22L19.5 10.5H13L12 2Z"/></svg> Project</div>
-      <div class="dev-bio" style="margin-bottom:6px"><b style="color:var(--primary-2)">Zenkai Tools</b><br>Web all-in-one <span style="color:var(--success);font-size:9px">● LIVE</span></div>
-      <div class="dev-bio" style="margin-bottom:6px"><b style="color:var(--primary-2)">Zenkai AutoFlow v1.2</b><br>Auto-isi Google Form <span style="color:var(--gold);font-size:9px">● BARU</span></div>
     </div>
     <div class="dev-section">
       <div class="dev-quote">"Belajar dari nol bukan alasan buat berhenti."</div>
-    </div>
-    <div class="dev-section">
-      <div class="dev-section-title"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg> Kontak</div>
-      <div style="text-align:center">
-        <a href="https://wa.me/6285352831643" target="_blank" style="display:inline-block;padding:8px 16px;background:rgba(37,211,102,.15);border:1px solid #25d366;color:#25d366;border-radius:8px;font-size:10px;font-weight:800;text-decoration:none;margin:3px">WhatsApp</a>
-        <a href="https://instagram.com/andik4.tm" target="_blank" style="display:inline-block;padding:8px 16px;background:rgba(255,0,128,.15);border:1px solid #ff0080;color:#ff0080;border-radius:8px;font-size:10px;font-weight:800;text-decoration:none;margin:3px">Instagram</a>
-      </div>
     </div>
   </div>
 </div>
@@ -492,7 +514,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="admin-sub">// ZENKAI ADMIN</div>
     </div>
     <div class="card">
-      <div class="card-label">📊 STATISTIK GLOBAL</div>
+      <div class="card-label">📊 STATISTIK</div>
       <div class="stats-grid">
         <div class="stat-box"><div class="stat-val" x-text="adminStats.total_users"></div><div class="stat-lbl">Users</div></div>
         <div class="stat-box"><div class="stat-val" x-text="adminStats.total_vip"></div><div class="stat-lbl">VIP</div></div>
@@ -508,16 +530,17 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
             <div class="admin-user-header">
               <div class="admin-user-name" x-text="u.username"></div>
               <div class="admin-user-meta">
-                <span x-show="u.is_vip" style="color:var(--gold)">◆ VIP</span>
+                <span x-show="u.role==='owner'" style="color:var(--gold)">★ OWNER</span>
+                <span x-show="u.is_vip && u.role!=='owner'" style="color:var(--gold)">◆ VIP</span>
                 <span x-show="u.is_banned" style="color:var(--danger)">● BANNED</span>
               </div>
             </div>
             <div class="admin-user-actions">
-              <template x-if="!u.is_banned"><button class="admin-btn danger" @click="banUser(u)">Ban</button></template>
+              <template x-if="!u.is_banned && u.role!=='owner'"><button class="admin-btn danger" @click="banUser(u)">Ban</button></template>
               <template x-if="u.is_banned"><button class="admin-btn success" @click="unbanUser(u)">Unban</button></template>
-              <template x-if="!u.is_vip"><button class="admin-btn gold" @click="giveVip(u)">+VIP</button></template>
-              <template x-if="u.is_vip"><button class="admin-btn" @click="removeVip(u)">-VIP</button></template>
-              <button class="admin-btn danger" @click="deleteUser(u)">Hapus</button>
+              <template x-if="!u.is_vip && u.role!=='owner'"><button class="admin-btn gold" @click="giveVip(u)">+VIP</button></template>
+              <template x-if="u.is_vip && u.role!=='owner'"><button class="admin-btn" @click="removeVip(u)">-VIP</button></template>
+              <template x-if="u.role!=='owner'"><button class="admin-btn danger" @click="deleteUser(u)">Hapus</button></template>
             </div>
           </div>
         </template>
@@ -539,7 +562,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 const SUPABASE_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
 const WA_ADMIN = '6285352831643';
-const OWNER_USERNAME = 'Zenkai';
+const OWNER_USERNAME = 'Zendk';
 const OWNER_PASSWORD = '763097';
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -557,12 +580,12 @@ function zenkaiApp() {
     stats: { total_soal: 0, total_forms: 0 },
     history: [],
     toasts: [], toastId: 0,
-    devSheetOpen: false, changelogOpen: false, adminOpen: false,
+    devSheetOpen: false, changelogOpen: false, adminOpen: false, vipSheetOpen: false,
     allUsers: [], userSearch: '',
     adminStats: { total_users: 0, total_vip: 0, total_banned: 0 },
     heroTengil: '"Otak lu capek? Pake otak gw aja."',
     tipsText: 'Set target 90 doang biar gak ketara.',
-    heroList: ['"Otak lu capek? Pake otak gw aja."', '"PR numpuk? Chill."', '"Yang penting target set."', '"Satu soal satu langkah."'],
+    heroList: ['"Otak lu capek? Pake otak gw aja."', '"PR numpuk? Chill."', '"Yang penting target set."'],
     tipsList: ['Set target 90 doang biar gak ketara.', 'PR numpuk? Chill, paste aja.', 'Yang penting target set, sisanya gw yang kerja.'],
 
     async init() {
@@ -581,7 +604,6 @@ function zenkaiApp() {
         }
       } catch (e) { console.error(e); }
       this.ready = true;
-
       if (window.chrome && chrome.runtime && chrome.runtime.onMessage) {
         try {
           chrome.runtime.onMessage.addListener((msg) => {
@@ -703,30 +725,22 @@ function zenkaiApp() {
           await this.loadProfile();
         } else {
           if (this.form.username === OWNER_USERNAME && this.form.password === OWNER_PASSWORD) {
-            const { data: ownerProfile } = await sb.from('profiles').select('*').ilike('username', OWNER_USERNAME).maybeSingle();
-            if (ownerProfile) {
-              const email = 'zenkai_owner_' + OWNER_USERNAME.toLowerCase() + '@zenkai.local';
-              const { data: signInData, error: signInError } = await sb.auth.signInWithPassword({ email, password: OWNER_PASSWORD });
-              if (signInError) {
-                const { data: newOwner, error: regError } = await sb.auth.signUp({ email, password: OWNER_PASSWORD, options: { data: { username: OWNER_USERNAME } } });
-                if (regError) throw regError;
-                this.user = newOwner.user;
-              } else {
-                this.user = signInData.user;
-              }
-              await sb.from('profiles').upsert({ id: this.user.id, username: OWNER_USERNAME, role: 'owner', is_vip: true });
-              await this.loadProfile();
-              this.showToast('Welcome, Owner!', 'success');
+            const email = 'zenkai_owner_' + OWNER_USERNAME.toLowerCase() + '@zenkai.local';
+            const { data: signInData, error: signInError } = await sb.auth.signInWithPassword({ email, password: OWNER_PASSWORD });
+            if (signInError) {
+              const { data: newOwner, error: regError } = await sb.auth.signUp({ email, password: OWNER_PASSWORD, options: { data: { username: OWNER_USERNAME } } });
+              if (regError) throw regError;
+              this.user = newOwner.user;
             } else {
-              this.errMsg = 'Owner belum di-setup. Daftar dulu pakai nama Zenkai.';
-              this.loading = false;
-              return;
+              this.user = signInData.user;
             }
+            await sb.from('profiles').upsert({ id: this.user.id, username: OWNER_USERNAME, role: 'owner', is_vip: true });
+            await this.loadProfile();
+            this.showToast('Welcome, Owner!', 'success');
           } else {
             const { data: prof } = await sb.from('profiles').select('*').ilike('username', this.form.username).maybeSingle();
             if (!prof) { this.errMsg = 'User tidak ditemukan!'; this.loading = false; return; }
-            if (prof.is_banned) { this.errMsg = 'Akun di-ban! Hubungi admin.'; this.loading = false; return; }
-            const { data: sessionData } = await sb.auth.getSession();
+            if (prof.is_banned) { this.errMsg = 'Akun di-ban!'; this.loading = false; return; }
             const email = 'user_' + prof.id.substring(0,8) + '@zenkai.local';
             const { data: signInData, error: signInError } = await sb.auth.signInWithPassword({ email, password: this.form.password });
             if (signInError) {
@@ -761,7 +775,6 @@ function zenkaiApp() {
         await sb.from('zenkai_autofill_settings').upsert({ user_id: this.user.id, target_score: this.targetScore, mode: this.mode, auto_submit: this.autoSubmit, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
         localStorage.setItem('zenkai_target', this.targetScore);
         localStorage.setItem('zenkai_mode', this.mode);
-        localStorage.setItem('zenkai_autosubmit', this.autoSubmit ? '1' : '0');
         this.syncToExtension();
         this.showToast('Setting tersimpan!', 'success');
       } catch (e) { this.showToast('Gagal simpan', 'error'); }
@@ -780,9 +793,9 @@ function zenkaiApp() {
     async startAutoFlow() {
       if (!this.formUrl.trim()) { this.showToast('Paste URL dulu!', 'error'); return; }
       if (!this.formUrl.includes('docs.google.com/forms')) { this.showToast('Bukan URL Google Form!', 'error'); return; }
-      if (this.remainingLimit <= 0 && !this.isVip && !this.isOwner) { this.showToast('Limit habis! Upgrade VIP.', 'error'); return; }
+      if (this.remainingLimit <= 0 && !this.isVip && !this.isOwner) { this.showToast('Limit habis! Upgrade VIP.', 'error'); this.vipSheetOpen = true; return; }
       const ok = await this.incrementLimit();
-      if (!ok) { this.showToast('Limit habis! Upgrade VIP.', 'error'); return; }
+      if (!ok) { this.showToast('Limit habis!', 'error'); this.vipSheetOpen = true; return; }
       this.starting = true;
       this.syncToExtension();
       if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
@@ -797,7 +810,7 @@ function zenkaiApp() {
       }
     },
 
-    openWaVip(dur, price) {
+    buyVip(dur, price) {
       const msg = encodeURIComponent('Halo Admin, gw mau beli VIP Zenkai AutoFlow.\n\nNama: ' + (this.profile.username||'-') + '\nDurasi: ' + dur + '\nHarga: ' + price + '\n\nMohon info pembayaran. Thanks!');
       window.open('https://wa.me/' + WA_ADMIN + '?text=' + msg, '_blank');
     },
