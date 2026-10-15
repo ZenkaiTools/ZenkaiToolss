@@ -2,221 +2,388 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Talkup RPG</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
-body{background:#0d0d1a;color:#eee;min-height:100vh;padding:12px}
-#app{max-width:520px;margin:auto;background:#16162a;border-radius:14px;padding:16px;box-shadow:0 0 30px #000}
-h1{text-align:center;color:#7df;margin-bottom:12px;font-size:22px}
-h2{color:#fd7;font-size:16px;margin:10px 0 6px}
-.panel{background:#1f1f3a;border-radius:10px;padding:12px;margin-bottom:10px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:13px}
-.stats div{background:#28284a;padding:6px 8px;border-radius:6px}
-button{width:100%;padding:11px;margin:4px 0;background:#3a3a6a;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;transition:.15s}
-button:hover{background:#505090;transform:translateY(-1px)}
-button.primary{background:#d6336c}
-button.primary:hover{background:#f04080}
-button.green{background:#2f9e44}
-button.green:hover{background:#37b24d}
-button:disabled{opacity:.4;cursor:not-allowed}
-#log{font-size:12px;max-height:140px;overflow-y:auto;background:#0a0a18;padding:8px;border-radius:8px;margin-top:8px;color:#9cf;line-height:1.5}
-#log div{padding:2px 0;border-bottom:1px solid #222}
-.row{display:flex;gap:6px}
-.row button{margin:4px 0}
-.hidden{display:none}
-.bar{height:8px;background:#28284a;border-radius:4px;overflow:hidden;margin-top:4px}
-.bar-fill{height:100%;transition:.3s}
-.hp-fill{background:linear-gradient(90deg,#e63946,#ff6b6b)}
-.mp-fill{background:linear-gradient(90deg,#1e6091,#4dabf7)}
-.exp-fill{background:linear-gradient(90deg,#f08c00,#ffd43b)}
+:root{
+  --bg:#0a0a14; --panel:#14142a; --accent:#ff3d71; --accent2:#7c3aed;
+  --gold:#ffd60a; --hp:#e63946; --mp:#4dabf7; --exp:#ffd43b;
+  --text:#e8e8f0; --muted:#8a8aa0;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);
+  background-image:radial-gradient(circle at 20% 0%,#2a0a3a 0%,transparent 50%),
+                   radial-gradient(circle at 80% 100%,#0a2a3a 0%,transparent 50%);
+  background-attachment:fixed;
+}
+#app{height:100vh;max-width:600px;margin:auto;display:flex;flex-direction:column;position:relative}
+
+/* HEADER */
+header{
+  padding:14px 16px;display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,rgba(20,20,42,.95),rgba(20,20,42,.6));
+  backdrop-filter:blur(10px);border-bottom:1px solid #2a2a4a;z-index:5;
+}
+header h1{font-family:'Cinzel',serif;font-size:20px;color:var(--accent);letter-spacing:1px}
+header .gold{color:var(--gold);font-weight:700;font-size:15px}
+
+/* SCENE AREA */
+#scene{
+  flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:16px;
+}
+#sceneImg{
+  width:100%;max-width:340px;aspect-ratio:1;border-radius:20px;object-fit:cover;
+  border:2px solid #2a2a4a;box-shadow:0 0 60px rgba(124,58,237,.4);
+  animation:fadeIn .6s ease;transition:transform .3s;
+}
+#sceneImg:active{transform:scale(.97)}
+@keyframes fadeIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+#sceneText{
+  margin-top:16px;text-align:center;font-size:15px;line-height:1.5;
+  max-width:400px;color:var(--text);animation:slideUp .4s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* STATS HUD */
+#hud{
+  padding:10px 16px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;
+  background:rgba(10,10,20,.7);backdrop-filter:blur(8px);
+}
+.stat{display:flex;justify-content:space-between;background:#1a1a30;padding:6px 10px;border-radius:8px}
+.stat span:last-child{font-weight:700;color:var(--gold)}
+.bar{height:6px;background:#1a1a30;border-radius:3px;overflow:hidden;margin-top:2px}
+.bar-fill{height:100%;transition:width .4s ease}
+
+/* BOTTOM SHEET */
+.sheet{
+  position:absolute;left:0;right:0;bottom:0;background:var(--panel);
+  border-top-left-radius:24px;border-top-right-radius:24px;
+  padding:20px 16px calc(20px + env(safe-area-inset-bottom));
+  max-height:80vh;overflow-y:auto;z-index:20;
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 -10px 40px rgba(0,0,0,.6);
+}
+.sheet.open{transform:translateY(0)}
+.sheet::before{
+  content:'';display:block;width:40px;height:4px;background:#3a3a5a;
+  border-radius:2px;margin:0 auto 16px;
+}
+.sheet h2{font-family:'Cinzel',serif;font-size:18px;color:var(--accent);margin-bottom:14px}
+
+/* BUTTONS */
+.btn{
+  width:100%;padding:14px;margin-bottom:8px;background:#22223c;color:var(--text);
+  border:1px solid #2f2f4a;border-radius:14px;font-size:15px;font-weight:600;
+  cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:space-between;
+}
+.btn:active{transform:scale(.98);background:#2a2a48}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none}
+.btn.green{background:linear-gradient(135deg,#2f9e44,#37b24d);border:none}
+.btn.danger{background:linear-gradient(135deg,#c92a2a,#e03131);border:none}
+.btn .price{color:var(--gold);font-weight:700}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:8px}
+.row .btn{margin-bottom:8px}
+
+/* ITEM CARD */
+.item-card{
+  display:flex;gap:12px;padding:12px;background:#1a1a30;border-radius:14px;
+  margin-bottom:8px;align-items:center;
+}
+.item-card img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+.item-card .info{flex:1}
+.item-card .name{font-weight:700;font-size:14px}
+.item-card .desc{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* LOG */
+#log{
+  font-size:11px;color:var(--muted);padding:8px 16px;max-height:80px;
+  overflow-y:auto;background:rgba(0,0,0,.3);line-height:1.6;
+}
+#log div{padding:2px 0;animation:fadeIn .3s}
+
+/* TOAST */
+#toast{
+  position:absolute;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);
+  background:rgba(0,0,0,.9);padding:10px 20px;border-radius:20px;font-size:13px;
+  opacity:0;transition:.3s;z-index:50;pointer-events:none;border:1px solid var(--accent);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.hidden{display:none!important}
 </style>
 </head>
 <body>
 <div id="app">
-<h1>⚔️ Talkup RPG</h1>
 
-<!-- MENU -->
-<div id="menu" class="panel">
+<header>
+  <h1>⚔️ TALKUP</h1>
+  <div class="gold">💰 <span id="hudGold">0</span></div>
+</header>
+
+<div id="scene">
+  <img id="sceneImg" src="" alt="scene" onerror="this.src='https://placehold.co/400x400/1a1a30/ff3d71?text=Talkup'">
+  <div id="sceneText">Memuat...</div>
+</div>
+
+<div id="hud">
+  <div>
+    <div class="stat"><span>❤️ HP</span><span id="hudHp">0/0</span></div>
+    <div class="bar"><div id="hpBar" class="bar-fill" style="background:var(--hp);width:100%"></div></div>
+  </div>
+  <div>
+    <div class="stat"><span>💧 MP</span><span id="hudMp">0/0</span></div>
+    <div class="bar"><div id="mpBar" class="bar-fill" style="background:var(--mp);width:100%"></div></div>
+  </div>
+  <div>
+    <div class="stat"><span>🎖️ Level</span><span id="hudLv">1</span></div>
+  </div>
+  <div>
+    <div class="stat"><span>⚡ EXP</span><span id="hudExp">0/50</span></div>
+  </div>
+</div>
+
+<div id="log"></div>
+
+<!-- BOTTOM SHEET: MENU UTAMA -->
+<div class="sheet" id="sheetMenu">
   <h2>Menu Utama</h2>
-  <button class="primary" onclick="newGame()">🆕 Game Baru</button>
-  <button class="green" onclick="loadGame()">💾 Load Game</button>
-  <button onclick="showHelp()">❓ Cara Main</button>
+  <button class="btn primary" onclick="newGame()"><span>🆕 Game Baru</span></button>
+  <button class="btn green" onclick="loadGame()"><span>💾 Load Game</span></button>
+  <button class="btn" onclick="openSheet('sheetHelp')"><span>❓ Cara Main</span></button>
 </div>
 
-<!-- GAME -->
-<div id="game" class="hidden">
-  <div class="panel">
-    <div class="stats">
-      <div>👤 <span id="pNama">-</span></div>
-      <div>🎖️ Lv <span id="pLv">1</span></div>
-      <div>❤️ HP <span id="pHp">100</span>/<span id="pMhp">100</span></div>
-      <div>💧 MP <span id="pMp">50</span>/<span id="pMmp">50</span></div>
-      <div>⚔️ ATK <span id="pAtk">10</span></div>
-      <div>🛡️ DEF <span id="pDef">5</span></div>
-      <div>💰 Gold <span id="pGold">50</span></div>
-      <div>🍀 LUCK <span id="pLuck">5</span></div>
-    </div>
-    <div class="bar"><div id="hpBar" class="bar-fill hp-fill" style="width:100%"></div></div>
-    <div class="bar"><div id="mpBar" class="bar-fill mp-fill" style="width:100%"></div></div>
-    <div class="bar"><div id="expBar" class="bar-fill exp-fill" style="width:0%"></div></div>
-  </div>
-
-  <div class="panel" id="mainActions">
-    <h2>Aksi</h2>
-    <button onclick="explore()">🌲 Jelajah Hutan</button>
-    <button onclick="dungeon()">🏰 Masuk Dungeon</button>
-    <button onclick="openShop()">🏪 Toko</button>
-    <button onclick="openInventory()">🎒 Inventory</button>
-    <button onclick="openQuest()">📜 Quest</button>
-    <button class="green" onclick="saveGame()">💾 Simpan</button>
-  </div>
-
-  <!-- COMBAT -->
-  <div id="combatPanel" class="panel hidden">
-    <h2>⚔️ Pertarungan</h2>
-    <div id="combatInfo">-</div>
-    <div class="bar"><div id="mHpBar" class="bar-fill hp-fill" style="width:100%"></div></div>
-    <div class="row">
-      <button onclick="attack()">🗡️ Serang</button>
-      <button onclick="useSkill()">✨ Skill (10 MP)</button>
-    </div>
-    <div class="row">
-      <button onclick="usePotion()">🧪 Potion</button>
-      <button onclick="flee()">🏃 Kabur</button>
-    </div>
-  </div>
-
-  <!-- INVENTORY -->
-  <div id="invPanel" class="panel hidden">
-    <h2>🎒 Inventory</h2>
-    <div id="invList"></div>
-    <button onclick="closePanels()">⬅️ Kembali</button>
-  </div>
-
-  <!-- SHOP -->
-  <div id="shopPanel" class="panel hidden">
-    <h2>🏪 Toko</h2>
-    <div id="shopList"></div>
-    <button onclick="closePanels()">⬅️ Kembali</button>
-  </div>
-
-  <!-- QUEST -->
-  <div id="questPanel" class="panel hidden">
-    <h2>📜 Quest</h2>
-    <div id="questList"></div>
-    <button onclick="closePanels()">⬅️ Kembali</button>
-  </div>
-
-  <div id="log"></div>
+<!-- BOTTOM SHEET: AKSI -->
+<div class="sheet" id="sheetAction">
+  <h2>Aksi</h2>
+  <button class="btn" onclick="explore()"><span>🌲 Jelajah Hutan</span></button>
+  <button class="btn" onclick="dungeon()"><span>🏰 Masuk Dungeon</span></button>
+  <button class="btn" onclick="openShop()"><span>🏪 Toko</span></button>
+  <button class="btn" onclick="openInventory()"><span>🎒 Inventory</span></button>
+  <button class="btn" onclick="openQuest()"><span>📜 Quest</span></button>
+  <button class="btn green" onclick="saveGame()"><span>💾 Simpan Game</span></button>
 </div>
+
+<!-- BOTTOM SHEET: COMBAT -->
+<div class="sheet" id="sheetCombat">
+  <h2>⚔️ Pertarungan</h2>
+  <div id="combatInfo" style="margin-bottom:12px;font-size:14px"></div>
+  <div class="bar" style="height:8px;margin-bottom:14px">
+    <div id="mHpBar" class="bar-fill" style="background:var(--hp);width:100%"></div>
+  </div>
+  <div class="row">
+    <button class="btn danger" onclick="attack()"><span>🗡️ Serang</span></button>
+    <button class="btn primary" onclick="useSkill()"><span>✨ Skill</span></button>
+  </div>
+  <div class="row">
+    <button class="btn" onclick="usePotion()"><span>🧪 Potion</span></button>
+    <button class="btn" onclick="flee()"><span>🏃 Kabur</span></button>
+  </div>
+</div>
+
+<!-- BOTTOM SHEET: INVENTORY -->
+<div class="sheet" id="sheetInv">
+  <h2>🎒 Inventory</h2>
+  <div id="invList"></div>
+  <button class="btn" style="margin-top:8px" onclick="closeSheets()"><span>⬅️ Kembali</span></button>
+</div>
+
+<!-- BOTTOM SHEET: SHOP -->
+<div class="sheet" id="sheetShop">
+  <h2>🏪 Toko</h2>
+  <div id="shopList"></div>
+  <button class="btn" style="margin-top:8px" onclick="closeSheets()"><span>⬅️ Kembali</span></button>
+</div>
+
+<!-- BOTTOM SHEET: QUEST -->
+<div class="sheet" id="sheetQuest">
+  <h2>📜 Quest</h2>
+  <div id="questList"></div>
+  <button class="btn" style="margin-top:8px" onclick="closeSheets()"><span>⬅️ Kembali</span></button>
+</div>
+
+<!-- BOTTOM SHEET: HELP -->
+<div class="sheet" id="sheetHelp">
+  <h2>❓ Cara Main</h2>
+  <p style="font-size:14px;line-height:1.7;color:var(--muted)">
+    1. Jelajah Hutan untuk cari monster & item<br>
+    2. Masuk Dungeon untuk lawan lebih kuat<br>
+    3. Serang, pakai skill, atau potion<br>
+    4. Beli item di Toko untuk naikkan stats<br>
+    5. Selesaikan Quest untuk reward besar<br>
+    6. Simpan game biar tidak hilang
+  </p>
+  <button class="btn" style="margin-top:12px" onclick="closeSheets()"><span>⬅️ Kembali</span></button>
+</div>
+
+<div id="toast"></div>
 
 </div>
 <script>
 // ===== STATE =====
 let P = null;
-const SAVE_KEY = "talkup_save_v1";
+const SAVE_KEY = "talkup_v2";
 
-// ===== ITEM DATABASE =====
-const ITEMS = {
-  potion:  { nama:"🧪 Potion",   harga:20,  efek:{hp:30} },
-  ether:   { nama:"💧 Ether",    harga:30,  efek:{mp:20} },
-  sword:   { nama:"🗡️ Sword",    harga:80,  efek:{atk:5} },
-  shield:  { nama:"🛡️ Shield",   harga:70,  efek:{def:4} },
-  amulet:  { nama:"🍀 Amulet",   harga:120, efek:{luck:5} },
-  elixir:  { nama:"🌟 Elixir",   harga:150, efek:{hp:100,mp:100} }
+// ===== IMAGE HELPER (pakai Pollinations AI gratis) =====
+function img(prompt, seed){
+  const s = seed || Math.floor(Math.random()*99999);
+  return "https://image.pollinations.ai/prompt/" +
+    encodeURIComponent(prompt + ", game art, fantasy, detailed, dramatic lighting") +
+    "?width=512&height=512&nologo=true&seed=" + s;
+}
+
+// ===== SCENE IMAGES =====
+const SCENES = {
+  town:   img("fantasy medieval town at sunset, epic game art"),
+  forest: img("dark mystical forest with glowing trees, fantasy game art"),
+  dungeon:img("dark dungeon entrance with torches, ominous fantasy"),
+  shop:   img("fantasy magic item shop interior, warm light"),
+  combat: img("fantasy battle arena, dramatic"),
 };
 
-// ===== MONSTER DATABASE =====
+// ===== ITEM DB =====
+const ITEMS = {
+  potion: { nama:"🧪 Potion",   harga:20, desc:"+30 HP",   efek:{hp:30} },
+  ether:  { nama:"💧 Ether",    harga:30, desc:"+20 MP",   efek:{mp:20} },
+  sword:  { nama:"🗡️ Sword",    harga:80, desc:"+5 ATK",   efek:{atk:5} },
+  shield: { nama:"🛡️ Shield",   harga:70, desc:"+4 DEF",   efek:{def:4} },
+  amulet: { nama:"🍀 Amulet",   harga:120,desc:"+5 LUCK",  efek:{luck:5} },
+  elixir: { nama:"🌟 Elixir",   harga:150,desc:"+100 HP/MP",efek:{hp:100,mp:100} }
+};
+
+// ===== MONSTER DB =====
 const MONSTERS = [
-  { nama:"🐺 Serigala",   hp:40,  atk:8,  def:2, exp:15, gold:12 },
-  { nama:"👹 Goblin",     hp:60,  atk:12, def:4, exp:25, gold:20 },
-  { nama:"🦇 Kelelawar",  hp:30,  atk:10, def:1, exp:12, gold:8 },
-  { nama:"🐉 Naga Kecil", hp:120, atk:20, def:8, exp:60, gold:60 },
-  { nama:"💀 Skeleton",   hp:80,  atk:15, def:6, exp:35, gold:28 }
+  { nama:"🐺 Serigala",   hp:40,  atk:8,  def:2, exp:15, gold:12, img:"fierce wolf, fantasy monster art" },
+  { nama:"👹 Goblin",     hp:60,  atk:12, def:4, exp:25, gold:20, img:"goblin warrior, fantasy monster" },
+  { nama:"🦇 Kelelawar",  hp:30,  atk:10, def:1, exp:12, gold:8,  img:"giant bat, dark fantasy monster" },
+  { nama:"🐉 Naga Kecil", hp:120, atk:20, def:8, exp:60, gold:60, img:"small dragon, epic fantasy monster" },
+  { nama:"💀 Skeleton",   hp:80,  atk:15, def:6, exp:35, gold:28, img:"skeleton warrior, dark fantasy" }
 ];
 
-// ===== QUESTS =====
-const QUESTS = [
-  { id:"q1", nama:"Bunuh 3 Serigala", target:"🐺 Serigala", butuh:3, reward:{exp:50,gold:40}, progress:0, selesai:false },
-  { id:"q2", nama:"Bunuh 2 Goblin",   target:"👹 Goblin",   butuh:2, reward:{exp:60,gold:50}, progress:0, selesai:false },
-  { id:"q3", nama:"Bunuh 1 Naga",     target:"🐉 Naga Kecil", butuh:1, reward:{exp:200,gold:200}, progress:0, selesai:false }
+// ===== QUEST DB =====
+const QUEST_TPL = [
+  { id:"q1", nama:"Bunuh 3 Serigala", target:"🐺 Serigala", butuh:3, reward:{exp:50,gold:40} },
+  { id:"q2", nama:"Bunuh 2 Goblin",   target:"👹 Goblin",   butuh:2, reward:{exp:60,gold:50} },
+  { id:"q3", nama:"Bunuh 1 Naga",     target:"🐉 Naga Kecil", butuh:1, reward:{exp:200,gold:200} }
 ];
 
-// ===== CORE =====
-function newGame() {
+// ===== UI HELPERS =====
+function openSheet(id){
+  document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open'));
+  document.getElementById(id).classList.add('open');
+}
+function closeSheets(){
+  document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open'));
+}
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.remove('show'), 1800);
+}
+function log(msg){
+  const el = document.getElementById('log');
+  const d = document.createElement('div');
+  d.textContent = msg;
+  el.prepend(d);
+  while(el.children.length > 30) el.removeChild(el.lastChild);
+}
+function setScene(imgUrl, text){
+  const i = document.getElementById('sceneImg');
+  i.style.opacity = 0;
+  setTimeout(()=>{
+    i.src = imgUrl;
+    i.style.opacity = 1;
+    i.style.animation = 'none';
+    i.offsetHeight;
+    i.style.animation = 'fadeIn .6s ease';
+  }, 150);
+  document.getElementById('sceneText').textContent = text;
+}
+
+// ===== RENDER HUD =====
+function render(){
+  if(!P) return;
+  document.getElementById('hudGold').textContent = P.gold;
+  document.getElementById('hudHp').textContent = P.hp + "/" + P.mhp;
+  document.getElementById('hudMp').textContent = P.mp + "/" + P.mmp;
+  document.getElementById('hudLv').textContent = P.lv;
+  document.getElementById('hudExp').textContent = P.exp + "/" + P.expNext;
+  document.getElementById('hpBar').style.width = (P.hp/P.mhp*100) + "%";
+  document.getElementById('mpBar').style.width = (P.mp/P.mmp*100) + "%";
+}
+
+// ===== START =====
+function newGame(){
   const nama = prompt("Nama karaktermu:", "Pemain");
-  if (!nama) return;
+  if(!nama) return;
   P = {
     nama, lv:1, exp:0, expNext:50,
     hp:100, mhp:100, mp:50, mmp:50,
     atk:10, def:5, luck:5, gold:50,
     inv:{ potion:3 },
-    quests: JSON.parse(JSON.stringify(QUESTS)),
+    quests: JSON.parse(JSON.stringify(QUEST_TPL)).map(q=>({...q,progress:0,selesai:false})),
     monster:null
   };
-  log("🎮 Game dimulai. Selamat datang, " + nama + "!");
-  document.getElementById("menu").classList.add("hidden");
-  document.getElementById("game").classList.remove("hidden");
+  closeSheets();
+  setScene(SCENES.town, "Selamat datang, " + nama + ". Petualanganmu dimulai.");
+  log("🎮 Game dimulai.");
   render();
-}
-
-function render() {
-  if (!P) return;
-  document.getElementById("pNama").textContent = P.nama;
-  document.getElementById("pLv").textContent = P.lv;
-  document.getElementById("pHp").textContent = P.hp;
-  document.getElementById("pMhp").textContent = P.mhp;
-  document.getElementById("pMp").textContent = P.mp;
-  document.getElementById("pMmp").textContent = P.mmp;
-  document.getElementById("pAtk").textContent = P.atk;
-  document.getElementById("pDef").textContent = P.def;
-  document.getElementById("pGold").textContent = P.gold;
-  document.getElementById("pLuck").textContent = P.luck;
-  document.getElementById("hpBar").style.width = (P.hp/P.mhp*100) + "%";
-  document.getElementById("mpBar").style.width = (P.mp/P.mmp*100) + "%";
-  document.getElementById("expBar").style.width = (P.exp/P.expNext*100) + "%";
-}
-
-function log(msg) {
-  const el = document.getElementById("log");
-  const d = document.createElement("div");
-  d.textContent = msg;
-  el.prepend(d);
+  setTimeout(()=>openSheet('sheetAction'), 800);
 }
 
 // ===== EXPLORE =====
-function explore() {
-  if (!P || P.monster) return;
-  const roll = Math.random();
-  if (roll < 0.65) startCombat();
-  else if (roll < 0.8) {
-    const gold = Math.floor(Math.random()*20)+5;
-    P.gold += gold;
-    log("💰 Kamu menemukan " + gold + " gold.");
-    render();
-  } else if (roll < 0.92) {
-    P.inv.potion = (P.inv.potion||0) + 1;
-    log("🧪 Kamu menemukan Potion.");
-    render();
-  } else {
-    const dmg = Math.floor(Math.random()*10)+5;
-    P.hp = Math.max(1, P.hp - dmg);
-    log("💥 Kamu kena jebakan! -" + dmg + " HP");
-    render();
-  }
+function explore(){
+  if(!P || P.monster) return;
+  closeSheets();
+  setScene(SCENES.forest, "Kamu menyusuri hutan...");
+  setTimeout(()=>{
+    const roll = Math.random();
+    if(roll < 0.65) startCombat();
+    else if(roll < 0.8){
+      const g = Math.floor(Math.random()*20)+5;
+      P.gold += g;
+      setScene(SCENES.forest, "💰 Kamu menemukan " + g + " gold di semak.");
+      toast("+" + g + " gold");
+      log("💰 +" + g + " gold");
+      render();
+      setTimeout(()=>openSheet('sheetAction'), 700);
+    } else if(roll < 0.92){
+      P.inv.potion = (P.inv.potion||0)+1;
+      setScene(SCENES.forest, "🧪 Kamu menemukan Potion.");
+      toast("+1 Potion");
+      log("🧪 +1 Potion");
+      render();
+      setTimeout(()=>openSheet('sheetAction'), 700);
+    } else {
+      const dmg = Math.floor(Math.random()*10)+5;
+      P.hp = Math.max(1, P.hp-dmg);
+      setScene(SCENES.forest, "💥 Kamu kena jebakan! -" + dmg + " HP");
+      log("💥 -" + dmg + " HP");
+      render();
+      setTimeout(()=>openSheet('sheetAction'), 700);
+    }
+  }, 500);
 }
 
-function dungeon() {
-  if (!P || P.monster) return;
-  const m = MONSTERS[Math.floor(Math.random()*MONSTERS.length)];
-  m.hp *= 1.5; m.atk *= 1.3; m.exp *= 2; m.gold *= 2;
-  startCombat(m);
-  log("🏰 Kamu masuk dungeon yang lebih berbahaya!");
+function dungeon(){
+  if(!P || P.monster) return;
+  closeSheets();
+  setScene(SCENES.dungeon, "Kamu masuk dungeon...");
+  setTimeout(()=>{
+    const base = MONSTERS[Math.floor(Math.random()*MONSTERS.length)];
+    const buffed = {...base, hp:Math.floor(base.hp*1.5), atk:Math.floor(base.atk*1.3), exp:base.exp*2, gold:base.gold*2};
+    startCombat(buffed);
+  }, 500);
 }
 
 // ===== COMBAT =====
-function startCombat(custom) {
+function startCombat(custom){
   const base = custom || MONSTERS[Math.floor(Math.random()*MONSTERS.length)];
   P.monster = {
     nama: base.nama,
@@ -224,196 +391,221 @@ function startCombat(custom) {
     atk: base.atk, def: base.def,
     exp: base.exp, gold: base.gold
   };
-  log("⚔️ " + P.monster.nama + " muncul!");
-  document.getElementById("combatPanel").classList.remove("hidden");
+  setScene(img(base.img, 1000+MONSTERS.indexOf(base)), "⚔️ " + base.nama + " menyerangmu!");
+  log("⚔️ " + base.nama + " muncul!");
   updateCombat();
+  setTimeout(()=>openSheet('sheetCombat'), 600);
 }
 
-function updateCombat() {
-  if (!P.monster) return;
+function updateCombat(){
+  if(!P.monster) return;
   const m = P.monster;
-  document.getElementById("combatInfo").textContent =
-    m.nama + " — HP " + m.hp + "/" + m.mhp;
-  document.getElementById("mHpBar").style.width = (m.hp/m.mhp*100) + "%";
+  document.getElementById('combatInfo').textContent = m.nama + " — HP " + m.hp + "/" + m.mhp;
+  document.getElementById('mHpBar').style.width = (m.hp/m.mhp*100) + "%";
 }
 
-function attack() {
-  if (!P.monster) return;
+function attack(){
+  if(!P.monster) return;
   const m = P.monster;
   const dmg = Math.max(1, P.atk - m.def + Math.floor(Math.random()*5));
   m.hp -= dmg;
-  log("🗡️ Kamu menyerang " + m.nama + " -" + dmg);
-  if (m.hp <= 0) return winCombat();
+  log("🗡️ Serang " + m.nama + " -" + dmg);
+  toast("-" + dmg + " HP");
+  if(m.hp <= 0) return winCombat();
+  updateCombat();
   monsterTurn();
 }
 
-function useSkill() {
-  if (!P.monster) return;
-  if (P.mp < 10) { log("💧 MP tidak cukup."); return; }
+function useSkill(){
+  if(!P.monster) return;
+  if(P.mp < 10){ toast("MP kurang"); return; }
   P.mp -= 10;
   const m = P.monster;
-  const dmg = Math.max(1, Math.floor(P.atk * 2.5) - m.def);
+  const dmg = Math.max(1, Math.floor(P.atk*2.5) - m.def);
   m.hp -= dmg;
-  log("✨ Skill! -" + dmg + " ke " + m.nama);
+  log("✨ Skill -" + dmg);
+  toast("✨ -" + dmg);
   render();
-  if (m.hp <= 0) return winCombat();
+  if(m.hp <= 0) return winCombat();
+  updateCombat();
   monsterTurn();
 }
 
-function usePotion() {
-  if (!P.monster) return;
-  if (!P.inv.potion) { log("🧪 Tidak ada potion."); return; }
+function usePotion(){
+  if(!P.monster) return;
+  if(!P.inv.potion){ toast("Tidak ada potion"); return; }
   P.inv.potion--;
-  P.hp = Math.min(P.mhp, P.hp + 30);
-  log("🧪 Kamu pakai Potion. +30 HP");
+  P.hp = Math.min(P.mhp, P.hp+30);
+  log("🧪 +30 HP");
+  toast("🧪 +30 HP");
   render();
   monsterTurn();
 }
 
-function flee() {
-  if (!P.monster) return;
-  if (Math.random() < 0.5 + P.luck*0.02) {
-    log("🏃 Kamu berhasil kabur.");
+function flee(){
+  if(!P.monster) return;
+  if(Math.random() < 0.5 + P.luck*0.02){
+    log("🏃 Kabur berhasil");
+    toast("🏃 Kabur!");
     P.monster = null;
-    document.getElementById("combatPanel").classList.add("hidden");
+    closeSheets();
+    setScene(SCENES.town, "Kamu kembali ke kota dengan selamat.");
+    setTimeout(()=>openSheet('sheetAction'), 600);
   } else {
     log("❌ Gagal kabur!");
     monsterTurn();
   }
 }
 
-function monsterTurn() {
-  if (!P.monster) return;
+function monsterTurn(){
+  if(!P.monster) return;
   const m = P.monster;
   const dmg = Math.max(1, m.atk - P.def + Math.floor(Math.random()*4));
   P.hp -= dmg;
-  log("👊 " + m.nama + " menyerangmu -" + dmg);
+  log("👊 " + m.nama + " -" + dmg + " HP");
   render();
   updateCombat();
-  if (P.hp <= 0) return loseCombat();
+  if(P.hp <= 0) return loseCombat();
 }
 
-function winCombat() {
+function winCombat(){
   const m = P.monster;
-  log("🏆 " + m.nama + " dikalahkan! +" + m.exp + " exp, +" + m.gold + " gold");
+  log("🏆 Menang! +" + m.exp + " exp, +" + m.gold + " gold");
+  toast("🏆 Menang!");
   P.exp += m.exp;
   P.gold += m.gold;
   updateQuest(m.nama);
   checkLevel();
   P.monster = null;
-  document.getElementById("combatPanel").classList.add("hidden");
   render();
+  closeSheets();
+  setScene(SCENES.town, "Kamu menang. Kembali ke kota.");
+  setTimeout(()=>openSheet('sheetAction'), 700);
 }
 
-function loseCombat() {
-  log("💀 Kamu kalah. Kembali ke kota dengan 1 HP.");
+function loseCombat(){
+  log("💀 Kalah. Kembali dengan 1 HP.");
+  toast("💀 Kalah");
   P.hp = 1;
   P.gold = Math.floor(P.gold/2);
   P.monster = null;
-  document.getElementById("combatPanel").classList.add("hidden");
   render();
+  closeSheets();
+  setScene(SCENES.town, "Kamu pingsan. Bangun di kota dengan 1 HP.");
+  setTimeout(()=>openSheet('sheetAction'), 700);
 }
 
-function checkLevel() {
-  while (P.exp >= P.expNext) {
+function checkLevel(){
+  while(P.exp >= P.expNext){
     P.exp -= P.expNext;
     P.lv++;
-    P.expNext = Math.floor(P.expNext * 1.5);
+    P.expNext = Math.floor(P.expNext*1.5);
     P.mhp += 20; P.mmp += 10;
     P.atk += 3; P.def += 2; P.luck += 1;
     P.hp = P.mhp; P.mp = P.mmp;
-    log("🎉 LEVEL UP! Sekarang Lv " + P.lv);
+    log("🎉 LEVEL UP! Lv " + P.lv);
+    toast("🎉 Level Up! Lv " + P.lv);
   }
 }
 
 // ===== QUEST =====
-function updateQuest(monsterName) {
-  P.quests.forEach(q => {
-    if (!q.selesai && q.target === monsterName) {
+function updateQuest(monsterName){
+  P.quests.forEach(q=>{
+    if(!q.selesai && q.target === monsterName){
       q.progress++;
-      if (q.progress >= q.butuh) {
+      if(q.progress >= q.butuh){
         q.selesai = true;
         P.exp += q.reward.exp;
         P.gold += q.reward.gold;
-        log("✅ Quest selesai: " + q.nama + " (+" + q.reward.exp + " exp)");
+        log("✅ Quest: " + q.nama);
+        toast("✅ Quest selesai!");
         checkLevel();
       }
     }
   });
 }
 
-// ===== UI PANELS =====
-function closePanels() {
-  document.querySelectorAll("#invPanel,#shopPanel,#questPanel").forEach(p => p.classList.add("hidden"));
-  document.getElementById("mainActions").classList.remove("hidden");
-}
-
-function openInventory() {
-  const el = document.getElementById("invList");
+// ===== PANELS =====
+function openInventory(){
+  const el = document.getElementById('invList');
   el.innerHTML = "";
-  if (!Object.keys(P.inv).length) el.innerHTML = "<p>Kosong.</p>";
-  Object.entries(P.inv).forEach(([k,v]) => {
-    el.innerHTML += "<div>" + ITEMS[k].nama + " x" + v + "</div>";
+  const keys = Object.keys(P.inv);
+  if(!keys.length) el.innerHTML = "<p style='color:var(--muted)'>Inventory kosong.</p>";
+  keys.forEach(k=>{
+    const it = ITEMS[k];
+    el.innerHTML += `<div class="item-card">
+      <div style="font-size:32px">${it.nama.split(' ')[0]}</div>
+      <div class="info">
+        <div class="name">${it.nama}</div>
+        <div class="desc">${it.desc} × ${P.inv[k]}</div>
+      </div>
+    </div>`;
   });
-  document.getElementById("mainActions").classList.add("hidden");
-  document.getElementById("invPanel").classList.remove("hidden");
+  openSheet('sheetInv');
 }
 
-function openShop() {
-  const el = document.getElementById("shopList");
+function openShop(){
+  const el = document.getElementById('shopList');
   el.innerHTML = "";
-  Object.entries(ITEMS).forEach(([key,it]) => {
-    const b = document.createElement("button");
-    b.textContent = it.nama + " - " + it.harga + "g";
-    b.onclick = () => buyItem(key);
-    el.appendChild(b);
+  Object.entries(ITEMS).forEach(([key,it])=>{
+    el.innerHTML += `<button class="btn" onclick="buyItem('${key}')">
+      <span>${it.nama}</span>
+      <span class="price">${it.harga}g</span>
+    </button>`;
   });
-  document.getElementById("mainActions").classList.add("hidden");
-  document.getElementById("shopPanel").classList.remove("hidden");
+  openSheet('sheetShop');
 }
 
-function buyItem(key) {
+function buyItem(key){
   const it = ITEMS[key];
-  if (P.gold < it.harga) { log("💰 Gold kurang."); return; }
+  if(P.gold < it.harga){ toast("Gold kurang"); return; }
   P.gold -= it.harga;
-  P.inv[key] = (P.inv[key]||0) + 1;
-  if (it.efek.atk) P.atk += it.efek.atk;
-  if (it.efek.def) P.def += it.efek.def;
-  if (it.efek.luck) P.luck += it.efek.luck;
+  P.inv[key] = (P.inv[key]||0)+1;
+  if(it.efek.atk) P.atk += it.efek.atk;
+  if(it.efek.def) P.def += it.efek.def;
+  if(it.efek.luck) P.luck += it.efek.luck;
+  if(it.efek.hp) P.hp = Math.min(P.mhp, P.hp+it.efek.hp);
+  if(it.efek.mp) P.mp = Math.min(P.mmp, P.mp+it.efek.mp);
   log("🛒 Beli " + it.nama);
+  toast("🛒 " + it.nama);
   render();
 }
 
-function openQuest() {
-  const el = document.getElementById("questList");
+function openQuest(){
+  const el = document.getElementById('questList');
   el.innerHTML = "";
-  P.quests.forEach(q => {
-    el.innerHTML += "<div>" + (q.selesai?"✅":"📜") + " " + q.nama +
-      " (" + q.progress + "/" + q.butuh + ")</div>";
+  P.quests.forEach(q=>{
+    el.innerHTML += `<div class="item-card">
+      <div style="font-size:28px">${q.selesai?'✅':'📜'}</div>
+      <div class="info">
+        <div class="name">${q.nama}</div>
+        <div class="desc">Progress: ${q.progress}/${q.butuh} — Reward: ${q.reward.exp} exp, ${q.reward.gold}g</div>
+      </div>
+    </div>`;
   });
-  document.getElementById("mainActions").classList.add("hidden");
-  document.getElementById("questPanel").classList.remove("hidden");
+  openSheet('sheetQuest');
 }
 
-// ===== SAVE/LOAD =====
-function saveGame() {
+// ===== SAVE / LOAD =====
+function saveGame(){
   localStorage.setItem(SAVE_KEY, JSON.stringify(P));
-  log("💾 Game disimpan.");
+  log("💾 Game disimpan");
+  toast("💾 Tersimpan!");
 }
 
-function loadGame() {
+function loadGame(){
   const raw = localStorage.getItem(SAVE_KEY);
-  if (!raw) { alert("Belum ada save."); return; }
+  if(!raw){ toast("Belum ada save"); return; }
   P = JSON.parse(raw);
-  document.getElementById("menu").classList.add("hidden");
-  document.getElementById("game").classList.remove("hidden");
-  log("💾 Game dimuat.");
+  closeSheets();
+  setScene(SCENES.town, "Game dimuat. Lanjutkan petualanganmu, " + P.nama + ".");
+  log("💾 Game dimuat");
   render();
+  setTimeout(()=>openSheet('sheetAction'), 700);
 }
 
-function showHelp() {
-  alert("Cara main:\n- Jelajah Hutan untuk cari monster/item\n- Masuk Dungeon untuk lawan kuat\n- Serang, pakai skill, atau potion\n- Beli item di Toko\n- Simpan supaya tidak hilang");
-}
+// ===== BOOT =====
+openSheet('sheetMenu');
 </script>
 </body>
 </html>
