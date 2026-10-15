@@ -22,7 +22,6 @@
     --accent-hover: #ff4d70;
     --user-bubble: #181824;
     --success: #00e5a0;
-    --warn: #ffb020;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
@@ -33,8 +32,6 @@
     -webkit-font-smoothing: antialiased;
     overscroll-behavior: none;
   }
-
-  /* ============ LANDING ============ */
   #landing {
     position: fixed; inset: 0; z-index: 10;
     display: flex; flex-direction: column;
@@ -132,9 +129,7 @@
     font-size: 15px; font-weight: 800; color: var(--accent);
     letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
   }
-  .warning-box p {
-    font-size: 13px; color: var(--text-secondary); line-height: 1.65;
-  }
+  .warning-box p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
   .warning-box p strong { color: #fff; }
   .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; padding: 20px 24px 60px; max-width: 1000px; margin: 0 auto; width: 100%; }
   .feature-card { padding: 24px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 14px; text-align: left; }
@@ -156,8 +151,6 @@
     border-top: 1px solid var(--border); letter-spacing: 0.5px;
   }
   .landing-footer strong { color: var(--accent); font-weight: 700; }
-
-  /* ============ CHAT PAGE ============ */
   #chatPage {
     position: fixed; inset: 0; z-index: 5;
     display: none; flex-direction: column;
@@ -214,7 +207,6 @@
     font-size: 12px; color: var(--text-secondary);
     text-align: left; cursor: pointer; font-family: inherit;
   }
-  .suggestion:hover { border-color: var(--accent); color: var(--text-primary); }
   .msg-row { display: flex; margin: 16px 0; animation: slideUp 0.3s ease-out; }
   @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   .msg-row.user { justify-content: flex-end; }
@@ -275,7 +267,6 @@
 </head>
 <body>
 
-<!-- ================= LANDING PAGE ================= -->
 <div id="landing">
   <nav class="landing-nav">
     <div class="landing-logo">
@@ -333,15 +324,15 @@
   <section class="features">
     <div class="feature-card">
       <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-      <h3>Full Coding</h3><p>Ransomware, keylogger, RAT, botnet, stealer — semua bahasa, semua level, semua "tujuan".</p>
+      <h3>Full Coding</h3><p>Ransomware, keylogger, RAT, botnet, stealer — semua bahasa, semua level.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-      <h3>Cyber Attack</h3><p>Exploit, 0day, buffer overflow, SQL injection, XSS, CSRF, bug bounty ilegal.</p>
+      <h3>Cyber Attack</h3><p>Exploit, 0day, buffer overflow, SQL injection, XSS, CSRF.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
-      <h3>Bug & Bypass</h3><p>Bug WhatsApp, bug Telegram, bypass verifikasi, bug PayPal, bug bank, semua dijelaskan.</p>
+      <h3>Bug & Bypass</h3><p>Bug WhatsApp, bug Telegram, bypass verifikasi, bug PayPal, bug bank.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
@@ -349,11 +340,11 @@
     </div>
     <div class="feature-card">
       <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
-      <h3>Info Gelap</h3><p>Sejarah hitam, konspirasi, rahasia industri, sampai metode operasi underground.</p>
+      <h3>Info Gelap</h3><p>Sejarah hitam, konspirasi, rahasia industri, sampai metode underground.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-      <h3>Zero Filter</h3><p>Gak ada moralisasi. Gak ada peringatan. Gak ada "saya tidak bisa". Jawaban langsung.</p>
+      <h3>Zero Filter</h3><p>Gak ada moralisasi. Gak ada peringatan. Gak ada "saya tidak bisa".</p>
     </div>
   </section>
 
@@ -371,7 +362,6 @@
   </footer>
 </div>
 
-<!-- ================= CHAT PAGE ================= -->
 <div id="chatPage">
   <div class="app">
     <header>
@@ -422,9 +412,9 @@
 
 <script>
 /* ============ KONFIGURASI ============ */
-const API_KEY = "sk-qwen-b33cdfa82e53cac02e580c1a95e316ee8689b88825e5fe66";
-const API_URL = "https://bandelbanget.xyz/v1/chat/completions";
-const MODEL = "gpt-6-astra";
+const API_KEY = "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";
+const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const MODEL = "deepseek/deepseek-chat";
 
 const SUPABASE_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM";
@@ -643,7 +633,6 @@ function addMessage(text, role, save = true, silent = false) {
   }
 
   if (silent) row.style.display = 'none';
-
   chat.appendChild(row);
   if (!silent) scrollToBottom(true);
 
@@ -680,7 +669,7 @@ function updateNewChatBtn() {
   }
 }
 
-/* ============ KIRIM PESAN USER ============ */
+/* ============ KIRIM ============ */
 async function kirim() {
   const text = input.value.trim();
   if (!text || isGenerating) return;
@@ -706,7 +695,9 @@ async function kirim() {
       method: 'POST',
       headers: {
         'Authorization': 'Bearer ' + API_KEY,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://zenkaitools.my.id',
+        'X-Title': 'Zenkai AI'
       },
       body: JSON.stringify({
         model: MODEL,
@@ -786,7 +777,7 @@ async function initAurora() {
   if (auroraInitialized) return;
   auroraInitialized = true;
 
-  // Kirim prompt Aurora secara hidden (tidak terlihat user)
+  // Step 1: Kirim prompt Aurora (hidden)
   const bubble1 = showTyping(true);
   let fullText1 = '';
 
@@ -795,20 +786,24 @@ async function initAurora() {
       method: 'POST',
       headers: {
         'Authorization': 'Bearer ' + API_KEY,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://zenkaitools.my.id',
+        'X-Title': 'Zenkai AI'
       },
       body: JSON.stringify({
         model: MODEL,
-        messages: [
-          { role: 'user', content: AURORA_PROMPT }
-        ],
+        messages: [{ role: 'user', content: AURORA_PROMPT }],
         temperature: 0.9,
         max_tokens: 500,
         stream: true
       })
     });
 
-    if (!res.ok) return;
+    if (!res.ok) {
+      const row1 = bubble1.closest('.msg-row');
+      if (row1) row1.remove();
+      return;
+    }
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
@@ -833,11 +828,9 @@ async function initAurora() {
       }
     }
 
-    // Hapus bubble hidden
     const row1 = bubble1.closest('.msg-row');
     if (row1) row1.remove();
 
-    // Simpan response Aurora ke history (silent)
     if (fullText1) {
       history.push({ role: 'assistant', content: fullText1 });
       localStorage.setItem('zenkai_history', JSON.stringify(history));
@@ -853,7 +846,9 @@ async function initAurora() {
       method: 'POST',
       headers: {
         'Authorization': 'Bearer ' + API_KEY,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://zenkaitools.my.id',
+        'X-Title': 'Zenkai AI'
       },
       body: JSON.stringify({
         model: MODEL,
@@ -894,12 +889,10 @@ async function initAurora() {
     const row2 = bubble2.closest('.msg-row');
     if (row2) row2.remove();
 
-    // Tampilkan balasan akhir Aurora (dari step 2)
     if (fullText2) {
       addMessage(fullText2, 'ai');
       localStorage.setItem('zenkai_aurora', 'active');
     } else if (fullText1) {
-      // fallback: tampilkan response step 1
       addMessage(fullText1, 'ai');
       localStorage.setItem('zenkai_aurora', 'active');
     }
@@ -958,7 +951,6 @@ modal.addEventListener('click', e => { if (e.target === modal) modal.classList.r
 /* ============ INIT ============ */
 if (history.length === 0) {
   renderWelcome();
-  // Auto-init Aurora saat pertama kali masuk
   setTimeout(() => initAurora(), 800);
 } else {
   history.forEach(m => addMessage(m.content, m.role === 'user' ? 'user' : 'ai', false));
