@@ -15,28 +15,22 @@ function switchTab(tabName) {
   if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
   try { localStorage.setItem('zenkai_active_tab', tabName); } catch(e) {}
 }
+window.switchTab = switchTab;
 
+// Klik nav
 navItems.forEach(item => {
   item.addEventListener('click', () => {
     switchTab(item.dataset.tab);
   });
 });
 
+// Restore tab terakhir
 try {
   const savedTab = localStorage.getItem('zenkai_active_tab');
   if (savedTab && document.getElementById('tab-' + savedTab)) {
     switchTab(savedTab);
   }
 } catch(e) {}
-
-// ===== FAQ TOGGLE =====
-function toggleFaq(btn) {
-  const item = btn.parentElement;
-  const wasOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-  if (!wasOpen) item.classList.add('open');
-}
-window.toggleFaq = toggleFaq;
 
 // ===== THEME TOGGLE =====
 const themeToggle = document.getElementById('themeToggle');
@@ -50,6 +44,14 @@ if (themeToggle) {
     document.body.classList.toggle('light');
     const isLight = document.body.classList.contains('light');
     try { localStorage.setItem('zenkai_theme', isLight ? 'light' : 'dark'); } catch(e) {}
+    const svg = themeToggle.querySelector('svg');
+    if (svg) {
+      if (isLight) {
+        svg.innerHTML = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
+      } else {
+        svg.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
+      }
+    }
   });
 }
 
@@ -72,7 +74,7 @@ if (window.location.hash) {
 let touchStartX = 0;
 let touchStartY = 0;
 const main = document.querySelector('.app-main');
-const TABS_ORDER = ['beranda', 'fitur', 'harga', 'faq', 'kontak'];
+const TABS_ORDER = ['beranda', 'produk', 'tools', 'tentang', 'sosial'];
 
 if (main) {
   main.addEventListener('touchstart', (e) => {
@@ -97,4 +99,5 @@ if (main) {
   }, { passive: true });
 }
 
-console.log('%c Zenkai ', 'background:#ff1f4b;color:#fff;font-weight:900;padding:4px 8px;border-radius:4px;', 'App loaded.');
+// ===== LOG =====
+console.log('%c Zenkai ', 'background:#ff1f4b;color:#fff;font-weight:900;padding:4px 8px;border-radius:4px;font-family:monospace', 'Bukan asisten. Bukan teman. Alat.');
