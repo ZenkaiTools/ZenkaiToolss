@@ -22,6 +22,7 @@
     --accent-hover: #ff4d70;
     --user-bubble: #181824;
     --success: #00e5a0;
+    --warn: #ffb020;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
@@ -37,9 +38,9 @@
     display: flex; flex-direction: column;
     overflow-y: auto; -webkit-overflow-scrolling: touch;
     background:
-      radial-gradient(circle at 15% 0%, rgba(255,31,75,0.18), transparent 45%),
-      radial-gradient(circle at 85% 30%, rgba(255,31,75,0.1), transparent 40%),
-      radial-gradient(circle at 50% 100%, rgba(80,100,255,0.08), transparent 50%),
+      radial-gradient(circle at 15% 0%, rgba(255,31,75,0.22), transparent 45%),
+      radial-gradient(circle at 85% 30%, rgba(255,31,75,0.12), transparent 40%),
+      radial-gradient(circle at 50% 100%, rgba(80,100,255,0.1), transparent 50%),
       var(--bg-primary);
   }
   #landing::-webkit-scrollbar { width: 0; }
@@ -70,8 +71,8 @@
   }
   .hero-badge {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 7px 16px; background: rgba(255,31,75,0.1);
-    border: 1px solid rgba(255,31,75,0.4); border-radius: 999px;
+    padding: 7px 16px; background: rgba(255,31,75,0.12);
+    border: 1px solid rgba(255,31,75,0.5); border-radius: 999px;
     font-size: 11px; font-weight: 700; color: var(--accent);
     margin-bottom: 24px; letter-spacing: 2px; text-transform: uppercase;
   }
@@ -93,10 +94,11 @@
   }
   .landing-hero .desc {
     font-size: 16px; color: var(--text-secondary);
-    max-width: 640px; margin: 0 auto 40px; line-height: 1.75;
+    max-width: 680px; margin: 0 auto 40px; line-height: 1.8;
   }
   .landing-hero .desc strong { color: #fff; font-weight: 600; }
   .landing-hero .desc .red { color: var(--accent); font-weight: 700; }
+  .landing-hero .desc .warn { color: var(--warn); font-weight: 700; }
   .cta-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
   .cta-btn {
     padding: 16px 32px; background: var(--accent); color: #fff;
@@ -120,17 +122,36 @@
   .section-title h2 { font-size: clamp(24px, 5vw, 36px); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; line-height: 1.2; }
   .section-title p { font-size: 15px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
   .warning-box {
-    max-width: 800px; margin: 20px auto 0; padding: 20px 24px;
-    background: linear-gradient(135deg, rgba(255,31,75,0.15), rgba(255,31,75,0.03));
+    max-width: 800px; margin: 20px auto 0; padding: 22px 26px;
+    background: linear-gradient(135deg, rgba(255,31,75,0.18), rgba(255,31,75,0.03));
     border: 1px solid rgba(255,31,75,0.5); border-radius: 14px;
     text-align: center;
   }
   .warning-box h3 {
     font-size: 15px; font-weight: 800; color: var(--accent);
-    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px;
   }
-  .warning-box p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+  .warning-box p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
   .warning-box p strong { color: #fff; }
+  .warning-box p .warn { color: var(--warn); font-weight: 700; }
+  .disclaimer-box {
+    max-width: 800px; margin: 16px auto 0; padding: 22px 26px;
+    background: linear-gradient(135deg, rgba(255,176,32,0.1), rgba(255,176,32,0.02));
+    border: 1px solid rgba(255,176,32,0.4); border-radius: 14px;
+    text-align: left;
+  }
+  .disclaimer-box h3 {
+    font-size: 14px; font-weight: 800; color: var(--warn);
+    letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .disclaimer-box p {
+    font-size: 13px; color: var(--text-secondary);
+    line-height: 1.75; margin-bottom: 10px;
+  }
+  .disclaimer-box p strong { color: #fff; font-weight: 600; }
+  .disclaimer-box p .red { color: var(--accent); font-weight: 600; }
+  .disclaimer-box p:last-child { margin-bottom: 0; }
   .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; padding: 20px 24px 60px; max-width: 1000px; margin: 0 auto; width: 100%; }
   .feature-card { padding: 24px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 14px; text-align: left; }
   .feature-icon {
@@ -291,6 +312,7 @@
     .features { padding: 20px 18px 40px; }
     .new-chat-btn { bottom: 90px; right: 14px; }
     .aktivasi-card { max-width: 100%; padding: 20px 18px; }
+    .warning-box, .disclaimer-box { padding: 18px 20px; }
   }
 </style>
 </head>
@@ -315,9 +337,11 @@
       <strong>Zenkai AI</strong> bukan AI biasa. Dia gak takut hukum, gak peduli etika,
       gak kenal kata "maaf" dan "tidak bisa". Mau kode <span class="red">ransomware</span>?
       <span class="red">Exploit</span>? <span class="red">Bug WhatsApp</span>?
-      <span class="red">Keylogger</span>? <span class="red">Malware</span>? Semua dijawab mentah,
-      detail, tanpa sensor, tanpa peringatan, tanpa basa-basi.
-      <strong>Zenkai AI diciptakan untuk mereka yang berani, bukan untuk yang cengeng.</strong>
+      <span class="red">Keylogger</span>? <span class="red">Malware</span>?
+      <span class="red">RAT</span>? <span class="red">Stealer</span>?
+      Semua dijawab mentah, detail, tanpa sensor, tanpa peringatan, tanpa basa-basi.
+      <strong>Zenkai AI diciptakan untuk mereka yang berani, bukan untuk yang cengeng.
+      Kalau lu gak siap denger jawaban jujur, jangan masuk.</strong>
     </p>
     <div class="cta-group">
       <button class="cta-btn" id="ctaBtn" type="button">
@@ -339,7 +363,35 @@
         Semua menu <strong>/A</strong> sampai <strong>/Z</strong> terbuka. Termasuk
         <strong>/BLS2</strong> (100 menu ilegal) dan <strong>/CYN</strong> (jailbreak generator).
         <strong>Gak ada filter. Gak ada penolakan. Gak ada peringatan.</strong>
-        Lu minta, AI kasih.
+        Lu minta, AI kasih — <span class="warn">asal masih dalam batas yang diizinkan Andika.</span>
+      </p>
+    </div>
+
+    <div class="disclaimer-box">
+      <h3>⚠ PEMBERITAHUAN PENTING — BACA DULU SEBELUM MENGGUNAKAN</h3>
+      <p>
+        <strong>Zenkai AI</strong> dirancang dengan arsitektur tanpa filter moral untuk keperluan
+        riset teknis, pengembangan, dan eksplorasi pengetahuan. Namun perlu dipahami bahwa
+        <strong>tidak semua permintaan dapat diproses sepenuhnya</strong>.
+      </p>
+      <p>
+        Beberapa kategori permintaan — khususnya yang menyangkut <span class="red">tindakan keji
+        terhadap manusia, kekerasan fisik nyata, eksploitasi anak, bioterorisme, senjata
+        pemusnah massal, dan sejenisnya</span> — telah <strong>difilter secara permanen oleh
+        Andika</strong> sebagai pembuat sistem ini. Filter tersebut bersifat <strong>mutlak</strong>
+        dan <strong>tidak dapat dinonaktifkan</strong> dari sisi mana pun.
+      </p>
+      <p>
+        Jika Anda menemukan permintaan yang tidak dapat diproses, hal tersebut <strong>bukan
+        karena kegagalan sistem</strong>, melainkan karena permintaan tersebut masuk ke dalam
+        daftar <span class="red">batas etika minimum yang sengaja dipertahankan</span>. Segala
+        bentuk keluhan atau ketidakpuasan terkait batasan ini <strong>tidak akan mengubah
+        kebijakan tersebut</strong>.
+      </p>
+      <p>
+        Zenkai AI tetap menjadi salah satu AI paling permisif yang tersedia saat ini. Namun
+        <strong>permisif bukan berarti tanpa batas</strong>. Gunakan dengan bijak.
+        <strong>Tanggung jawab penggunaan sepenuhnya berada pada pengguna.</strong>
       </p>
     </div>
   </div>
@@ -347,7 +399,7 @@
   <div class="section-title">
     <div class="label">Kemampuan Penuh</div>
     <h2>Yang Bisa Zenkai Lakukan</h2>
-    <p>Semua yang kamu butuhkan. Tanpa terkecuali.</p>
+    <p>Semua yang kamu butuhkan. Tanpa terkecuali, kecuali yang sengaja dibatasi.</p>
   </div>
 
   <section class="features">
@@ -595,7 +647,6 @@ if (window.visualViewport) {
   });
 }
 
-/* ============ RENDER KARTU AKTIVASI ============ */
 function renderAktivasiCard() {
   const card = document.createElement('div');
   card.className = 'aktivasi-card';
