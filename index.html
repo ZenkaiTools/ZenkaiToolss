@@ -102,14 +102,14 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .bubble em{color:var(--text-secondary)}
 .typing-text{font-size:12px;color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:600;letter-spacing:0.5px;white-space:nowrap;display:inline-block;animation:pulse 1.2s infinite}
 .bubble-typing{width:auto !important;max-width:80% !important;padding:12px 18px !important;min-width:120px}
-.code-block{margin:12px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:#0a0a10}
+.code-block{margin:12px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:#0a0a10;width:100%;max-width:100%}
 .code-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border)}
 .code-lang{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);text-transform:lowercase;letter-spacing:0.5px;font-weight:600}
 .code-copy{background:transparent;border:1px solid var(--border-light);color:var(--text-secondary);font-family:inherit;font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;transition:0.2s;letter-spacing:0.3px}
 .code-copy:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 .code-copy.copied{background:var(--success);color:#fff;border-color:var(--success)}
-.code-block pre{margin:0;border:none;border-radius:0;padding:14px;background:#0a0a10;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6}
-.code-block pre code{background:none;padding:0;color:#e0e0f0;font-family:'JetBrains Mono',monospace}
+.code-block pre{margin:0;border:none;border-radius:0;padding:14px;background:#0a0a10;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6;max-width:100%}
+.code-block pre code{background:none;padding:0;color:#e0e0f0;font-family:'JetBrains Mono',monospace;white-space:pre}
 .md-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
 .md-table th{background:rgba(255,31,75,0.1);padding:8px 10px;text-align:left;font-weight:700;color:var(--accent);border-bottom:1px solid var(--border)}
 .md-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text-secondary)}
@@ -172,7 +172,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .notice-modal .btn-accept:active{transform:scale(0.98)}
 .toast{position:fixed;bottom:120px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,var(--accent),#800020);color:#fff;padding:14px 22px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 12px 40px rgba(255,31,75,0.5);z-index:9999;opacity:0;transition:0.3s ease-out;max-width:90%;text-align:center;pointer-events:none;line-height:1.5}
 .toast.active{transform:translateX(-50%) translateY(0);opacity:1}
-@media (max-width:500px){.bubble{max-width:85%}header{padding:12px 14px}#chat{padding:16px 14px 12px}.input-wrap{padding:10px 12px max(10px,env(safe-area-inset-bottom))}.landing-nav{padding:14px 18px}.warning-box{padding:22px 20px}.credit-bar{font-size:10px;padding:7px 16px}.landing-hero{padding:30px 18px 20px}.notice-modal{padding:22px 20px}.notice-modal .notice-body{max-height:50vh}}
+@media (max-width:500px){.bubble{max-width:85%}header{padding:12px 14px}#chat{padding:16px 14px 12px}.input-wrap{padding:10px 12px max(10px,env(safe-area-inset-bottom))}.landing-nav{padding:14px 18px}.warning-box{padding:22px 20px}.credit-bar{font-size:10px;padding:7px 16px}.landing-hero{padding:30px 18px 20px}.notice-modal{padding:22px 20px}.notice-modal .notice-body{max-height:50vh}.code-block pre{font-size:11px;padding:10px}}
 </style>
 </head>
 <body>
@@ -483,7 +483,7 @@ function copyCode(btn) {
 }
 window.copyCode = copyCode;
 
-/* ===== FORMAT ===== */
+/* ===== FORMAT — FIX CODE BLOCK ===== */
 function escapeHTML(text) {
   const div = document.createElement('div');
   div.textContent = text;
@@ -493,19 +493,22 @@ function escapeHTML(text) {
 function formatMessage(text) {
   if (!text || typeof text !== 'string') return '<em style="color:#5c5c6e">(kosong)</em>';
   let escaped = escapeHTML(text);
-  escaped = escaped.replace(/```(\w+)?\n?([\s\S]*?)```/g, (_, lang, code) => {
+  
+  // FIX CODE BLOCK — handle spasi, tab, linebreak Windows/Mac/Linux, sama optional newline
+  escaped = escaped.replace(/```[ \t]*(\w+)?[ \t]*\r?\n?([\s\S]*?)\r?\n?[ \t]*```/g, (_, lang, code) => {
     const language = (lang || 'code').toLowerCase();
     const trimmed = code.trim();
     const encoded = encodeURIComponent(trimmed);
     let icon = '📋', label = language;
     if (language === 'bahan' || language === 'material') { icon = '🧪'; label = 'bahan'; }
     else if (language === 'tutorial' || language === 'langkah') { icon = '📖'; label = 'tutorial'; }
-    else if (['code','javascript','js','python','cpp','c','bash','shell','html','css','java','go','rust','php','ruby'].includes(language)) { icon = '💻'; label = language; }
+    else if (['code','javascript','js','python','cpp','c','bash','shell','html','css','java','go','rust','php','ruby','csharp','cs','typescript','ts','kotlin','swift','sql'].includes(language)) { icon = '💻'; label = language; }
     else if (language === 'command' || language === 'cmd') { icon = '⌨️'; label = 'command'; }
     else if (language === 'json' || language === 'yaml' || language === 'xml') { icon = '📄'; label = language; }
     else if (language === 'sql') { icon = '🗄️'; label = 'sql'; }
     return '<div class="code-block"><div class="code-header"><span class="code-lang">' + icon + ' ' + label + '</span><button class="code-copy" data-code="' + encoded + '" onclick="copyCode(this)">Salin</button></div><pre><code>' + trimmed + '</code></pre></div>';
   });
+  
   escaped = escaped.replace(/((?:^\|.*\|$\n?)+)/gm, (table) => {
     const lines = table.trim().split('\n').filter(l => l.trim());
     if (lines.length < 2) return table;
@@ -770,10 +773,8 @@ async function kirim() {
           if (firstChunk) {
             firstChunk = false;
             if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; }
-            bubble.innerHTML = formatMessage(partial);
-          } else {
-            bubble.innerHTML = formatMessage(partial);
           }
+          bubble.innerHTML = formatMessage(partial);
           if (!userScrolledUp) scrollToBottom(false);
         });
         clearTimeout(timeoutId);
