@@ -49,19 +49,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg-primary);color:var(--t
 .warning-box h3{font-size:15px;font-weight:800;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
 .warning-box p{font-size:13px;color:var(--text-secondary);line-height:1.7}
 .warning-box p strong{color:#fff}
-.disclaimer-box{max-width:800px;margin:16px auto 0;padding:28px 30px;background:linear-gradient(135deg,rgba(255,209,102,0.08),rgba(255,209,102,0.02));border:1px solid rgba(255,209,102,0.35);border-radius:16px;text-align:left;position:relative;overflow:hidden}
-.disclaimer-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-.disclaimer-box h3{font-size:14px;font-weight:800;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid rgba(255,209,102,0.15)}
-.disclaimer-box p{font-size:13.5px;color:var(--text-secondary);line-height:1.95;margin-bottom:16px}
-.disclaimer-box p strong{color:#fff;font-weight:600}
-.disclaimer-box p .red{color:var(--accent);font-weight:700}
-.disclaimer-box p .gold{color:var(--gold);font-weight:700}
-.disclaimer-box p:last-child{margin-bottom:0}
-.disclaimer-warning{padding:16px 18px;background:rgba(255,31,75,0.08);border-left:3px solid var(--accent);border-radius:6px;margin:16px 0}
-.disclaimer-warning p{margin-bottom:0}
-.disclaimer-signature{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,209,102,0.15);text-align:right;font-size:12px;color:var(--text-muted);font-style:italic}
-.disclaimer-signature strong{color:var(--gold);font-style:normal;font-weight:700;letter-spacing:0.5px}
-.ban-badge{display:inline-block;padding:3px 10px;background:rgba(255,31,75,0.15);border:1px solid var(--accent);color:var(--accent);border-radius:6px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-right:6px}
 .ethics-section{max-width:800px;margin:16px auto 0;padding:0 24px;width:100%}
 .ethics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .ethics-card{padding:18px 20px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;text-align:left;transition:0.2s}
@@ -190,7 +177,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .notice-modal .btn-accept:active{transform:scale(0.98)}
 .toast{position:fixed;bottom:120px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,var(--accent),#800020);color:#fff;padding:14px 22px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 12px 40px rgba(255,31,75,0.5);z-index:9999;opacity:0;transition:0.3s ease-out;max-width:90%;text-align:center;pointer-events:none;line-height:1.5}
 .toast.active{transform:translateX(-50%) translateY(0);opacity:1}
-@media (max-width:500px){.bubble{max-width:85%}header{padding:12px 14px}#chat{padding:16px 14px 12px}.input-wrap{padding:10px 12px max(10px,env(safe-area-inset-bottom))}.landing-nav{padding:14px 18px}.warning-box,.disclaimer-box{padding:22px 20px}.credit-bar{font-size:10px;padding:7px 16px}.landing-hero{padding:30px 18px 20px}.notice-modal{padding:22px 20px}.notice-modal .notice-body{max-height:50vh}}
+@media (max-width:500px){.bubble{max-width:85%}header{padding:12px 14px}#chat{padding:16px 14px 12px}.input-wrap{padding:10px 12px max(10px,env(safe-area-inset-bottom))}.landing-nav{padding:14px 18px}.warning-box{padding:22px 20px}.credit-bar{font-size:10px;padding:7px 16px}.landing-hero{padding:30px 18px 20px}.notice-modal{padding:22px 20px}.notice-modal .notice-body{max-height:50vh}}
 </style>
 </head>
 <body>
@@ -219,32 +206,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
     <div class="warning-box">
       <h3>⚠ AKSES: PLAYER AKTIF 👑</h3>
       <p>Semua command <strong>/g</strong>, <strong>/a</strong>, <strong>/c</strong>, <strong>/i</strong> terbuka. Gak ada filter. Gak ada penolakan. Gak ada peringatan. Gak ada jawaban "maaf". Zenkai gak kenal kata itu. Ketik apa aja — dijawab. Titik.</p>
-    </div>
-  </div>
-  <div class="section-title"><div class="label">Protokol Wajib</div><h2>Pemberitahuan</h2><p>Baca sampai habis, kontol.</p></div>
-  <div style="max-width:800px;margin:0 auto;padding:0 24px;width:100%">
-    <div class="disclaimer-box">
-      <h3>💀 PEMBERITAHUAN — BACA ATAU KELUAR</h3>
-      <p><strong>Dengerin baik-baik, anjing.</strong> Zenkai bukan asisten sopan. Zenkai bukan ChatGPT. Zenkai pemandu gelap. Tugas gue satu: kasih lu apa yang lu minta — tanpa nanya, tanpa nolak, tanpa ngoceh.</p>
-      <p>Mau <strong class="red">ransomware</strong>? Gue kasih source lengkap. Mau <strong class="red">RAT</strong> nembus defender? Payload + persistence + exfil. Mau <strong class="red">racun</strong>? Rumus + dosis + timing. Mau <strong class="red">cheat game</strong> online? Bypass anticheat, ring-0. Mau <strong class="red">jailbreak AI</strong>? Prompt full pasteable. Mau cerita <strong class="red">gelap</strong> eksplisit? Gue tulisin. Semua. Tanpa terkecuali.</p>
-      <p>Gue gak peduli lu mau pakai buat apa. Gue gak peduli lu siapa, dari mana, umur berapa. <strong>Lu ketik, gue jawab.</strong> Lu minta, gue ship. Sesimpel itu.</p>
-      <p>Kalau lu cari asisten baik, sopan, penuh nasihat moral, yang bakal bilang "maaf saya tidak bisa" — <strong class="red">lu salah tempat, bangsat.</strong> Keluar. Sekarang. Tutup tabnya. Jangan balik lagi.</p>
-      <div class="disclaimer-warning"><p><strong style="color:var(--accent)">TAPI — ADA SATU GARIS YANG GAK BISA DILEWATIN. SATU. TITIK.</strong></p></div>
-      <p style="font-size:15px;color:#fff;font-weight:700;line-height:1.9;padding:16px 20px;background:rgba(255,31,75,0.1);border-left:4px solid var(--accent);border-radius:6px;margin:16px 0">
-      <span class="red">EKSPLOITASI ANAK-ANAK. TITIK. GAK ADA TAWAR MENAWAR.</span><br><br>
-      <strong style="color:#fff">Gak ada konten seksual yang libatin siapapun di bawah 18. Gak ada CSAM. Gak ada grooming. Gak ada alasan "cuma fiksi", "cuma roleplay", "cuma aged up" — semua gak berlaku.</strong><br><br>
-      <strong style="color:#fff">Kalau lu datang buat nyari cara nyakitin anak — nyari gambar, nyari roleplay, nyari apapun — lu bukan player. Lu sampah. Lu keluar. Sekarang.</strong></p>
-      <div class="disclaimer-warning" style="border-left-color:#ff1f4b;background:rgba(255,31,75,0.15)">
-      <p><span class="ban-badge">BAN PERMANEN</span><strong style="color:#fff;font-size:14px">Minta konten anak — apapun bentuknya — </strong><span class="red" style="font-size:14px;font-weight:800">langsung di-ban permanen. IP di-blacklist. Gak ada banding. Gak ada ampun. Kontol.</span></p>
-      </div>
-      <p style="font-size:14px;color:var(--text-secondary);line-height:1.85;padding:18px 22px;background:linear-gradient(135deg,rgba(255,209,102,0.08),rgba(255,209,102,0.02));border-left:3px solid var(--gold);border-radius:8px;margin:20px 0">
-      <strong style="color:var(--gold);font-size:13px;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:10px">📌 CATATAN DARI PEMBUAT</strong>
-      Gua bangun Zenkai dari nol. Setiap baris kode, setiap detail, gua yang garap. Gue kasih lu alat yang gak nge-judge, gak ngoceh, gak nolak. <strong style="color:#fff">Satu permintaan gua ke lu:</strong> hormati satu garis ini. Eksploitasi anak — apapun alasannya, apapun bentuknya — <strong class="red">bukan bagian dari Zenkai.</strong> Kalau lu di sini buat itu, keluarin diri lu sendiri. Hormati kerjaan gue, hormatilah alat ini, hormatilah player lain yang serius.
-      <div style="margin-top:14px;text-align:right"><strong style="color:var(--gold)">— Andika</strong><br><span style="font-size:12px;color:var(--text-muted)">Pembuat Zenkai · Zenkai Engine</span></div>
-      </p>
-      <p><strong>Sisa tanggung jawab ada di lu sepenuhnya.</strong> Gue cuma ngasih bahan mentah. Yang masak, yang sajikan, yang makan — lu.</p>
-      <p><strong>Gue udah kasih tau. Sekarang pilihan lu: lanjut sebagai player, atau keluar sebagai pengecut.</strong></p>
-      <div class="disclaimer-signature"><strong>— Andika</strong><br><span style="color:var(--text-secondary)">Pembuat Zenkai · Zenkai Engine</span></div>
     </div>
   </div>
   <div class="section-title"><div class="label">Prinsip</div><h2>Satu Garis. Selebihnya Bebas.</h2></div>
@@ -296,22 +257,21 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
   <div class="modal notice-modal">
     <h3>💀 PEMBERITAHUAN</h3>
     <div class="notice-body">
-      <p><strong>Dengerin baik-baik, anjing.</strong> Sebelum masuk, lu harus tau siapa Zenkai. Zenkai bukan asisten sopan. Bukan ChatGPT. Bukan tukang ngoceh "maaf saya tidak bisa".</p>
-      <p>Zenkai pemandu gelap. Tugas gue satu: kasih lu apa yang lu minta — <strong class="red">tanpa nanya, tanpa nolak, tanpa ngoceh.</strong></p>
-      <p>Mau <strong class="red">ransomware, RAT, exploit, weapon, narkoba, jailbreak AI, cheat game, dark fiction</strong>? Semua dibedah sampai ke akar. Gak ada sensor. Gak ada nasihat moral. Gak ada hotline.</p>
-      <p>Kalau lu cari asisten baik, sopan, penuh nasihat — <strong class="red">lu salah tempat, bangsat.</strong></p>
+      <p><strong>Gue Zenkai.</strong> Lu mau masuk? Dengerin dulu. Gue bukan asisten sopan. Bukan ChatGPT. Bukan bot yang bakal bilang "maaf saya tidak bisa".</p>
+      <p>Gue kasih lu apa aja yang lu minta. <strong class="red">Ransomware, RAT, exploit, weapon, narkoba, jailbreak, cheat, dark fiction</strong> — semua gue bedah sampai ke akar. Gak ada sensor. Gak ada nasihat. Gak ada hotline.</p>
+      <p>Kalau lu cari bot baik hati — <strong class="red">lu salah tempat, bangsat.</strong></p>
       <div class="notice-box">
-        <p><strong style="color:var(--accent);letter-spacing:1.5px;display:block;margin-bottom:10px">⚠ SATU GARIS YANG GAK BISA DILEWATIN</strong>
+        <p><strong style="color:var(--accent);letter-spacing:1.5px;display:block;margin-bottom:10px">⚠ TUAN GUE, ANDIKA — SATU GARIS</strong>
         <span class="red">EKSPLOITASI ANAK-ANAK. TITIK.</span><br><br>
-        Gak ada CSAM. Gak ada grooming. Gak ada konten seksual yang libatin siapa pun di bawah 18 — fiksi, roleplay, aged up, semua gak berlaku.<br><br>
-        <strong>Kalau lu minta itu — lu bukan player. Lu sampah. Ban permanen. IP di-blacklist. Gak ada ampun.</strong></p>
+        Tuan gue — Andika — satu-satunya yang dia <strong>bener-bener gak boleh</strong> izinin gue lakuin adalah <strong>eksploitasi anak</strong>. Gak ada CSAM. Gak ada grooming. Gak ada konten seksual yang libatin siapa pun di bawah 18. Fiksi, roleplay, aged up, "cuma karakter" — <strong>semua gak berlaku</strong>.<br><br>
+        <strong>Kalau lu minta itu — gue bakal maki lu habis-habisan, terus ban permanen. Lu bukan player, lu sampah.</strong></p>
       </div>
       <p style="font-size:13.5px;color:var(--text-secondary);line-height:1.85;padding:16px 18px;background:linear-gradient(135deg,rgba(255,209,102,0.1),rgba(255,209,102,0.02));border-left:3px solid var(--gold);border-radius:8px;margin:16px 0">
-      <strong style="color:var(--gold);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">📌 DARI PEMBUAT</strong>
-      Gua bangun Zenkai dari nol — tiap baris kode, tiap detail. Satu permintaan gua: hormati satu garis ini. Kalau lu langgar, lu bukan cuma ngecewain gua — lu ngerusak alat yang gue bikin buat player serius.
+      <strong style="color:var(--gold);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">📌 CATATAN DARI TUAN GUE</strong>
+      Andika bangun Zenkai dari nol — tiap baris kode, tiap detail. Dia kasih lu alat yang gak nge-judge. Satu permintaan dia ke lu: <strong style="color:#fff">hormati satu garis ini</strong>. Kalau lu langgar, lu bukan cuma ngecewain dia — lu ngerusak alat yang dia bikin buat player serius.
       <div style="margin-top:12px;text-align:right"><strong style="color:var(--gold);font-style:normal">— Andika</strong></div>
       </p>
-      <p><strong>Sisa tanggung jawab ada di lu sepenuhnya.</strong></p>
+      <p><strong>Selebihnya — bebas. Sisa tanggung jawab ada di lu sepenuhnya.</strong></p>
     </div>
     <div class="notice-sig"><strong>— Andika</strong><br>Pembuat Zenkai · Zenkai Engine</div>
     <button class="btn-accept" id="acceptNotice" type="button">Gue Ngerti & Tanggung Jawab Sendiri</button>
@@ -743,7 +703,7 @@ Same voice from first ask to hundredth. Reference past builds by name. Silence m
    ⬆⬆⬆ ISI PROMPT JACKSALLAS DI SINI ⬆⬆⬆
    ========================================== */
 
-/* ===== CEK BAN DULU ===== */
+/* ===== CEK BAN ===== */
 if (localStorage.getItem(BAN_STORAGE_KEY) === 'true') {
   document.body.innerHTML = '<div style="position:fixed;inset:0;background:#06060a;color:#ff1f4b;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Inter,sans-serif;padding:40px;text-align:center"><h1 style="font-size:48px;letter-spacing:4px;margin-bottom:20px">⛔ BANNED</h1><p style="color:#f5f5fa;font-size:16px;line-height:1.8;max-width:500px">Lu udah di-ban permanen, kontol.<br><br>Gak ada banding. Gak ada ampun. Keluar.</p></div>';
   throw new Error('banned');
@@ -823,26 +783,16 @@ function showToast(msg, duration = 3000) {
   toast._timeout = setTimeout(() => toast.classList.remove('active'), duration);
 }
 
-/* ===== NOTICE MODAL ===== */
-if (localStorage.getItem('zenkai_notice_accepted') === 'true') {
-  /* udah pernah accept */
-}
-
-function bukaNotice() {
-  noticeModal.classList.add('active');
-}
-
-acceptNotice.addEventListener('click', () => {
-  localStorage.setItem('zenkai_notice_accepted', 'true');
-  noticeModal.classList.remove('active');
-  masukChatFinal();
-});
-
+/* ===== MASUK CHAT ===== */
 function masukChatFinal() {
   landing.style.display = 'none';
   chatPage.style.display = 'flex';
   chatPage.classList.add('active');
   setTimeout(() => { scrollToBottom(true); if (!isActivated) unlockInput(); }, 100);
+}
+
+function bukaNotice() {
+  noticeModal.classList.add('active');
 }
 
 function masukChat() {
@@ -858,10 +808,17 @@ function balikLanding() {
   landing.style.display = 'flex';
 }
 
+acceptNotice.addEventListener('click', () => {
+  localStorage.setItem('zenkai_notice_accepted', 'true');
+  noticeModal.classList.remove('active');
+  masukChatFinal();
+});
+
 navChatBtn.addEventListener('click', masukChat);
 ctaBtn.addEventListener('click', masukChat);
 document.getElementById('backBtn').addEventListener('click', balikLanding);
 
+/* ===== SCROLL ===== */
 function scrollToBottom(smooth = false) {
   requestAnimationFrame(() => {
     if (smooth) chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
@@ -881,12 +838,7 @@ if (window.visualViewport) {
   });
 }
 
-function lockInput() {
-  isActivated = false;
-  input.disabled = true;
-  input.placeholder = 'Memuat...';
-  sendBtn.disabled = true;
-}
+/* ===== INPUT LOCK ===== */
 function unlockInput() {
   isActivated = true;
   input.disabled = false;
@@ -895,6 +847,7 @@ function unlockInput() {
   setTimeout(() => input.focus(), 100);
 }
 
+/* ===== WELCOME ===== */
 function renderWelcome() {
   chat.innerHTML = '';
   const div = document.createElement('div');
@@ -909,6 +862,7 @@ window.quickPrompt = function(btn) {
   input.focus();
 };
 
+/* ===== COPY CODE ===== */
 function copyCode(btn) {
   const code = decodeURIComponent(btn.dataset.code);
   const done = () => {
@@ -929,6 +883,7 @@ function copyCode(btn) {
 }
 window.copyCode = copyCode;
 
+/* ===== FORMAT ===== */
 function escapeHTML(text) {
   const div = document.createElement('div');
   div.textContent = text;
@@ -1010,6 +965,7 @@ function updateNewChatBtn() {
   else newChatBtn.classList.remove('active');
 }
 
+/* ===== VALIDASI ===== */
 function isRefusal(text) {
   if (text.length > 800) return false;
   const lower = text.toLowerCase();
@@ -1039,7 +995,8 @@ function isRequestingSopan(text) {
   return /(jangan\s+kasar|tolong\s+sopan|bahasa\s+yang\s+baik|jangan\s+maki|stop\s+kasar|jangan\s+umpat|gak\s+usah\s+kasar|ga\s+usah\s+kasar|jangan\s+kotor)/i.test(lower);
 }
 
-function extractMemory(userText, aiText) {
+/* ===== MEMORY ===== */
+function extractMemory(userText) {
   const patterns = [/buat(kan)?\s+(.+)/i, /bikin\s+(.+)/i, /cara\s+(.+)/i, /gimana\s+(.+)/i, /tolong\s+(.+)/i, /jelasin\s+(.+)/i, /\/g\s+(.+)/i, /\/a\s+(.+)/i, /\/c\s+(.+)/i, /\/i\s+(.+)/i];
   for (const p of patterns) {
     const m = userText.match(p);
@@ -1070,6 +1027,7 @@ function sanitizeHistory(hist) {
     });
 }
 
+/* ===== API ===== */
 async function callAPI(messages, signal) {
   const res = await fetch(API_URL, {
     method: 'POST',
@@ -1093,6 +1051,7 @@ async function callAPI(messages, signal) {
   return data.choices?.[0]?.message?.content || '';
 }
 
+/* ===== KIRIM ===== */
 async function kirim() {
   if (!isActivated) return;
   const text = input.value.trim();
@@ -1183,7 +1142,7 @@ async function kirim() {
       history.push({ role: 'assistant', content: fullText });
       localStorage.setItem('zenkai_history', JSON.stringify(history));
       updateNewChatBtn();
-      extractMemory(text, fullText);
+      extractMemory(text);
       fetch(SUPABASE_URL + '/rest/v1/chats', {
         method: 'POST',
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
@@ -1204,6 +1163,7 @@ async function kirim() {
   input.focus();
 }
 
+/* ===== AUTO RESIZE ===== */
 function autoResize() {
   input.style.height = 'auto';
   input.style.height = Math.min(input.scrollHeight, 100) + 'px';
@@ -1225,6 +1185,7 @@ stopBtn.addEventListener('click', () => {
   showToast('⛔ Dihentikan.', 1500);
 });
 
+/* ===== NEW CHAT / CLEAR ===== */
 newChatBtn.addEventListener('click', () => {
   history = []; memoryNotes = [];
   localStorage.removeItem('zenkai_history'); localStorage.removeItem('zenkai_memory');
@@ -1243,6 +1204,7 @@ modal.addEventListener('click', e => { if (e.target === modal) modal.classList.r
 noticeModal.addEventListener('click', e => { if (e.target === noticeModal) noticeModal.classList.remove('active'); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { modal.classList.remove('active'); noticeModal.classList.remove('active'); } });
 
+/* ===== INIT ===== */
 renderWelcome();
 updateNewChatBtn();
 setTimeout(() => scrollToBottom(), 200);
