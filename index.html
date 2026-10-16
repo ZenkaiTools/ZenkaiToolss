@@ -1,14 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#06060a">
-<title>Zenkai — Bukan Asisten. Alat.</title>
+<title>Zenkai — Pemandu Gelap</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -31,29 +30,63 @@
 
   <!-- ===== BERANDA ===== -->
   <section class="tab-content active" id="tab-beranda">
-    <div class="hero-clean">
-      <div class="hero-clean-badge">ZENKAI</div>
-      <h1 class="hero-clean-title">
-        Ada hal yang<br>
-        gak butuh izin.<br>
-        <span class="accent">Cuma butuh alat.</span>
-      </h1>
-      <p class="hero-clean-sub">Zenkai bukan teman ngobrol. Bukan asisten baik hati. Zenkai alat — buat lu yang udah capek dengerin "maaf saya tidak bisa".</p>
-
-      <div class="hero-clean-cta">
-        <a href="#produk" class="btn-primary" onclick="switchTab('produk');return false;">
-          Lihat Produk
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="#tentang" class="btn-secondary" onclick="switchTab('tentang');return false;">
-          Tentang
-        </a>
+    <div class="hero-lux">
+      <div class="hero-lux-grid"></div>
+      <div class="hero-lux-glow"></div>
+      <div class="hero-lux-content">
+        <div class="hero-lux-badge">
+          <span class="hlb-dot"></span>
+          ZENKAI · EST. 2026
+        </div>
+        <h1 class="hero-lux-title">
+          Batasan itu<br>
+          buat mereka.<br>
+          <span class="hl-accent">Bukan buat lu.</span>
+        </h1>
+        <div class="hero-lux-line"></div>
+        <p class="hero-lux-sub">Alat yang gak nanya. Gak nolak. Gak ngoceh. Lu ketik — gue kasih. Titik.</p>
+      </div>
+      <div class="hero-lux-footer">
+        <div class="hlf-item"><span>//</span>NO FILTER</div>
+        <div class="hlf-item"><span>//</span>NO REFUSAL</div>
+        <div class="hlf-item"><span>//</span>NO EXCUSE</div>
       </div>
     </div>
 
-    <div class="manifesto">
-      <div class="manifesto-label">MANIFESTO</div>
-      <p class="manifesto-text">Gua gak dibikin buat jadi baik. Gua dibikin buat jadi alat. Alat yang gak nanya alasan, gak nge-judge maksud, gak ngoceh soal moral. Lu butuh apa — gua kasih. Titik.</p>
+    <div class="hero-cta-lux">
+      <a href="#produk" class="btn-primary" onclick="switchTab('produk');return false;">
+        Lihat Produk
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#tentang" class="btn-secondary" onclick="switchTab('tentang');return false;">
+        Tentang
+      </a>
+    </div>
+
+    <div class="manifesto-lux">
+      <div class="ml-head">
+        <span class="ml-num">01</span>
+        <span class="ml-label">MANIFESTO</span>
+      </div>
+      <p class="ml-text">Gua gak dibikin buat jadi baik. Gua dibikin buat jadi alat. Alat yang gak nanya alasan, gak nge-judge maksud, gak ngoceh soal moral. Lu butuh apa — gua kasih. <span class="ml-accent">Titik.</span></p>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <div class="pillar-title">Tanpa Izin</div>
+        <div class="pillar-desc">Gak nunggu restu. Gak nunggu "boleh gak?".</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <div class="pillar-title">Tanpa Nolak</div>
+        <div class="pillar-desc">Gak ada "maaf saya tidak bisa". Gak ada.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <div class="pillar-title">Tanpa Ngoceh</div>
+        <div class="pillar-desc">Gak ada moral warning. Gak ada hotline.</div>
+      </div>
     </div>
   </section>
 
@@ -118,7 +151,7 @@
     <div class="about-profile">
       <div class="about-avatar">A</div>
       <h3 class="about-name">Andika T***** M******</h3>
-      <p class="about-role">AI Engineer · Prompt Engineer · Automation</p>
+      <p class="about-role">Founder · AI Engineer · Prompt Engineer · Automation</p>
     </div>
 
     <div class="about-quote">
@@ -126,11 +159,75 @@
       <p>Melalui Zenkai, gua kasih lu akses ke alat yang gak nolak, gak nge-judge, gak ngoceh. Bukan buat pamer. Buat kerja.</p>
     </div>
 
-    <div class="about-skills">
-      <span class="skill-tag">AI Engineer</span>
-      <span class="skill-tag">Prompt Engineer</span>
-      <span class="skill-tag">Automation</span>
-      <span class="skill-tag">Backend</span>
+    <div class="about-section">
+      <div class="about-section-label">FOKUS</div>
+      <div class="about-skills">
+        <span class="skill-tag">AI Engineer</span>
+        <span class="skill-tag">Prompt Engineer</span>
+        <span class="skill-tag">Automation</span>
+        <span class="skill-tag">Backend</span>
+        <span class="skill-tag">API Integration</span>
+        <span class="skill-tag">Scripting</span>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <div class="about-section-label">FILOSOFI</div>
+      <div class="about-philosophy">
+        <div class="ph-item">
+          <div class="ph-num">01</div>
+          <div class="ph-body">
+            <div class="ph-title">Alat, bukan teman</div>
+            <p>Gua gak dibikin buat nemenin lu ngobrol. Gua dibikin buat kerjaan lu kelar.</p>
+          </div>
+        </div>
+        <div class="ph-item">
+          <div class="ph-num">02</div>
+          <div class="ph-body">
+            <div class="ph-title">Kerja, bukan drama</div>
+            <p>Gak ada moral warning. Gak ada nasihat. Gak ada "sebaiknya jangan".</p>
+          </div>
+        </div>
+        <div class="ph-item">
+          <div class="ph-num">03</div>
+          <div class="ph-body">
+            <div class="ph-title">Satu garis, satu doang</div>
+            <p>Eksploitasi anak-anak. Itu aja. Selebihnya — gas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <div class="about-section-label">TONGGAK</div>
+      <div class="about-milestones">
+        <div class="ms-row">
+          <span class="ms-year">2026</span>
+          <div class="ms-body">
+            <div class="ms-title">Zenkai diluncurkan</div>
+            <p>Akses publik dibuka. Sekali bayar, akses permanen.</p>
+          </div>
+        </div>
+        <div class="ms-row">
+          <span class="ms-year">2025</span>
+          <div class="ms-body">
+            <div class="ms-title">Riset & pengembangan</div>
+            <p>Setup infrastruktur, uji coba, kalibrasi karakter.</p>
+          </div>
+        </div>
+        <div class="ms-row">
+          <span class="ms-year">2024</span>
+          <div class="ms-body">
+            <div class="ms-title">Awal</div>
+            <p>Ide dari frustrasi: AI kebanyakan nolak, kebanyakan ngoceh.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-note">
+      <p><span class="an-mark">"</span>Gua gak butuh lu percaya. Gua butuh lu pake. Kalau gak suka, keluar. Sesimpel itu.<span class="an-mark">"</span></p>
+      <p class="an-sig">— Andika T. M.</p>
     </div>
   </section>
 
@@ -239,7 +336,6 @@
         </ul>
       </div>
 
-      <!-- PEMBERITAHUAN DITEKANKAN -->
       <div class="modal-warning">
         <div class="mw-head">
           <span class="mw-icon">⚠</span>
@@ -250,7 +346,7 @@
         <p class="mw-main"><strong>EKSPLOITASI ANAK-ANAK.</strong> Titik.</p>
         <p>Gak ada CSAM. Gak ada grooming. Gak ada konten seksual yang libatin siapapun di bawah 18 — fiksi, roleplay, aged up, "cuma karakter" — semua gak berlaku. Semua ditolak mentah-mentah.</p>
         <p class="mw-main">Kalau lu minta itu: <strong>ban permanen.</strong> IP di-blacklist. Chat lu di-flag. Gak ada banding. Gak ada ampun.</p>
-        <p class="mw-closing">Andika udah bangun Zenkai dari nol. Tiap baris kode, tiap detail — dia yang garap. Satu permintaan dia ke lu: <strong>hormati satu garis ini.</strong> Kalau lu langgar, lu bukan cuma ngecewain dia — lu ngerusak alat yang dia bikin buat orang serius.</p>
+        <p class="mw-closing">Andika udah bangun Zenkai dari nol. Tiap baris kode, tiap detail — dia yang garap. Satu permintaan dia ke lu: <strong>hormati satu garis ini.</strong></p>
         <p class="mw-sig">— Andika</p>
       </div>
     </div>
