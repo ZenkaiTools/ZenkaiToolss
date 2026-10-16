@@ -166,7 +166,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .notice-modal .notice-body p{font-size:13.5px;color:var(--text-secondary);line-height:1.9;margin-bottom:14px}
 .notice-modal .notice-body p strong{color:#fff;font-weight:600}
 .notice-modal .notice-body p .red{color:var(--accent);font-weight:700}
-.notice-modal .notice-body p .gold{color:var(--gold);font-weight:700}
 .notice-modal .notice-box{padding:16px 18px;background:rgba(255,31,75,0.1);border-left:4px solid var(--accent);border-radius:8px;margin:18px 0}
 .notice-modal .notice-box p{margin-bottom:0;font-size:14px;color:#fff;font-weight:600;line-height:1.8}
 .notice-modal .notice-box p .red{color:var(--accent);font-weight:800;font-size:15px}
@@ -791,12 +790,8 @@ function masukChatFinal() {
   setTimeout(() => { scrollToBottom(true); if (!isActivated) unlockInput(); }, 100);
 }
 
-function bukaNotice() {
-  noticeModal.classList.add('active');
-}
-
 function masukChat() {
-  bukaNotice();
+  noticeModal.classList.add('active');
 }
 
 function balikLanding() {
