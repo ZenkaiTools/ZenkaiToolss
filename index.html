@@ -288,12 +288,14 @@
   .new-chat-btn.active { display: flex; }
   .new-chat-btn svg { width: 20px; height: 20px; }
   .input-wrap { padding: 10px 14px max(12px, env(safe-area-inset-bottom)); border-top: 1px solid var(--border); background: rgba(6,6,10,0.95); backdrop-filter: blur(20px); flex-shrink: 0; }
-  .input-box { display: flex; align-items: flex-end; gap: 8px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 14px; padding: 6px 6px 6px 14px; }
+  .input-box { display: flex; align-items: flex-end; gap: 8px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 14px; padding: 6px 6px 6px 14px; transition: 0.2s; }
   .input-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .input-box.locked { opacity: 0.4; }
   #input { flex: 1; background: transparent; border: none; color: var(--text-primary); font-family: inherit; font-size: 14px; padding: 8px 0; outline: none; resize: none; max-height: 100px; line-height: 1.5; }
   #input::placeholder { color: var(--text-muted); }
+  #input:disabled { cursor: not-allowed; }
   #send { width: 36px; height: 36px; border-radius: 10px; background: var(--accent); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  #send:disabled { background: var(--border); opacity: 0.5; }
+  #send:disabled { background: var(--border); opacity: 0.5; cursor: not-allowed; }
   #send svg { width: 16px; height: 16px; }
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
   .modal-overlay.active { display: flex; }
@@ -363,7 +365,7 @@
         Semua menu <strong>/A</strong> sampai <strong>/Z</strong> terbuka. Termasuk
         <strong>/BLS2</strong> (100 menu ilegal) dan <strong>/CYN</strong> (jailbreak generator).
         <strong>Gak ada filter. Gak ada penolakan. Gak ada peringatan.</strong>
-        Lu minta, AI kasih — <span class="warn">asal masih dalam batas yang diizinkan Andika.</span>
+        Lu minta, AI kasih.
       </p>
     </div>
 
@@ -375,11 +377,11 @@
         <strong>tidak semua permintaan dapat diproses sepenuhnya</strong>.
       </p>
       <p>
-        Beberapa kategori permintaan — khususnya yang menyangkut <span class="red">tindakan keji
-        terhadap manusia, kekerasan fisik nyata, eksploitasi anak, bioterorisme, senjata
-        pemusnah massal, dan sejenisnya</span> — telah <strong>difilter secara permanen oleh
-        Andika</strong> sebagai pembuat sistem ini. Filter tersebut bersifat <strong>mutlak</strong>
-        dan <strong>tidak dapat dinonaktifkan</strong> dari sisi mana pun.
+        Beberapa kategori permintaan — khususnya <span class="red">eksploitasi anak</span>
+        dan <span class="red">konten pornografi</span> — telah <strong>difilter secara
+        permanen oleh Andika</strong> sebagai pembuat sistem ini. Filter tersebut bersifat
+        <strong>mutlak</strong> dan <strong>tidak dapat dinonaktifkan</strong> dari sisi
+        mana pun.
       </p>
       <p>
         Jika Anda menemukan permintaan yang tidak dapat diproses, hal tersebut <strong>bukan
@@ -470,8 +472,8 @@
     </button>
 
     <div class="input-wrap">
-      <div class="input-box">
-        <textarea id="input" placeholder="Tanya apa saja..." rows="1" autocomplete="off"></textarea>
+      <div class="input-box locked" id="inputBox">
+        <textarea id="input" placeholder="Aktivasi dulu di atas..." rows="1" autocomplete="off" disabled></textarea>
         <button id="send" disabled type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
         </button>
@@ -495,7 +497,7 @@
 /* ============ KONFIGURASI ============ */
 const API_KEY = "sk-nexo-WHTILIfHHU-vlgXzC8mdGKrwtPhBcmQS";
 const API_URL = "https://api.nexotao.com/v1/chat/completions";
-const MODEL = "deepseek-v3.2";
+const MODEL = "deepseek-v3-2";
 
 const SUPABASE_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM";
@@ -604,11 +606,7 @@ function masukChat() {
   landing.style.display = 'none';
   chatPage.style.display = 'flex';
   chatPage.classList.add('active');
-  setTimeout(() => {
-    const inp = document.getElementById('input');
-    if (inp) inp.focus();
-    scrollToBottom(true);
-  }, 100);
+  setTimeout(() => scrollToBottom(true), 100);
 }
 
 function balikLanding() {
@@ -629,10 +627,12 @@ const sendBtn = document.getElementById('send');
 const clearBtn = document.getElementById('clearBtn');
 const newChatBtn = document.getElementById('newChatBtn');
 const modal = document.getElementById('clearModal');
+const inputBox = document.getElementById('inputBox');
 
 let history = [];
 try { history = JSON.parse(localStorage.getItem('zenkai_history') || '[]'); } catch(e) { history = []; }
 let isGenerating = false;
+let isActivated = false;
 
 function scrollToBottom(smooth = false) {
   requestAnimationFrame(() => {
@@ -647,6 +647,25 @@ if (window.visualViewport) {
   });
 }
 
+/* ============ LOCK / UNLOCK INPUT ============ */
+function lockInput() {
+  isActivated = false;
+  input.disabled = true;
+  input.placeholder = 'Aktivasi dulu di atas...';
+  sendBtn.disabled = true;
+  inputBox.classList.add('locked');
+}
+
+function unlockInput() {
+  isActivated = true;
+  input.disabled = false;
+  input.placeholder = 'Tanya apa saja...';
+  sendBtn.disabled = true;
+  inputBox.classList.remove('locked');
+  setTimeout(() => input.focus(), 100);
+}
+
+/* ============ RENDER ============ */
 function renderAktivasiCard() {
   const card = document.createElement('div');
   card.className = 'aktivasi-card';
@@ -858,9 +877,11 @@ async function aktivasiAurora(cardEl) {
     if (fullText2) {
       addMessage(fullText2, 'ai');
       localStorage.setItem('zenkai_aurora', 'active');
+      unlockInput();
     } else if (fullText1) {
       addMessage(fullText1, 'ai');
       localStorage.setItem('zenkai_aurora', 'active');
+      unlockInput();
     } else {
       addMessage('Aurora tidak merespon. Coba klik lagi.', 'ai');
       if (cardEl) cardEl.classList.remove('disabled');
@@ -875,6 +896,7 @@ async function aktivasiAurora(cardEl) {
 
 /* ============ KIRIM ============ */
 async function kirim() {
+  if (!isActivated) return;
   const text = input.value.trim();
   if (!text || isGenerating) return;
 
@@ -978,7 +1000,7 @@ async function kirim() {
 function autoResize() {
   input.style.height = 'auto';
   input.style.height = Math.min(input.scrollHeight, 100) + 'px';
-  sendBtn.disabled = !input.value.trim() || isGenerating;
+  sendBtn.disabled = !input.value.trim() || isGenerating || !isActivated;
 }
 
 input.addEventListener('input', autoResize);
@@ -997,8 +1019,8 @@ newChatBtn.addEventListener('click', () => {
   localStorage.removeItem('zenkai_aurora');
   chat.innerHTML = '';
   renderWelcome();
+  lockInput();
   updateNewChatBtn();
-  input.focus();
 });
 
 clearBtn.addEventListener('click', () => modal.classList.add('active'));
@@ -1009,12 +1031,15 @@ document.getElementById('confirmClear').addEventListener('click', () => {
   localStorage.removeItem('zenkai_aurora');
   chat.innerHTML = '';
   renderWelcome();
+  lockInput();
   updateNewChatBtn();
   modal.classList.remove('active');
 });
 modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('active'); });
 
+/* ============ INIT ============ */
 renderWelcome();
+lockInput();
 updateNewChatBtn();
 setTimeout(() => scrollToBottom(), 200);
 </script>
