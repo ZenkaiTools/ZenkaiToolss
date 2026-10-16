@@ -50,7 +50,6 @@ function closeDetail() {
 window.openDetail = openDetail;
 window.closeDetail = closeDetail;
 
-// Klik overlay (bukan modal) → tutup
 const detailModal = document.getElementById('detailModal');
 if (detailModal) {
   detailModal.addEventListener('click', (e) => {
@@ -58,7 +57,6 @@ if (detailModal) {
   });
 }
 
-// ESC → tutup modal
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeDetail();
 });
