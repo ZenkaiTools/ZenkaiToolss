@@ -896,14 +896,12 @@ document.getElementById('skipReadBtn').addEventListener('click', () => {
   showToast('✓ Gate kebuka. Centang buat lanjut, kontol.', 2500);
 });
 
+/* AUTO-UNLOCK setelah 3 detik — user dianggap udah baca */
 setTimeout(() => {
-  if (!hasReadNotice) {
-    const sh = disclaimerScroll.scrollHeight;
-    const ch = disclaimerScroll.clientHeight;
-    if (sh <= ch + 20) unlockReadGate();
-  }
-}, 500);
+  if (!hasReadNotice) unlockReadGate();
+}, 3000);
 
+/* Scroll tetap update progress bar sebagai visual aja */
 disclaimerScroll.addEventListener('scroll', () => {
   const scrollTop = disclaimerScroll.scrollTop;
   const scrollHeight = disclaimerScroll.scrollHeight - disclaimerScroll.clientHeight;
@@ -911,8 +909,6 @@ disclaimerScroll.addEventListener('scroll', () => {
   if (progress > maxScrollReached) maxScrollReached = progress;
   readProgressBar.style.width = maxScrollReached + '%';
   readStatPercent.textContent = maxScrollReached + '% terbaca';
-  if (maxScrollReached >= 99) unlockReadGate();
-  else if (!hasReadNotice) readGateText.textContent = 'Scroll sampai habis (' + maxScrollReached + '%). Gak ada skip, kontol.';
 }, { passive: true });
 
 readCheckbox.addEventListener('change', () => {
