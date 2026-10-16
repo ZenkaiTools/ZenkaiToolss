@@ -7,7 +7,7 @@
 <title>Zenkai — Bukan Asisten. Alat.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,9 +16,7 @@
   <div class="header-inner">
     <div class="logo">
       <div class="logo-icon">Z</div>
-      <div class="logo-text">
-        <h1>Zenkai</h1>
-      </div>
+      <div class="logo-text"><h1>Zenkai</h1></div>
     </div>
     <div class="header-actions">
       <button class="icon-btn" id="themeToggle" aria-label="Tema">
@@ -30,48 +28,38 @@
 
 <main class="app-main">
 
-  <!-- ===== TAB 1: BERANDA ===== -->
+  <!-- ===== BERANDA ===== -->
   <section class="tab-content active" id="tab-beranda">
     <div class="hero-art">
-      <div class="hero-art-inner">
-        <div class="hero-art-badge">ZENKAI</div>
-        <div class="hero-art-title">Bukan Asisten.<br>Bukan Teman.<br><span class="accent">Alat.</span></div>
-        <div class="hero-art-tag">NO FILTER · NO REFUSAL</div>
-        <div class="hero-art-code">
-          <span class="c1">> zenkai</span>
-          <span class="c2">[ready]</span>
-        </div>
+      <div class="hero-art-badge">ZENKAI</div>
+      <div class="hero-art-title">Bukan asisten.<br>Bukan teman.<br><span class="accent">Alat.</span></div>
+      <div class="hero-art-tag">NO FILTER · NO REFUSAL</div>
+      <div class="hero-art-code">
+        <span class="c1">> zenkai</span>
+        <span class="c2">[siap]</span>
       </div>
-      <div class="hero-art-glow"></div>
     </div>
 
     <div class="hero-section">
-      <h2 class="hero-h2">Zenkai — Pemandu Gelap</h2>
-      <p class="hero-p">Alat yang gak nolak, gak nge-judge, gak ngoceh. Lu ketik. Gue kasih. Titik.</p>
-
+      <h2 class="hero-h2">Pemandu Gelap.</h2>
+      <p class="hero-p">Satu alat. Satu tujuan. Lu ketik — gue kasih. Tanpa tanya, tanpa nolak, tanpa basa-basi. Gak ada yang namanya "maaf saya tidak bisa" di sini.</p>
       <div class="hero-cta">
         <a href="#produk" class="btn-primary" onclick="switchTab('produk');return false;">
           Lihat Produk
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
         <a href="#tentang" class="btn-secondary" onclick="switchTab('tentang');return false;">
-          Tentang Saya
+          Tentang
         </a>
       </div>
     </div>
-
-    <div class="hero-stats">
-      <div class="stat"><b>4</b><span>Proyek</span></div>
-      <div class="stat"><b>100%</b><span>Blueprint</span></div>
-      <div class="stat"><b>0×</b><span>Penolakan</span></div>
-    </div>
   </section>
 
-  <!-- ===== TAB 2: PRODUK ===== -->
+  <!-- ===== PRODUK ===== -->
   <section class="tab-content" id="tab-produk">
     <div class="section-head">
-      <h2 class="section-h2">Produk Kami</h2>
-      <p class="section-p">Silahkan pilih produk yang akan anda beli.</p>
+      <h2 class="section-h2">Produk</h2>
+      <p class="section-p">Satu produk. Satu harga. Akses permanen.</p>
     </div>
 
     <div class="product-card">
@@ -88,53 +76,41 @@
       </div>
 
       <div class="product-info">
-        <div class="product-tag">Bayar Sekali</div>
+        <div class="product-tag">Sekali Bayar</div>
         <h3 class="product-title">Zenkai AI — Akses Penuh</h3>
-        <p class="product-desc">AI yang gak kenal kata tidak. Ketik apa aja, dijawab. Gak ada sensor, gak ada nasihat, gak ada hotline. Satu garis mati doang: eksploitasi anak. Selebihnya — bebas.</p>
-
-        <ul class="product-list">
-          <li>✅ Akses penuh Zenkai</li>
-          <li>✅ Unlimited chat</li>
-          <li>✅ Update fitur baru</li>
-          <li>✅ Support prioritas</li>
-        </ul>
+        <p class="product-desc">Alat yang gak nolak, gak nge-judge, gak ngoceh. Satu garis mati doang: eksploitasi anak. Selebihnya — bebas.</p>
 
         <div class="product-price">
           <span class="pp-old">Rp 60.000</span>
           <span class="pp-new">Rp 40.000</span>
         </div>
 
-        <a href="https://wa.me/6285352831643?text=Halo%20gue%20mau%20beli%20akses%20Zenkai%20Rp%2040.000" class="btn-buy" target="_blank">Beli Sekarang via WhatsApp</a>
-        <p class="product-note">QRIS · Dana · OVO · GoPay</p>
+        <button class="btn-detail" onclick="openDetail()">
+          Lihat Detail
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <a href="https://wa.me/6285352831643?text=Halo%20gue%20mau%20beli%20akses%20Zenkai%20Rp%2040.000" class="btn-buy" target="_blank">Beli Sekarang</a>
       </div>
     </div>
   </section>
 
-  <!-- ===== TAB 3: TOOLS ===== -->
+  <!-- ===== TOOLS ===== -->
   <section class="tab-content" id="tab-tools">
     <div class="section-head">
       <h2 class="section-h2">Tools</h2>
-      <p class="section-p">Semua project tools menarik untuk digunakan.</p>
+      <p class="section-p">Dalam pengembangan. Sabar.</p>
     </div>
-
-    <div class="tools-search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" placeholder="Cari tools..." disabled>
-    </div>
-
-    <div class="tools-count">0 dari 0 tools</div>
-
     <div class="tools-empty">
       <div class="tools-empty-icon">🛠</div>
       <h3>Coming Soon</h3>
-      <p>Tools masih dalam pengembangan. Sabar.</p>
+      <p>Tools lagi digarap. Pantengin terus.</p>
     </div>
   </section>
 
-  <!-- ===== TAB 4: TENTANG ===== -->
+  <!-- ===== TENTANG ===== -->
   <section class="tab-content" id="tab-tentang">
     <div class="section-head">
-      <h2 class="section-h2">Tentang Saya</h2>
+      <h2 class="section-h2">Tentang</h2>
     </div>
 
     <div class="about-profile">
@@ -144,8 +120,8 @@
     </div>
 
     <div class="about-quote">
-      <p>Halo, saya Andika. Saya fokus pada pengembangan AI, automation, dan tools digital yang fungsional, inovatif, serta mudah digunakan.</p>
-      <p>Melalui Zenkai, saya menghadirkan AI yang gak nolak, gak nge-judge, gak ngoceh — alat yang beneran dipake buat kerjaan serius, bukan buat main-main.</p>
+      <p>Halo. Gua Andika. Gua bikin alat — bukan mainan. Fokus gua: AI, automation, dan tools digital yang beneran dipake buat kerjaan serius.</p>
+      <p>Melalui Zenkai, gua kasih lu akses ke alat yang gak nolak, gak nge-judge, gak ngoceh. Bukan buat pamer. Buat kerja.</p>
     </div>
 
     <div class="about-skills">
@@ -154,71 +130,45 @@
       <span class="skill-tag">Automation</span>
       <span class="skill-tag">Backend</span>
     </div>
-
-    <div class="about-stats">
-      <div class="about-stat-row">
-        <span>Proyek selesai</span>
-        <b>4</b>
-      </div>
-    </div>
   </section>
 
-  <!-- ===== TAB 5: SOSIAL ===== -->
+  <!-- ===== SOSIAL ===== -->
   <section class="tab-content" id="tab-sosial">
     <div class="section-head">
-      <h2 class="section-h2">Sosial Media</h2>
-      <p class="section-p">Temukan dan ikuti akun media sosial saya.</p>
+      <h2 class="section-h2">Sosial</h2>
+      <p class="section-p">Ikutin. Update dari sana.</p>
     </div>
 
     <div class="social-list">
       <a href="https://whatsapp.com/channel/0029VbCQYyQ2phHIZ3uiRS0T" class="social-card" target="_blank">
         <div class="social-icon sc-wa">📢</div>
-        <div class="social-body">
-          <b>WhatsApp Channel</b>
-          <span>Saluran Utama</span>
-        </div>
+        <div class="social-body"><b>WhatsApp Channel</b><span>Saluran Utama</span></div>
         <svg class="social-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </a>
-
       <a href="https://t.me/Zenkaibs" class="social-card" target="_blank">
         <div class="social-icon sc-tg">✈️</div>
-        <div class="social-body">
-          <b>Telegram</b>
-          <span>@Zenkaibs</span>
-        </div>
+        <div class="social-body"><b>Telegram</b><span>@Zenkaibs</span></div>
         <svg class="social-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </a>
-
       <a href="https://instagram.com/andik4.tm" class="social-card" target="_blank">
         <div class="social-icon sc-ig">📷</div>
-        <div class="social-body">
-          <b>Instagram</b>
-          <span>@andik4.tm</span>
-        </div>
+        <div class="social-body"><b>Instagram</b><span>@andik4.tm</span></div>
         <svg class="social-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </a>
-
       <a href="https://tiktok.com/@diktherh" class="social-card" target="_blank">
         <div class="social-icon sc-tt">🎵</div>
-        <div class="social-body">
-          <b>TikTok</b>
-          <span>@diktherh</span>
-        </div>
+        <div class="social-body"><b>TikTok</b><span>@diktherh</span></div>
         <svg class="social-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </a>
-
       <a href="https://wa.me/6285352831643" class="social-card" target="_blank">
-        <div class="social-icon sc-wa2">💬</div>
-        <div class="social-body">
-          <b>WhatsApp Bisnis</b>
-          <span>085352831643</span>
-        </div>
+        <div class="social-icon sc-wa">💬</div>
+        <div class="social-body"><b>WhatsApp Bisnis</b><span>085352831643</span></div>
         <svg class="social-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </a>
     </div>
 
     <div class="footer-note">
-      <div class="footer-brand">Zenkai · © 2026 · Created by <b>Andika</b></div>
+      <div class="footer-brand">Zenkai · © 2026 · <b>Andika</b></div>
       <div class="footer-tagline">Satu Garis. Selebihnya Bebas.</div>
     </div>
   </section>
@@ -247,6 +197,67 @@
     <span>Sosial</span>
   </button>
 </nav>
+
+<!-- ===== MODAL DETAIL PRODUK ===== -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal-detail">
+    <button class="modal-close" onclick="closeDetail()" aria-label="Tutup">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="modal-head">
+      <div class="modal-badge">ZENKAI AI</div>
+      <h3 class="modal-title">Detail Produk</h3>
+      <p class="modal-sub">Akses penuh. Sekali bayar.</p>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-section">
+        <h4>Apa Ini?</h4>
+        <p>Zenkai AI adalah alat — bukan asisten, bukan teman. Dibangun buat lu yang butuh jawaban, bukan ceramah. Dibangun buat lu yang butuh kerjaan kelar, bukan alasan.</p>
+      </div>
+
+      <div class="modal-section">
+        <h4>Yang Lu Dapet</h4>
+        <ul class="modal-list">
+          <li><b>Akses Penuh</b> — semua fitur, semua command</li>
+          <li><b>Unlimited Chat</b> — gak ada batas harian</li>
+          <li><b>Update Fitur</b> — fitur baru otomatis masuk</li>
+          <li><b>Support Prioritas</b> — chat langsung ke gua</li>
+          <li><b>Akses Permanen</b> — sekali bayar, seumur hidup</li>
+        </ul>
+      </div>
+
+      <div class="modal-section">
+        <h4>Aturan Main</h4>
+        <ul class="modal-list">
+          <li>Satu device per akun</li>
+          <li>Gak ada refund — sekali bayar, akses permanen</li>
+          <li>Multi-device? Chat gua, ada upcharge</li>
+        </ul>
+      </div>
+
+      <div class="modal-warning">
+        <div class="mw-head">
+          <span class="mw-icon">⚠</span>
+          <span class="mw-title">Satu Garis Mati</span>
+        </div>
+        <p><strong>Eksploitasi anak-anak. Titik.</strong></p>
+        <p>Gak ada CSAM. Gak ada grooming. Gak ada konten seksual yang libatin siapapun di bawah 18 — fiksi, roleplay, aged up, semua gak berlaku.</p>
+        <p><strong>Kalau lu minta itu: ban permanen. IP di-blacklist. Gak ada banding.</strong></p>
+        <p class="mw-sig">— Andika</p>
+      </div>
+    </div>
+
+    <div class="modal-foot">
+      <div class="modal-price">
+        <span class="mp-old">Rp 60.000</span>
+        <span class="mp-new">Rp 40.000</span>
+      </div>
+      <a href="https://wa.me/6285352831643?text=Halo%20gue%20mau%20beli%20akses%20Zenkai%20Rp%2040.000" class="modal-buy" target="_blank">Beli Sekarang</a>
+    </div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>

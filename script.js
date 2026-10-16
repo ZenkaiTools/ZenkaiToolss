@@ -17,20 +17,51 @@ function switchTab(tabName) {
 }
 window.switchTab = switchTab;
 
-// Klik nav
 navItems.forEach(item => {
   item.addEventListener('click', () => {
     switchTab(item.dataset.tab);
   });
 });
 
-// Restore tab terakhir
 try {
   const savedTab = localStorage.getItem('zenkai_active_tab');
   if (savedTab && document.getElementById('tab-' + savedTab)) {
     switchTab(savedTab);
   }
 } catch(e) {}
+
+// ===== MODAL DETAIL PRODUK =====
+function openDetail() {
+  const modal = document.getElementById('detailModal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeDetail() {
+  const modal = document.getElementById('detailModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+window.openDetail = openDetail;
+window.closeDetail = closeDetail;
+
+// Klik overlay (bukan modal) → tutup
+const detailModal = document.getElementById('detailModal');
+if (detailModal) {
+  detailModal.addEventListener('click', (e) => {
+    if (e.target === detailModal) closeDetail();
+  });
+}
+
+// ESC → tutup modal
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeDetail();
+});
 
 // ===== THEME TOGGLE =====
 const themeToggle = document.getElementById('themeToggle');
