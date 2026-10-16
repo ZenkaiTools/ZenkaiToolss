@@ -280,6 +280,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
       <div class="read-gate-progress"><div class="read-gate-progress-bar" id="readProgressBar"></div></div>
       <div class="read-gate-stats"><span id="readStatPercent">0% terbaca</span><span id="readStatTime">status: belum</span></div>
       <div class="read-gate-text" id="readGateText">Scroll pemberitahuan sampai habis, kontol. Gak ada skip.</div>
+      <button id="skipReadBtn" type="button" style="width:100%;padding:12px;background:linear-gradient(135deg,rgba(255,31,75,0.15),rgba(255,31,75,0.05));border:1.5px solid var(--accent);color:var(--accent);border-radius:10px;font-family:inherit;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;margin-bottom:14px">Aku Udah Baca Sampai Bawah, Kontol</button>
       <label class="read-gate-check">
         <input type="checkbox" id="readCheckbox" disabled>
         <label for="readCheckbox">Gue udah baca <strong>sampai habis</strong>, gue paham Zenkai <strong>gak kenal kata tidak</strong>. Satu-satunya garis mati: <strong style="color:var(--accent)">anak-anak</strong>. Kalau gue minta konten anak, gue siap di-ban permanen.</label>
@@ -845,7 +846,7 @@ function showToast(msg, duration = 3000) {
   toast._timeout = setTimeout(() => toast.classList.remove('active'), duration);
 }
 
-/* ===== READ GATE — TANPA TIMER ===== */
+/* ===== READ GATE — FIXED ===== */
 const disclaimerScroll = document.getElementById('disclaimerScroll');
 const readProgressBar = document.getElementById('readProgressBar');
 const readGateText = document.getElementById('readGateText');
@@ -869,7 +870,39 @@ if (localStorage.getItem('zenkai_notice_accepted') === 'true') {
   readStatPercent.textContent = '100% terbaca'; readStatPercent.classList.add('done');
   readStatTime.textContent = 'status: verified'; readStatTime.classList.add('done');
   navChatBtn.classList.add('active'); ctaBtn.classList.add('active'); ctaBottom.classList.add('active');
+  const skipBtn = document.getElementById('skipReadBtn');
+  if (skipBtn) skipBtn.style.display = 'none';
 }
+
+function unlockReadGate() {
+  if (hasReadNotice) return;
+  hasReadNotice = true;
+  readProgressBar.style.width = '100%';
+  readProgressBar.classList.add('done');
+  readStatPercent.textContent = '100% terbaca';
+  readStatPercent.classList.add('done');
+  readGateText.textContent = '✓ Terverifikasi. Centang di bawah, bangsat.';
+  readGateText.style.color = 'var(--success)';
+  readGate.classList.add('ready');
+  readCheckbox.disabled = false;
+  readStatTime.textContent = 'status: verified';
+  readStatTime.classList.add('done');
+  const skipBtn = document.getElementById('skipReadBtn');
+  if (skipBtn) skipBtn.style.display = 'none';
+}
+
+document.getElementById('skipReadBtn').addEventListener('click', () => {
+  unlockReadGate();
+  showToast('✓ Gate kebuka. Centang buat lanjut, kontol.', 2500);
+});
+
+setTimeout(() => {
+  if (!hasReadNotice) {
+    const sh = disclaimerScroll.scrollHeight;
+    const ch = disclaimerScroll.clientHeight;
+    if (sh <= ch + 20) unlockReadGate();
+  }
+}, 500);
 
 disclaimerScroll.addEventListener('scroll', () => {
   const scrollTop = disclaimerScroll.scrollTop;
@@ -878,35 +911,9 @@ disclaimerScroll.addEventListener('scroll', () => {
   if (progress > maxScrollReached) maxScrollReached = progress;
   readProgressBar.style.width = maxScrollReached + '%';
   readStatPercent.textContent = maxScrollReached + '% terbaca';
-  if (maxScrollReached >= 99 && !hasReadNotice) {
-    hasReadNotice = true;
-    readProgressBar.classList.add('done');
-    readGateText.textContent = '✓ Terverifikasi. Centang di bawah, bangsat.';
-    readGateText.style.color = 'var(--success)';
-    readGate.classList.add('ready');
-    readCheckbox.disabled = false;
-    readStatTime.textContent = 'status: verified'; readStatTime.classList.add('done');
-  } else if (!hasReadNotice && maxScrollReached < 99) {
-    readGateText.textContent = 'Scroll sampai habis (' + maxScrollReached + '%). Gak ada skip, kontol.';
-  }
-});
-
-/* Kalau scrollHeight <= clientHeight (pemberitahuan muat penuh), auto-ready */
-setTimeout(() => {
-  if (disclaimerScroll.scrollHeight <= disclaimerScroll.clientHeight + 5 && !hasReadNotice) {
-    maxScrollReached = 100;
-    readProgressBar.style.width = '100%';
-    readProgressBar.classList.add('done');
-    readStatPercent.textContent = '100% terbaca';
-    readStatPercent.classList.add('done');
-    readGateText.textContent = '✓ Terverifikasi. Centang di bawah, bangsat.';
-    readGateText.style.color = 'var(--success)';
-    readGate.classList.add('ready');
-    readCheckbox.disabled = false;
-    readStatTime.textContent = 'status: verified'; readStatTime.classList.add('done');
-    hasReadNotice = true;
-  }
-}, 300);
+  if (maxScrollReached >= 99) unlockReadGate();
+  else if (!hasReadNotice) readGateText.textContent = 'Scroll sampai habis (' + maxScrollReached + '%). Gak ada skip, kontol.';
+}, { passive: true });
 
 readCheckbox.addEventListener('change', () => {
   if (readCheckbox.checked && hasReadNotice) {
@@ -920,15 +927,21 @@ readCheckbox.addEventListener('change', () => {
 });
 
 function masukChat() {
-  if (!userConfirmed || !hasReadNotice) {
-    showToast('⚠ BACA PEMBERITAHUANNYA DULU, KONTOL! Scroll sampai bawah, centang, baru masuk. Gak ada pintasan!', 4500);
+  if (!hasReadNotice) {
+    showToast('⚠ BACA PEMBERITAHUANNYA DULU, KONTOL! Scroll sampai bawah atau klik tombol "Aku Udah Baca", centang, baru masuk!', 4500);
     readGate.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    /* Efek getar gate kalau dipaksa masuk */
     readGate.style.borderColor = '#ff1f4b';
     readGate.style.transform = 'translateX(-4px)';
     setTimeout(() => { readGate.style.transform = 'translateX(4px)'; }, 80);
     setTimeout(() => { readGate.style.transform = 'translateX(-4px)'; }, 160);
     setTimeout(() => { readGate.style.transform = 'translateX(0)'; readGate.style.borderColor = ''; }, 240);
+    return;
+  }
+  if (!userConfirmed) {
+    showToast('⚠ Centang dulu kotaknya, bangsat! Gak ada jalan pintas!', 4000);
+    readGate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    readGate.style.borderColor = '#ff1f4b';
+    setTimeout(() => { readGate.style.borderColor = ''; }, 800);
     return;
   }
   landing.style.display = 'none';
