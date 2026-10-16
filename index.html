@@ -796,11 +796,7 @@ function bukaNotice() {
 }
 
 function masukChat() {
-  if (localStorage.getItem('zenkai_notice_accepted') === 'true') {
-    masukChatFinal();
-  } else {
-    bukaNotice();
-  }
+  bukaNotice();
 }
 
 function balikLanding() {
@@ -809,7 +805,6 @@ function balikLanding() {
 }
 
 acceptNotice.addEventListener('click', () => {
-  localStorage.setItem('zenkai_notice_accepted', 'true');
   noticeModal.classList.remove('active');
   masukChatFinal();
 });
