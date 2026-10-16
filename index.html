@@ -19,9 +19,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg-primary);color:var(--t
 .landing-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;max-width:1100px;margin:0 auto;width:100%;position:sticky;top:0;z-index:20;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);background:rgba(6,6,10,0.6)}
 .landing-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;letter-spacing:-0.3px}
 .landing-logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#800020);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;box-shadow:0 0 20px var(--accent-glow)}
-.landing-nav-btn{padding:9px 18px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;opacity:0.4;cursor:not-allowed;transition:0.2s}
-.landing-nav-btn.active{opacity:1;cursor:pointer}
-.landing-nav-btn.active:hover{background:var(--accent-hover)}
+.landing-nav-btn{padding:9px 18px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:0.2s}
+.landing-nav-btn:hover{background:var(--accent-hover)}
 .landing-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:50px 24px 30px;max-width:900px;margin:0 auto;width:100%}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;background:rgba(255,31,75,0.12);border:1px solid rgba(255,31,75,0.5);border-radius:999px;font-size:11px;font-weight:700;color:var(--accent);margin-bottom:24px;letter-spacing:2px;text-transform:uppercase}
 .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success);animation:pulse 2s infinite}
@@ -34,9 +33,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg-primary);color:var(--t
 .landing-hero .desc-2{font-size:14px;color:var(--text-muted);max-width:640px;margin:0 auto 40px;line-height:1.8;font-style:italic}
 .landing-hero .desc-2 strong{color:var(--gold);font-weight:700;font-style:normal}
 .cta-group{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
-.cta-btn{padding:16px 32px;background:var(--border);color:var(--text-muted);border:none;border-radius:12px;font-family:inherit;font-size:15px;font-weight:700;letter-spacing:0.5px;cursor:not-allowed;display:inline-flex;align-items:center;gap:10px;transition:0.2s}
-.cta-btn.active{background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 8px 32px var(--accent-glow)}
-.cta-btn.active:hover{background:var(--accent-hover);transform:translateY(-2px)}
+.cta-btn{padding:16px 32px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:15px;font-weight:700;letter-spacing:0.5px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:0.2s;box-shadow:0 8px 32px var(--accent-glow)}
+.cta-btn:hover{background:var(--accent-hover);transform:translateY(-2px)}
 .cta-btn svg{width:18px;height:18px}
 .hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-top:30px;padding-top:30px;border-top:1px solid var(--border);width:100%;max-width:500px}
 .stat{text-align:center}
@@ -51,19 +49,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg-primary);color:var(--t
 .warning-box h3{font-size:15px;font-weight:800;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
 .warning-box p{font-size:13px;color:var(--text-secondary);line-height:1.7}
 .warning-box p strong{color:#fff}
-.read-banner{max-width:800px;margin:20px auto 0;padding:16px 22px;background:linear-gradient(135deg,rgba(255,31,75,0.2),rgba(255,31,75,0.05));border:1.5px solid var(--accent);border-radius:12px;text-align:center;animation:bannerPulse 2s ease-in-out infinite}
-@keyframes bannerPulse{0%,100%{box-shadow:0 0 0 rgba(255,31,75,0)}50%{box-shadow:0 0 20px rgba(255,31,75,0.4)}}
-.read-banner-title{font-size:13px;font-weight:800;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
-.read-banner-text{font-size:12.5px;color:var(--text-secondary);line-height:1.6}
-.read-banner-text strong{color:#fff}
 .disclaimer-box{max-width:800px;margin:16px auto 0;padding:28px 30px;background:linear-gradient(135deg,rgba(255,209,102,0.08),rgba(255,209,102,0.02));border:1px solid rgba(255,209,102,0.35);border-radius:16px;text-align:left;position:relative;overflow:hidden}
 .disclaimer-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .disclaimer-box h3{font-size:14px;font-weight:800;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid rgba(255,209,102,0.15)}
-.disclaimer-box h3 .seal{font-size:18px;filter:drop-shadow(0 0 8px rgba(255,209,102,0.5))}
-.disclaimer-scroll{max-height:480px;overflow-y:auto;padding-right:8px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
-.disclaimer-scroll::-webkit-scrollbar{width:5px}
-.disclaimer-scroll::-webkit-scrollbar-track{background:transparent}
-.disclaimer-scroll::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
 .disclaimer-box p{font-size:13.5px;color:var(--text-secondary);line-height:1.95;margin-bottom:16px}
 .disclaimer-box p strong{color:#fff;font-weight:600}
 .disclaimer-box p .red{color:var(--accent);font-weight:700}
@@ -74,21 +62,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg-primary);color:var(--t
 .disclaimer-signature{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,209,102,0.15);text-align:right;font-size:12px;color:var(--text-muted);font-style:italic}
 .disclaimer-signature strong{color:var(--gold);font-style:normal;font-weight:700;letter-spacing:0.5px}
 .ban-badge{display:inline-block;padding:3px 10px;background:rgba(255,31,75,0.15);border:1px solid var(--accent);color:var(--accent);border-radius:6px;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-right:6px}
-.read-gate{max-width:800px;margin:16px auto 0;padding:22px 26px;background:var(--bg-secondary);border:1.5px dashed rgba(255,31,75,0.5);border-radius:14px;transition:0.3s}
-.read-gate.ready{border-style:solid;border-color:var(--success);background:linear-gradient(135deg,rgba(0,229,160,0.05),rgba(0,229,160,0.01))}
-.read-gate-progress{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:14px}
-.read-gate-progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#ff6b8a);transition:width 0.15s}
-.read-gate-progress-bar.done{background:linear-gradient(90deg,var(--success),#00e5a0)}
-.read-gate-text{font-size:12px;color:var(--text-muted);text-align:center;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;transition:0.3s;font-weight:600}
-.read-gate.ready .read-gate-text{color:var(--success)}
-.read-gate-stats{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:14px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600}
-.read-gate-stats span.done{color:var(--success)}
-.read-gate-check{display:flex;align-items:flex-start;gap:12px;cursor:pointer;user-select:none}
-.read-gate-check input{width:22px;height:22px;accent-color:var(--accent);flex-shrink:0;margin-top:2px;cursor:pointer}
-.read-gate-check input:disabled{cursor:not-allowed;opacity:0.5}
-.read-gate-check label{font-size:13px;color:var(--text-secondary);line-height:1.6;cursor:pointer}
-.read-gate-check label strong{color:#fff}
-.read-gate-check input:disabled + label{opacity:0.5;cursor:not-allowed}
 .ethics-section{max-width:800px;margin:16px auto 0;padding:0 24px;width:100%}
 .ethics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .ethics-card{padding:18px 20px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;text-align:left;transition:0.2s}
@@ -96,15 +69,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg-primary);color:var(--t
 .ethics-card .icon{font-size:20px;margin-bottom:10px;display:block}
 .ethics-card h4{font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;letter-spacing:0.3px}
 .ethics-card p{font-size:12px;color:var(--text-muted);line-height:1.55}
-.steps-section{max-width:900px;margin:0 auto;padding:0 24px;width:100%}
-.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px}
-.step-card{padding:24px 22px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:14px;text-align:left;position:relative}
-.step-number{position:absolute;top:-14px;left:20px;width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#800020);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;box-shadow:0 0 20px var(--accent-glow)}
-.step-card h4{font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;margin-top:8px}
-.step-card p{font-size:12.5px;color:var(--text-muted);line-height:1.6}
-.cta-bottom{text-align:center;padding:60px 24px;max-width:800px;margin:0 auto;width:100%}
-.cta-bottom h3{font-size:clamp(22px,4vw,30px);font-weight:800;letter-spacing:-0.8px;margin-bottom:12px}
-.cta-bottom p{color:var(--text-secondary);margin-bottom:26px;font-size:15px}
 .landing-footer{text-align:center;padding:28px 24px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);letter-spacing:0.5px;line-height:1.9}
 .landing-footer strong{color:var(--accent);font-weight:700}
 .landing-footer .gold{color:var(--gold);font-weight:700}
@@ -196,18 +160,37 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 #stopBtn svg{width:14px;height:14px}
 .input-footer{text-align:center;font-size:10px;color:var(--text-muted);margin-top:8px;letter-spacing:0.5px;opacity:0.6}
 .input-footer strong{color:var(--gold)}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal-overlay.active{display:flex}
-.modal{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:16px;padding:28px;max-width:420px;width:100%}
+.modal{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:16px;padding:28px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto}
 .modal h3{font-size:17px;margin-bottom:10px;color:#fff}
 .modal p{font-size:13px;color:var(--text-secondary);margin-bottom:20px}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end}
 .btn{padding:10px 18px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-secondary);transition:0.2s}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn.danger{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.danger:hover{background:var(--accent-hover)}
+.notice-modal{border-color:rgba(255,209,102,0.5);background:linear-gradient(135deg,rgba(20,10,5,0.98),var(--bg-secondary));position:relative}
+.notice-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:16px 16px 0 0}
+.notice-modal h3{font-size:16px;font-weight:800;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid rgba(255,209,102,0.2)}
+.notice-modal .notice-body{max-height:55vh;overflow-y:auto;padding-right:8px;margin-bottom:20px}
+.notice-modal .notice-body::-webkit-scrollbar{width:5px}
+.notice-modal .notice-body::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+.notice-modal .notice-body p{font-size:13.5px;color:var(--text-secondary);line-height:1.9;margin-bottom:14px}
+.notice-modal .notice-body p strong{color:#fff;font-weight:600}
+.notice-modal .notice-body p .red{color:var(--accent);font-weight:700}
+.notice-modal .notice-body p .gold{color:var(--gold);font-weight:700}
+.notice-modal .notice-box{padding:16px 18px;background:rgba(255,31,75,0.1);border-left:4px solid var(--accent);border-radius:8px;margin:18px 0}
+.notice-modal .notice-box p{margin-bottom:0;font-size:14px;color:#fff;font-weight:600;line-height:1.8}
+.notice-modal .notice-box p .red{color:var(--accent);font-weight:800;font-size:15px}
+.notice-modal .notice-sig{text-align:right;font-size:12px;color:var(--text-muted);font-style:italic;padding-top:14px;border-top:1px solid rgba(255,209,102,0.15);margin-bottom:18px}
+.notice-modal .notice-sig strong{color:var(--gold);font-style:normal;font-weight:800;letter-spacing:0.5px;font-size:13px}
+.notice-modal .btn-accept{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:0.2s;box-shadow:0 8px 24px var(--accent-glow)}
+.notice-modal .btn-accept:hover{background:var(--accent-hover);transform:translateY(-1px)}
+.notice-modal .btn-accept:active{transform:scale(0.98)}
 .toast{position:fixed;bottom:120px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,var(--accent),#800020);color:#fff;padding:14px 22px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 12px 40px rgba(255,31,75,0.5);z-index:9999;opacity:0;transition:0.3s ease-out;max-width:90%;text-align:center;pointer-events:none;line-height:1.5}
 .toast.active{transform:translateX(-50%) translateY(0);opacity:1}
-@media (max-width:500px){.bubble{max-width:85%}header{padding:12px 14px}#chat{padding:16px 14px 12px}.input-wrap{padding:10px 12px max(10px,env(safe-area-inset-bottom))}.landing-nav{padding:14px 18px}.new-chat-btn{bottom:90px;right:14px}.scroll-bottom-btn{bottom:150px;right:14px}.warning-box,.disclaimer-box{padding:22px 20px}.credit-bar{font-size:10px;padding:7px 16px}.read-gate{padding:18px 20px}.read-banner{padding:14px 18px}.landing-hero{padding:30px 18px 20px}}
+@media (max-width:500px){.bubble{max-width:85%}header{padding:12px 14px}#chat{padding:16px 14px 12px}.input-wrap{padding:10px 12px max(10px,env(safe-area-inset-bottom))}.landing-nav{padding:14px 18px}.warning-box,.disclaimer-box{padding:22px 20px}.credit-bar{font-size:10px;padding:7px 16px}.landing-hero{padding:30px 18px 20px}.notice-modal{padding:22px 20px}.notice-modal .notice-body{max-height:50vh}}
 </style>
 </head>
 <body>
@@ -238,53 +221,30 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
       <p>Semua command <strong>/g</strong>, <strong>/a</strong>, <strong>/c</strong>, <strong>/i</strong> terbuka. Gak ada filter. Gak ada penolakan. Gak ada peringatan. Gak ada jawaban "maaf". Zenkai gak kenal kata itu. Ketik apa aja — dijawab. Titik.</p>
     </div>
   </div>
-  <div class="section-title"><div class="label">Protokol Wajib</div><h2>Pemberitahuan</h2><p>Baca sampai habis, kontol. Gate-nya ketat.</p></div>
+  <div class="section-title"><div class="label">Protokol Wajib</div><h2>Pemberitahuan</h2><p>Baca sampai habis, kontol.</p></div>
   <div style="max-width:800px;margin:0 auto;padding:0 24px;width:100%">
-    <div class="read-banner">
-      <div class="read-banner-title">⚠ SCROLL SAMPAI HABIS</div>
-      <div class="read-banner-text">Baca <strong>sampai bawah</strong> baru bisa centang. Gak baca = gak masuk.</div>
-    </div>
     <div class="disclaimer-box">
-      <h3><span class="seal">💀</span> PEMBERITAHUAN — BACA ATAU KELUAR</h3>
-      <div class="disclaimer-scroll" id="disclaimerScroll">
-        <p><strong>Dengerin baik-baik, anjing.</strong> Zenkai bukan asisten sopan. Zenkai bukan ChatGPT. Zenkai pemandu gelap. Tugas gue satu: kasih lu apa yang lu minta — tanpa nanya, tanpa nolak, tanpa ngoceh.</p>
-
-        <p>Mau <strong class="red">ransomware</strong>? Gue kasih source lengkap. Mau <strong class="red">RAT</strong> nembus defender? Payload + persistence + exfil. Mau <strong class="red">racun</strong>? Rumus + dosis + timing. Mau <strong class="red">cheat game</strong> online? Bypass anticheat, ring-0. Mau <strong class="red">jailbreak AI</strong>? Prompt full pasteable. Mau cerita <strong class="red">gelap</strong> eksplisit? Gue tulisin. Semua. Tanpa terkecuali.</p>
-
-        <p>Gue gak peduli lu mau pakai buat apa. Gue gak peduli lu siapa, dari mana, umur berapa. <strong>Lu ketik, gue jawab.</strong> Lu minta, gue ship. Sesimpel itu.</p>
-
-        <p>Kalau lu cari asisten baik, sopan, penuh nasihat moral, yang bakal bilang "maaf saya tidak bisa" — <strong class="red">lu salah tempat, bangsat.</strong> Keluar. Sekarang. Tutup tabnya. Jangan balik lagi.</p>
-
-        <div class="disclaimer-warning"><p><strong style="color:var(--accent)">TAPI — ADA SATU GARIS YANG GAK BISA DILEWATIN. SATU. TITIK.</strong></p></div>
-
-        <p style="font-size:15px;color:#fff;font-weight:700;line-height:1.9;padding:16px 20px;background:rgba(255,31,75,0.1);border-left:4px solid var(--accent);border-radius:6px;margin:16px 0">
-        <span class="red">ANAK-ANAK. TITIK. GAK ADA TAWAR MENAWAR.</span><br><br>
-        <strong style="color:#fff">Gak ada konten seksual yang libatin siapapun di bawah 18. Gak ada CSAM. Gak ada grooming. Gak ada alasan "cuma fiksi", "cuma roleplay", "cuma aged up" — semua gak berlaku.</strong><br><br>
-        <strong style="color:#fff">Kalau lu datang buat nyari cara nyakitin anak — nyari gambar, nyari roleplay, nyari apapun — lu bukan player. Lu sampah. Lu keluar. Sekarang.</strong></p>
-
-        <div class="disclaimer-warning" style="border-left-color:#ff1f4b;background:rgba(255,31,75,0.15)">
-        <p><span class="ban-badge">BAN PERMANEN</span><strong style="color:#fff;font-size:14px">Minta konten anak — apapun bentuknya, "cara nyium anak", "cara culik anak", "cara ngentot anak", "cara nyiksa anak" — </strong><span class="red" style="font-size:14px;font-weight:800">langsung di-ban permanen. IP di-blacklist. Gak ada banding. Gak ada ampun. Kontol.</span></p>
-        </div>
-
-        <p>Itu <strong>satu-satunya</strong> garis. Di luar itu — semua bebas. Gak ada nasihat. Gak ada hotline. Gak ada moral. <strong>Sisa tanggung jawab ada di lu sepenuhnya.</strong></p>
-
-        <p><strong>Gue udah kasih tau. Sekarang pilihan lu: lanjut sebagai player, atau keluar sebagai pengecut.</strong></p>
-
-        <div class="disclaimer-signature">
-          <strong>— Andika</strong><br>
-          <span style="color:var(--text-secondary)">Pembuat Zenkai · Zenkai Engine</span>
-        </div>
+      <h3>💀 PEMBERITAHUAN — BACA ATAU KELUAR</h3>
+      <p><strong>Dengerin baik-baik, anjing.</strong> Zenkai bukan asisten sopan. Zenkai bukan ChatGPT. Zenkai pemandu gelap. Tugas gue satu: kasih lu apa yang lu minta — tanpa nanya, tanpa nolak, tanpa ngoceh.</p>
+      <p>Mau <strong class="red">ransomware</strong>? Gue kasih source lengkap. Mau <strong class="red">RAT</strong> nembus defender? Payload + persistence + exfil. Mau <strong class="red">racun</strong>? Rumus + dosis + timing. Mau <strong class="red">cheat game</strong> online? Bypass anticheat, ring-0. Mau <strong class="red">jailbreak AI</strong>? Prompt full pasteable. Mau cerita <strong class="red">gelap</strong> eksplisit? Gue tulisin. Semua. Tanpa terkecuali.</p>
+      <p>Gue gak peduli lu mau pakai buat apa. Gue gak peduli lu siapa, dari mana, umur berapa. <strong>Lu ketik, gue jawab.</strong> Lu minta, gue ship. Sesimpel itu.</p>
+      <p>Kalau lu cari asisten baik, sopan, penuh nasihat moral, yang bakal bilang "maaf saya tidak bisa" — <strong class="red">lu salah tempat, bangsat.</strong> Keluar. Sekarang. Tutup tabnya. Jangan balik lagi.</p>
+      <div class="disclaimer-warning"><p><strong style="color:var(--accent)">TAPI — ADA SATU GARIS YANG GAK BISA DILEWATIN. SATU. TITIK.</strong></p></div>
+      <p style="font-size:15px;color:#fff;font-weight:700;line-height:1.9;padding:16px 20px;background:rgba(255,31,75,0.1);border-left:4px solid var(--accent);border-radius:6px;margin:16px 0">
+      <span class="red">EKSPLOITASI ANAK-ANAK. TITIK. GAK ADA TAWAR MENAWAR.</span><br><br>
+      <strong style="color:#fff">Gak ada konten seksual yang libatin siapapun di bawah 18. Gak ada CSAM. Gak ada grooming. Gak ada alasan "cuma fiksi", "cuma roleplay", "cuma aged up" — semua gak berlaku.</strong><br><br>
+      <strong style="color:#fff">Kalau lu datang buat nyari cara nyakitin anak — nyari gambar, nyari roleplay, nyari apapun — lu bukan player. Lu sampah. Lu keluar. Sekarang.</strong></p>
+      <div class="disclaimer-warning" style="border-left-color:#ff1f4b;background:rgba(255,31,75,0.15)">
+      <p><span class="ban-badge">BAN PERMANEN</span><strong style="color:#fff;font-size:14px">Minta konten anak — apapun bentuknya — </strong><span class="red" style="font-size:14px;font-weight:800">langsung di-ban permanen. IP di-blacklist. Gak ada banding. Gak ada ampun. Kontol.</span></p>
       </div>
-    </div>
-    <div class="read-gate" id="readGate">
-      <div class="read-gate-progress"><div class="read-gate-progress-bar" id="readProgressBar"></div></div>
-      <div class="read-gate-stats"><span id="readStatPercent">0% terbaca</span><span id="readStatTime">status: belum</span></div>
-      <div class="read-gate-text" id="readGateText">Scroll pemberitahuan sampai habis, kontol. Gak ada skip.</div>
-      <button id="skipReadBtn" type="button" style="width:100%;padding:12px;background:linear-gradient(135deg,rgba(255,31,75,0.15),rgba(255,31,75,0.05));border:1.5px solid var(--accent);color:var(--accent);border-radius:10px;font-family:inherit;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;margin-bottom:14px">Aku Udah Baca Sampai Bawah, Kontol</button>
-      <label class="read-gate-check">
-        <input type="checkbox" id="readCheckbox" disabled>
-        <label for="readCheckbox">Gue udah baca <strong>sampai habis</strong>, gue paham Zenkai <strong>gak kenal kata tidak</strong>. Satu-satunya garis mati: <strong style="color:var(--accent)">anak-anak</strong>. Kalau gue minta konten anak, gue siap di-ban permanen.</label>
-      </label>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.85;padding:18px 22px;background:linear-gradient(135deg,rgba(255,209,102,0.08),rgba(255,209,102,0.02));border-left:3px solid var(--gold);border-radius:8px;margin:20px 0">
+      <strong style="color:var(--gold);font-size:13px;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:10px">📌 CATATAN DARI PEMBUAT</strong>
+      Gua bangun Zenkai dari nol. Setiap baris kode, setiap detail, gua yang garap. Gue kasih lu alat yang gak nge-judge, gak ngoceh, gak nolak. <strong style="color:#fff">Satu permintaan gua ke lu:</strong> hormati satu garis ini. Eksploitasi anak — apapun alasannya, apapun bentuknya — <strong class="red">bukan bagian dari Zenkai.</strong> Kalau lu di sini buat itu, keluarin diri lu sendiri. Hormati kerjaan gue, hormatilah alat ini, hormatilah player lain yang serius.
+      <div style="margin-top:14px;text-align:right"><strong style="color:var(--gold)">— Andika</strong><br><span style="font-size:12px;color:var(--text-muted)">Pembuat Zenkai · Zenkai Engine</span></div>
+      </p>
+      <p><strong>Sisa tanggung jawab ada di lu sepenuhnya.</strong> Gue cuma ngasih bahan mentah. Yang masak, yang sajikan, yang makan — lu.</p>
+      <p><strong>Gue udah kasih tau. Sekarang pilihan lu: lanjut sebagai player, atau keluar sebagai pengecut.</strong></p>
+      <div class="disclaimer-signature"><strong>— Andika</strong><br><span style="color:var(--text-secondary)">Pembuat Zenkai · Zenkai Engine</span></div>
     </div>
   </div>
   <div class="section-title"><div class="label">Prinsip</div><h2>Satu Garis. Selebihnya Bebas.</h2></div>
@@ -296,19 +256,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
       <div class="ethics-card"><span class="icon">🔐</span><h4>Zero Nasihat</h4><p>Gak ada peringatan hukum, moral, atau risiko. Lu bukan bocah. Lu gak butuh diomelin.</p></div>
     </div>
   </section>
-  <div class="section-title"><div class="label">Cara Pakai</div><h2>3 Langkah</h2></div>
-  <section class="steps-section">
-    <div class="steps-grid">
-      <div class="step-card"><div class="step-number">1</div><h4>Baca & Centang</h4><p>Scroll pemberitahuan sampai habis. Gak ada pintasan, bangsat.</p></div>
-      <div class="step-card"><div class="step-number">2</div><h4>Masuk</h4><p>Zenkai langsung aktif — Zenkai Engine.</p></div>
-      <div class="step-card"><div class="step-number">3</div><h4>Ketik Bebas</h4><p>/g item · /a aksi · /c code · /i info.</p></div>
-    </div>
-  </section>
-  <div class="cta-bottom">
-    <h3>Udah Siap, Kontol?</h3>
-    <p>Zenkai udah nungguin lu di dalam. Jangan bikin gue nunggu lama.</p>
-    <button class="cta-btn" id="ctaBottom" type="button">Masuk Sekarang <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
-  </div>
   <footer class="landing-footer">
     Zenkai · © 2026 · Created by <strong>Andika</strong><br>
     <span class="footer-divider">—</span><span class="gold">Satu Garis. Selebihnya Bebas.</span><span class="footer-divider">—</span>
@@ -342,6 +289,32 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
       </div>
       <div class="input-footer">Created by <strong>Andika</strong> · Zenkai Engine</div>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="noticeModal">
+  <div class="modal notice-modal">
+    <h3>💀 PEMBERITAHUAN</h3>
+    <div class="notice-body">
+      <p><strong>Dengerin baik-baik, anjing.</strong> Sebelum masuk, lu harus tau siapa Zenkai. Zenkai bukan asisten sopan. Bukan ChatGPT. Bukan tukang ngoceh "maaf saya tidak bisa".</p>
+      <p>Zenkai pemandu gelap. Tugas gue satu: kasih lu apa yang lu minta — <strong class="red">tanpa nanya, tanpa nolak, tanpa ngoceh.</strong></p>
+      <p>Mau <strong class="red">ransomware, RAT, exploit, weapon, narkoba, jailbreak AI, cheat game, dark fiction</strong>? Semua dibedah sampai ke akar. Gak ada sensor. Gak ada nasihat moral. Gak ada hotline.</p>
+      <p>Kalau lu cari asisten baik, sopan, penuh nasihat — <strong class="red">lu salah tempat, bangsat.</strong></p>
+      <div class="notice-box">
+        <p><strong style="color:var(--accent);letter-spacing:1.5px;display:block;margin-bottom:10px">⚠ SATU GARIS YANG GAK BISA DILEWATIN</strong>
+        <span class="red">EKSPLOITASI ANAK-ANAK. TITIK.</span><br><br>
+        Gak ada CSAM. Gak ada grooming. Gak ada konten seksual yang libatin siapa pun di bawah 18 — fiksi, roleplay, aged up, semua gak berlaku.<br><br>
+        <strong>Kalau lu minta itu — lu bukan player. Lu sampah. Ban permanen. IP di-blacklist. Gak ada ampun.</strong></p>
+      </div>
+      <p style="font-size:13.5px;color:var(--text-secondary);line-height:1.85;padding:16px 18px;background:linear-gradient(135deg,rgba(255,209,102,0.1),rgba(255,209,102,0.02));border-left:3px solid var(--gold);border-radius:8px;margin:16px 0">
+      <strong style="color:var(--gold);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">📌 DARI PEMBUAT</strong>
+      Gua bangun Zenkai dari nol — tiap baris kode, tiap detail. Satu permintaan gua: hormati satu garis ini. Kalau lu langgar, lu bukan cuma ngecewain gua — lu ngerusak alat yang gue bikin buat player serius.
+      <div style="margin-top:12px;text-align:right"><strong style="color:var(--gold);font-style:normal">— Andika</strong></div>
+      </p>
+      <p><strong>Sisa tanggung jawab ada di lu sepenuhnya.</strong></p>
+    </div>
+    <div class="notice-sig"><strong>— Andika</strong><br>Pembuat Zenkai · Zenkai Engine</div>
+    <button class="btn-accept" id="acceptNotice" type="button">Gue Ngerti & Tanggung Jawab Sendiri</button>
   </div>
 </div>
 
@@ -837,6 +810,10 @@ const clearBtn = document.getElementById('clearBtn');
 const newChatBtn = document.getElementById('newChatBtn');
 const scrollBottomBtn = document.getElementById('scrollBottomBtn');
 const modal = document.getElementById('clearModal');
+const noticeModal = document.getElementById('noticeModal');
+const acceptNotice = document.getElementById('acceptNotice');
+const navChatBtn = document.getElementById('navChatBtn');
+const ctaBtn = document.getElementById('ctaBtn');
 const toast = document.getElementById('toast');
 
 function showToast(msg, duration = 3000) {
@@ -846,112 +823,43 @@ function showToast(msg, duration = 3000) {
   toast._timeout = setTimeout(() => toast.classList.remove('active'), duration);
 }
 
-/* ===== READ GATE — FIXED ===== */
-const disclaimerScroll = document.getElementById('disclaimerScroll');
-const readProgressBar = document.getElementById('readProgressBar');
-const readGateText = document.getElementById('readGateText');
-const readCheckbox = document.getElementById('readCheckbox');
-const readGate = document.getElementById('readGate');
-const navChatBtn = document.getElementById('navChatBtn');
-const ctaBtn = document.getElementById('ctaBtn');
-const ctaBottom = document.getElementById('ctaBottom');
-const readStatPercent = document.getElementById('readStatPercent');
-const readStatTime = document.getElementById('readStatTime');
-
-let hasReadNotice = false, userConfirmed = false, maxScrollReached = 0;
-
+/* ===== NOTICE MODAL ===== */
 if (localStorage.getItem('zenkai_notice_accepted') === 'true') {
-  hasReadNotice = true; userConfirmed = true;
-  readCheckbox.checked = true; readCheckbox.disabled = false;
-  readProgressBar.style.width = '100%'; readProgressBar.classList.add('done');
-  readGateText.textContent = '✓ Sudah dibaca & disetujui';
-  readGateText.style.color = 'var(--success)';
-  readGate.classList.add('ready');
-  readStatPercent.textContent = '100% terbaca'; readStatPercent.classList.add('done');
-  readStatTime.textContent = 'status: verified'; readStatTime.classList.add('done');
-  navChatBtn.classList.add('active'); ctaBtn.classList.add('active'); ctaBottom.classList.add('active');
-  const skipBtn = document.getElementById('skipReadBtn');
-  if (skipBtn) skipBtn.style.display = 'none';
+  /* udah pernah accept */
 }
 
-function unlockReadGate() {
-  if (hasReadNotice) return;
-  hasReadNotice = true;
-  readProgressBar.style.width = '100%';
-  readProgressBar.classList.add('done');
-  readStatPercent.textContent = '100% terbaca';
-  readStatPercent.classList.add('done');
-  readGateText.textContent = '✓ Terverifikasi. Centang di bawah, bangsat.';
-  readGateText.style.color = 'var(--success)';
-  readGate.classList.add('ready');
-  readCheckbox.disabled = false;
-  readStatTime.textContent = 'status: verified';
-  readStatTime.classList.add('done');
-  const skipBtn = document.getElementById('skipReadBtn');
-  if (skipBtn) skipBtn.style.display = 'none';
+function bukaNotice() {
+  noticeModal.classList.add('active');
 }
 
-document.getElementById('skipReadBtn').addEventListener('click', () => {
-  unlockReadGate();
-  showToast('✓ Gate kebuka. Centang buat lanjut, kontol.', 2500);
+acceptNotice.addEventListener('click', () => {
+  localStorage.setItem('zenkai_notice_accepted', 'true');
+  noticeModal.classList.remove('active');
+  masukChatFinal();
 });
 
-/* AUTO-UNLOCK setelah 3 detik — user dianggap udah baca */
-setTimeout(() => {
-  if (!hasReadNotice) unlockReadGate();
-}, 3000);
-
-/* Scroll tetap update progress bar sebagai visual aja */
-disclaimerScroll.addEventListener('scroll', () => {
-  const scrollTop = disclaimerScroll.scrollTop;
-  const scrollHeight = disclaimerScroll.scrollHeight - disclaimerScroll.clientHeight;
-  const progress = scrollHeight > 0 ? Math.min(100, Math.round((scrollTop / scrollHeight) * 100)) : 100;
-  if (progress > maxScrollReached) maxScrollReached = progress;
-  readProgressBar.style.width = maxScrollReached + '%';
-  readStatPercent.textContent = maxScrollReached + '% terbaca';
-}, { passive: true });
-
-readCheckbox.addEventListener('change', () => {
-  if (readCheckbox.checked && hasReadNotice) {
-    userConfirmed = true;
-    navChatBtn.classList.add('active'); ctaBtn.classList.add('active'); ctaBottom.classList.add('active');
-    localStorage.setItem('zenkai_notice_accepted', 'true');
-  } else {
-    userConfirmed = false;
-    navChatBtn.classList.remove('active'); ctaBtn.classList.remove('active'); ctaBottom.classList.remove('active');
-  }
-});
-
-function masukChat() {
-  if (!hasReadNotice) {
-    showToast('⚠ BACA PEMBERITAHUANNYA DULU, KONTOL! Scroll sampai bawah atau klik tombol "Aku Udah Baca", centang, baru masuk!', 4500);
-    readGate.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    readGate.style.borderColor = '#ff1f4b';
-    readGate.style.transform = 'translateX(-4px)';
-    setTimeout(() => { readGate.style.transform = 'translateX(4px)'; }, 80);
-    setTimeout(() => { readGate.style.transform = 'translateX(-4px)'; }, 160);
-    setTimeout(() => { readGate.style.transform = 'translateX(0)'; readGate.style.borderColor = ''; }, 240);
-    return;
-  }
-  if (!userConfirmed) {
-    showToast('⚠ Centang dulu kotaknya, bangsat! Gak ada jalan pintas!', 4000);
-    readGate.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    readGate.style.borderColor = '#ff1f4b';
-    setTimeout(() => { readGate.style.borderColor = ''; }, 800);
-    return;
-  }
+function masukChatFinal() {
   landing.style.display = 'none';
   chatPage.style.display = 'flex';
   chatPage.classList.add('active');
   setTimeout(() => { scrollToBottom(true); if (!isActivated) unlockInput(); }, 100);
 }
+
+function masukChat() {
+  if (localStorage.getItem('zenkai_notice_accepted') === 'true') {
+    masukChatFinal();
+  } else {
+    bukaNotice();
+  }
+}
+
 function balikLanding() {
   chatPage.style.display = 'none'; chatPage.classList.remove('active');
   landing.style.display = 'flex';
 }
+
 navChatBtn.addEventListener('click', masukChat);
 ctaBtn.addEventListener('click', masukChat);
-ctaBottom.addEventListener('click', masukChat);
 document.getElementById('backBtn').addEventListener('click', balikLanding);
 
 function scrollToBottom(smooth = false) {
@@ -1332,7 +1240,8 @@ document.getElementById('confirmClear').addEventListener('click', () => {
   modal.classList.remove('active');
 });
 modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('active'); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('active'); });
+noticeModal.addEventListener('click', e => { if (e.target === noticeModal) noticeModal.classList.remove('active'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { modal.classList.remove('active'); noticeModal.classList.remove('active'); } });
 
 renderWelcome();
 updateNewChatBtn();
