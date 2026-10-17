@@ -57,7 +57,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg-primary);color:var(--t
 .landing-footer .footer-divider{display:inline-block;margin:0 8px;opacity:0.4}
 .landing-footer .footer-links{margin-top:8px;font-size:10px;opacity:0.6}
 
-/* ============ CHAT PAGE ============ */
 #chatPage{position:fixed;inset:0;z-index:5;display:none;flex-direction:column;height:100dvh;max-height:100dvh}
 #chatPage.active{display:flex}
 .app{height:100%;display:flex;flex-direction:column;max-width:900px;margin:0 auto;width:100%;overflow:hidden;position:relative;background:var(--bg-primary)}
@@ -89,7 +88,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .chip{padding:9px 15px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:999px;font-size:12.5px;color:var(--text-secondary);cursor:pointer;transition:0.2s;font-family:inherit}
 .chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);transform:translateY(-1px)}
 
-/* ============ MESSAGES ============ */
 .msg-row{display:flex;margin:20px 0;animation:slideUp 0.25s ease-out;min-width:0;max-width:100%;position:relative}
 @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .msg-row.user{justify-content:flex-end}
@@ -113,15 +111,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .action-btn svg{width:12px;height:12px}
 .msg-row.user .msg-actions{opacity:1;margin-right:44px;margin-top:4px;justify-content:flex-end}
 
-/* attachment preview inside bubble */
-.attach-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-.attach-thumb{width:100px;height:100px;border-radius:10px;overflow:hidden;border:1px solid var(--border-light);background:var(--bg-tertiary);position:relative;flex-shrink:0}
-.attach-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.attach-file{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.2);border:1px solid var(--border-light);border-radius:10px;font-size:12px;color:var(--text-secondary);max-width:100%}
-.attach-file .ficon{font-size:16px;flex-shrink:0}
-.attach-file .fname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px}
-
-/* markdown */
 .bubble code{font-family:'JetBrains Mono',monospace;font-size:13px;background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:5px;color:#ff8da6}
 .msg-row.user .bubble code{background:rgba(0,0,0,0.25);color:#fff}
 [data-theme="light"] .bubble code {background:rgba(0,0,0,0.06);color:#c9184a;}
@@ -158,7 +147,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .md-h.h2{font-size:15.5px;color:var(--gold)}
 .md-h.h3{font-size:14.5px;color:var(--accent)}
 
-/* ============ INPUT ============ */
 .new-chat-btn{position:fixed;bottom:110px;right:20px;width:48px;height:48px;border-radius:14px;background:var(--bg-elevated);border:1px solid var(--border-strong);color:var(--text-secondary);display:none;align-items:center;justify-content:center;cursor:pointer;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,0.5);transition:0.2s}
 .new-chat-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 .new-chat-btn.active{display:flex}
@@ -185,7 +173,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .input-footer{text-align:center;font-size:10px;color:var(--text-muted);margin-top:9px;letter-spacing:0.5px;opacity:0.55}
 .input-footer strong{color:var(--gold)}
 
-/* ============ SIDEBAR ============ */
 .sidebar{position:fixed;top:0;left:-280px;width:280px;height:100%;background:var(--bg-secondary);border-right:1px solid var(--border);z-index:200;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column}
 .sidebar.open{transform:translateX(280px)}
 .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:150;display:none;opacity:0;transition:opacity 0.3s}
@@ -204,7 +191,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .sidebar-item .del-btn:hover{background:rgba(255,31,75,0.2);color:var(--accent)}
 .sidebar-item .del-btn svg{width:12px;height:12px}
 
-/* ============ MODALS ============ */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:none;align-items:center;justify-content:center;z-index:300;padding:20px}
 .modal-overlay.active{display:flex}
 .modal{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:16px;padding:28px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto}
@@ -238,7 +224,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .toast{position:fixed;bottom:130px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,var(--accent),#800020);color:#fff;padding:14px 22px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 12px 40px rgba(255,31,75,0.5);z-index:9999;opacity:0;transition:0.3s ease-out;max-width:90%;text-align:center;pointer-events:none;line-height:1.5}
 .toast.active{transform:translateX(-50%) translateY(0);opacity:1}
 
-/* Math/KaTeX tweaks */
 .katex { font-size: 1.1em !important; }
 
 @media (max-width:500px){
@@ -253,6 +238,4 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
   .notice-modal{padding:22px 20px}
   .notice-modal .notice-body{max-height:50vh}
   .code-block pre{font-size:11.5px;padding:12px}
-  .attach-item{max-width:180px}
-  .attach-item .aname{max-width:100px}
 }
