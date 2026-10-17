@@ -48,7 +48,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg-primary);color:var(--t
 .ethics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .ethics-card{padding:18px 20px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;text-align:left;transition:0.2s}
 .ethics-card:hover{border-color:rgba(255,209,102,0.3)}
-.ethics-card .icon{font-size:20px;margin-bottom:10px;display:block}
 .ethics-card h4{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
 .ethics-card p{font-size:12px;color:var(--text-muted);line-height:1.55}
 .landing-footer{text-align:center;padding:28px 24px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);line-height:1.9}
@@ -96,13 +95,14 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .avatar.ai{background:linear-gradient(135deg,var(--accent),#800020);color:#fff;margin-right:12px;box-shadow:0 2px 12px var(--accent-glow)}
 .avatar.user-av{background:var(--bg-elevated);color:var(--text-secondary);margin-left:12px;border:1px solid var(--border-light)}
 
-.bubble{max-width:80%;padding:14px 18px;border-radius:16px;font-size:14.5px;line-height:1.7;word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;position:relative;min-width:0;overflow:hidden}
+.bubble{max-width:80%;padding:14px 18px;border-radius:16px;font-size:14.5px;line-height:1.6;word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;position:relative;min-width:0;overflow:hidden}
 .msg-row.user .bubble{background:linear-gradient(135deg,var(--accent),#cc1940);color:#fff;border:none;border-bottom-right-radius:5px;box-shadow:0 4px 16px rgba(255,31,75,0.2)}
 [data-theme="light"] .msg-row.user .bubble {background:var(--accent);box-shadow:none;}
-.msg-row.ai .bubble{background:var(--bg-secondary);border:1px solid var(--border);border-bottom-left-radius:5px;white-space:pre-wrap}
+.msg-row.ai .bubble{background:var(--bg-secondary);border:1px solid var(--border);border-bottom-left-radius:5px}
 
-.msg-row.ai .bubble p { margin-bottom: 10px; }
-.msg-row.ai .bubble p:last-child { margin-bottom: 0; }
+/* Jarak antar paragraf / baris baru */
+.msg-row.ai .bubble br { display: block; content: ""; margin-top: 8px; }
+.msg-row.ai .bubble p { margin-bottom: 8px; }
 
 .msg-actions{display:flex;gap:8px;margin-top:8px;opacity:0;transition:0.2s;justify-content:flex-end}
 .msg-row:hover .msg-actions{opacity:1}
