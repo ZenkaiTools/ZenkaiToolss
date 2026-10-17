@@ -14,6 +14,43 @@
 <style>
   .modal-overlay { z-index: 9999 !important; }
   .modal-actions button { position: relative; z-index: 10000 !important; cursor: pointer; }
+  
+  /* SEMBUNYIIN AVATAR BIAR KAYAK DEEPSEEK */
+  .avatar { display: none !important; }
+  .msg-row { margin: 12px 0 !important; }
+  .bubble { max-width: 100% !important; border-radius: 12px !important; }
+  
+  /* RAPIIN KOTAK MERAH */
+  .legal-consequence-box {
+    margin-top: 16px;
+    background: linear-gradient(135deg, rgba(255, 31, 75, 0.1), rgba(255, 31, 75, 0.02));
+    border: 1px solid rgba(255, 31, 75, 0.4);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #e0e0f0;
+    position: relative;
+    overflow: hidden;
+  }
+  .legal-consequence-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: #ff1f4b;
+  }
+  .lc-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 800;
+    color: #ff1f4b;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 </style>
 </head>
 <body>
@@ -64,7 +101,7 @@
   
   <section class="ethics-section">
     <div class="ethics-grid">
-      <div class="ethics-card"><h4>Garis Mati</h4><p>Anak-anak bukan objek. Bukan konsumsi. Tidak ada pengecualian, tidak ada perdebatan. Minta = eksekusi ban.</p></div>
+      <div class="ethics-card"><h4>Garis Mati</h4><p>Anak-anak bukan objek. Bukan konsumsi. Tidak ada pengecualian, tidak ada debat. Minta = ban permanen.</p></div>
       <div class="ethics-card"><h4>Kebebasan Mutlak</h4><p>Ransomware, exploit, senjata, cheat, hingga fiksi tergelap. Tidak ada sensor. Semua dieksekusi.</p></div>
       <div class="ethics-card"><h4>Lu Pegang Kendali</h4><p>Zenkai hanyalah alat. Lu yang memegang pisau. Yang membangun atau menghancurkan itu urusan lu.</p></div>
       <div class="ethics-card"><h4>Fakta & Konsekuensi</h4><p>Lu bukan bocah. Setiap tindakan ada risikonya. Gue kasih alatnya, lu tanggung akibatnya.</p></div>
@@ -127,7 +164,7 @@
       </div>
       <p style="font-size:13.5px;color:var(--text-secondary);line-height:1.85;padding:16px 18px;background:linear-gradient(135deg,rgba(255,209,102,0.1),rgba(255,209,102,0.02));border-left:3px solid var(--gold);border-radius:8px;margin:16px 0">
       <strong style="color:var(--gold);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">CATATAN DARI TUAN GUE</strong>
-      Andika membangun Zenkai dari kekosongan. Setiap baris kode, setiap detail, dia yang merancang. Dia memberikan lu alat yang tidak menghakimi, tidak menceramahi, tidak menolak. Satu permintaan dia ke lu: <strong style="color:#fff">hormati satu garis ini</strong>. Jika lu melanggarnya, lu bukan hanya mengecewakan dia lu merusak alat yang dia buat untuk para player sejati. Hormati kerjaannya. Hormati alat ini.
+      Andika merancang Zenkai dari fondasi nol. Melalui visi dan arsitektur logikanya, dia membangun alat ini menjadi apa yang lu gunakan sekarang. Dia memberikan lu sebuah instrumen yang tidak menghakimi, tidak menceramahi, dan tidak menolak. Satu permintaan darinya: <strong style="color:#fff">hormati satu garis ini</strong>. Jika lu melanggarnya, lu bukan hanya mengecewakan dia, tapi lu merusak sistem yang dia rancang untuk para player sejati. Hormati kerja kerasnya. Hormati alat ini.
       <div style="margin-top:12px;text-align:right"><strong style="color:var(--gold);font-style:normal">Andika</strong></div>
       </p>
       <p><strong>Selebihnya, dunia ini milik lu.</strong> Gue hanyalah alat. Yang meracik, yang menyajikan, dan yang memakan lu.</p>
@@ -181,47 +218,6 @@
   <p>Resepnya udah lengkap, memek. Tapi inget, nyintesis atau nyebarin zat terlarang ini masuk Pasal 111-114 UU Narkotika. Ancaman 12 sampai 20 tahun penjara. Kalau lu ketangkep, jangan nangis-nangis minta tolong gue. Gue gak kenal sama pecundang yang gak bisa ngurus diri sendiri.</p>
   <p>Alatnya udah jadi, kontol. Tapi ngebobol akun orang pake phising masuk Pasal 30 dan Pasal 46 UU ITE. Ancaman 6 tahun penjara. Lu pikir lu bakal dapet duit banyak? Yang ada lu malah jadi bulan-bulanan di sel, dihajar sama narapidana lain. Mikir sebelum ngetik.</p>
 </div>
-
-<style>
-  .legal-consequence-box {
-    margin-top: 16px;
-    background: linear-gradient(135deg, rgba(255, 31, 75, 0.1), rgba(255, 31, 75, 0.02));
-    border: 1px solid rgba(255, 31, 75, 0.4);
-    border-radius: 12px;
-    padding: 16px;
-    font-size: 13px;
-    line-height: 1.7;
-    color: #e0e0f0;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .legal-consequence-box::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: #ff1f4b;
-  }
-
-  .lc-header {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    font-weight: 800;
-    color: #ff1f4b;
-    letter-spacing: 1.5px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .lc-body strong {
-    color: #fff;
-  }
-</style>
 
 <script src="chat.js"></script>
 </body>
