@@ -11,6 +11,11 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="chat.css">
+<style>
+  /* Paksa tombol modal di atas segalanya biar bisa diklik */
+  .modal-overlay { z-index: 9999 !important; }
+  .modal-actions button { position: relative; z-index: 10000 !important; cursor: pointer; }
+</style>
 </head>
 <body>
 
@@ -156,6 +161,7 @@
   </div>
 </div>
 
+<!-- MODAL BAN (TOMBOL KELUAR UDAH DIBENERIN) -->
 <div class="modal-overlay" id="banModal">
   <div class="modal" style="border-color:#ff1f4b;background:linear-gradient(135deg,#1a0008,#0d0d14)">
     <h3 style="color:#ff1f4b;font-size:20px;letter-spacing:2px">AKSES DICABUT PERMANEN</h3>
@@ -165,7 +171,7 @@
       <strong style="color:#ff1f4b">Lu bukan player di sini. Lu cuma sampah yang harus dibersihin. IP lu udah gue catat, jejak digital lu gak bakal ilang. Gak ada banding. Gak ada ampun. Keluar, dan jangan pernah balik lagi.</strong>
     </p>
     <div class="modal-actions">
-      <button class="btn danger" id="banOk" type="button" style="width:100%">KELUAR</button>
+      <button class="btn danger" id="banOk" type="button" style="width:100%; padding: 15px; font-size: 16px;">KELUAR</button>
     </div>
   </div>
 </div>
