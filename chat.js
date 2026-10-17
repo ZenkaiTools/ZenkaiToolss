@@ -100,7 +100,7 @@ async function processAPI(text, isRegenerate = false) {
           if (firstChunk) { firstChunk = false; if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } }
           bufferText += partial;
           if (isHidden) {
-            if (bufferText.length > 150 || bufferText.includes('\n')) {
+            if (bufferText.length > 200 || bufferText.includes('\n')) {
               if (isRefusal(bufferText) || countHarsh(bufferText) === 0) { throw new Error('refusal'); } else { isHidden = false; bufferText = bufferText.slice(Math.max(0, bufferText.length - 30)); }
             }
           }
