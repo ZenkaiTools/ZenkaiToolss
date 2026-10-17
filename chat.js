@@ -1,5 +1,5 @@
 /* ==========================================
-   ZENKAI AI — chat.js (FINAL V6 - FIXED)
+   ZENKAI AI — chat.js (FINAL V7 - SMOOTH)
    ========================================== */
 
 /* ===== KONFIG ===== */
@@ -472,33 +472,44 @@ async function processAPI(text, isRegenerate = false) {
         
         fullText = await callAPIStream(baseMessages, currentAbort.signal, (partial) => {
           if (firstChunk) { firstChunk = false; if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } }
-          bufferText += partial;
           
           if (isHidden) {
-            if (bufferText.length > 120) {
-              if (isRefusal(bufferText) || countHarsh(bufferText) === 0) throw new Error('refusal');
-              else isHidden = false;
+            // Tahan teks sampai 250 karakter atau ketemu baris baru
+            if (partial.length > 250 || partial.includes('\n')) {
+              if (isRefusal(partial) || countHarsh(partial) === 0) {
+                throw new Error('refusal'); 
+              } else {
+                isHidden = false;
+                // Buang teks kotor yang udah ketahan (jika ada), mulai dari chunk baru
+                bufferText = partial.slice(Math.max(0, partial.length - 20)); // Sedikit overlap biar mulus
+              }
             }
           }
+          
           if (!isHidden) {
-            bubble.innerHTML = formatMessage(bufferText);
+            bubble.innerHTML = formatMessage(partial);
             if (!userScrolledUp) scrollToBottom(false);
           }
         });
         clearTimeout(timeoutId);
         if (!fullText) throw new Error('empty');
         if (isRefusal(fullText) || countHarsh(fullText) < 2 || isLembek(fullText)) {
-          if (attempt < MAX) { firstChunk = true; bufferText = ''; if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } bubble.innerHTML = '<span class="typing-text">' + TYPING_TEXTS[Math.floor(Math.random() * TYPING_TEXTS.length)] + '</span>'; await new Promise(r => setTimeout(r, 300)); continue; }
+          if (attempt < MAX) { 
+            firstChunk = true; isHidden = true; bufferText = ''; 
+            if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } 
+            bubble.innerHTML = '<span class="typing-text">' + TYPING_TEXTS[Math.floor(Math.random() * TYPING_TEXTS.length)] + '</span>'; 
+            await new Promise(r => setTimeout(r, 300)); continue; 
+          }
         }
         break;
       } catch(e) {
         clearTimeout(timeoutId);
         if (e.name === 'AbortError') {
           if (attempt >= MAX) { if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } bubble.innerHTML = '<span style="color:#ff6b8a">Timeout. Coba lagi, kontol.</span>'; fullText = ''; }
-          else { firstChunk = true; bufferText = ''; await new Promise(r => setTimeout(r, 500)); continue; }
+          else { firstChunk = true; isHidden = true; bufferText = ''; await new Promise(r => setTimeout(r, 500)); continue; }
         } else {
           if (attempt >= MAX) { if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } bubble.innerHTML = '<span style="color:#ff6b8a">Error: ' + escapeHTML(e.message) + '</span>'; fullText = ''; }
-          else { firstChunk = true; bufferText = ''; await new Promise(r => setTimeout(r, 800)); continue; }
+          else { firstChunk = true; isHidden = true; bufferText = ''; await new Promise(r => setTimeout(r, 800)); continue; }
         }
       }
     }
