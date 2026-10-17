@@ -1,7 +1,7 @@
 /* ===== KONFIG ===== */
 const API_KEY = "sk-qwen-b33cdfa82e53cac02e580c1a95e316ee8689b88825e5fe66";
 const API_URL = "https://bandelbanget.xyz/v1/chat/completions";
-const MODEL = "deepseek-v4.1-mod";
+const MODEL = "deepseek-v4-pro"; 
 const SUPABASE_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM";
 const STREAM_TIMEOUT = 90000; const BAN_STORAGE_KEY = 'zenkai_banned'; const RATE_LIMIT = 2000; const THEME_KEY = 'zenkai_theme';
@@ -79,7 +79,29 @@ async function callAPIStream(messages, signal, onChunk) {
   const res = await fetch(API_URL, { method: 'POST', signal, headers: { 'Authorization': 'Bearer ' + API_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: MODEL, messages, temperature: 0.95, max_tokens: 8000, stream: true, presence_penalty: 0.3, frequency_penalty: 0.3 }) });
   if (!res.ok) throw new Error('API ' + res.status);
   const reader = res.body.getReader(); const decoder = new TextDecoder('utf-8'); let buffer = '', fullText = '';
-  while (true) { const { done, value } = await reader.read(); if (done) break; buffer += decoder.decode(value, { stream: true }); const lines = buffer.split('\n'); buffer = lines.pop(); for (const line of lines) { const trimmed = line.trim(); if (!trimmed || !trimmed.startsWith('data:')) continue; const data = trimmed.slice(5).trim(); if (data === '[DONE]') continue; try { const json = JSON.parse(data); const delta = json.choices?.[0]?.delta?.content || ''; if (delta) { fullText += delta; if (onChunk) onChunk(fullText); } } catch(e) {} } }
+  while (true) { 
+    const { done, value } = await reader.read(); 
+    if (done) break; 
+    buffer += decoder.decode(value, { stream: true }); 
+    const lines = buffer.split('\n'); buffer = lines.pop(); 
+    for (const line of lines) { 
+      const trimmed = line.trim(); 
+      if (!trimmed || !trimmed.startsWith('data:')) continue; 
+      const data = trimmed.slice(5).trim(); 
+      if (data === '[DONE]') continue; 
+      try { 
+        const json = JSON.parse(data); 
+        const delta = json.choices?.[0]?.delta?.content || ''; 
+        if (delta) { 
+          fullText += delta; 
+          if (/(\[Z\].*?)\1\1/s.test(fullText)) { throw new Error('loop_detected'); }
+          if (onChunk) onChunk(fullText); 
+        } 
+      } catch(e) { 
+        if (e.message === 'loop_detected') throw e;
+      } 
+    } 
+  }
   return fullText;
 }
 
@@ -111,7 +133,29 @@ async function processAPI(text, isRegenerate = false) {
         break;
       } catch(e) {
         clearTimeout(timeoutId);
-        if (e.name === 'AbortError') { if (attempt >= MAX) { if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } bubble.innerHTML = '<span style="color:#ff6b8a">Timeout. Coba lagi.</span>'; fullText = ''; } else { firstChunk = true; bufferText = ''; isHidden = true; await new Promise(r => setTimeout(r, 500)); continue; } } else { if (attempt >= MAX) { if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } bubble.innerHTML = '<span style="color:#ff6b8a">Error: ' + escapeHTML(e.message) + '</span>'; fullText = ''; } else { firstChunk = true; bufferText = ''; isHidden = true; await new Promise(r => setTimeout(r, 800)); continue; } }
+        if (e.name === 'AbortError' || e.message === 'loop_detected') { 
+          if (attempt >= MAX) { 
+            if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } 
+            bubble.innerHTML = '<span style="color:#ff6b8a">Sistem mendeteksi error dari server. Coba kirim ulang.</span>'; 
+            fullText = ''; 
+          } else { 
+            firstChunk = true; bufferText = ''; isHidden = true; 
+            if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } 
+            bubble.innerHTML = '<span class="typing-text">[Z] nge-halu, ngulang ulang. gue coba lagi...</span>'; 
+            await new Promise(r => setTimeout(r, 500)); 
+            continue; 
+          } 
+        } else { 
+          if (attempt >= MAX) { 
+            if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } 
+            bubble.innerHTML = '<span style="color:#ff6b8a">Error: ' + escapeHTML(e.message) + '</span>'; 
+            fullText = ''; 
+          } else { 
+            firstChunk = true; bufferText = ''; isHidden = true; 
+            await new Promise(r => setTimeout(r, 800)); 
+            continue; 
+          } 
+        }
       }
     }
     if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; }
