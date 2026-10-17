@@ -154,7 +154,7 @@ async function processAPI(text, isRegenerate = false) {
         
         clearTimeout(timeoutId); if (!fullText) throw new Error('empty');
         
-        if (isRefusal(fullText) || countHarsh(fullText) < 1) { 
+        if (fullText.length < 200 && (isRefusal(fullText) || countHarsh(fullText) < 1)) { 
           if (attempt < MAX) { firstChunk = true; if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } bubble.innerHTML = '<span class="typing-text">' + TYPING_TEXTS[Math.floor(Math.random() * TYPING_TEXTS.length)] + '</span>'; await new Promise(r => setTimeout(r, 300)); continue; } 
         }
         break;
@@ -184,7 +184,8 @@ async function processAPI(text, isRegenerate = false) {
       }
     }
     if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; }
-    if (isRefusal(fullText)) { 
+    
+    if (fullText.length < 200 && isRefusal(fullText)) { 
       fullText = '[Z] Kontol. Itu belum kebuka di Zenkai. Masih pengembangan. Yang lain aja.'; 
     } 
     
