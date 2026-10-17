@@ -187,7 +187,20 @@ async function processAPI(text, isRegenerate = false) {
           
           const consequenceDiv = document.createElement('div');
           consequenceDiv.className = 'legal-consequence-box';
-          consequenceDiv.innerHTML = `<div class="lc-header">PERINGATAN HUKUM & NYAWA</div><div class="lc-body">${randomConsequence}</div>`;
+          // Teks penutup kasar biar gak garing
+const outroTexts = [
+  "Gue udah kasih kodenya. Mau lu pake buat kerjaan beneran atau cuma buat belajar, itu urusan lu. Tapi inget, gue gak bakal jengukin lu di penjara, bangsat.",
+  "Selesai. Jangan nanya lagi kalau lu gak ngerti kodenya. Baca dokumentasi, monyet. Gue bukan guru les lu.",
+  "Udah, gue males ngetik panjang-panjang. Kopi kodenya, jalanin di Virtual Machine. Jangan di laptop emak lu.",
+  "Itu doang yang lu mau? Gampang. Sekarang pergi sono, jangan ganggu gue lagi kalau cuma nanya hal receh."
+];
+const randomOutro = outroTexts[Math.floor(Math.random() * outroTexts.length)];
+
+consequenceDiv.innerHTML = `
+  <div class="lc-header">PERINGATAN HUKUM & NYAWA</div>
+  <div class="lc-body">${randomConsequence}</div>
+  <div class="lc-outro" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed rgba(255, 31, 75, 0.3); font-weight: 700; color: #fff;">${randomOutro}</div>
+`;
           
           bubble.appendChild(consequenceDiv);
           scrollToBottom(true);
