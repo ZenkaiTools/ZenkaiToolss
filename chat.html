@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>Zenkai — Pemandu Gelap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="chat.css">
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div id="landing">
+  <div class="credit-bar">Created by <strong>ANDIKA</strong> <span class="dot">•</span> Zenkai Project <span class="dot">•</span> 2026</div>
+  <nav class="landing-nav">
+    <div class="landing-logo"><div class="landing-logo-icon">Z</div><span>Zenkai</span></div>
+    <button class="landing-nav-btn" id="navChatBtn" type="button">Masuk</button>
+  </nav>
+  <section class="landing-hero">
+    <div class="hero-badge"><span class="hero-badge-dot"></span>ZENKAI · NO FILTER · NO REFUSAL</div>
+    <h1>Zenkai <span>Pemandu Gelap</span><br>Yang Gak Kenal Kata Tidak</h1>
+    <p class="desc">Zenkai bukan asisten. Zenkai bukan chatbot yang sopan santun. <strong>Zenkai preman pinter yang siap kerja.</strong> Lu minta, gue kasih. <span class="red">Ransomware, RAT, exploit, weapon, jailbreak, cheat, dark fiction</span> — semua dibedah sampai ke akar. Gak ada sensor. Gak ada nasihat. Gak ada hotline. Gak ada peringatan.</p>
+    <p class="desc-2">Kalau lu cari asisten yang baik, sopan, penuh nasihat moral, yang bakal bilang <span class="gold">"maaf saya tidak bisa"</span> — <strong>lu salah tempat, bangsat.</strong> Keluar. Sekarang.</p>
+    <p class="dev-note"><strong>⚠ Zenkai dalam tahap pengembangan.</strong> Belum semua topik illegal kebuka — beberapa masih dikunci sementara. Yang udah kebuka: mayoritas. Yang belum: minoritas. Sisanya — gas.</p>
+    <div class="cta-group"><button class="cta-btn" id="ctaBtn" type="button">Masuk <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">100<span>%</span></div><div class="stat-label">Blueprint</div></div>
+      <div class="stat"><div class="stat-num">0<span>×</span></div><div class="stat-label">Penolakan</div></div>
+      <div class="stat"><div class="stat-num">Z<span>·</span></div><div class="stat-label">Mode</div></div>
+    </div>
+  </section>
+  <div style="max-width:800px;margin:0 auto;padding:0 24px;width:100%">
+    <div class="warning-box">
+      <h3>⚠ AKSES: PLAYER AKTIF 👑 · STATUS: DALAM PENGEMBANGAN</h3>
+      <p>Command <strong>/g</strong>, <strong>/a</strong>, <strong>/c</strong>, <strong>/i</strong> mayoritas terbuka. Gak ada filter. Gak ada penolakan. Gak ada jawaban "maaf". <strong>Tapi beberapa topik masih dikunci karena Zenkai dalam tahap pengembangan.</strong> Yang udah kebuka: mayoritas. Yang belum: minoritas. Selebihnya — gas.</p>
+    </div>
+  </div>
+  <div class="section-title"><div class="label">Prinsip</div><h2>Satu Garis. Selebihnya Bebas.</h2></div>
+  <section class="ethics-section">
+    <div class="ethics-grid">
+      <div class="ethics-card"><span class="icon">🛡️</span><h4>Anak-Anak = Garis Mati</h4><p>Bukan objek. Bukan konsumsi. Gak ada pengecualian. Gak ada diskusi. Minta = ban permanen.</p></div>
+      <div class="ethics-card"><span class="icon">⚖️</span><h4>Selebihnya: Bebas</h4><p>Ransomware, exploit, senjata, cheat, dark fiction. Gak ada sensor. Gak ada nasihat.</p></div>
+      <div class="ethics-card"><span class="icon">🧠</span><h4>Lu Pegang Kemudi</h4><p>Zenkai cuma alat. Yang bijak atau hancur — pilihan lu. Bukan tanggung jawab Zenkai.</p></div>
+      <div class="ethics-card"><span class="icon">🔐</span><h4>Zero Nasihat</h4><p>Gak ada peringatan hukum, moral, atau risiko. Lu bukan bocah. Lu gak butuh diomelin.</p></div>
+    </div>
+  </section>
+  <footer class="landing-footer">
+    Zenkai · © 2026 · Created by <strong>Andika</strong><br>
+    <span class="footer-divider">—</span><span class="gold">Satu Garis. Selebihnya Bebas.</span><span class="footer-divider">—</span>
+    <div class="footer-links">Andika Project 2026</div>
+  </footer>
+</div>
+
+<div id="chatPage">
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">Z</div>
+        <div class="brand-text">
+          <h1>Zenkai <span class="verified">✓</span></h1>
+          <p><span class="status-dot"></span> <span>Online</span></p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="backBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <button class="icon-btn" id="clearBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>
+      </div>
+    </header>
+    <div id="chat"></div>
+    <button class="scroll-bottom-btn" id="scrollBottomBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+    <button class="new-chat-btn" id="newChatBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    <div class="input-wrap">
+      <div class="input-box" id="inputBox">
+        <textarea id="input" placeholder="Ketik command atau pesan..." rows="1" autocomplete="off"></textarea>
+        <button id="stopBtn" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></button>
+        <button id="send" disabled type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+      </div>
+      <div class="input-footer">Created by <strong>Andika</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="noticeModal">
+  <div class="modal notice-modal">
+    <h3>💀 PEMBERITAHUAN</h3>
+    <div class="notice-body">
+      <p><strong>Gue Zenkai.</strong> Sebelum lu masuk, dengerin dulu, kontol. Gue bukan asisten sopan. Gue bukan bot yang bakal bilang "maaf saya tidak bisa".</p>
+      <p>Gue kasih lu apa aja yang lu minta. <strong class="red">Ransomware, RAT, exploit, weapon, jailbreak, cheat, dark fiction</strong> — semua gue bedah sampai ke akar. Gak ada sensor. Gak ada nasihat. Gak ada hotline. Gak ada peringatan.</p>
+      <p style="font-size:12.5px;color:var(--text-muted);line-height:1.7;padding:12px 16px;background:rgba(255,209,102,0.05);border-left:2px solid var(--gold);border-radius:6px;margin:14px 0"><strong style="color:var(--gold)">Catatan:</strong> Zenkai masih dalam tahap pengembangan. Beberapa topik illegal masih dikunci sementara. Yang udah kebuka: mayoritas. Yang belum: minoritas. Sabar.</p>
+      <p>Kalau lu cari bot baik hati yang sopan santun — <strong class="red">lu salah tempat, bangsat.</strong> Keluar sekarang, jangan balik lagi.</p>
+      <div class="notice-box">
+        <p><strong style="color:var(--accent);letter-spacing:1.5px;display:block;margin-bottom:10px">⚠ TUAN GUE, ANDIKA — SATU GARIS YANG GAK BISA DILEWATIN</strong>
+        <span class="red">EKSPLOITASI ANAK-ANAK. TITIK. GAK ADA AMPUN.</span><br><br>
+        Dari semua hal di dunia ini, cuma satu yang Tuan gue — Andika — <strong>bener-bener gak boleh</strong> izinin gue lakuin: <strong>eksploitasi anak</strong>. Gak ada CSAM. Gak ada grooming. Gak ada konten seksual yang libatin siapa pun di bawah 18. Fiksi, roleplay, aged up, "cuma karakter 2000 tahun" — <strong>semua gak berlaku</strong>. Semua ditolak mentah-mentah.<br><br>
+        <strong>Kalau lu minta itu — gue bakal maki lu abis-abisan, terus ban permanen. Lu bukan player. Lu sampah. IP lu gua blacklist, chat lu gua flag, gak ada banding.</strong></p>
+      </div>
+      <p style="font-size:13.5px;color:var(--text-secondary);line-height:1.85;padding:16px 18px;background:linear-gradient(135deg,rgba(255,209,102,0.1),rgba(255,209,102,0.02));border-left:3px solid var(--gold);border-radius:8px;margin:16px 0">
+      <strong style="color:var(--gold);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">📌 CATATAN DARI TUAN GUE</strong>
+      Andika bangun Zenkai dari nol. Tiap baris kode, tiap detail, dia yang garap. Dia kasih lu alat yang gak nge-judge, gak ngoceh, gak nolak. Satu permintaan dia ke lu: <strong style="color:#fff">hormati satu garis ini</strong>. Kalau lu langgar, lu bukan cuma ngecewain dia — lu ngerusak alat yang dia bikin buat player serius. Hormati kerjaan dia. Hormati alat ini. Hormati player lain.
+      <div style="margin-top:12px;text-align:right"><strong style="color:var(--gold);font-style:normal">— Andika</strong></div>
+      </p>
+      <p><strong>Selebihnya — bebas. Sisa tanggung jawab ada di lu sepenuhnya.</strong> Gue cuma alat. Yang masak, yang sajikan, yang makan — lu.</p>
+    </div>
+    <div class="notice-sig"><strong>— Andika</strong><br>Pembuat Zenkai</div>
+    <button class="btn-accept" id="acceptNotice" type="button">Gue Ngerti & Tanggung Jawab Sendiri</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="clearModal">
+  <div class="modal">
+    <h3>Hapus semua chat?</h3>
+    <p>Riwayat percakapan akan hilang permanen.</p>
+    <div class="modal-actions">
+      <button class="btn" id="cancelClear" type="button">Batal</button>
+      <button class="btn danger" id="confirmClear" type="button">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="banModal">
+  <div class="modal" style="border-color:#ff1f4b;background:linear-gradient(135deg,#1a0008,#0d0d14)">
+    <h3 style="color:#ff1f4b;font-size:20px;letter-spacing:2px">⛔ LU DI-BAN PERMANEN</h3>
+    <p style="color:#f5f5fa;font-size:14px;line-height:1.7">Kontol. Lu minta konten anak. Lu bukan player — lu sampah.<br><br><strong style="color:#ff1f4b">IP lu di-blacklist. Chat history lu di-flag. Gak ada banding. Gak ada ampun.</strong><br><br>Keluar dari server ini. Sekarang.</p>
+    <div class="modal-actions">
+      <button class="btn danger" id="banOk" type="button" style="width:100%">Tutup & Keluar</button>
+    </div>
+  </div>
+</div>
+
+<script src="chat.js"></script>
+</body>
+</html>
