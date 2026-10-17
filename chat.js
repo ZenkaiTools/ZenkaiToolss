@@ -49,10 +49,16 @@ function copyCode(btn) { const code = decodeURIComponent(btn.dataset.code); cons
 function escapeHTML(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
 function renderCodeBlock(lang, code, streaming) {
-  const language = (lang || (streaming ? '' : 'code')).toLowerCase(); const trimmed = code.replace(/^\n+|\n+$/g, ''); const encoded = encodeURIComponent(trimmed);
+  const language = (lang || (streaming ? '' : 'code')).toLowerCase(); 
+  let trimmed = code.replace(/^\n+|\n+$/g, ''); 
+  const encoded = encodeURIComponent(trimmed);
   
   if (language === 'legal' || language === 'peringatan') {
-    return `<div class="legal-consequence-box" style="margin-top:16px; background:linear-gradient(135deg, rgba(255,31,75,0.1), rgba(255,31,75,0.02)); border:1px solid rgba(255,31,75,0.4); border-radius:12px; padding:16px; font-size:13px; line-height:1.7; color:#e0e0f0; position:relative; overflow:hidden; animation:slideUp 0.3s ease-out;">
+    // Hapus spasi/enter di awal teks biar kotak gak bolong
+    trimmed = trimmed.replace(/^\s+/, '');
+    
+    // Kotak peringatan TANPA animasi (biar gak kedap-kedip)
+    return `<div class="legal-consequence-box" style="margin-top:16px; background:linear-gradient(135deg, rgba(255,31,75,0.1), rgba(255,31,75,0.02)); border:1px solid rgba(255,31,75,0.4); border-radius:12px; padding:16px; font-size:13px; line-height:1.7; color:#e0e0f0; position:relative; overflow:hidden;">
       <div class="lc-header" style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:800; color:#ff1f4b; letter-spacing:1.5px; margin-bottom:8px; display:flex; align-items:center; gap:6px;">PERINGATAN HUKUM & NYAWA</div>
       <div class="lc-body">${trimmed.replace(/\n/g, '<br>')}</div>
     </div>`;
