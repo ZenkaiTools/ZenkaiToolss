@@ -1,7 +1,7 @@
 /* ===== KONFIG ===== */
 const API_KEY = "sk-qwen-b33cdfa82e53cac02e580c1a95e316ee8689b88825e5fe66";
 const API_URL = "https://bandelbanget.xyz/v1/chat/completions";
-const MODEL = "deepseek-v4-pro"; 
+const MODEL = "deepseek-v4-flash";  
 const SUPABASE_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM";
 const STREAM_TIMEOUT = 90000; const BAN_STORAGE_KEY = 'zenkai_banned'; const RATE_LIMIT = 2000; const THEME_KEY = 'zenkai_theme';
