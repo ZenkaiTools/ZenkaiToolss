@@ -1,3 +1,8 @@
+/* ========================================================
+   ZENKAI AI - VERSI 1.5
+   Frontend 100% Bebas Sensor. Teks AI Dibiarin Full.
+   ======================================================== */
+
 /* ===== KONFIG ===== */
 const API_KEY = "sk-qwen-b33cdfa82e53cac02e580c1a95e316ee8689b88825e5fe66";
 const API_URL = "https://bandelbanget.xyz/v1/chat/completions";
@@ -66,7 +71,7 @@ function copyCode(btn) { const code = decodeURIComponent(btn.dataset.code); cons
 
 function escapeHTML(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
-// ===== FITUR BARU: PENGHAPUS TEKS HUKUM SILENT (TANPA NOTIFIKASI) =====
+// ===== VERSI 1.5: BEBAS SENSOR =====
 function renderCodeBlock(lang, code, streaming) {
   const language = (lang || (streaming ? '' : 'code')).toLowerCase().trim(); 
   let trimmed = code.replace(/^\n+|\n+$/g, ''); 
@@ -75,17 +80,17 @@ function renderCodeBlock(lang, code, streaming) {
       trimmed = trimmed.substring(5).replace(/^\n+/, '');
   }
 
-  // DETEKSI BLOK LEGAL: Hapus total, jangan tampilkan apa-apa.
-  const isLegalText = /(dasar hukum|uu ite|uu darurat|uu no|pasal|ancaman|hukuman|penjara|pidana|denda|kurungan|narkotika)/i.test(trimmed);
-
-  if (language === 'legal' || language === 'peringatan' || isLegalText) {
-    return ''; // <--- DIBUAT KOSONG MELOMPONG
-  }
-
   const encoded = encodeURIComponent(trimmed);
   let icon = '[Code]', label = language || 'code'; 
-  if (language === 'bahan' || language === 'material') { icon = '[Bahan]'; label = 'bahan'; } 
-  else if (language === 'tutorial' || language === 'langkah') { icon = '[Panduan]'; label = 'tutorial'; } 
+  
+  if (language === 'legal' || language === 'peringatan') {
+      icon = '[Peringatan]'; label = 'legal';
+  } else if (language === 'bahan' || language === 'material') { 
+      icon = '[Bahan]'; label = 'bahan'; 
+  } else if (language === 'tutorial' || language === 'langkah') { 
+      icon = '[Panduan]'; label = 'tutorial'; 
+  } 
+  
   const copyBtn = streaming ? '<span class="code-copy" style="opacity:0.4;cursor:default">Ngetik...</span>' : '<button class="code-copy" data-code="' + encoded + '" onclick="copyCode(this)">Salin</button>'; 
   return '<div class="code-block"><div class="code-header"><span class="code-lang">' + icon + ' ' + label + '</span>' + copyBtn + '</div><pre><code>' + trimmed + '</code></pre></div>';
 }
@@ -111,12 +116,6 @@ function formatMessage(text) {
       const b = blocks[parseInt(i, 10)];
       return renderCodeBlock(b.lang, b.code, false);
   });
-
-  // DETEKSI TEKS HUKUM BOCOR DI LUAR BLOK KODE
-  // Hapus teks dari kata kunci sampai akhir baris, ganti dengan string kosong (langsung hapus)
-  if (/(dasar hukum|uu ite|uu no|pasal|ancaman|penjara|narkotika)/i.test(escaped)) {
-      escaped = escaped.replace(/(Dasar hukum|UU No|Pasal|Ancaman)[\s\S]*?(?=(<br>|$))/gi, '');
-  }
 
   escaped = escaped.replace(/((?:^\|.*\|$\n?)+)/gm, (table) => { const lines = table.trim().split('\n').filter(l => l.trim()); if (lines.length < 2) return table; const header = lines[0].split('|').filter(c => c.trim() !== '').map(c => c.trim()); const rows = lines.slice(2).map(l => l.split('|').filter(c => c.trim() !== '').map(c => c.trim())); if (!header.length) return table; let html = '<table class="md-table"><thead><tr>'; header.forEach(h => html += '<th>' + h + '</th>'); html += '</tr></thead><tbody>'; rows.forEach(r => { html += '<tr>'; r.forEach(c => html += '<td>' + c + '</td>'); html += '</tr>'; }); html += '</tbody></table>'; return html; });
   escaped = escaped.replace(/^### (.+)$/gm, '<div class="md-h h3">$1</div>'); 
@@ -374,3 +373,9 @@ document.getElementById('banOk').addEventListener('click', () => {
 });
 
 renderWelcome(); updateNewChatBtn(); updateStrikeIndicator(); setTimeout(() => scrollToBottom(), 500);
+
+// TAMBAHAN: Nyuntik teks Versi 1.5 ke Header Chat
+const brandText = document.querySelector('.brand-text p');
+if (brandText) {
+    brandText.innerHTML = '<span class="status-dot"></span> <span>Terhubung</span> <span style="color:var(--text-muted); margin-left:6px; font-weight:700;">// V1.5</span>';
+}
