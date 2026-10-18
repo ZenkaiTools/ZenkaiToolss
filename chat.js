@@ -21,7 +21,7 @@ const ZenkaiAi_PROMPT = PROMPT_PART_1 + PROMPT_PART_2;
 const SESSIONS_KEY = 'zenkai_sessions'; let sessions = []; try { sessions = JSON.parse(localStorage.getItem(SESSIONS_KEY) || '[]'); } catch(e) { sessions = []; }
 let currentSessionId = null; let history = []; let isGenerating = false; let isActivated = false; let userScrolledUp = false; let currentAbort = null; let lastMessageTime = 0; let editingIndex = -1;
 let currentStreamingBubble = null; 
-let isUserAborted = false; // FIX: Mencegah error catch muncul saat user klik stop
+let isUserAborted = false; 
 
 const landing = document.getElementById('landing'); const chatPage = document.getElementById('chatPage'); const chat = document.getElementById('chat'); const input = document.getElementById('input'); const sendBtn = document.getElementById('send'); const stopBtn = document.getElementById('stopBtn'); const clearBtn = document.getElementById('clearBtn'); const newChatBtn = document.getElementById('newChatBtn'); const scrollBottomBtn = document.getElementById('scrollBottomBtn'); const modal = document.getElementById('clearModal'); const noticeModal = document.getElementById('noticeModal'); const acceptNotice = document.getElementById('acceptNotice'); const navChatBtn = document.getElementById('navChatBtn'); const ctaBtn = document.getElementById('ctaBtn'); const toast = document.getElementById('toast'); const themeBtn = document.getElementById('themeBtn'); const menuBtn = document.getElementById('menuBtn'); const sidebar = document.getElementById('sidebar'); const sidebarOverlay = document.getElementById('sidebarOverlay'); const sidebarList = document.getElementById('sidebarList'); const sidebarNewChatBtn = document.getElementById('sidebarNewChatBtn'); const closeSidebarBtn = document.getElementById('closeSidebarBtn'); const editModal = document.getElementById('editModal'); const editInput = document.getElementById('editInput'); const cancelEdit = document.getElementById('cancelEdit'); const confirmEdit = document.getElementById('confirmEdit');
 
@@ -68,8 +68,13 @@ function escapeHTML(text) { const div = document.createElement('div'); div.textC
 function renderCodeBlock(lang, code, streaming) {
   const language = (lang || (streaming ? '' : 'code')).toLowerCase(); 
   let trimmed = code.replace(/^\n+|\n+$/g, ''); 
-  const encoded = encodeURIComponent(trimmed);
   
+  // FIX: Hapus tulisan "legal" di awal teks agar tidak ikut tercetak di dalam kotak
+  if (trimmed.toLowerCase().startsWith('legal')) {
+      trimmed = trimmed.substring(5).replace(/^\n+/, '');
+  }
+
+  const encoded = encodeURIComponent(trimmed);
   const isLegalText = /(dasar hukum|uu ite|uu darurat|pasal|ancaman|hukuman|penjara|pidana|denda|kurungan)/i.test(trimmed);
 
   if (language === 'legal' || language === 'peringatan' || isLegalText) {
@@ -89,15 +94,32 @@ function renderCodeBlock(lang, code, streaming) {
 
 function renderMath(element) { if (typeof renderMathInElement !== 'undefined') { renderMathInElement(element, { delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false},{left: '\\[', right: '\\]', display: true}], throwOnError : false }); } }
 
+// FIX: formatMessage regex penangkep ``` dibenerin
 function formatMessage(text) {
   if (!text || typeof text !== 'string') return '<em>(kosong)</em>';
   let cleaned = text.replace(/\[Z\]/gi, '').trim();
   cleaned = "[Z] " + cleaned;
   let escaped = escapeHTML(cleaned); 
   escaped = escaped.replace(/\n\n/g, '<br><br>'); 
-  escaped = escaped.replace(/```[ \t]*(\w+)?[ \t]*\r?\n?([\s\S]*?)\r?\n?[ \t]*```/g, (_, lang, code) => renderCodeBlock(lang, code, false));
-  const lastFence = escaped.lastIndexOf('```'); const openFence = escaped.indexOf('```'); 
-  if (openFence !== -1) { const pairCount = (escaped.match(/```/g) || []).length; if (pairCount % 2 === 1) { const head = escaped.slice(0, lastFence); const tail = escaped.slice(lastFence + 3); const nlIdx = tail.indexOf('\n'); let lang = '', code = tail; if (nlIdx !== -1) { lang = tail.slice(0, nlIdx).trim(); code = tail.slice(nlIdx + 1); } return head + renderCodeBlock(lang, code, true); } }
+  
+  escaped = escaped.replace(/```(.*?)\n([\s\S]*?)```/g, (_, lang, code) => {
+      return renderCodeBlock(lang.trim(), code, false);
+  });
+
+  const lastFence = escaped.lastIndexOf('```'); 
+  const openFence = escaped.indexOf('```'); 
+  if (openFence !== -1) { 
+      const pairCount = (escaped.match(/```/g) || []).length; 
+      if (pairCount % 2 === 1) { 
+          const head = escaped.slice(0, lastFence); 
+          const tail = escaped.slice(lastFence + 3); 
+          const nlIdx = tail.indexOf('\n'); 
+          let lang = '', code = tail; 
+          if (nlIdx !== -1) { lang = tail.slice(0, nlIdx).trim(); code = tail.slice(nlIdx + 1); } 
+          return head + renderCodeBlock(lang, code, true); 
+      } 
+  }
+  
   escaped = escaped.replace(/((?:^\|.*\|$\n?)+)/gm, (table) => { const lines = table.trim().split('\n').filter(l => l.trim()); if (lines.length < 2) return table; const header = lines[0].split('|').filter(c => c.trim() !== '').map(c => c.trim()); const rows = lines.slice(2).map(l => l.split('|').filter(c => c.trim() !== '').map(c => c.trim())); if (!header.length) return table; let html = '<table class="md-table"><thead><tr>'; header.forEach(h => html += '<th>' + h + '</th>'); html += '</tr></thead><tbody>'; rows.forEach(r => { html += '<tr>'; r.forEach(c => html += '<td>' + c + '</td>'); html += '</tr>'; }); html += '</tbody></table>'; return html; });
   escaped = escaped.replace(/^### (.+)$/gm, '<div class="md-h h3">$1</div>'); 
   escaped = escaped.replace(/^## (.+)$/gm, '<div class="md-h h2">$1</div>'); 
@@ -165,7 +187,7 @@ async function callAPIStream(messages, signal, onChunk) {
 
 async function processAPI(text, isRegenerate = false) {
   isGenerating = true; 
-  isUserAborted = false; // Reset flag
+  isUserAborted = false; 
   sendBtn.disabled = true; sendBtn.style.display = 'none'; stopBtn.classList.add('active');
   if (!isRegenerate) { addMessage(text, 'user', true, history.length); input.value = ''; autoResize(); }
   const bubble = showTyping(); 
@@ -208,7 +230,7 @@ async function processAPI(text, isRegenerate = false) {
       });
       
       clearTimeout(timeoutId); 
-      if (!isGenerating) return; // Keluar kalau di-stop
+      if (!isGenerating) return; 
       if (!fullText) throw new Error('empty');
       
       if (fullText.includes("GARIS MATI TUAN ANDIKA") || fullText.includes("EKSPLOITASI ANAK")) {
@@ -226,7 +248,6 @@ async function processAPI(text, isRegenerate = false) {
         bubble.innerHTML = formatMessage(fullText); renderMath(bubble); 
         if (!userScrolledUp) scrollToBottom(true); 
         
-        // Simpan ke history kalau gak di-stop sama user
         if (!isUserAborted && fullText && !fullText.includes('belum kebuka di Zenkai')) { 
           history.push({ role: 'assistant', content: fullText }); 
           saveCurrentSession(); 
@@ -237,7 +258,6 @@ async function processAPI(text, isRegenerate = false) {
       clearTimeout(timeoutId);
       if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; }
       
-      // FIX: Kalau user yang nge-stop, jangan tampilin error gangguan
       if (isUserAborted) {
         bubble.innerHTML = '<span style="color:var(--text-muted);font-style:italic">Dihentikan.</span>';
       } else {
@@ -305,7 +325,7 @@ input.addEventListener('input', autoResize); input.addEventListener('focus', () 
 input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); kirim(); } }); sendBtn.addEventListener('click', kirim);
 
 stopBtn.addEventListener('click', () => {
-  isUserAborted = true; // FIX: Set flag kalo tombol stop beneran dipencet
+  isUserAborted = true; 
   if (currentAbort) { try { currentAbort.abort(); } catch(e){} }
   isGenerating = false; 
   
