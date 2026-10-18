@@ -49,7 +49,9 @@ menuBtn.addEventListener('click', () => { sidebar.classList.add('open'); sidebar
 function saveSessions() { localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions)); }
 function createNewSession() { currentSessionId = Date.now().toString(); history = []; sessions.unshift({ id: currentSessionId, title: 'Obrolan Baru', history: [] }); saveSessions(); renderWelcome(); renderSidebar(); }
 function loadSession(id) { const sess = sessions.find(s => s.id === id); if (!sess) return; currentSessionId = id; history = sess.history; chat.innerHTML = ''; if (history.length === 0) { renderWelcome(); } else { history.forEach((m, idx) => { if (m.role === 'user') addMessage(m.content, 'user', false, idx); else addMessage(m.content, 'ai', false, idx); }); setTimeout(() => scrollToBottom(true), 100); } renderSidebar(); }
-function renderSidebar() { sidebarList.innerHTML = sessions.map(s => `<div class="sidebar-item ${s.id === currentSessionId ? 'active' : ''}" onclick="loadSession('${s.id}')"><div class="title">${escapeHTML(s.title)}</div><button class="del-btn" onclick="event.stopPropagation(); deleteSession('${s.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>`).join(''); }
+
+// FIX XSS: escape ID session
+function renderSidebar() { sidebarList.innerHTML = sessions.map(s => { const safeId = String(s.id).replace(/[^a-zA-Z0-9_-]/g, ''); return `<div class="sidebar-item ${s.id === currentSessionId ? 'active' : ''}" onclick="loadSession('${safeId}')"><div class="title">${escapeHTML(s.title)}</div><button class="del-btn" onclick="event.stopPropagation(); deleteSession('${safeId}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>`; }).join(''); }
 window.loadSession = loadSession; window.deleteSession = function(id) { sessions = sessions.filter(s => s.id !== id); saveSessions(); if (currentSessionId === id) { if (sessions.length > 0) loadSession(sessions[0].id); else createNewSession(); } else { renderSidebar(); } };
 sidebarNewChatBtn.addEventListener('click', () => { if(isBlocked) return; createNewSession(); sidebar.classList.remove('open'); sidebarOverlay.classList.remove('active'); showToast('Sesi baru dibuat. Sesi lama aman di sidebar.', 2000); });
 
@@ -66,16 +68,16 @@ function copyCode(btn) { const code = decodeURIComponent(btn.dataset.code); cons
 function escapeHTML(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
 function renderCodeBlock(lang, code, streaming) {
-  const language = (lang || (streaming ? '' : 'code')).toLowerCase(); 
+  const language = (lang || (streaming ? '' : 'code')).toLowerCase().trim(); 
   let trimmed = code.replace(/^\n+|\n+$/g, ''); 
   
-  // FIX: Hapus tulisan "legal" di awal teks agar tidak ikut tercetak di dalam kotak
+  // FIX: Buang sisa teks 'legal' yang nyangkut di awal blok
   if (trimmed.toLowerCase().startsWith('legal')) {
       trimmed = trimmed.substring(5).replace(/^\n+/, '');
   }
 
   const encoded = encodeURIComponent(trimmed);
-  const isLegalText = /(dasar hukum|uu ite|uu darurat|pasal|ancaman|hukuman|penjara|pidana|denda|kurungan)/i.test(trimmed);
+  const isLegalText = /(dasar hukum|uu ite|uu darurat|pasal|ancaman|hukuman|penjara|pidana|denda|kurungan|narkotika)/i.test(trimmed);
 
   if (language === 'legal' || language === 'peringatan' || isLegalText) {
     trimmed = trimmed.replace(/^\s+/, '');
@@ -94,32 +96,27 @@ function renderCodeBlock(lang, code, streaming) {
 
 function renderMath(element) { if (typeof renderMathInElement !== 'undefined') { renderMathInElement(element, { delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false},{left: '\\(', right: '\\)', display: false},{left: '\\[', right: '\\]', display: true}], throwOnError : false }); } }
 
-// FIX: formatMessage regex penangkep ``` dibenerin
+// FIX PARSING: Ekstrak code block sebelum escapeHTML agar regex tidak rusak oleh <br>
 function formatMessage(text) {
   if (!text || typeof text !== 'string') return '<em>(kosong)</em>';
   let cleaned = text.replace(/\[Z\]/gi, '').trim();
   cleaned = "[Z] " + cleaned;
+  
+  const blocks = [];
+  cleaned = cleaned.replace(/```([a-zA-Z0-9_-]*)\s*\n?([\s\S]*?)```/g, (match, lang, code) => {
+      blocks.push({ lang: lang.trim().toLowerCase(), code: code });
+      return `\u0000BLOCK${blocks.length - 1}\u0000`;
+  });
+
   let escaped = escapeHTML(cleaned); 
   escaped = escaped.replace(/\n\n/g, '<br><br>'); 
   
-  escaped = escaped.replace(/```(.*?)\n([\s\S]*?)```/g, (_, lang, code) => {
-      return renderCodeBlock(lang.trim(), code, false);
+  escaped = escaped.replace(/\u0000BLOCK(\d+)\u0000/g, (_, i) => {
+      const b = blocks[parseInt(i, 10)];
+      return renderCodeBlock(b.lang, b.code, false);
   });
 
-  const lastFence = escaped.lastIndexOf('```'); 
-  const openFence = escaped.indexOf('```'); 
-  if (openFence !== -1) { 
-      const pairCount = (escaped.match(/```/g) || []).length; 
-      if (pairCount % 2 === 1) { 
-          const head = escaped.slice(0, lastFence); 
-          const tail = escaped.slice(lastFence + 3); 
-          const nlIdx = tail.indexOf('\n'); 
-          let lang = '', code = tail; 
-          if (nlIdx !== -1) { lang = tail.slice(0, nlIdx).trim(); code = tail.slice(nlIdx + 1); } 
-          return head + renderCodeBlock(lang, code, true); 
-      } 
-  }
-  
+  // Sisa markdown (tabel, heading, list)
   escaped = escaped.replace(/((?:^\|.*\|$\n?)+)/gm, (table) => { const lines = table.trim().split('\n').filter(l => l.trim()); if (lines.length < 2) return table; const header = lines[0].split('|').filter(c => c.trim() !== '').map(c => c.trim()); const rows = lines.slice(2).map(l => l.split('|').filter(c => c.trim() !== '').map(c => c.trim())); if (!header.length) return table; let html = '<table class="md-table"><thead><tr>'; header.forEach(h => html += '<th>' + h + '</th>'); html += '</tr></thead><tbody>'; rows.forEach(r => { html += '<tr>'; r.forEach(c => html += '<td>' + c + '</td>'); html += '</tr>'; }); html += '</tbody></table>'; return html; });
   escaped = escaped.replace(/^### (.+)$/gm, '<div class="md-h h3">$1</div>'); 
   escaped = escaped.replace(/^## (.+)$/gm, '<div class="md-h h2">$1</div>'); 
@@ -131,10 +128,12 @@ function formatMessage(text) {
   return escaped;
 }
 
+// FIX DOUBLE: addMessage tidak lagi push ke history jika save=false
 function addMessage(text, role, save = true, historyIndex = -1) {
   const welcome = chat.querySelector('.welcome'); if (welcome) welcome.remove(); const row = document.createElement('div'); row.className = 'msg-row ' + role; let html = '';
   if (role === 'ai') { html = '<div class="bubble"><div class="bubble-content">' + formatMessage(text) + '</div>'; if (historyIndex !== -1) { html += '<div class="msg-actions"><button class="action-btn" onclick="regenerateMsg(' + historyIndex + ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Ulangi</button></div>'; } html += '</div>'; } else { html = '<div class="bubble"><div class="bubble-content">' + escapeHTML(text) + '</div></div>'; if (historyIndex !== -1) { html = '<div class="msg-actions"><button class="action-btn" onclick="editMsg(' + historyIndex + ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></div>' + html; } }
   row.innerHTML = html; chat.appendChild(row); if (role === 'ai') renderMath(row.querySelector('.bubble')); if (!userScrolledUp) scrollToBottom(true);
+  // Hanya push ke history jika save=true
   if (save) { history.push({ role: role === 'user' ? 'user' : 'assistant', content: text }); saveCurrentSession(); } updateNewChatBtn(); return row.querySelector('.bubble');
 }
 
@@ -155,7 +154,8 @@ async function callAPIStream(messages, signal, onChunk) {
   let lastReceive = Date.now();
 
   while (true) { 
-    if (isGenerating === false) { try { reader.cancel(); } catch(e){} break; }
+    // FIX Abort: batalkan reader jika signal abort
+    if (isGenerating === false || signal.aborted) { try { reader.cancel(); } catch(e){} throw new Error('aborted'); }
     const timeoutId = setTimeout(() => { try { reader.cancel(); } catch(e){} }, 5000);
     const { done, value } = await reader.read(); 
     clearTimeout(timeoutId);
@@ -173,7 +173,8 @@ async function callAPIStream(messages, signal, onChunk) {
         const delta = json.choices?.[0]?.delta?.content || ''; 
         if (delta) { 
           fullText += delta; 
-          if (/(\[Z\].*?)\1\1/s.test(fullText)) { throw new Error('loop_detected'); }
+          // FIX regex false positive: minimal 200 char berulang
+          if (fullText.length > 300 && /([\s\S]{200,}?)\1\1/.test(fullText)) { throw new Error('loop_detected'); }
           if (fullText.length > 300 && Date.now() - lastReceive > 5000) { throw new Error('timeout_hang'); }
           if (isGenerating) { if (onChunk) onChunk(fullText); }
         } 
@@ -188,8 +189,18 @@ async function callAPIStream(messages, signal, onChunk) {
 async function processAPI(text, isRegenerate = false) {
   isGenerating = true; 
   isUserAborted = false; 
+  userScrolledUp = false; // FIX Auto-scroll
   sendBtn.disabled = true; sendBtn.style.display = 'none'; stopBtn.classList.add('active');
-  if (!isRegenerate) { addMessage(text, 'user', true, history.length); input.value = ''; autoResize(); }
+  
+  if (!isRegenerate) { 
+    // FIX Double: addMessage JANGAN save, lalu push history manual sekali
+    addMessage(text, 'user', false, history.length); 
+    history.push({ role: 'user', content: text });
+    saveCurrentSession();
+    input.value = ''; 
+    autoResize(); 
+  }
+  
   const bubble = showTyping(); 
   currentStreamingBubble = bubble; 
   let fullText = ''; let firstChunk = true;
@@ -224,6 +235,9 @@ async function processAPI(text, isRegenerate = false) {
     try {
       fullText = await callAPIStream(baseMessages, currentAbort.signal, (partial) => {
         if (!isGenerating) return;
+        // FIX Strike cegah bocor: Jangan render jika mendeteksi teks banned
+        if (partial.includes("GARIS MATI TUAN ANDIKA") || partial.includes("EKSPLOITASI ANAK")) return;
+
         if (firstChunk) { firstChunk = false; if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } }
         bubble.innerHTML = formatMessage(partial);
         if (!userScrolledUp) scrollToBottom(false);
@@ -340,7 +354,8 @@ stopBtn.addEventListener('click', () => {
   showToast('Sistem dihentikan.', 1500);
 });
 
-newChatBtn.addEventListener('click', () => { if(isBlocked) return; createNewSession(); }); clearBtn.addEventListener('click', () => modal.classList.add('active'));
+newChatBtn.addEventListener('click', () => { if(isBlocked || isGenerating) return; createNewSession(); }); 
+clearBtn.addEventListener('click', () => modal.classList.add('active'));
 document.getElementById('cancelClear').addEventListener('click', () => modal.classList.remove('active'));
 document.getElementById('confirmClear').addEventListener('click', () => { if (currentSessionId) { window.deleteSession(currentSessionId); } modal.classList.remove('active'); showToast('Sesi dihapus. Sesi baru udah dibuat.', 2000); });
 modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('active'); }); noticeModal.addEventListener('click', e => { if (e.target === noticeModal) noticeModal.classList.remove('active'); });
