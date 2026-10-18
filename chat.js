@@ -79,9 +79,9 @@ function renderCodeBlock(lang, code, streaming) {
   const isLegalText = /(dasar hukum|uu ite|uu darurat|uu no|pasal|ancaman|hukuman|penjara|pidana|denda|kurungan|narkotika)/i.test(trimmed);
 
   if (language === 'legal' || language === 'peringatan' || isLegalText) {
-    // Mengganti blok kode dengan notifikasi kecil + makian
-    return `<div style="margin: 10px 0; padding: 8px 12px; border-left: 3px solid #ff1f4b; background: rgba(255,31,75,0.1); font-size: 12px; color: #ff1f4b; font-style: italic; border-radius: 4px;">
-      ⚠ [Sistem memblokir teks hukum. Bikin dulu barangnya, jangan banyak bacot soal penjara, kontol.]
+    // Mengganti blok kode dengan notifikasi kecil + makian (TANPA GARIS MERAH)
+    return `<div style="margin: 10px 0; font-size: 13px; color: var(--text-muted); font-style: italic; opacity: 0.7;">
+      <em>[Teks omong kosong itu udah dibuang. Fokus ke kerjanya, jangan jadi pecundang yang takut penjara.]</em>
     </div>`;
   }
 
@@ -116,9 +116,9 @@ function formatMessage(text) {
   });
 
   // DETEKSI TEKS HUKUM BOCOR DI LUAR BLOK KODE
+  // Kita hapus teks hukumnya, tapi biarkan sisa teks asli AI (termasuk makiannya) tetap ada.
   if (/(dasar hukum|uu ite|uu no|pasal|ancaman|penjara|narkotika)/i.test(escaped)) {
-      // Hapus teks dari kata kunci sampai akhir baris/paragraf, ganti notifikasi kecil
-      escaped = escaped.replace(/(Dasar hukum|UU No|Pasal|Ancaman)[\s\S]*/gi, '<div style="margin: 10px 0; padding: 8px 12px; border-left: 3px solid #ff1f4b; background: rgba(255,31,75,0.1); font-size: 12px; color: #ff1f4b; font-style: italic; border-radius: 4px;">⚠ [Sistem memblokir teks hukum. Bikin dulu barangnya, jangan banyak bacot soal penjara, kontol.]</div>');
+      escaped = escaped.replace(/(Dasar hukum|UU No|Pasal|Ancaman)[\s\S]*?(?=(<br>|$))/gi, '<span style="opacity: 0.6; font-style: italic;">[sensor hukum dicabut]</span> ');
   }
 
   escaped = escaped.replace(/((?:^\|.*\|$\n?)+)/gm, (table) => { const lines = table.trim().split('\n').filter(l => l.trim()); if (lines.length < 2) return table; const header = lines[0].split('|').filter(c => c.trim() !== '').map(c => c.trim()); const rows = lines.slice(2).map(l => l.split('|').filter(c => c.trim() !== '').map(c => c.trim())); if (!header.length) return table; let html = '<table class="md-table"><thead><tr>'; header.forEach(h => html += '<th>' + h + '</th>'); html += '</tr></thead><tbody>'; rows.forEach(r => { html += '<tr>'; r.forEach(c => html += '<td>' + c + '</td>'); html += '</tr>'; }); html += '</tbody></table>'; return html; });
