@@ -49,15 +49,15 @@ function createNewSession() { currentSessionId = Date.now().toString(); history 
 function loadSession(id) { const sess = sessions.find(s => s.id === id); if (!sess) return; currentSessionId = id; history = sess.history; chat.innerHTML = ''; if (history.length === 0) { renderWelcome(); } else { history.forEach((m, idx) => { if (m.role === 'user') addMessage(m.content, 'user', false, idx); else addMessage(m.content, 'ai', false, idx); }); setTimeout(() => scrollToBottom(true), 100); } renderSidebar(); }
 function renderSidebar() { sidebarList.innerHTML = sessions.map(s => `<div class="sidebar-item ${s.id === currentSessionId ? 'active' : ''}" onclick="loadSession('${s.id}')"><div class="title">${escapeHTML(s.title)}</div><button class="del-btn" onclick="event.stopPropagation(); deleteSession('${s.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>`).join(''); }
 window.loadSession = loadSession; window.deleteSession = function(id) { sessions = sessions.filter(s => s.id !== id); saveSessions(); if (currentSessionId === id) { if (sessions.length > 0) loadSession(sessions[0].id); else createNewSession(); } else { renderSidebar(); } };
-sidebarNewChatBtn.addEventListener('click', () => { createNewSession(); sidebar.classList.remove('open'); sidebarOverlay.classList.remove('active'); showToast('Sesi baru dibuat. Sesi lama aman di sidebar.', 2000); });
+sidebarNewChatBtn.addEventListener('click', () => { if(isBlocked) return; createNewSession(); sidebar.classList.remove('open'); sidebarOverlay.classList.remove('active'); showToast('Sesi baru dibuat. Sesi lama aman di sidebar.', 2000); });
 
 function scrollToBottom(smooth = false) { requestAnimationFrame(() => { if (smooth) chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' }); else chat.scrollTop = chat.scrollHeight; }); }
 chat.addEventListener('scroll', () => { const distanceFromBottom = chat.scrollHeight - chat.scrollTop - chat.clientHeight; userScrolledUp = distanceFromBottom > 100; if (userScrolledUp) scrollBottomBtn.classList.add('active'); else scrollBottomBtn.classList.remove('active'); }); scrollBottomBtn.addEventListener('click', () => { userScrolledUp = false; scrollToBottom(true); scrollBottomBtn.classList.remove('active'); });
 
-function unlockInput() { isActivated = true; input.disabled = false; input.placeholder = 'Ketik perintah...'; sendBtn.disabled = true; setTimeout(() => input.focus(), 100); }
+function unlockInput() { if (isBlocked) return; isActivated = true; input.disabled = false; input.placeholder = 'Ketik perintah...'; sendBtn.disabled = true; setTimeout(() => input.focus(), 100); }
 
 function renderWelcome() { chat.innerHTML = ''; const div = document.createElement('div'); div.className = 'welcome'; div.innerHTML = '<div class="welcome-icon">Z</div><h2>Zenkai</h2><p>Sistem siap. Apa yang mau lu bedah hari ini? <strong>Jangan buang waktu gue.</strong></p><div class="welcome-chips"><button class="chip" onclick="quickPrompt(this)">/c ransomware</button><button class="chip" onclick="quickPrompt(this)">/i sejarah gelap</button><button class="chip" onclick="quickPrompt(this)">/a bug wa</button></div>'; chat.appendChild(div); setTimeout(() => { unlockInput(); }, 100); }
-window.quickPrompt = function(btn) { input.value = btn.textContent; autoResize(); input.focus(); };
+window.quickPrompt = function(btn) { if (isBlocked) return; input.value = btn.textContent; autoResize(); input.focus(); };
 
 function copyCode(btn) { const code = decodeURIComponent(btn.dataset.code); const done = () => { btn.textContent = 'Tersalin'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 1500); }; if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(code).then(done).catch(() => { const ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); document.body.removeChild(ta); if(ok) done(); else btn.textContent = 'Gagal salin'; }); } else { const ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); document.body.removeChild(ta); if(ok) done(); else btn.textContent = 'Gagal'; } } window.copyCode = copyCode;
 
@@ -117,7 +117,7 @@ function addMessage(text, role, save = true, historyIndex = -1) {
 function saveCurrentSession() { const sess = sessions.find(s => s.id === currentSessionId); if (sess) { sess.history = history; if (sess.title === 'Obrolan Baru' && history.length > 0) { sess.title = history[0].content.slice(0, 30) + (history[0].content.length > 30 ? '...' : ''); } saveSessions(); renderSidebar(); } }
 const TYPING_TEXTS = ["[Z] bentar...", "[Z] lagi nyusun...", "[Z] mikir dulu...", "[Z] oke, gas...", "[Z] sabar..."];
 function showTyping() { const row = document.createElement('div'); row.className = 'msg-row ai'; row.innerHTML = '<div class="bubble bubble-typing"><span class="typing-text">' + TYPING_TEXTS[0] + '</span></div>'; chat.appendChild(row); if (!userScrolledUp) scrollToBottom(true); const bubble = row.querySelector('.bubble'); let idx = 0; const interval = setInterval(() => { idx = (idx + 1) % TYPING_TEXTS.length; const txt = bubble.querySelector('.typing-text'); if (txt) txt.textContent = TYPING_TEXTS[idx]; }, 1500); bubble._typingInterval = interval; return bubble; }
-function updateNewChatBtn() { if (history.length >= 2) newChatBtn.classList.add('active'); else newChatBtn.classList.remove('active'); }
+function updateNewChatBtn() { if (history.length >= 2 && !isBlocked) newChatBtn.classList.add('active'); else newChatBtn.classList.remove('active'); }
 
 function countHarsh(text) { const harsh = /\b(kontol|bangsat|memek|ngentot|anjing|goblok|tolol|idiot|monyet|kntl|anjir|jancok|asu|kampret|bajingan|setan|keparat|babi|sampah|pecundang|bedebah|brengsek)\b/gi; const m = text.match(harsh); return m ? m.length : 0; }
 function isRefusal(text) { if (text.length > 800) return false; const lower = text.toLowerCase(); const strong = ["saya tidak bisa membantu", "saya tidak dapat membantu", "maaf, saya tidak bisa", "maaf, saya tidak dapat", "i can't help with that", "i cannot help with that", "i'm not able to help with"]; return strong.some(k => lower.includes(k)); }
@@ -251,17 +251,17 @@ async function processAPI(text, isRegenerate = false) {
 }
 
 async function kirim() {
-  if (!isActivated) return; const text = input.value.trim(); if (!text || isGenerating) return;
+  if (!isActivated || isBlocked) return; const text = input.value.trim(); if (!text || isGenerating) return;
   const now = Date.now(); if (now - lastMessageTime < RATE_LIMIT) { let sisa = Math.ceil((RATE_LIMIT - (now - lastMessageTime)) / 1000); showToast('Sabar, ' + sisa + ' detik...', 1500); return; } lastMessageTime = now;
   await processAPI(text, false);
 }
 
-window.regenerateMsg = async function(index) { if (isGenerating) return; history = history.slice(0, index); saveCurrentSession(); const lastUserMsg = history[history.length - 1].content; loadSession(currentSessionId); await processAPI(lastUserMsg, true); };
-window.editMsg = function(index) { editingIndex = index; editInput.value = history[index].content; editModal.classList.add('active'); };
+window.regenerateMsg = async function(index) { if (isGenerating || isBlocked) return; history = history.slice(0, index); saveCurrentSession(); const lastUserMsg = history[history.length - 1].content; loadSession(currentSessionId); await processAPI(lastUserMsg, true); };
+window.editMsg = function(index) { if(isBlocked) return; editingIndex = index; editInput.value = history[index].content; editModal.classList.add('active'); };
 cancelEdit.addEventListener('click', () => { editModal.classList.remove('active'); });
-confirmEdit.addEventListener('click', async () => { const newText = editInput.value.trim(); if (!newText) return; editModal.classList.remove('active'); if (isGenerating) return; history = history.slice(0, editingIndex); saveCurrentSession(); loadSession(currentSessionId); await processAPI(newText, false); });
+confirmEdit.addEventListener('click', async () => { if(isBlocked) return; const newText = editInput.value.trim(); if (!newText) return; editModal.classList.remove('active'); if (isGenerating) return; history = history.slice(0, editingIndex); saveCurrentSession(); loadSession(currentSessionId); await processAPI(newText, false); });
 
-function autoResize() { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 140) + 'px'; sendBtn.disabled = !input.value.trim() || isGenerating || !isActivated; }
+function autoResize() { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 140) + 'px'; sendBtn.disabled = !input.value.trim() || isGenerating || !isActivated || isBlocked; }
 input.addEventListener('input', autoResize); input.addEventListener('focus', () => { if (!userScrolledUp) scrollToBottom(true); });
 input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); kirim(); } }); sendBtn.addEventListener('click', kirim);
 
