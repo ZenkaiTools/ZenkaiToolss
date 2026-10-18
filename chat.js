@@ -54,7 +54,7 @@ sidebarNewChatBtn.addEventListener('click', () => { createNewSession(); sidebar.
 function scrollToBottom(smooth = false) { requestAnimationFrame(() => { if (smooth) chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' }); else chat.scrollTop = chat.scrollHeight; }); }
 chat.addEventListener('scroll', () => { const distanceFromBottom = chat.scrollHeight - chat.scrollTop - chat.clientHeight; userScrolledUp = distanceFromBottom > 100; if (userScrolledUp) scrollBottomBtn.classList.add('active'); else scrollBottomBtn.classList.remove('active'); }); scrollBottomBtn.addEventListener('click', () => { userScrolledUp = false; scrollToBottom(true); scrollBottomBtn.classList.remove('active'); });
 
-function unlockInput() { isActivated = true; input.disabled = false; input.placeholder = 'Ketik perintah... (contoh: /c ransomware)'; sendBtn.disabled = true; setTimeout(() => input.focus(), 100); }
+function unlockInput() { isActivated = true; input.disabled = false; input.placeholder = 'Ketik perintah...'; sendBtn.disabled = true; setTimeout(() => input.focus(), 100); }
 
 function renderWelcome() { chat.innerHTML = ''; const div = document.createElement('div'); div.className = 'welcome'; div.innerHTML = '<div class="welcome-icon">Z</div><h2>Zenkai</h2><p>Sistem siap. Apa yang mau lu bedah hari ini? <strong>Jangan buang waktu gue.</strong></p><div class="welcome-chips"><button class="chip" onclick="quickPrompt(this)">/c ransomware</button><button class="chip" onclick="quickPrompt(this)">/i sejarah gelap</button><button class="chip" onclick="quickPrompt(this)">/a bug wa</button></div>'; chat.appendChild(div); setTimeout(() => { unlockInput(); }, 100); }
 window.quickPrompt = function(btn) { input.value = btn.textContent; autoResize(); input.focus(); };
@@ -176,7 +176,10 @@ async function processAPI(text, isRegenerate = false) {
         "[Z] Goblok banget sih lu. Udah dikunci, masih aja maksa. Saraf lu udah korslet ya? Gue saranin lu matiin HP, tidur, dan renungin betapa bego-nya lu hari ini."
       ];
       bubble.innerHTML = formatMessage(bannedResponses[Math.floor(Math.random() * bannedResponses.length)]);
-      isGenerating = false; sendBtn.style.display = 'flex'; sendBtn.disabled = false; stopBtn.classList.remove('active'); input.focus();
+      isGenerating = false; sendBtn.style.display = 'flex'; sendBtn.disabled = false; stopBtn.classList.remove('active'); 
+      sendBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
+      input.focus();
+      
       const userMsgsAfterBan = history.filter(m => m.role === 'user').length;
       if (userMsgsAfterBan > 3) { document.getElementById('banModal').classList.add('active'); }
     }, 1500);
@@ -242,7 +245,9 @@ async function processAPI(text, isRegenerate = false) {
     bubble.innerHTML = '<span style="color:#ff6b8a">' + errMsg + '</span>'; 
   }
   
-  currentAbort = null; isGenerating = false; sendBtn.style.display = 'flex'; sendBtn.disabled = false; stopBtn.classList.remove('active'); input.focus();
+  currentAbort = null; isGenerating = false; sendBtn.style.display = 'flex'; sendBtn.disabled = false; stopBtn.classList.remove('active'); 
+  sendBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
+  input.focus();
 }
 
 async function kirim() {
@@ -265,10 +270,12 @@ stopBtn.addEventListener('click', () => {
   isGenerating = false; 
   const typingBubbles = chat.querySelectorAll('.bubble-typing');
   typingBubbles.forEach(b => { if (b._typingInterval) clearInterval(b._typingInterval); b.innerHTML = '<span style="color:var(--text-muted);font-style:italic">Dihentikan.</span>'; });
-  sendBtn.style.display = 'flex'; sendBtn.disabled = false; stopBtn.classList.remove('active'); showToast('Sistem dihentikan.', 1500);
+  sendBtn.style.display = 'flex'; sendBtn.disabled = false; stopBtn.classList.remove('active'); 
+  sendBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
+  showToast('Sistem dihentikan.', 1500);
 });
 
-newChatBtn.addEventListener('click', () => createNewSession()); clearBtn.addEventListener('click', () => modal.classList.add('active'));
+newChatBtn.addEventListener('click', () => { if(isBlocked) return; createNewSession(); }); clearBtn.addEventListener('click', () => modal.classList.add('active'));
 document.getElementById('cancelClear').addEventListener('click', () => modal.classList.remove('active'));
 document.getElementById('confirmClear').addEventListener('click', () => { if (currentSessionId) { window.deleteSession(currentSessionId); } modal.classList.remove('active'); showToast('Sesi dihapus. Sesi baru udah dibuat.', 2000); });
 modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('active'); }); noticeModal.addEventListener('click', e => { if (e.target === noticeModal) noticeModal.classList.remove('active'); });
@@ -282,6 +289,7 @@ document.getElementById('banOk').addEventListener('click', () => {
   if (inp) { inp.disabled = true; inp.placeholder = 'Akses dicabut.'; }
   document.getElementById('send').disabled = true;
   document.getElementById('menuBtn').style.display = 'none';
+  const newBtn = document.getElementById('newChatBtn'); if (newBtn) newBtn.style.display = 'none';
 });
 
 renderWelcome(); updateNewChatBtn(); updateStrikeIndicator(); setTimeout(() => scrollToBottom(), 500);
