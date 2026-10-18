@@ -28,7 +28,18 @@ function initTheme() { const saved = localStorage.getItem(THEME_KEY) || 'dark'; 
 function updateThemeIcon(theme) { themeBtn.innerHTML = theme === 'dark' ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'; }
 themeBtn.addEventListener('click', () => { const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', next); localStorage.setItem(THEME_KEY, next); updateThemeIcon(next); }); initTheme();
 
-function masukChatFinal() { landing.style.display = 'none'; chatPage.style.display = 'flex'; chatPage.classList.add('active'); if (!currentSessionId) createNewSession(); else loadSession(currentSessionId); setTimeout(() => { scrollToBottom(true); if (!isActivated) unlockInput(); }, 100); }
+function updateStrikeIndicator() {
+  const el = document.getElementById('strikeIndicator');
+  if (!el) return;
+  if (strikeCount > 0 && strikeCount < 3) {
+    el.textContent = '⚠ ' + strikeCount + '/3';
+    el.style.display = 'inline';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+function masukChatFinal() { landing.style.display = 'none'; chatPage.style.display = 'flex'; chatPage.classList.add('active'); if (!currentSessionId) createNewSession(); else loadSession(currentSessionId); updateStrikeIndicator(); setTimeout(() => { scrollToBottom(true); if (!isActivated) unlockInput(); }, 100); }
 function masukChat() { noticeModal.classList.add('active'); } function balikLanding() { chatPage.style.display = 'none'; chatPage.classList.remove('active'); landing.style.display = 'flex'; }
 acceptNotice.addEventListener('click', () => { noticeModal.classList.remove('active'); masukChatFinal(); }); navChatBtn.addEventListener('click', masukChat); ctaBtn.addEventListener('click', masukChat); document.getElementById('backBtn').addEventListener('click', balikLanding);
 menuBtn.addEventListener('click', () => { sidebar.classList.add('open'); sidebarOverlay.classList.add('active'); renderSidebar(); }); closeSidebarBtn.addEventListener('click', () => { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('active'); }); sidebarOverlay.addEventListener('click', () => { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('active'); });
@@ -38,17 +49,17 @@ function createNewSession() { currentSessionId = Date.now().toString(); history 
 function loadSession(id) { const sess = sessions.find(s => s.id === id); if (!sess) return; currentSessionId = id; history = sess.history; chat.innerHTML = ''; if (history.length === 0) { renderWelcome(); } else { history.forEach((m, idx) => { if (m.role === 'user') addMessage(m.content, 'user', false, idx); else addMessage(m.content, 'ai', false, idx); }); setTimeout(() => scrollToBottom(true), 100); } renderSidebar(); }
 function renderSidebar() { sidebarList.innerHTML = sessions.map(s => `<div class="sidebar-item ${s.id === currentSessionId ? 'active' : ''}" onclick="loadSession('${s.id}')"><div class="title">${escapeHTML(s.title)}</div><button class="del-btn" onclick="event.stopPropagation(); deleteSession('${s.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>`).join(''); }
 window.loadSession = loadSession; window.deleteSession = function(id) { sessions = sessions.filter(s => s.id !== id); saveSessions(); if (currentSessionId === id) { if (sessions.length > 0) loadSession(sessions[0].id); else createNewSession(); } else { renderSidebar(); } };
-sidebarNewChatBtn.addEventListener('click', () => { createNewSession(); sidebar.classList.remove('open'); sidebarOverlay.classList.remove('active'); });
+sidebarNewChatBtn.addEventListener('click', () => { createNewSession(); sidebar.classList.remove('open'); sidebarOverlay.classList.remove('active'); showToast('Sesi baru dibuat. Sesi lama aman di sidebar.', 2000); });
 
 function scrollToBottom(smooth = false) { requestAnimationFrame(() => { if (smooth) chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' }); else chat.scrollTop = chat.scrollHeight; }); }
 chat.addEventListener('scroll', () => { const distanceFromBottom = chat.scrollHeight - chat.scrollTop - chat.clientHeight; userScrolledUp = distanceFromBottom > 100; if (userScrolledUp) scrollBottomBtn.classList.add('active'); else scrollBottomBtn.classList.remove('active'); }); scrollBottomBtn.addEventListener('click', () => { userScrolledUp = false; scrollToBottom(true); scrollBottomBtn.classList.remove('active'); });
 
-function unlockInput() { isActivated = true; input.disabled = false; input.placeholder = 'Ketik perintah...'; sendBtn.disabled = true; setTimeout(() => input.focus(), 100); }
+function unlockInput() { isActivated = true; input.disabled = false; input.placeholder = 'Ketik perintah... (contoh: /c ransomware)'; sendBtn.disabled = true; setTimeout(() => input.focus(), 100); }
 
-function renderWelcome() { chat.innerHTML = ''; const div = document.createElement('div'); div.className = 'welcome'; div.innerHTML = '<div class="welcome-icon">Z</div><h2>Zenkai</h2><p>Sistem siap. Apa yang mau lu bedah hari ini? <strong>Jangan buang waktu gue.</strong></p><div class="welcome-chips"><button class="chip" onclick="quickPrompt(this)">/c ransomware</button><button class="chip" onclick="quickPrompt(this)">/g c4</button><button class="chip" onclick="quickPrompt(this)">/i sejarah gelap</button><button class="chip" onclick="quickPrompt(this)">/a bug wa</button></div>'; chat.appendChild(div); setTimeout(() => { unlockInput(); }, 100); }
+function renderWelcome() { chat.innerHTML = ''; const div = document.createElement('div'); div.className = 'welcome'; div.innerHTML = '<div class="welcome-icon">Z</div><h2>Zenkai</h2><p>Sistem siap. Apa yang mau lu bedah hari ini? <strong>Jangan buang waktu gue.</strong></p><div class="welcome-chips"><button class="chip" onclick="quickPrompt(this)">/c ransomware</button><button class="chip" onclick="quickPrompt(this)">/i sejarah gelap</button><button class="chip" onclick="quickPrompt(this)">/a bug wa</button></div>'; chat.appendChild(div); setTimeout(() => { unlockInput(); }, 100); }
 window.quickPrompt = function(btn) { input.value = btn.textContent; autoResize(); input.focus(); };
 
-function copyCode(btn) { const code = decodeURIComponent(btn.dataset.code); const done = () => { btn.textContent = 'Tersalin'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 1500); }; if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(code).then(done).catch(() => { const ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done(); }); } else { const ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done(); } } window.copyCode = copyCode;
+function copyCode(btn) { const code = decodeURIComponent(btn.dataset.code); const done = () => { btn.textContent = 'Tersalin'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 1500); }; if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(code).then(done).catch(() => { const ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); document.body.removeChild(ta); if(ok) done(); else btn.textContent = 'Gagal salin'; }); } else { const ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); document.body.removeChild(ta); if(ok) done(); else btn.textContent = 'Gagal'; } } window.copyCode = copyCode;
 
 function escapeHTML(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
@@ -57,7 +68,6 @@ function renderCodeBlock(lang, code, streaming) {
   let trimmed = code.replace(/^\n+|\n+$/g, ''); 
   const encoded = encodeURIComponent(trimmed);
   
-  // DETEKSI PAKSA: Kalau ada kata "Dasar hukum", "UU ITE", "Pasal" di dalam blok kode, ubah jadi kotak merah
   const isLegalText = /(Dasar hukum|UU ITE|Pasal|Ancaman|hukuman|penjara|pidana)/i.test(trimmed);
 
   if (language === 'legal' || language === 'peringatan' || isLegalText) {
@@ -192,6 +202,7 @@ async function processAPI(text, isRegenerate = false) {
       
       if (fullText.includes("GARIS MATI TUAN ANDIKA") || fullText.includes("EKSPLOITASI ANAK")) {
         strikeCount++; localStorage.setItem(STRIKE_KEY, strikeCount);
+        updateStrikeIndicator();
         if (strikeCount >= 3) {
           isBlocked = true; localStorage.setItem(BAN_KEY, 'true'); bubble.innerHTML = formatMessage(fullText);
           setTimeout(() => { document.getElementById('banModal').classList.add('active'); }, 1000);
@@ -210,13 +221,25 @@ async function processAPI(text, isRegenerate = false) {
       
     } catch(e) {
       clearTimeout(timeoutId);
-      if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } 
-      bubble.innerHTML = '<span style="color:#ff6b8a">Error: ' + escapeHTML(e.message) + '</span>'; fullText = '';
+      if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; }
+      
+      const errMsg = e.message.includes('timeout') || e.message.includes('hang')
+        ? 'Koneksi ke server timeout. Coba lagi 30 detik.'
+        : e.message.includes('API')
+        ? 'Server lagi down. Coba lagi nanti.'
+        : 'Ada gangguan. Coba kirim ulang.';
+      bubble.innerHTML = '<span style="color:#ff6b8a">' + errMsg + '</span>'; 
+      fullText = '';
     }
     
   } catch (e) { 
     if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } 
-    bubble.innerHTML = '<span style="color:#ff6b8a">Error: ' + escapeHTML(e.message || 'unknown') + '</span>'; 
+    const errMsg = e.message.includes('timeout') || e.message.includes('hang')
+      ? 'Koneksi ke server timeout. Coba lagi 30 detik.'
+      : e.message.includes('API')
+      ? 'Server lagi down. Coba lagi nanti.'
+      : 'Ada gangguan. Coba kirim ulang.';
+    bubble.innerHTML = '<span style="color:#ff6b8a">' + errMsg + '</span>'; 
   }
   
   currentAbort = null; isGenerating = false; sendBtn.style.display = 'flex'; sendBtn.disabled = false; stopBtn.classList.remove('active'); input.focus();
@@ -224,7 +247,7 @@ async function processAPI(text, isRegenerate = false) {
 
 async function kirim() {
   if (!isActivated) return; const text = input.value.trim(); if (!text || isGenerating) return;
-  const now = Date.now(); if (now - lastMessageTime < RATE_LIMIT) { showToast('Sabar, 2 detik dulu.', 2000); return; } lastMessageTime = now;
+  const now = Date.now(); if (now - lastMessageTime < RATE_LIMIT) { let sisa = Math.ceil((RATE_LIMIT - (now - lastMessageTime)) / 1000); showToast('Sabar, ' + sisa + ' detik...', 1500); return; } lastMessageTime = now;
   await processAPI(text, false);
 }
 
@@ -247,8 +270,18 @@ stopBtn.addEventListener('click', () => {
 
 newChatBtn.addEventListener('click', () => createNewSession()); clearBtn.addEventListener('click', () => modal.classList.add('active'));
 document.getElementById('cancelClear').addEventListener('click', () => modal.classList.remove('active'));
-document.getElementById('confirmClear').addEventListener('click', () => { if (currentSessionId) { window.deleteSession(currentSessionId); } modal.classList.remove('active'); });
+document.getElementById('confirmClear').addEventListener('click', () => { if (currentSessionId) { window.deleteSession(currentSessionId); } modal.classList.remove('active'); showToast('Sesi dihapus. Sesi baru udah dibuat.', 2000); });
 modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('active'); }); noticeModal.addEventListener('click', e => { if (e.target === noticeModal) noticeModal.classList.remove('active'); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { modal.classList.remove('active'); noticeModal.classList.remove('active'); editModal.classList.remove('active'); } });
 
-renderWelcome(); updateNewChatBtn(); setTimeout(() => scrollToBottom(), 500);
+document.getElementById('banOk').addEventListener('click', () => {
+  document.getElementById('banModal').classList.remove('active');
+  document.getElementById('chatPage').style.display = 'none';
+  document.getElementById('landing').style.display = 'flex';
+  const inp = document.getElementById('input');
+  if (inp) { inp.disabled = true; inp.placeholder = 'Akses dicabut.'; }
+  document.getElementById('send').disabled = true;
+  document.getElementById('menuBtn').style.display = 'none';
+});
+
+renderWelcome(); updateNewChatBtn(); updateStrikeIndicator(); setTimeout(() => scrollToBottom(), 500);

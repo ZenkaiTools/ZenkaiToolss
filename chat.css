@@ -75,7 +75,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .icon-btn:active{transform:scale(0.95)}
 .icon-btn svg{width:17px;height:17px}
 
-#chat{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 20px 20px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;min-height:0;max-width:100%}
+#chat{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 20px 60px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;min-height:0;max-width:100%}
 #chat::-webkit-scrollbar{width:6px}
 #chat::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
 #chat::-webkit-scrollbar-track{background:transparent}
@@ -88,6 +88,8 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .welcome-chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;max-width:640px;margin:0 auto}
 .chip{padding:9px 15px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:999px;font-size:12.5px;color:var(--text-secondary);cursor:pointer;transition:0.2s;font-family:inherit}
 .chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);transform:translateY(-1px)}
+[data-theme="light"] .chip { background: #ebebf0; border-color: #d1d1d9; color: #555; }
+[data-theme="light"] .chip:hover { background: rgba(230,0,51,0.08); color: #e60033; }
 
 .msg-row{display:flex;margin:12px 0;animation:slideUp 0.25s ease-out;min-width:0;max-width:100%;position:relative}
 @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -136,6 +138,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 
 .md-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .md-table th{background:rgba(255,31,75,0.12);padding:9px 12px;text-align:left;font-weight:700;color:var(--accent);border-bottom:1px solid var(--border)}
+[data-theme="light"] .md-table th { background: rgba(230,0,51,0.08); }
 .md-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text-secondary)}
 .md-table tr:last-child td{border-bottom:none}
 .md-list{margin:10px 0 10px 22px;line-height:1.75}
@@ -150,7 +153,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .new-chat-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 .new-chat-btn.active{display:flex}
 .new-chat-btn svg{width:20px;height:20px}
-.scroll-bottom-btn{position:fixed;bottom:170px;right:20px;width:42px;height:42px;border-radius:50%;background:var(--accent);border:none;color:#fff;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:50;box-shadow:0 8px 24px rgba(255,31,75,0.5);transition:0.2s}
+.scroll-bottom-btn{position:fixed;bottom:150px;right:12px;width:38px;height:38px;border-radius:50%;background:var(--accent);border:none;color:#fff;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:50;box-shadow:0 8px 24px rgba(255,31,75,0.5);transition:0.2s}
 .scroll-bottom-btn.active{display:flex}
 .scroll-bottom-btn svg{width:18px;height:18px}
 
@@ -225,10 +228,13 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 
 .katex { font-size: 1.1em !important; }
 
+[data-theme="light"] .legal-consequence-box { color: #111118; }
+[data-theme="light"] .legal-consequence-box .lc-body { color: #333; }
+
 @media (max-width:500px){
   .bubble{max-width:100%}
   header{padding:12px 14px}
-  #chat{padding:16px 14px 12px}
+  #chat{padding:16px 14px 60px}
   .input-wrap{padding:10px 12px max(10px,env(safe-area-inset-bottom))}
   .landing-nav{padding:14px 18px}
   .warning-box{padding:22px 20px}
