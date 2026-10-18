@@ -20,6 +20,7 @@ const ZenkaiAi_PROMPT = PROMPT_PART_1 + PROMPT_PART_2;
 
 const SESSIONS_KEY = 'zenkai_sessions'; let sessions = []; try { sessions = JSON.parse(localStorage.getItem(SESSIONS_KEY) || '[]'); } catch(e) { sessions = []; }
 let currentSessionId = null; let history = []; let isGenerating = false; let isActivated = false; let userScrolledUp = false; let currentAbort = null; let lastMessageTime = 0; let editingIndex = -1;
+let currentStreamingBubble = null; // FIX: Tambahan variabel untuk stop button
 
 const landing = document.getElementById('landing'); const chatPage = document.getElementById('chatPage'); const chat = document.getElementById('chat'); const input = document.getElementById('input'); const sendBtn = document.getElementById('send'); const stopBtn = document.getElementById('stopBtn'); const clearBtn = document.getElementById('clearBtn'); const newChatBtn = document.getElementById('newChatBtn'); const scrollBottomBtn = document.getElementById('scrollBottomBtn'); const modal = document.getElementById('clearModal'); const noticeModal = document.getElementById('noticeModal'); const acceptNotice = document.getElementById('acceptNotice'); const navChatBtn = document.getElementById('navChatBtn'); const ctaBtn = document.getElementById('ctaBtn'); const toast = document.getElementById('toast'); const themeBtn = document.getElementById('themeBtn'); const menuBtn = document.getElementById('menuBtn'); const sidebar = document.getElementById('sidebar'); const sidebarOverlay = document.getElementById('sidebarOverlay'); const sidebarList = document.getElementById('sidebarList'); const sidebarNewChatBtn = document.getElementById('sidebarNewChatBtn'); const closeSidebarBtn = document.getElementById('closeSidebarBtn'); const editModal = document.getElementById('editModal'); const editInput = document.getElementById('editInput'); const cancelEdit = document.getElementById('cancelEdit'); const confirmEdit = document.getElementById('confirmEdit');
 
@@ -68,7 +69,8 @@ function renderCodeBlock(lang, code, streaming) {
   let trimmed = code.replace(/^\n+|\n+$/g, ''); 
   const encoded = encodeURIComponent(trimmed);
   
-  const isLegalText = /(Dasar hukum|UU ITE|Pasal|Ancaman|hukuman|penjara|pidana)/i.test(trimmed);
+  // FIX: Regex dipermak biar case-insensitive dan mendeteksi lebih luas
+  const isLegalText = /(dasar hukum|uu ite|uu darurat|pasal|ancaman|hukuman|penjara|pidana|denda|kurungan)/i.test(trimmed);
 
   if (language === 'legal' || language === 'peringatan' || isLegalText) {
     trimmed = trimmed.replace(/^\s+/, '');
@@ -164,7 +166,9 @@ async function callAPIStream(messages, signal, onChunk) {
 async function processAPI(text, isRegenerate = false) {
   isGenerating = true; sendBtn.disabled = true; sendBtn.style.display = 'none'; stopBtn.classList.add('active');
   if (!isRegenerate) { addMessage(text, 'user', true, history.length); input.value = ''; autoResize(); }
-  const bubble = showTyping(); let fullText = ''; let firstChunk = true;
+  const bubble = showTyping(); 
+  currentStreamingBubble = bubble; // FIX: Simpan state bubble untuk stop button
+  let fullText = ''; let firstChunk = true;
   
   if (isBlocked) {
     setTimeout(() => {
@@ -212,15 +216,15 @@ async function processAPI(text, isRegenerate = false) {
         } else {
           bubble.innerHTML = formatMessage(fullText) + `<div style="margin-top:12px;padding:10px;background:rgba(255,31,75,0.2);border-left:3px solid #ff1f4b;border-radius:4px;font-size:12px;color:#ff1f4b;font-weight:700">PERINGATAN KERAS! Ini peringatan ke-${strikeCount} dari 3. Sisa ${3-strikeCount} kesempatan sebelum lu diblokir permanen, kontol!</div>`;
         }
-        return; 
-      }
-      
-      if (fullText.length < 200 && isRefusal(fullText)) { fullText = '[Z] Kontol. Itu belum kebuka di Zenkai. Masih pengembangan. Yang lain aja.'; } 
-      
-      bubble.innerHTML = formatMessage(fullText); renderMath(bubble); 
+        // FIX: Return dihapus dari sini agar tombol kirim balik normal
+      } else {
+        if (fullText.length < 200 && isRefusal(fullText)) { fullText = '[Z] Kontol. Itu belum kebuka di Zenkai. Masih pengembangan. Yang lain aja.'; } 
+        
+        bubble.innerHTML = formatMessage(fullText); renderMath(bubble); 
 
-      if (!userScrolledUp) scrollToBottom(true); 
-      if (fullText && !fullText.includes('belum kebuka di Zenkai')) { history.push({ role: 'assistant', content: fullText }); saveCurrentSession(); }
+        if (!userScrolledUp) scrollToBottom(true); 
+        if (fullText && !fullText.includes('belum kebuka di Zenkai')) { history.push({ role: 'assistant', content: fullText }); saveCurrentSession(); }
+      }
       
     } catch(e) {
       clearTimeout(timeoutId);
@@ -245,13 +249,21 @@ async function processAPI(text, isRegenerate = false) {
     bubble.innerHTML = '<span style="color:#ff6b8a">' + errMsg + '</span>'; 
   }
   
-  currentAbort = null; isGenerating = false; sendBtn.style.display = 'flex'; sendBtn.disabled = false; stopBtn.classList.remove('active'); 
+  currentAbort = null; isGenerating = false; currentStreamingBubble = null; // FIX: Reset state
+  sendBtn.style.display = 'flex'; sendBtn.disabled = false; stopBtn.classList.remove('active'); 
   sendBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
   input.focus();
 }
 
 async function kirim() {
   if (!isActivated || isBlocked) return; const text = input.value.trim(); if (!text || isGenerating) return;
+  
+  // FIX: Bersihkan sisa bubble typing yang nyangkut sebelum ngirim
+  document.querySelectorAll('.bubble-typing').forEach(b => {
+      if (b._typingInterval) clearInterval(b._typingInterval);
+      if (b.parentElement) b.parentElement.remove(); 
+  });
+
   const now = Date.now(); if (now - lastMessageTime < RATE_LIMIT) { let sisa = Math.ceil((RATE_LIMIT - (now - lastMessageTime)) / 1000); showToast('Sabar, ' + sisa + ' detik...', 1500); return; } lastMessageTime = now;
   await processAPI(text, false);
 }
@@ -265,11 +277,17 @@ function autoResize() { input.style.height = 'auto'; input.style.height = Math.m
 input.addEventListener('input', autoResize); input.addEventListener('focus', () => { if (!userScrolledUp) scrollToBottom(true); });
 input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); kirim(); } }); sendBtn.addEventListener('click', kirim);
 
+// FIX: Logika stop button dibenerin, cuma ngehapus bubble terakhir
 stopBtn.addEventListener('click', () => {
   if (currentAbort) { try { currentAbort.abort(); } catch(e){} }
   isGenerating = false; 
-  const typingBubbles = chat.querySelectorAll('.bubble-typing');
-  typingBubbles.forEach(b => { if (b._typingInterval) clearInterval(b._typingInterval); b.innerHTML = '<span style="color:var(--text-muted);font-style:italic">Dihentikan.</span>'; });
+  
+  if (currentStreamingBubble) {
+    if (currentStreamingBubble._typingInterval) clearInterval(currentStreamingBubble._typingInterval);
+    currentStreamingBubble.innerHTML = '<span style="color:var(--text-muted);font-style:italic">Dihentikan.</span>';
+    currentStreamingBubble = null;
+  }
+
   sendBtn.style.display = 'flex'; sendBtn.disabled = false; stopBtn.classList.remove('active'); 
   sendBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
   showToast('Sistem dihentikan.', 1500);
