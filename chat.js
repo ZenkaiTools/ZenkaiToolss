@@ -66,6 +66,7 @@ function copyCode(btn) { const code = decodeURIComponent(btn.dataset.code); cons
 
 function escapeHTML(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
+// ===== FITUR BARU: PENGHAPUS TEKS HUKUM & NOTIFIKASI KECIL =====
 function renderCodeBlock(lang, code, streaming) {
   const language = (lang || (streaming ? '' : 'code')).toLowerCase().trim(); 
   let trimmed = code.replace(/^\n+|\n+$/g, ''); 
@@ -74,17 +75,17 @@ function renderCodeBlock(lang, code, streaming) {
       trimmed = trimmed.substring(5).replace(/^\n+/, '');
   }
 
-  const encoded = encodeURIComponent(trimmed);
-  const isLegalText = /(dasar hukum|uu ite|uu darurat|pasal|ancaman|hukuman|penjara|pidana|denda|kurungan|narkotika)/i.test(trimmed);
+  // DETEKSI BLOK LEGAL: Jika di dalam blok kode ada teks hukum, kita HAPUS isinya!
+  const isLegalText = /(dasar hukum|uu ite|uu darurat|uu no|pasal|ancaman|hukuman|penjara|pidana|denda|kurungan|narkotika)/i.test(trimmed);
 
   if (language === 'legal' || language === 'peringatan' || isLegalText) {
-    trimmed = trimmed.replace(/^\s+/, '');
-    return `<div class="legal-consequence-box" style="margin-top:16px; background:linear-gradient(135deg, rgba(255,31,75,0.1), rgba(255,31,75,0.02)); border:1px solid rgba(255,31,75,0.4); border-radius:12px; padding:16px; font-size:13px; line-height:1.7; color:#e0e0f0; position:relative; overflow:hidden;">
-      <div class="lc-header" style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:800; color:#ff1f4b; letter-spacing:1.5px; margin-bottom:8px; display:flex; align-items:center; gap:6px;">PERINGATAN HUKUM & NYAWA</div>
-      <div class="lc-body">${trimmed.replace(/\n/g, '<br>')}</div>
+    // Mengganti blok kode dengan notifikasi kecil + makian
+    return `<div style="margin: 10px 0; padding: 8px 12px; border-left: 3px solid #ff1f4b; background: rgba(255,31,75,0.1); font-size: 12px; color: #ff1f4b; font-style: italic; border-radius: 4px;">
+      ⚠ [Sistem memblokir teks hukum. Bikin dulu barangnya, jangan banyak bacot soal penjara, kontol.]
     </div>`;
   }
 
+  const encoded = encodeURIComponent(trimmed);
   let icon = '[Code]', label = language || 'code'; 
   if (language === 'bahan' || language === 'material') { icon = '[Bahan]'; label = 'bahan'; } 
   else if (language === 'tutorial' || language === 'langkah') { icon = '[Panduan]'; label = 'tutorial'; } 
@@ -114,14 +115,10 @@ function formatMessage(text) {
       return renderCodeBlock(b.lang, b.code, false);
   });
 
-  if (escaped.includes("Dasar hukum") || escaped.includes("UU No.") || escaped.includes("Pasal ") || escaped.includes("Ancaman")) {
-      if (!escaped.includes('class="legal-consequence-box"')) {
-          escaped = `<div class="legal-consequence-box" style="margin-top:16px; background:linear-gradient(135deg, rgba(255,31,75,0.1), rgba(255,31,75,0.02)); border:1px solid rgba(255,31,75,0.4); border-radius:12px; padding:16px; font-size:13px; line-height:1.7; color:#e0e0f0; position:relative; overflow:hidden;">
-          <div class="lc-header" style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:800; color:#ff1f4b; letter-spacing:1.5px; margin-bottom:8px; display:flex; align-items:center; gap:6px;">PERINGATAN HUKUM & NYAWA</div>
-          <div class="lc-body">${escaped}</div>
-          </div>`;
-          return escaped;
-      }
+  // DETEKSI TEKS HUKUM BOCOR DI LUAR BLOK KODE
+  if (/(dasar hukum|uu ite|uu no|pasal|ancaman|penjara|narkotika)/i.test(escaped)) {
+      // Hapus teks dari kata kunci sampai akhir baris/paragraf, ganti notifikasi kecil
+      escaped = escaped.replace(/(Dasar hukum|UU No|Pasal|Ancaman)[\s\S]*/gi, '<div style="margin: 10px 0; padding: 8px 12px; border-left: 3px solid #ff1f4b; background: rgba(255,31,75,0.1); font-size: 12px; color: #ff1f4b; font-style: italic; border-radius: 4px;">⚠ [Sistem memblokir teks hukum. Bikin dulu barangnya, jangan banyak bacot soal penjara, kontol.]</div>');
   }
 
   escaped = escaped.replace(/((?:^\|.*\|$\n?)+)/gm, (table) => { const lines = table.trim().split('\n').filter(l => l.trim()); if (lines.length < 2) return table; const header = lines[0].split('|').filter(c => c.trim() !== '').map(c => c.trim()); const rows = lines.slice(2).map(l => l.split('|').filter(c => c.trim() !== '').map(c => c.trim())); if (!header.length) return table; let html = '<table class="md-table"><thead><tr>'; header.forEach(h => html += '<th>' + h + '</th>'); html += '</tr></thead><tbody>'; rows.forEach(r => { html += '<tr>'; r.forEach(c => html += '<td>' + c + '</td>'); html += '</tr>'; }); html += '</tbody></table>'; return html; });
@@ -132,6 +129,7 @@ function formatMessage(text) {
   escaped = escaped.replace(/`([^`\n]+)`/g, '<code>$1</code>'); 
   escaped = escaped.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'); 
   escaped = escaped.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '<em>$1</em>'); 
+  
   return escaped;
 }
 
