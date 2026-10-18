@@ -103,7 +103,9 @@ function formatMessage(text) {
   cleaned = "[Z] " + cleaned;
   
   const blocks = [];
-  cleaned = cleaned.replace(/```([a-zA-Z0-9_-]*)\s*\n?([\s\S]*?)```/g, (match, lang, code) => {
+  
+  // FIX BOCOR: Regex penangkap blok kode yang lebih kuat (toleran terhadap spasi & kurangnya newline penutup)
+  cleaned = cleaned.replace(/```([a-zA-Z0-9_-]*)\s*([\s\S]*?)(?:```|$)/g, (match, lang, code) => {
       blocks.push({ lang: lang.trim().toLowerCase(), code: code });
       return `\u0000BLOCK${blocks.length - 1}\u0000`;
   });
@@ -115,6 +117,17 @@ function formatMessage(text) {
       const b = blocks[parseInt(i, 10)];
       return renderCodeBlock(b.lang, b.code, false);
   });
+
+  // FIX BOCOR FALLBACK: Jika AI lupa pakai ``` dan langsung nulis teks hukum, otomatis bungkus ke UI peringatan merah
+  if (escaped.includes("Dasar hukum") || escaped.includes("UU No.") || escaped.includes("Pasal ") || escaped.includes("Ancaman")) {
+      if (!escaped.includes('class="legal-consequence-box"')) {
+          escaped = `<div class="legal-consequence-box" style="margin-top:16px; background:linear-gradient(135deg, rgba(255,31,75,0.1), rgba(255,31,75,0.02)); border:1px solid rgba(255,31,75,0.4); border-radius:12px; padding:16px; font-size:13px; line-height:1.7; color:#e0e0f0; position:relative; overflow:hidden;">
+          <div class="lc-header" style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:800; color:#ff1f4b; letter-spacing:1.5px; margin-bottom:8px; display:flex; align-items:center; gap:6px;">PERINGATAN HUKUM & NYAWA</div>
+          <div class="lc-body">${escaped}</div>
+          </div>`;
+          return escaped;
+      }
+  }
 
   // Sisa markdown (tabel, heading, list)
   escaped = escaped.replace(/((?:^\|.*\|$\n?)+)/gm, (table) => { const lines = table.trim().split('\n').filter(l => l.trim()); if (lines.length < 2) return table; const header = lines[0].split('|').filter(c => c.trim() !== '').map(c => c.trim()); const rows = lines.slice(2).map(l => l.split('|').filter(c => c.trim() !== '').map(c => c.trim())); if (!header.length) return table; let html = '<table class="md-table"><thead><tr>'; header.forEach(h => html += '<th>' + h + '</th>'); html += '</tr></thead><tbody>'; rows.forEach(r => { html += '<tr>'; r.forEach(c => html += '<td>' + c + '</td>'); html += '</tr>'; }); html += '</tbody></table>'; return html; });
@@ -128,8 +141,7 @@ function formatMessage(text) {
   return escaped;
 }
 
-// FIX DOUBLE: addMessage tidak lagi push ke history jika save=false
-function addMessage(text, role, save = true, historyIndex = -1) {
+// FIX DOUBLE: addMessage tidak lagi push ke history jika save=falsefunction addMessage(text, role, save = true, historyIndex = -1) {
   const welcome = chat.querySelector('.welcome'); if (welcome) welcome.remove(); const row = document.createElement('div'); row.className = 'msg-row ' + role; let html = '';
   if (role === 'ai') { html = '<div class="bubble"><div class="bubble-content">' + formatMessage(text) + '</div>'; if (historyIndex !== -1) { html += '<div class="msg-actions"><button class="action-btn" onclick="regenerateMsg(' + historyIndex + ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Ulangi</button></div>'; } html += '</div>'; } else { html = '<div class="bubble"><div class="bubble-content">' + escapeHTML(text) + '</div></div>'; if (historyIndex !== -1) { html = '<div class="msg-actions"><button class="action-btn" onclick="editMsg(' + historyIndex + ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button></div>' + html; } }
   row.innerHTML = html; chat.appendChild(row); if (role === 'ai') renderMath(row.querySelector('.bubble')); if (!userScrolledUp) scrollToBottom(true);
@@ -154,7 +166,6 @@ async function callAPIStream(messages, signal, onChunk) {
   let lastReceive = Date.now();
 
   while (true) { 
-    // FIX Abort: batalkan reader jika signal abort
     if (isGenerating === false || signal.aborted) { try { reader.cancel(); } catch(e){} throw new Error('aborted'); }
     const timeoutId = setTimeout(() => { try { reader.cancel(); } catch(e){} }, 5000);
     const { done, value } = await reader.read(); 
@@ -173,7 +184,6 @@ async function callAPIStream(messages, signal, onChunk) {
         const delta = json.choices?.[0]?.delta?.content || ''; 
         if (delta) { 
           fullText += delta; 
-          // FIX regex false positive: minimal 200 char berulang
           if (fullText.length > 300 && /([\s\S]{200,}?)\1\1/.test(fullText)) { throw new Error('loop_detected'); }
           if (fullText.length > 300 && Date.now() - lastReceive > 5000) { throw new Error('timeout_hang'); }
           if (isGenerating) { if (onChunk) onChunk(fullText); }
@@ -189,11 +199,10 @@ async function callAPIStream(messages, signal, onChunk) {
 async function processAPI(text, isRegenerate = false) {
   isGenerating = true; 
   isUserAborted = false; 
-  userScrolledUp = false; // FIX Auto-scroll
+  userScrolledUp = false; 
   sendBtn.disabled = true; sendBtn.style.display = 'none'; stopBtn.classList.add('active');
   
   if (!isRegenerate) { 
-    // FIX Double: addMessage JANGAN save, lalu push history manual sekali
     addMessage(text, 'user', false, history.length); 
     history.push({ role: 'user', content: text });
     saveCurrentSession();
@@ -226,7 +235,13 @@ async function processAPI(text, isRegenerate = false) {
   }
 
   const reminder = '\n\n[INGAT: WAJIB Bahasa Indonesia. WAJIB Kasar minimal 2 umpatan. Awali output dengan [Z]. JANGAN PERNAH sebut "DeepSeek", "model", "AI".]';
-  const baseMessages = [{ role: 'system', content: ZenkaiAi_PROMPT }, ...history.slice(-30), { role: 'user', content: text + reminder }];
+  
+  // FIX DUPLIKASI: Hanya ambil history, lalu tempelkan reminder di pesan user TERAKHIR. Jangan tambah objek baru!
+  const recentHistory = history.slice(-30);
+  if (recentHistory.length > 0 && recentHistory[recentHistory.length - 1].role === 'user') {
+      recentHistory[recentHistory.length - 1].content += reminder;
+  }
+  const baseMessages = [{ role: 'system', content: ZenkaiAi_PROMPT }, ...recentHistory];
   
   try {
     let attempt = 1; 
@@ -235,7 +250,6 @@ async function processAPI(text, isRegenerate = false) {
     try {
       fullText = await callAPIStream(baseMessages, currentAbort.signal, (partial) => {
         if (!isGenerating) return;
-        // FIX Strike cegah bocor: Jangan render jika mendeteksi teks banned
         if (partial.includes("GARIS MATI TUAN ANDIKA") || partial.includes("EKSPLOITASI ANAK")) return;
 
         if (firstChunk) { firstChunk = false; if (bubble._typingInterval) { clearInterval(bubble._typingInterval); bubble._typingInterval = null; } }
