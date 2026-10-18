@@ -1,6 +1,5 @@
 /* ========================================================
-   ZENKAI AI - VERSI 1.5
-   Frontend 100% Bebas Sensor. Teks AI Dibiarin Full.
+   ZENKAI AI - VERSI 1.5 (FIXED STATE & UI)
    ======================================================== */
 
 /* ===== KONFIG ===== */
@@ -221,9 +220,9 @@ async function processAPI(text, isRegenerate = false) {
     return;
   }
 
+  // FIX: Ambil history, tambahkan reminder ke PESAN PALING AKHIR, JANGAN simpan ke database.
   const reminder = '\n\n[INGAT: WAJIB Bahasa Indonesia. WAJIB Kasar minimal 2 umpatan. Awali output dengan [Z]. JANGAN PERNAH sebut "DeepSeek", "model", "AI".]';
-  
-  const recentHistory = history.slice(-30);
+  const recentHistory = JSON.parse(JSON.stringify(history.slice(-30))); // Deep copy
   if (recentHistory.length > 0 && recentHistory[recentHistory.length - 1].role === 'user') {
       recentHistory[recentHistory.length - 1].content += reminder;
   }
@@ -374,8 +373,8 @@ document.getElementById('banOk').addEventListener('click', () => {
 
 renderWelcome(); updateNewChatBtn(); updateStrikeIndicator(); setTimeout(() => scrollToBottom(), 500);
 
-// TAMBAHAN: Nyuntik teks Versi 1.5 ke Header Chat
+// TAMBAHAN: Nyuntik teks Versi 1.5 ke Header Chat (Posisi Rapi)
 const brandText = document.querySelector('.brand-text p');
 if (brandText) {
-    brandText.innerHTML = '<span class="status-dot"></span> <span>Terhubung</span> <span style="color:var(--text-muted); margin-left:6px; font-weight:700;">// V1.5</span>';
+    brandText.innerHTML = '<span class="status-dot"></span> <span>Terhubung</span> <span style="color:var(--accent); margin-left:6px; font-weight:700; background:rgba(255,31,75,0.1); padding:1px 5px; border-radius:4px; font-size:9px;">// V1.5</span>';
 }
