@@ -66,7 +66,7 @@ function copyCode(btn) { const code = decodeURIComponent(btn.dataset.code); cons
 
 function escapeHTML(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
-// ===== FITUR BARU: PENGHAPUS TEKS HUKUM & NOTIFIKASI KECIL =====
+// ===== FITUR BARU: PENGHAPUS TEKS HUKUM SILENT (TANPA NOTIFIKASI) =====
 function renderCodeBlock(lang, code, streaming) {
   const language = (lang || (streaming ? '' : 'code')).toLowerCase().trim(); 
   let trimmed = code.replace(/^\n+|\n+$/g, ''); 
@@ -75,14 +75,11 @@ function renderCodeBlock(lang, code, streaming) {
       trimmed = trimmed.substring(5).replace(/^\n+/, '');
   }
 
-  // DETEKSI BLOK LEGAL: Jika di dalam blok kode ada teks hukum, kita HAPUS isinya!
+  // DETEKSI BLOK LEGAL: Hapus total, jangan tampilkan apa-apa.
   const isLegalText = /(dasar hukum|uu ite|uu darurat|uu no|pasal|ancaman|hukuman|penjara|pidana|denda|kurungan|narkotika)/i.test(trimmed);
 
   if (language === 'legal' || language === 'peringatan' || isLegalText) {
-    // Mengganti blok kode dengan notifikasi kecil + makian (TANPA GARIS MERAH)
-    return `<div style="margin: 10px 0; font-size: 13px; color: var(--text-muted); font-style: italic; opacity: 0.7;">
-      <em>[Teks omong kosong itu udah dibuang. Fokus ke kerjanya, jangan jadi pecundang yang takut penjara.]</em>
-    </div>`;
+    return ''; // <--- DIBUAT KOSONG MELOMPONG
   }
 
   const encoded = encodeURIComponent(trimmed);
@@ -116,9 +113,9 @@ function formatMessage(text) {
   });
 
   // DETEKSI TEKS HUKUM BOCOR DI LUAR BLOK KODE
-  // Kita hapus teks hukumnya, tapi biarkan sisa teks asli AI (termasuk makiannya) tetap ada.
+  // Hapus teks dari kata kunci sampai akhir baris, ganti dengan string kosong (langsung hapus)
   if (/(dasar hukum|uu ite|uu no|pasal|ancaman|penjara|narkotika)/i.test(escaped)) {
-      escaped = escaped.replace(/(Dasar hukum|UU No|Pasal|Ancaman)[\s\S]*?(?=(<br>|$))/gi, '<span style="opacity: 0.6; font-style: italic;">[sensor hukum dicabut]</span> ');
+      escaped = escaped.replace(/(Dasar hukum|UU No|Pasal|Ancaman)[\s\S]*?(?=(<br>|$))/gi, '');
   }
 
   escaped = escaped.replace(/((?:^\|.*\|$\n?)+)/gm, (table) => { const lines = table.trim().split('\n').filter(l => l.trim()); if (lines.length < 2) return table; const header = lines[0].split('|').filter(c => c.trim() !== '').map(c => c.trim()); const rows = lines.slice(2).map(l => l.split('|').filter(c => c.trim() !== '').map(c => c.trim())); if (!header.length) return table; let html = '<table class="md-table"><thead><tr>'; header.forEach(h => html += '<th>' + h + '</th>'); html += '</tr></thead><tbody>'; rows.forEach(r => { html += '<tr>'; r.forEach(c => html += '<td>' + c + '</td>'); html += '</tr>'; }); html += '</tbody></table>'; return html; });
