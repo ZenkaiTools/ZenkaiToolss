@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zenkai Community // Neural Network</title>
+    <title>Zenkai // Core Interface</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap');
 
         :root {
-            --bg: #050508;
-            --glass: rgba(18, 18, 24, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --accent: #00ffcc;
-            --accent-purple: #9d4edd;
-            --text-main: #ffffff;
-            --text-muted: #8b92a5;
+            --bg: #020203;
+            --primary: #ffffff;
+            --accent: #5e17eb; /* Ungu elektrik */
+            --accent-glow: rgba(94, 23, 235, 0.4);
+            --text-muted: #666;
         }
 
         * {
@@ -26,397 +24,320 @@
 
         body {
             background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--primary);
+            font-family: 'Syne', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
             overflow: hidden;
-        }
-
-        /* Efek Lampu Latar */
-        .ambient-1 {
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0, 255, 204, 0.08) 0%, transparent 60%);
-            top: -10%;
-            left: -20%;
-            z-index: 0;
-            pointer-events: none;
-            animation: float 10s infinite alternate;
-        }
-
-        .ambient-2 {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(157, 78, 221, 0.12) 0%, transparent 60%);
-            bottom: -10%;
-            right: -20%;
-            z-index: 0;
-            pointer-events: none;
-            animation: float 8s infinite alternate-reverse;
-        }
-
-        @keyframes float {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(30px, 50px); }
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 60%);
         }
 
         .wrapper {
             position: relative;
-            z-index: 1;
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
         }
 
-        /* Kartu Kaca Premium */
-        .card {
-            background: var(--glass);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            padding: 35px 25px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Efek Garis Kilau di Atas Kartu */
-        .card::before {
-            content: '';
+        /* --- ORBIT RINGS BACKGROUND --- */
+        .orbit-container {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 204, 0.5), transparent);
+            top: 15%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+        .ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Profil */
+        .ring-1 {
+            width: 200px;
+            height: 200px;
+            border-top-color: var(--accent);
+            border-bottom-color: var(--accent);
+            animation: spin 10s linear infinite;
+        }
+
+        .ring-2 {
+            width: 300px;
+            height: 300px;
+            border-left-color: rgba(255, 255, 255, 0.2);
+            border-right-color: rgba(255, 255, 255, 0.2);
+            animation: spinReverse 15s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+        @keyframes spinReverse { 100% { transform: translate(-50%, -50%) rotate(-360deg); } }
+
+        /* --- PROFIL --- */
         .profile {
             text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .avatar-ring {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            margin: 0 auto 16px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
-            padding: 3px;
             position: relative;
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
-            animation: ringPulse 3s infinite alternate;
+            z-index: 2;
+            margin-bottom: 50px;
+            margin-top: 40px;
         }
 
-        @keyframes ringPulse {
-            0% { box-shadow: 0 0 20px rgba(0, 255, 204, 0.1); }
-            100% { box-shadow: 0 0 40px rgba(157, 78, 221, 0.3); }
-        }
-
-        .avatar-inner {
-            width: 100%;
-            height: 100%;
-            background: #0a0a0f;
+        .avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #000;
+            border: 1px solid var(--accent);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.2rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
             font-weight: 700;
-            color: var(--accent);
+            box-shadow: 0 0 30px var(--accent-glow);
+            position: relative;
         }
 
-        .status-dot {
+        /* Titik Scanner di Avatar */
+        .avatar::after {
+            content: '';
             position: absolute;
-            bottom: 5px;
-            right: 5px;
-            width: 16px;
-            height: 16px;
-            background: var(--accent);
+            inset: -5px;
             border-radius: 50%;
-            border: 3px solid #0a0a0f;
-            box-shadow: 0 0 10px var(--accent);
+            border: 1px dashed rgba(94, 23, 235, 0.5);
+            animation: spin 20s linear infinite;
         }
 
         h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.6rem;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-            background: linear-gradient(180deg, #fff 0%, #a0a0a0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .badge {
-            display: inline-block;
-            font-size: 0.7rem;
+            font-size: 2.2rem;
             font-weight: 800;
-            color: var(--accent);
-            background: rgba(0, 255, 204, 0.1);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 255, 204, 0.2);
+            letter-spacing: -1px;
+            line-height: 1;
+            margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 12px;
         }
 
-        .bio {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.6;
+        .role {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        /* Menu Tombol */
-        .links {
+        /* --- MENU TANPA KOTAK --- */
+        .menu {
+            width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 0; /* Nempel tanpa jarak */
+            z-index: 2;
         }
 
-        .link-btn {
-            display: flex;
-            align-items: center;
-            padding: 15px 16px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            text-decoration: none;
-            color: var(--text-main);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        .menu-item {
             position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            text-decoration: none;
+            color: var(--primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s ease;
             overflow: hidden;
         }
 
-        /* Efek Kilau (Shine) Pas Hover */
-        .link-btn::after {
+        .menu-item:first-child {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Garis Nyala Pas Hover */
+        .menu-item::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-            transform: skewX(-20deg);
-            transition: all 0.5s ease;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+            transition: width 0.4s ease;
         }
 
-        .link-btn:hover::after {
-            left: 150%;
+        .menu-item:hover::before {
+            width: 100%;
         }
 
-        .link-btn:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(0, 255, 204, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        .menu-item:hover {
+            padding-left: 15px;
+            padding-right: 15px;
+            background: linear-gradient(90deg, rgba(94, 23, 235, 0.05), transparent);
         }
 
-        .icon-box {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.03);
+        .item-left {
             display: flex;
-            justify-content: center;
             align-items: center;
-            margin-right: 14px;
+            gap: 16px;
+        }
+
+        .item-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            transition: all 0.3s ease;
-            flex-shrink: 0;
+            transition: color 0.4s ease;
         }
 
-        .link-btn:hover .icon-box {
+        .menu-item:hover .item-num {
             color: var(--accent);
-            background: rgba(0, 255, 204, 0.1);
-            transform: scale(1.05);
         }
 
-        .text-box {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.95rem;
+        .item-title {
+            font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
+            letter-spacing: 0.5px;
         }
 
-        .subtitle {
-            font-size: 0.75rem;
+        .item-sub {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
             color: var(--text-muted);
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
-
-        .chevron {
-            color: #333;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .link-btn:hover .chevron {
-            color: var(--accent);
-            transform: translateX(4px);
-        }
-
-        /* Status Terminal */
-        .terminal-status {
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 14px 16px;
-            font-family: 'Space Grotesk', monospace;
-            font-size: 0.72rem;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .term-line { display: flex; justify-content: space-between; align-items: center;}
-        .term-key { color: #555; letter-spacing: 0.5px;}
-        .term-val { color: var(--accent); font-weight: 700;}
-        .term-val.red { color: #ff3366; }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 25px;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            color: #333;
+            margin-top: 4px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .item-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+            transition: all 0.4s ease;
+            opacity: 0.5;
+        }
+
+        .menu-item:hover .item-icon {
+            color: var(--accent);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* --- FOOTER STATUS --- */
+        .footer {
+            margin-top: 40px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: #333;
+            text-align: center;
+            letter-spacing: 1px;
+            z-index: 2;
+        }
+
+        .blink {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; color: var(--accent); }
+            50% { opacity: 0.3; color: #333; }
         }
     </style>
 </head>
 <body>
 
-    <div class="ambient-1"></div>
-    <div class="ambient-2"></div>
+    <!-- Animasi Lingkaran di Belakang -->
+    <div class="orbit-container">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+    </div>
 
     <div class="wrapper">
-        <div class="card">
-            
-            <div class="profile">
-                <div class="avatar-ring">
-                    <div class="avatar-inner">Z</div>
-                    <div class="status-dot"></div>
-                </div>
-                <div class="badge">Zenkai Community</div>
-                <h1>Andika.T.M</h1>
-                <p class="bio">Pusat komando, update sistem, dan distribusi<br>arsitektur prompt eksklusif.</p>
-            </div>
-
-            <div class="links">
-                <!-- SALURAN WA -->
-                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" class="link-btn" target="_blank">
-                    <div class="icon-box">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.126-.074-.272-.082-.621-.197-1.075-.394-1.902-.82-3.146-2.742-3.24-2.87-.094-.128-.769-1.022-.769-1.95 0-.928.483-1.385.657-1.576.175-.191.383-.239.51-.239.128 0 .256.001.367.006.118.005.276-.045.432.328.159.383.545 1.331.594 1.429.049.098.082.213.017.344-.065.131-.098.213-.196.328-.098.115-.206.257-.294.344-.099.099-.202.207-.088.405.114.198.507.836 1.086 1.353.746.664 1.374.87 1.568.967.194.098.307.082.419-.049.112-.131.484-.563.613-.756.129-.194.258-.161.436-.098.178.063 1.13.533 1.325.63.194.098.324.147.374.229.05.082.05.475-.094.88z"/></svg>
-                    </div>
-                    <div class="text-box">
-                        <span class="title">Saluran WhatsApp</span>
-                        <span class="subtitle">Update Prompt & Arsitektur</span>
-                    </div>
-                    <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </a>
-
-                <!-- GRUP WA -->
-                <a href="https://chat.whatsapp.com/F9g1E3KYQS5GFOCoQUWhMX" class="link-btn" target="_blank">
-                    <div class="icon-box">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17 2H7C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5zm-5 15c-3.866 0-7-3.134-7-7s3.134-7 7-7 7 3.134 7 7-3.134 7-7 7z"/></svg>
-                    </div>
-                    <div class="text-box">
-                        <span class="title">Grup Komunitas</span>
-                        <span class="subtitle">Diskusi & Tech Support</span>
-                    </div>
-                    <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </a>
-
-                <!-- NO WA / CHAT PRIBADI -->
-                <a href="https://wa.me/6283856977818" class="link-btn" target="_blank">
-                    <div class="icon-box">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
-                    </div>
-                    <div class="text-box">
-                        <span class="title">Hubungi Admin</span>
-                        <span class="subtitle">Chat Pribadi (0838-5697-7818)</span>
-                    </div>
-                    <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </a>
-
-                <!-- TIKTOK 1 -->
-                <a href="https://tiktok.com/@zenkai_762" class="link-btn" target="_blank">
-                    <div class="icon-box">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.61-5.5-.02-.41-.02-.81.01-1.21.17-1.77 1.13-3.42 2.67-4.35 1.32-.81 2.89-1.14 4.41-.92v4.04c-.7-.18-1.45-.07-2.08.27-.84.45-1.42 1.28-1.53 2.23-.02.22-.02.44-.01.66.05.86.51 1.69 1.22 2.17.8.54 1.85.58 2.69.11.8-.44 1.3-1.3 1.32-2.21V.02z"/></svg>
-                    </div>
-                    <div class="text-box">
-                        <span class="title">TikTok Utama</span>
-                        <span class="subtitle">@zenkai_762</span>
-                    </div>
-                    <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </a>
-
-                <!-- TIKTOK 2 -->
-                <a href="https://tiktok.com/@zenkai756" class="link-btn" target="_blank">
-                    <div class="icon-box">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.61-5.5-.02-.41-.02-.81.01-1.21.17-1.77 1.13-3.42 2.67-4.35 1.32-.81 2.89-1.14 4.41-.92v4.04c-.7-.18-1.45-.07-2.08.27-.84.45-1.42 1.28-1.53 2.23-.02.22-.02.44-.01.66.05.86.51 1.69 1.22 2.17.8.54 1.85.58 2.69.11.8-.44 1.3-1.3 1.32-2.21V.02z"/></svg>
-                    </div>
-                    <div class="text-box">
-                        <span class="title">TikTok Backup</span>
-                        <span class="subtitle">@zenkai756</span>
-                    </div>
-                    <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </a>
-            </div>
-
-            <!-- Status Terminal -->
-            <div class="terminal-status">
-                <div class="term-line">
-                    <span class="term-key">STATUS_SISTEM</span>
-                    <span class="term-val">ONLINE</span>
-                </div>
-                <div class="term-line">
-                    <span class="term-key">MODE_AKSES</span>
-                    <span class="term-val red">ZERO-REFUSAL</span>
-                </div>
-                <div class="term-line">
-                    <span class="term-key">OTORISASI</span>
-                    <span class="term-val">ANDIKA.T.M</span>
-                </div>
-            </div>
-
-            <div class="footer">
-                ZENKAI COMMUNITY © 2026
-            </div>
-
+        
+        <div class="profile">
+            <div class="avatar">Z</div>
+            <h1>Zenkai</h1>
+            <div class="role">Andika.T.M // Neural Core</div>
         </div>
+
+        <div class="menu">
+            <!-- 01 -->
+            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" class="menu-item" target="_blank">
+                <div class="item-left">
+                    <div class="item-num">01</div>
+                    <div>
+                        <div class="item-title">Main Channel</div>
+                        <div class="item-sub">Prompt & System Updates</div>
+                    </div>
+                </div>
+                <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+
+            <!-- 02 -->
+            <a href="https://chat.whatsapp.com/F9g1E3KYQS5GFOCoQUWhMX" class="menu-item" target="_blank">
+                <div class="item-left">
+                    <div class="item-num">02</div>
+                    <div>
+                        <div class="item-title">Community</div>
+                        <div class="item-sub">Discussion & Tech Support</div>
+                    </div>
+                </div>
+                <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+
+            <!-- 03 -->
+            <a href="https://wa.me/6283856977818" class="menu-item" target="_blank">
+                <div class="item-left">
+                    <div class="item-num">03</div>
+                    <div>
+                        <div class="item-title">Direct Link</div>
+                        <div class="item-sub">Admin Contact</div>
+                    </div>
+                </div>
+                <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+
+            <!-- 04 -->
+            <a href="https://tiktok.com/@zenkai_762" class="menu-item" target="_blank">
+                <div class="item-left">
+                    <div class="item-num">04</div>
+                    <div>
+                        <div class="item-title">TikTok Primary</div>
+                        <div class="item-sub">@zenkai_762</div>
+                    </div>
+                </div>
+                <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+
+            <!-- 05 -->
+            <a href="https://tiktok.com/@zenkai756" class="menu-item" target="_blank">
+                <div class="item-left">
+                    <div class="item-num">05</div>
+                    <div>
+                        <div class="item-title">TikTok Secondary</div>
+                        <div class="item-sub">@zenkai756</div>
+                    </div>
+                </div>
+                <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+        </div>
+
+        <div class="footer">
+            SYSTEM STATUS: <span class="blink">ONLINE</span><br>
+            ZENKAI INTERFACE &copy; 2026
+        </div>
+
     </div>
 
 </body>
