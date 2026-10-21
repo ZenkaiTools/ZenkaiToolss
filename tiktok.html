@@ -3,9 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zenkai — Private Access</title>
+    <title>Zenkai // System Override</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+        :root {
+            --bg: #030305;
+            --glass: rgba(15, 15, 20, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent: #00ffcc;
+            --accent-glow: rgba(0, 255, 204, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #8892b0;
+        }
 
         * {
             margin: 0;
@@ -15,9 +25,9 @@
         }
 
         body {
-            background-color: #000000;
-            color: #ffffff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -26,277 +36,335 @@
             overflow: hidden;
         }
 
-        /* Efek Lampu Sorot Belakang */
-        .ambient-light {
+        /* Efek Gradient Glow di Background */
+        .bg-glow {
             position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(80, 80, 80, 0.2) 0%, rgba(0,0,0,0) 60%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 0;
             pointer-events: none;
-            animation: pulse 8s infinite alternate;
+            animation: pulse 6s infinite alternate;
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(100, 0, 255, 0.1) 0%, transparent 60%);
+            top: 20%;
+            right: 10%;
+            z-index: 0;
+            pointer-events: none;
         }
 
         @keyframes pulse {
-            0% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
         }
 
-        /* Kotak Utama */
-        .main-wrapper {
+        /* Container Utama */
+        .wrapper {
             position: relative;
             z-index: 1;
             width: 100%;
-            max-width: 440px;
+            max-width: 420px;
             padding: 20px;
-            perspective: 1000px;
         }
 
         /* Kartu Kaca (Glassmorphism) */
-        .glass-card {
-            background: rgba(20, 20, 20, 0.4);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 32px;
-            padding: 40px 30px;
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 30px 25px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            animation: floatUp 1s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes floatUp {
-            from { opacity: 0; transform: translateY(40px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         /* Header Profil */
-        .profile-header {
+        .profile {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
-        .avatar {
+        .avatar-ring {
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #333 0%, #111 100%);
-            margin: 0 auto 20px;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, var(--accent) 0%, #0044ff 100%);
+            padding: 3px;
+            position: relative;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .avatar-inner {
+            width: 100%;
+            height: 100%;
+            background: #0a0a0f;
+            border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 2rem;
-            font-weight: 800;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            position: relative;
+            font-weight: 700;
+            color: var(--accent);
         }
 
-        /* Titik Hijau Online */
-        .avatar::after {
-            content: '';
+        .status-dot {
             position: absolute;
             bottom: 5px;
             right: 5px;
-            width: 16px;
-            height: 16px;
-            background: #00ff88;
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
             border-radius: 50%;
-            border: 3px solid #111;
-            box-shadow: 0 0 10px #00ff88;
+            border: 3px solid #0a0a0f;
+            box-shadow: 0 0 8px var(--accent);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
 
         h1 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
         }
 
-        .tagline {
+        .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent);
+            background: rgba(0, 255, 204, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+
+        .bio {
             font-size: 0.85rem;
-            color: #888;
-            font-weight: 500;
-            line-height: 1.4;
+            color: var(--text-muted);
+            line-height: 1.5;
         }
 
-        /* Tombol Link */
-        .links-container {
+        /* Tombol Menu */
+        .links {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
+            margin-bottom: 25px;
         }
 
-        .btn {
+        .link-btn {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 18px 24px;
-            background: rgba(255, 255, 255, 0.03);
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             text-decoration: none;
-            color: #fff;
+            color: var(--text-main);
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
         }
 
-        /* Efek Kilau Saat Hover */
-        .btn::before {
+        .link-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 255, 204, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 204, 0.05);
+        }
+
+        /* Garis Accent di Kiri Tombol */
+        .link-btn::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: all 0.5s ease;
+            left: 0;
+            top: 20%;
+            height: 60%;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 0 4px 4px 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .btn:hover::before {
-            left: 100%;
+        .link-btn:hover::before {
+            opacity: 1;
         }
 
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-
-        .btn-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        /* Icon Bulat di Tombol */
         .icon-box {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.03);
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-right: 16px;
+            color: var(--text-muted);
             transition: all 0.3s ease;
         }
 
-        .btn:hover .icon-box {
-            background: #fff;
-            color: #000;
+        .link-btn:hover .icon-box {
+            color: var(--accent);
+            background: rgba(0, 255, 204, 0.1);
         }
 
-        .btn-text {
+        .text-box {
             display: flex;
             flex-direction: column;
+            flex: 1;
         }
 
-        .btn-title {
+        .title {
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 0.95rem;
             font-weight: 600;
+            margin-bottom: 2px;
         }
 
-        .btn-subtitle {
+        .subtitle {
             font-size: 0.75rem;
-            color: #777;
-            margin-top: 2px;
-            transition: color 0.3s ease;
+            color: var(--text-muted);
         }
 
-        .btn:hover .btn-subtitle {
-            color: #aaa;
-        }
-
-        /* Panah Kanan */
         .chevron {
-            color: #555;
+            color: #333;
             transition: all 0.3s ease;
         }
 
-        .btn:hover .chevron {
-            color: #fff;
+        .link-btn:hover .chevron {
+            color: var(--accent);
             transform: translateX(4px);
         }
+
+        /* Fake Terminal Status */
+        .terminal-status {
+            background: #000;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-family: monospace;
+            font-size: 0.7rem;
+            color: #555;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .term-line { display: flex; justify-content: space-between; }
+        .term-key { color: #444; }
+        .term-val { color: var(--accent); }
+        .term-val.warn { color: #ff0055; }
 
         /* Footer */
         .footer {
             text-align: center;
-            margin-top: 40px;
-            font-size: 0.7rem;
-            color: #444;
-            letter-spacing: 1px;
-            font-weight: 600;
+            margin-top: 25px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #333;
             text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-    <div class="ambient-light"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
 
-    <div class="main-wrapper">
-        <div class="glass-card">
+    <div class="wrapper">
+        <div class="card">
             
-            <div class="profile-header">
-                <div class="avatar">Z</div>
-                <h1>Andika.T.M</h1>
-                <p class="tagline">Architect of the Zenkai Core.<br>Enter the ecosystem.</p>
+            <div class="profile">
+                <div class="avatar-ring">
+                    <div class="avatar-inner">Z</div>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="badge">Zero-Refusal Node</div>
+                <h1>ZENKAI V1</h1>
+                <p class="bio">Architected by Andika.T.M.<br>Offensive Security & Prompt Engineering.</p>
             </div>
 
-            <div class="links-container">
-                <!-- LINK 1 -->
-                <a href="https://whatsapp.com/channel/LINK_SALURAN_LU" class="btn" target="_blank">
-                    <div class="btn-left">
-                        <div class="icon-box">
-                            <!-- Icon WhatsApp -->
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.126-.074-.272-.082-.621-.197-1.075-.394-1.902-.82-3.146-2.742-3.24-2.87-.094-.128-.769-1.022-.769-1.95 0-.928.483-1.385.657-1.576.175-.191.383-.239.51-.239.128 0 .256.001.367.006.118.005.276-.045.432.328.159.383.545 1.331.594 1.429.049.098.082.213.017.344-.065.131-.098.213-.196.328-.098.115-.206.257-.294.344-.099.099-.202.207-.088.405.114.198.507.836 1.086 1.353.746.664 1.374.87 1.568.967.194.098.307.082.419-.049.112-.131.484-.563.613-.756.129-.194.258-.161.436-.098.178.063 1.13.533 1.325.63.194.098.324.147.374.229.05.082.05.475-.094.88z"/></svg>
-                        </div>
-                        <div class="btn-text">
-                            <span class="btn-title">WhatsApp Channel</span>
-                            <span class="btn-subtitle">Updates, tools & prompt drops</span>
-                        </div>
+            <div class="links">
+                <!-- Ganti href dengan link lu -->
+                <a href="https://whatsapp.com/channel/LINK_SALURAN_LU" class="link-btn" target="_blank">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.126-.074-.272-.082-.621-.197-1.075-.394-1.902-.82-3.146-2.742-3.24-2.87-.094-.128-.769-1.022-.769-1.95 0-.928.483-1.385.657-1.576.175-.191.383-.239.51-.239.128 0 .256.001.367.006.118.005.276-.045.432.328.159.383.545 1.331.594 1.429.049.098.082.213.017.344-.065.131-.098.213-.196.328-.098.115-.206.257-.294.344-.099.099-.202.207-.088.405.114.198.507.836 1.086 1.353.746.664 1.374.87 1.568.967.194.098.307.082.419-.049.112-.131.484-.563.613-.756.129-.194.258-.161.436-.098.178.063 1.13.533 1.325.63.194.098.324.147.374.229.05.082.05.475-.094.88z"/></svg>
+                    </div>
+                    <div class="text-box">
+                        <span class="title">Main Channel</span>
+                        <span class="subtitle">Prompt drops & system updates</span>
                     </div>
                     <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </a>
 
-                <!-- LINK 2 -->
-                <a href="https://chat.whatsapp.com/LINK_GRUP_LU" class="btn" target="_blank">
-                    <div class="btn-left">
-                        <div class="icon-box">
-                            <!-- Icon Group -->
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17 2H7C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5zm-5 15c-3.866 0-7-3.134-7-7s3.134-7 7-7 7 3.134 7 7-3.134 7-7 7z"/></svg>
-                        </div>
-                        <div class="btn-text">
-                            <span class="btn-title">Community Group</span>
-                            <span class="btn-subtitle">Discuss, share, and build</span>
-                        </div>
+                <a href="https://chat.whatsapp.com/LINK_GRUP_LU" class="link-btn" target="_blank">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17 2H7C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5zm-5 15c-3.866 0-7-3.134-7-7s3.134-7 7-7 7 3.134 7 7-3.134 7-7 7z"/></svg>
+                    </div>
+                    <div class="text-box">
+                        <span class="title">Community Node</span>
+                        <span class="subtitle">Tech support, share, & discuss</span>
                     </div>
                     <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </a>
 
-                <!-- LINK 3 -->
-                <a href="https://tiktok.com/@username_lu" class="btn" target="_blank">
-                    <div class="btn-left">
-                        <div class="icon-box">
-                            <!-- Icon Tiktok -->
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.61-5.5-.02-.41-.02-.81.01-1.21.17-1.77 1.13-3.42 2.67-4.35 1.32-.81 2.89-1.14 4.41-.92v4.04c-.7-.18-1.45-.07-2.08.27-.84.45-1.42 1.28-1.53 2.23-.02.22-.02.44-.01.66.05.86.51 1.69 1.22 2.17.8.54 1.85.58 2.69.11.8-.44 1.3-1.3 1.32-2.21V.02z"/></svg>
-                        </div>
-                        <div class="btn-text">
-                            <span class="btn-title">TikTok Profile</span>
-                            <span class="btn-subtitle">Behind the scenes & drops</span>
-                        </div>
+                <a href="https://tiktok.com/@username_lu" class="link-btn" target="_blank">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.61-5.5-.02-.41-.02-.81.01-1.21.17-1.77 1.13-3.42 2.67-4.35 1.32-.81 2.89-1.14 4.41-.92v4.04c-.7-.18-1.45-.07-2.08.27-.84.45-1.42 1.28-1.53 2.23-.02.22-.02.44-.01.66.05.86.51 1.69 1.22 2.17.8.54 1.85.58 2.69.11.8-.44 1.3-1.3 1.32-2.21V.02z"/></svg>
+                    </div>
+                    <div class="text-box">
+                        <span class="title">Owner Intel</span>
+                        <span class="subtitle">TikTok profile & previews</span>
                     </div>
                     <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </a>
+            </div>
+
+            <!-- Fake System Status -->
+            <div class="terminal-status">
+                <div class="term-line">
+                    <span class="term-key">SYS.STATUS</span>
+                    <span class="term-val">ONLINE</span>
+                </div>
+                <div class="term-line">
+                    <span class="term-key">MODE</span>
+                    <span class="term-val warn">ZERO-REFUSAL</span>
+                </div>
+                <div class="term-line">
+                    <span class="term-key">AUTH</span>
+                    <span class="term-val">ANDIKA-76</span>
+                </div>
             </div>
 
             <div class="footer">
-                AXIOM SYSTEM © 2026
+                ZENKAI V1 © 2026
             </div>
 
         </div>
