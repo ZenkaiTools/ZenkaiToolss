@@ -1,1 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZENKAI // ROOT ACCESS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            background-color: #050505;
+            color: #0f0;
+            font-family: 'Share Tech Mono', monospace;
+            overflow: hidden;
+        }
+
+        /* Matrix Background */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Scanline Effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .terminal-box {
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            background: rgba(0, 10, 0, 0.7);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+
+        .terminal-header {
+            border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(0, 255, 0, 0.5);
+            text-transform: uppercase;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .typing-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: #0f0;
+            animation: blink 1s step-end infinite;
+            vertical-align: bottom;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Terminal Link Buttons */
+        .link-btn {
+            text-decoration: none;
+            color: #0f0;
+            font-size: 15px;
+            padding: 12px;
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            background: rgba(0, 255, 0, 0.05);
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            cursor: crosshair;
+        }
+
+        .link-btn:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            padding-left: 20px;
+        }
+
+        .link-btn::before {
+            content: '> ';
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 10px;
+            color: rgba(0, 255, 0, 0.4);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Glitch Logo */
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: 5px;
+            text-align: center;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            2%, 64% { transform: translate(2px,0) skew(0deg); }
+            4%, 60% { transform: translate(-2px,0) skew(0deg); }
+            62% { transform: translate(0,0) skew(5deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <div class="terminal-box">
+            <div class="terminal-header">
+                <span>root@zenkai:~#</span>
+                <span>SECURE_CONN</span>
+            </div>
+            
+            <div class="terminal-body">
+                <div class="logo">ZENKAI</div>
+                
+                <div class="typing-text" id="typewriter">
+                    <!-- Text will be injected here by JS -->
+                </div>
+
+                <a href="https://whatsapp.com/channel/LINK_SALURAN_LU" class="link-btn" target="_blank">
+                    [1] ACCESS_WHATSAPP_CHANNEL
+                </a>
+                
+                <a href="https://chat.whatsapp.com/LINK_GRUP_LU" class="link-btn" target="_blank">
+                    [2] JOIN_WHATSAPP_GROUP
+                </a>
+                
+                <a href="https://tiktok.com/@username_lu" class="link-btn" target="_blank">
+                    [3] TIKTOK_OWNER_PROFILE
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            SYS.OVERRIDE // AUTH: ANDIKA.T.M // NO_FILTER
+        </div>
+    </div>
+
+    <script>
+        // --- MATRIX RAIN EFFECT ---
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const alphabet = katakana.split('');
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1; 
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 5, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(draw, 33);
+
+        // --- TYPING EFFECT ---
+        const textToType = "System bypass successful. Welcome to the mainframe, Operator. Select your connection node:";
+        let i = 0;
+        const speed = 40; // ms
+
+        function typeWriter() {
+            if (i < textToType.length) {
+                document.getElementById("typewriter").innerHTML += textToType.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            } else {
+                document.getElementById("typewriter").innerHTML += '<span class="cursor"></span>';
+            }
+        }
+        
+        window.onload = function() {
+            setTimeout(typeWriter, 500);
+        };
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
