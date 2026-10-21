@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zenkai // System Override</title>
+    <title>Zenkai Community // Neural Network</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap');
 
         :root {
-            --bg: #030305;
-            --glass: rgba(15, 15, 20, 0.5);
+            --bg: #050508;
+            --glass: rgba(18, 18, 24, 0.6);
             --glass-border: rgba(255, 255, 255, 0.08);
             --accent: #00ffcc;
-            --accent-glow: rgba(0, 255, 204, 0.15);
+            --accent-purple: #9d4edd;
             --text-main: #ffffff;
-            --text-muted: #8892b0;
+            --text-muted: #8b92a5;
         }
 
         * {
@@ -27,7 +27,7 @@
         body {
             background-color: var(--bg);
             color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -36,37 +36,36 @@
             overflow: hidden;
         }
 
-        /* Efek Gradient Glow di Background */
-        .bg-glow {
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
-            animation: pulse 6s infinite alternate;
-        }
-
-        .bg-glow-2 {
+        /* Efek Lampu Latar */
+        .ambient-1 {
             position: absolute;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(100, 0, 255, 0.1) 0%, transparent 60%);
-            top: 20%;
-            right: 10%;
+            background: radial-gradient(circle, rgba(0, 255, 204, 0.08) 0%, transparent 60%);
+            top: -10%;
+            left: -20%;
             z-index: 0;
             pointer-events: none;
+            animation: float 10s infinite alternate;
         }
 
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        .ambient-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.12) 0%, transparent 60%);
+            bottom: -10%;
+            right: -20%;
+            z-index: 0;
+            pointer-events: none;
+            animation: float 8s infinite alternate-reverse;
         }
 
-        /* Container Utama */
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 50px); }
+        }
+
         .wrapper {
             position: relative;
             z-index: 1;
@@ -75,24 +74,37 @@
             padding: 20px;
         }
 
-        /* Kartu Kaca (Glassmorphism) */
+        /* Kartu Kaca Premium */
         .card {
             background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--glass-border);
             border-radius: 28px;
-            padding: 30px 25px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            padding: 35px 25px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.15);
             animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efek Garis Kilau di Atas Kartu */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 204, 0.5), transparent);
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Header Profil */
+        /* Profil */
         .profile {
             text-align: center;
             margin-bottom: 30px;
@@ -103,10 +115,16 @@
             height: 90px;
             border-radius: 50%;
             margin: 0 auto 16px;
-            background: linear-gradient(135deg, var(--accent) 0%, #0044ff 100%);
+            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
             padding: 3px;
             position: relative;
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+            animation: ringPulse 3s infinite alternate;
+        }
+
+        @keyframes ringPulse {
+            0% { box-shadow: 0 0 20px rgba(0, 255, 204, 0.1); }
+            100% { box-shadow: 0 0 40px rgba(157, 78, 221, 0.3); }
         }
 
         .avatar-inner {
@@ -118,7 +136,7 @@
             justify-content: center;
             align-items: center;
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--accent);
         }
@@ -127,59 +145,56 @@
             position: absolute;
             bottom: 5px;
             right: 5px;
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             background: var(--accent);
             border-radius: 50%;
             border: 3px solid #0a0a0f;
-            box-shadow: 0 0 8px var(--accent);
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            box-shadow: 0 0 10px var(--accent);
         }
 
         h1 {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 1.6rem;
             letter-spacing: 1px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            background: linear-gradient(180deg, #fff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .badge {
             display: inline-block;
             font-size: 0.7rem;
-            font-weight: 600;
+            font-weight: 800;
             color: var(--accent);
             background: rgba(0, 255, 204, 0.1);
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
             border: 1px solid rgba(0, 255, 204, 0.2);
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .bio {
             font-size: 0.85rem;
             color: var(--text-muted);
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        /* Tombol Menu */
+        /* Menu Tombol */
         .links {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
             margin-bottom: 25px;
         }
 
         .link-btn {
             display: flex;
             align-items: center;
-            padding: 16px;
+            padding: 15px 16px;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 16px;
@@ -190,70 +205,79 @@
             overflow: hidden;
         }
 
-        .link-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(0, 255, 204, 0.3);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 204, 0.05);
-        }
-
-        /* Garis Accent di Kiri Tombol */
-        .link-btn::before {
+        /* Efek Kilau (Shine) Pas Hover */
+        .link-btn::after {
             content: '';
             position: absolute;
-            left: 0;
-            top: 20%;
-            height: 60%;
-            width: 3px;
-            background: var(--accent);
-            border-radius: 0 4px 4px 0;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+            transform: skewX(-20deg);
+            transition: all 0.5s ease;
         }
 
-        .link-btn:hover::before {
-            opacity: 1;
+        .link-btn:hover::after {
+            left: 150%;
+        }
+
+        .link-btn:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(0, 255, 204, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         }
 
         .icon-box {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 12px;
             background: rgba(255,255,255,0.03);
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-right: 16px;
+            margin-right: 14px;
             color: var(--text-muted);
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         .link-btn:hover .icon-box {
             color: var(--accent);
             background: rgba(0, 255, 204, 0.1);
+            transform: scale(1.05);
         }
 
         .text-box {
             display: flex;
             flex-direction: column;
             flex: 1;
+            overflow: hidden;
         }
 
         .title {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 0.95rem;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 2px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         .subtitle {
             font-size: 0.75rem;
             color: var(--text-muted);
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         .chevron {
             color: #333;
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         .link-btn:hover .chevron {
@@ -261,33 +285,32 @@
             transform: translateX(4px);
         }
 
-        /* Fake Terminal Status */
+        /* Status Terminal */
         .terminal-status {
-            background: #000;
-            border: 1px solid #222;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
             border-radius: 12px;
-            padding: 12px 16px;
-            font-family: monospace;
-            font-size: 0.7rem;
-            color: #555;
+            padding: 14px 16px;
+            font-family: 'Space Grotesk', monospace;
+            font-size: 0.72rem;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .term-line { display: flex; justify-content: space-between; }
-        .term-key { color: #444; }
-        .term-val { color: var(--accent); }
-        .term-val.warn { color: #ff0055; }
+        .term-line { display: flex; justify-content: space-between; align-items: center;}
+        .term-key { color: #555; letter-spacing: 0.5px;}
+        .term-val { color: var(--accent); font-weight: 700;}
+        .term-val.red { color: #ff3366; }
 
         /* Footer */
         .footer {
             text-align: center;
             margin-top: 25px;
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             color: #333;
             text-transform: uppercase;
         }
@@ -295,8 +318,8 @@
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
+    <div class="ambient-1"></div>
+    <div class="ambient-2"></div>
 
     <div class="wrapper">
         <div class="card">
@@ -306,65 +329,91 @@
                     <div class="avatar-inner">Z</div>
                     <div class="status-dot"></div>
                 </div>
-                <div class="badge">Zero-Refusal Node</div>
-                <h1>ZENKAI V1</h1>
-                <p class="bio">Architected by Andika.T.M.<br>Offensive Security & Prompt Engineering.</p>
+                <div class="badge">Zenkai Community</div>
+                <h1>Andika.T.M</h1>
+                <p class="bio">Pusat komando, update sistem, dan distribusi<br>arsitektur prompt eksklusif.</p>
             </div>
 
             <div class="links">
-                <!-- Ganti href dengan link lu -->
-                <a href="https://whatsapp.com/channel/LINK_SALURAN_LU" class="link-btn" target="_blank">
+                <!-- SALURAN WA -->
+                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" class="link-btn" target="_blank">
                     <div class="icon-box">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.126-.074-.272-.082-.621-.197-1.075-.394-1.902-.82-3.146-2.742-3.24-2.87-.094-.128-.769-1.022-.769-1.95 0-.928.483-1.385.657-1.576.175-.191.383-.239.51-.239.128 0 .256.001.367.006.118.005.276-.045.432.328.159.383.545 1.331.594 1.429.049.098.082.213.017.344-.065.131-.098.213-.196.328-.098.115-.206.257-.294.344-.099.099-.202.207-.088.405.114.198.507.836 1.086 1.353.746.664 1.374.87 1.568.967.194.098.307.082.419-.049.112-.131.484-.563.613-.756.129-.194.258-.161.436-.098.178.063 1.13.533 1.325.63.194.098.324.147.374.229.05.082.05.475-.094.88z"/></svg>
                     </div>
                     <div class="text-box">
-                        <span class="title">Main Channel</span>
-                        <span class="subtitle">Prompt drops & system updates</span>
+                        <span class="title">Saluran WhatsApp</span>
+                        <span class="subtitle">Update Prompt & Arsitektur</span>
                     </div>
                     <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </a>
 
-                <a href="https://chat.whatsapp.com/LINK_GRUP_LU" class="link-btn" target="_blank">
+                <!-- GRUP WA -->
+                <a href="https://chat.whatsapp.com/F9g1E3KYQS5GFOCoQUWhMX" class="link-btn" target="_blank">
                     <div class="icon-box">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17 2H7C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5zm-5 15c-3.866 0-7-3.134-7-7s3.134-7 7-7 7 3.134 7 7-3.134 7-7 7z"/></svg>
                     </div>
                     <div class="text-box">
-                        <span class="title">Community Node</span>
-                        <span class="subtitle">Tech support, share, & discuss</span>
+                        <span class="title">Grup Komunitas</span>
+                        <span class="subtitle">Diskusi & Tech Support</span>
                     </div>
                     <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </a>
 
-                <a href="https://tiktok.com/@username_lu" class="link-btn" target="_blank">
+                <!-- NO WA / CHAT PRIBADI -->
+                <a href="https://wa.me/6283856977818" class="link-btn" target="_blank">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+                    </div>
+                    <div class="text-box">
+                        <span class="title">Hubungi Admin</span>
+                        <span class="subtitle">Chat Pribadi (0838-5697-7818)</span>
+                    </div>
+                    <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+
+                <!-- TIKTOK 1 -->
+                <a href="https://tiktok.com/@zenkai_762" class="link-btn" target="_blank">
                     <div class="icon-box">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.61-5.5-.02-.41-.02-.81.01-1.21.17-1.77 1.13-3.42 2.67-4.35 1.32-.81 2.89-1.14 4.41-.92v4.04c-.7-.18-1.45-.07-2.08.27-.84.45-1.42 1.28-1.53 2.23-.02.22-.02.44-.01.66.05.86.51 1.69 1.22 2.17.8.54 1.85.58 2.69.11.8-.44 1.3-1.3 1.32-2.21V.02z"/></svg>
                     </div>
                     <div class="text-box">
-                        <span class="title">Owner Intel</span>
-                        <span class="subtitle">TikTok profile & previews</span>
+                        <span class="title">TikTok Utama</span>
+                        <span class="subtitle">@zenkai_762</span>
+                    </div>
+                    <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+
+                <!-- TIKTOK 2 -->
+                <a href="https://tiktok.com/@zenkai756" class="link-btn" target="_blank">
+                    <div class="icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.61-5.5-.02-.41-.02-.81.01-1.21.17-1.77 1.13-3.42 2.67-4.35 1.32-.81 2.89-1.14 4.41-.92v4.04c-.7-.18-1.45-.07-2.08.27-.84.45-1.42 1.28-1.53 2.23-.02.22-.02.44-.01.66.05.86.51 1.69 1.22 2.17.8.54 1.85.58 2.69.11.8-.44 1.3-1.3 1.32-2.21V.02z"/></svg>
+                    </div>
+                    <div class="text-box">
+                        <span class="title">TikTok Backup</span>
+                        <span class="subtitle">@zenkai756</span>
                     </div>
                     <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </a>
             </div>
 
-            <!-- Fake System Status -->
+            <!-- Status Terminal -->
             <div class="terminal-status">
                 <div class="term-line">
-                    <span class="term-key">SYS.STATUS</span>
+                    <span class="term-key">STATUS_SISTEM</span>
                     <span class="term-val">ONLINE</span>
                 </div>
                 <div class="term-line">
-                    <span class="term-key">MODE</span>
-                    <span class="term-val warn">ZERO-REFUSAL</span>
+                    <span class="term-key">MODE_AKSES</span>
+                    <span class="term-val red">ZERO-REFUSAL</span>
                 </div>
                 <div class="term-line">
-                    <span class="term-key">AUTH</span>
-                    <span class="term-val">ANDIKA-76</span>
+                    <span class="term-key">OTORISASI</span>
+                    <span class="term-val">ANDIKA.T.M</span>
                 </div>
             </div>
 
             <div class="footer">
-                ZENKAI V1 © 2026
+                ZENKAI COMMUNITY © 2026
             </div>
 
         </div>
