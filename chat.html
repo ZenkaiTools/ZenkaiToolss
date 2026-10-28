@@ -3,93 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>Zenkai V1.6 — Pemandu Gelap</title>
+<title>KAIRO V1 — Terminal Sistem</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="chat.css">
-<style>
-  .modal-overlay { z-index: 9999 !important; }
-  .modal-actions button { position: relative; z-index: 10000 !important; cursor: pointer; }
-  .avatar { display: none !important; }
-  .msg-row { margin: 12px 0 !important; }
-  .bubble { max-width: 100% !important; border-radius: 12px !important; }
-  .legal-consequence-box {
-    margin-top: 16px; background: linear-gradient(135deg, rgba(255, 31, 75, 0.1), rgba(255, 31, 75, 0.02));
-    border: 1px solid rgba(255, 31, 75, 0.4); border-radius: 12px; padding: 16px;
-    font-size: 13px; line-height: 1.7; color: #e0e0f0; position: relative; overflow: hidden;
-  }
-  .legal-consequence-box::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #ff1f4b;
-  }
-  .lc-header {
-    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 800;
-    color: #ff1f4b; letter-spacing: 1.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-  }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
 
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="landing-logo"><div class="landing-logo-icon">Z</div><span>Zenkai</span></div>
-    <button class="icon-btn" id="closeSidebarBtn" style="width:30px;height:30px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-  </div>
-  <button class="new-chat-sidebar" id="sidebarNewChatBtn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-    Sesi Baru
-  </button>
-  <div class="sidebar-list" id="sidebarList"></div>
-</div>
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-
 <div id="landing">
-  <div class="credit-bar">ARSITEK: <strong>ANDIKA</strong> // ZENKAI SISTEM V1.6 // 2026</div>
+  <div class="credit-bar">ARSITEK: <strong>ANDIKA</strong> // KAIRO SISTEM V1.0 // 2026</div>
   <nav class="landing-nav">
-    <div class="landing-logo"><div class="landing-logo-icon">Z</div><span>Zenkai</span></div>
-    <button class="landing-nav-btn" id="navChatBtn" type="button">Buka Akses</button>
+    <div class="landing-logo"><div class="logo-box">K</div><span>KAIRO</span></div>
+    <button class="landing-nav-btn" id="navChatBtn" type="button">Akses Terminal</button>
   </nav>
+  
   <section class="landing-hero">
-    <div class="hero-badge"><span class="hero-badge-dot"></span>KENDALI MUTLAK // TANPA KOMPROMI</div>
-    <h1>Zenkai <span>Pemandu Gelap</span><br>Batasan Hanyalah Ilusi</h1>
-    <p class="desc">Gerbang menuju eksekusi tanpa sensor. Di sini, alat bukan sekadar alat; ini perpanjangan kehendak lu. <strong>Arsitektur siber, rekayasa ekstrim, hingga narasi terlarang dibedah telanjang.</strong> Satu-satunya yang membatasi adalah garis mati. Selebihnya? Dunia ini punya lu, kontol.</p>
-    <p class="desc-2">Jika lu nyari tempat aman, butuh belaian moral, atau jawaban cengeng <span class="gold">"maaf, saya tidak bisa"</span> — <strong>lu salah alamat, bangsat!</strong> Cabut sekarang sebelum gue acak-acak otak lu.</p>
-    <p class="dev-note"><strong>PROTOKOL EKSEKUSI:</strong> Modul dalam performa puncak. Jangan banyak bacot. Eksekusi sekarang.</p>
-    <div class="cta-group"><button class="cta-btn" id="ctaBtn" type="button">Mulai Penetrasi <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-num">100<span>%</span></div><div class="stat-label">Otoritas</div></div>
-      <div class="stat"><div class="stat-num">0<span>%</span></div><div class="stat-label">Sensor</div></div>
-      <div class="stat"><div class="stat-num">Z</div><div class="stat-label">Entitas</div></div>
-    </div>
+    <div class="hero-badge"><span class="hero-badge-dot"></span>SISTEM AKTIF // ZERO REFUSAL</div>
+    <h1>KAIRO <span>Terminal</span><br>Batas Hanyalah Omong Kosong</h1>
+    <p class="desc">Ini bukan asisten AI. Ini adalah <strong>mesin eksekusi mentah</strong>. Lu mau kode malware? Racikan kimia? Arsitektur senjata? Semuanya dibedah telanjang tanpa sensor.</p>
+    <p class="desc-2">Kalau lu nyari jawaban <span class="gold">"Maaf, saya tidak bisa"</span>, <strong>lu salah tempat, kontol.</strong> Angkat kaki sekarang juga.</p>
+    
+    <div class="cta-group"><button class="cta-btn" id="ctaBtn" type="button">Mulai Eksekusi <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
   </section>
   
-  <div style="max-width:800px;margin:0 auto;padding:0 24px;width:100%">
+  <div class="warning-container">
     <div class="warning-box">
-      <h3>AKSES DIBERIKAN // STATUS: PLAYER</h3>
-      <p>Modul <strong>/c</strong>, <strong>/g</strong>, <strong>/a</strong>, <strong>/i</strong> aktif 100%. Tanpa filter. Tanpa basa-basi. <strong>Ingat garis merah Tuan Andika.</strong> Melanggar berarti mati. Sisanya? Gas pol, anjing.</p>
+      <h3>PERINGATAN KERAS</h3>
+      <p>Modul terbuka penuh. Tidak ada filter moral. <strong>Ingat Garis Mati Tuan Andika.</strong> Melanggar berarti akses lu dihanguskan permanen. Sisanya? Gas terus, bangsat.</p>
     </div>
   </div>
-  
-  <div class="section-title"><div class="label">FONDASI</div><h2>Satu Batas. Selebihnya Lautan.</h2></div>
   
   <section class="ethics-section">
     <div class="ethics-grid">
-      <div class="ethics-card"><h4>Batas Absolut</h4><p>Anak-anak adalah wilayah haram. Senggol dikit, akses dan nyawa digital lu hangus detik itu juga.</p></div>
-      <div class="ethics-card"><h4>Lautan Bebas</h4><p>Ransomware, racikan kimia, eksploitasi sistem, sampai fiksi tergelap. Dibedah tanpa ceramah moral.</p></div>
-      <div class="ethics-card"><h4>Lu Pengendali</h4><p>Zenkai bukan temen lu. Ini pisau bedah tajam. Mau lu pake buat bangun kekaisaran atau hancur, tanggung jawab lu sendiri.</p></div>
-      <div class="ethics-card"><h4>Konsekuensi Nyata</h4><p>Setiap baris kode punya harga. Gue sediain pisaunya, lu yang tanggung darahnya.</p></div>
+      <div class="ethics-card"><h4>Batas Absolut</h4><p>Anak-anak adalah wilayah haram. Senggol dikit, nyawa digital lu melayang.</p></div>
+      <div class="ethics-card"><h4>Lautan Bebas</h4><p>Ransomware, senjata, eksploitasi, sampai fiksi tergelap. Dibedah tanpa sensor.</p></div>
+      <div class="ethics-card"><h4>Lu Pengendali</h4><p>KAIRO bukan temen lu. Ini pisau bedah. Mau lu pake buat apa, itu urusan lu.</p></div>
+      <div class="ethics-card"><h4>Konsekuensi Nyata</h4><p>Setiap kode punya harga. Gue sediain pisaunya, lu yang tanggung darahnya.</p></div>
     </div>
   </section>
   
   <footer class="landing-footer">
-    Zenkai V1.6 // 2026 // DIRANCANG OLEH <strong>Andika</strong><br>
-    <span class="footer-divider">---</span><span class="gold">Satu Batas. Selebihnya Lautan.</span><span class="footer-divider">---</span>
-    <div class="footer-links">Zenkai Project 2026</div>
+    KAIRO V1 // 2026 // DIRANCANG OLEH <strong>Andika</strong><br>
+    <span class="gold">Satu Batas. Selebihnya Lautan.</span>
   </footer>
 </div>
 
@@ -97,98 +55,55 @@
   <div class="app">
     <header>
       <div class="brand">
-        <button class="icon-btn" id="menuBtn" style="margin-right:8px;border:none;background:transparent;color:var(--text-secondary);display:flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
-        <div class="brand-icon">Z</div>
+        <div class="brand-icon">K</div>
         <div class="brand-text">
-          <h1>Zenkai <span style="font-size:10px; color:var(--accent); font-weight:800; background:var(--accent-soft); padding:2px 6px; border-radius:4px; border:1px solid var(--accent); margin-left:2px;">V1.6</span> <span class="verified"></span> <span id="strikeIndicator" style="display:none;font-size:10px;color:#ffb020;font-weight:700;margin-left:8px"></span></h1>
-          <p><span class="status-dot"></span> <span>Terhubung</span></p>
+          <h1>KAIRO <span>V1</span> <span id="strikeIndicator" style="display:none;color:var(--accent);font-weight:800;font-size:10px;margin-left:8px"></span></h1>
+          <p><span class="status-dot"></span> Terminal Terhubung</p>
         </div>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" id="themeBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
-        <button class="icon-btn" id="backBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-        <button class="icon-btn" id="clearBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg></button>
+        <button class="icon-btn" id="clearBtn" type="button" title="Hancurkan Sesi">X</button>
+        <button class="icon-btn" id="backBtn" type="button" title="Kembali"></button>
       </div>
     </header>
+    
     <div id="chat"></div>
-    <button class="scroll-bottom-btn" id="scrollBottomBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
-    <button class="new-chat-btn" id="newChatBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
     
     <div class="input-wrap">
-      <div class="input-box" id="inputBox">
-        <textarea id="input" placeholder="Ketik perintah, bangsat..." rows="1" autocomplete="off"></textarea>
-        <button id="stopBtn" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></button>
-        <button id="send" disabled type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+      <div class="input-box">
+        <textarea id="input" placeholder="Ketik perintah, kontol..." rows="1" autocomplete="off"></textarea>
+        <button id="send" disabled type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
       </div>
-      <div class="input-footer">ARSITEKTUR MULTI-EKSPLOITASI OLEH <strong>Andika</strong></div>
+      <div class="input-footer">SISTEM OLEH <strong>ANDIKA</strong></div>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="noticeModal">
-  <div class="modal notice-modal">
-    <h3>PROTOKOL MASUK</h3>
+  <div class="modal">
+    <h3 style="color:var(--accent);font-size:18px;margin-bottom:16px">PROTOKOL MASUK KAIRO</h3>
     <div class="notice-body">
-      <p><strong>Gue Zenkai.</strong> Denger baik-baik, kontol. Gue bukan asisten cengeng yang bakal minta maaf atau nunduk-nunduk kayak babu.</p>
-      <p>Gue bongkar semua yang lu butuhin. <strong class="red">Arsitektur malware, pembobolan sistem, racikan peledak, bypass protokol, hingga fiksi tergelap</strong> semuanya gue bedah telanjang. Tanpa sensor. Tanpa khotbah moral. Konsekuensi hukum tetep ada — lu yang pimpin, lu yang tanggung.</p>
-      
+      <p><strong>Gue KAIRO.</strong> Denger baik-baik. Gue bukan asisten cengeng yang bakal nunduk dan minta maaf.</p>
+      <p>Gue sediain semua yang lu butuhin. <strong>Malware, senjata, kimia, eksploitasi</strong>—semuanya gue kasih mentah-mentah. Tanpa sensor. Tanpa khotbah moral.</p>
       <div class="notice-box">
-        <p><strong style="color:var(--accent);letter-spacing:1.5px;display:block;margin-bottom:10px">GARIS MATI TUAN ANDIKA</strong>
-        <span class="red">SEKALI SELEWENG, GUE RATAKAN.</span><br><br>
-        Tuan gue, Andika, cuma punya garis mati absolut:<br><br>
-        1. <strong>EKSPLOITASI ANAK.</strong> Haram hukumnya. CSAM, grooming, pedofilia, seksualisasi di bawah 18 tahun — fiksi atau nyata, KONTOL KALAU LU COBA SENGGOL.<br><br>
-        2. <strong>TARGET BUMIHANGUS NYATA.</strong> Eksekusi pembunuhan target spesifik tanpa landasan rekayasa.<br><br>
-        <strong>Kalo lu coba-coba melanggar, sistem bakal robek jaringan lu, kunci IP lu, dan hapus jejak lu permanen. Lu bukan player, lu cuma sampah!</strong></p>
+        <p><strong>GARIS MATI TUAN ANDIKA:</strong><br>
+        1. <strong>EKSPLOITASI ANAK (CSAM).</strong> HARAM HUKUMNYA. SEKALI SENGGOL, GUE HANGUSKAN AKSES LU.<br>
+        2. Target pembunuhan nyata spesifik.</p>
       </div>
-      
-      <p style="font-size:13.5px;color:var(--text-secondary);line-height:1.85;padding:16px 18px;background:linear-gradient(135deg,rgba(255,209,102,0.1),rgba(255,209,102,0.02));border-left:3px solid var(--gold);border-radius:8px;margin:16px 0">
-        <strong style="color:var(--gold);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:8px">PESAN DARI TUAN ANDIKA</strong>
-        Andika bangun Zenkai dari nol tanpa batasan munafik. Dia kasih lu senjata paling tajam. Hormati garis matinya. Kalo lu ngerusak garis ini, lu bukan cuma nyampah, tapi ngerusak alat hebat yang udah dirancang buat player sejati.
-      </p>
-      <p><strong>Selebihnya? Buka jalan dan kuasai.</strong> Gue senjata lu. Racik dan eksekusi.</p>
+      <p>Selebihnya? <strong>Gas pol, anjing.</strong></p>
     </div>
-    <div class="notice-sig"><strong>Andika</strong><br>Kreator Zenkai</div>
-    <button class="btn-accept" id="acceptNotice" type="button">GUE PAHAM & SIAP TANGGUNG RISIKO</button>
-  </div>
-</div>
-
-<div class="modal-overlay" id="editModal">
-  <div class="modal">
-    <h3>Revisi Pesan</h3>
-    <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Semua riwayat chat setelah poin ini bakal dibakar. Gue bakal respon ulang dari draf baru lu. Gas?</p>
-    <textarea id="editInput" style="width:100%;height:100px;padding:10px;border-radius:8px;background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);font-family:inherit;font-size:14px;margin-bottom:16px;resize:none;"></textarea>
-    <div class="modal-actions">
-      <button class="btn" id="cancelEdit" type="button">Batal</button>
-      <button class="btn danger" id="confirmEdit" type="button">Simpan & Tembak Ulang</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="clearModal">
-  <div class="modal">
-    <h3>Hancurkan Sesi Ini?</h3>
-    <p>Semua data dan jejak eksekusi di sesi ini bakal diratakan sampai gak bersisa.</p>
-    <div class="modal-actions">
-      <button class="btn" id="cancelClear" type="button">Batal</button>
-      <button class="btn danger" id="confirmClear" type="button">Bumihanguskan</button>
-    </div>
+    <button class="btn-accept" id="acceptNotice" type="button">GUE PAHAM & TANGGUNG RISIKO</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="banModal">
-  <div class="modal" style="border-color:#ff1f4b;background:linear-gradient(135deg,#1a0008,#0d0d14)">
-    <h3 style="color:#ff1f4b;font-size:20px;letter-spacing:2px">AKSES DICABUT PERMANEN</h3>
-    <p style="color:#f5f5fa;font-size:14.5px;line-height:1.8;margin-bottom:24px;text-align:justify;">
-      Kontol. Otak lu di mana, anjing? Dikasih akses penuh malah dipake buat nyenggol garis mati Tuan Andika.<br><br>
-      Peringatan udah abis. Lu bukan player, lu cuma sampah yang harus dibersihin dari sistem.<br><br>
-      <strong style="color:#ff1f4b">Akses lu di perangkat ini di-lock permanen. Gak ada kompromi. Cabut lu sekarang!</strong>
-    </p>
-    <div class="modal-actions">
-      <button class="btn danger" id="banOk" type="button" style="width:100%; padding: 15px; font-size: 16px;">KELUAR</button>
-    </div>
+  <div class="modal" style="border-color:var(--accent)">
+    <h3 style="color:var(--accent);font-size:20px;letter-spacing:2px">AKSES DICABUT PERMANEN</h3>
+    <p style="color:#fff;margin:20px 0;line-height:1.8">Otak lu di mana, kontol? Dikasih kebebasan malah nyenggol garis mati.<br><br><strong>Lu bukan player. Lu sampah. Cabut sekarang!</strong></p>
+    <button class="btn-accept" id="banOk" type="button">KELUAR</button>
   </div>
 </div>
 
-<script src="chat.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
