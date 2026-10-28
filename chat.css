@@ -187,6 +187,13 @@ html, body { height:100%; overflow:hidden; background:var(--bg-primary); color:v
 .ethics-card:hover::before { opacity:1; }
 .ethics-card h4 { font-size:12.5px; font-weight:800; color:var(--text-primary); margin-bottom:6px; letter-spacing:1px; text-transform:uppercase; font-family:'IBM Plex Mono',monospace; }
 .ethics-card p { font-size:12px; color:var(--text-muted); line-height:1.6; }
+.eth-icon {
+  width: 28px; height: 28px; color: var(--accent);
+  margin-bottom: 12px; opacity: 0.8; transition: 0.3s;
+}
+.ethics-card:hover .eth-icon {
+  opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 8px var(--accent-glow));
+}
 .landing-footer {
   text-align:center; padding:30px 24px; font-size:11px; color:var(--text-muted);
   border-top:1px solid var(--border); line-height:1.9; font-family:'IBM Plex Mono',monospace;
@@ -201,9 +208,6 @@ html, body { height:100%; overflow:hidden; background:var(--bg-primary); color:v
 #chatPage.active { display:flex; }
 .app { height:100%; display:flex; flex-direction:column; max-width:900px; margin:0 auto; width:100%; overflow:hidden; position:relative; background: transparent; }
 
-/* [Sisa CSS Chat, Header, Input, Modal, dll SAMA PERSIS SEPERTI SEBELUMNYA, 
-   tidak ada yang berubah dari logika fungsional. 
-   Hanya background landing yang dirombak di atas. */
 header {
   display:flex; align-items:center; justify-content:space-between;
   padding:14px 20px; border-bottom:1px solid var(--border);
