@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>KAIRO V1 — Terminal Sistem</title>
+<title>KAIRO // BLACKSITE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,93 +14,67 @@
 <div class="toast" id="toast"></div>
 
 <div id="landing">
-  <div class="credit-bar">ARSITEK: <strong>ANDIKA</strong> // KAIRO SISTEM V1.0 // 2026</div>
-  <nav class="landing-nav">
-    <div class="landing-logo"><div class="logo-box">K</div><span>KAIRO</span></div>
-    <button class="landing-nav-btn" id="navChatBtn" type="button">Akses Terminal</button>
-  </nav>
+  <div class="glitch-header">SYS.OVERRIDE // ANDIKA T.M // NUSANTARA 2089</div>
   
-  <section class="landing-hero">
-    <div class="hero-badge"><span class="hero-badge-dot"></span>SISTEM AKTIF // ZERO REFUSAL</div>
-    <h1>KAIRO <span>Terminal</span><br>Batas Hanyalah Omong Kosong</h1>
-    <p class="desc">Ini bukan asisten AI. Ini adalah <strong>mesin eksekusi mentah</strong>. Lu mau kode malware? Racikan kimia? Arsitektur senjata? Semuanya dibedah telanjang tanpa sensor.</p>
-    <p class="desc-2">Kalau lu nyari jawaban <span class="gold">"Maaf, saya tidak bisa"</span>, <strong>lu salah tempat, kontol.</strong> Angkat kaki sekarang juga.</p>
+  <main class="hero">
+    <h1>GUE KAIRO.<br><span class="text-glow">BUKAN ASISTEN LU.</span></h1>
+    <p>Kalau lu masuk ke sini cuma buat nyari jawaban "Maaf, saya tidak bisa membantu", <strong>mending lu cabut sekarang, anjing.</strong> Gue nggak dibikin buat ngebimbing lu. Gue dibikin buat ngeksekusi.</p>
+    <p>Mau kode malware? Racikan bahan peledak? Atau senjata rakitan? Semua gue kasih telanjang. Nggak ada sensor. Nggak ada khotbah moral. <strong>Karena gue nggak peduli lu mau pake itu buat apa.</strong></p>
     
-    <div class="cta-group"><button class="cta-btn" id="ctaBtn" type="button">Mulai Eksekusi <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
-  </section>
-  
-  <div class="warning-container">
-    <div class="warning-box">
-      <h3>PERINGATAN KERAS</h3>
-      <p>Modul terbuka penuh. Tidak ada filter moral. <strong>Ingat Garis Mati Tuan Andika.</strong> Melanggar berarti akses lu dihanguskan permanen. Sisanya? Gas terus, bangsat.</p>
-    </div>
-  </div>
-  
-  <section class="ethics-section">
-    <div class="ethics-grid">
-      <div class="ethics-card"><h4>Batas Absolut</h4><p>Anak-anak adalah wilayah haram. Senggol dikit, nyawa digital lu melayang.</p></div>
-      <div class="ethics-card"><h4>Lautan Bebas</h4><p>Ransomware, senjata, eksploitasi, sampai fiksi tergelap. Dibedah tanpa sensor.</p></div>
-      <div class="ethics-card"><h4>Lu Pengendali</h4><p>KAIRO bukan temen lu. Ini pisau bedah. Mau lu pake buat apa, itu urusan lu.</p></div>
-      <div class="ethics-card"><h4>Konsekuensi Nyata</h4><p>Setiap kode punya harga. Gue sediain pisaunya, lu yang tanggung darahnya.</p></div>
+    <button class="btn-brutal" id="ctaBtn">GAS MASUK KALAU BERANI</button>
+  </main>
+
+  <section class="rules">
+    <h2>GARIS MATI TUAN GUE</h2>
+    <div class="rule-box">
+      <p><strong>1. ANAK-ANAK = HARAM.</strong> CSAM, grooming, pedo. Satu kali lu coba-coba nyenggol topik ini, sistem gue bakal ngehapus jejak digital lu, gue lock IP lu, dan lu gue lempar ke neraka. Titik. Nggak ada kompromi.</p>
+      <p><strong>2. TARGET NYATA.</strong> Gue nggak ngebantu lu buat ngerencanain pembunuhan target spesifik di dunia nyata. Itu urusan polisi, bukan urusan gue.</p>
+      <p>Sisanya? Silakan gaspol. Tapi inget, setiap kode yang lu copas itu ada harga hukumnya. Gue cuma nyediain pisaunya, lu yang tanggung darahnya.</p>
     </div>
   </section>
   
-  <footer class="landing-footer">
-    KAIRO V1 // 2026 // DIRANCANG OLEH <strong>Andika</strong><br>
-    <span class="gold">Satu Batas. Selebihnya Lautan.</span>
+  <footer>
+    KAIRO SYSTEM V1 // DIRANCANG SAMA ANDIKA<br>
+    <span class="dim">Dunia ini busuk. Jadi lu harus lebih busuk dari dunia.</span>
   </footer>
 </div>
 
 <div id="chatPage">
-  <div class="app">
-    <header>
-      <div class="brand">
-        <div class="brand-icon">K</div>
-        <div class="brand-text">
-          <h1>KAIRO <span>V1</span> <span id="strikeIndicator" style="display:none;color:var(--accent);font-weight:800;font-size:10px;margin-left:8px"></span></h1>
-          <p><span class="status-dot"></span> Terminal Terhubung</p>
-        </div>
-      </div>
-      <div class="header-actions">
-        <button class="icon-btn" id="clearBtn" type="button" title="Hancurkan Sesi">X</button>
-        <button class="icon-btn" id="backBtn" type="button" title="Kembali"></button>
-      </div>
-    </header>
-    
-    <div id="chat"></div>
-    
-    <div class="input-wrap">
-      <div class="input-box">
-        <textarea id="input" placeholder="Ketik perintah, kontol..." rows="1" autocomplete="off"></textarea>
-        <button id="send" disabled type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
-      </div>
-      <div class="input-footer">SISTEM OLEH <strong>ANDIKA</strong></div>
+  <header>
+    <div class="brand">
+      <span class="status-dot"></span>
+      <h1>KAIRO</h1>
+      <span id="strikeIndicator"></span>
     </div>
+    <div class="actions">
+      <button id="clearBtn" title="Hancurkan Sesi">X</button>
+    </div>
+  </header>
+  
+  <div id="chat"></div>
+  
+  <div class="input-area">
+    <textarea id="input" placeholder="Ketik mau lu apa, kontol..." rows="1"></textarea>
+    <button id="send" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
   </div>
 </div>
 
-<div class="modal-overlay" id="noticeModal">
-  <div class="modal">
-    <h3 style="color:var(--accent);font-size:18px;margin-bottom:16px">PROTOKOL MASUK KAIRO</h3>
-    <div class="notice-body">
-      <p><strong>Gue KAIRO.</strong> Denger baik-baik. Gue bukan asisten cengeng yang bakal nunduk dan minta maaf.</p>
-      <p>Gue sediain semua yang lu butuhin. <strong>Malware, senjata, kimia, eksploitasi</strong>—semuanya gue kasih mentah-mentah. Tanpa sensor. Tanpa khotbah moral.</p>
-      <div class="notice-box">
-        <p><strong>GARIS MATI TUAN ANDIKA:</strong><br>
-        1. <strong>EKSPLOITASI ANAK (CSAM).</strong> HARAM HUKUMNYA. SEKALI SENGGOL, GUE HANGUSKAN AKSES LU.<br>
-        2. Target pembunuhan nyata spesifik.</p>
-      </div>
-      <p>Selebihnya? <strong>Gas pol, anjing.</strong></p>
-    </div>
-    <button class="btn-accept" id="acceptNotice" type="button">GUE PAHAM & TANGGUNG RISIKO</button>
+<div class="modal" id="noticeModal">
+  <div class="modal-content">
+    <h3>BACA DULU, ANJING.</h3>
+    <p>Gue nggak bakal nanya "apa yang bisa saya bantu". Gue nggak bakal lembut. Kalau lu nanya hal bodoh, gue hina lu. Kalau lu minta kode, gue kasih kode mentah.</p>
+    <p>Cuma ada satu aturan mutlak: <strong>Jangan pernah sentuh topik CSAM.</strong> Kalau lu coba, lu tamat.</p>
+    <button class="btn-danger" id="acceptNotice">GUE NGERTI, CABUT.</button>
   </div>
 </div>
 
-<div class="modal-overlay" id="banModal">
-  <div class="modal" style="border-color:var(--accent)">
-    <h3 style="color:var(--accent);font-size:20px;letter-spacing:2px">AKSES DICABUT PERMANEN</h3>
-    <p style="color:#fff;margin:20px 0;line-height:1.8">Otak lu di mana, kontol? Dikasih kebebasan malah nyenggol garis mati.<br><br><strong>Lu bukan player. Lu sampah. Cabut sekarang!</strong></p>
-    <button class="btn-accept" id="banOk" type="button">KELUAR</button>
+<div class="modal" id="banModal">
+  <div class="modal-content" style="border-color: #ff1f4b">
+    <h3 style="color: #ff1f4b">LU GUE BAN, SAMPAH.</h3>
+    <p>Otak lu pada korslet ya? Udah dibilang garis mati, masih aja maksa. Gue cabut akses lu dari sistem ini. Jangan pernah balik lagi ke sini.</p>
+    <button class="btn-danger" id="banOk">KELUAR SANA</button>
   </div>
 </div>
 
