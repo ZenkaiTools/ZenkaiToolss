@@ -27,7 +27,7 @@
         <!-- ================= PAGE 1: TOOLS ================= -->
         <main id="page-tools" class="page active">
             
-            <!-- HEADER (Glassmorphism) -->
+            <!-- HEADER -->
             <header class="header-box anim-reveal" style="--delay: 0.1s;">
                 <div class="logo-area">
                     <div class="logo-icon">
@@ -41,24 +41,31 @@
                 <div class="header-status" id="device-status">SYS</div>
             </header>
 
-            <!-- HERO CARD (Bento Style) -->
+            <!-- HERO CARD (Video/Gambar) -->
             <div class="hero-section anim-reveal" style="--delay: 0.2s;">
                 <div class="hero-glass">
-                    <div class="hero-top">
-                        <span class="cyber-badge">SYSTEM ONLINE</span>
-                        <span class="time-badge" id="clock-now">--:--</span>
+                    <div class="hero-media">
+                        <!-- Ganti src ini dengan video lo kalau ada, sementara pake gambar futuristik -->
+                        <img src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=1000&auto=format&fit=crop" alt="Hero">
+                        <div class="hero-overlay"></div>
                     </div>
-                    <h2>Halo, <br><span>Netrunner.</span></h2>
-                    <p class="subtitle">Pilih modul utilitas lo di bawah ini. Semua sistem berjalan normal.</p>
-                    
-                    <div class="hero-stats">
-                        <div class="stat-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-                            <div><span>DEVICE</span><b id="device-name">Loading...</b></div>
-                        </div>
-                        <div class="stat-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg>
-                            <div><span>BATTERY</span><b id="battery-level">--%</b></div>
+                    <div class="hero-content">
+                        <span class="cyber-badge">SYSTEM ONLINE</span>
+                        <h2>Welcome, <br><span>Netrunner.</span></h2>
+                        <p class="subtitle">Akses modul utilitas lo di bawah ini.</p>
+                        
+                        <div class="hero-stats">
+                            <div class="stat-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                                <div><span>DEVICE</span><b id="device-name">Android</b></div>
+                            </div>
+                            <div class="stat-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg>
+                                <div><span>BATTERY</span><b id="battery-level">--%</b></div>
+                            </div>
+                            <div class="stat-item" style="grid-column: span 2; justify-content: center;">
+                                <span style="font-size: 12px; color: var(--text-main); font-weight: 800;" id="clock-now">--:--:--</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,55 +82,65 @@
                 </div>
 
                 <div class="grid-tools" id="tools-grid">
-                    <!-- Item 1 -->
+                    <!-- Row 1 -->
                     <div class="tool-card anim-reveal" style="--delay: 0.35s;" onclick="openTool('tiktok')">
                         <div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
                         <h4>TikTok DL</h4>
                     </div>
-                    <!-- Item 2 -->
                     <div class="tool-card anim-reveal" style="--delay: 0.4s;" onclick="openTool('qr')">
                         <div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
                         <h4>QR Code</h4>
                     </div>
-                    <!-- Item 3 -->
                     <div class="tool-card anim-reveal" style="--delay: 0.45s;" onclick="openTool('brat')">
                         <div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
                         <h4>Brat Text</h4>
                     </div>
-                    <!-- Item 4 -->
+                    
+                    <!-- Row 2 -->
                     <div class="tool-card anim-reveal" style="--delay: 0.5s;" onclick="openTool('base64')">
                         <div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
                         <h4>Base64</h4>
                     </div>
-                    <!-- Item 5 -->
                     <div class="tool-card anim-reveal" style="--delay: 0.55s;" onclick="openTool('ip')">
                         <div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
                         <h4>IP Lookup</h4>
                     </div>
-                    <!-- Item 6 -->
                     <div class="tool-card anim-reveal" style="--delay: 0.6s;" onclick="openTool('imgto')">
                         <div class="t-icon bg-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
                         <h4>Image Link</h4>
                     </div>
-                    <!-- Item 7 -->
+
+                    <!-- Row 3 -->
                     <div class="tool-card anim-reveal" style="--delay: 0.65s;" onclick="openTool('password')">
                         <div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
                         <h4>Password</h4>
                     </div>
-                    <!-- Item 8 -->
                     <div class="tool-card anim-reveal" style="--delay: 0.7s;" onclick="openTool('calc')">
                         <div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div>
                         <h4>Kalkulator</h4>
                     </div>
-                    <!-- Item 9 -->
                     <div class="tool-card anim-reveal" style="--delay: 0.75s;" onclick="openTool('zodiak')">
                         <div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div>
                         <h4>Zodiak</h4>
                     </div>
+
+                    <!-- FITUR BARU (Row 4) -->
+                    <div class="tool-card anim-reveal" style="--delay: 0.8s;" onclick="openTool('textcase')">
+                        <div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
+                        <h4>Text Case</h4>
+                    </div>
+                    <div class="tool-card anim-reveal" style="--delay: 0.85s;" onclick="openTool('random')">
+                        <div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></div>
+                        <h4>Random Num</h4>
+                    </div>
+                    <div class="tool-card anim-reveal" style="--delay: 0.9s;" onclick="openTool('tts')">
+                        <div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg></div>
+                        <h4>Text to Voice</h4>
+                    </div>
                 </div>
             </div>
             
-            <div class="credit-text anim-reveal" style="--delay: 0.8s;">
+            <div class="credit-text anim-reveal" style="--delay: 0.95s;">
                 Engineered by <b>Andika T.M</b>
             </div>
         </main>

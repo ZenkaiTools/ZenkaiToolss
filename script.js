@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         t.innerText = msg;
         c.appendChild(t);
         
-        // Animasi keluar
         setTimeout(() => { 
             t.style.opacity = '0'; 
             t.style.transform = 'translateY(-20px)';
@@ -38,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 bgm.volume = 0.2;
                 bgm.play().then(() => { 
                     isPlaying = true; 
-                    // Ubah warna tombol jadi Cyan pas nyala
                     musicToggle.style.background = 'var(--neon-cyan)'; 
                     musicToggle.style.color = '#000';
                     showToast('Musik dinyalakan 🎵');
@@ -46,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 bgm.pause(); 
                 isPlaying = false; 
-                // Balikin ke transparan pas mati
                 musicToggle.style.background = 'rgba(0, 243, 255, 0.1)';
                 musicToggle.style.color = 'var(--neon-cyan)';
                 showToast('Musik dimatikan 🔇');
@@ -60,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTime() {
         const now = new Date();
         const c = document.getElementById('clock-now');
-        if(c) c.innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        if(c) c.innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }
     setInterval(updateTime, 1000); 
     updateTime();
@@ -113,9 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const title = card.querySelector('h4').innerText.toLowerCase();
                 if (title.includes(term)) {
                     card.style.display = 'flex';
-                    // Reset animasi biar munculnya tetep smooth pas di-search
                     card.style.animation = 'none';
-                    card.offsetHeight; /* trigger reflow */
+                    card.offsetHeight; 
                     card.style.animation = null; 
                 } else {
                     card.style.display = 'none';
@@ -135,7 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { modalContent.innerHTML = ''; }, 300);
     };
 
-    // Fungsi Tutup Modal Klik Overlay (Area Gelap)
     window.closeModalOnOverlay = (e) => {
         if (e.target.id === 'tool-modal') {
             closeModal();
@@ -228,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- 4. BASE64 ---
         else if (tool === 'base64') {
             modalContent.innerHTML = `
-                <h3>Base64 Encode/Decode</h3>
+                <h3>Base64</h3>
                 <textarea id="b64-in" rows="3" placeholder="Ketik teks di sini..."></textarea>
                 <div style="display:flex;gap:10px;">
                     <button class="action-btn" id="btn-enc" style="flex:1;">Encode</button>
@@ -303,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- 7. PASSWORD GEN ---
         else if (tool === 'password') {
             modalContent.innerHTML = `
-                <h3>Password Generator</h3>
+                <h3>Password Gen</h3>
                 <button class="action-btn" id="btn-pass">Generate Password</button>
                 <div id="pass-res" class="result-box" style="display:none;font-size:20px;font-weight:800;color:var(--neon-green); letter-spacing:1px;"></div>
             `;
@@ -336,36 +331,130 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         
-        // --- 9. ZODIAK ---
+        // --- 9. ZODIAK (CUSTOM DROPDOWN) ---
         else if (tool === 'zodiak') {
+            // Bikin opsi tanggal 1-31
+            let optTgl = '<option value="">Tgl</option>';
+            for(let i=1; i<=31; i++) optTgl += `<option value="${i}">${i}</option>`;
+            
+            // Bikin opsi bulan
+            const bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+            let optBln = '<option value="">Bulan</option>';
+            bulan.forEach((b, i) => optBln += `<option value="${i+1}">${b}</option>`);
+            
+            // Bikin opsi tahun (1990 - 2010)
+            let optThn = '<option value="">Tahun</option>';
+            for(let i=2010; i>=1990; i--) optThn += `<option value="${i}">${i}</option>`;
+
             modalContent.innerHTML = `
                 <h3>Cek Zodiak</h3>
-                <input type="date" id="zodiak-in">
+                <div class="date-group">
+                    <select id="z-tgl">${optTgl}</select>
+                    <select id="z-bln" style="flex:2;">${optBln}</select>
+                    <select id="z-thn">${optThn}</select>
+                </div>
                 <button class="action-btn" id="btn-zodiak">Cek Zodiak</button>
                 <div id="zodiak-res" class="result-box" style="display:none;font-size:16px;"></div>
             `;
             document.getElementById('btn-zodiak').onclick = () => {
-                const dVal = document.getElementById('zodiak-in').value;
-                if(!dVal) return showToast('Pilih tanggal!', true);
-                const d = new Date(dVal);
-                const day = d.getDate(), month = d.getMonth() + 1;
+                const tgl = parseInt(document.getElementById('z-tgl').value);
+                const bln = parseInt(document.getElementById('z-bln').value);
+                
+                if(!tgl || !bln) return showToast('Pilih tanggal dan bulan!', true);
+                
                 let z = "";
-                if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) z = "Aquarius ♒";
-                else if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) z = "Pisces ♓";
-                else if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) z = "Aries ♈";
-                else if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) z = "Taurus ♉";
-                else if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) z = "Gemini ♊";
-                else if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) z = "Cancer ♋";
-                else if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) z = "Leo ♌";
-                else if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) z = "Virgo ♍";
-                else if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) z = "Libra ♎";
-                else if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) z = "Scorpio ♏";
-                else if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) z = "Sagittarius ♐";
+                if ((bln == 1 && tgl >= 20) || (bln == 2 && tgl <= 18)) z = "Aquarius ♒";
+                else if ((bln == 2 && tgl >= 19) || (bln == 3 && tgl <= 20)) z = "Pisces ♓";
+                else if ((bln == 3 && tgl >= 21) || (bln == 4 && tgl <= 19)) z = "Aries ♈";
+                else if ((bln == 4 && tgl >= 20) || (bln == 5 && tgl <= 20)) z = "Taurus ♉";
+                else if ((bln == 5 && tgl >= 21) || (bln == 6 && tgl <= 20)) z = "Gemini ♊";
+                else if ((bln == 6 && tgl >= 21) || (bln == 7 && tgl <= 22)) z = "Cancer ♋";
+                else if ((bln == 7 && tgl >= 23) || (bln == 8 && tgl <= 22)) z = "Leo ♌";
+                else if ((bln == 8 && tgl >= 23) || (bln == 9 && tgl <= 22)) z = "Virgo ♍";
+                else if ((bln == 9 && tgl >= 23) || (bln == 10 && tgl <= 22)) z = "Libra ♎";
+                else if ((bln == 10 && tgl >= 23) || (bln == 11 && tgl <= 21)) z = "Scorpio ♏";
+                else if ((bln == 11 && tgl >= 22) || (bln == 12 && tgl <= 21)) z = "Sagittarius ♐";
                 else z = "Capricorn ♑";
                 
                 const b = document.getElementById('zodiak-res');
                 b.style.display = 'block';
                 b.innerHTML = `Zodiak lu: <b style="color:var(--neon-yellow); font-size:22px; display:block; margin-top:5px;">${z}</b>`;
+            };
+        }
+        
+        // --- 10. TEXT CASE ---
+        else if (tool === 'textcase') {
+            modalContent.innerHTML = `
+                <h3>Text Case</h3>
+                <textarea id="tc-in" rows="3" placeholder="Ketik teks di sini..."></textarea>
+                <div style="display:flex;gap:10px; flex-wrap:wrap;">
+                    <button class="action-btn" id="btn-upper" style="flex:1; min-width:100px;">UPPER</button>
+                    <button class="action-btn" id="btn-lower" style="flex:1; min-width:100px; background:var(--neon-purple); color:#fff;">lower</button>
+                    <button class="action-btn" id="btn-title" style="flex:1; min-width:100px; background:var(--neon-blue); color:#fff;">Title</button>
+                </div>
+                <div id="tc-res" class="result-box" style="display:none; word-break: break-all;"></div>
+            `;
+            const process = (type) => {
+                const v = document.getElementById('tc-in').value;
+                if(!v) return showToast('Input kosong!', true);
+                let res = "";
+                if(type === 'upper') res = v.toUpperCase();
+                if(type === 'lower') res = v.toLowerCase();
+                if(type === 'title') res = v.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+                
+                const b = document.getElementById('tc-res');
+                b.style.display = 'block';
+                b.innerText = res;
+            };
+            document.getElementById('btn-upper').onclick = () => process('upper');
+            document.getElementById('btn-lower').onclick = () => process('lower');
+            document.getElementById('btn-title').onclick = () => process('title');
+        }
+
+        // --- 11. RANDOM NUMBER ---
+        else if (tool === 'random') {
+            modalContent.innerHTML = `
+                <h3>Random Number</h3>
+                <div style="display:flex;gap:10px;">
+                    <input type="number" id="rn-min" placeholder="Min" value="1">
+                    <input type="number" id="rn-max" placeholder="Max" value="100">
+                </div>
+                <button class="action-btn" id="btn-rn">Generate</button>
+                <div id="rn-res" class="result-box" style="display:none;font-size:32px;font-weight:800;color:var(--neon-cyan);"></div>
+            `;
+            document.getElementById('btn-rn').onclick = () => {
+                const min = parseInt(document.getElementById('rn-min').value) || 0;
+                const max = parseInt(document.getElementById('rn-max').value) || 100;
+                if(min >= max) return showToast('Max harus lebih besar dari Min!', true);
+                
+                const res = Math.floor(Math.random() * (max - min + 1)) + min;
+                const b = document.getElementById('rn-res');
+                b.style.display = 'block';
+                b.innerText = res;
+            };
+        }
+
+        // --- 12. TEXT TO VOICE ---
+        else if (tool === 'tts') {
+            modalContent.innerHTML = `
+                <h3>Text to Voice</h3>
+                <textarea id="tts-in" rows="3" placeholder="Ketik teks yang mau diucapkan..."></textarea>
+                <button class="action-btn" id="btn-tts" style="background:var(--neon-green);">Putar Suara</button>
+            `;
+            document.getElementById('btn-tts').onclick = () => {
+                const text = document.getElementById('tts-in').value;
+                if(!text) return showToast('Input kosong!', true);
+                
+                // Cek browser support
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'id-ID'; // Set bahasa Indonesia
+                    utterance.rate = 1; // Kecepatan normal
+                    window.speechSynthesis.speak(utterance);
+                    showToast('Memutar suara...');
+                } else {
+                    showToast('Browser lo gak support fitur ini.', true);
+                }
             };
         }
     };
