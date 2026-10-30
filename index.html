@@ -11,13 +11,14 @@
 </head>
 <body>
 
-  <!-- POPUP JOIN WA CHANNEL -->
+  <!-- POPUP JOIN WA CHANNEL (FIXED) -->
   <div class="popup-overlay" id="waPopup">
     <div class="popup-box">
       <h2>Gabung Saluran WA!</h2>
       <p>Dapetin update tools terbaru dan prompt jailbreak eksklusif cuma di saluran WhatsApp Zenkai.</p>
       <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" class="btn-wa">Join Saluran Sekarang</a>
-      <button class="btn-close-popup" onclick="closePopup()">Nanti Aja</button>
+      <!-- INI DIA YANG GW BENERIN, LANGSUNG HAPUS ELEMENNYA -->
+      <button class="btn-close-popup" onclick="document.getElementById('waPopup').remove()">Nanti Aja</button>
     </div>
   </div>
 
@@ -43,7 +44,6 @@
     <!-- KOTAK BESAR: WELCOME & INFO DEVICE -->
     <div class="main-card">
       <div class="hero-image">
-        <!-- Ganti URL ini pake gambar anime/estetik kesukaan lu -->
         <img src="https://i.pinimg.com/736x/8a/e9/92/8ae99293e4541f0f2f6e8eef3f2e6e5e.jpg" alt="Hero" onerror="this.style.display='none'">
       </div>
       
@@ -120,7 +120,7 @@
           <h4>IP Lookup<br>Lacak</h4>
         </div>
 
-        <!-- TOOL 6: SCAN VIRUS (Placeholder) -->
+        <!-- TOOL 6: SCAN VIRUS -->
         <div class="tool-card" onclick="openTool('soon')">
           <div class="tool-icon bg-yellow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
