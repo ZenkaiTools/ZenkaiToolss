@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANDIKA TOOLS // Dark Utility Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Andika Tools // Utility Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -12,129 +12,92 @@
 </head>
 <body>
 
-    <!-- BGM (MUSIK VIRAL) -->
+    <!-- BGM (Musik Viral) -->
     <audio id="bgm" loop>
         <source src="https://www.myinstants.com/media/sounds/astaga-bercanda.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- FLOATING BUTTONS -->
-    <button id="music-toggle" class="fab" title="Putar Musik"></button>
+    <!-- Tombol Musik -->
+    <button id="music-toggle" class="fab-music" title="Putar Musik">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    </button>
 
-    <!-- TOAST CONTAINER (PENGGANTI ALERT) -->
+    <!-- Toast Container -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="logo-area">
-            <div class="logo-box">A</div>
-            <div>
-                <h1>ANDIKA</h1>
-                <span>TOOLS v3.0</span>
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="header-box">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <div class="logo-text">
+                    <h1>ANDIKA<br>TOOLS</h1>
+                </div>
+            </div>
+            <div class="header-status">
+                <span id="device-status">Device</span>
+            </div>
+        </header>
+
+        <!-- KOTAK BESAR: HERO (FOTO/VIDEO) -->
+        <div class="main-card">
+            <div class="hero-media-box">
+                <!-- GANTI SRC DI BAWAH INI PAKAI FOTO/VIDEO LU SENDIRI -->
+                <img src="https://picsum.photos/seed/andika/800/400" alt="Hero Media" id="hero-image">
+            </div>
+            
+            <h2 class="welcome-text">Selamat datang di Andika Tools!</h2>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <svg class="info-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    <div>
+                        <span>DEVICE</span>
+                        <strong id="device-name">...</strong>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <svg class="info-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"></rect><line x1="23" y1="13" x2="23" y2="11"></line></svg>
+                    <div>
+                        <span>BATTERY</span>
+                        <strong id="battery-level">--%</strong>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <svg class="info-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <div>
+                        <span>TANGGAL</span>
+                        <strong id="date-now">--</strong>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <svg class="info-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <div>
+                        <span>JAM</span>
+                        <strong id="clock-now">--:--</strong>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="header-status">
-            <span id="device-status">Loading...</span>
+
+        <!-- MENU TOOLS (Efek Cutscene) -->
+        <div class="tools-container">
+            <div class="tools-header">
+                <h3 class="section-title">TOOLS</h3>
+                <div class="search-bar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="search-tools" placeholder="Cari tools...">
+                </div>
+            </div>
+
+            <!-- Grid ID ini yang bakal di-render JS pakai efek cutscene -->
+            <div class="grid-tools" id="tools-grid">
+                <!-- Item bakal dimasukin otomatis sama JS biar bisa animasi satu-satu -->
+            </div>
         </div>
-    </header>
-
-    <!-- MAIN CONTENT -->
-    <main id="page-tools">
-        <!-- HERO SECTION -->
-        <section class="hero">
-            <div class="hero-text">
-                <h2>Utility Hub</h2>
-                <p>Created by <b>Andika</b></p>
-            </div>
-            <div class="time-box">
-                <span id="clock">00:00</span>
-                <span id="date">1 Jan 2026</span>
-            </div>
-        </section>
-
-        <!-- TOOLS GRID -->
-        <section class="tools-section">
-            <div class="section-header">
-                <h3>Semua Tools</h3>
-                <input type="text" id="search-tools" placeholder="Cari tools...">
-            </div>
-
-            <div class="grid-container" id="tools-grid">
-                <!-- 1 -->
-                <div class="tool-card" onclick="openTool('tiktok')">
-                    <div class="tool-icon" style="background: #ff0050;"></div>
-                    <h4>TikTok DL</h4>
-                </div>
-                <!-- 2 -->
-                <div class="tool-card" onclick="openTool('qr')">
-                    <div class="tool-icon" style="background: #00f2ea;"></div>
-                    <h4>QR Code</h4>
-                </div>
-                <!-- 3 -->
-                <div class="tool-card" onclick="openTool('brat')">
-                    <div class="tool-icon" style="background: #ffcc00;"></div>
-                    <h4>Brat Text</h4>
-                </div>
-                <!-- 4 -->
-                <div class="tool-card" onclick="openTool('base64')">
-                    <div class="tool-icon" style="background: #a8e6cf;"></div>
-                    <h4>Base64</h4>
-                </div>
-                <!-- 5 -->
-                <div class="tool-card" onclick="openTool('ip')">
-                    <div class="tool-icon" style="background: #b5e2fa;"></div>
-                    <h4>IP Lookup</h4>
-                </div>
-                <!-- 6 -->
-                <div class="tool-card" onclick="openTool('imgto')">
-                    <div class="tool-icon" style="background: #e0c3fc;"></div>
-                    <h4>Image to Link</h4>
-                </div>
-                <!-- 7 -->
-                <div class="tool-card" onclick="openTool('password')">
-                    <div class="tool-icon" style="background: #ffb3ba;"></div>
-                    <h4>Password</h4>
-                </div>
-                <!-- 8 -->
-                <div class="tool-card" onclick="openTool('calc')">
-                    <div class="tool-icon" style="background: #baffc9;"></div>
-                    <h4>Kalkulator</h4>
-                </div>
-                <!-- 9 -->
-                <div class="tool-card" onclick="openTool('textcase')">
-                    <div class="tool-icon" style="background: #ffffba;">Aa</div>
-                    <h4>Text Case</h4>
-                </div>
-                <!-- 10 -->
-                <div class="tool-card" onclick="openTool('zodiak')">
-                    <div class="tool-icon" style="background: #ff99cc;"></div>
-                    <h4>Zodiak</h4>
-                </div>
-                <!-- 11 -->
-                <div class="tool-card" onclick="openTool('quotes')">
-                    <div class="tool-icon" style="background: #99ccff;"></div>
-                    <h4>Quotes</h4>
-                </div>
-                <!-- 12 -->
-                <div class="tool-card" onclick="openTool('game')">
-                    <div class="tool-icon" style="background: #cc99ff;"></div>
-                    <h4>Tebak Angka</h4>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- INFO PAGE (Sembunyi) -->
-    <div id="page-info" class="page-hidden">
-        <h2>Tentang Andika Tools</h2>
-        <p><b>Andika Tools v3.0</b> adalah utilitas web ringan yang dibuat untuk mempermudah aktivitas digital lu. Download video, generate QR, main game, dan masih banyak lagi.</p>
-        <p>Dibuat dengan  dan  oleh <b>Andika</b>.</p>
     </div>
-
-    <!-- NAVIGASI BAWAH -->
-    <nav class="bottom-nav">
-        <button class="nav-btn active" onclick="switchPage('tools', this)">Tools</button>
-        <button class="nav-btn" onclick="switchPage('info', this)">Info App</button>
-    </nav>
 
     <!-- MODAL TOOL -->
     <div class="modal-overlay" id="tool-modal">
