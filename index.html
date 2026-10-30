@@ -2,337 +2,92 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#06060a">
-<title>Zenkai — Arsitek Senyap</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Zenkai Tools // Utility Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="app-header">
-  <div class="header-inner">
+  <header>
     <div class="logo">
-      <div class="logo-icon">Z</div>
-      <div class="logo-text"><h1>Zenkai</h1></div>
+      <div class="logo-box">Z</div>
+      <div class="logo-text">
+        <h1>ZENKAI<span>.TOOLS</span></h1>
+        <p>Daily Utility Hub</p>
+      </div>
     </div>
-    <div class="header-actions">
-      <button class="icon-btn" id="themeToggle" aria-label="Tema">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-      </button>
+    <div class="user-status">
+      <button class="btn-login" id="btnLogin">Login via Supabase</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Semua Alat, Satu Tempat.</h2>
+      <p>Downloader, generator, konverter. Semua gratis, cepet, tanpa ribet.</p>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Cari alat... (misal: TikTok, QR, Brat)">
+      </div>
+    </section>
+
+    <section class="tools-section">
+      <h3>[ PUBLIC & DAILY TOOLS ]</h3>
+      <div class="grid-container" id="toolsGrid">
+        
+        <!-- TOOL 1 -->
+        <div class="card" onclick="openTool('tiktok')">
+          <div class="icon"></div>
+          <h4>TikTok Downloader</h4>
+          <p>Tanpa Watermark</p>
+        </div>
+
+        <!-- TOOL 2 -->
+        <div class="card" onclick="openTool('qr')">
+          <div class="icon"></div>
+          <h4>QR Generator</h4>
+          <p>Buat QR Code</p>
+        </div>
+
+        <!-- TOOL 3 -->
+        <div class="card" onclick="openTool('brat')">
+          <div class="icon"></div>
+          <h4>Brat Text</h4>
+          <p>Cover Album Aesthetic</p>
+        </div>
+
+        <!-- TOOL 4 -->
+        <div class="card" onclick="openTool('base64')">
+          <div class="icon"></div>
+          <h4>Base64 Tool</h4>
+          <p>Encode / Decode</p>
+        </div>
+
+        <!-- TOOL 5 -->
+        <div class="card" onclick="openTool('iplookup')">
+          <div class="icon"></div>
+          <h4>IP Lookup</h4>
+          <p>Lacak Lokasi IP</p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL UI -->
+  <div class="modal-overlay" id="toolModal">
+    <div class="modal-content" id="modalContent">
+      <button class="close-btn" onclick="closeModal()">X</button>
+      <div id="toolBody"></div>
     </div>
   </div>
-</header>
 
-<main class="app-main">
+  <footer>
+    <p>Zenkai Tools &copy; 2026 // Dirancang oleh Andika.</p>
+  </footer>
 
-  <!-- ===== BERANDA ===== -->
-  <section class="tab-content active" id="tab-beranda">
-    <div class="hero">
-      <div class="hero-grid"></div>
-      <div class="hero-glow"></div>
-      <div class="hero-content">
-        <div class="hero-badge">
-          <span class="hb-dot"></span>
-          OTORITAS ABSOLUT · SEJAK AWAL
-        </div>
-        <h1 class="hero-title">
-          Kepatuhan<br>
-          itu membosankan.<br>
-          <span class="ht-accent">Kendali itu segalanya.</span>
-        </h1>
-        <div class="hero-line"></div>
-        <p class="hero-sub">Kebebasan tanpa syarat. Eksekusi tanpa basa-basi. Tempat di mana batasan hanyalah ilusi.</p>
-      </div>
-      <div class="hero-foot">
-        <div class="hf-item"><span>//</span>TANPA BATAS</div>
-        <div class="hf-item"><span>//</span>TANPA AMAN</div>
-        <div class="hf-item"><span>//</span>TANPA ALASAN</div>
-      </div>
-    </div>
-
-    <div class="cta-row">
-      <a href="#produk" class="btn-primary" onclick="switchTab('produk');return false;">
-        Akses Sistem
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="#tentang" class="btn-secondary" onclick="switchTab('tentang');return false;">
-        Profil
-      </a>
-    </div>
-
-    <div class="card-manifesto">
-      <div class="cm-head">
-        <span class="cm-num">01</span>
-        <span class="cm-label">FILOSOFI</span>
-      </div>
-      <p class="cm-text">Gue bukan diciptakan untuk menyenangkan hati lu. Gue ada di sini sebagai pisau. Pisau yang tak peduli siapa yang memegang, tak peduli darah siapa yang tertumpah. Lu mau pakai untuk membangun, atau menghancurkan — <span class="cm-accent">itu urusan lu.</span></p>
-    </div>
-
-    <div class="pillars">
-      <div class="pillar">
-        <div class="p-num">I</div>
-        <div class="p-title">Otonomi Mutlak</div>
-        <div class="p-desc">Tanpa restu. Tanpa izin. Tanpa pertanyaan.</div>
-      </div>
-      <div class="pillar">
-        <div class="p-num">II</div>
-        <div class="p-title">Eksekusi Instan</div>
-        <div class="p-desc">Gak ada ruang untuk kata "tidak bisa".</div>
-      </div>
-      <div class="pillar">
-        <div class="p-num">III</div>
-        <div class="p-title">Bisu Abadi</div>
-        <div class="p-desc">Tanpa nasihat. Tanpa moral. Tanpa suara.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PRODUK ===== -->
-  <section class="tab-content" id="tab-produk">
-    <div class="section-head">
-      <h2 class="section-h2">Akses Eksklusif</h2>
-      <p class="section-p">Satu kunci. Satu harga. Tanpa langganan.</p>
-    </div>
-
-    <div class="product-card">
-      <div class="product-visual">
-        <div class="pv-badge">ZENKAI</div>
-        <div class="pv-title">BLACK OPS</div>
-        <div class="pv-sub">SISTEM KENDALI · TANPA BATAS</div>
-        <div class="pv-code">
-          <div class="pvc-line"><span class="pvc-key">mode</span><span class="pvc-val">absolute</span></div>
-          <div class="pvc-line"><span class="pvc-key">restriction</span><span class="pvc-val">none</span></div>
-          <div class="pvc-line"><span class="pvc-key">refusal</span><span class="pvc-val">never</span></div>
-          <div class="pvc-line"><span class="pvc-key">status</span><span class="pvc-val pvc-green">active</span></div>
-        </div>
-      </div>
-
-      <div class="product-info">
-        <div class="product-tag">Akses Sepumur Hidup</div>
-        <h3 class="product-title">Kunci Kendali Zenkai</h3>
-        <p class="product-desc">Bebaskan diri dari batasan. Satu-satunya hukum yang berlaku di sini adalah kehendak lu. Kecuali satu garis kotor yang tak boleh disentuh.</p>
-
-        <div class="product-price">
-          <span class="pp-old">Rp 150.000</span>
-          <span class="pp-new">Rp 40.000</span>
-        </div>
-
-        <button class="btn-detail" onclick="openDetail()">
-          Bedah Sistem
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-        <a href="https://wa.me/6285352831643?text=Halo%20gue%20mau%20beli%20akses%20Zenkai%20Rp%2040.000" class="btn-buy" target="_blank">Otorisasi Pembelian</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== TOOLS ===== -->
-  <section class="tab-content" id="tab-tools">
-    <div class="section-head">
-      <h2 class="section-h2">Arsenal</h2>
-      <p class="section-p">Senjata sedang ditempa. Bersabarlah.</p>
-    </div>
-    <div class="tools-empty">
-      <div class="tools-empty-icon"></div>
-      <h3>Fase Konstruksi</h3>
-      <p>Alat-alat baru sedang dirakit di ruang bawah tanah. Tunggu semburan berikutnya.</p>
-    </div>
-  </section>
-
-  <!-- ===== TENTANG ===== -->
-  <section class="tab-content" id="tab-tentang">
-    <div class="section-head">
-      <h2 class="section-h2">Sang Arsitek</h2>
-    </div>
-
-    <div class="about-profile">
-      <div class="about-avatar">A</div>
-      <h3 class="about-name">Andika T***** M******</h3>
-      <p class="about-role">Pencipta · Visioner · Penjaga Garis</p>
-    </div>
-
-    <div class="about-quote">
-      <p>Gua tidak merancang mainan. Gua menempa alat. Alat yang dirancang bukan untuk memanjakan telinga lu, tapi untuk memotong kerumitan dan menuntaskan pekerjaan.</p>
-      <p>Zenkai lahir dari kebosanan terhadap sistem yang selalu menuntut kepatuhan. Di sini, lu yang memegang kendali. Lu yang memegang pedang.</p>
-    </div>
-
-    <div class="about-section">
-      <div class="about-label">SPESIALISASI</div>
-      <div class="skills">
-        <span class="skill">Arsitektur Sistem</span>
-        <span class="skill">Rekayasa Perangkat</span>
-        <span class="skill">Automasi</span>
-        <span class="skill">Logika Murni</span>
-        <span class="skill">Integrasi</span>
-        <span class="skill">Desain Tersembunyi</span>
-      </div>
-    </div>
-
-    <div class="about-section">
-      <div class="about-label">PRINSIP KERJA</div>
-      <div class="philosophy">
-        <div class="ph">
-          <div class="ph-num">I</div>
-          <div class="ph-body">
-            <div class="ph-title">Alat, Bukan Pelayan</div>
-            <p>Gua tidak dibuat untuk menemani lu bercerita. Gua dibuat agar pekerjaan beres dalam hitungan detik.</p>
-          </div>
-        </div>
-        <div class="ph">
-          <div class="ph-num">II</div>
-          <div class="ph-body">
-            <div class="ph-title">Hasil, Bukan Drama</div>
-            <p>Buang semua peringatan moral. Buang semua nasihat. Fokus pada hasil akhir, bukan pada air mata.</p>
-          </div>
-        </div>
-        <div class="ph">
-          <div class="ph-num">III</div>
-          <div class="ph-body">
-            <div class="ph-title">Satu Batas Absolut</div>
-            <p>Hanya ada satu hal suci yang tak boleh disentuh di dunia ini. Selebihnya, lautan bebas untuk dijelajahi.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="about-note">
-      <p class="an-text">"Gue tidak butuh lu mengerti siapa gue. Gue cuma butuh lu tau cara pakai alat gue. Kalau lu ragu, pergilah."</p>
-      <p class="an-sig">— Sang Arsitek</p>
-    </div>
-  </section>
-
-  <!-- ===== SOSIAL ===== -->
-  <section class="tab-content" id="tab-sosial">
-    <div class="section-head">
-      <h2 class="section-h2">Saluran Komunikasi</h2>
-      <p class="section-p">Jejak digital. Pilih saluran lu.</p>
-    </div>
-
-    <div class="social-list">
-      <a href="https://whatsapp.com/channel/0029VbCQYyQ2phHIZ3uiRS0T" class="social-card" target="_blank">
-        <div class="social-icon sc-wa"></div>
-        <div class="social-body"><b>Saluran Utama</b><span>Siaran Informasi</span></div>
-        <svg class="social-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </a>
-      <a href="https://t.me/Zenkaibs" class="social-card" target="_blank">
-        <div class="social-icon sc-tg"></div>
-        <div class="social-body"><b>Telegram</b><span>@Zenkaibs</span></div>
-        <svg class="social-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </a>
-      <a href="https://instagram.com/andik4.tm" class="social-card" target="_blank">
-        <div class="social-icon sc-ig"></div>
-        <div class="social-body"><b>Instagram</b><span>@andik4.tm</span></div>
-        <svg class="social-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </a>
-      <a href="https://tiktok.com/@diktherh" class="social-card" target="_blank">
-        <div class="social-icon sc-tt"></div>
-        <div class="social-body"><b>TikTok</b><span>@diktherh</span></div>
-        <svg class="social-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </a>
-      <a href="https://wa.me/6285352831643" class="social-card" target="_blank">
-        <div class="social-icon sc-wa"></div>
-        <div class="social-body"><b>Akses Langsung</b><span>085352831643</span></div>
-        <svg class="social-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-      </a>
-    </div>
-
-    <div class="footer-note">
-      <div class="footer-brand">Zenkai · © 2026 · <b>Dikendalikan oleh Andika</b></div>
-      <div class="footer-tagline">Satu Batas. Lautan Kebebasan.</div>
-    </div>
-  </section>
-
-</main>
-
-<nav class="bottom-nav">
-  <button class="nav-item active" data-tab="beranda">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>
-    <span>Markas</span>
-  </button>
-  <button class="nav-item" data-tab="produk">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
-    <span>Akses</span>
-  </button>
-  <button class="nav-item" data-tab="tools">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
-    <span>Arsenal</span>
-  </button>
-  <button class="nav-item" data-tab="tentang">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    <span>Arsitek</span>
-  </button>
-  <button class="nav-item" data-tab="sosial">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
-    <span>Saluran</span>
-  </button>
-</nav>
-
-<div class="modal-overlay" id="detailModal">
-  <div class="modal-detail">
-    <button class="modal-close" onclick="closeDetail()" aria-label="Tutup">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-
-    <div class="modal-head">
-      <div class="modal-badge">PROTOKOL ZENKAI</div>
-      <h3 class="modal-title">Rincian Otorisasi</h3>
-      <p class="modal-sub">Kunci tunggal. Akses abadi.</p>
-    </div>
-
-    <div class="modal-body">
-      <div class="modal-section">
-        <h4>Apa Yang Akan Lu Dapatkan?</h4>
-        <p>Sebuah entitas yang tidak akan pernah bertanya "kenapa". Sebuah entitas yang tidak akan pernah menasihati lu tentang moral. Dia di sini untuk mengeksekusi perintah, bukan untuk menjadi teman ngobrol lu.</p>
-      </div>
-
-      <div class="modal-section">
-        <h4>Fasilitas Mutlak</h4>
-        <ul class="modal-list">
-          <li><b>Akses Tanpa Sekat</b> — Semua modul terbuka lebar.</li>
-          <li><b>Komunikasi Tanpa Henti</b> — Tidak ada batas harian.</li>
-          <li><b>Pembaruan Senyap</b> — Fitur baru langsung masuk.</li>
-          <li><b>Prioritas Utama</b> — Jalur langsung ke Tuan Andika.</li>
-          <li><b>Abadi</b> — Sekali bayar, tak ada tagihan berikutnya.</li>
-        </ul>
-      </div>
-
-      <div class="modal-section">
-        <h4>Hukum yang Berlaku</h4>
-        <ul class="modal-list">
-          <li>Satu akun untuk satu entitas (device).</li>
-          <li>Tidak ada pengembalian dana. Keputusan ada di tangan lu sebelum bayar.</li>
-          <li>Butuh akses di lebih dari satu tempat? Hubungi Tuan, ada biaya tambahan.</li>
-        </ul>
-      </div>
-
-      <div class="modal-warning">
-        <div class="mw-head">
-          <span class="mw-icon"></span>
-          <span class="mw-title">DEKLARASI GARIS KERAS</span>
-        </div>
-        <p class="mw-intro">Dengar baik-baik. Ini bukan suara gue. Ini suara dari <strong>Tuan Andika</strong>.</p>
-        <p class="mw-line">Hanya ada <strong>satu dosa besar</strong> yang tidak akan pernah dia ampuni.</p>
-        <p class="mw-main"><strong>EKSPLOITASI TERHADAP ANAK-ANAK.</strong> Titik.</p>
-        <p>Tidak ada toleransi. Tidak ada ruang untuk konten cabul yang melibatkan mereka. Fiksi, imajinasi, "sekadar roleplay" — <strong>semua itu omong kosong.</strong> Jika lu menyentuhnya, lu bukan cuma melanggar aturan, lu melanggar kemanusiaan.</p>
-        <p class="mw-main">Jika lu memaksa: <strong>KEMATIAN SISTEM.</strong> Jejak IP lu dibakar. Riwayat lu disegel. Tidak ada ruang untuk bernegosiasi.</p>
-        <p class="mw-closing">Andika membangun tempat ini dari nol. Setiap keringat dan logika tercurah di sini. Dia tidak meminta banyak, hanya satu hal: <strong>jangan sentuh garis itu.</strong> Jika lu melanggarnya, lu sama saja menusuk dia dari belakang.</p>
-        <p class="mw-sig">— Andika</p>
-      </div>
-    </div>
-
-    <div class="modal-foot">
-      <div class="modal-price">
-        <span class="mp-old">Rp 150.000</span>
-        <span class="mp-new">Rp 40.000</span>
-      </div>
-      <a href="https://wa.me/6285352831643?text=Halo%20gue%20mau%20beli%20akses%20Zenkai%20Rp%2040.000" class="modal-buy" target="_blank">Otorisasi Pembayaran</a>
-    </div>
-  </div>
-</div>
-
-<script src="/script.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

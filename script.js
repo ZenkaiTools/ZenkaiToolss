@@ -1,132 +1,177 @@
-// ===== TAB SWITCHING =====
-const navItems = document.querySelectorAll('.nav-item');
-const tabContents = document.querySelectorAll('.tab-content');
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-function switchTab(tabName) {
-  navItems.forEach(item => {
-    if (item.dataset.tab === tabName) item.classList.add('active');
-    else item.classList.remove('active');
-  });
-  tabContents.forEach(content => {
-    if (content.id === 'tab-' + tabName) content.classList.add('active');
-    else content.classList.remove('active');
-  });
-  const main = document.querySelector('.app-main');
-  if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
-  try { localStorage.setItem('zenkai_active_tab', tabName); } catch(e) {}
-}
-window.switchTab = switchTab;
+// === KONFIGURASI SUPABASE LU ===
+const SUPABASE_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM";
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-navItems.forEach(item => {
-  item.addEventListener('click', () => {
-    switchTab(item.dataset.tab);
+// === LOGIC LOGIN SUPABASE (Biar keren pake Auth) ===
+document.getElementById('btnLogin').addEventListener('click', async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+  if(error) alert("Error: " + error.message);
+});
+
+// === UI LOGIC ===
+const modal = document.getElementById('toolModal');
+const toolBody = document.getElementById('toolBody');
+
+window.closeModal = () => {
+  modal.classList.remove('active');
+  toolBody.innerHTML = '';
+};
+
+// SEARCH FILTER
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const term = e.target.value.toLowerCase();
+  document.querySelectorAll('.card').forEach(card => {
+    const text = card.innerText.toLowerCase();
+    card.style.display = text.includes(term) ? 'block' : 'none';
   });
 });
 
-try {
-  const savedTab = localStorage.getItem('zenkai_active_tab');
-  if (savedTab && document.getElementById('tab-' + savedTab)) {
-    switchTab(savedTab);
+// === FUNGSI BUKA TOOL ===
+window.openTool = (tool) => {
+  modal.classList.add('active');
+  
+  if(tool === 'tiktok') {
+    toolBody.innerHTML = `
+      <h3>TikTok Downloader</h3>
+      <input type="text" id="ttUrl" placeholder="Paste link TikTok di sini...">
+      <button onclick="downloadTikTok()">Download Video</button>
+      <div id="ttResult" class="result-box" style="display:none;"></div>
+    `;
+  } 
+  
+  else if(tool === 'qr') {
+    toolBody.innerHTML = `
+      <h3>QR Code Generator</h3>
+      <input type="text" id="qrText" placeholder="Ketik teks atau link..." oninput="generateQR()">
+      <div id="qrResult" class="result-box">
+        <img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ZenkaiTools" alt="QR">
+      </div>
+    `;
+  } 
+  
+  else if(tool === 'brat') {
+    toolBody.innerHTML = `
+      <h3>Brat Text Generator</h3>
+      <input type="text" id="bratText" placeholder="Ketik teks lu..." oninput="generateBrat()">
+      <div class="result-box">
+        <div id="bratResult" style="background:#fff;color:#000;padding:20px;font-family:Arial;font-size:24px;font-weight:bold;word-wrap:break-word;filter:blur(0.5px);">Zenkai</div>
+      </div>
+    `;
+  } 
+  
+  else if(tool === 'base64') {
+    toolBody.innerHTML = `
+      <h3>Base64 Tool</h3>
+      <textarea id="b64Input" rows="3" placeholder="Ketik teks atau Base64 di sini..."></textarea>
+      <button onclick="encodeB64()" style="width:48%; margin-right:4%;">Encode</button>
+      <button onclick="decodeB64()" style="width:48%;">Decode</button>
+      <div id="b64Result" class="result-box" style="display:none;"></div>
+    `;
+  } 
+  
+  else if(tool === 'iplookup') {
+    toolBody.innerHTML = `
+      <h3>IP Lookup</h3>
+      <input type="text" id="ipAddr" placeholder="Masukkan IP (misal: 8.8.8.8)">
+      <button onclick="lookupIP()">Lacak IP</button>
+      <div id="ipResult" class="result-box" style="display:none;"></div>
+    `;
   }
-} catch(e) {}
+};
 
-// ===== MODAL DETAIL PRODUK =====
-function openDetail() {
-  const modal = document.getElementById('detailModal');
-  if (modal) {
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-}
+// === FUNGSI EKSEKUSI TOOL ===
 
-function closeDetail() {
-  const modal = document.getElementById('detailModal');
-  if (modal) {
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-}
-
-window.openDetail = openDetail;
-window.closeDetail = closeDetail;
-
-const detailModal = document.getElementById('detailModal');
-if (detailModal) {
-  detailModal.addEventListener('click', (e) => {
-    if (e.target === detailModal) closeDetail();
-  });
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeDetail();
-});
-
-// ===== THEME TOGGLE =====
-const themeToggle = document.getElementById('themeToggle');
-if (themeToggle) {
+// 1. TikTok Downloader (Pake API Publik)
+window.downloadTikTok = async () => {
+  const url = document.getElementById('ttUrl').value;
+  const resBox = document.getElementById('ttResult');
+  if(!url) return alert("Masukin link dulu, kontol!");
+  
+  resBox.style.display = 'block';
+  resBox.innerHTML = "Memproses video...";
+  
   try {
-    const savedTheme = localStorage.getItem('zenkai_theme');
-    if (savedTheme === 'light') document.body.classList.add('light');
-  } catch(e) {}
-
-  themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('light');
-    const isLight = document.body.classList.contains('light');
-    try { localStorage.setItem('zenkai_theme', isLight ? 'light' : 'dark'); } catch(e) {}
-    const svg = themeToggle.querySelector('svg');
-    if (svg) {
-      if (isLight) {
-        svg.innerHTML = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
-      } else {
-        svg.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
-      }
+    // Pake API gratis (TikWM) - Catatan: API publik bisa mati kapan aja
+    const res = await fetch(`https://www.tikwm.com/api/?url=${url}`);
+    const data = await res.json();
+    
+    if(data.code === 0 && data.data) {
+      const videoUrl = data.data.play;
+      resBox.innerHTML = `
+        <p style="color:#00ff66;font-size:12px;margin-bottom:10px;">Berhasil!</p>
+        <video src="${videoUrl}" controls style="max-width:100%;border-radius:8px;"></video>
+        <br><br>
+        <a href="${videoUrl}" target="_blank" style="display:block;background:#00ff66;color:#000;text-decoration:none;padding:10px;border-radius:8px;font-weight:bold;">Download Video HD</a>
+      `;
+    } else {
+      resBox.innerHTML = "<span style='color:red'>Gagal ambil video. Link salah atau API down.</span>";
     }
-  });
-}
-
-// ===== HASH ROUTING =====
-window.addEventListener('hashchange', () => {
-  const hash = window.location.hash.replace('#', '');
-  if (hash && document.getElementById('tab-' + hash)) {
-    switchTab(hash);
+  } catch(e) {
+    resBox.innerHTML = "<span style='color:red'>Error koneksi ke server TikTok.</span>";
   }
-});
+};
 
-if (window.location.hash) {
-  const hash = window.location.hash.replace('#', '');
-  if (document.getElementById('tab-' + hash)) {
-    setTimeout(() => switchTab(hash), 100);
+// 2. QR Generator
+window.generateQR = () => {
+  const text = document.getElementById('qrText').value || "ZenkaiTools";
+  document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(text)}`;
+};
+
+// 3. Brat Text
+window.generateBrat = () => {
+  const text = document.getElementById('bratText').value || "Zenkai";
+  document.getElementById('bratResult').innerText = text;
+};
+
+// 4. Base64
+window.encodeB64 = () => {
+  const input = document.getElementById('b64Input').value;
+  const res = btoa(input);
+  const box = document.getElementById('b64Result');
+  box.style.display = 'block';
+  box.innerHTML = `<b>Result:</b><br><span style="color:#00ff66">${res}</span>`;
+};
+window.decodeB64 = () => {
+  const input = document.getElementById('b64Input').value;
+  try {
+    const res = atob(input);
+    const box = document.getElementById('b64Result');
+    box.style.display = 'block';
+    box.innerHTML = `<b>Result:</b><br><span style="color:#00ff66">${res}</span>`;
+  } catch(e) {
+    alert("Format Base64 salah, kontol!");
   }
-}
+};
 
-// ===== SWIPE GESTURE =====
-let touchStartX = 0;
-let touchStartY = 0;
-const main = document.querySelector('.app-main');
-const TABS_ORDER = ['beranda', 'produk', 'tools', 'tentang', 'sosial'];
-
-if (main) {
-  main.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-  }, { passive: true });
-
-  main.addEventListener('touchend', (e) => {
-    const dx = e.changedTouches[0].screenX - touchStartX;
-    const dy = e.changedTouches[0].screenY - touchStartY;
-    if (Math.abs(dx) < 60) return;
-    if (Math.abs(dy) > Math.abs(dx)) return;
-    const activeNav = document.querySelector('.nav-item.active');
-    if (!activeNav) return;
-    const currentIdx = TABS_ORDER.indexOf(activeNav.dataset.tab);
-    if (currentIdx === -1) return;
-    let nextIdx;
-    if (dx < 0) nextIdx = currentIdx + 1;
-    else nextIdx = currentIdx - 1;
-    if (nextIdx < 0 || nextIdx >= TABS_ORDER.length) return;
-    switchTab(TABS_ORDER[nextIdx]);
-  }, { passive: true });
-}
-
-// ===== LOG =====
-console.log('%c Zenkai ', 'background:#ff1f4b;color:#fff;font-weight:900;padding:4px 8px;border-radius:4px;font-family:monospace', 'Bukan asisten. Bukan teman. Alat.');
+// 5. IP Lookup (Pake API ipapi.co)
+window.lookupIP = async () => {
+  const ip = document.getElementById('ipAddr').value;
+  const box = document.getElementById('ipResult');
+  if(!ip) return alert("Masukin IP dulu!");
+  
+  box.style.display = 'block';
+  box.innerHTML = "Mencari lokasi...";
+  
+  try {
+    const res = await fetch(`https://ipapi.co/${ip}/json/`);
+    const data = await res.json();
+    
+    if(data.error) {
+      box.innerHTML = `<span style="color:red">${data.reason}</span>`;
+    } else {
+      box.innerHTML = `
+        <div style="text-align:left;font-size:13px;">
+          <p><b>IP:</b> ${data.ip}</p>
+          <p><b>Kota:</b> ${data.city}</p>
+          <p><b>Negara:</b> ${data.country_name}</p>
+          <p><b>ISP:</b> ${data.org}</p>
+        </div>
+      `;
+    }
+  } catch(e) {
+    box.innerHTML = "<span style='color:red'>Gagal melacak IP.</span>";
+  }
+};
