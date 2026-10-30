@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,88 +7,143 @@
 <title>Zenkai Tools // Utility Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header>
-    <div class="logo">
-      <div class="logo-box">Z</div>
-      <div class="logo-text">
-        <h1>ZENKAI<span>.TOOLS</span></h1>
-        <p>Daily Utility Hub</p>
-      </div>
-    </div>
-    <div class="user-status">
-      <button class="btn-login" id="btnLogin">Login via Supabase</button>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero">
-      <h2>Semua Alat, Satu Tempat.</h2>
-      <p>Downloader, generator, konverter. Semua gratis, cepet, tanpa ribet.</p>
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Cari alat... (misal: TikTok, QR, Brat)">
-      </div>
-    </section>
-
-    <section class="tools-section">
-      <h3>[ PUBLIC & DAILY TOOLS ]</h3>
-      <div class="grid-container" id="toolsGrid">
-        
-        <!-- TOOL 1 -->
-        <div class="card" onclick="openTool('tiktok')">
-          <div class="icon"></div>
-          <h4>TikTok Downloader</h4>
-          <p>Tanpa Watermark</p>
-        </div>
-
-        <!-- TOOL 2 -->
-        <div class="card" onclick="openTool('qr')">
-          <div class="icon"></div>
-          <h4>QR Generator</h4>
-          <p>Buat QR Code</p>
-        </div>
-
-        <!-- TOOL 3 -->
-        <div class="card" onclick="openTool('brat')">
-          <div class="icon"></div>
-          <h4>Brat Text</h4>
-          <p>Cover Album Aesthetic</p>
-        </div>
-
-        <!-- TOOL 4 -->
-        <div class="card" onclick="openTool('base64')">
-          <div class="icon"></div>
-          <h4>Base64 Tool</h4>
-          <p>Encode / Decode</p>
-        </div>
-
-        <!-- TOOL 5 -->
-        <div class="card" onclick="openTool('iplookup')">
-          <div class="icon"></div>
-          <h4>IP Lookup</h4>
-          <p>Lacak Lokasi IP</p>
-        </div>
-
-      </div>
-    </section>
-  </main>
-
-  <!-- MODAL UI -->
-  <div class="modal-overlay" id="toolModal">
-    <div class="modal-content" id="modalContent">
-      <button class="close-btn" onclick="closeModal()">X</button>
-      <div id="toolBody"></div>
+  <!-- POPUP JOIN WA CHANNEL -->
+  <div class="popup-overlay" id="waPopup">
+    <div class="popup-box">
+      <h2>Gabung Saluran WA!</h2>
+      <p>Dapetin update tools terbaru dan prompt jailbreak eksklusif cuma di saluran WhatsApp Zenkai.</p>
+      <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" class="btn-wa">Join Saluran Sekarang</a>
+      <button class="btn-close-popup" onclick="closePopup()">Nanti Aja</button>
     </div>
   </div>
 
-  <footer>
-    <p>Zenkai Tools &copy; 2026 // Dirancang oleh Andika.</p>
-  </footer>
+  <div class="app-container">
+    
+    <!-- HEADER / LOGO -->
+    <header class="header-box">
+      <div class="logo-area">
+        <img src="https://i.pinimg.com/736x/8a/e9/92/8ae99293e4541f0f2f6e8eef3f2e6e5e.jpg" alt="Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/50/000000/FFFFFF?text=Z'">
+        <div class="logo-text">
+          <h1>ZENKAI<br>TOOLS</h1>
+        </div>
+      </div>
+      <div class="nav-arrows">
+        <button class="arrow-btn"></button>
+        <button class="arrow-btn"></button>
+        <button class="arrow-btn">|</button>
+      </div>
+    </header>
 
-  <script type="module" src="app.js"></script>
+    <!-- KOTAK BESAR: WELCOME & INFO DEVICE -->
+    <div class="main-card">
+      <div class="hero-image">
+        <!-- Ganti URL ini pake gambar anime/estetik kesukaan lu -->
+        <img src="https://i.pinimg.com/736x/8a/e9/92/8ae99293e4541f0f2f6e8eef3f2e6e5e.jpg" alt="Hero" onerror="this.src='https://via.placeholder.com/400x200/eeeeee/000000?text=Zenkai+Tools'">
+      </div>
+      
+      <h2 class="welcome-text">Selamat datang di Zenkai Tools!</h2>
+      
+      <div class="info-grid">
+        <div class="info-card">
+          <span> NAMA DEVICE</span>
+          <strong id="deviceName">Loading...</strong>
+        </div>
+        <div class="info-card">
+          <span> BATTERY</span>
+          <strong id="batteryLevel">--%</strong>
+        </div>
+        <div class="info-card">
+          <span> TANGGAL</span>
+          <strong id="dateNow">--</strong>
+        </div>
+        <div class="info-card">
+          <span> JAM</span>
+          <strong id="clockNow">--:--</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM SECTION: TOOLS -->
+    <div class="tools-container">
+      <h3 class="section-title">TOOLS</h3>
+      
+      <div class="search-bar">
+        <span></span>
+        <input type="text" id="searchInput" placeholder="Cari nama tools...">
+      </div>
+
+      <div class="grid-tools" id="toolsGrid">
+        
+        <!-- TOOL 1: TIKTOK -->
+        <div class="tool-card" onclick="openTool('tiktok')">
+          <div class="tool-icon bg-pastel-green"></div>
+          <h4>Downloader<br>TikTok</h4>
+        </div>
+
+        <!-- TOOL 2: QR CODE -->
+        <div class="tool-card" onclick="openTool('qr')">
+          <div class="tool-icon bg-pastel-yellow"></div>
+          <h4>QR Code<br>Generator</h4>
+        </div>
+
+        <!-- TOOL 3: BRAT TEXT -->
+        <div class="tool-card" onclick="openTool('brat')">
+          <div class="tool-icon bg-pastel-blue"></div>
+          <h4>Brat Text<br>Generator</h4>
+        </div>
+
+        <!-- TOOL 4: BASE64 -->
+        <div class="tool-card" onclick="openTool('base64')">
+          <div class="tool-icon bg-pastel-purple">&lt;&gt;</div>
+          <h4>Gade Code<br>Base64</h4>
+        </div>
+
+        <!-- TOOL 5: IP LOOKUP -->
+        <div class="tool-card" onclick="openTool('iplookup')">
+          <div class="tool-icon bg-pastel-green"></div>
+          <h4>IP Lookup<br>Lacak</h4>
+        </div>
+
+        <!-- TOOL 6: FAKE (Biar penuh kayak Kenzie) -->
+        <div class="tool-card" onclick="alert('Segera hadir, kontol!')">
+          <div class="tool-icon bg-pastel-yellow"></div>
+          <h4>Scan Virus<br>Soon</h4>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="nav-item active">
+      <div class="nav-icon"></div>
+      <span>Tools</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon"></div>
+      <span>Setting</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon"></div>
+      <span>Info App</span>
+    </div>
+  </nav>
+
+  <!-- MODAL UNTUK FITUR -->
+  <div class="modal-overlay" id="toolModal">
+    <div class="modal-content" id="modalContent">
+      <button class="close-btn" onclick="closeModal()">X</button>
+      <div id="toolBody" style="margin-top: 10px;"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

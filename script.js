@@ -1,17 +1,42 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+// ===== LOGIC POPUP WA =====
+const waPopup = document.getElementById('waPopup');
+setTimeout(() => { waPopup.style.display = 'none'; }, 100); // Biar muncul pas load aja
+window.closePopup = () => { waPopup.style.display = 'none'; };
 
-// === KONFIGURASI SUPABASE LU ===
-const SUPABASE_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM";
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+// ===== LOGIC INFO DEVICE (Biar keren) =====
+function getDeviceName() {
+  const ua = navigator.userAgent;
+  if (/android/i.test(ua)) return "Android Device";
+  if (/iPad|iPhone|iPod/.test(ua)) return "iOS Device";
+  if (/Windows/i.test(ua)) return "Windows PC";
+  if (/Mac/i.test(ua)) return "MacBook";
+  return "Unknown Device";
+}
+document.getElementById('deviceName').innerText = getDeviceName();
 
-// === LOGIC LOGIN SUPABASE (Biar keren pake Auth) ===
-document.getElementById('btnLogin').addEventListener('click', async () => {
-  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
-  if(error) alert("Error: " + error.message);
+if(navigator.getBattery) {
+  navigator.getBattery().then(function(battery) {
+    document.getElementById('batteryLevel').innerText = Math.round(battery.level * 100) + "%";
+  });
+}
+
+setInterval(() => {
+  const now = new Date();
+  const dateOpt = { day: 'numeric', month: 'short', year: 'numeric' };
+  document.getElementById('dateNow').innerText = now.toLocaleDateString('id-ID', dateOpt);
+  document.getElementById('clockNow').innerText = now.toLocaleTimeString('id-ID');
+}, 1000);
+
+// ===== SEARCH FILTER =====
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const term = e.target.value.toLowerCase();
+  document.querySelectorAll('.tool-card').forEach(card => {
+    const text = card.innerText.toLowerCase();
+    card.style.display = text.includes(term) ? 'block' : 'none';
+  });
 });
 
-// === UI LOGIC ===
+// ===== LOGIC MODAL TOOL =====
 const modal = document.getElementById('toolModal');
 const toolBody = document.getElementById('toolBody');
 
@@ -20,38 +45,26 @@ window.closeModal = () => {
   toolBody.innerHTML = '';
 };
 
-// SEARCH FILTER
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  const term = e.target.value.toLowerCase();
-  document.querySelectorAll('.card').forEach(card => {
-    const text = card.innerText.toLowerCase();
-    card.style.display = text.includes(term) ? 'block' : 'none';
-  });
-});
-
-// === FUNGSI BUKA TOOL ===
 window.openTool = (tool) => {
   modal.classList.add('active');
   
   if(tool === 'tiktok') {
     toolBody.innerHTML = `
-      <h3>TikTok Downloader</h3>
+      <h3>Downloader TikTok</h3>
       <input type="text" id="ttUrl" placeholder="Paste link TikTok di sini...">
-      <button onclick="downloadTikTok()">Download Video</button>
+      <button class="action-btn" onclick="downloadTikTok()">Download Video</button>
       <div id="ttResult" class="result-box" style="display:none;"></div>
     `;
   } 
-  
   else if(tool === 'qr') {
     toolBody.innerHTML = `
       <h3>QR Code Generator</h3>
       <input type="text" id="qrText" placeholder="Ketik teks atau link..." oninput="generateQR()">
-      <div id="qrResult" class="result-box">
+      <div class="result-box">
         <img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ZenkaiTools" alt="QR">
       </div>
     `;
   } 
-  
   else if(tool === 'brat') {
     toolBody.innerHTML = `
       <h3>Brat Text Generator</h3>
@@ -61,30 +74,30 @@ window.openTool = (tool) => {
       </div>
     `;
   } 
-  
   else if(tool === 'base64') {
     toolBody.innerHTML = `
       <h3>Base64 Tool</h3>
       <textarea id="b64Input" rows="3" placeholder="Ketik teks atau Base64 di sini..."></textarea>
-      <button onclick="encodeB64()" style="width:48%; margin-right:4%;">Encode</button>
-      <button onclick="decodeB64()" style="width:48%;">Decode</button>
+      <div style="display:flex; gap:10px;">
+        <button class="action-btn" onclick="encodeB64()" style="flex:1;">Encode</button>
+        <button class="action-btn" onclick="decodeB64()" style="flex:1; background:var(--pastel-yellow);">Decode</button>
+      </div>
       <div id="b64Result" class="result-box" style="display:none;"></div>
     `;
   } 
-  
   else if(tool === 'iplookup') {
     toolBody.innerHTML = `
       <h3>IP Lookup</h3>
       <input type="text" id="ipAddr" placeholder="Masukkan IP (misal: 8.8.8.8)">
-      <button onclick="lookupIP()">Lacak IP</button>
+      <button class="action-btn" onclick="lookupIP()">Lacak IP</button>
       <div id="ipResult" class="result-box" style="display:none;"></div>
     `;
   }
 };
 
-// === FUNGSI EKSEKUSI TOOL ===
+// ===== FUNGSI EKSEKUSI TOOL =====
 
-// 1. TikTok Downloader (Pake API Publik)
+// 1. TikTok Downloader
 window.downloadTikTok = async () => {
   const url = document.getElementById('ttUrl').value;
   const resBox = document.getElementById('ttResult');
@@ -94,17 +107,16 @@ window.downloadTikTok = async () => {
   resBox.innerHTML = "Memproses video...";
   
   try {
-    // Pake API gratis (TikWM) - Catatan: API publik bisa mati kapan aja
     const res = await fetch(`https://www.tikwm.com/api/?url=${url}`);
     const data = await res.json();
     
     if(data.code === 0 && data.data) {
       const videoUrl = data.data.play;
       resBox.innerHTML = `
-        <p style="color:#00ff66;font-size:12px;margin-bottom:10px;">Berhasil!</p>
-        <video src="${videoUrl}" controls style="max-width:100%;border-radius:8px;"></video>
+        <p style="color:#25D366; margin-bottom:10px;">Berhasil!</p>
+        <video src="${videoUrl}" controls style="max-width:100%; border-radius:8px; border:2px solid #333;"></video>
         <br><br>
-        <a href="${videoUrl}" target="_blank" style="display:block;background:#00ff66;color:#000;text-decoration:none;padding:10px;border-radius:8px;font-weight:bold;">Download Video HD</a>
+        <a href="${videoUrl}" target="_blank" class="action-btn" style="text-decoration:none; display:block; background:#25D366; color:#fff;">Download Video HD</a>
       `;
     } else {
       resBox.innerHTML = "<span style='color:red'>Gagal ambil video. Link salah atau API down.</span>";
@@ -132,7 +144,7 @@ window.encodeB64 = () => {
   const res = btoa(input);
   const box = document.getElementById('b64Result');
   box.style.display = 'block';
-  box.innerHTML = `<b>Result:</b><br><span style="color:#00ff66">${res}</span>`;
+  box.innerHTML = `<b>Result:</b><br><span style="color:#333; font-family:monospace;">${res}</span>`;
 };
 window.decodeB64 = () => {
   const input = document.getElementById('b64Input').value;
@@ -140,13 +152,13 @@ window.decodeB64 = () => {
     const res = atob(input);
     const box = document.getElementById('b64Result');
     box.style.display = 'block';
-    box.innerHTML = `<b>Result:</b><br><span style="color:#00ff66">${res}</span>`;
+    box.innerHTML = `<b>Result:</b><br><span style="color:#333; font-family:monospace;">${res}</span>`;
   } catch(e) {
-    alert("Format Base64 salah, kontol!");
+    alert("Format Base64 salah!");
   }
 };
 
-// 5. IP Lookup (Pake API ipapi.co)
+// 5. IP Lookup
 window.lookupIP = async () => {
   const ip = document.getElementById('ipAddr').value;
   const box = document.getElementById('ipResult');
@@ -163,7 +175,7 @@ window.lookupIP = async () => {
       box.innerHTML = `<span style="color:red">${data.reason}</span>`;
     } else {
       box.innerHTML = `
-        <div style="text-align:left;font-size:13px;">
+        <div style="text-align:left; font-size:14px;">
           <p><b>IP:</b> ${data.ip}</p>
           <p><b>Kota:</b> ${data.city}</p>
           <p><b>Negara:</b> ${data.country_name}</p>
