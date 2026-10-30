@@ -1,5 +1,14 @@
-// TUNGGU HTML SELESAI DIMUAT BARU JALANIN JS
 document.addEventListener('DOMContentLoaded', () => {
+  
+  // ===== LOGIC TUTUP POPUP (WAJIB DITARO DI ATAS) =====
+  const btnTutupWa = document.getElementById('btnTutupWa');
+  const waPopup = document.getElementById('waPopup');
+  
+  if(btnTutupWa && waPopup) {
+    btnTutupWa.addEventListener('click', () => {
+      waPopup.style.display = 'none';
+    });
+  }
 
   // ===== LOGIC INFO DEVICE =====
   function getDeviceName() {

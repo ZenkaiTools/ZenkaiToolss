@@ -8,7 +8,6 @@
   --pastel-yellow: #fff3b0;
   --pastel-blue: #b5e2fa;
   --pastel-purple: #e0c3fc;
-  --shadow-solid: 4px 4px 0px #333333;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
