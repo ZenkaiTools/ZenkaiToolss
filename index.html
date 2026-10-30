@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Zenkai Tools // Neon Core</title>
+    <title>Zenkai Tools v1</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -31,41 +31,34 @@
             <header class="header-box anim-reveal" style="--delay: 0.1s;">
                 <div class="logo-area">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                     </div>
                     <div class="logo-text">
-                        <h1>ZENKAI<span>.TOOLS</span></h1>
-                        <p class="version">v1.0 // Andika T.M</p>
+                        <h1>ZenkaiTools <span>v1</span></h1>
+                        <p class="version">By Andika T.M</p>
                     </div>
                 </div>
                 <div class="header-status" id="device-status">SYS</div>
             </header>
 
-            <!-- HERO CARD (Video/Gambar) -->
+            <!-- HERO SECTION (Bento Style) -->
             <div class="hero-section anim-reveal" style="--delay: 0.2s;">
                 <div class="hero-glass">
-                    <div class="hero-media">
-                        <!-- Ganti src ini dengan video lo kalau ada, sementara pake gambar futuristik -->
-                        <img src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=1000&auto=format&fit=crop" alt="Hero">
-                        <div class="hero-overlay"></div>
-                    </div>
-                    <div class="hero-content">
+                    <div class="hero-top">
                         <span class="cyber-badge">SYSTEM ONLINE</span>
-                        <h2>Welcome, <br><span>Netrunner.</span></h2>
-                        <p class="subtitle">Akses modul utilitas lo di bawah ini.</p>
-                        
-                        <div class="hero-stats">
-                            <div class="stat-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-                                <div><span>DEVICE</span><b id="device-name">Android</b></div>
-                            </div>
-                            <div class="stat-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg>
-                                <div><span>BATTERY</span><b id="battery-level">--%</b></div>
-                            </div>
-                            <div class="stat-item" style="grid-column: span 2; justify-content: center;">
-                                <span style="font-size: 12px; color: var(--text-main); font-weight: 800;" id="clock-now">--:--:--</span>
-                            </div>
+                        <span class="time-badge" id="clock-now">--:--:--</span>
+                    </div>
+                    <h2>Welcome, <br><span>Netrunner.</span></h2>
+                    <p class="subtitle">Akses modul utilitas dan generator lo di bawah ini.</p>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                            <div><span>DEVICE</span><b id="device-name">Android</b></div>
+                        </div>
+                        <div class="stat-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg>
+                            <div><span>BATTERY</span><b id="battery-level">--%</b></div>
                         </div>
                     </div>
                 </div>
@@ -82,60 +75,65 @@
                 </div>
 
                 <div class="grid-tools" id="tools-grid">
-                    <!-- Row 1 -->
+                    <!-- 1. TikTok -->
                     <div class="tool-card anim-reveal" style="--delay: 0.35s;" onclick="openTool('tiktok')">
                         <div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
                         <h4>TikTok DL</h4>
                     </div>
+                    <!-- 2. QR -->
                     <div class="tool-card anim-reveal" style="--delay: 0.4s;" onclick="openTool('qr')">
                         <div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
                         <h4>QR Code</h4>
                     </div>
+                    <!-- 3. Brat -->
                     <div class="tool-card anim-reveal" style="--delay: 0.45s;" onclick="openTool('brat')">
                         <div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
                         <h4>Brat Text</h4>
                     </div>
-                    
-                    <!-- Row 2 -->
+                    <!-- 4. Base64 -->
                     <div class="tool-card anim-reveal" style="--delay: 0.5s;" onclick="openTool('base64')">
                         <div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
                         <h4>Base64</h4>
                     </div>
+                    <!-- 5. IP Lookup -->
                     <div class="tool-card anim-reveal" style="--delay: 0.55s;" onclick="openTool('ip')">
                         <div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
                         <h4>IP Lookup</h4>
                     </div>
+                    <!-- 6. Image Link -->
                     <div class="tool-card anim-reveal" style="--delay: 0.6s;" onclick="openTool('imgto')">
                         <div class="t-icon bg-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
                         <h4>Image Link</h4>
                     </div>
-
-                    <!-- Row 3 -->
+                    <!-- 7. Password -->
                     <div class="tool-card anim-reveal" style="--delay: 0.65s;" onclick="openTool('password')">
                         <div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
                         <h4>Password</h4>
                     </div>
+                    <!-- 8. Kalkulator -->
                     <div class="tool-card anim-reveal" style="--delay: 0.7s;" onclick="openTool('calc')">
                         <div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div>
                         <h4>Kalkulator</h4>
                     </div>
+                    <!-- 9. Zodiak -->
                     <div class="tool-card anim-reveal" style="--delay: 0.75s;" onclick="openTool('zodiak')">
                         <div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div>
                         <h4>Zodiak</h4>
                     </div>
-
-                    <!-- FITUR BARU (Row 4) -->
-                    <div class="tool-card anim-reveal" style="--delay: 0.8s;" onclick="openTool('textcase')">
-                        <div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
-                        <h4>Text Case</h4>
+                    <!-- 10. Cuaca -->
+                    <div class="tool-card anim-reveal" style="--delay: 0.8s;" onclick="openTool('cuaca')">
+                        <div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41M12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg></div>
+                        <h4>Cuaca</h4>
                     </div>
-                    <div class="tool-card anim-reveal" style="--delay: 0.85s;" onclick="openTool('random')">
-                        <div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></div>
-                        <h4>Random Num</h4>
+                    <!-- 11. Quotes -->
+                    <div class="tool-card anim-reveal" style="--delay: 0.85s;" onclick="openTool('quotes')">
+                        <div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></div>
+                        <h4>Quotes</h4>
                     </div>
-                    <div class="tool-card anim-reveal" style="--delay: 0.9s;" onclick="openTool('tts')">
-                        <div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg></div>
-                        <h4>Text to Voice</h4>
+                    <!-- 12. Hitung BMI -->
+                    <div class="tool-card anim-reveal" style="--delay: 0.9s;" onclick="openTool('bmi')">
+                        <div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg></div>
+                        <h4>Hitung BMI</h4>
                     </div>
                 </div>
             </div>
@@ -157,7 +155,7 @@
             </header>
             <div class="hero-glass anim-reveal" style="--delay: 0.1s; padding: 40px 20px; text-align: center;">
                 <h2 style="color: var(--neon-purple); margin-bottom: 10px;">Under Construction</h2>
-                <p style="color:var(--text-muted); font-size: 14px;">Modul pengaturan sedang di-encode. Cek lagi nanti.</p>
+                <p style="color:var(--text-muted); font-size: 14px;">Modul pengaturan sedang dikembangkan. Cek lagi nanti.</p>
             </div>
         </main>
 
@@ -170,7 +168,7 @@
                 </div>
             </header>
             <div class="hero-glass anim-reveal" style="--delay: 0.1s; padding: 30px 20px;">
-                <h2 style="color: var(--neon-blue); margin-bottom: 10px;">Zenkai Tools v1.0</h2>
+                <h2 style="color: var(--neon-blue); margin-bottom: 10px;">Zenkai Tools v1</h2>
                 <p style="color:var(--text-muted); line-height:1.7; font-size: 14px;">
                     Sistem utilitas ringan berbasis web. Dibuat dengan presisi oleh <b style="color:var(--neon-cyan);">Andika T.M</b>. 
                     <br><br>
@@ -179,7 +177,7 @@
             </div>
         </main>
 
-        <!-- NAVIGASI BAWAH (Floating Dock) -->
+        <!-- NAVIGASI BAWAH (FIX 100% DI TENGAH) -->
         <nav class="bottom-nav anim-reveal" style="--delay: 0.85s;">
             <button class="nav-item active" onclick="switchPage('tools', this)">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
