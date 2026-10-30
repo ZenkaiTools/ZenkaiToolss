@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================
-    // 1. TOAST (NOTIFIKASI MODERN)
+    // 1. TOAST NOTIFICATION
     // =========================================
     window.showToast = (msg, isError = false) => {
         const c = document.getElementById('toast-container');
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (isError) {
             t.style.borderColor = 'var(--neon-red)';
-            t.style.color = '#ff9999';
+            t.style.borderLeftColor = 'var(--neon-red)';
         }
         
         t.innerText = msg;
@@ -38,13 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 bgm.volume = 0.2;
                 bgm.play().then(() => { 
                     isPlaying = true; 
-                    musicToggle.style.background = 'var(--neon-yellow)'; 
+                    // Ubah warna tombol jadi Cyan pas nyala
+                    musicToggle.style.background = 'var(--neon-cyan)'; 
+                    musicToggle.style.color = '#000';
                     showToast('Musik dinyalakan 🎵');
                 }).catch(() => showToast('Musik gagal diputar.', true));
             } else {
                 bgm.pause(); 
                 isPlaying = false; 
-                musicToggle.style.background = 'var(--neon-green)';
+                // Balikin ke transparan pas mati
+                musicToggle.style.background = 'rgba(0, 243, 255, 0.1)';
+                musicToggle.style.color = 'var(--neon-cyan)';
                 showToast('Musik dimatikan 🔇');
             }
         });
@@ -99,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 5. SEARCH FILTER (ANTI HILANG ANIMASI)
+    // 5. SEARCH FILTER
     // =========================================
     const sInput = document.getElementById('search-tools');
     if (sInput) {
@@ -109,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const title = card.querySelector('h4').innerText.toLowerCase();
                 if (title.includes(term)) {
                     card.style.display = 'flex';
-                    // Trik biar animasinya jalan lagi pas di-search
+                    // Reset animasi biar munculnya tetep smooth pas di-search
                     card.style.animation = 'none';
                     card.offsetHeight; /* trigger reflow */
                     card.style.animation = null; 
@@ -128,11 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.closeModal = () => { 
         modal.classList.remove('active'); 
-        // Delay hapus konten biar animasi tutupnya mulus
         setTimeout(() => { modalContent.innerHTML = ''; }, 300);
     };
 
-    // Fungsi Tutup Modal Klik Overlay
+    // Fungsi Tutup Modal Klik Overlay (Area Gelap)
     window.closeModalOnOverlay = (e) => {
         if (e.target.id === 'tool-modal') {
             closeModal();
@@ -189,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>QR Code</h3>
                 <input type="text" id="qr-text" placeholder="Teks/Link..." value="ZenkaiTools by Andika T.M">
                 <button class="action-btn" id="btn-qr">Generate</button>
-                <div class="result-box"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ZenkaiTools" style="max-width:100%;border-radius:8px;"></div>
+                <div class="result-box"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ZenkaiTools" style="max-width:100%;border-radius:12px;"></div>
             `;
             document.getElementById('btn-qr').onclick = () => {
                 const txt = document.getElementById('qr-text').value || "ZenkaiTools";
@@ -229,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <textarea id="b64-in" rows="3" placeholder="Ketik teks di sini..."></textarea>
                 <div style="display:flex;gap:10px;">
                     <button class="action-btn" id="btn-enc" style="flex:1;">Encode</button>
-                    <button class="action-btn" id="btn-dec" style="flex:1;background:var(--neon-purple); color:#fff;">Decode</button>
+                    <button class="action-btn" id="btn-dec" style="flex:1;background:var(--neon-purple); color:#fff; box-shadow:none;">Decode</button>
                 </div>
                 <div id="b64-res" class="result-box" style="display:none; word-break: break-all;"></div>
             `;
@@ -320,13 +323,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>Kalkulator</h3>
                 <input type="text" id="calc-in" placeholder="Cth: 5 + 5 * 2">
                 <button class="action-btn" id="btn-calc">Hitung</button>
-                <div id="calc-res" class="result-box" style="display:none;font-size:24px;font-weight:800;color:var(--neon-blue);"></div>
+                <div id="calc-res" class="result-box" style="display:none;font-size:24px;font-weight:800;color:var(--neon-cyan);"></div>
             `;
             document.getElementById('btn-calc').onclick = () => {
                 const expr = document.getElementById('calc-in').value;
                 if(!expr) return;
                 try {
-                    // Pake Function buat eval matematika sederhana
                     const res = Function('"use strict";return (' + expr + ')')();
                     const b = document.getElementById('calc-res');
                     b.style.display = 'block'; b.innerText = res;
