@@ -1,22 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================
-    // 1. SISTEM GANTI TEMA (COMIC -> CYBER -> MINIMAL)
+    // 1. SISTEM GANTI TEMA & LAYOUT
     // =========================================
     const themes = ['comic', 'cyber', 'minimal'];
     let currentThemeIndex = 0;
 
     window.switchTheme = () => {
-        // Ganti index tema (0, 1, 2)
         currentThemeIndex = (currentThemeIndex + 1) % themes.length;
         const newTheme = themes[currentThemeIndex];
-        
-        // Terapkan ke body
         document.body.setAttribute('data-theme', newTheme);
         
-        // Notifikasi sesuai tema
         const themeNames = { comic: 'Comic Style 🎨', cyber: 'Cyberpunk ⚡', minimal: 'Clean Minimalist ✨' };
-        showToast(`Tema diganti: ${themeNames[newTheme]}`);
+        showToast(`Tema: ${themeNames[newTheme]}`);
     };
 
     // =========================================
@@ -38,16 +34,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 3. PLAYLIST MUSIK (ACAK & GAK NGULANG)
+    // 3. PLAYLIST MUSIK VIRAL INDONESIA
     // =========================================
     const bgm = document.getElementById('bgm');
     const musicToggle = document.getElementById('music-toggle');
     
-    // Kumpulan lagu bebas royalti (Full Song)
+    // Lagu Viral (Bebas Royalti, Full Audio)
     const playlist = [
-        "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=cyberpunk-2099-10701.mp3",
-        "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0c6ff1bab.mp3?filename=electronic-future-beats-117997.mp3",
-        "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"
+        "https://cdn.pixabay.com/download/audio/2023/03/16/audio_6764249b25.mp3?filename=teh-hijau-remix-135971.mp3", // Instrumental Teh Hijau
+        "https://cdn.pixabay.com/download/audio/2022/11/22/audio_4b16a02c47.mp3?filename=viral-tiktok-beat-122724.mp3", // Beat Viral
+        "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=cyberpunk-2099-10701.mp3", // Cyberpunk
+        "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" // Lofi
     ];
     
     let isPlaying = false;
@@ -55,9 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function playRandomSong() {
         let newIndex;
-        do {
-            newIndex = Math.floor(Math.random() * playlist.length);
-        } while (newIndex === lastPlayedIndex && playlist.length > 1);
+        do { newIndex = Math.floor(Math.random() * playlist.length); } 
+        while (newIndex === lastPlayedIndex && playlist.length > 1);
         
         lastPlayedIndex = newIndex;
         bgm.src = playlist[newIndex];
@@ -67,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (musicToggle && bgm) {
         musicToggle.addEventListener('click', () => {
             if (!isPlaying) {
-                bgm.volume = 0.2;
+                bgm.volume = 0.3;
                 playRandomSong();
                 isPlaying = true; 
                 musicToggle.style.background = 'var(--primary)'; 
@@ -80,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Pas lagu habis, putar lagu random selanjutnya
         bgm.addEventListener('ended', () => {
             if (isPlaying) playRandomSong();
         });
@@ -108,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================
-    // 5. LOGIC MODAL
+    // 5. LOGIC BOTTOM SHEET MODAL
     // =========================================
     const modal = document.getElementById('tool-modal');
     const modalContent = document.getElementById('modal-content');
@@ -117,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('active'); 
         setTimeout(() => { modalContent.innerHTML = ''; }, 300);
     };
+    
     window.closeModalOnOverlay = (e) => {
         if (e.target.id === 'tool-modal') closeModal();
     };
@@ -126,16 +122,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     window.openTool = (tool) => {
         modal.classList.add('active');
-        modalContent.innerHTML = '';
+        
+        // Header Modal dengan Tombol X (SVG)
+        const closeBtnHTML = `<button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
 
-        // --- 1. TIKTOK DOWNLOADER (WITH VIDEO PREVIEW & LOADING) ---
+        // --- 1. TIKTOK DOWNLOADER ---
         if (tool === 'tiktok') {
             modalContent.innerHTML = `
+                ${closeBtnHTML}
                 <h3>TikTok Downloader</h3>
                 <p style="font-size:12px; opacity:0.7; margin-bottom:15px;">Paste link TikTok lo. Video bakal muncul di sini dan bisa diputar dulu sebelum didownload.</p>
                 <input type="text" id="tt-url" placeholder="https://www.tiktok.com/...">
                 <button class="action-btn" id="btn-dl-tt">Proses Video</button>
-                <div id="tt-result" class="result-box" style="display:none;"></div>
+                <div id="tt-result" style="display:none;"></div>
             `;
             document.getElementById('btn-dl-tt').onclick = async () => {
                 const url = document.getElementById('tt-url').value.trim();
@@ -143,11 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const btn = document.getElementById('btn-dl-tt');
                 if(!url) return showToast('Masukkan link dulu!', true);
                 
-                // LOADING ANIMASI
-                btn.innerHTML = '<span class="loader-spinner"></span> Memproses...';
+                btn.innerHTML = '<div class="loader" style="display:inline-block; vertical-align:middle; margin-right:10px;"></div> Memproses...';
                 btn.disabled = true;
                 box.style.display = 'block'; 
-                box.innerHTML = '<span style="color:var(--primary); font-weight:bold;">Menghubungi server TikTok...</span>';
+                box.innerHTML = '<div style="text-align:center; padding:20px;"><div class="loader"></div><p style="font-size:12px; margin-top:10px;">Menghubungi server...</p></div>';
                 
                 try {
                     const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
@@ -157,19 +155,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     const vidUrl = data.data.hdplay || data.data.play;
                     const title = data.data.title || "Video TikTok";
                     
-                    // TAMPILKAN VIDEO PREVIEW
                     box.innerHTML = `
-                        <div style="text-align:left; margin-bottom:10px; font-size:12px;">
+                        <div style="text-align:left; margin-bottom:10px; font-size:12px; border-bottom:2px solid var(--border); padding-bottom:10px;">
                             <b>Judul:</b> ${title}
                         </div>
-                        <video class="video-preview" src="${vidUrl}" controls playsinline></video>
-                        <button class="action-btn" id="btn-save-tt" style="background:var(--primary);">Download ke Galeri</button>
+                        <video style="width:100%; max-height:250px; border-radius:8px; border:2px solid var(--border); margin-bottom:15px; background:#000;" src="${vidUrl}" controls playsinline></video>
+                        <button class="action-btn" id="btn-save-tt">Download Video</button>
                     `;
                     
-                    // LOGIC DOWNLOAD
                     document.getElementById('btn-save-tt').onclick = async () => {
                         const saveBtn = document.getElementById('btn-save-tt');
-                        saveBtn.innerHTML = '<span class="loader-spinner"></span> Mendownload...';
+                        saveBtn.innerHTML = 'Mendownload...';
                         try {
                             const blob = await (await fetch(vidUrl)).blob();
                             const a = document.createElement('a');
@@ -178,10 +174,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             a.click();
                             showToast('Video berhasil disimpan!');
                         } catch(e) { showToast('Gagal download.', true); }
-                        saveBtn.innerText = 'Download ke Galeri';
+                        saveBtn.innerText = 'Download Video';
                     };
                 } catch(e) { 
-                    box.innerHTML = `<span style="color:#ff3333;">Error: ${e.message}</span>`; 
+                    box.innerHTML = `<div style="text-align:center; color:#ff3333; padding:10px;">Error: ${e.message}</div>`; 
                 } finally {
                     btn.innerText = 'Proses Video';
                     btn.disabled = false;
@@ -192,10 +188,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- 2. QR CODE ---
         else if (tool === 'qr') {
             modalContent.innerHTML = `
+                ${closeBtnHTML}
                 <h3>QR Code Generator</h3>
                 <input type="text" id="qr-text" placeholder="Teks/Link..." value="ZenkaiTools by Andika T.M">
                 <button class="action-btn" id="btn-qr">Generate QR</button>
-                <div class="result-box"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ZenkaiTools" style="max-width:100%;border-radius:12px;"></div>
+                <div style="text-align:center; margin-top:15px;"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ZenkaiTools" style="max-width:100%; border-radius:8px; border:2px solid var(--border);"></div>
             `;
             document.getElementById('btn-qr').onclick = () => {
                 const txt = document.getElementById('qr-text').value || "ZenkaiTools";
@@ -206,13 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- 3. BRAT TEXT ---
         else if (tool === 'brat') {
             modalContent.innerHTML = `
+                ${closeBtnHTML}
                 <h3>Brat Text Maker</h3>
                 <input type="text" id="brat-input" placeholder="Ketik teks..." value="Andika T.M">
                 <button class="action-btn" id="btn-brat">Update Teks</button>
-                <div class="result-box" style="background:#fff;padding:20px; border-radius:12px; border:none; display:flex; justify-content:center;">
+                <div style="background:#fff;padding:20px; border-radius:8px; border:2px solid var(--border); display:flex; justify-content:center; margin-bottom:15px;">
                     <div id="brat-res" style="color:#000;font-family:Arial;font-weight:bold;font-size:26px;filter:blur(1.5px);text-align:center;word-wrap:break-word;line-height:1.2; max-width:100%;">Andika T.M</div>
                 </div>
-                <button class="action-btn" id="btn-dl-brat" style="margin-top:15px;">Simpan PNG</button>
+                <button class="action-btn" id="btn-dl-brat">Simpan PNG</button>
             `;
             document.getElementById('btn-brat').onclick = () => {
                 document.getElementById('brat-res').innerText = document.getElementById('brat-input').value || "Andika T.M";
@@ -228,134 +226,97 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         
-        // --- 4. BASE64 ---
-        else if (tool === 'base64') {
-            modalContent.innerHTML = `
-                <h3>Base64 Converter</h3>
-                <textarea id="b64-in" rows="3" placeholder="Ketik teks di sini..."></textarea>
-                <div style="display:flex;gap:10px;">
-                    <button class="action-btn" id="btn-enc" style="flex:1;">Encode</button>
-                    <button class="action-btn" id="btn-dec" style="flex:1;">Decode</button>
-                </div>
-                <div id="b64-res" class="result-box" style="display:none; word-break: break-all;"></div>
-            `;
-            document.getElementById('btn-enc').onclick = () => {
-                const v = document.getElementById('b64-in').value;
-                if(!v) return showToast('Input kosong!', true);
-                const b = document.getElementById('b64-res'); 
-                b.style.display='block';
-                try { b.innerText = btoa(unescape(encodeURIComponent(v))); } catch(e) { b.innerText = 'Gagal encode.'; }
-            };
-            document.getElementById('btn-dec').onclick = () => {
-                const v = document.getElementById('b64-in').value;
-                if(!v) return showToast('Input kosong!', true);
-                const b = document.getElementById('b64-res'); 
-                b.style.display='block';
-                try { b.innerText = decodeURIComponent(escape(atob(v))); } catch(e) { b.innerText = 'Format Base64 tidak valid!'; }
-            };
-        }
-        
-        // --- 5. IP LOOKUP ---
-        else if (tool === 'ip') {
-            modalContent.innerHTML = `
-                <h3>IP Address Lookup</h3>
-                <input type="text" id="ip-in" placeholder="Cth: 8.8.8.8">
-                <button class="action-btn" id="btn-ip">Lacak IP</button>
-                <div id="ip-res" class="result-box" style="display:none; text-align:left; line-height:1.8;"></div>
-            `;
-            document.getElementById('btn-ip').onclick = async () => {
-                const ip = document.getElementById('ip-in').value;
-                if(!ip) return showToast('Masukkan IP!', true);
-                const b = document.getElementById('ip-res'); 
-                b.style.display='block'; b.innerText = 'Mencari...';
-                try {
-                    const res = await fetch(`https://ipapi.co/${ip}/json/`);
-                    const data = await res.json();
-                    if(data.error) throw new Error(data.reason);
-                    b.innerHTML = `<b>IP:</b> ${data.ip}<br><b>Kota:</b> ${data.city}<br><b>Negara:</b> ${data.country_name}<br><b>ISP:</b> ${data.org}`;
-                } catch(e) { b.innerText = 'IP tidak ditemukan.'; }
-            };
-        }
-        
-        // --- 6. IMAGE TO BASE64 ---
-        else if (tool === 'imgto') {
-            modalContent.innerHTML = `
-                <h3>Image to Base64</h3>
-                <input type="file" id="img-in" accept="image/*" style="padding:10px;">
-                <div id="img-res" class="result-box" style="display:none; font-size:10px; word-break:break-all; text-align:left; max-height:150px; overflow-y:auto;"></div>
-            `;
-            document.getElementById('img-in').onchange = (e) => {
-                const file = e.target.files[0];
-                if(!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    const b = document.getElementById('img-res');
-                    b.style.display = 'block';
-                    b.innerText = ev.target.result;
-                };
-                reader.readAsDataURL(file);
-            };
-        }
-        
-        // --- 7. PASSWORD GEN ---
-        else if (tool === 'password') {
-            modalContent.innerHTML = `
-                <h3>Password Generator</h3>
-                <button class="action-btn" id="btn-pass">Generate Password</button>
-                <div id="pass-res" class="result-box" style="display:none;font-size:20px;font-weight:800; color:var(--primary); letter-spacing:1px;"></div>
-            `;
-            document.getElementById('btn-pass').onclick = () => {
-                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-                let pass = "";
-                for(let i=0; i<16; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
-                const b = document.getElementById('pass-res');
-                b.style.display = 'block';
-                b.innerText = pass;
-            };
-        }
-        
-        // --- 8. KALKULATOR ---
+        // --- 4. KALKULATOR BENERAN ---
         else if (tool === 'calc') {
             modalContent.innerHTML = `
+                ${closeBtnHTML}
                 <h3>Kalkulator</h3>
-                <input type="text" id="calc-in" placeholder="Cth: 5 + 5 * 2">
-                <button class="action-btn" id="btn-calc">Hitung</button>
-                <div id="calc-res" class="result-box" style="display:none;font-size:24px;font-weight:800; color:var(--primary);"></div>
+                <div class="calc-container">
+                    <div class="calc-display" id="calc-screen">0</div>
+                    <div class="calc-keys">
+                        <button class="calc-btn op" onclick="calcInput('C')">C</button>
+                        <button class="calc-btn op" onclick="calcInput('DEL')">⌫</button>
+                        <button class="calc-btn op" onclick="calcInput('%')">%</button>
+                        <button class="calc-btn op" onclick="calcInput('/')">÷</button>
+                        
+                        <button class="calc-btn" onclick="calcInput('7')">7</button>
+                        <button class="calc-btn" onclick="calcInput('8')">8</button>
+                        <button class="calc-btn" onclick="calcInput('9')">9</button>
+                        <button class="calc-btn op" onclick="calcInput('*')">×</button>
+                        
+                        <button class="calc-btn" onclick="calcInput('4')">4</button>
+                        <button class="calc-btn" onclick="calcInput('5')">5</button>
+                        <button class="calc-btn" onclick="calcInput('6')">6</button>
+                        <button class="calc-btn op" onclick="calcInput('-')">-</button>
+                        
+                        <button class="calc-btn" onclick="calcInput('1')">1</button>
+                        <button class="calc-btn" onclick="calcInput('2')">2</button>
+                        <button class="calc-btn" onclick="calcInput('3')">3</button>
+                        <button class="calc-btn op" onclick="calcInput('+')">+</button>
+                        
+                        <button class="calc-btn" onclick="calcInput('0')" style="grid-column: span 2;">0</button>
+                        <button class="calc-btn" onclick="calcInput('.')">.</button>
+                        <button class="calc-btn op" onclick="calcInput('=')" style="background:#00ff9d;">=</button>
+                    </div>
+                </div>
             `;
-            document.getElementById('btn-calc').onclick = () => {
-                const expr = document.getElementById('calc-in').value;
-                if(!expr) return;
-                try {
-                    const res = Function('"use strict";return (' + expr + ')')();
-                    const b = document.getElementById('calc-res');
-                    b.style.display = 'block'; b.innerText = res;
-                } catch(e) { showToast('Ekspresi tidak valid!', true); }
-            };
         }
         
-        // --- 9. ZODIAK ---
+        // --- 5. ZODIAK (CUSTOM SELECT / BOTTOM SHEET) ---
         else if (tool === 'zodiak') {
-            let optTgl = '<option value="">Tgl</option>';
-            for(let i=1; i<=31; i++) optTgl += `<option value="${i}">${i}</option>`;
-            const bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-            let optBln = '<option value="">Bulan</option>';
-            bulan.forEach((b, i) => optBln += `<option value="${i+1}">${b}</option>`);
+            let tglOpts = '';
+            for(let i=1; i<=31; i++) tglOpts += `<div class="z-opt" onclick="selectZ('tgl', ${i}, '${i}', this)" style="padding:10px; border-bottom:1px solid var(--border); cursor:pointer;">${i}</div>`;
             
+            const bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+            let blnOpts = '';
+            bulan.forEach((b, i) => blnOpts += `<div class="z-opt" onclick="selectZ('bln', ${i+1}, '${b}', this)" style="padding:10px; border-bottom:1px solid var(--border); cursor:pointer;">${b}</div>`);
+
             modalContent.innerHTML = `
+                ${closeBtnHTML}
                 <h3>Cek Zodiak</h3>
-                <div class="date-group">
-                    <select id="z-tgl">${optTgl}</select>
-                    <select id="z-bln" style="flex:2;">${optBln}</select>
+                
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <div style="flex:1; position:relative;">
+                        <button class="action-btn" onclick="toggleZD('tgl')" id="btn-z-tgl" style="margin-bottom:0;">Pilih Tgl</button>
+                        <div id="list-tgl" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--card-bg); border:2px solid var(--border); border-radius:8px; max-height:150px; overflow-y:auto; z-index:10; margin-top:5px;">
+                            ${tglOpts}
+                        </div>
+                    </div>
+                    <div style="flex:2; position:relative;">
+                        <button class="action-btn" onclick="toggleZD('bln')" id="btn-z-bln" style="margin-bottom:0;">Pilih Bulan</button>
+                        <div id="list-bln" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--card-bg); border:2px solid var(--border); border-radius:8px; max-height:150px; overflow-y:auto; z-index:10; margin-top:5px;">
+                            ${blnOpts}
+                        </div>
+                    </div>
                 </div>
-                <button class="action-btn" id="btn-zodiak">Cek Zodiak</button>
-                <div id="zodiak-res" class="result-box" style="display:none;font-size:16px;"></div>
+
+                <button class="action-btn" onclick="hitungZodiak()" style="margin-top:10px;">Cek Zodiak</button>
+                <div id="zodiak-res" style="display:none; text-align:center; font-size:16px; margin-top:15px; padding:15px; background:var(--card-bg); border:2px solid var(--border); border-radius:8px;"></div>
             `;
-            document.getElementById('btn-zodiak').onclick = () => {
-                const tgl = parseInt(document.getElementById('z-tgl').value);
-                const bln = parseInt(document.getElementById('z-bln').value);
-                if(!tgl || !bln) return showToast('Pilih tanggal dan bulan!', true);
+            
+            // State
+            window.zTgl = null;
+            window.zBln = null;
+
+            window.toggleZD = (type) => {
+                document.getElementById('list-tgl').style.display = 'none';
+                document.getElementById('list-bln').style.display = 'none';
+                const el = document.getElementById(`list-${type}`);
+                el.style.display = el.style.display === 'none' ? 'block' : 'none';
+            };
+
+            window.selectZ = (type, val, txt, el) => {
+                if(type === 'tgl') { window.zTgl = val; document.getElementById('btn-z-tgl').innerText = txt; }
+                if(type === 'bln') { window.zBln = val; document.getElementById('btn-z-bln').innerText = txt; }
+                document.getElementById('list-tgl').style.display = 'none';
+                document.getElementById('list-bln').style.display = 'none';
+            };
+
+            window.hitungZodiak = () => {
+                if(!window.zTgl || !window.zBln) return showToast('Pilih tanggal & bulan!', true);
                 
                 let z = "";
+                const tgl = window.zTgl, bln = window.zBln;
                 if ((bln == 1 && tgl >= 20) || (bln == 2 && tgl <= 18)) z = "Aquarius ♒";
                 else if ((bln == 2 && tgl >= 19) || (bln == 3 && tgl <= 20)) z = "Pisces ♓";
                 else if ((bln == 3 && tgl >= 21) || (bln == 4 && tgl <= 19)) z = "Aries ♈";
@@ -369,10 +330,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if ((bln == 11 && tgl >= 22) || (bln == 12 && tgl <= 21)) z = "Sagittarius ♐";
                 else z = "Capricorn ♑";
                 
-                const b = document.getElementById('zodiak-res');
-                b.style.display = 'block';
-                b.innerHTML = `Zodiak lu: <b style="color:var(--primary); font-size:22px; display:block; margin-top:5px;">${z}</b>`;
+                const res = document.getElementById('zodiak-res');
+                res.style.display = 'block';
+                res.innerHTML = `Zodiak: <b style="color:var(--primary); font-size:20px; display:block;">${z}</b>`;
             };
         }
     };
+
+    // =========================================
+    // 7. LOGIKA KALKULATOR
+    // =========================================
+    let calcExpression = "";
+    
+    window.calcInput = (val) => {
+        const screen = document.getElementById('calc-screen');
+        if(val === 'C') { calcExpression = ""; screen.innerText = "0"; return; }
+        if(val === 'DEL') { calcExpression = calcExpression.toString().slice(0, -1); screen.innerText = calcExpression || "0"; return; }
+        if(val === '=') {
+            try {
+                const res = Function('"use strict";return (' + calcExpression + ')')();
+                screen.innerText = res;
+                calcExpression = res.toString();
+            } catch(e) { screen.innerText = "Error"; calcExpression = ""; }
+            return;
+        }
+        
+        calcExpression += val;
+        screen.innerText = calcExpression;
+    };
+
 });
