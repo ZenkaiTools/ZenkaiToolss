@@ -19,7 +19,7 @@
             <div class="wa-badge">UPDATE TERBARU</div>
             <h2>Gabung Saluran WhatsApp</h2>
             <p>Dapatkan update fitur, tools terbaru, dan info penting langsung dari <b>Zenkai Tools</b>.</p>
-            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" class="wa-btn">
+            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="wa-btn">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.031 2C6.502 2 2 6.502 2 12.031c0 1.77.46 3.49 1.34 5.01L2 22l5.09-1.33c1.47.8 3.13 1.22 4.84 1.22h.1c5.52 0 10.02-4.5 10.02-10.03C22.05 6.5 17.55 2 12.03 2zm0 18.05c-1.55 0-3.07-.42-4.4-1.2l-.32-.19-3.27.86.87-3.19-.2-.33A8.01 8.01 0 0 1 4 12.03C4 7.6 7.6 4 12.03 4c2.14 0 4.15.83 5.66 2.34a7.97 7.97 0 0 1 2.34 5.66c0 4.43-3.6 8.05-8 8.05zm4.4-5.99c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.68 2.57 4.08 3.6.57.24 1.01.39 1.36.5.57.18 1.09.15 1.5.09.46-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/></svg>
                 Gabung ke Saluran
             </a>
@@ -50,25 +50,33 @@
                 </div>
             </header>
 
-            <!-- TEKS SAMBUTAN -->
-            <div class="welcome-box">
-                <h2>Halo, Netrunner! </h2>
-                <p>Selamat datang di Zenkai Tools. Akses berbagai modul utilitas dan generator lo di sini. Gak perlu install aplikasi tambahan.</p>
-            </div>
-
-            <div class="device-info-bar">
-                <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg><span id="device-name">HP</span></div>
-                <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg><span id="battery-level">--%</span></div>
-                <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="clock-now">--:--</span></div>
-            </div>
-
-            <div class="hero-section">
+            <!-- ========================================== -->
+            <!-- KOTAK BESAR: VIDEO + DEVICE INFO           -->
+            <!-- ========================================== -->
+            <div class="custom-hero-block">
+                <!-- Video Hero -->
                 <div class="hero-media">
-                    <!-- Filter video jadi hitam putih via CSS -->
                     <video autoplay loop muted playsinline class="theme-video">
                         <source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/main/ff159444c39001329443bf9fbc846fcc_720w.mp4" type="video/mp4">
                     </video>
                 </div>
+
+                <!-- Garis pembatas unik -->
+                <div class="hero-divider"></div>
+
+                <!-- Device Info -->
+                <div class="device-info-bar">
+                    <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg><span id="device-name">HP</span></div>
+                    <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg><span id="battery-level">--%</span></div>
+                    <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="clock-now">--:--</span></div>
+                </div>
+            </div>
+            <!-- ========================================== -->
+
+            <!-- TEKS SAMBUTAN -->
+            <div class="welcome-box">
+                <h2>Halo, Netrunner! </h2>
+                <p>Selamat datang di Zenkai Tools. Akses berbagai modul utilitas dan generator lo di sini. Gak perlu install aplikasi tambahan.</p>
             </div>
 
             <div class="tools-section">
@@ -79,7 +87,7 @@
                         <input type="text" id="search-tools" placeholder="Cari...">
                     </div>
                 </div>
-                <!-- Grid Tools lo (sama kayak sebelumnya) -->
+                <!-- Grid Tools -->
                 <div class="grid-tools">
                     <div class="tool-card press" onclick="openTool('tiktok')"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><h4>TikTok DL</h4></div>
                     <div class="tool-card press" onclick="openTool('qr')"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><h4>QR Code</h4></div>
@@ -100,7 +108,7 @@
             <div class="credit-text">Dibuat oleh <b>Andika T.M</b></div>
         </main>
 
-        <!-- Setting & Info (Sama kayak sebelumnya) -->
+        <!-- Setting & Info -->
         <main id="page-setting" class="page">
             <header class="header-box"><div class="logo-area"><div class="logo-icon" style="background:var(--primary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><div class="logo-text"><h1>PENGATURAN</h1></div></div></header>
             <div class="tools-section">
