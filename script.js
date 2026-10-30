@@ -844,5 +844,41 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+// =========================================
+// OTAK ANIME
+// =========================================
 
+// NANTI GANTI PAKE URL SUPABASE LO (TAHAP 3)
+const ANIME_API_URL = "https://PROJECT_ID.supabase.co/functions/v1/anime-api";
+
+window.cariAnime = async () => {
+    const keyword = document.getElementById('anime-search').value;
+    const listBox = document.getElementById('anime-list');
+    
+    if(!keyword) return showToast('Ketik judul anime dulu!');
+    
+    listBox.innerHTML = '<div class="loader" style="grid-column:span 2; margin:20px auto;"></div>';
+    
+    try {
+        const res = await fetch(`${ANIME_API_URL}?q=${encodeURIComponent(keyword)}`);
+        const data = await res.json();
+        
+        if(data.error) throw new Error(data.error);
+        if(data.length === 0) throw new Error('Anime tidak ditemukan.');
+
+        listBox.innerHTML = ''; 
+        data.slice(0, 10).forEach(anime => {
+            listBox.innerHTML += `
+                <div style="border:2px solid var(--border); border-radius:8px; overflow:hidden; background:var(--card-bg); box-shadow:var(--shadow);">
+                    <img src="${anime.coverImage}" style="width:100%; height:120px; object-fit:cover;">
+                    <div style="padding:8px; text-align:center;">
+                        <h4 style="font-size:10px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${anime.title}</h4>
+                    </div>
+                </div>
+            `;
+        });
+    } catch(e) {
+        listBox.innerHTML = `<p style="grid-column:span 2; color:red; text-align:center; font-size:12px;">${e.message}</p>`;
+    }
+};
 });
