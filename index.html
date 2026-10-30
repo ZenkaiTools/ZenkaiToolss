@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Andika Tools // Cyber Edition</title>
+    <title>ZenkaiTools v1 // Cyber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
@@ -26,24 +26,25 @@
         
         <!-- ================= PAGE 1: TOOLS ================= -->
         <main id="page-tools" class="page active">
+            
             <!-- HEADER -->
-            <header class="header-box">
+            <header class="header-box anim-drop" style="animation-delay: 0.1s;">
                 <div class="logo-area">
-                    <div class="logo-icon">A</div>
+                    <div class="logo-icon">Z</div>
                     <div class="logo-text">
-                        <h1>ANDIKA<span>.TOOLS</span></h1>
-                        <p class="version">v4.0 Cyber Edition</p>
+                        <h1>ZENKAI<span>.TOOLS</span></h1>
+                        <p class="version">v1.0 // Cyber Edition</p>
                     </div>
                 </div>
                 <div class="header-status" id="device-status">SYS.ON</div>
             </header>
 
             <!-- HERO CARD -->
-            <div class="hero-card">
+            <div class="hero-card anim-drop" style="animation-delay: 0.2s;">
                 <div class="hero-img-wrap">
                     <img src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=1000&auto=format&fit=crop" alt="Hero">
                     <div class="hero-overlay"></div>
-                    <div class="hero-badge">NETRUNNER V4</div>
+                    <div class="hero-badge">NETRUNNER V1</div>
                 </div>
                 <div class="hero-info">
                     <h2>Welcome, Netrunner.</h2>
@@ -57,91 +58,97 @@
             </div>
 
             <!-- MENU TOOLS -->
-            <div class="tools-section">
+            <div class="tools-section anim-drop" style="animation-delay: 0.3s;">
                 <div class="section-header">
                     <h3>UTILITIES</h3>
                     <div class="search-wrapper">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input type="text" id="search-tools" placeholder="Cari modul...">
+                        <input type="text" id="search-tools" placeholder="Cari tool...">
                     </div>
                 </div>
 
                 <div class="grid-tools" id="tools-grid">
                     <!-- 1. TikTok -->
-                    <div class="tool-card" onclick="openTool('tiktok')">
+                    <div class="tool-card anim-pop" style="animation-delay: 0.4s;" onclick="openTool('tiktok')">
                         <div class="t-icon bg-neon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
                         <h4>TikTok DL</h4>
                     </div>
                     <!-- 2. QR -->
-                    <div class="tool-card" onclick="openTool('qr')">
+                    <div class="tool-card anim-pop" style="animation-delay: 0.45s;" onclick="openTool('qr')">
                         <div class="t-icon bg-neon-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
                         <h4>QR Code</h4>
                     </div>
                     <!-- 3. Brat -->
-                    <div class="tool-card" onclick="openTool('brat')">
+                    <div class="tool-card anim-pop" style="animation-delay: 0.5s;" onclick="openTool('brat')">
                         <div class="t-icon bg-neon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
                         <h4>Brat Text</h4>
                     </div>
                     <!-- 4. Base64 -->
-                    <div class="tool-card" onclick="openTool('base64')">
+                    <div class="tool-card anim-pop" style="animation-delay: 0.55s;" onclick="openTool('base64')">
                         <div class="t-icon bg-neon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
                         <h4>Base64</h4>
                     </div>
                     <!-- 5. IP Lookup -->
-                    <div class="tool-card" onclick="openTool('ip')">
+                    <div class="tool-card anim-pop" style="animation-delay: 0.6s;" onclick="openTool('ip')">
                         <div class="t-icon bg-neon-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
                         <h4>IP Lookup</h4>
                     </div>
                     <!-- 6. Image Link -->
-                    <div class="tool-card" onclick="openTool('imgto')">
+                    <div class="tool-card anim-pop" style="animation-delay: 0.65s;" onclick="openTool('imgto')">
                         <div class="t-icon bg-neon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
                         <h4>Image Link</h4>
                     </div>
                     <!-- 7. Password -->
-                    <div class="tool-card" onclick="openTool('password')">
+                    <div class="tool-card anim-pop" style="animation-delay: 0.7s;" onclick="openTool('password')">
                         <div class="t-icon bg-neon-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
                         <h4>Password</h4>
                     </div>
                     <!-- 8. Kalkulator -->
-                    <div class="tool-card" onclick="openTool('calc')">
+                    <div class="tool-card anim-pop" style="animation-delay: 0.75s;" onclick="openTool('calc')">
                         <div class="t-icon bg-neon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div>
                         <h4>Kalkulator</h4>
                     </div>
                     <!-- 9. Zodiak -->
-                    <div class="tool-card" onclick="openTool('zodiak')">
+                    <div class="tool-card anim-pop" style="animation-delay: 0.8s;" onclick="openTool('zodiak')">
                         <div class="t-icon bg-neon-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div>
                         <h4>Zodiak</h4>
                     </div>
                 </div>
             </div>
+            
+            <div class="credit-text anim-drop" style="animation-delay: 0.9s;">
+                Made with  by <b>Andika T.M</b>
+            </div>
         </main>
 
         <!-- ================= PAGE 2: SETTING ================= -->
         <main id="page-setting" class="page">
-            <header class="header-box">
+            <header class="header-box anim-drop">
                 <div class="logo-area">
-                    <div class="logo-icon" style="background:var(--neon-purple); color:#fff;"></div>
+                    <div class="logo-icon" style="background:var(--neon-purple); color:#fff;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
                     <div class="logo-text"><h1>SETTING</h1></div>
                 </div>
             </header>
-            <div class="hero-card" style="padding: 30px 20px; text-align: center;">
+            <div class="hero-card anim-drop" style="animation-delay: 0.1s; padding: 40px 20px; text-align: center;">
                 <h2 style="color: var(--neon-purple); margin-bottom: 15px;">Pengaturan</h2>
-                <p style="color:#a1a1aa; line-height:1.6; font-size: 14px;">Fitur pengaturan sedang dalam tahap pengembangan oleh Andika. Stay tuned for updates!</p>
+                <p style="color:var(--text-muted); line-height:1.6; font-size: 14px;">Fitur pengaturan sedang dalam tahap pengembangan. Stay tuned!</p>
             </div>
         </main>
 
         <!-- ================= PAGE 3: INFO APP ================= -->
         <main id="page-info" class="page">
-            <header class="header-box">
+            <header class="header-box anim-drop">
                 <div class="logo-area">
                     <div class="logo-icon" style="background:var(--neon-blue); color:#fff;">i</div>
                     <div class="logo-text"><h1>INFO APP</h1></div>
                 </div>
             </header>
-            <div class="hero-card" style="padding: 30px 20px;">
-                <h2 style="color: var(--neon-blue); margin-bottom: 15px;">Andika Tools</h2>
-                <p style="color:#a1a1aa; line-height:1.8; font-size: 14px;">
-                    <b>Andika Tools v4.0 (Cyber Edition)</b> adalah utility ringan tanpa ribet yang dibuat oleh <b style="color:var(--neon-green);">Andika</b>. 
+            <div class="hero-card anim-drop" style="animation-delay: 0.1s; padding: 30px 20px;">
+                <h2 style="color: var(--neon-blue); margin-bottom: 15px;">ZenkaiTools v1</h2>
+                <p style="color:var(--text-muted); line-height:1.8; font-size: 14px;">
+                    <b>ZenkaiTools v1.0 (Cyber Edition)</b> adalah utility ringan tanpa ribet yang dibuat oleh <b style="color:var(--neon-green);">Andika T.M</b>. 
                     <br><br>
                     Dirancang dengan antarmuka futuristik untuk memberikan pengalaman pengguna yang cepat, aman, dan berkelas.
                 </p>
@@ -149,7 +156,7 @@
         </main>
 
         <!-- NAVIGASI BAWAH -->
-        <nav class="bottom-nav">
+        <nav class="bottom-nav anim-slide-up">
             <button class="nav-item active" onclick="switchPage('tools', this)">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 <span>Tools</span>
@@ -168,7 +175,9 @@
     <!-- MODAL FITUR -->
     <div class="modal-overlay" id="tool-modal" onclick="closeModalOnOverlay(event)">
         <div class="modal-box">
-            <button class="modal-close" onclick="closeModal()">×</button>
+            <button class="modal-close" onclick="closeModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
             <div id="modal-content"></div>
         </div>
     </div>

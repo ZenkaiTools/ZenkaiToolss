@@ -7,17 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const c = document.getElementById('toast-container');
         const t = document.createElement('div');
         t.className = 'toast';
+        
         if (isError) {
             t.style.borderColor = 'var(--neon-red)';
-            t.style.borderLeftColor = 'var(--neon-red)';
+            t.style.color = '#ff9999';
         }
+        
         t.innerText = msg;
         c.appendChild(t);
         
+        // Animasi keluar
         setTimeout(() => { 
             t.style.opacity = '0'; 
             t.style.transform = 'translateY(-20px)';
-            t.style.transition = '0.3s';
+            t.style.transition = '0.3s ease';
             setTimeout(() => t.remove(), 300); 
         }, 3000);
     };
@@ -36,14 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 bgm.play().then(() => { 
                     isPlaying = true; 
                     musicToggle.style.background = 'var(--neon-yellow)'; 
-                    musicToggle.style.color = '#000';
                     showToast('Musik dinyalakan 🎵');
                 }).catch(() => showToast('Musik gagal diputar.', true));
             } else {
                 bgm.pause(); 
                 isPlaying = false; 
-                musicToggle.style.background = 'rgba(0, 255, 204, 0.1)';
-                musicToggle.style.color = 'var(--neon-green)';
+                musicToggle.style.background = 'var(--neon-green)';
                 showToast('Musik dimatikan 🔇');
             }
         });
@@ -60,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateTime, 1000); 
     updateTime();
 
+    // Deteksi Device
     const ua = navigator.userAgent;
     let dev = "Desktop";
     if (/android/i.test(ua)) dev = "Android"; 
@@ -71,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sEl = document.getElementById('device-status'); 
     if(sEl) sEl.innerText = dev.substring(0,3).toUpperCase() + ".ON";
 
+    // Deteksi Baterai
     if (navigator.getBattery) {
         navigator.getBattery().then(b => {
             const bEl = document.getElementById('battery-level');
@@ -89,12 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.switchPage = (pageId, btn) => {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById('page-' + pageId).classList.add('active');
-        btn.classList.add('active');
+        
+        const targetPage = document.getElementById('page-' + pageId);
+        if(targetPage) targetPage.classList.add('active');
+        if(btn) btn.classList.add('active');
     };
 
     // =========================================
-    // 5. SEARCH FILTER
+    // 5. SEARCH FILTER (ANTI HILANG ANIMASI)
     // =========================================
     const sInput = document.getElementById('search-tools');
     if (sInput) {
@@ -104,7 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const title = card.querySelector('h4').innerText.toLowerCase();
                 if (title.includes(term)) {
                     card.style.display = 'flex';
-                    card.style.animation = 'none'; // Reset animasi search
+                    // Trik biar animasinya jalan lagi pas di-search
+                    card.style.animation = 'none';
+                    card.offsetHeight; /* trigger reflow */
+                    card.style.animation = null; 
                 } else {
                     card.style.display = 'none';
                 }
@@ -120,21 +128,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.closeModal = () => { 
         modal.classList.remove('active'); 
+        // Delay hapus konten biar animasi tutupnya mulus
         setTimeout(() => { modalContent.innerHTML = ''; }, 300);
     };
 
-    // Fungsi Tutup Modal Klik Overlay (Yang tadi hilang)
+    // Fungsi Tutup Modal Klik Overlay
     window.closeModalOnOverlay = (e) => {
         if (e.target.id === 'tool-modal') {
             closeModal();
         }
     };
 
+    // Buka Tool berdasarkan parameter
     window.openTool = (tool) => {
         modal.classList.add('active');
         modalContent.innerHTML = '';
 
-        // --- TIKTOK DOWNLOADER ---
+        // --- 1. TIKTOK DOWNLOADER ---
         if (tool === 'tiktok') {
             modalContent.innerHTML = `
                 <h3>TikTok DL</h3>
@@ -173,33 +183,33 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         
-        // --- QR CODE ---
+        // --- 2. QR CODE ---
         else if (tool === 'qr') {
             modalContent.innerHTML = `
                 <h3>QR Code</h3>
-                <input type="text" id="qr-text" placeholder="Teks/Link..." value="Andika Tools">
+                <input type="text" id="qr-text" placeholder="Teks/Link..." value="ZenkaiTools by Andika T.M">
                 <button class="action-btn" id="btn-qr">Generate</button>
-                <div class="result-box"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Andika" style="max-width:100%;border-radius:8px;"></div>
+                <div class="result-box"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ZenkaiTools" style="max-width:100%;border-radius:8px;"></div>
             `;
             document.getElementById('btn-qr').onclick = () => {
-                const txt = document.getElementById('qr-text').value || "Andika";
+                const txt = document.getElementById('qr-text').value || "ZenkaiTools";
                 document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(txt)}`;
             };
         }
         
-        // --- BRAT TEXT ---
+        // --- 3. BRAT TEXT ---
         else if (tool === 'brat') {
             modalContent.innerHTML = `
                 <h3>Brat Text</h3>
-                <input type="text" id="brat-input" placeholder="Ketik teks..." value="Andika">
+                <input type="text" id="brat-input" placeholder="Ketik teks..." value="Andika T.M">
                 <button class="action-btn" id="btn-brat">Update Teks</button>
                 <div class="result-box" style="background:#fff;padding:15px; border-radius:12px; border:none;">
-                    <div id="brat-res" style="color:#000;font-family:Arial;font-weight:bold;font-size:24px;filter:blur(1.5px);text-align:center;word-wrap:break-word;line-height:1.2;">Andika</div>
+                    <div id="brat-res" style="color:#000;font-family:Arial;font-weight:bold;font-size:24px;filter:blur(1.5px);text-align:center;word-wrap:break-word;line-height:1.2;">Andika T.M</div>
                 </div>
                 <button class="action-btn" id="btn-dl-brat" style="background:var(--neon-yellow);margin-top:10px;">Save PNG</button>
             `;
             document.getElementById('btn-brat').onclick = () => {
-                document.getElementById('brat-res').innerText = document.getElementById('brat-input').value || "Andika";
+                document.getElementById('brat-res').innerText = document.getElementById('brat-input').value || "Andika T.M";
             };
             document.getElementById('btn-dl-brat').onclick = () => {
                 html2canvas(document.getElementById('brat-res').parentElement, { scale: 2, backgroundColor: '#ffffff' }).then(canvas => {
@@ -212,14 +222,14 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         
-        // --- BASE64 ---
+        // --- 4. BASE64 ---
         else if (tool === 'base64') {
             modalContent.innerHTML = `
-                <h3>Base64</h3>
+                <h3>Base64 Encode/Decode</h3>
                 <textarea id="b64-in" rows="3" placeholder="Ketik teks di sini..."></textarea>
                 <div style="display:flex;gap:10px;">
                     <button class="action-btn" id="btn-enc" style="flex:1;">Encode</button>
-                    <button class="action-btn" id="btn-dec" style="flex:1;background:var(--neon-purple); color:#fff; box-shadow:0 4px 15px rgba(168,85,247,0.2);">Decode</button>
+                    <button class="action-btn" id="btn-dec" style="flex:1;background:var(--neon-purple); color:#fff;">Decode</button>
                 </div>
                 <div id="b64-res" class="result-box" style="display:none; word-break: break-all;"></div>
             `;
@@ -245,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         
-        // --- IP LOOKUP ---
+        // --- 5. IP LOOKUP ---
         else if (tool === 'ip') {
             modalContent.innerHTML = `
                 <h3>IP Lookup</h3>
@@ -267,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         
-        // --- IMAGE TO LINK ---
+        // --- 6. IMAGE TO BASE64 ---
         else if (tool === 'imgto') {
             modalContent.innerHTML = `
                 <h3>Image to Base64</h3>
@@ -287,10 +297,10 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         
-        // --- PASSWORD GEN ---
+        // --- 7. PASSWORD GEN ---
         else if (tool === 'password') {
             modalContent.innerHTML = `
-                <h3>Password Gen</h3>
+                <h3>Password Generator</h3>
                 <button class="action-btn" id="btn-pass">Generate Password</button>
                 <div id="pass-res" class="result-box" style="display:none;font-size:20px;font-weight:800;color:var(--neon-green); letter-spacing:1px;"></div>
             `;
@@ -304,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         
-        // --- KALKULATOR ---
+        // --- 8. KALKULATOR ---
         else if (tool === 'calc') {
             modalContent.innerHTML = `
                 <h3>Kalkulator</h3>
@@ -316,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const expr = document.getElementById('calc-in').value;
                 if(!expr) return;
                 try {
+                    // Pake Function buat eval matematika sederhana
                     const res = Function('"use strict";return (' + expr + ')')();
                     const b = document.getElementById('calc-res');
                     b.style.display = 'block'; b.innerText = res;
@@ -323,12 +334,12 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         
-        // --- ZODIAK ---
+        // --- 9. ZODIAK ---
         else if (tool === 'zodiak') {
             modalContent.innerHTML = `
                 <h3>Cek Zodiak</h3>
                 <input type="date" id="zodiak-in">
-                <button class="action-btn" id="btn-zodiak">Cek</button>
+                <button class="action-btn" id="btn-zodiak">Cek Zodiak</button>
                 <div id="zodiak-res" class="result-box" style="display:none;font-size:16px;"></div>
             `;
             document.getElementById('btn-zodiak').onclick = () => {
