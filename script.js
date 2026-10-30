@@ -849,7 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================================
 
 // NANTI GANTI PAKE URL SUPABASE LO (TAHAP 3)
-const ANIME_API_URL = "https://PROJECT_ID.supabase.co/functions/v1/anime-api";
+const ANIME_API_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/anime-api";
 
 window.cariAnime = async () => {
     const keyword = document.getElementById('anime-search').value;
