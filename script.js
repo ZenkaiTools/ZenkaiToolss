@@ -848,31 +848,33 @@ document.addEventListener('DOMContentLoaded', () => {
 // OTAK ANIME
 // =========================================
 
-// NANTI GANTI PAKE URL SUPABASE LO (TAHAP 3)
+// =========================================
+// LOGIKA ANIME + STREAMING
+// =========================================
 const ANIME_API_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/anime-api";
 
+// 1. Cari Anime
 window.cariAnime = async () => {
     const keyword = document.getElementById('anime-search').value;
     const listBox = document.getElementById('anime-list');
     
-    if(!keyword) return showToast('Ketik judul anime dulu!');
-    
+    if(!keyword) return showToast('Ketik judul komik dulu!');
     listBox.innerHTML = '<div class="loader" style="grid-column:span 2; margin:20px auto;"></div>';
     
     try {
         const res = await fetch(`${ANIME_API_URL}?q=${encodeURIComponent(keyword)}`);
         const data = await res.json();
-        
+
         if(data.error) throw new Error(data.error);
-        if(data.length === 0) throw new Error('Anime tidak ditemukan.');
+        if(!data || data.length === 0) throw new Error('Komik tidak ditemukan.');
 
         listBox.innerHTML = ''; 
-        data.slice(0, 10).forEach(anime => {
+        data.forEach(komik => {
             listBox.innerHTML += `
-                <div style="border:2px solid var(--border); border-radius:8px; overflow:hidden; background:var(--card-bg); box-shadow:var(--shadow);">
-                    <img src="${anime.coverImage}" style="width:100%; height:120px; object-fit:cover;">
+                <div class="press" style="border:2px solid var(--border); border-radius:8px; overflow:hidden; background:var(--card-bg); box-shadow:var(--shadow); cursor:pointer;">
+                    <img src="${komik.image}" style="width:100%; height:150px; object-fit:cover;">
                     <div style="padding:8px; text-align:center;">
-                        <h4 style="font-size:10px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${anime.title}</h4>
+                        <h4 style="font-size:10px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${komik.title}</h4>
                     </div>
                 </div>
             `;
@@ -881,4 +883,55 @@ window.cariAnime = async () => {
         listBox.innerHTML = `<p style="grid-column:span 2; color:red; text-align:center; font-size:12px;">${e.message}</p>`;
     }
 };
+
+// 2. Buka Anime & Ambil Daftar Episode
+window.bukaAnime = async (slug) => {
+    showToast('Mengambil daftar episode...');
+    try {
+        const res = await fetch(`${ANIME_API_URL}?action=detail&slug=${encodeURIComponent(slug)}`);
+        const data = await res.json();
+        
+        // (Asumsi API ngasih list episode, tampilin di modal)
+        let epHtml = '<h4 style="margin-bottom:10px;">Pilih Episode:</h4>';
+        data.episodes.forEach(ep => {
+            epHtml += `<button class="action-btn" onclick="nontonAnime('${ep.slug}')" style="margin-bottom:5px; font-size:11px;">${ep.title}</button>`;
+        });
+        
+        // Tampilin di pop-up modal yang udah ada
+        openModalCustom(epHtml); 
+        
+    } catch (e) {
+        showToast('Gagal ambil episode: ' + e.message);
+    }
+};
+
+// 3. Nonton Video (Streaming)
+window.nontonAnime = async (epSlug) => {
+    showToast('Memuat video...');
+    try {
+        const res = await fetch(`${ANIME_API_URL}?action=stream&slug=${encodeURIComponent(epSlug)}`);
+        const data = await res.json();
+        
+        // Ambil link iframe dari API
+        const iframeUrl = data.stream_url || data.iframe;
+        
+        // Tampilin video di dalam modal
+        const videoHtml = `
+            <h3>Nonton Anime</h3>
+            <iframe src="${iframeUrl}" width="100%" height="250" frameborder="0" allowfullscreen style="border-radius:8px; border:2px solid var(--border);"></iframe>
+        `;
+        openModalCustom(videoHtml);
+
+    } catch (e) {
+        showToast('Gagal memuat video: ' + e.message);
+    }
+};
+
+// Helper buat buka modal custom (biar rapi)
+function openModalCustom(html) {
+    const modal = document.getElementById('tool-modal');
+    const modalContent = document.getElementById('modal-content');
+    modalContent.innerHTML = `<button class="modal-close press" onclick="closeModal()">X</button>` + html;
+    modal.classList.add('active');
+}
 });
