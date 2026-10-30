@@ -1,18 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     // =========================================
-    // 1. SISTEM GANTI TEMA
+    // 1. SISTEM GANTI TEMA (DARI HALAMAN SETTING)
     // =========================================
-    const themes = ['comic', 'cyber', 'minimal'];
-    let currentThemeIndex = 0;
-    window.switchTheme = () => {
-        currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-        document.body.setAttribute('data-theme', themes[currentThemeIndex]);
-        showToast(`Tema diubah!`);
+    window.setTheme = (themeName) => {
+        document.body.setAttribute('data-theme', themeName);
+        showToast(`Tema diubah ke ${themeName.toUpperCase()}`);
     };
 
     // =========================================
-    // 2. TOAST NOTIFICATION
+    // 2. NAVIGASI HALAMAN (TOOLS, SETTING, INFO)
+    // =========================================
+    window.switchPage = (pageId, btn) => {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const targetPage = document.getElementById('page-' + pageId);
+        if(targetPage) targetPage.classList.add('active');
+        if(btn) btn.classList.add('active');
+    };
+
+    // =========================================
+    // 3. TOAST NOTIFICATION
     // =========================================
     window.showToast = (msg) => {
         const c = document.getElementById('toast-container');
@@ -22,73 +29,89 @@ document.addEventListener('DOMContentLoaded', () => {
         c.appendChild(t);
         setTimeout(() => { 
             t.style.opacity = '0'; 
+            t.style.transition = '0.3s';
             setTimeout(() => t.remove(), 300); 
         }, 2500);
     };
 
     // =========================================
-    // 3. MUSIK (Lagu Viral)
+    // 4. MUSIK WIDGET (PLAY/PREV/NEXT)
     // =========================================
     const bgm = document.getElementById('bgm');
-    const musicToggle = document.getElementById('music-toggle');
-    const playlist = [
-        "https://cdn.pixabay.com/download/audio/2023/03/16/audio_6764249b25.mp3?filename=teh-hijau-remix-135971.mp3",
-        "https://cdn.pixabay.com/download/audio/2022/11/22/audio_4b16a02c47.mp3?filename=viral-tiktok-beat-122724.mp3",
-        "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=cyberpunk-2099-10701.mp3"
-    ];
-    let isPlaying = false, lastIdx = -1;
+    const icPlay = document.getElementById('ic-play');
+    const icPause = document.getElementById('ic-pause');
+    const mTitle = document.getElementById('m-title');
     
-    if (musicToggle) {
-        musicToggle.onclick = () => {
-            if(!isPlaying) {
-                let idx; do { idx = Math.floor(Math.random() * playlist.length); } while(idx === lastIdx);
-                lastIdx = idx; 
-                bgm.src = playlist[idx]; 
-                bgm.volume = 0.3; 
-                bgm.play();
-                isPlaying = true; 
-                musicToggle.style.background = '#fff'; 
-                showToast('Musik Nyala 🎵');
-            } else {
-                bgm.pause(); 
-                isPlaying = false; 
-                musicToggle.style.background = 'var(--primary)'; 
-                showToast('Musik Mati 🔇');
-            }
-        };
-        bgm.onended = () => { 
-            if(isPlaying) { 
-                let idx; do { idx = Math.floor(Math.random() * playlist.length); } while(idx === lastIdx);
-                lastIdx = idx; bgm.src = playlist[idx]; bgm.play(); 
-            } 
-        };
-    }
+    const playlist = [
+        { name: "Teh Hijau", src: "https://cdn.pixabay.com/download/audio/2023/03/16/audio_6764249b25.mp3?filename=teh-hijau-remix-135971.mp3" },
+        { name: "Viral Beat", src: "https://cdn.pixabay.com/download/audio/2022/11/22/audio_4b16a02c47.mp3?filename=viral-tiktok-beat-122724.mp3" },
+        { name: "Cyberpunk", src: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=cyberpunk-2099-10701.mp3" }
+    ];
+    let currentSong = 0;
+    let isPlaying = false;
+
+    window.loadSong = (index) => {
+        currentSong = index;
+        bgm.src = playlist[index].src;
+        mTitle.innerText = playlist[index].name;
+    };
+
+    window.toggleMusic = () => {
+        if(!isPlaying) {
+            if(!bgm.src) loadSong(0);
+            bgm.volume = 0.3;
+            bgm.play();
+            isPlaying = true;
+            icPlay.style.display = 'none';
+            icPause.style.display = 'block';
+            showToast('Musik Nyala 🎵');
+        } else {
+            bgm.pause();
+            isPlaying = false;
+            icPlay.style.display = 'block';
+            icPause.style.display = 'none';
+            showToast('Musik Mati 🔇');
+        }
+    };
+
+    window.nextSong = () => {
+        currentSong = (currentSong + 1) % playlist.length;
+        loadSong(currentSong);
+        if(isPlaying) bgm.play();
+    };
+
+    window.prevSong = () => {
+        currentSong = (currentSong - 1 + playlist.length) % playlist.length;
+        loadSong(currentSong);
+        if(isPlaying) bgm.play();
+    };
+
+    bgm.onended = () => { if(isPlaying) nextSong(); };
 
     // =========================================
-    // 4. LOGIC MODAL (BOTTOM SHEET)
+    // 5. LOGIC MODAL (BOTTOM SHEET)
     // =========================================
     const modal = document.getElementById('tool-modal');
     const modalContent = document.getElementById('modal-content');
     
     window.closeModal = () => { 
         modal.classList.remove('active'); 
-        setTimeout(() => modalContent.innerHTML = '', 300); 
+        setTimeout(() => { modalContent.innerHTML = ''; }, 300);
     };
     
     window.closeModalOnOverlay = (e) => { 
         if(e.target.id === 'tool-modal') closeModal(); 
     };
 
-    // SVG Tombol Close (Pengganti '?' )
-    const closeSvg = `<button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+    const closeSvg = `<button class="modal-close press" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
 
     // =========================================
-    // 5. FITUR MODULES (LENGKAP)
+    // 6. FITUR TOOLS (LENGKAP + 5 FITUR BARU)
     // =========================================
     window.openTool = (tool) => {
         modal.classList.add('active');
         
-        // --- TIKTOK DL ---
+        // --- 1. TIKTOK DOWNLOADER ---
         if (tool === 'tiktok') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -100,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('btn-dl-tt').onclick = async () => {
                 const url = document.getElementById('tt-url').value.trim();
                 const box = document.getElementById('tt-result');
-                if(!url) return showToast('Masukkan link!');
+                if(!url) return showToast('Masukkan link dulu!');
                 
                 box.innerHTML = '<div class="loader"></div><p style="text-align:center;font-size:12px; margin-top:10px;">Memproses video...</p>';
                 try {
@@ -118,11 +141,135 @@ document.addEventListener('DOMContentLoaded', () => {
                         a.href = URL.createObjectURL(blob); a.download = `tt-${Date.now()}.mp4`; a.click();
                         showToast('Tersimpan!');
                     };
-                } catch(e) { box.innerHTML = '<p style="text-align:center;color:red;">Gagal ambil video. Pastikan link valid.</p>'; }
+                } catch(e) { box.innerHTML = '<p style="text-align:center;color:red;">Gagal ambil video.</p>'; }
             };
         }
 
-        // --- KALKULATOR BENERAN ---
+        // --- 2. QR CODE ---
+        else if (tool === 'qr') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>QR Code</h3>
+                <input type="text" id="qr-text" placeholder="Teks/Link..." value="ZenkaiTools by Andika T.M">
+                <button class="action-btn" id="btn-qr">Generate QR</button>
+                <div style="text-align:center; margin-top:15px;"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ZenkaiTools" style="max-width:100%; border-radius:8px; border:2px solid var(--border);"></div>
+            `;
+            document.getElementById('btn-qr').onclick = () => {
+                const txt = document.getElementById('qr-text').value || "ZenkaiTools";
+                document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(txt)}`;
+            };
+        }
+
+        // --- 3. BRAT TEXT ---
+        else if (tool === 'brat') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Brat Text</h3>
+                <input type="text" id="brat-input" placeholder="Ketik teks..." value="Andika T.M">
+                <button class="action-btn" id="btn-brat">Update Teks</button>
+                <div style="background:#fff;padding:20px; border-radius:8px; border:2px solid var(--border); display:flex; justify-content:center; margin-bottom:15px;">
+                    <div id="brat-res" style="color:#000;font-family:Arial;font-weight:bold;font-size:26px;filter:blur(1.5px);text-align:center;word-wrap:break-word;line-height:1.2; max-width:100%;">Andika T.M</div>
+                </div>
+                <button class="action-btn" id="btn-dl-brat">Simpan PNG</button>
+            `;
+            document.getElementById('btn-brat').onclick = () => {
+                document.getElementById('brat-res').innerText = document.getElementById('brat-input').value || "Andika T.M";
+            };
+            document.getElementById('btn-dl-brat').onclick = () => {
+                html2canvas(document.getElementById('brat-res').parentElement, { scale: 2, backgroundColor: '#ffffff' }).then(canvas => {
+                    const a = document.createElement('a'); 
+                    a.download = 'brat.png'; 
+                    a.href = canvas.toDataURL(); 
+                    a.click();
+                    showToast('Tersimpan!');
+                });
+            };
+        }
+
+        // --- 4. BASE64 ---
+        else if (tool === 'base64') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Base64</h3>
+                <textarea id="b64-in" rows="3" placeholder="Teks..."></textarea>
+                <div style="display:flex;gap:10px;">
+                    <button class="action-btn" onclick="b64Act('enc')" style="flex:1;">Encode</button>
+                    <button class="action-btn" onclick="b64Act('dec')" style="flex:1;">Decode</button>
+                </div>
+                <div id="b64-res" style="display:none; margin-top:15px; word-break:break-all; text-align:center; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
+            `;
+            window.b64Act = (type) => {
+                const v = document.getElementById('b64-in').value;
+                const b = document.getElementById('b64-res');
+                if(!v) return showToast('Isi teks!');
+                b.style.display = 'block';
+                try {
+                    if(type === 'enc') b.innerText = btoa(unescape(encodeURIComponent(v)));
+                    else b.innerText = decodeURIComponent(escape(atob(v)));
+                } catch(e) { b.innerText = 'Gagal memproses.'; }
+            };
+        }
+
+        // --- 5. IP LOOKUP ---
+        else if (tool === 'ip') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>IP Lookup</h3>
+                <input type="text" id="ip-in" placeholder="Cth: 8.8.8.8">
+                <button class="action-btn" onclick="cekIP()">Lacak</button>
+                <div id="ip-res" style="display:none; margin-top:15px; text-align:left; line-height:1.8; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
+            `;
+            window.cekIP = async () => {
+                const ip = document.getElementById('ip-in').value;
+                const b = document.getElementById('ip-res');
+                if(!ip) return showToast('Masukkan IP!');
+                b.style.display = 'block'; b.innerText = 'Mencari...';
+                try {
+                    const res = await fetch(`https://ipapi.co/${ip}/json/`);
+                    const data = await res.json();
+                    b.innerHTML = `<b>IP:</b> ${data.ip}<br><b>Kota:</b> ${data.city}<br><b>Negara:</b> ${data.country_name}<br><b>ISP:</b> ${data.org}`;
+                } catch(e) { b.innerText = 'IP tidak ditemukan.'; }
+            };
+        }
+
+        // --- 6. IMAGE TO BASE64 ---
+        else if (tool === 'imgto') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Image to Base64</h3>
+                <input type="file" id="img-in" accept="image/*" style="padding:10px; margin-bottom:15px;">
+                <div id="img-res" style="display:none; font-size:10px; word-break:break-all; text-align:left; border:2px dashed var(--border); padding:15px; border-radius:8px; max-height:150px; overflow-y:auto;"></div>
+            `;
+            document.getElementById('img-in').onchange = (e) => {
+                const file = e.target.files[0];
+                if(!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const b = document.getElementById('img-res');
+                    b.style.display = 'block'; b.innerText = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+
+        // --- 7. PASSWORD GEN ---
+        else if (tool === 'password') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Password Gen</h3>
+                <button class="action-btn" onclick="genPass()">Generate Password</button>
+                <div id="pass-res" style="display:none; font-size:20px; font-weight:800; color:var(--primary); text-align:center; margin-top:15px; border:2px dashed var(--border); padding:15px; border-radius:8px; word-break:break-all;"></div>
+            `;
+            window.genPass = () => {
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+                let pass = "";
+                for(let i=0; i<16; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
+                const b = document.getElementById('pass-res');
+                b.style.display = 'block'; b.innerText = pass;
+            };
+        }
+
+        // --- 8. KALKULATOR ---
         else if (tool === 'calc') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -170,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- ZODIAK LIST (TANPA SELECT BAWAAN) ---
+        // --- 9. ZODIAK LIST ---
         else if (tool === 'zodiak') {
             let tgls = ''; for(let i=1; i<=31; i++) tgls += `<div onclick="setZ('tgl',${i},this)" style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer;">${i}</div>`;
             let blns = ''; const b = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
@@ -228,125 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- FITUR LAINNYA (QR, BRAT, BASE64, IP, IMG, PASSWORD, CUACA, QUOTES, BMI) ---
-        else if (tool === 'qr') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>QR Code Generator</h3>
-                <input type="text" id="qr-text" placeholder="Teks/Link..." value="ZenkaiTools by Andika T.M">
-                <button class="action-btn" id="btn-qr">Generate QR</button>
-                <div style="text-align:center; margin-top:15px;"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ZenkaiTools" style="max-width:100%; border-radius:8px; border:2px solid var(--border);"></div>
-            `;
-            document.getElementById('btn-qr').onclick = () => {
-                const txt = document.getElementById('qr-text').value || "ZenkaiTools";
-                document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(txt)}`;
-            };
-        }
-
-        else if (tool === 'brat') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Brat Text Maker</h3>
-                <input type="text" id="brat-input" placeholder="Ketik teks..." value="Andika T.M">
-                <button class="action-btn" id="btn-brat">Update Teks</button>
-                <div style="background:#fff;padding:20px; border-radius:8px; border:2px solid var(--border); display:flex; justify-content:center; margin-bottom:15px;">
-                    <div id="brat-res" style="color:#000;font-family:Arial;font-weight:bold;font-size:26px;filter:blur(1.5px);text-align:center;word-wrap:break-word;line-height:1.2; max-width:100%;">Andika T.M</div>
-                </div>
-                <button class="action-btn" id="btn-dl-brat">Simpan PNG</button>
-            `;
-            document.getElementById('btn-brat').onclick = () => {
-                document.getElementById('brat-res').innerText = document.getElementById('brat-input').value || "Andika T.M";
-            };
-            document.getElementById('btn-dl-brat').onclick = () => {
-                html2canvas(document.getElementById('brat-res').parentElement, { scale: 2, backgroundColor: '#ffffff' }).then(canvas => {
-                    const a = document.createElement('a'); 
-                    a.download = 'brat-andika.png'; 
-                    a.href = canvas.toDataURL(); 
-                    a.click();
-                    showToast('Tersimpan!');
-                });
-            };
-        }
-
-        else if (tool === 'base64') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Base64</h3>
-                <textarea id="b64-in" rows="3" placeholder="Teks..."></textarea>
-                <div style="display:flex;gap:10px;">
-                    <button class="action-btn" onclick="b64Action('enc')" style="flex:1;">Encode</button>
-                    <button class="action-btn" onclick="b64Action('dec')" style="flex:1; background:var(--primary);">Decode</button>
-                </div>
-                <div id="b64-res" style="display:none; margin-top:15px; word-break:break-all; text-align:center; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
-            `;
-            window.b64Action = (type) => {
-                const v = document.getElementById('b64-in').value;
-                const b = document.getElementById('b64-res');
-                if(!v) return showToast('Isi teks dulu!');
-                b.style.display = 'block';
-                try {
-                    if(type === 'enc') b.innerText = btoa(unescape(encodeURIComponent(v)));
-                    else b.innerText = decodeURIComponent(escape(atob(v)));
-                } catch(e) { b.innerText = 'Gagal memproses.'; }
-            };
-        }
-
-        else if (tool === 'ip') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>IP Lookup</h3>
-                <input type="text" id="ip-in" placeholder="Cth: 8.8.8.8">
-                <button class="action-btn" onclick="cekIP()">Lacak</button>
-                <div id="ip-res" style="display:none; margin-top:15px; text-align:left; line-height:1.8; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
-            `;
-            window.cekIP = async () => {
-                const ip = document.getElementById('ip-in').value;
-                const b = document.getElementById('ip-res');
-                if(!ip) return showToast('Masukkan IP!');
-                b.style.display = 'block'; b.innerText = 'Mencari...';
-                try {
-                    const res = await fetch(`https://ipapi.co/${ip}/json/`);
-                    const data = await res.json();
-                    b.innerHTML = `<b>IP:</b> ${data.ip}<br><b>Kota:</b> ${data.city}<br><b>Negara:</b> ${data.country_name}<br><b>ISP:</b> ${data.org}`;
-                } catch(e) { b.innerText = 'IP tidak ditemukan.'; }
-            };
-        }
-
-        else if (tool === 'imgto') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Image to Base64</h3>
-                <input type="file" id="img-in" accept="image/*" style="padding:10px; margin-bottom:15px;">
-                <div id="img-res" style="display:none; font-size:10px; word-break:break-all; text-align:left; border:2px dashed var(--border); padding:15px; border-radius:8px; max-height:150px; overflow-y:auto;"></div>
-            `;
-            document.getElementById('img-in').onchange = (e) => {
-                const file = e.target.files[0];
-                if(!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    const b = document.getElementById('img-res');
-                    b.style.display = 'block'; b.innerText = ev.target.result;
-                };
-                reader.readAsDataURL(file);
-            };
-        }
-
-        else if (tool === 'password') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Password Gen</h3>
-                <button class="action-btn" onclick="genPass()">Generate Password</button>
-                <div id="pass-res" style="display:none; font-size:20px; font-weight:800; color:var(--primary); text-align:center; margin-top:15px; border:2px dashed var(--border); padding:15px; border-radius:8px; word-break:break-all;"></div>
-            `;
-            window.genPass = () => {
-                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-                let pass = "";
-                for(let i=0; i<16; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
-                const b = document.getElementById('pass-res');
-                b.style.display = 'block'; b.innerText = pass;
-            };
-        }
-
+        // --- 10. CUACA ---
         else if (tool === 'cuaca') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -370,6 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
+        // --- 11. QUOTES ---
         else if (tool === 'quotes') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -389,6 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
+        // --- 12. HITUNG BMI ---
         else if (tool === 'bmi') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -409,9 +440,111 @@ document.addEventListener('DOMContentLoaded', () => {
                 b.innerHTML = `Skor: <span style="color:var(--primary); font-size:24px;">${bmi}</span><br>Status: ${status}`;
             };
         }
+
+        // --- 13. TEKS TERBALIK ---
+        else if (tool === 'reverse') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Teks Terbalik</h3>
+                <input type="text" id="rev-in" placeholder="Ketik teks...">
+                <button class="action-btn" onclick="doReverse()">Balik Teks</button>
+                <div id="rev-res" style="display:none; margin-top:15px; text-align:center; font-size:18px; font-weight:bold; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
+            `;
+            window.doReverse = () => {
+                const v = document.getElementById('rev-in').value;
+                if(!v) return showToast('Isi teks!');
+                const b = document.getElementById('rev-res');
+                b.style.display = 'block'; b.innerText = v.split("").reverse().join("");
+            };
+        }
+
+        // --- 14. ACAK HURUF ---
+        else if (tool === 'scramble') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Acak Huruf</h3>
+                <input type="text" id="scr-in" placeholder="Ketik teks...">
+                <button class="action-btn" onclick="doScramble()">Acak</button>
+                <div id="scr-res" style="display:none; margin-top:15px; text-align:center; font-size:18px; font-weight:bold; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
+            `;
+            window.doScramble = () => {
+                const v = document.getElementById('scr-in').value;
+                if(!v) return showToast('Isi teks!');
+                const b = document.getElementById('scr-res');
+                b.style.display = 'block'; b.innerText = v.split('').sort(() => 0.5 - Math.random()).join('');
+            };
+        }
+
+        // --- 15. TIMER ---
+        else if (tool === 'timer') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Timer</h3>
+                <input type="number" id="timer-in" placeholder="Detik (Cth: 10)">
+                <button class="action-btn" onclick="startTimer()">Mulai</button>
+                <div id="timer-res" style="display:none; margin-top:15px; text-align:center; font-size:32px; font-weight:bold; color:var(--primary); border:2px dashed var(--border); padding:15px; border-radius:8px;">0</div>
+            `;
+            let timerInt;
+            window.startTimer = () => {
+                let s = parseInt(document.getElementById('timer-in').value);
+                if(!s) return showToast('Isi detik!');
+                const b = document.getElementById('timer-res');
+                b.style.display = 'block';
+                b.innerText = s;
+                clearInterval(timerInt);
+                timerInt = setInterval(() => {
+                    s--;
+                    b.innerText = s;
+                    if(s <= 0) { clearInterval(timerInt); showToast('Waktu Habis!'); }
+                }, 1000);
+            };
+        }
+
+        // --- 16. HITUNG UMUR ---
+        else if (tool === 'umur') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Hitung Umur</h3>
+                <input type="date" id="umur-in">
+                <button class="action-btn" onclick="hitungUmur()">Hitung</button>
+                <div id="umur-res" style="display:none; margin-top:15px; text-align:center; font-size:18px; font-weight:bold; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
+            `;
+            window.hitungUmur = () => {
+                const v = document.getElementById('umur-in').value;
+                if(!v) return showToast('Pilih tanggal!');
+                const tglLahir = new Date(v);
+                const hariIni = new Date();
+                let umur = hariIni.getFullYear() - tglLahir.getFullYear();
+                const m = hariIni.getMonth() - tglLahir.getMonth();
+                if (m < 0 || (m === 0 && hariIni.getDate() < tglLahir.getDate())) { umur--; }
+                
+                const b = document.getElementById('umur-res');
+                b.style.display = 'block'; b.innerText = `Umur Lo: ${umur} Tahun`;
+            };
+        }
+
+        // --- 17. GEN WARNA ---
+        else if (tool === 'warna') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Gen Warna</h3>
+                <button class="action-btn" onclick="genWarna()">Generate Warna</button>
+                <div id="warna-res" style="display:none; margin-top:15px; text-align:center; font-size:18px; font-weight:bold; padding:40px 15px; border-radius:8px; border:2px solid var(--border); transition:0.3s;"></div>
+            `;
+            window.genWarna = () => {
+                const hex = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+                const b = document.getElementById('warna-res');
+                b.style.display = 'block';
+                b.style.background = hex;
+                b.style.color = (parseInt(hex.replace('#',''), 16) > 0xffffff/2) ? '#000' : '#fff';
+                b.innerText = hex.toUpperCase();
+            };
+        }
     };
 
-    // Search Tool
+    // =========================================
+    // 7. SEARCH FILTER
+    // =========================================
     const sInput = document.getElementById('search-tools');
     if (sInput) {
         sInput.addEventListener('input', (e) => {
@@ -422,5 +555,4 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
 });
