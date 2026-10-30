@@ -1,9 +1,9 @@
 // ===== LOGIC POPUP WA =====
-const waPopup = document.getElementById('waPopup');
-setTimeout(() => { waPopup.style.display = 'none'; }, 100); // Biar muncul pas load aja
-window.closePopup = () => { waPopup.style.display = 'none'; };
+window.closePopup = () => {
+  document.getElementById('waPopup').style.display = 'none';
+};
 
-// ===== LOGIC INFO DEVICE (Biar keren) =====
+// ===== LOGIC INFO DEVICE =====
 function getDeviceName() {
   const ua = navigator.userAgent;
   if (/android/i.test(ua)) return "Android Device";
@@ -92,6 +92,9 @@ window.openTool = (tool) => {
       <button class="action-btn" onclick="lookupIP()">Lacak IP</button>
       <div id="ipResult" class="result-box" style="display:none;"></div>
     `;
+  }
+  else if(tool === 'soon') {
+    toolBody.innerHTML = `<h3>Coming Soon</h3><p>Fitur ini masih dalam tahap pengembangan, kontol!</p>`;
   }
 };
 
