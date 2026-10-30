@@ -1,15 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // =========================================
-    // 1. SISTEM GANTI TEMA (DARI HALAMAN SETTING)
-    // =========================================
+    
+    // 1. POP-UP WHATSAPP
+    const waPopup = document.getElementById('wa-popup');
+    if (!sessionStorage.getItem('wa_popup_shown')) {
+        setTimeout(() => {
+            if(waPopup) waPopup.classList.add('active');
+            sessionStorage.setItem('wa_popup_shown', 'true');
+        }, 1000);
+    }
+    window.closeWaPopup = () => { if(waPopup) waPopup.classList.remove('active'); };
+
+    // 2. GANTI TEMA
     window.setTheme = (themeName) => {
         document.body.setAttribute('data-theme', themeName);
         showToast(`Tema diubah ke ${themeName.toUpperCase()}`);
     };
 
-    // =========================================
-    // 2. NAVIGASI HALAMAN (TOOLS, SETTING, INFO)
-    // =========================================
+    // 3. NAVIGASI
     window.switchPage = (pageId, btn) => {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -18,9 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(btn) btn.classList.add('active');
     };
 
-    // =========================================
-    // 3. TOAST NOTIFICATION
-    // =========================================
+    // 4. TOAST
     window.showToast = (msg) => {
         const c = document.getElementById('toast-container');
         const t = document.createElement('div');
@@ -34,9 +39,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2500);
     };
 
-    // =========================================
-    // 4. MUSIK WIDGET (PLAY/PREV/NEXT)
-    // =========================================
+    // 5. DEVICE, BATERAI, JAM
+    function updateTime() {
+        const now = new Date();
+        const c = document.getElementById('clock-now');
+        if(c) c.innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    }
+    setInterval(updateTime, 1000); 
+    updateTime();
+
+    const ua = navigator.userAgent;
+    let dev = "Device";
+    if (/android/i.test(ua)) dev = "Android"; 
+    else if (/iPad|iPhone|iPod/.test(ua)) dev = "iOS";
+    else dev = "Desktop";
+    
+    const dEl = document.getElementById('device-name'); 
+    if(dEl) dEl.innerText = dev;
+
+    if (navigator.getBattery) {
+        navigator.getBattery().then(b => {
+            const bEl = document.getElementById('battery-level');
+            if(bEl) {
+                bEl.innerText = Math.round(b.level * 100) + "%";
+                b.addEventListener('levelchange', () => {
+                    bEl.innerText = Math.round(b.level * 100) + "%";
+                });
+            }
+        });
+    }
+
+    // 6. MUSIK WIDGET
     const bgm = document.getElementById('bgm');
     const icPlay = document.getElementById('ic-play');
     const icPause = document.getElementById('ic-pause');
@@ -55,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
         bgm.src = playlist[index].src;
         mTitle.innerText = playlist[index].name;
     };
-
     window.toggleMusic = () => {
         if(!isPlaying) {
             if(!bgm.src) loadSong(0);
@@ -73,24 +105,19 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('Musik Mati 🔇');
         }
     };
-
     window.nextSong = () => {
         currentSong = (currentSong + 1) % playlist.length;
         loadSong(currentSong);
         if(isPlaying) bgm.play();
     };
-
     window.prevSong = () => {
         currentSong = (currentSong - 1 + playlist.length) % playlist.length;
         loadSong(currentSong);
         if(isPlaying) bgm.play();
     };
-
     bgm.onended = () => { if(isPlaying) nextSong(); };
 
-    // =========================================
-    // 5. LOGIC MODAL (BOTTOM SHEET)
-    // =========================================
+    // 7. MODAL BOTTOM SHEET
     const modal = document.getElementById('tool-modal');
     const modalContent = document.getElementById('modal-content');
     
@@ -98,20 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('active'); 
         setTimeout(() => { modalContent.innerHTML = ''; }, 300);
     };
-    
     window.closeModalOnOverlay = (e) => { 
         if(e.target.id === 'tool-modal') closeModal(); 
     };
-
     const closeSvg = `<button class="modal-close press" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
 
-    // =========================================
-    // 6. FITUR TOOLS (LENGKAP + 5 FITUR BARU)
-    // =========================================
+    // 8. FITUR TOOLS
     window.openTool = (tool) => {
         modal.classList.add('active');
         
-        // --- 1. TIKTOK DOWNLOADER ---
+        // TikTok
         if (tool === 'tiktok') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -145,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 2. QR CODE ---
+        // QR
         else if (tool === 'qr') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -160,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 3. BRAT TEXT ---
+        // Brat
         else if (tool === 'brat') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -186,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 4. BASE64 ---
+        // Base64
         else if (tool === 'base64') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -210,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 5. IP LOOKUP ---
+        // IP Lookup
         else if (tool === 'ip') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -232,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 6. IMAGE TO BASE64 ---
+        // Image to Base64
         else if (tool === 'imgto') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -252,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 7. PASSWORD GEN ---
+        // Password
         else if (tool === 'password') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -269,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 8. KALKULATOR ---
+        // Kalkulator
         else if (tool === 'calc') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -315,9 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.calcExpression += val;
                 screen.innerText = window.calcExpression;
             };
-        }
-
-        // --- 9. ZODIAK LIST ---
+        }        // 9. Zodiak
         else if (tool === 'zodiak') {
             let tgls = ''; for(let i=1; i<=31; i++) tgls += `<div onclick="setZ('tgl',${i},this)" style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer;">${i}</div>`;
             let blns = ''; const b = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
@@ -375,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 10. CUACA ---
+        // 10. Cuaca
         else if (tool === 'cuaca') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -399,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 11. QUOTES ---
+        // 11. Quotes
         else if (tool === 'quotes') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -419,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 12. HITUNG BMI ---
+        // 12. BMI
         else if (tool === 'bmi') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -441,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 13. TEKS TERBALIK ---
+        // 13. Teks Terbalik
         else if (tool === 'reverse') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -458,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 14. ACAK HURUF ---
+        // 14. Acak Huruf
         else if (tool === 'scramble') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -475,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 15. TIMER ---
+        // 15. Timer
         else if (tool === 'timer') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -500,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 16. HITUNG UMUR ---
+        // 16. Hitung Umur
         else if (tool === 'umur') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -523,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // --- 17. GEN WARNA ---
+        // 17. Gen Warna
         else if (tool === 'warna') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -543,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 7. SEARCH FILTER
+    // 9. SEARCH FILTER
     // =========================================
     const sInput = document.getElementById('search-tools');
     if (sInput) {
@@ -555,4 +576,5 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
 });
