@@ -11,7 +11,7 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
-body { background-color: var(--bg-body); background-image: linear-gradient(90deg, #dcdcdc 1px, transparent 1px), linear-gradient(#dcdcdc 1px, transparent 1px); background-size: 30px 30px; color: var(--text-main); padding-bottom: 90px; }
+body { background-color: var(--bg-body); background-image: linear-gradient(90deg, #dcdcdc 1px, transparent 1px), linear-gradient(#dcdcdc 1px, transparent 1px); background-size: 30px 30px; color: var(--text-main); padding-bottom: 100px; }
 
 /* POPUP WA */
 .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
@@ -24,18 +24,19 @@ body { background-color: var(--bg-body); background-image: linear-gradient(90deg
 
 /* APP CONTAINER */
 .app-container { max-width: 480px; margin: 0 auto; padding: 15px; }
+.page-hidden { display: none; }
 
 /* HEADER */
 .header-box { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 3px solid #333; border-radius: 20px; padding: 10px 15px; box-shadow: 4px 4px 0 #333; margin-bottom: 15px; }
 .logo-area { display: flex; align-items: center; gap: 10px; }
-.logo-icon { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #333; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; padding: 8px; }
+.logo-icon { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #333; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; padding: 8px; flex-shrink: 0; }
 .logo-text h1 { font-size: 16px; font-weight: 900; line-height: 1.1; letter-spacing: -0.5px; }
 .nav-arrows { display: flex; gap: 5px; }
 .arrow-btn { background: var(--pastel-green); border: 2px solid #333; border-radius: 8px; padding: 5px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 2px 2px 0 #333; color: #333; }
 .arrow-btn svg { width: 14px; height: 14px; }
 .arrow-btn:active { transform: translate(2px, 2px); box-shadow: none; }
 
-/* MAIN CARD (Hero & Device) */
+/* MAIN CARD */
 .main-card { background: #fff; border: 3px solid #333; border-radius: 20px; padding: 15px; box-shadow: 4px 4px 0 #333; margin-bottom: 20px; }
 .hero-image { width: 100%; height: 180px; border: 2px solid #333; border-radius: 12px; margin-bottom: 15px; overflow: hidden; background: #eee; display: flex; align-items: center; justify-content: center;}
 .hero-image img { width: 100%; height: 100%; object-fit: cover; }
@@ -45,11 +46,11 @@ body { background-color: var(--bg-body); background-image: linear-gradient(90deg
 .info-card span { font-size: 10px; font-weight: 800; color: #777; display: block; margin-bottom: 4px; letter-spacing: 0.5px; }
 .info-card strong { font-size: 14px; font-weight: 800; color: #333; }
 
-/* TOOLS SECTION */
+/* TOOLS */
 .tools-container { background: #fff; border: 3px solid #333; border-radius: 20px; padding: 15px; box-shadow: 4px 4px 0 #333; }
 .section-title { font-size: 18px; font-weight: 900; margin-bottom: 12px; color: #333; }
 .search-bar { display: flex; align-items: center; background: #f0f0f0; border: 2px solid #333; border-radius: 12px; padding: 10px; margin-bottom: 15px; }
-.search-bar svg { width: 18px; height: 18px; color: #777; margin-right: 10px; }
+.search-bar svg { width: 18px; height: 18px; color: #777; margin-right: 10px; flex-shrink: 0; }
 .search-bar input { border: none; background: transparent; outline: none; font-size: 14px; font-weight: 600; width: 100%; color: #333; }
 
 .grid-tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -65,7 +66,7 @@ body { background-color: var(--bg-body); background-image: linear-gradient(90deg
 
 /* BOTTOM NAV */
 .bottom-nav { position: fixed; bottom: 15px; left: 15px; right: 15px; max-width: 450px; margin: 0 auto; background: #fff; border: 3px solid #333; border-radius: 20px; display: flex; justify-content: space-around; padding: 10px; box-shadow: 4px 4px 0 #333; z-index: 100; }
-.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 20px; border-radius: 12px; cursor: pointer; color: #777; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 16px; border-radius: 12px; cursor: pointer; color: #777; border: 2px solid transparent; transition: 0.15s; }
 .nav-item.active { background: var(--pastel-yellow); color: #333; border: 2px solid #333; box-shadow: 2px 2px 0 #333; }
 .nav-icon svg { width: 20px; height: 20px; }
 .nav-item span { font-size: 11px; font-weight: 800; }
@@ -74,14 +75,20 @@ body { background-color: var(--bg-body); background-image: linear-gradient(90deg
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
 .modal-overlay.active { display: flex; }
 .modal-content { background: #fff; border: 3px solid #333; border-radius: 20px; padding: 20px; width: 100%; max-width: 400px; position: relative; box-shadow: 6px 6px 0 #333; max-height: 85vh; overflow-y: auto; }
-.close-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; color: #fff; border: 2px solid #333; border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 2px 2px 0 #333; }
+.close-btn { position: absolute; top: 15px; right: 15px; background: #ff4d4d; color: #fff; border: 2px solid #333; border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 2px 2px 0 #333; z-index: 2; }
 .close-btn svg { width: 16px; height: 16px; }
 .close-btn:active { transform: translate(2px, 2px); box-shadow: none; }
 
-/* UI DI DALAM MODAL */
-#toolBody h3 { font-size: 18px; font-weight: 900; margin-bottom: 15px; color: #333; margin-top: 10px; }
+/* UI DALAM MODAL */
+#toolBody h3 { font-size: 18px; font-weight: 900; margin-bottom: 15px; color: #333; margin-top: 10px; padding-right: 40px; }
 #toolBody input, #toolBody textarea { width: 100%; padding: 12px; border: 2px solid #333; border-radius: 10px; font-size: 14px; font-weight: 600; margin-bottom: 12px; outline: none; font-family: 'Nunito', sans-serif; }
 #toolBody button.action-btn { width: 100%; padding: 12px; background: var(--pastel-green); border: 2px solid #333; border-radius: 10px; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 3px 3px 0 #333; color: #333; margin-bottom: 15px; font-family: 'Nunito', sans-serif; }
 #toolBody button.action-btn:active { transform: translate(3px, 3px); box-shadow: none; }
-.result-box { background: #f9f9f9; border: 2px dashed #333; border-radius: 12px; padding: 15px; text-align: center; word-wrap: break-word; margin-top: 10px; font-weight: 600; }
+#toolBody button.action-btn.secondary { background: var(--pastel-yellow); }
+#toolBody button.action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.result-box { background: #f9f9f9; border: 2px dashed #333; border-radius: 12px; padding: 15px; text-align: center; word-wrap: break-word; margin-top: 10px; font-weight: 600; overflow-wrap: anywhere; }
 .result-box img { max-width: 100%; border-radius: 8px; border: 2px solid #333; }
+
+/* BRAT RESULT */
+#bratCanvasWrap { background: #fff; padding: 20px; border: 2px solid #333; border-radius: 12px; display: flex; align-items: center; justify-content: center; min-height: 120px; }
+#bratResult { background:#fff; color:#000; padding:10px 15px; font-family: Arial, Helvetica, sans-serif; font-size: 28px; font-weight: bold; word-wrap: break-word; filter: blur(1.2px); text-align: center; line-height: 1.15; max-width: 100%; }

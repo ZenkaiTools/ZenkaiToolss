@@ -2,11 +2,11 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zenkai Tools // Utility Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,12 +16,12 @@
     <div class="popup-box">
       <h2>Gabung Saluran WA!</h2>
       <p>Dapetin update tools terbaru dan prompt jailbreak eksklusif cuma di saluran WhatsApp Zenkai.</p>
-      <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" class="btn-wa">Join Saluran Sekarang</a>
+      <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener" class="btn-wa">Join Saluran Sekarang</a>
       <button class="btn-close-popup" id="btnTutupWa">Nanti Aja</button>
     </div>
   </div>
 
-  <div class="app-container">
+  <div class="app-container" id="pageTools">
     <!-- HEADER -->
     <header class="header-box">
       <div class="logo-area">
@@ -33,16 +33,22 @@
         </div>
       </div>
       <div class="nav-arrows">
-        <button class="arrow-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <button class="arrow-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg></button>
-        <button class="arrow-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 4l10 8-10 8V4zM19 4v16"/></svg></button>
+        <button class="arrow-btn" onclick="scrollToTop()" title="Ke atas" aria-label="Ke atas">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 15l-6-6-6 6"/></svg>
+        </button>
+        <button class="arrow-btn" onclick="scrollToTools()" title="Ke tools" aria-label="Ke tools">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <button class="arrow-btn" onclick="openTool('soon')" title="Tentang" aria-label="Tentang">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </button>
       </div>
     </header>
 
-    <!-- KOTAK BESAR: WELCOME & INFO DEVICE -->
+    <!-- MAIN CARD -->
     <div class="main-card">
       <div class="hero-image">
-        <img src="https://i.pinimg.com/736x/8a/e9/92/8ae99293e4541f0f2f6e8eef3f2e6e5e.jpg" alt="Hero" onerror="this.style.display='none'">
+        <img src="https://picsum.photos/seed/zenkai/800/400" alt="Hero" onerror="this.parentElement.innerHTML='<span style=\'color:#777;font-weight:800;\'>Zenkai Tools</span>'">
       </div>
       
       <h2 class="welcome-text">Selamat datang di Zenkai Tools!</h2>
@@ -67,8 +73,8 @@
       </div>
     </div>
 
-    <!-- BOTTOM SECTION: TOOLS -->
-    <div class="tools-container">
+    <!-- TOOLS -->
+    <div class="tools-container" id="toolsSection">
       <h3 class="section-title">TOOLS</h3>
       
       <div class="search-bar">
@@ -77,7 +83,6 @@
       </div>
 
       <div class="grid-tools" id="toolsGrid">
-        <!-- TOOL 1: TIKTOK -->
         <div class="tool-card" onclick="openTool('tiktok')">
           <div class="tool-icon bg-green">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
@@ -85,7 +90,6 @@
           <h4>Downloader<br>TikTok</h4>
         </div>
 
-        <!-- TOOL 2: QR CODE -->
         <div class="tool-card" onclick="openTool('qr')">
           <div class="tool-icon bg-yellow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -93,7 +97,6 @@
           <h4>QR Code<br>Generator</h4>
         </div>
 
-        <!-- TOOL 3: BRAT TEXT -->
         <div class="tool-card" onclick="openTool('brat')">
           <div class="tool-icon bg-blue">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
@@ -101,15 +104,13 @@
           <h4>Brat Text<br>Generator</h4>
         </div>
 
-        <!-- TOOL 4: BASE64 -->
         <div class="tool-card" onclick="openTool('base64')">
           <div class="tool-icon bg-purple">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           </div>
-          <h4>Gade Code<br>Base64</h4>
+          <h4>Encode/Decode<br>Base64</h4>
         </div>
 
-        <!-- TOOL 5: IP LOOKUP -->
         <div class="tool-card" onclick="openTool('iplookup')">
           <div class="tool-icon bg-green">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -117,7 +118,6 @@
           <h4>IP Lookup<br>Lacak</h4>
         </div>
 
-        <!-- TOOL 6: SCAN VIRUS -->
         <div class="tool-card" onclick="openTool('soon')">
           <div class="tool-icon bg-yellow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -128,32 +128,102 @@
     </div>
   </div>
 
+  <!-- PAGE: SETTING -->
+  <div class="app-container page-hidden" id="pageSetting">
+    <header class="header-box">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+        <div class="logo-text"><h1>SETTING</h1></div>
+      </div>
+    </header>
+    <div class="main-card">
+      <h2 class="welcome-text">Pengaturan</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <span>TEMA</span>
+          <strong>Neo Brutalism</strong>
+        </div>
+        <div class="info-card">
+          <span>BAHASA</span>
+          <strong>Indonesia</strong>
+        </div>
+        <div class="info-card">
+          <span>VERSI</span>
+          <strong>1.0.1</strong>
+        </div>
+        <div class="info-card">
+          <span>STATUS</span>
+          <strong>Online</strong>
+        </div>
+      </div>
+      <button class="action-btn" style="width:100%;margin-top:15px;" onclick="alert('Pengaturan belum bisa diubah di versi ini.')">Ubah Pengaturan</button>
+    </div>
+  </div>
+
+  <!-- PAGE: INFO APP -->
+  <div class="app-container page-hidden" id="pageInfo">
+    <header class="header-box">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
+        <div class="logo-text"><h1>INFO APP</h1></div>
+      </div>
+    </header>
+    <div class="main-card">
+      <h2 class="welcome-text">Tentang Zenkai Tools</h2>
+      <p style="font-size:14px;line-height:1.6;color:#555;margin-bottom:12px;">Zenkai Tools adalah kumpulan utility ringan yang bisa dipakai langsung di browser: downloader, generator QR, Brat text, Base64, dan IP lookup. Dibuat simpel, cepat, dan gratis.</p>
+      <div class="info-grid">
+        <div class="info-card">
+          <span>VERSI</span>
+          <strong>1.0.1</strong>
+        </div>
+        <div class="info-card">
+          <span>DEVELOPER</span>
+          <strong>Zenkai</strong>
+        </div>
+        <div class="info-card">
+          <span>LICENSE</span>
+          <strong>Free</strong>
+        </div>
+        <div class="info-card">
+          <span>UPDATE</span>
+          <strong>2026</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
-    <div class="nav-item active">
+    <div class="nav-item active" data-page="tools" onclick="switchPage('tools')">
       <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
       <span>Tools</span>
     </div>
-    <div class="nav-item">
-      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+    <div class="nav-item" data-page="setting" onclick="switchPage('setting')">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
       <span>Setting</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" data-page="info" onclick="switchPage('info')">
       <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
       <span>Info App</span>
     </div>
   </nav>
 
-  <!-- MODAL UNTUK FITUR -->
+  <!-- MODAL -->
   <div class="modal-overlay" id="toolModal">
     <div class="modal-content">
-      <button class="close-btn" onclick="closeModal()">
+      <button class="close-btn" onclick="closeModal()" aria-label="Tutup">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
       <div id="toolBody" style="margin-top: 10px;"></div>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <!-- html2canvas untuk download Brat -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
