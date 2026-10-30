@@ -124,12 +124,29 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 }
 .info-item svg { width: 14px; height: 14px; color: var(--primary); }
 
+/* =========================================
+   MUSIC WIDGET (TOMBOL MELAYANG)
+   ========================================= */
+.music-widget { 
+    position: fixed; bottom: 85px; right: 15px; 
+    background: var(--card-bg); border: 2px solid var(--border); 
+    border-radius: 30px; padding: 5px; display: flex; align-items: center; gap: 5px;
+    box-shadow: var(--shadow); z-index: 99; transition: var(--transition);
+}
+.music-widget button { 
+    background: var(--primary); border: 2px solid var(--border); 
+    width: 32px; height: 32px; border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center; 
+    color: #000; cursor: pointer; 
+}
+.music-widget button svg { width: 14px; height: 14px; }
+
 /* WELCOME BOX */
 .welcome-box { background: var(--card-bg); border: 2px solid var(--border); border-radius: var(--radius); padding: 15px; margin-bottom: 15px; box-shadow: var(--shadow); transition: var(--transition); }
 .welcome-box h2 { font-family: var(--font-head); font-size: 20px; margin-bottom: 5px; color: var(--primary); }
 .welcome-box p { font-size: 12px; line-height: 1.5; opacity: 0.8; }
 
-/* TOOLS */
+/* TOOLS GRID */
 .tools-section { background: var(--card-bg); border: 2px solid var(--border); border-radius: var(--radius); padding: 15px; box-shadow: var(--shadow); transition: var(--transition); }
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .section-header h3 { font-family: var(--font-head); font-size: 16px; }
@@ -138,12 +155,14 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 #search-tools { width: 100%; background: transparent; border: 2px solid var(--border); color: var(--text); padding: 6px 6px 6px 26px; border-radius: calc(var(--radius) / 2); font-size: 10px; outline: none; }
 #search-tools:focus { border-color: var(--primary); }
 
-.grid-tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 8px; }
+/* Grid disesuaikan buat nampung banyak tombol */
+.grid-tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 8px; }
 .tool-card { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.t-icon { width: 50px; height: 50px; border-radius: calc(var(--radius) - 2px); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; color: #000; box-shadow: var(--shadow); background: var(--primary); transition: var(--transition); }
-.t-icon svg { width: 22px; height: 22px; }
-.tool-card h4 { font-size: 10px; font-weight: 700; }
+.t-icon { width: 48px; height: 48px; border-radius: calc(var(--radius) - 2px); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; color: #000; box-shadow: var(--shadow); background: var(--primary); transition: var(--transition); }
+.t-icon svg { width: 20px; height: 20px; }
+.tool-card h4 { font-size: 9px; font-weight: 700; line-height: 1.2; }
 
+/* WARNA ICON */
 .bg-cyan { background: #00f3ff; } .bg-yellow { background: #ffcc00; } .bg-pink { background: #ff007f; color: #fff; }
 .bg-blue { background: #3b82f6; color: #fff; } .bg-purple { background: #a855f7; color: #fff; }
 .bg-orange { background: #ff7300; } .bg-red { background: #ff3333; color: #fff; } .bg-green { background: #00ff9d; }
@@ -157,12 +176,6 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 .nav-item svg { width: 18px; height: 18px; }
 .nav-item span { font-size: 9px; font-weight: 700; }
 .nav-item.active { opacity: 1; color: var(--primary); }
-
-/* MUSIC WIDGET */
-.music-widget { position: fixed; bottom: 85px; right: 15px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 30px; padding: 5px; display: flex; align-items: center; gap: 5px; box-shadow: var(--shadow); z-index: 99; transition: var(--transition); }
-.music-widget button { background: var(--primary); border: 2px solid var(--border); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; }
-.music-widget button svg { width: 14px; height: 14px; }
-.music-title { font-size: 9px; font-weight: 700; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 5px; }
 
 /* BOTTOM SHEET (MODAL TOOLS) */
 .bottom-sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: flex-end; justify-content: center; z-index: 1000; backdrop-filter: blur(5px); }
@@ -179,6 +192,14 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 .action-btn { width: 100%; background: var(--primary); color: #000; border: 2px solid var(--border); padding: 12px; border-radius: calc(var(--radius)/2); font-weight: 800; font-size: 13px; cursor: pointer; margin-bottom: 12px; box-shadow: var(--shadow); transition: var(--transition); }
 .action-btn:active { transform: translateY(3px); box-shadow: none; }
 
+/* =========================================
+   MODAL TOOLS: RATA TENGAH & PENJELASAN (BARU)
+   ========================================= */
+#modal-content { text-align: center; }
+#modal-content h3 { text-align: center; margin-bottom: 5px; }
+.desc-text { font-size: 11px; opacity: 0.7; margin-bottom: 15px; display: block; line-height: 1.4; padding: 0 10px; }
+#modal-content input[type="text"], #modal-content input[type="number"], #modal-content textarea { text-align: center; margin: 0 auto 15px auto; display: block; max-width: 90%; }
+#modal-content .action-btn { max-width: 90%; margin: 0 auto 15px auto; }
 /* KALKULATOR */
 .calc-container { display: flex; flex-direction: column; gap: 8px; }
 .calc-display { background: var(--card-bg); border: 2px solid var(--border); border-radius: calc(var(--radius)/2); padding: 15px; text-align: right; font-size: 28px; font-weight: 800; min-height: 60px; word-wrap: break-word; transition: var(--transition); }
@@ -233,3 +254,31 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 }
 .wa-btn:active { transform: translateY(4px); box-shadow: none; }
 .wa-foot { font-size: 10px; color: #b2bec3; text-align: center; margin-top: 15px; margin-bottom: 0; }
+/* =========================================
+   ZEN-BRUTALISM STYLE (Biar Beda dari yang lain)
+   ========================================= */
+
+body[data-theme="comic"] .tools-section, 
+body[data-theme="comic"] .welcome-box,
+body[data-theme="comic"] .header-box,
+body[data-theme="comic"] .custom-hero-block {
+    border-radius: 4px !important; 
+    border: 3px solid var(--border) !important;
+    box-shadow: 6px 6px 0px 0px var(--primary), 8px 8px 0px 0px #000 !important; 
+    position: relative;
+}
+
+body[data-theme="comic"] .section-header {
+    border-bottom: 2px dashed var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+body[data-theme="comic"] .t-icon {
+    border-radius: 2px !important; 
+}
+
+body[data-theme="comic"] .logo-text h1 {
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
