@@ -2,27 +2,24 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Andika Tools // Cyber Edition</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 </head>
 <body>
 
-    <!-- BGM (Musik Phonk Viral) -->
     <audio id="bgm" loop>
-        <source src="https://www.myinstants.com/media/sounds/metamorphosis-phonk.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=cyberpunk-2099-10701.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Tombol Musik Melayang -->
     <button id="music-toggle" class="fab-music" title="Putar Musik">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
     </button>
 
-    <!-- Custom Alert/Toast -->
     <div id="toast-container" class="toast-container"></div>
 
     <div class="app-container">
@@ -35,20 +32,22 @@
                     <div class="logo-icon">A</div>
                     <div class="logo-text">
                         <h1>ANDIKA<span>.TOOLS</span></h1>
+                        <p class="version">v4.0 Cyber Edition</p>
                     </div>
                 </div>
-                <div class="header-status" id="device-status">DEV</div>
+                <div class="header-status" id="device-status">SYS.ON</div>
             </header>
 
-            <!-- KOTAK BESAR: HERO (FOTO/VIDEO) -->
+            <!-- HERO CARD -->
             <div class="hero-card">
                 <div class="hero-img-wrap">
-                    <!-- GANTI URL DI BAWAH PAKAI FOTO/VIDEO LU SENDIRI -->
-                    <!-- Kalau mau pakai video, ganti tag <img> jadi <video src="..." autoplay loop muted playsinline></video> -->
-                    <img src="https://picsum.photos/seed/cyberpunk/800/400" alt="Hero">
+                    <img src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=1000&auto=format&fit=crop" alt="Hero">
+                    <div class="hero-overlay"></div>
+                    <div class="hero-badge">NETRUNNER V4</div>
                 </div>
                 <div class="hero-info">
                     <h2>Welcome, Netrunner.</h2>
+                    <p class="subtitle">Sistem siap. Pilih modul di bawah.</p>
                     <div class="info-row">
                         <span class="badge" id="device-name">Loading...</span>
                         <span class="badge" id="battery-level">--%</span>
@@ -57,57 +56,60 @@
                 </div>
             </div>
 
-            <!-- MENU TOOLS (EFEK CUTSCENE) -->
+            <!-- MENU TOOLS -->
             <div class="tools-section">
                 <div class="section-header">
                     <h3>UTILITIES</h3>
-                    <input type="text" id="search-tools" placeholder="Cari tool...">
+                    <div class="search-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="search-tools" placeholder="Cari modul...">
+                    </div>
                 </div>
 
-                <div class="grid-tools">
-                    <!-- 1 -->
-                    <div class="tool-card delay-1" onclick="openTool('tiktok')">
-                        <div class="t-icon bg-neon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+                <div class="grid-tools" id="tools-grid">
+                    <!-- 1. TikTok -->
+                    <div class="tool-card" onclick="openTool('tiktok')">
+                        <div class="t-icon bg-neon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
                         <h4>TikTok DL</h4>
                     </div>
-                    <!-- 2 -->
-                    <div class="tool-card delay-2" onclick="openTool('qr')">
-                        <div class="t-icon bg-neon-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+                    <!-- 2. QR -->
+                    <div class="tool-card" onclick="openTool('qr')">
+                        <div class="t-icon bg-neon-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
                         <h4>QR Code</h4>
                     </div>
-                    <!-- 3 -->
-                    <div class="tool-card delay-3" onclick="openTool('brat')">
-                        <div class="t-icon bg-neon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
+                    <!-- 3. Brat -->
+                    <div class="tool-card" onclick="openTool('brat')">
+                        <div class="t-icon bg-neon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
                         <h4>Brat Text</h4>
                     </div>
-                    <!-- 4 -->
-                    <div class="tool-card delay-4" onclick="openTool('base64')">
-                        <div class="t-icon bg-neon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+                    <!-- 4. Base64 -->
+                    <div class="tool-card" onclick="openTool('base64')">
+                        <div class="t-icon bg-neon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
                         <h4>Base64</h4>
                     </div>
-                    <!-- 5 -->
-                    <div class="tool-card delay-5" onclick="openTool('ip')">
-                        <div class="t-icon bg-neon-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+                    <!-- 5. IP Lookup -->
+                    <div class="tool-card" onclick="openTool('ip')">
+                        <div class="t-icon bg-neon-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
                         <h4>IP Lookup</h4>
                     </div>
-                    <!-- 6 -->
-                    <div class="tool-card delay-6" onclick="openTool('imgto')">
-                        <div class="t-icon bg-neon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                    <!-- 6. Image Link -->
+                    <div class="tool-card" onclick="openTool('imgto')">
+                        <div class="t-icon bg-neon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
                         <h4>Image Link</h4>
                     </div>
-                    <!-- 7 -->
-                    <div class="tool-card delay-7" onclick="openTool('password')">
-                        <div class="t-icon bg-neon-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                    <!-- 7. Password -->
+                    <div class="tool-card" onclick="openTool('password')">
+                        <div class="t-icon bg-neon-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
                         <h4>Password</h4>
                     </div>
-                    <!-- 8 -->
-                    <div class="tool-card delay-8" onclick="openTool('calc')">
-                        <div class="t-icon bg-neon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div>
+                    <!-- 8. Kalkulator -->
+                    <div class="tool-card" onclick="openTool('calc')">
+                        <div class="t-icon bg-neon-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div>
                         <h4>Kalkulator</h4>
                     </div>
-                    <!-- 9 -->
-                    <div class="tool-card delay-9" onclick="openTool('zodiak')">
-                        <div class="t-icon bg-neon-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div>
+                    <!-- 9. Zodiak -->
+                    <div class="tool-card" onclick="openTool('zodiak')">
+                        <div class="t-icon bg-neon-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div>
                         <h4>Zodiak</h4>
                     </div>
                 </div>
@@ -118,13 +120,13 @@
         <main id="page-setting" class="page">
             <header class="header-box">
                 <div class="logo-area">
-                    <div class="logo-icon" style="background:var(--neon-purple);"></div>
+                    <div class="logo-icon" style="background:var(--neon-purple); color:#fff;"></div>
                     <div class="logo-text"><h1>SETTING</h1></div>
                 </div>
             </header>
-            <div class="hero-card">
-                <h2>Pengaturan</h2>
-                <p style="margin-top:10px; color:#888; line-height:1.6;">Fitur pengaturan sedang dalam tahap pengembangan oleh Andika.</p>
+            <div class="hero-card" style="padding: 30px 20px; text-align: center;">
+                <h2 style="color: var(--neon-purple); margin-bottom: 15px;">Pengaturan</h2>
+                <p style="color:#a1a1aa; line-height:1.6; font-size: 14px;">Fitur pengaturan sedang dalam tahap pengembangan oleh Andika. Stay tuned for updates!</p>
             </div>
         </main>
 
@@ -132,35 +134,39 @@
         <main id="page-info" class="page">
             <header class="header-box">
                 <div class="logo-area">
-                    <div class="logo-icon" style="background:var(--neon-blue);">i</div>
+                    <div class="logo-icon" style="background:var(--neon-blue); color:#fff;">i</div>
                     <div class="logo-text"><h1>INFO APP</h1></div>
                 </div>
             </header>
-            <div class="hero-card">
-                <h2>Tentang Aplikasi</h2>
-                <p style="margin-top:10px; color:#888; line-height:1.6;"><b>Andika Tools v4.0 (Cyber Edition)</b> adalah utility ringan tanpa ribet yang dibuat oleh <b style="color:var(--neon-green);">Andika</b>. Dibuat dengan  dan .</p>
+            <div class="hero-card" style="padding: 30px 20px;">
+                <h2 style="color: var(--neon-blue); margin-bottom: 15px;">Andika Tools</h2>
+                <p style="color:#a1a1aa; line-height:1.8; font-size: 14px;">
+                    <b>Andika Tools v4.0 (Cyber Edition)</b> adalah utility ringan tanpa ribet yang dibuat oleh <b style="color:var(--neon-green);">Andika</b>. 
+                    <br><br>
+                    Dirancang dengan antarmuka futuristik untuk memberikan pengalaman pengguna yang cepat, aman, dan berkelas.
+                </p>
             </div>
         </main>
 
         <!-- NAVIGASI BAWAH -->
         <nav class="bottom-nav">
             <button class="nav-item active" onclick="switchPage('tools', this)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 <span>Tools</span>
             </button>
             <button class="nav-item" onclick="switchPage('setting', this)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                 <span>Setting</span>
             </button>
             <button class="nav-item" onclick="switchPage('info', this)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                 <span>Info App</span>
             </button>
         </nav>
     </div>
 
     <!-- MODAL FITUR -->
-    <div class="modal-overlay" id="tool-modal">
+    <div class="modal-overlay" id="tool-modal" onclick="closeModalOnOverlay(event)">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal()">×</button>
             <div id="modal-content"></div>

@@ -1,23 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================
-    // 1. TOAST (PENGGANTI ALERT)
+    // 1. TOAST (NOTIFIKASI MODERN)
     // =========================================
     window.showToast = (msg, isError = false) => {
         const c = document.getElementById('toast-container');
         const t = document.createElement('div');
         t.className = 'toast';
-        if (isError) t.style.borderColor = 'var(--neon-red)';
+        if (isError) {
+            t.style.borderColor = 'var(--neon-red)';
+            t.style.borderLeftColor = 'var(--neon-red)';
+        }
         t.innerText = msg;
         c.appendChild(t);
+        
         setTimeout(() => { 
             t.style.opacity = '0'; 
+            t.style.transform = 'translateY(-20px)';
+            t.style.transition = '0.3s';
             setTimeout(() => t.remove(), 300); 
         }, 3000);
     };
 
     // =========================================
-    // 2. BGM (MUSIK VIRAL)
+    // 2. BGM (MUSIK)
     // =========================================
     const bgm = document.getElementById('bgm');
     const musicToggle = document.getElementById('music-toggle');
@@ -30,11 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 bgm.play().then(() => { 
                     isPlaying = true; 
                     musicToggle.style.background = 'var(--neon-yellow)'; 
+                    musicToggle.style.color = '#000';
+                    showToast('Musik dinyalakan 🎵');
                 }).catch(() => showToast('Musik gagal diputar.', true));
             } else {
                 bgm.pause(); 
                 isPlaying = false; 
-                musicToggle.style.background = 'var(--neon-green)';
+                musicToggle.style.background = 'rgba(0, 255, 204, 0.1)';
+                musicToggle.style.color = 'var(--neon-green)';
+                showToast('Musik dimatikan 🔇');
             }
         });
     }
@@ -59,17 +69,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if(dEl) dEl.innerText = dev;
     
     const sEl = document.getElementById('device-status'); 
-    if(sEl) sEl.innerText = dev.substring(0,3).toUpperCase();
+    if(sEl) sEl.innerText = dev.substring(0,3).toUpperCase() + ".ON";
 
     if (navigator.getBattery) {
         navigator.getBattery().then(b => {
             const bEl = document.getElementById('battery-level');
-            if(bEl) bEl.innerText = Math.round(b.level * 100) + "%";
+            if(bEl) {
+                bEl.innerText = Math.round(b.level * 100) + "%";
+                b.addEventListener('levelchange', () => {
+                    bEl.innerText = Math.round(b.level * 100) + "%";
+                });
+            }
         });
     }
 
     // =========================================
-    // 4. NAVIGASI BAWAH (TOOLS, SETTING, INFO)
+    // 4. NAVIGASI BAWAH
     // =========================================
     window.switchPage = (pageId, btn) => {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -87,7 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const term = e.target.value.toLowerCase();
             document.querySelectorAll('.tool-card').forEach(card => {
                 const title = card.querySelector('h4').innerText.toLowerCase();
-                card.style.display = title.includes(term) ? 'block' : 'none';
+                if (title.includes(term)) {
+                    card.style.display = 'flex';
+                    card.style.animation = 'none'; // Reset animasi search
+                } else {
+                    card.style.display = 'none';
+                }
             });
         });
     }
@@ -100,7 +120,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.closeModal = () => { 
         modal.classList.remove('active'); 
-        modalContent.innerHTML = ''; 
+        setTimeout(() => { modalContent.innerHTML = ''; }, 300);
+    };
+
+    // Fungsi Tutup Modal Klik Overlay (Yang tadi hilang)
+    window.closeModalOnOverlay = (e) => {
+        if (e.target.id === 'tool-modal') {
+            closeModal();
+        }
     };
 
     window.openTool = (tool) => {
@@ -152,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>QR Code</h3>
                 <input type="text" id="qr-text" placeholder="Teks/Link..." value="Andika Tools">
                 <button class="action-btn" id="btn-qr">Generate</button>
-                <div class="result-box"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Andika" style="max-width:100%;"></div>
+                <div class="result-box"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Andika" style="max-width:100%;border-radius:8px;"></div>
             `;
             document.getElementById('btn-qr').onclick = () => {
                 const txt = document.getElementById('qr-text').value || "Andika";
@@ -166,7 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>Brat Text</h3>
                 <input type="text" id="brat-input" placeholder="Ketik teks..." value="Andika">
                 <button class="action-btn" id="btn-brat">Update Teks</button>
-                <div class="result-box" style="background:#fff;padding:15px;"><div id="brat-res" style="color:#000;font-family:Arial;font-weight:bold;font-size:20px;filter:blur(1px);text-align:center;word-wrap:break-word;">Andika</div></div>
+                <div class="result-box" style="background:#fff;padding:15px; border-radius:12px; border:none;">
+                    <div id="brat-res" style="color:#000;font-family:Arial;font-weight:bold;font-size:24px;filter:blur(1.5px);text-align:center;word-wrap:break-word;line-height:1.2;">Andika</div>
+                </div>
                 <button class="action-btn" id="btn-dl-brat" style="background:var(--neon-yellow);margin-top:10px;">Save PNG</button>
             `;
             document.getElementById('btn-brat').onclick = () => {
@@ -190,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <textarea id="b64-in" rows="3" placeholder="Ketik teks di sini..."></textarea>
                 <div style="display:flex;gap:10px;">
                     <button class="action-btn" id="btn-enc" style="flex:1;">Encode</button>
-                    <button class="action-btn" id="btn-dec" style="flex:1;background:var(--neon-purple);">Decode</button>
+                    <button class="action-btn" id="btn-dec" style="flex:1;background:var(--neon-purple); color:#fff; box-shadow:0 4px 15px rgba(168,85,247,0.2);">Decode</button>
                 </div>
                 <div id="b64-res" class="result-box" style="display:none; word-break: break-all;"></div>
             `;
@@ -222,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>IP Lookup</h3>
                 <input type="text" id="ip-in" placeholder="Cth: 8.8.8.8">
                 <button class="action-btn" id="btn-ip">Lacak IP</button>
-                <div id="ip-res" class="result-box" style="display:none; text-align:left; line-height:1.6;"></div>
+                <div id="ip-res" class="result-box" style="display:none; text-align:left; line-height:1.8;"></div>
             `;
             document.getElementById('btn-ip').onclick = async () => {
                 const ip = document.getElementById('ip-in').value;
@@ -263,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 <h3>Password Gen</h3>
                 <button class="action-btn" id="btn-pass">Generate Password</button>
-                <div id="pass-res" class="result-box" style="display:none;font-size:18px;font-weight:bold;color:var(--neon-green);"></div>
+                <div id="pass-res" class="result-box" style="display:none;font-size:20px;font-weight:800;color:var(--neon-green); letter-spacing:1px;"></div>
             `;
             document.getElementById('btn-pass').onclick = () => {
                 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
@@ -281,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>Kalkulator</h3>
                 <input type="text" id="calc-in" placeholder="Cth: 5 + 5 * 2">
                 <button class="action-btn" id="btn-calc">Hitung</button>
-                <div id="calc-res" class="result-box" style="display:none;font-size:20px;font-weight:bold;"></div>
+                <div id="calc-res" class="result-box" style="display:none;font-size:24px;font-weight:800;color:var(--neon-blue);"></div>
             `;
             document.getElementById('btn-calc').onclick = () => {
                 const expr = document.getElementById('calc-in').value;
@@ -323,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const b = document.getElementById('zodiak-res');
                 b.style.display = 'block';
-                b.innerHTML = `Zodiak lu: <b style="color:var(--neon-yellow); font-size:20px;">${z}</b>`;
+                b.innerHTML = `Zodiak lu: <b style="color:var(--neon-yellow); font-size:22px; display:block; margin-top:5px;">${z}</b>`;
             };
         }
     };
