@@ -424,42 +424,43 @@ document.addEventListener('DOMContentLoaded', () => {
         currentImageUrl = "";
 
         try {
-            // Tetap nembak ke Supabase lu
             const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url: url })
             });
             
-            const data = await res.json();
+            const result = await res.json();
             
-            if (!data.status || !data.data) {
-                throw new Error(data.error || 'Konten tidak ditemukan');
+            if (result.status === false) {
+                throw new Error(result.error || 'Konten tidak ditemukan');
             }
 
-            // BONGKAR FORMAT API BARU
-            if (data.data.video) currentVideoUrl = data.data.video;
-            if (data.data.image) currentImageUrl = data.data.image;
+            // BONGKAR DATA DARI API BARU (pinterestdownloader.pro)
+            const data = result.data;
             
-            // Kadang formatnya array (kalau isinya banyak gambar/video)
-            if (data.data.medias && Array.isArray(data.data.medias)) {
+            // Cek format array medias
+            if (data.data && data.data.medias && Array.isArray(data.data.medias)) {
                 data.data.medias.forEach(media => {
                     if (media.type === 'video') currentVideoUrl = media.url;
                     if (media.type === 'image') currentImageUrl = media.url;
                 });
+            } 
+            // Fallback kalau formatnya langsung
+            else if (data.data) {
+                if (data.data.video) currentVideoUrl = data.data.video;
+                if (data.data.image) currentImageUrl = data.data.image;
             }
 
             // --- TAMPILAN UI (SELALU 2 TOMBOL) ---
             let htmlContent = '';
 
-            // Preview
             if (currentVideoUrl) {
                 htmlContent += `<video src="${escapeHTML(currentVideoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;"></video>`;
             } else if (currentImageUrl) {
                 htmlContent += `<img src="${escapeHTML(currentImageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;">`;
             }
 
-            // DUA TOMBOL
             htmlContent += `
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <button class="action-btn" id="btn-dl-vid" style="background:#00ff9d; margin-bottom:0;">🎬 DOWNLOAD VIDEO</button>
@@ -471,10 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Logika Tombol Video
             document.getElementById('btn-dl-vid').onclick = async (e) => {
-                if (!currentVideoUrl) {
-                    showToast('Link ini tidak memiliki video, cuma gambar.');
-                    return;
-                }
+                if (!currentVideoUrl) return showToast('Link ini tidak memiliki video.');
                 const saveBtn = e.target;
                 setBtnLoading(saveBtn, true, 'Menyimpan...');
                 try {
@@ -497,10 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Logika Tombol Gambar
             document.getElementById('btn-dl-img').onclick = async (e) => {
-                if (!currentImageUrl) {
-                    showToast('Gambar tidak ditemukan.');
-                    return;
-                }
+                if (!currentImageUrl) return showToast('Gambar tidak ditemukan.');
                 const saveBtn = e.target;
                 setBtnLoading(saveBtn, true, 'Menyimpan...');
                 try {
