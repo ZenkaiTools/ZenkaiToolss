@@ -100,40 +100,118 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 .nav-item svg { width: 18px; height: 18px; }
 .nav-item span { font-size: 9px; font-weight: 700; }
 .nav-item.active { opacity: 1; color: var(--primary); }
-/* BOTTOM SHEET (MODAL TOOLS) */
-.bottom-sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: flex-end; justify-content: center; z-index: 1000; backdrop-filter: blur(5px); }
+
+/* =========================================
+   BOTTOM SHEET (MODAL) - SUPER PRO DESIGN
+   ========================================= */
+.bottom-sheet-overlay { 
+    position: fixed; inset: 0; 
+    background: rgba(0,0,0,0.8); 
+    backdrop-filter: blur(8px); 
+    display: none; align-items: flex-end; justify-content: center; z-index: 1000; 
+}
 .bottom-sheet-overlay.active { display: flex; }
-.bottom-sheet-content { background: var(--bg); border: 2px solid var(--border); border-bottom: none; border-radius: 24px 24px 0 0; padding: 20px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; color: var(--text); position: relative; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); transition: var(--transition); }
+
+.bottom-sheet-content { 
+    background: var(--bg); 
+    border: 3px solid var(--border); 
+    border-bottom: none;
+    border-radius: 24px 24px 0 0; 
+    padding: 25px 20px 30px; 
+    width: 100%; max-width: 480px; 
+    max-height: 92vh; overflow-y: auto; 
+    color: var(--text); position: relative; 
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.4);
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: var(--transition);
+}
+
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.bottom-sheet-content::before { content: ''; display: block; width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 15px auto; opacity: 0.5; }
 
-.modal-close { position: absolute; top: 15px; right: 15px; background: #ff3333; color: #fff; border: 2px solid var(--border); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
-#modal-content h3 { font-family: var(--font-head); font-size: 20px; margin-bottom: 15px; padding-right: 30px; }
-#modal-content input, #modal-content textarea { width: 100%; background: var(--card-bg); border: 2px solid var(--border); color: var(--text); padding: 10px; border-radius: calc(var(--radius)/2); font-size: 13px; margin-bottom: 12px; outline: none; transition: var(--transition); }
-#modal-content input:focus, #modal-content textarea:focus { border-color: var(--primary); }
+/* Garis Tarik di atas */
+.bottom-sheet-content::before { 
+    content: ''; display: block; width: 50px; height: 6px; 
+    background: var(--border); border-radius: 10px; 
+    margin: -10px auto 20px auto; opacity: 0.3; 
+}
 
-.action-btn { width: 100%; background: var(--primary); color: #000; border: 2px solid var(--border); padding: 12px; border-radius: calc(var(--radius)/2); font-weight: 800; font-size: 13px; cursor: pointer; margin-bottom: 12px; box-shadow: var(--shadow); transition: var(--transition); }
-.action-btn:active { transform: translateY(3px); box-shadow: none; }
+/* Tombol Close (X) */
+.modal-close { 
+    position: absolute; top: 15px; right: 15px; 
+    background: #ff3333; color: #fff; 
+    border: 3px solid var(--border); 
+    width: 36px; height: 36px; border-radius: 50%; 
+    cursor: pointer; display: flex; align-items: center; justify-content: center; 
+    z-index: 10; box-shadow: 2px 2px 0 var(--border); transition: 0.1s;
+}
+.modal-close:active { transform: scale(0.9); box-shadow: none; }
 
-/* MODAL TOOLS */
-#modal-content { text-align: center; }
-#modal-content h3 { text-align: center; margin-bottom: 5px; }
-.desc-text { font-size: 11px; opacity: 0.7; margin-bottom: 15px; display: block; line-height: 1.4; padding: 0 10px; }
-#modal-content input[type="text"], #modal-content input[type="number"], #modal-content input[type="email"], #modal-content textarea { text-align: center; margin: 0 auto 15px auto; display: block; max-width: 90%; }
-#modal-content .action-btn { max-width: 90%; margin: 0 auto 15px auto; }
+/* Judul di dalam Modal */
+#modal-content h3 { 
+    font-family: var(--font-head); font-size: 26px; 
+    margin-bottom: 5px; text-align: center; 
+    text-transform: uppercase; letter-spacing: 1px; color: var(--primary);
+    text-shadow: 2px 2px 0 var(--border);
+}
+
+/* Teks Deskripsi */
+#modal-content .desc-text { 
+    font-size: 12px; opacity: 0.9; margin-bottom: 20px; 
+    display: block; line-height: 1.5; text-align: center; 
+    background: var(--card-bg); padding: 10px 15px; 
+    border-radius: 10px; border: 2px dashed var(--border);
+    font-weight: 600;
+}
+
+/* Input Form */
+#modal-content input, #modal-content textarea, #modal-content select { 
+    width: 100%; background: var(--card-bg); 
+    border: 3px solid var(--border); color: var(--text); 
+    padding: 14px; border-radius: 12px; font-size: 14px; 
+    margin-bottom: 15px; outline: none; transition: 0.2s; 
+    text-align: center; display: block; max-width: 100%;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    font-family: var(--font-main);
+}
+#modal-content input:focus, #modal-content textarea:focus { 
+    border-color: var(--primary); 
+    box-shadow: 0 0 0 4px rgba(255, 0, 127, 0.2); 
+}
+
+/* Tombol Aksi (Proses, Download, dll) */
+.action-btn { 
+    width: 100%; background: var(--primary); 
+    color: #000; border: 3px solid var(--border); 
+    padding: 14px; border-radius: 12px; 
+    font-weight: 900; font-size: 14px; cursor: pointer; 
+    margin-bottom: 15px; box-shadow: 4px 4px 0 var(--border); 
+    transition: 0.1s; text-transform: uppercase; letter-spacing: 0.5px;
+    display: block; max-width: 100%; font-family: var(--font-main);
+}
+.action-btn:active { transform: translateY(4px); box-shadow: none; }
+
+/* Pesan Berhasil/Gagal */
+#modal-content .success-msg { color: #00b894; font-weight: bold; text-align: center; padding: 15px; background: rgba(0, 184, 148, 0.1); border-radius: 8px; border: 2px dashed #00b894; }
+#modal-content .error-msg { color: #ff3333; font-weight: bold; text-align: center; padding: 15px; background: rgba(255, 51, 51, 0.1); border-radius: 8px; border: 2px dashed #ff3333; }
+
+/* Hasil (Gambar/Video) */
+#modal-content img, #modal-content video { 
+    border-radius: 12px; border: 3px solid var(--border); 
+    margin-bottom: 15px; width: 100%; box-shadow: var(--shadow);
+}
 
 /* KALKULATOR */
 .calc-container { display: flex; flex-direction: column; gap: 8px; }
-.calc-display { background: var(--card-bg); border: 2px solid var(--border); border-radius: calc(var(--radius)/2); padding: 15px; text-align: right; font-size: 28px; font-weight: 800; min-height: 60px; word-wrap: break-word; transition: var(--transition); }
+.calc-display { background: var(--card-bg); border: 3px solid var(--border); border-radius: calc(var(--radius)/2); padding: 15px; text-align: right; font-size: 28px; font-weight: 800; min-height: 60px; word-wrap: break-word; transition: var(--transition); box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
 .calc-keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.calc-btn { background: var(--card-bg); border: 2px solid var(--border); color: var(--text); font-size: 18px; font-weight: 700; padding: 12px 0; border-radius: calc(var(--radius)/2); cursor: pointer; transition: 0.1s; }
-.calc-btn:active { transform: scale(0.9); background: var(--primary); color: #000; }
+.calc-btn { background: var(--card-bg); border: 2px solid var(--border); color: var(--text); font-size: 18px; font-weight: 700; padding: 12px 0; border-radius: calc(var(--radius)/2); cursor: pointer; transition: 0.1s; box-shadow: 2px 2px 0 var(--border); }
+.calc-btn:active { transform: translateY(2px); box-shadow: none; }
 .calc-btn.op { background: var(--primary); color: #000; }
 
 /* TOAST & LOADER */
 .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; width: 90%; }
-.toast { background: var(--card-bg); border: 2px solid var(--border); padding: 10px; border-radius: var(--radius); box-shadow: var(--shadow); color: var(--text); text-align: center; font-weight: 700; font-size: 12px; animation: slideUp 0.3s; }
-.loader { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid var(--primary); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: 0 auto 8px auto; }
+.toast { background: var(--card-bg); border: 3px solid var(--border); padding: 12px; border-radius: var(--radius); box-shadow: var(--shadow); color: var(--text); text-align: center; font-weight: 700; font-size: 12px; animation: slideUp 0.3s; }
+.loader { border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 .page { display: none; } 
@@ -141,9 +219,9 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* POP-UP WHATSAPP */
-.wa-popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+.wa-popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
 .wa-popup-overlay.active { display: flex; }
-.wa-popup-box { background: var(--card-bg); border: 2px solid var(--border); border-radius: 20px; padding: 25px 20px; width: 100%; max-width: 340px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.3); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.wa-popup-box { background: var(--card-bg); border: 3px solid var(--border); border-radius: 20px; padding: 25px 20px; width: 100%; max-width: 340px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.3); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .wa-close { position: absolute; top: 15px; right: 15px; background: #f1f2f6; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 20px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #2d3436; transition: 0.2s; }
 .wa-close:hover { background: #dfe4ea; }
@@ -165,3 +243,452 @@ body[data-theme="comic"] .custom-hero-block {
 body[data-theme="comic"] .section-header { border-bottom: 2px dashed var(--border); padding-bottom: 10px; margin-bottom: 15px; }
 body[data-theme="comic"] .t-icon { border-radius: 2px !important; }
 body[data-theme="comic"] .logo-text h1 { letter-spacing: 2px; text-transform: uppercase; }
+/* =========================================
+   ZENKAI ANIMATION PACK v1.0
+   ========================================= */
+
+/* ---------- 1. HERO VIDEO: GLITCH + SCANLINE ---------- */
+.hero-media {
+    position: relative;
+    overflow: hidden;
+}
+.hero-media::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.15) 0px,
+        rgba(0,0,0,0.15) 1px,
+        transparent 1px,
+        transparent 4px
+    );
+    pointer-events: none;
+    animation: scanline 8s linear infinite;
+    z-index: 2;
+}
+.hero-media::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(255,0,127,0.08) 50%,
+        transparent 100%
+    );
+    pointer-events: none;
+    animation: glitchMove 3s ease-in-out infinite;
+    z-index: 2;
+}
+@keyframes scanline {
+    0%   { background-position: 0 0; }
+    100% { background-position: 0 100px; }
+}
+@keyframes glitchMove {
+    0%, 100% { opacity: 0.2; transform: translateY(0); }
+    50%      { opacity: 0.5; transform: translateY(-8px); }
+}
+.theme-video {
+    animation: videoFlicker 6s infinite;
+}
+@keyframes videoFlicker {
+    0%, 100% { filter: grayscale(100%) contrast(1.1) brightness(1); }
+    47%      { filter: grayscale(100%) contrast(1.2) brightness(1.05); }
+    48%      { filter: grayscale(100%) contrast(0.9) brightness(0.9); }
+    49%      { filter: grayscale(100%) contrast(1.1) brightness(1); }
+}
+
+/* ---------- 2. TOOL CARD: STAGGERED POP-IN ---------- */
+.tool-card {
+    animation: cardPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+.tool-card:nth-child(1)  { animation-delay: 0.02s; }
+.tool-card:nth-child(2)  { animation-delay: 0.04s; }
+.tool-card:nth-child(3)  { animation-delay: 0.06s; }
+.tool-card:nth-child(4)  { animation-delay: 0.08s; }
+.tool-card:nth-child(5)  { animation-delay: 0.10s; }
+.tool-card:nth-child(6)  { animation-delay: 0.12s; }
+.tool-card:nth-child(7)  { animation-delay: 0.14s; }
+.tool-card:nth-child(8)  { animation-delay: 0.16s; }
+.tool-card:nth-child(9)  { animation-delay: 0.18s; }
+.tool-card:nth-child(10) { animation-delay: 0.20s; }
+.tool-card:nth-child(11) { animation-delay: 0.22s; }
+.tool-card:nth-child(12) { animation-delay: 0.24s; }
+.tool-card:nth-child(13) { animation-delay: 0.26s; }
+.tool-card:nth-child(14) { animation-delay: 0.28s; }
+.tool-card:nth-child(15) { animation-delay: 0.30s; }
+.tool-card:nth-child(16) { animation-delay: 0.32s; }
+.tool-card:nth-child(17) { animation-delay: 0.34s; }
+.tool-card:nth-child(18) { animation-delay: 0.36s; }
+.tool-card:nth-child(19) { animation-delay: 0.38s; }
+.tool-card:nth-child(20) { animation-delay: 0.40s; }
+.tool-card:nth-child(21) { animation-delay: 0.42s; }
+.tool-card:nth-child(22) { animation-delay: 0.44s; }
+.tool-card:nth-child(23) { animation-delay: 0.46s; }
+.tool-card:nth-child(24) { animation-delay: 0.48s; }
+.tool-card:nth-child(25) { animation-delay: 0.50s; }
+.tool-card:nth-child(26) { animation-delay: 0.52s; }
+.tool-card:nth-child(27) { animation-delay: 0.54s; }
+.tool-card:nth-child(28) { animation-delay: 0.56s; }
+.tool-card:nth-child(29) { animation-delay: 0.58s; }
+.tool-card:nth-child(30) { animation-delay: 0.60s; }
+
+@keyframes cardPop {
+    0%   { opacity: 0; transform: scale(0.6) translateY(20px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ---------- 3. T-ICON: SHINE + HOVER LIFT ---------- */
+.t-icon {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+.t-icon::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 50%; height: 200%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.6),
+        transparent
+    );
+    transform: rotate(25deg);
+    animation: shine 3.5s ease-in-out infinite;
+}
+.tool-card:hover .t-icon {
+    transform: translateY(-4px) scale(1.08) rotate(-3deg);
+    box-shadow: 6px 6px 0 var(--border);
+}
+@keyframes shine {
+    0%, 70%  { left: -50%; }
+    100%     { left: 150%; }
+}
+
+/* ---------- 4. LOGO ICON: PULSE GLOW ---------- */
+.logo-icon {
+    animation: logoPulse 2.5s ease-in-out infinite;
+}
+@keyframes logoPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,0,127,0.5); }
+    50%      { box-shadow: 0 0 0 8px rgba(255,0,127,0); }
+}
+
+/* ---------- 5. BOTTOM SHEET: BOUNCE BACK ---------- */
+.bottom-sheet-content {
+    animation: sheetBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes sheetBounce {
+    0%   { transform: translateY(100%); opacity: 0; }
+    60%  { transform: translateY(-8px); opacity: 1; }
+    80%  { transform: translateY(4px); }
+    100% { transform: translateY(0); }
+}
+
+/* ---------- 6. BACKGROUND: ANIMATED GRID DRIFT ---------- */
+body[data-theme="comic"] {
+    animation: gridDrift 20s linear infinite;
+}
+@keyframes gridDrift {
+    0%   { background-position: 0 0; }
+    100% { background-position: 20px 20px; }
+}
+
+/* ---------- 7. TOOL CARD ICON: WIGGLE ON HOVER ---------- */
+.tool-card:hover .t-icon svg {
+    animation: wiggle 0.5s ease-in-out;
+}
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25%      { transform: rotate(-12deg); }
+    75%      { transform: rotate(12deg); }
+}
+
+/* ---------- 8. MODAL CLOSE: SPIN ON HOVER ---------- */
+.modal-close:hover {
+    animation: spinBtn 0.5s ease;
+    background: #ff5555;
+}
+@keyframes spinBtn {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* ---------- 9. TOAST: SLIDE + BOUNCE ---------- */
+.toast {
+    animation: toastIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes toastIn {
+    0%   { transform: translateY(-100px) scale(0.8); opacity: 0; }
+    60%  { transform: translateY(8px) scale(1.05); opacity: 1; }
+    100% { transform: translateY(0) scale(1); }
+}
+
+/* ---------- 10. BGM WIDGET: IDLE BOUNCE ---------- */
+.music-widget {
+    animation: widgetBounce 3s ease-in-out infinite;
+}
+@keyframes widgetBounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+}
+.music-widget:hover {
+    animation-play-state: paused;
+}
+
+/* ---------- 11. SECTION HEADER: UNDERLINE SLIDE ---------- */
+.section-header h3 {
+    position: relative;
+    display: inline-block;
+}
+.section-header h3::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -4px;
+    height: 3px; width: 0;
+    background: var(--primary);
+    transition: width 0.4s ease;
+}
+.section-header:hover h3::after {
+    width: 100%;
+}
+
+/* ---------- 12. NAV ITEM: PULSE DOT ---------- */
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: 2px; right: 2px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+    animation: navPulse 1.5s ease-in-out infinite;
+}
+.nav-item {
+    position: relative;
+}
+@keyframes navPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,0,127,0.6); }
+    50%      { box-shadow: 0 0 0 6px rgba(255,0,127,0); }
+}
+
+/* ---------- 13. WELCOME BOX: TEXT SHIMMER ---------- */
+.welcome-box h2 {
+    background: linear-gradient(
+        90deg,
+        var(--primary) 0%,
+        var(--text) 50%,
+        var(--primary) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShimmer 3s linear infinite;
+}
+@keyframes textShimmer {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+/* ---------- 14. CARD PRESS: RIPPLE ---------- */
+.tool-card.press {
+    position: relative;
+    overflow: visible;
+}
+.tool-card.press:active::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 10px; height: 10px;
+    background: var(--primary);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    animation: ripple 0.5s ease-out;
+    pointer-events: none;
+    opacity: 0.6;
+}
+@keyframes ripple {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+    100% { transform: translate(-50%, -50%) scale(15); opacity: 0; }
+}
+
+/* ---------- 15. REDUCED MOTION SUPPORT ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* =========================================
+   INTRO SCREEN FULLSCREEN (SPLASH SCREEN)
+   ========================================= */
+.intro-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.intro-screen.hide {
+    opacity: 0;
+    transform: scale(1.1);
+    pointer-events: none;
+}
+
+.intro-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.2);
+}
+
+/* Efek scanline biar makin keren */
+.intro-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.3) 0px,
+        rgba(0,0,0,0.3) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    pointer-events: none;
+    animation: scanline 6s linear infinite;
+    z-index: 2;
+}
+
+/* Gradasi hitam di atas/bawah biar teks kebaca */
+.intro-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(0,0,0,0.8) 0%,
+        transparent 20%,
+        transparent 80%,
+        rgba(0,0,0,0.9) 100%
+    );
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Tombol Skip */
+.intro-skip {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    background: rgba(255, 0, 127, 0.9);
+    color: #fff;
+    border: 2px solid #000;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: var(--font-main);
+    font-weight: 800;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+    transition: 0.2s;
+}
+.intro-skip:hover {
+    background: #ff3399;
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 #000;
+}
+
+/* Loading bar di bawah */
+.intro-loader {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: rgba(255,255,255,0.1);
+    z-index: 5;
+}
+.intro-loader-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--primary);
+    transition: width 0.1s linear;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+/* Brand ZenkaiTools (muncul pas video mau selesai) */
+.intro-brand {
+    position: absolute;
+    z-index: 5;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.intro-brand.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.intro-brand h1 {
+    font-family: var(--font-head);
+    font-size: 42px;
+    color: #fff;
+    letter-spacing: 3px;
+    text-shadow: 
+        0 0 20px rgba(255, 0, 127, 0.8),
+        0 0 40px rgba(255, 0, 127, 0.5),
+        4px 4px 0 #000;
+    margin-bottom: 8px;
+}
+.intro-brand h1 span {
+    color: var(--primary);
+    display: inline-block;
+    animation: neonFlicker 2s infinite;
+}
+.intro-brand p {
+    font-family: var(--font-main);
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+@keyframes neonFlicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 20px rgba(255, 0, 127, 0.8), 0 0 40px rgba(255, 0, 127, 0.5);
+    }
+    20%, 24%, 55% {
+        opacity: 0.4;
+        text-shadow: none;
+    }
+}
+
+/* Getar layar pas video selesai */
+.intro-screen.shake {
+    animation: introShake 0.5s ease;
+}
+@keyframes introShake {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-8px, 4px); }
+    50% { transform: translate(8px, -4px); }
+    75% { transform: translate(-4px, -8px); }
+}
+
+/* FIX: matikan animasi widget pas intro masih jalan */
+body.intro-active .music-widget,
+body.intro-active .bottom-nav,
+body.intro-active .wa-popup-overlay {
+    display: none !important;
+}
