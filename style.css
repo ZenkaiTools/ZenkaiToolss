@@ -38,9 +38,30 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 
 .theme-video { filter: grayscale(100%) contrast(1.1); }
 
+/* SKIP LINK (A11Y) */
+.skip-link {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--primary); color: #000;
+    padding: 10px 16px; z-index: 100000;
+    font-weight: 800; border-radius: 0 0 8px 0;
+    text-decoration: none;
+}
+.skip-link:focus { left: 0; }
+
 /* ANIMASI KLIK */
 .press { transition: transform 0.1s ease, box-shadow 0.1s ease; cursor: pointer; }
 .press:active { transform: translateY(4px) scale(0.96) !important; box-shadow: 0 0px 0 transparent !important; }
+
+/* FOCUS VISIBLE (A11Y) */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+.tool-card:focus-visible,
+a:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
 
 /* HEADER */
 .header-box { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); border: 2px solid var(--border); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 10px; box-shadow: var(--shadow); transition: var(--transition); }
@@ -84,7 +105,7 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 .tool-card { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .t-icon { width: 48px; height: 48px; border-radius: calc(var(--radius) - 2px); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; color: #000; box-shadow: var(--shadow); background: var(--primary); transition: var(--transition); }
 .t-icon svg { width: 20px; height: 20px; }
-.tool-card h4 { font-size: 9px; font-weight: 700; line-height: 1.2; }
+.tool-card h4 { font-size: 11px; font-weight: 700; line-height: 1.2; }
 
 /* WARNA ICON */
 .bg-cyan { background: #00f3ff; } .bg-yellow { background: #ffcc00; } .bg-pink { background: #ff007f; color: #fff; }
@@ -95,8 +116,8 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 .credit-text b { color: var(--primary); }
 
 /* NAV */
-.bottom-nav { display: flex; justify-content: space-around; background: var(--card-bg); border: 2px solid var(--border); padding: 8px; z-index: 100; transition: var(--transition); }
-.nav-item { background: transparent; border: none; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text); opacity: 0.5; transition: 0.2s; }
+.bottom-nav { display: flex; justify-content: space-around; background: var(--card-bg); border: 2px solid var(--border); padding: 8px; padding-bottom: calc(8px + env(safe-area-inset-bottom)); z-index: 100; transition: var(--transition); }
+.nav-item { background: transparent; border: none; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text); opacity: 0.5; transition: 0.2s; position: relative; padding: 4px 10px; border-radius: 8px; }
 .nav-item svg { width: 18px; height: 18px; }
 .nav-item span { font-size: 9px; font-weight: 700; }
 .nav-item.active { opacity: 1; color: var(--primary); }
@@ -104,23 +125,23 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 /* =========================================
    BOTTOM SHEET (MODAL) - SUPER PRO DESIGN
    ========================================= */
-.bottom-sheet-overlay { 
-    position: fixed; inset: 0; 
-    background: rgba(0,0,0,0.8); 
-    backdrop-filter: blur(8px); 
-    display: none; align-items: flex-end; justify-content: center; z-index: 1000; 
+.bottom-sheet-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
+    display: none; align-items: flex-end; justify-content: center; z-index: 1000;
 }
 .bottom-sheet-overlay.active { display: flex; }
 
-.bottom-sheet-content { 
-    background: var(--bg); 
-    border: 3px solid var(--border); 
+.bottom-sheet-content {
+    background: var(--bg);
+    border: 3px solid var(--border);
     border-bottom: none;
-    border-radius: 24px 24px 0 0; 
-    padding: 25px 20px 30px; 
-    width: 100%; max-width: 480px; 
-    max-height: 92vh; overflow-y: auto; 
-    color: var(--text); position: relative; 
+    border-radius: 24px 24px 0 0;
+    padding: 25px 20px 30px;
+    width: 100%; max-width: 480px;
+    max-height: 92vh; overflow-y: auto;
+    color: var(--text); position: relative;
     box-shadow: 0 -10px 40px rgba(0,0,0,0.4);
     animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     transition: var(--transition);
@@ -128,75 +149,73 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-/* Garis Tarik di atas */
-.bottom-sheet-content::before { 
-    content: ''; display: block; width: 50px; height: 6px; 
-    background: var(--border); border-radius: 10px; 
-    margin: -10px auto 20px auto; opacity: 0.3; 
+.bottom-sheet-content::before {
+    content: ''; display: block; width: 50px; height: 6px;
+    background: var(--border); border-radius: 10px;
+    margin: -10px auto 20px auto; opacity: 0.3;
 }
 
-/* Tombol Close (X) */
-.modal-close { 
-    position: absolute; top: 15px; right: 15px; 
-    background: #ff3333; color: #fff; 
-    border: 3px solid var(--border); 
-    width: 36px; height: 36px; border-radius: 50%; 
-    cursor: pointer; display: flex; align-items: center; justify-content: center; 
+.modal-close {
+    position: absolute; top: 15px; right: 15px;
+    background: #ff3333; color: #fff;
+    border: 3px solid var(--border);
+    width: 36px; height: 36px; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
     z-index: 10; box-shadow: 2px 2px 0 var(--border); transition: 0.1s;
 }
 .modal-close:active { transform: scale(0.9); box-shadow: none; }
 
-/* Judul di dalam Modal */
-#modal-content h3 { 
-    font-family: var(--font-head); font-size: 26px; 
-    margin-bottom: 5px; text-align: center; 
+#modal-content h3 {
+    font-family: var(--font-head); font-size: 26px;
+    margin-bottom: 5px; text-align: center;
     text-transform: uppercase; letter-spacing: 1px; color: var(--primary);
     text-shadow: 2px 2px 0 var(--border);
 }
 
-/* Teks Deskripsi */
-#modal-content .desc-text { 
-    font-size: 12px; opacity: 0.9; margin-bottom: 20px; 
-    display: block; line-height: 1.5; text-align: center; 
-    background: var(--card-bg); padding: 10px 15px; 
+#modal-content .desc-text {
+    font-size: 12px; opacity: 0.9; margin-bottom: 20px;
+    display: block; line-height: 1.5; text-align: center;
+    background: var(--card-bg); padding: 10px 15px;
     border-radius: 10px; border: 2px dashed var(--border);
     font-weight: 600;
 }
 
-/* Input Form */
-#modal-content input, #modal-content textarea, #modal-content select { 
-    width: 100%; background: var(--card-bg); 
-    border: 3px solid var(--border); color: var(--text); 
-    padding: 14px; border-radius: 12px; font-size: 14px; 
-    margin-bottom: 15px; outline: none; transition: 0.2s; 
-    text-align: center; display: block; max-width: 100%;
+/* Input: text-align kiri untuk URL/email (sedang: readabilitas) */
+#modal-content input,
+#modal-content textarea,
+#modal-content select {
+    width: 100%; background: var(--card-bg);
+    border: 3px solid var(--border); color: var(--text);
+    padding: 14px; border-radius: 12px; font-size: 14px;
+    margin-bottom: 15px; outline: none; transition: 0.2s;
+    text-align: left; display: block; max-width: 100%;
     box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
     font-family: var(--font-main);
 }
-#modal-content input:focus, #modal-content textarea:focus { 
-    border-color: var(--primary); 
-    box-shadow: 0 0 0 4px rgba(255, 0, 127, 0.2); 
+#modal-content input:focus,
+#modal-content textarea:focus,
+#modal-content select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(255, 0, 127, 0.2);
 }
 
-/* Tombol Aksi (Proses, Download, dll) */
-.action-btn { 
-    width: 100%; background: var(--primary); 
-    color: #000; border: 3px solid var(--border); 
-    padding: 14px; border-radius: 12px; 
-    font-weight: 900; font-size: 14px; cursor: pointer; 
-    margin-bottom: 15px; box-shadow: 4px 4px 0 var(--border); 
+.action-btn {
+    width: 100%; background: var(--primary);
+    color: #000; border: 3px solid var(--border);
+    padding: 14px; border-radius: 12px;
+    font-weight: 900; font-size: 14px; cursor: pointer;
+    margin-bottom: 15px; box-shadow: 4px 4px 0 var(--border);
     transition: 0.1s; text-transform: uppercase; letter-spacing: 0.5px;
     display: block; max-width: 100%; font-family: var(--font-main);
 }
 .action-btn:active { transform: translateY(4px); box-shadow: none; }
+.action-btn:disabled { cursor: not-allowed; opacity: 0.6; }
 
-/* Pesan Berhasil/Gagal */
 #modal-content .success-msg { color: #00b894; font-weight: bold; text-align: center; padding: 15px; background: rgba(0, 184, 148, 0.1); border-radius: 8px; border: 2px dashed #00b894; }
 #modal-content .error-msg { color: #ff3333; font-weight: bold; text-align: center; padding: 15px; background: rgba(255, 51, 51, 0.1); border-radius: 8px; border: 2px dashed #ff3333; }
 
-/* Hasil (Gambar/Video) */
-#modal-content img, #modal-content video { 
-    border-radius: 12px; border: 3px solid var(--border); 
+#modal-content img, #modal-content video {
+    border-radius: 12px; border: 3px solid var(--border);
     margin-bottom: 15px; width: 100%; box-shadow: var(--shadow);
 }
 
@@ -214,7 +233,7 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 .loader { border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-.page { display: none; } 
+.page { display: none; }
 .page.active { display: block; animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -233,7 +252,7 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 .wa-foot { font-size: 10px; color: #b2bec3; text-align: center; margin-top: 15px; margin-bottom: 0; }
 
 /* ZEN-BRUTALISM STYLE */
-body[data-theme="comic"] .tools-section, 
+body[data-theme="comic"] .tools-section,
 body[data-theme="comic"] .welcome-box,
 body[data-theme="comic"] .header-box,
 body[data-theme="comic"] .custom-hero-block {
@@ -248,48 +267,25 @@ body[data-theme="comic"] .logo-text h1 { letter-spacing: 2px; text-transform: up
    ========================================= */
 
 /* ---------- 1. HERO VIDEO: GLITCH + SCANLINE ---------- */
-.hero-media {
-    position: relative;
-    overflow: hidden;
-}
+.hero-media { position: relative; overflow: hidden; }
 .hero-media::after {
     content: '';
     position: absolute; inset: 0;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(0,0,0,0.15) 0px,
-        rgba(0,0,0,0.15) 1px,
-        transparent 1px,
-        transparent 4px
-    );
-    pointer-events: none;
-    animation: scanline 8s linear infinite;
-    z-index: 2;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 4px);
+    pointer-events: none; animation: scanline 8s linear infinite; z-index: 2;
 }
 .hero-media::before {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(
-        180deg,
-        transparent 0%,
-        rgba(255,0,127,0.08) 50%,
-        transparent 100%
-    );
-    pointer-events: none;
-    animation: glitchMove 3s ease-in-out infinite;
-    z-index: 2;
+    background: linear-gradient(180deg, transparent 0%, rgba(255,0,127,0.08) 50%, transparent 100%);
+    pointer-events: none; animation: glitchMove 3s ease-in-out infinite; z-index: 2;
 }
-@keyframes scanline {
-    0%   { background-position: 0 0; }
-    100% { background-position: 0 100px; }
-}
+@keyframes scanline { 0% { background-position: 0 0; } 100% { background-position: 0 100px; } }
 @keyframes glitchMove {
     0%, 100% { opacity: 0.2; transform: translateY(0); }
     50%      { opacity: 0.5; transform: translateY(-8px); }
 }
-.theme-video {
-    animation: videoFlicker 6s infinite;
-}
+.theme-video { animation: videoFlicker 6s infinite; }
 @keyframes videoFlicker {
     0%, 100% { filter: grayscale(100%) contrast(1.1) brightness(1); }
     47%      { filter: grayscale(100%) contrast(1.2) brightness(1.05); }
@@ -298,87 +294,48 @@ body[data-theme="comic"] .logo-text h1 { letter-spacing: 2px; text-transform: up
 }
 
 /* ---------- 2. TOOL CARD: STAGGERED POP-IN ---------- */
-.tool-card {
-    animation: cardPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-}
-.tool-card:nth-child(1)  { animation-delay: 0.02s; }
-.tool-card:nth-child(2)  { animation-delay: 0.04s; }
-.tool-card:nth-child(3)  { animation-delay: 0.06s; }
-.tool-card:nth-child(4)  { animation-delay: 0.08s; }
-.tool-card:nth-child(5)  { animation-delay: 0.10s; }
-.tool-card:nth-child(6)  { animation-delay: 0.12s; }
-.tool-card:nth-child(7)  { animation-delay: 0.14s; }
-.tool-card:nth-child(8)  { animation-delay: 0.16s; }
-.tool-card:nth-child(9)  { animation-delay: 0.18s; }
-.tool-card:nth-child(10) { animation-delay: 0.20s; }
-.tool-card:nth-child(11) { animation-delay: 0.22s; }
-.tool-card:nth-child(12) { animation-delay: 0.24s; }
-.tool-card:nth-child(13) { animation-delay: 0.26s; }
-.tool-card:nth-child(14) { animation-delay: 0.28s; }
-.tool-card:nth-child(15) { animation-delay: 0.30s; }
-.tool-card:nth-child(16) { animation-delay: 0.32s; }
-.tool-card:nth-child(17) { animation-delay: 0.34s; }
-.tool-card:nth-child(18) { animation-delay: 0.36s; }
-.tool-card:nth-child(19) { animation-delay: 0.38s; }
-.tool-card:nth-child(20) { animation-delay: 0.40s; }
-.tool-card:nth-child(21) { animation-delay: 0.42s; }
-.tool-card:nth-child(22) { animation-delay: 0.44s; }
-.tool-card:nth-child(23) { animation-delay: 0.46s; }
-.tool-card:nth-child(24) { animation-delay: 0.48s; }
-.tool-card:nth-child(25) { animation-delay: 0.50s; }
-.tool-card:nth-child(26) { animation-delay: 0.52s; }
-.tool-card:nth-child(27) { animation-delay: 0.54s; }
-.tool-card:nth-child(28) { animation-delay: 0.56s; }
-.tool-card:nth-child(29) { animation-delay: 0.58s; }
-.tool-card:nth-child(30) { animation-delay: 0.60s; }
-
+.tool-card { animation: cardPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; }
+.tool-card:nth-child(1)  { animation-delay: 0.02s; } .tool-card:nth-child(2)  { animation-delay: 0.04s; }
+.tool-card:nth-child(3)  { animation-delay: 0.06s; } .tool-card:nth-child(4)  { animation-delay: 0.08s; }
+.tool-card:nth-child(5)  { animation-delay: 0.10s; } .tool-card:nth-child(6)  { animation-delay: 0.12s; }
+.tool-card:nth-child(7)  { animation-delay: 0.14s; } .tool-card:nth-child(8)  { animation-delay: 0.16s; }
+.tool-card:nth-child(9)  { animation-delay: 0.18s; } .tool-card:nth-child(10) { animation-delay: 0.20s; }
+.tool-card:nth-child(11) { animation-delay: 0.22s; } .tool-card:nth-child(12) { animation-delay: 0.24s; }
+.tool-card:nth-child(13) { animation-delay: 0.26s; } .tool-card:nth-child(14) { animation-delay: 0.28s; }
+.tool-card:nth-child(15) { animation-delay: 0.30s; } .tool-card:nth-child(16) { animation-delay: 0.32s; }
+.tool-card:nth-child(17) { animation-delay: 0.34s; } .tool-card:nth-child(18) { animation-delay: 0.36s; }
+.tool-card:nth-child(19) { animation-delay: 0.38s; } .tool-card:nth-child(20) { animation-delay: 0.40s; }
+.tool-card:nth-child(21) { animation-delay: 0.42s; } .tool-card:nth-child(22) { animation-delay: 0.44s; }
+.tool-card:nth-child(23) { animation-delay: 0.46s; } .tool-card:nth-child(24) { animation-delay: 0.48s; }
+.tool-card:nth-child(25) { animation-delay: 0.50s; } .tool-card:nth-child(26) { animation-delay: 0.52s; }
+.tool-card:nth-child(27) { animation-delay: 0.54s; } .tool-card:nth-child(28) { animation-delay: 0.56s; }
+.tool-card:nth-child(29) { animation-delay: 0.58s; } .tool-card:nth-child(30) { animation-delay: 0.60s; }
 @keyframes cardPop {
     0%   { opacity: 0; transform: scale(0.6) translateY(20px); }
     100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 /* ---------- 3. T-ICON: SHINE + HOVER LIFT ---------- */
-.t-icon {
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
-}
+.t-icon { position: relative; overflow: hidden; transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
 .t-icon::after {
     content: '';
-    position: absolute;
-    top: -50%; left: -50%;
+    position: absolute; top: -50%; left: -50%;
     width: 50%; height: 200%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,0.6),
-        transparent
-    );
-    transform: rotate(25deg);
-    animation: shine 3.5s ease-in-out infinite;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    transform: rotate(25deg); animation: shine 3.5s ease-in-out infinite;
 }
-.tool-card:hover .t-icon {
-    transform: translateY(-4px) scale(1.08) rotate(-3deg);
-    box-shadow: 6px 6px 0 var(--border);
-}
-@keyframes shine {
-    0%, 70%  { left: -50%; }
-    100%     { left: 150%; }
-}
+.tool-card:hover .t-icon { transform: translateY(-4px) scale(1.08) rotate(-3deg); box-shadow: 6px 6px 0 var(--border); }
+@keyframes shine { 0%, 70% { left: -50%; } 100% { left: 150%; } }
 
 /* ---------- 4. LOGO ICON: PULSE GLOW ---------- */
-.logo-icon {
-    animation: logoPulse 2.5s ease-in-out infinite;
-}
+.logo-icon { animation: logoPulse 2.5s ease-in-out infinite; }
 @keyframes logoPulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(255,0,127,0.5); }
     50%      { box-shadow: 0 0 0 8px rgba(255,0,127,0); }
 }
 
 /* ---------- 5. BOTTOM SHEET: BOUNCE BACK ---------- */
-.bottom-sheet-content {
-    animation: sheetBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+.bottom-sheet-content { animation: sheetBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
 @keyframes sheetBounce {
     0%   { transform: translateY(100%); opacity: 0; }
     60%  { transform: translateY(-8px); opacity: 1; }
@@ -387,18 +344,11 @@ body[data-theme="comic"] .logo-text h1 { letter-spacing: 2px; text-transform: up
 }
 
 /* ---------- 6. BACKGROUND: ANIMATED GRID DRIFT ---------- */
-body[data-theme="comic"] {
-    animation: gridDrift 20s linear infinite;
-}
-@keyframes gridDrift {
-    0%   { background-position: 0 0; }
-    100% { background-position: 20px 20px; }
-}
+body[data-theme="comic"] { animation: gridDrift 20s linear infinite; }
+@keyframes gridDrift { 0% { background-position: 0 0; } 100% { background-position: 20px 20px; } }
 
 /* ---------- 7. TOOL CARD ICON: WIGGLE ON HOVER ---------- */
-.tool-card:hover .t-icon svg {
-    animation: wiggle 0.5s ease-in-out;
-}
+.tool-card:hover .t-icon svg { animation: wiggle 0.5s ease-in-out; }
 @keyframes wiggle {
     0%, 100% { transform: rotate(0deg); }
     25%      { transform: rotate(-12deg); }
@@ -406,19 +356,11 @@ body[data-theme="comic"] {
 }
 
 /* ---------- 8. MODAL CLOSE: SPIN ON HOVER ---------- */
-.modal-close:hover {
-    animation: spinBtn 0.5s ease;
-    background: #ff5555;
-}
-@keyframes spinBtn {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
-}
+.modal-close:hover { animation: spinBtn 0.5s ease; background: #ff5555; }
+@keyframes spinBtn { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 /* ---------- 9. TOAST: SLIDE + BOUNCE ---------- */
-.toast {
-    animation: toastIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+.toast { animation: toastIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
 @keyframes toastIn {
     0%   { transform: translateY(-100px) scale(0.8); opacity: 0; }
     60%  { transform: translateY(8px) scale(1.05); opacity: 1; }
@@ -426,46 +368,23 @@ body[data-theme="comic"] {
 }
 
 /* ---------- 10. BGM WIDGET: IDLE BOUNCE ---------- */
-.music-widget {
-    animation: widgetBounce 3s ease-in-out infinite;
-}
-@keyframes widgetBounce {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-4px); }
-}
-.music-widget:hover {
-    animation-play-state: paused;
-}
+.music-widget { animation: widgetBounce 3s ease-in-out infinite; }
+@keyframes widgetBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.music-widget:hover { animation-play-state: paused; }
 
 /* ---------- 11. SECTION HEADER: UNDERLINE SLIDE ---------- */
-.section-header h3 {
-    position: relative;
-    display: inline-block;
-}
+.section-header h3 { position: relative; display: inline-block; }
 .section-header h3::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -4px;
-    height: 3px; width: 0;
-    background: var(--primary);
-    transition: width 0.4s ease;
+    content: ''; position: absolute; left: 0; bottom: -4px;
+    height: 3px; width: 0; background: var(--primary); transition: width 0.4s ease;
 }
-.section-header:hover h3::after {
-    width: 100%;
-}
+.section-header:hover h3::after { width: 100%; }
 
 /* ---------- 12. NAV ITEM: PULSE DOT ---------- */
 .nav-item.active::before {
-    content: '';
-    position: absolute;
-    top: 2px; right: 2px;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--primary);
-    animation: navPulse 1.5s ease-in-out infinite;
-}
-.nav-item {
-    position: relative;
+    content: ''; position: absolute; top: 2px; right: 8px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--primary); animation: navPulse 1.5s ease-in-out infinite;
 }
 @keyframes navPulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(255,0,127,0.6); }
@@ -474,221 +393,74 @@ body[data-theme="comic"] {
 
 /* ---------- 13. WELCOME BOX: TEXT SHIMMER ---------- */
 .welcome-box h2 {
-    background: linear-gradient(
-        90deg,
-        var(--primary) 0%,
-        var(--text) 50%,
-        var(--primary) 100%
-    );
+    background: linear-gradient(90deg, var(--primary) 0%, var(--text) 50%, var(--primary) 100%);
     background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
+    -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: textShimmer 3s linear infinite;
 }
-@keyframes textShimmer {
-    0%   { background-position: 0% center; }
-    100% { background-position: 200% center; }
-}
+@keyframes textShimmer { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
 
 /* ---------- 14. CARD PRESS: RIPPLE ---------- */
-.tool-card.press {
-    position: relative;
-    overflow: visible;
-}
+.tool-card.press { position: relative; overflow: visible; }
 .tool-card.press:active::after {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
+    content: ''; position: absolute; top: 50%; left: 50%;
     width: 10px; height: 10px;
-    background: var(--primary);
-    border-radius: 50%;
+    background: var(--primary); border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
     animation: ripple 0.5s ease-out;
-    pointer-events: none;
-    opacity: 0.6;
+    pointer-events: none; opacity: 0.6;
 }
 @keyframes ripple {
     0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
     100% { transform: translate(-50%, -50%) scale(15); opacity: 0; }
 }
-
-/* ---------- 15. REDUCED MOTION SUPPORT ---------- */
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
+    position: relative;
 }
 
-/* =========================================
-   INTRO SCREEN FULLSCREEN (SPLASH SCREEN)
-   ========================================= */
-.intro-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    transition: opacity 0.8s ease, transform 0.8s ease;
+/* --- FITUR MAINTENANCE INSTAGRAM --- */
+.tool-card.maintenance {
+    position: relative;
 }
 
-.intro-screen.hide {
-    opacity: 0;
-    transform: scale(1.1);
-    pointer-events: none;
-}
-
-.intro-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(100%) contrast(1.2);
-}
-
-/* Efek scanline biar makin keren */
-.intro-screen::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(0,0,0,0.3) 0px,
-        rgba(0,0,0,0.3) 1px,
-        transparent 1px,
-        transparent 3px
-    );
-    pointer-events: none;
-    animation: scanline 6s linear infinite;
-    z-index: 2;
-}
-
-/* Gradasi hitam di atas/bawah biar teks kebaca */
-.intro-screen::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        180deg,
-        rgba(0,0,0,0.8) 0%,
-        transparent 20%,
-        transparent 80%,
-        rgba(0,0,0,0.9) 100%
-    );
-    pointer-events: none;
-    z-index: 2;
-}
-
-/* Tombol Skip */
-.intro-skip {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 10;
-    background: rgba(255, 0, 127, 0.9);
-    color: #fff;
-    border: 2px solid #000;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-family: var(--font-main);
-    font-weight: 800;
-    font-size: 12px;
-    cursor: pointer;
-    box-shadow: 3px 3px 0 #000;
-    transition: 0.2s;
-}
-.intro-skip:hover {
-    background: #ff3399;
-    transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0 #000;
-}
-
-/* Loading bar di bawah */
-.intro-loader {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background: rgba(255,255,255,0.1);
-    z-index: 5;
-}
-.intro-loader-bar {
-    height: 100%;
-    width: 0%;
-    background: var(--primary);
-    transition: width 0.1s linear;
-    box-shadow: 0 0 10px var(--primary);
-}
-
-/* Brand ZenkaiTools (muncul pas video mau selesai) */
-.intro-brand {
-    position: absolute;
-    z-index: 5;
-    text-align: center;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.intro-brand.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-.intro-brand h1 {
-    font-family: var(--font-head);
-    font-size: 42px;
-    color: #fff;
-    letter-spacing: 3px;
-    text-shadow: 
-        0 0 20px rgba(255, 0, 127, 0.8),
-        0 0 40px rgba(255, 0, 127, 0.5),
-        4px 4px 0 #000;
-    margin-bottom: 8px;
-}
-.intro-brand h1 span {
-    color: var(--primary);
-    display: inline-block;
-    animation: neonFlicker 2s infinite;
-}
-.intro-brand p {
-    font-family: var(--font-main);
-    font-size: 12px;
-    color: rgba(255,255,255,0.7);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-}
-
-@keyframes neonFlicker {
-    0%, 18%, 22%, 25%, 53%, 57%, 100% {
-        opacity: 1;
-        text-shadow: 0 0 20px rgba(255, 0, 127, 0.8), 0 0 40px rgba(255, 0, 127, 0.5);
-    }
-    20%, 24%, 55% {
-        opacity: 0.4;
-        text-shadow: none;
-    }
-}
-
-/* Getar layar pas video selesai */
-.intro-screen.shake {
-    animation: introShake 0.5s ease;
-}
-@keyframes introShake {
-    0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(-8px, 4px); }
-    50% { transform: translate(8px, -4px); }
-    75% { transform: translate(-4px, -8px); }
-}
-
-/* FIX: matikan animasi widget pas intro masih jalan */
-body.intro-active .music-widget,
-body.intro-active .bottom-nav,
-body.intro-active .wa-popup-overlay {
+/* Matikan efek kilau (shine) di ikon yang maintenance */
+.tool-card.maintenance .t-icon::after {
     display: none !important;
+}
+
+/* Bikin ikonnya jadi abu-abu dan pudar */
+.tool-card.maintenance .t-icon {
+    background: #b2bec3 !important;
+    color: #636e72 !important;
+    filter: grayscale(100%) !important;
+    border-color: #636e72 !important;
+    box-shadow: 2px 2px 0 #636e72 !important;
+    transform: none !important;
+}
+
+/* Animasi getar (shake) kalau dipencet */
+.tool-card.maintenance:active {
+    animation: shake 0.4s ease-in-out;
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px) rotate(-5deg); }
+    75% { transform: translateX(5px) rotate(5deg); }
+}
+
+/* Label "MAINTENANCE" di bawah teks */
+.tool-card.maintenance h4 {
+    color: #ff3333 !important;
+}
+.tool-card.maintenance h4::after {
+    content: 'MAINTENANCE';
+    display: block;
+    font-size: 7px;
+    background: #ff3333;
+    color: #fff;
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-top: 4px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.5px;
 }

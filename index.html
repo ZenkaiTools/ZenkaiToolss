@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description" content="Zenkai Tools — 26 modul utilitas, downloader, generator, dan fitur sultan. Gratis, ringan, tanpa install.">
+    <meta name="theme-color" content="#ff007f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Zenkai Tools // Andika T.M</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,23 +15,22 @@
 </head>
 <body data-theme="comic">
 
+    <a href="#page-tools" class="skip-link">Lewati ke konten utama</a>
+
     <!-- ========================================= -->
     <!-- LAYAR INTRO FULLSCREEN (MUNCUL PERTAMA KALI) -->
     <!-- ========================================= -->
-    <div id="intro-screen" class="intro-screen">
+    <div id="intro-screen" class="intro-screen" aria-hidden="true">
         <video id="intro-video" autoplay muted playsinline class="intro-video">
             <source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/e27b1de96f73698b9a1a15553ccf6ff00c7ac265/0a220ffe6ffe05c3243dfef08d96253b_720w.mp4" type="video/mp4">
         </video>
-        
-        <!-- Tombol Skip -->
-        <button class="intro-skip press" onclick="skipIntro()">Skip </button>
 
-        <!-- Loading bar di bawah -->
-        <div class="intro-loader">
+        <button class="intro-skip press" onclick="skipIntro()" aria-label="Lewati intro">Skip »</button>
+
+        <div class="intro-loader" aria-hidden="true">
             <div class="intro-loader-bar" id="intro-loader-bar"></div>
         </div>
 
-        <!-- Teks ZenkaiTools (muncul pas video selesai) -->
         <div class="intro-brand" id="intro-brand">
             <h1>ZENKAI<span>TOOLS</span></h1>
             <p>by Andika T.M</p>
@@ -35,14 +38,14 @@
     </div>
 
     <!-- POPUP WHATSAPP CHANNEL -->
-    <div class="wa-popup-overlay" id="wa-popup">
+    <div class="wa-popup-overlay" id="wa-popup" role="dialog" aria-modal="true" aria-labelledby="wa-title">
         <div class="wa-popup-box">
-            <button class="wa-close" onclick="closeWaPopup()">×</button>
+            <button class="wa-close" onclick="closeWaPopup()" aria-label="Tutup popup">×</button>
             <div class="wa-badge">UPDATE TERBARU</div>
-            <h2>Gabung Saluran WhatsApp</h2>
+            <h2 id="wa-title">Gabung Saluran WhatsApp</h2>
             <p>Dapatkan update fitur, tools terbaru, dan info penting langsung dari <b>Zenkai Tools</b>.</p>
             <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="wa-btn">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.031 2C6.502 2 2 6.502 2 12.031c0 1.77.46 3.49 1.34 5.01L2 22l5.09-1.33c1.47.8 3.13 1.22 4.84 1.22h.1c5.52 0 10.02-4.5 10.02-10.03C22.05 6.5 17.55 2 12.03 2zm0 18.05c-1.55 0-3.07-.42-4.4-1.2l-.32-.19-3.27.86.87-3.19-.2-.33A8.01 8.01 0 0 1 4 12.03C4 7.6 7.6 4 12.03 4c2.14 0 4.15.83 5.66 2.34a7.97 7.97 0 0 1 2.34 5.66c0 4.43-3.6 8.05-8 8.05zm4.4-5.99c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.68 2.57 4.08 3.6.57.24 1.01.39 1.36.5.57.18 1.09.15 1.5.09.46-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/></svg>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12.031 2C6.502 2 2 6.502 2 12.031c0 1.77.46 3.49 1.34 5.01L2 22l5.09-1.33c1.47.8 3.13 1.22 4.84 1.22h.1c5.52 0 10.02-4.5 10.02-10.03C22.05 6.5 17.55 2 12.03 2zm0 18.05c-1.55 0-3.07-.42-4.4-1.2l-.32-.19-3.27.86.87-3.19-.2-.33A8.01 8.01 0 0 1 4 12.03C4 7.6 7.6 4 12.03 4c2.14 0 4.15.83 5.66 2.34a7.97 7.97 0 0 1 2.34 5.66c0 4.43-3.6 8.05-8 8.05zm4.4-5.99c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.68 2.57 4.08 3.6.57.24 1.01.39 1.36.5.57.18 1.09.15 1.5.09.46-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/></svg>
                 Gabung ke Saluran
             </a>
             <p class="wa-foot">Saluran resmi Zenkai Tools</p>
@@ -50,44 +53,50 @@
     </div>
 
     <!-- TOMBOL MUSIK MELAYANG -->
-    <div class="music-widget">
+    <div class="music-widget" role="group" aria-label="Pemutar musik">
         <button onclick="prevSong()" class="press" aria-label="Lagu sebelumnya">
-            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>
         </button>
         <button onclick="toggleMusic()" id="btn-play" class="press" aria-label="Play / Pause" style="width: 40px; height: 40px;">
-            <svg id="ic-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            <svg id="ic-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            <svg id="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg id="ic-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
         </button>
         <button onclick="nextSong()" class="press" aria-label="Lagu berikutnya">
-            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
         </button>
     </div>
     <audio id="bgm"></audio>
 
-    <div id="toast-container" class="toast-container"></div>
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <noscript>
+        <div style="padding:20px; text-align:center; font-family:sans-serif;">
+            Zenkai Tools butuh JavaScript. Aktifkan JavaScript di browser Anda.
+        </div>
+    </noscript>
 
     <div class="app-container">
-        
+
         <!-- HALAMAN TOOLS -->
         <main id="page-tools" class="page active">
             <header class="header-box">
                 <div class="logo-area">
-                    <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+                    <div class="logo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
                     <div class="logo-text"><h1>ZenkaiTools</h1><p class="version">v1.0 // Andika T.M</p></div>
                 </div>
             </header>
 
             <div class="custom-hero-block">
                 <div class="hero-media">
-                    <video autoplay loop muted playsinline class="theme-video">
+                    <video autoplay loop muted playsinline class="theme-video" aria-hidden="true">
                         <source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/main/ff159444c39001329443bf9fbc846fcc_720w.mp4" type="video/mp4">
                     </video>
                 </div>
                 <div class="hero-divider"></div>
                 <div class="device-info-bar">
-                    <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg><span id="device-name">HP</span></div>
-                    <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg><span id="battery-level">--%</span></div>
-                    <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="clock-now">--:--</span></div>
+                    <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg><span id="device-name">HP</span></div>
+                    <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg><span id="battery-level">--%</span></div>
+                    <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="clock-now">--:--</span></div>
                 </div>
             </div>
 
@@ -116,61 +125,60 @@
                 <div class="section-header">
                     <h3>MODULES</h3>
                     <div class="search-wrapper">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input type="text" id="search-tools" placeholder="Cari...">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="search-tools" placeholder="Cari..." aria-label="Cari tools">
                     </div>
                 </div>
-                
+
                 <div class="grid-tools">
                     <!-- DOWNLOADER -->
-                    <div class="tool-card press" onclick="openTool('tiktok')"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><h4>TikTok DL</h4></div>
-                    <div class="tool-card press" onclick="openTool('instagram')"><div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div><h4>Instagram DL</h4></div>
-                    <div class="tool-card press" onclick="openTool('facebook')"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div><h4>Facebook DL</h4></div>
-                    <div class="tool-card press" onclick="openTool('pinterest')"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10 5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M12 6c-3.31 0-6 2.69-6 6 0 2.21 1.21 4.15 3 5.19V18h2v-1.81c1.79-1.04 3-2.98 3-5.19 0-3.31-2.69-6-6-6z"/></svg></div><h4>Pinterest</h4></div>
+                    <div class="tool-card press" onclick="openTool('tiktok')" role="button" tabindex="0"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><h4>TikTok DL</h4></div>
+                    <div class="tool-card press" onclick="openTool('instagram')" role="button" tabindex="0"><div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div><h4>Instagram DL</h4></div>
+                    <div class="tool-card press" onclick="openTool('facebook')" role="button" tabindex="0"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div><h4>Facebook DL</h4></div>
+                    <div class="tool-card press" onclick="openTool('pinterest')" role="button" tabindex="0"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10 5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M12 6c-3.31 0-6 2.69-6 6 0 2.21 1.21 4.15 3 5.19V18h2v-1.81c1.79-1.04 3-2.98 3-5.19 0-3.31-2.69-6-6-6z"/></svg></div><h4>Pinterest</h4></div>
 
                     <!-- STALKER -->
-                    <div class="tool-card press" onclick="openTool('stalkig')"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk IG</h4></div>
-                    <div class="tool-card press" onclick="openTool('stalktt')"><div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk TT</h4></div>
-                    <div class="tool-card press" onclick="openTool('stalkroblox')"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk Roblox</h4></div>
+                    <div class="tool-card press" onclick="openTool('stalkig')" role="button" tabindex="0"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk IG</h4></div>
+                    <div class="tool-card press" onclick="openTool('stalktt')" role="button" tabindex="0"><div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk TT</h4></div>
+                    <div class="tool-card press" onclick="openTool('stalkroblox')" role="button" tabindex="0"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk Roblox</h4></div>
 
                     <!-- GAMBAR & TEKS -->
-                    <div class="tool-card press" onclick="openTool('qr')"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><h4>QR Code</h4></div>
-                    <div class="tool-card press" onclick="openTool('imgtoqr')"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><h4>Image to QR</h4></div>
-                    <div class="tool-card press" onclick="openTool('imgtojpg')"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9"/></svg></div><h4>Image to JPG</h4></div>
-                    <div class="tool-card press" onclick="openTool('hdimage')"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 23 18 1 18 1 6"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><h4>Image HD</h4></div>
-                    
+                    <div class="tool-card press" onclick="openTool('qr')" role="button" tabindex="0"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><h4>QR Code</h4></div>
+                    <div class="tool-card press" onclick="openTool('imgtoqr')" role="button" tabindex="0"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><h4>Image to QR</h4></div>
+                    <div class="tool-card press" onclick="openTool('imgtojpg')" role="button" tabindex="0"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9"/></svg></div><h4>Image to JPG</h4></div>
+                    <div class="tool-card press" onclick="openTool('hdimage')" role="button" tabindex="0"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="23 6 23 18 1 18 1 6"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><h4>Image HD</h4></div>
+
                     <!-- LAINNYA -->
-                    <div class="tool-card press" onclick="openTool('username')"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h4>Username Gen</h4></div>
-                    <div class="tool-card press" onclick="openTool('artinama')"><div class="t-icon bg-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><h4>Arti Nama</h4></div>
-                    <div class="tool-card press" onclick="openTool('password')"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h4>Password</h4></div>
-                    <div class="tool-card press" onclick="openTool('calc')"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div><h4>Kalkulator</h4></div>
-                    <div class="tool-card press" onclick="openTool('zodiak')"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div><h4>Zodiak</h4></div>
-                    <div class="tool-card press" onclick="openTool('base64')"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><h4>Base64</h4></div>
-                    <div class="tool-card press" onclick="openTool('ip')"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>IP Lookup</h4></div>
-                    <div class="tool-card press" onclick="openTool('reverse')"><div class="t-icon bg-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div><h4>Teks Terbalik</h4></div>
-                    <div class="tool-card press" onclick="openTool('scramble')"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></div><h4>Acak Huruf</h4></div>
-                    <div class="tool-card press" onclick="openTool('timer')"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h4>Timer</h4></div>
-                    <div class="tool-card press" onclick="openTool('umur')"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><h4>Hitung Umur</h4></div>
-                    <div class="tool-card press" onclick="openTool('warna')"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div><h4>Gen Warna</h4></div>
+                    <div class="tool-card press" onclick="openTool('username')" role="button" tabindex="0"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h4>Username Gen</h4></div>
+                    <div class="tool-card press" onclick="openTool('artinama')" role="button" tabindex="0"><div class="t-icon bg-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><h4>Arti Nama</h4></div>
+                    <div class="tool-card press" onclick="openTool('password')" role="button" tabindex="0"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h4>Password</h4></div>
+                    <div class="tool-card press" onclick="openTool('calc')" role="button" tabindex="0"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div><h4>Kalkulator</h4></div>
+                    <div class="tool-card press" onclick="openTool('zodiak')" role="button" tabindex="0"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div><h4>Zodiak</h4></div>
+                    <div class="tool-card press" onclick="openTool('base64')" role="button" tabindex="0"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><h4>Base64</h4></div>
+                    <div class="tool-card press" onclick="openTool('ip')" role="button" tabindex="0"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>IP Lookup</h4></div>
+                    <div class="tool-card press" onclick="openTool('reverse')" role="button" tabindex="0"><div class="t-icon bg-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div><h4>Teks Terbalik</h4></div>
+                    <div class="tool-card press" onclick="openTool('scramble')" role="button" tabindex="0"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></div><h4>Acak Huruf</h4></div>
+                    <div class="tool-card press" onclick="openTool('timer')" role="button" tabindex="0"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h4>Timer</h4></div>
+                    <div class="tool-card press" onclick="openTool('umur')" role="button" tabindex="0"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><h4>Hitung Umur</h4></div>
+                    <div class="tool-card press" onclick="openTool('warna')" role="button" tabindex="0"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div><h4>Gen Warna</h4></div>
 
                     <!-- FITUR BARU KURONEKO -->
-                    <div class="tool-card press" onclick="openTool('tempmail')"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div><h4>Temp Mail</h4></div>
-                    <div class="tool-card press" onclick="openTool('nik')"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></div><h4>NIK Parser</h4></div>
-                    <div class="tool-card press" onclick="openTool('mlbb')"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>Stalk MLBB</h4></div>
-                    <div class="tool-card press" onclick="openTool('spotify')"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 15c2-2 6-2 8 0"/><path d="M8 11c3-2.5 8-2 10 1"/><path d="M8 7c4-3 10-2 12 2"/></svg></div><h4>Spotify DL</h4></div>
-                    <div class="tool-card press" onclick="openTool('iplookup')"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>IP Lookup</h4></div>
-                    <div class="tool-card press" onclick="openTool('removebg')"><div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div><h4>RemoveBg</h4></div>
+                    <div class="tool-card press" onclick="openTool('tempmail')" role="button" tabindex="0"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div><h4>Temp Mail</h4></div>
+                    <div class="tool-card press" onclick="openTool('nik')" role="button" tabindex="0"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></div><h4>NIK Parser</h4></div>
+                    <div class="tool-card press" onclick="openTool('mlbb')" role="button" tabindex="0"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>Stalk MLBB</h4></div>
+                    <div class="tool-card press" onclick="openTool('spotify')" role="button" tabindex="0"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 15c2-2 6-2 8 0"/><path d="M8 11c3-2.5 8-2 10 1"/><path d="M8 7c4-3 10-2 12 2"/></svg></div><h4>Spotify DL</h4></div>
+                    <div class="tool-card press" onclick="openTool('iplookup')" role="button" tabindex="0"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>IP Lookup Pro</h4></div>
+                    <div class="tool-card press" onclick="openTool('removebg')" role="button" tabindex="0"><div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div><h4>RemoveBg</h4></div>
                 </div>
             </div>
             <div class="credit-text">Dibuat oleh <b>Andika T.M</b></div>
         </main>
-        
-        <!-- HALAMAN FUN -->
+                <!-- HALAMAN FUN -->
         <main id="page-fun" class="page">
             <header class="header-box">
                 <div class="logo-area">
-                    <div class="logo-icon" style="background:#a855f7; color:#fff;">F</div>
-                    <div class="logo-text"><h1>Zenkai Fun</h1><p class="version">Bypass & Tools</p></div>
+                    <div class="logo-icon" style="background:#a855f7; color:#fff;" aria-hidden="true">F</div>
+                    <div class="logo-text"><h1>Zenkai Fun</h1><p class="version">Bypass &amp; Tools</p></div>
                 </div>
             </header>
 
@@ -182,17 +190,17 @@
             <div class="tools-section">
                 <div class="grid-tools">
                     <!-- LINKVERTISE BYPASS -->
-                    <div class="tool-card press" onclick="openTool('linkvertise')">
+                    <div class="tool-card press" onclick="openTool('linkvertise')" role="button" tabindex="0">
                         <div class="t-icon bg-purple" style="width:60px; height:60px;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
                         </div>
                         <h4 style="font-size:11px; margin-top:5px;">Bypass Link</h4>
                     </div>
-                    
+
                     <!-- ALIGHT MOTION -->
-                    <div class="tool-card press" onclick="openTool('alightmotion')">
+                    <div class="tool-card press" onclick="openTool('alightmotion')" role="button" tabindex="0">
                         <div class="t-icon bg-blue" style="width:60px; height:60px;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                         </div>
                         <h4 style="font-size:11px; margin-top:5px;">Alight Motion</h4>
                     </div>
@@ -205,7 +213,7 @@
         <main id="page-setting" class="page">
             <header class="header-box">
                 <div class="logo-area">
-                    <div class="logo-icon" style="background:var(--primary)">
+                    <div class="logo-icon" style="background:var(--primary)" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                     </div>
                     <div class="logo-text"><h1>PENGATURAN</h1></div>
@@ -240,7 +248,7 @@
         <main id="page-info" class="page">
             <header class="header-box">
                 <div class="logo-area">
-                    <div class="logo-icon" style="background:var(--primary); color:#fff;">i</div>
+                    <div class="logo-icon" style="background:var(--primary); color:#fff;" aria-hidden="true">i</div>
                     <div class="logo-text"><h1>INFO APLIKASI</h1></div>
                 </div>
             </header>
@@ -248,7 +256,7 @@
             <div class="tools-section" style="padding:20px; margin-bottom:15px;">
                 <h2 style="font-family:var(--font-head); color:var(--primary); font-size:24px; margin-bottom:10px;">Zenkai Tools v1.0</h2>
                 <p style="line-height:1.6; opacity:0.8; font-size:13px; margin-bottom:15px;">Aplikasi utilitas serba-serbi dengan antarmuka tebal, tegas, dan futuristik. Ringan, responsif, dan siap pakai di HP maupun PC tanpa install.</p>
-                
+
                 <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; border-top:2px dashed var(--border); padding-top:15px;">
                     <div style="display:flex; justify-content:space-between;"><span>Versi:</span> <b>1.0.0 (Stable)</b></div>
                     <div style="display:flex; justify-content:space-between;"><span>Developer:</span> <b>Andika T.M</b></div>
@@ -267,28 +275,29 @@
                 <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;">Special Thanks</h3>
                 <p style="font-size:11px; line-height:1.6; opacity:0.7;">Terima kasih yang sebesar-besarnya kepada seluruh Netrunner dan pengguna setia <b>Zenkai Tools</b>. Tanpa kalian, project iseng ini nggak akan berkembang sampai sejauh ini. Tetap semangat, jangan lupa istirahat, dan gunakan tools ini dengan bijak!</p>
             </div>
-            
+
             <div class="credit-text" style="margin-top:20px;">&copy; 2026 Zenkai Tools. All rights reserved.</div>
         </main>
     </div>
 
     <!-- NAVIGASI BAWAH -->
-    <nav class="bottom-nav">
-        <button class="nav-item active press" onclick="switchPage('tools', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Tools</span>
+    <nav class="bottom-nav" role="navigation" aria-label="Navigasi utama">
+        <button class="nav-item active press" onclick="switchPage('tools', this)" aria-label="Tools">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Tools</span>
         </button>
-        <button class="nav-item press" onclick="switchPage('fun', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg><span>Fun</span>
+        <button class="nav-item press" onclick="switchPage('fun', this)" aria-label="Fun">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg><span>Fun</span>
         </button>
-        <button class="nav-item press" onclick="switchPage('setting', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Setting</span>
+        <button class="nav-item press" onclick="switchPage('setting', this)" aria-label="Setting">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Setting</span>
         </button>
-        <button class="nav-item press" onclick="switchPage('info', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>Info</span>
+        <button class="nav-item press" onclick="switchPage('info', this)" aria-label="Info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>Info</span>
         </button>
     </nav>
 
-    <div class="bottom-sheet-overlay" id="tool-modal" onclick="closeModalOnOverlay(event)">
+    <!-- MODAL BOTTOM SHEET -->
+    <div class="bottom-sheet-overlay" id="tool-modal" onclick="closeModalOnOverlay(event)" role="dialog" aria-modal="true" aria-label="Tool panel">
         <div class="bottom-sheet-content" id="modal-content"></div>
     </div>
 
