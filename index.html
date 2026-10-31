@@ -46,7 +46,9 @@
 
     <div class="app-container">
         
-        <!-- HALAMAN TOOLS -->
+        <!-- ========================================= -->
+        <!-- HALAMAN TOOLS                             -->
+        <!-- ========================================= -->
         <main id="page-tools" class="page active">
             <header class="header-box">
                 <div class="logo-area">
@@ -119,57 +121,64 @@
             <div class="credit-text">Dibuat oleh <b>Andika T.M</b></div>
         </main>
                 <!-- ========================================= -->
-        <!-- HALAMAN ZENNIME (ANIME)                   -->
+        <!-- HALAMAN KOMIK (ZENKOMIK)                  -->
         <!-- ========================================= -->
         <main id="page-anime" class="page">
             <header class="header-box">
                 <div class="logo-area">
-                    <div class="logo-icon" style="background:#00f3ff; color:#000;">Z</div>
-                    <div class="logo-text"><h1>ZenNime</h1><p class="version">Nonton Gratis</p></div>
+                    <div class="logo-icon" style="background:#00f3ff; color:#000;">K</div>
+                    <div class="logo-text"><h1>ZenKomik</h1><p class="version">Baca Gratis</p></div>
                 </div>
             </header>
 
-            <!-- HERO BANNER -->
-            <div style="background: url('https://otakudesu.blog/wp-content/uploads/2023/10/One-Piece.jpg') center/cover; height: 220px; border-radius: var(--radius); border: 3px solid var(--border); box-shadow: var(--shadow); position: relative; margin-bottom: 15px; overflow: hidden;">
-                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px;">
-                    <h2 style="color: #fff; font-family: var(--font-head); font-size: 24px; text-shadow: 2px 2px 0 #000; margin-bottom: 5px;">One Piece</h2>
-                    <p style="color: #ccc; font-size: 10px; margin-bottom: 15px;">Action • Fantasy • Ongoing</p>
-                    <button class="action-btn press" style="width: auto; padding: 10px 25px; margin-bottom: 0; display: flex; align-items: center; gap: 8px; background: #fff; color: #000;">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg> Play
-                    </button>
-                </div>
+            <div class="welcome-box">
+                <h2>Cari Komik </h2>
+                <p>Baca manga, manhwa, dan manhua favoritmu di sini.</p>
             </div>
 
-            <!-- MENU KATEGORI -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-                <div class="tools-section press" style="padding: 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 0; border-radius: var(--radius);">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    <span style="font-size: 12px; font-weight: bold;">Jadwal Rilis</span>
-                </div>
-                <div class="tools-section press" style="padding: 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 0; border-radius: var(--radius);">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                    <span style="font-size: 12px; font-weight: bold;">Genre</span>
-                </div>
-            </div>
-
-            <!-- SEARCH BAR -->
             <div class="tools-section" style="margin-bottom:15px; padding:15px;">
-                <h3 style="font-family:var(--font-head); margin-bottom:10px;">Cari Anime</h3>
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="anime-search" placeholder="Ketik judul anime..." style="flex: 1; padding:12px; border:2px solid var(--border); background:var(--bg); color:var(--text); border-radius:5px; outline:none;">
+                    <input type="text" id="anime-search" placeholder="Ketik judul komik..." style="flex: 1; padding:12px; border:2px solid var(--border); background:var(--bg); color:var(--text); border-radius:5px; outline:none;">
                     <button class="action-btn press" onclick="cariAnime()" style="width: auto; margin-bottom: 0; padding: 0 20px;">Cari</button>
                 </div>
             </div>
 
-            <!-- HASIL PENCARIAN -->
             <div class="tools-section" style="margin-bottom:15px;">
                 <div class="section-header">
-                    <h3 id="anime-section-title" style="font-family:var(--font-head);">Rekomendasi Anime</h3>
+                    <h3 id="anime-section-title">Rekomendasi Komik</h3>
                 </div>
                 <div id="anime-list" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
                     <p style="grid-column:span 2; text-align:center; font-size:12px; opacity:0.7;">Ketik judul dan klik Cari.</p>
                 </div>
             </div>
+        </main>
+
+        <!-- ========================================= -->
+        <!-- HALAMAN FUN (BYPASS & ALIGHT MOTION)      -->
+        <!-- ========================================= -->
+        <main id="page-fun" class="page">
+            <header class="header-box">
+                <div class="logo-area">
+                    <div class="logo-icon" style="background:#a855f7; color:#fff;">F</div>
+                    <div class="logo-text"><h1>Zenkai Fun</h1><p class="version">Bypass & Tools</p></div>
+                </div>
+            </header>
+
+            <div class="welcome-box">
+                <h2>Fitur Sultan </h2>
+                <p>Bypass link dan ambil file premium.</p>
+            </div>
+
+            <div class="tools-section">
+                <div class="grid-tools">
+                    <!-- LINKVERTISE BYPASS -->
+                    <div class="tool-card press" onclick="openTool('linkvertise')"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div><h4>Bypass Link</h4></div>
+                    
+                    <!-- ALIGHT MOTION -->
+                    <div class="tool-card press" onclick="openTool('alightmotion')"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><h4>Alight Motion</h4></div>
+                </div>
+            </div>
+            <div class="credit-text">Powered by <b>KuroNeko API</b></div>
         </main>
 
         <!-- ========================================= -->
@@ -252,14 +261,17 @@
         <button class="nav-item active press" onclick="switchPage('tools', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Tools</span>
         </button>
+        <button class="nav-item press" onclick="switchPage('anime', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Komik</span>
+        </button>
+        <button class="nav-item press" onclick="switchPage('fun', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg><span>Fun</span>
+        </button>
         <button class="nav-item press" onclick="switchPage('setting', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Setting</span>
         </button>
         <button class="nav-item press" onclick="switchPage('info', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>Info</span>
-        </button>
-        <button class="nav-item press" onclick="switchPage('anime', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg><span>ZenNime</span>
         </button>
     </nav>
 

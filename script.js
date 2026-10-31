@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>TikTok DL</h3>
-                <span class="desc-text">Download video TikTok tanpa watermark (HD). Cukup paste link videonya.</span>
+                <span class="desc-text">Download video TikTok tanpa watermark (HD).</span>
                 <input type="text" id="tt-url" placeholder="Paste link TikTok...">
                 <button class="action-btn" id="btn-dl-tt">Proses Video</button>
                 <div id="tt-result"></div>
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Instagram DL</h3>
-                <span class="desc-text">Simpan foto, video, atau Reels dari Instagram secara gratis.</span>
+                <span class="desc-text">Simpan foto, video, atau Reels dari Instagram.</span>
                 <input type="text" id="ig-url" placeholder="Paste link IG...">
                 <button class="action-btn" onclick="downloadIG()">Download</button>
                 <div id="ig-res" style="display:none; margin-top:15px; text-align:center;"></div>
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Pinterest DL</h3>
-                <span class="desc-text">Simpan video atau gambar dari Pinterest dengan kualitas asli.</span>
+                <span class="desc-text">Simpan video atau gambar dari Pinterest.</span>
                 <input type="text" id="pin-url" placeholder="Paste link Pinterest (pin.it/...)">
                 <button class="action-btn" onclick="downloadPinterest()">Download</button>
                 <div id="pin-res" style="display:none; margin-top:15px; text-align:center;"></div>
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Stalk Instagram</h3>
-                <span class="desc-text">Lihat info profil, bio, dan jumlah followers akun Instagram publik.</span>
+                <span class="desc-text">Lihat info profil, bio, dan jumlah followers.</span>
                 <input type="text" id="stalkig-user" placeholder="Username (tanpa @)">
                 <button class="action-btn" onclick="stalkIG()">Cari</button>
                 <div id="stalkig-res" style="display:none; margin-top:15px; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Stalk TikTok</h3>
-                <span class="desc-text">Cek statistik akun TikTok secara instan tanpa login.</span>
+                <span class="desc-text">Cek statistik akun TikTok secara instan.</span>
                 <input type="text" id="stalktt-user" placeholder="Username (tanpa @)">
                 <button class="action-btn" onclick="stalkTT()">Cari</button>
                 <div id="stalktt-res" style="display:none; margin-top:15px; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Stalk Roblox</h3>
-                <span class="desc-text">Lacak profil Roblox, cek bio, tanggal dibuat, dan avatar.</span>
+                <span class="desc-text">Lacak profil Roblox, cek bio, tanggal dibuat.</span>
                 <input type="text" id="stalkrbx-user" placeholder="Username Roblox">
                 <button class="action-btn" onclick="stalkRoblox()">Cari</button>
                 <div id="stalkrbx-res" style="display:none; margin-top:15px; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
@@ -403,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>QR Code</h3>
-                <span class="desc-text">Ubah teks atau link menjadi gambar QR Code yang bisa discan.</span>
+                <span class="desc-text">Ubah teks atau link menjadi gambar QR Code.</span>
                 <input type="text" id="qr-text" placeholder="Teks/Link..." value="ZenkaiTools by Andika T.M">
                 <button class="action-btn" id="btn-qr">Generate QR</button>
                 <div style="text-align:center; margin-top:15px;"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ZenkaiTools" style="max-width:100%; border-radius:8px; border:2px solid var(--border);"></div>
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Bikin QR Code</h3>
-                <span class="desc-text">Ubah teks menjadi QR Code dengan resolusi lebih besar.</span>
+                <span class="desc-text">Ubah teks menjadi QR Code resolusi besar.</span>
                 <input type="text" id="qr-txt" placeholder="Ketik teks/link...">
                 <button class="action-btn" onclick="genQR()">Buat QR</button>
                 <div style="text-align:center; margin-top:15px;">
@@ -438,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Image to JPG</h3>
-                <span class="desc-text">Ubah format gambar PNG/WebP ke JPG dengan background putih.</span>
+                <span class="desc-text">Ubah format gambar PNG/WebP ke JPG.</span>
                 <input type="file" id="jpg-in" accept="image/*" style="padding:10px; margin-bottom:15px;">
                 <div id="jpg-res" style="display:none; text-align:center;">
                     <img id="jpg-preview" style="max-width:100%; border-radius:8px; border:2px solid var(--border); margin-bottom:10px;">
@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Image HD (Upscale)</h3>
-                <span class="desc-text">Perbesar resolusi gambar hingga 2x lipat tanpa pecah.</span>
+                <span class="desc-text">Perbesar resolusi gambar hingga 2x lipat.</span>
                 <input type="file" id="hd-in" accept="image/*" style="padding:10px; margin-bottom:15px;">
                 <div id="hd-res" style="display:none; text-align:center;">
                     <img id="hd-preview" style="max-width:100%; border-radius:8px; border:2px solid var(--border); margin-bottom:10px;">
@@ -512,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Username Gen</h3>
-                <span class="desc-text">Bikin username keren dan belum dipakai buat akun sosmed kamu.</span>
+                <span class="desc-text">Bikin username keren dan belum dipakai.</span>
                 <input type="text" id="user-name" placeholder="Nama kamu (cth: andika)">
                 <button class="action-btn" onclick="genUser()">Generate</button>
                 <div id="user-res" style="display:none; text-align:center; font-size:16px; font-weight:bold; border:2px dashed var(--border); padding:15px; border-radius:8px; margin-top:15px;"></div>
@@ -531,7 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Arti Nama</h3>
-                <span class="desc-text">Cari tau makna dan asal-usul di balik sebuah nama.</span>
+                <span class="desc-text">Cari tau makna dan asal-usul di balik nama.</span>
                 <input type="text" id="nama-in" placeholder="Ketik nama...">
                 <button class="action-btn" onclick="cariArti()">Cari Arti</button>
                 <div id="nama-res" style="display:none; text-align:left; line-height:1.6; border:2px dashed var(--border); padding:15px; border-radius:8px; margin-top:15px;"></div>
@@ -562,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Password Gen</h3>
-                <span class="desc-text">Buat password acak 16 karakter yang kuat dan aman.</span>
+                <span class="desc-text">Buat password acak 16 karakter yang kuat.</span>
                 <button class="action-btn" onclick="genPass()">Generate Password</button>
                 <div id="pass-res" style="display:none; font-size:20px; font-weight:800; color:var(--primary); text-align:center; margin-top:15px; border:2px dashed var(--border); padding:15px; border-radius:8px; word-break:break-all;"></div>
             `;
@@ -579,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Kalkulator</h3>
-                <span class="desc-text">Hitung angka dasar dengan cepat dan akurat.</span>
+                <span class="desc-text">Hitung angka dasar dengan cepat.</span>
                 <div class="calc-container">
                     <div class="calc-display" id="calc-screen">0</div>
                     <div class="calc-keys">
@@ -767,7 +767,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Timer</h3>
-                <span class="desc-text">Pasang timer hitung mundur untuk aktivitas kamu.</span>
+                <span class="desc-text">Pasang timer hitung mundur.</span>
                 <input type="number" id="timer-in" placeholder="Detik (Cth: 10)">
                 <button class="action-btn" onclick="startTimer()">Mulai</button>
                 <div id="timer-res" style="display:none; margin-top:15px; text-align:center; font-size:32px; font-weight:bold; color:var(--primary); border:2px dashed var(--border); padding:15px; border-radius:8px;">0</div>
@@ -794,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Hitung Umur</h3>
-                <span class="desc-text">Hitung umur kamu berdasarkan tanggal lahir.</span>
+                <span class="desc-text">Hitung umur berdasarkan tanggal lahir.</span>
                 <input type="date" id="umur-in">
                 <button class="action-btn" onclick="hitungUmur()">Hitung</button>
                 <div id="umur-res" style="display:none; margin-top:15px; text-align:center; font-size:18px; font-weight:bold; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
@@ -817,7 +817,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Gen Warna</h3>
-                <span class="desc-text">Dapetin kode warna HEX acak buat desain.</span>
+                <span class="desc-text">Dapetin kode warna HEX acak.</span>
                 <button class="action-btn" onclick="genWarna()">Generate Warna</button>
                 <div id="warna-res" style="display:none; margin-top:15px; text-align:center; font-size:18px; font-weight:bold; padding:40px 15px; border-radius:8px; border:2px solid var(--border); transition:0.3s;"></div>
             `;
@@ -832,7 +832,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // =========================================
     // 9. SEARCH FILTER
+    // =========================================
     const sInput = document.getElementById('search-tools');
     if (sInput) {
         sInput.addEventListener('input', (e) => {
@@ -845,44 +847,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================
-    // 10. LOGIKA ZENNIME (ANIME)
+    // 10. LOGIKA ZENKOMIK (MANGA DEX)
     // =========================================
-    
-    const ANIME_API_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/anime-api";
+    const KURO_KEY = 'sylva-e96de6848abe4ce410a0f85ceb0d25ce';
 
-    // Cari Anime
     window.cariAnime = async () => {
         const keyword = document.getElementById('anime-search').value;
         const listBox = document.getElementById('anime-list');
         
-        if(!keyword) return showToast('Ketik judul anime dulu!');
+        if(!keyword) return showToast('Ketik judul komik dulu!');
         listBox.innerHTML = '<div class="loader" style="grid-column:span 2; margin:20px auto;"></div>';
         
         try {
-            const res = await fetch(`${ANIME_API_URL}?q=${encodeURIComponent(keyword)}`);
+            const res = await fetch(`https://sylvatica.my.id/api/anime/mangadex-search?query=${encodeURIComponent(keyword)}&page=1&apikey=${KURO_KEY}`);
             const response = await res.json();
 
-            // Ambil array dari data.animeList (Wajik API)
-            let animeList = response.data?.animeList || response.data || response;
-
-            if (!Array.isArray(animeList) || animeList.length === 0) {
-                throw new Error('Anime tidak ditemukan.');
+            if (!response.status || !response.result || response.result.length === 0) {
+                throw new Error('Komik tidak ditemukan.');
             }
 
-            // Ganti judul section
             document.getElementById('anime-section-title').innerText = 'Hasil: ' + keyword;
-
             listBox.innerHTML = ''; 
-            animeList.forEach(anime => {
-                // PAKE .poster LANGSUNG (Sesuai Dokumentasi Wajik)
-                const imgUrl = anime.poster; 
-                const animeId = anime.animeId;
-                
+            
+            response.result.forEach(komik => {
+                let imgUrl = 'https://via.placeholder.com/150';
+                if (komik.relationships) {
+                    const cover = komik.relationships.find(rel => rel.type === 'cover_art');
+                    if (cover && cover.attributes && cover.attributes.fileName) {
+                        imgUrl = `https://uploads.mangadex.org/covers/${komik.id}/${cover.attributes.fileName}.256.jpg`;
+                    }
+                }
+
+                const title = komik.attributes.title.en || Object.values(komik.attributes.title)[0] || 'Tanpa Judul';
+
                 listBox.innerHTML += `
-                    <div class="anime-card press" onclick="bukaAnime('${animeId}')">
-                        <img src="${imgUrl}" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150'">
+                    <div class="anime-card press" onclick="bacaKomik('${komik.id}')">
+                        <img src="${imgUrl}" onerror="this.src='https://via.placeholder.com/150'">
                         <div class="info">
-                            <h4>${anime.title}</h4>
+                            <h4>${title}</h4>
                         </div>
                     </div>
                 `;
@@ -892,55 +894,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Buka Anime & Ambil Episode
-    window.bukaAnime = async (slug) => {
-        showToast('Mengambil daftar episode...');
-        try {
-            const res = await fetch(`${ANIME_API_URL}?action=detail&slug=${encodeURIComponent(slug)}`);
-            const data = await res.json();
-            
-            let epHtml = '<h3 style="margin-bottom:15px; font-family:var(--font-head);">Pilih Episode:</h3>';
-            const episodes = data.episodeList || data.episodes || [];
-            
-            if(episodes.length > 0) {
-                episodes.forEach(ep => {
-                    epHtml += `<button class="action-btn" onclick="nontonAnime('${ep.episodeId || ep.slug}')" style="margin-bottom:5px; font-size:11px;">${ep.title || ep.episode}</button>`;
-                });
-            } else {
-                epHtml += '<p>Episode belum tersedia.</p>';
-            }
-            
-            openModalCustom(epHtml); 
-        } catch (e) {
-            showToast('Gagal ambil episode: ' + e.message);
-        }
-    };
-
-    // Nonton Video
-    window.nontonAnime = async (slug) => {
-        showToast('Memuat video...');
-        try {
-            const res = await fetch(`${ANIME_API_URL}?action=stream&slug=${encodeURIComponent(slug)}`);
-            const data = await res.json();
-            
-            const iframeUrl = data.streamUrl || data.iframe || data.link;
-            
-            const videoHtml = `
-                <h3 style="margin-bottom:10px; font-family:var(--font-head);">Nonton Anime</h3>
-                <iframe src="${iframeUrl}" width="100%" height="250" frameborder="0" allowfullscreen style="border-radius:8px; border:2px solid var(--border);"></iframe>
+    // =========================================
+    // 11. LOGIKA ZENFUN (BYPASS & ALIGHT)
+    // =========================================
+    
+    // TAMBAHAN FITUR BYPASS & ALIGHT MOTION DI SINI
+    const originalOpenTool = window.openTool;
+    window.openTool = (tool) => {
+        originalOpenTool(tool);
+        
+        if (tool === 'linkvertise') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Bypass Link</h3>
+                <span class="desc-text">Nembus iklan Linkvertise / SFL.</span>
+                <input type="text" id="bypass-url" placeholder="Paste link disini...">
+                <button class="action-btn" id="btn-bypass">Bypass Sekarang</button>
+                <div id="bypass-res" style="display:none; margin-top:15px; text-align:center; border:2px dashed var(--border); padding:15px; border-radius:8px; word-break:break-all;"></div>
             `;
-            openModalCustom(videoHtml);
-        } catch (e) {
-            showToast('Gagal memuat video: ' + e.message);
+            document.getElementById('btn-bypass').onclick = async () => {
+                const url = document.getElementById('bypass-url').value.trim();
+                const box = document.getElementById('bypass-res');
+                if(!url) return showToast('Masukkan link!');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div><p>Memproses...</p>';
+                try {
+                    const res = await fetch(`https://sylvatica.my.id/api/bypass/linkvertise?url=${encodeURIComponent(url)}&apikey=${KURO_KEY}`);
+                    const data = await res.json();
+                    if(!data.status) throw new Error(data.error || 'Gagal');
+                    box.innerHTML = `
+                        <p style="font-size:12px; margin-bottom:10px;">Link Asli:</p>
+                        <a href="${data.result.url}" target="_blank" style="color:var(--primary); font-weight:bold;">${data.result.url}</a>
+                    `;
+                } catch(e) { box.innerHTML = `<p style="color:red;">Gagal: ${e.message}</p>`; }
+            };
         }
-    };
 
-    // Helper buka modal
-    window.openModalCustom = (html) => {
-        const modal = document.getElementById('tool-modal');
-        const modalContent = document.getElementById('modal-content');
-        modalContent.innerHTML = `<button class="modal-close press" onclick="closeModal()">X</button>` + html;
-        modal.classList.add('active');
+        else if (tool === 'alightmotion') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Alight Motion</h3>
+                <span class="desc-text">Bypass Premium Alight Motion.</span>
+                <input type="email" id="am-email" placeholder="Email (bebas)">
+                <button class="action-btn" id="btn-am">Generate Link</button>
+                <div id="am-res" style="display:none; margin-top:15px; text-align:center; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
+            `;
+            document.getElementById('btn-am').onclick = async () => {
+                const email = document.getElementById('am-email').value.trim() || "user@zenkai.com";
+                const box = document.getElementById('am-res');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div><p>Memproses...</p>';
+                try {
+                    const res = await fetch(`https://sylvatica.my.id/api/tools/alightmotion?email=${encodeURIComponent(email)}&options=premium&url=&apikey=${KURO_KEY}`);
+                    const data = await res.json();
+                    if(!data.status) throw new Error(data.error || 'Gagal');
+                    box.innerHTML = `
+                        <a href="${data.result.url || data.result.download}" target="_blank" class="action-btn" style="display:block; text-decoration:none;">Download Alight Motion</a>
+                    `;
+                } catch(e) { box.innerHTML = `<p style="color:red;">Gagal: ${e.message}</p>`; }
+            };
+        }
     };
 
 });
