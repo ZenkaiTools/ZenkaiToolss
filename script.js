@@ -623,9 +623,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         } 
                 // =========================================
-        // SISA FITUR TOOLS (ZODIAK, BASE64, DLL)
+        // SISA FITUR TOOLS
         // =========================================
-
         else if (tool === 'zodiak') {
             let tgls = ''; for(let i=1; i<=31; i++) tgls += `<div onclick="setZ('tgl',${i},this)" style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer;">${i}</div>`;
             let blns = ''; const b = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
@@ -844,53 +843,56 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
     // =========================================
-    // OTAK ANIME + STREAMING
+    // 10. LOGIKA ZENNIME (ANIME)
     // =========================================
     
     const ANIME_API_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/anime-api";
 
-    // 1. Cari Anime
+    // Cari Anime
     window.cariAnime = async () => {
-    const keyword = document.getElementById('anime-search').value;
-    const listBox = document.getElementById('anime-list');
-    
-    if(!keyword) return showToast('Ketik judul anime dulu!');
-    listBox.innerHTML = '<div class="loader" style="grid-column:span 2; margin:20px auto;"></div>';
-    
-    try {
-        const res = await fetch(`${ANIME_API_URL}?q=${encodeURIComponent(keyword)}`);
-        const response = await res.json();
+        const keyword = document.getElementById('anime-search').value;
+        const listBox = document.getElementById('anime-list');
+        
+        if(!keyword) return showToast('Ketik judul anime dulu!');
+        listBox.innerHTML = '<div class="loader" style="grid-column:span 2; margin:20px auto;"></div>';
+        
+        try {
+            const res = await fetch(`${ANIME_API_URL}?q=${encodeURIComponent(keyword)}`);
+            const response = await res.json();
 
-        // LOGIKA BARU: Ambil dari data.animeList, kalo gak ada ambil data-nya langsung
-        let data = response.data?.animeList || response.data || response;
+            // Ambil array dari data.animeList (Wajik API)
+            let animeList = response.data?.animeList || response.data || response;
 
-        // Kalo datanya kosong / bukan array
-        if(!data || !Array.isArray(data) || data.length === 0) {
-            throw new Error('Anime tidak ditemukan. Coba kata kunci lain (cth: "Solo").');
-        }
+            if (!Array.isArray(animeList) || animeList.length === 0) {
+                throw new Error('Anime tidak ditemukan.');
+            }
 
-        listBox.innerHTML = ''; 
-        data.forEach(anime => {
-            // Pake 'poster' dan 'animeId' sesuai API Wajik
-            const imgUrl = anime.poster || 'https://via.placeholder.com/150';
-            const animeId = anime.animeId;
-            
-            listBox.innerHTML += `
-                <div class="press" onclick="bukaAnime('${animeId}')" style="border:2px solid var(--border); border-radius:8px; overflow:hidden; background:var(--card-bg); box-shadow:var(--shadow); cursor:pointer;">
-                    <img src="${imgUrl}" style="width:100%; height:150px; object-fit:cover;" onerror="this.src='https://via.placeholder.com/150'">
-                    <div style="padding:8px; text-align:center;">
-                        <h4 style="font-size:10px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${anime.title}</h4>
+            // Ganti judul section
+            document.getElementById('anime-section-title').innerText = 'Hasil: ' + keyword;
+
+            listBox.innerHTML = ''; 
+            animeList.forEach(anime => {
+                // PAKE .poster LANGSUNG (Sesuai Dokumentasi Wajik)
+                const imgUrl = anime.poster; 
+                const animeId = anime.animeId;
+                
+                listBox.innerHTML += `
+                    <div class="anime-card press" onclick="bukaAnime('${animeId}')">
+                        <img src="${imgUrl}" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150'">
+                        <div class="info">
+                            <h4>${anime.title}</h4>
+                        </div>
                     </div>
-                </div>
-            `;
-        });
-    } catch(e) {
-        listBox.innerHTML = `<p style="grid-column:span 2; color:red; text-align:center; font-size:12px;">${e.message}</p>`;
-    }
-};
+                `;
+            });
+        } catch(e) {
+            listBox.innerHTML = `<p style="grid-column:span 2; color:red; text-align:center; font-size:12px;">${e.message}</p>`;
+        }
+    };
 
-    // 2. Buka Anime & Ambil Episode
+    // Buka Anime & Ambil Episode
     window.bukaAnime = async (slug) => {
         showToast('Mengambil daftar episode...');
         try {
@@ -914,7 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 3. Nonton Video
+    // Nonton Video
     window.nontonAnime = async (slug) => {
         showToast('Memuat video...');
         try {
@@ -940,4 +942,5 @@ document.addEventListener('DOMContentLoaded', () => {
         modalContent.innerHTML = `<button class="modal-close press" onclick="closeModal()">X</button>` + html;
         modal.classList.add('active');
     };
+
 });

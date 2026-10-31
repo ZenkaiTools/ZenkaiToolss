@@ -46,9 +46,7 @@
 
     <div class="app-container">
         
-        <!-- ========================================= -->
-        <!-- HALAMAN TOOLS                             -->
-        <!-- ========================================= -->
+        <!-- HALAMAN TOOLS -->
         <main id="page-tools" class="page active">
             <header class="header-box">
                 <div class="logo-area">
@@ -73,7 +71,7 @@
 
             <div class="welcome-box">
                 <h2>Halo, Netrunner! </h2>
-                <p>Selamat datang di Zenkai Tools v1.0. Akses berbagai modul utilitas dan generator lo di sini.</p>
+                <p>Selamat datang di Zenkai Tools. Akses berbagai modul utilitas dan generator lo di sini.</p>
             </div>
 
             <div class="tools-section">
@@ -120,30 +118,61 @@
             </div>
             <div class="credit-text">Dibuat oleh <b>Andika T.M</b></div>
         </main>
-        <!-- ========================================= -->
-<!-- HALAMAN KOMIK                             -->
-<!-- ========================================= -->
-<main id="page-anime" class="page">
-    <header class="header-box">
-        <div class="logo-area">
-            <div class="logo-icon" style="background:#ff007f; color:#fff;">K</div>
-            <div class="logo-text"><h1>ZENKAI KOMIK</h1><p class="version">Baca Gratis</p></div>
-        </div>
-    </header>
-
-    <div class="tools-section" style="margin-bottom:15px; padding:15px;">
-        <h3 style="font-family:var(--font-head); margin-bottom:10px;">Cari Komik</h3>
-        <input type="text" id="anime-search" placeholder="Ketik judul komik..." style="width:100%; padding:10px; border:2px solid var(--border); background:var(--bg); color:var(--text); border-radius:5px; margin-bottom:10px;">
-        <button class="action-btn press" onclick="cariAnime()" style="margin-bottom:0;">Cari Komik</button>
-    </div>
-
-    <div class="tools-section" style="margin-bottom:15px;">
-        <div id="anime-list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <p style="grid-column:span 2; text-align:center; font-size:12px; opacity:0.7;">Hasil pencarian muncul di sini.</p>
-        </div>
-    </div>
-</main>
                 <!-- ========================================= -->
+        <!-- HALAMAN ZENNIME (ANIME)                   -->
+        <!-- ========================================= -->
+        <main id="page-anime" class="page">
+            <header class="header-box">
+                <div class="logo-area">
+                    <div class="logo-icon" style="background:#00f3ff; color:#000;">Z</div>
+                    <div class="logo-text"><h1>ZenNime</h1><p class="version">Nonton Gratis</p></div>
+                </div>
+            </header>
+
+            <!-- HERO BANNER -->
+            <div style="background: url('https://otakudesu.blog/wp-content/uploads/2023/10/One-Piece.jpg') center/cover; height: 220px; border-radius: var(--radius); border: 3px solid var(--border); box-shadow: var(--shadow); position: relative; margin-bottom: 15px; overflow: hidden;">
+                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px;">
+                    <h2 style="color: #fff; font-family: var(--font-head); font-size: 24px; text-shadow: 2px 2px 0 #000; margin-bottom: 5px;">One Piece</h2>
+                    <p style="color: #ccc; font-size: 10px; margin-bottom: 15px;">Action • Fantasy • Ongoing</p>
+                    <button class="action-btn press" style="width: auto; padding: 10px 25px; margin-bottom: 0; display: flex; align-items: center; gap: 8px; background: #fff; color: #000;">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg> Play
+                    </button>
+                </div>
+            </div>
+
+            <!-- MENU KATEGORI -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                <div class="tools-section press" style="padding: 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 0; border-radius: var(--radius);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <span style="font-size: 12px; font-weight: bold;">Jadwal Rilis</span>
+                </div>
+                <div class="tools-section press" style="padding: 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 0; border-radius: var(--radius);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    <span style="font-size: 12px; font-weight: bold;">Genre</span>
+                </div>
+            </div>
+
+            <!-- SEARCH BAR -->
+            <div class="tools-section" style="margin-bottom:15px; padding:15px;">
+                <h3 style="font-family:var(--font-head); margin-bottom:10px;">Cari Anime</h3>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="anime-search" placeholder="Ketik judul anime..." style="flex: 1; padding:12px; border:2px solid var(--border); background:var(--bg); color:var(--text); border-radius:5px; outline:none;">
+                    <button class="action-btn press" onclick="cariAnime()" style="width: auto; margin-bottom: 0; padding: 0 20px;">Cari</button>
+                </div>
+            </div>
+
+            <!-- HASIL PENCARIAN -->
+            <div class="tools-section" style="margin-bottom:15px;">
+                <div class="section-header">
+                    <h3 id="anime-section-title" style="font-family:var(--font-head);">Rekomendasi Anime</h3>
+                </div>
+                <div id="anime-list" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <p style="grid-column:span 2; text-align:center; font-size:12px; opacity:0.7;">Ketik judul dan klik Cari.</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- ========================================= -->
         <!-- HALAMAN SETTING                           -->
         <!-- ========================================= -->
         <main id="page-setting" class="page">
@@ -168,8 +197,8 @@
             <div class="tools-section" style="margin-bottom:15px;">
                 <h3 style="margin-bottom:15px; font-family:var(--font-head);">Fitur Tambahan</h3>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                    <button class="action-btn press" onclick="toggleMusic()" style="background:var(--bg); color:var(--text); border-color:var(--border);"> Nyalakan/Matikan Musik</button>
-                    <button class="action-btn press" onclick="resetData()" style="background:#ff3333; color:#fff;"> Hapus Cache Web</button>
+                    <button class="action-btn press" onclick="toggleMusic()" style="background:var(--bg); color:var(--text); border-color:var(--border);">Nyalakan/Matikan Musik</button>
+                    <button class="action-btn press" onclick="resetData()" style="background:#ff3333; color:#fff;">Hapus Cache Web</button>
                 </div>
             </div>
 
@@ -200,7 +229,7 @@
                     <div style="display:flex; justify-content:space-between;"><span>Developer:</span> <b>Andika T.M</b></div>
                     <div style="display:flex; justify-content:space-between;"><span>Total Tools:</span> <b>20+ Modul</b></div>
                     <div style="display:flex; justify-content:space-between;"><span>Framework:</span> <b>Vanilla JS</b></div>
-                    <div style="display:flex; justify-content:space-between;"><span>Status:</span> <b style="color:#27ae60;">Online </b></div>
+                    <div style="display:flex; justify-content:space-between;"><span>Status:</span> <b style="color:#27ae60;">Online</b></div>
                 </div>
             </div>
 
@@ -229,10 +258,9 @@
         <button class="nav-item press" onclick="switchPage('info', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>Info</span>
         </button>
-        <!-- TOMBOL ANIME BARU -->
-<button class="nav-item press" onclick="switchPage('anime', this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg><span>Komik</span>
-</button>
+        <button class="nav-item press" onclick="switchPage('anime', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg><span>ZenNime</span>
+        </button>
     </nav>
 
     <div class="bottom-sheet-overlay" id="tool-modal" onclick="closeModalOnOverlay(event)">
