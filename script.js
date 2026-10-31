@@ -439,31 +439,42 @@ document.addEventListener('DOMContentLoaded', () => {
             const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
             if (!pinDataObj) throw new Error('Struktur data tidak dikenali');
 
-            // 1. CARI VIDEO (Bongkar paksa)
+            // 1. BONGKAR VIDEO (Sikat dari videoUrls)
             if (pinDataObj.videos) {
                 if (pinDataObj.videos.videoList?.v720P?.url) {
                     currentVideoUrl = pinDataObj.videos.videoList.v720P.url;
                 } else if (pinDataObj.videos.videoUrls && Array.isArray(pinDataObj.videos.videoUrls)) {
+                    // Cari yang .mp4 dulu
                     const mp4Url = pinDataObj.videos.videoUrls.find(u => u.includes('.mp4'));
-                    if (mp4Url) currentVideoUrl = mp4Url;
+                    if (mp4Url) {
+                        currentVideoUrl = mp4Url;
+                    } else {
+                        // Kalau nggak ada mp4, ambil m3u8
+                        const m3u8Url = pinDataObj.videos.videoUrls.find(u => u.includes('.m3u8'));
+                        if (m3u8Url) currentVideoUrl = m3u8Url;
+                    }
                 }
             }
 
-            // 2. CARI GAMBAR
+            // 2. BONGKAR GAMBAR
             if (pinDataObj.images_orig?.url) {
                 currentImageUrl = pinDataObj.images_orig.url;
             } else if (pinDataObj.images_736x?.url) {
                 currentImageUrl = pinDataObj.images_736x.url;
             }
 
-            // --- TAMPILAN UI (SELALU 2 TOMBOL) ---
+            // --- TAMPILAN UI ---
             let htmlContent = '';
 
-            // Preview
-            if (currentVideoUrl) {
+            // Preview (Pake Video kalau ada, kalau nggak pake gambar)
+            if (currentVideoUrl && currentVideoUrl.includes('.mp4')) {
                 htmlContent += `<video src="${escapeHTML(currentVideoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;"></video>`;
             } else if (currentImageUrl) {
+                // Kalau videonya m3u8 (nggak bisa di preview), kita tampilin gambarnya aja
                 htmlContent += `<img src="${escapeHTML(currentImageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;">`;
+                if (currentVideoUrl) {
+                    htmlContent += `<p style="font-size:10px; opacity:0.7; margin-bottom:10px;">*(Video format HLS, silakan klik tombol download video)*</p>`;
+                }
             }
 
             // DUA TOMBOL SELALU ADA
@@ -485,20 +496,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 const saveBtn = e.target;
                 setBtnLoading(saveBtn, true, 'Menyimpan...');
                 try {
+                    // Sedot lewat Supabase
                     const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ download_url: currentVideoUrl })
                     });
+                    
                     if (!dlRes.ok) throw new Error('Gagal');
+                    
                     const blob = await dlRes.blob();
+                    const ext = currentVideoUrl.includes('.mp4') ? 'mp4' : 'm3u8'; 
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
-                    a.download = `pin-vid-${Date.now()}.mp4`;
+                    a.download = `pin-vid-${Date.now()}.${ext}`;
                     a.click();
                     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
                     showToast('Video Tersimpan!');
-                } catch (error) { showToast('Gagal simpan video.'); }
+                } catch (error) { 
+                    showToast('Gagal simpan video. Coba lagi.'); 
+                }
                 setBtnLoading(saveBtn, false, '🎬 DOWNLOAD VIDEO');
             };
 
