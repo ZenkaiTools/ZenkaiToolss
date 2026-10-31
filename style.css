@@ -325,3 +325,89 @@ body.intro-active .music-widget, body.intro-active .bottom-nav, body.intro-activ
 .tool-card.maintenance .t-icon { background: #b2bec3 !important; color: #636e72 !important; filter: grayscale(100%) !important; border-color: #636e72 !important; box-shadow: 2px 2px 0 #636e72 !important; transform: none !important; }
 .tool-card.maintenance h4 { color: #ff3333 !important; }
 .tool-card.maintenance h4::after { content: 'MAINTENANCE'; display: block; font-size: 7px; background: #ff3333; color: #fff; padding: 2px 4px; border-radius: 4px; margin-top: 4px; font-family: 'Space Mono', monospace; letter-spacing: 0.5px; }
+/* =========================================
+   FIX: GRID 3 KOLOM
+   ========================================= */
+@media (min-width: 360px) {
+    .grid-tools { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+/* =========================================
+   GAYA COMING SOON (Abu-abu + Label SOON)
+   ========================================= */
+.tool-card.soon .t-icon {
+    background: #b2bec3 !important;
+    color: #636e72 !important;
+    filter: grayscale(100%) !important;
+    border-color: #636e72 !important;
+    box-shadow: 2px 2px 0 #636e72 !important;
+}
+.tool-card.soon .t-icon::after { display: none !important; }
+.tool-card.soon h4 { color: #636e72 !important; }
+.tool-card.soon h4::after {
+    content: 'SOON';
+    display: block;
+    font-size: 8px;
+    background: #636e72;
+    color: #fff;
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-top: 4px;
+    font-family: var(--font-main);
+    letter-spacing: 0.5px;
+}
+
+/* =========================================
+   GAYA BYPASS MAINTENANCE (Khusus Halaman Fun)
+   ========================================= */
+.tool-card.maintenance-fun .t-icon {
+    background: #b2bec3 !important;
+    color: #636e72 !important;
+    filter: grayscale(100%) !important;
+    border-color: #636e72 !important;
+    box-shadow: 2px 2px 0 #636e72 !important;
+}
+.tool-card.maintenance-fun .t-icon::after { display: none !important; }
+.tool-card.maintenance-fun h4 { color: #ff3333 !important; }
+.tool-card.maintenance-fun h4::after {
+    content: 'MAINTENANCE';
+    display: block;
+    font-size: 7px;
+    background: #ff3333;
+    color: #fff;
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-top: 4px;
+    font-family: var(--font-main);
+    letter-spacing: 0.5px;
+}
+/* =========================================
+   PEMBATAS COMING SOON
+   ========================================= */
+.coming-soon-divider {
+    grid-column: 1 / -1; /* Biar garisnya full dari kiri ke kanan */
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0 15px 0;
+    color: #636e72;
+    font-family: var(--font-main);
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.coming-soon-divider::before,
+.coming-soon-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 3px dashed #b2bec3;
+}
+
+.coming-soon-divider span {
+    padding: 0 10px;
+    background: var(--card-bg); /* Biar teksnya nutupin garis */
+    position: relative;
+    z-index: 1;
+}

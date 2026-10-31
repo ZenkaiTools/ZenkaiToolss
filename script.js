@@ -324,21 +324,24 @@ window.openTool = (tool) => {
     }
 
     // =========================================
-    // BYPASS MAINTENANCE
-    // =========================================
-    if (tool === 'linkvertise') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Bypass Link</h3>
-            <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">
-                🚧 SEDANG MAINTENANCE 🚧
-            </span>
-            <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">
-                Fitur bypass link saat ini sedang dalam perbaikan sistem keamanan.<br><br>Silakan coba lagi nanti.
-            </p>
-        `;
-        return;
-    }
+// BYPASS MAINTENANCE
+// =========================================
+if (tool === 'linkvertise') {
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <h3>Bypass Link</h3>
+        <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">
+            🚧 SEDANG MAINTENANCE 🚧
+        </span>
+        <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">
+            Fitur bypass link saat ini sedang dalam perbaikan sistem keamanan.<br><br>Silakan coba lagi nanti.
+        </p>
+        <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">
+            Pantau Update di WhatsApp
+        </a>
+    `;
+    return;
+}
 
     // =========================================
     // DOWNLOADER
@@ -1325,13 +1328,29 @@ window.openTool = (tool) => {
     }
 
     // =========================================
-    // 12. UPDATE VISUAL: TANDAI TOOL MAINTENANCE
-    // =========================================
-    const igCard = document.querySelector('.tool-card[onclick="openTool(\'instagram\')"]');
-    if (igCard) {
-        igCard.classList.add('maintenance');
-        const igTitle = igCard.querySelector('h4');
-        if (igTitle) igTitle.innerText = 'Instagram DL';
+// 12. UPDATE VISUAL: MAINTENANCE & COMING SOON
+// =========================================
+// Tandai Instagram (Maintenance)
+const igCard = document.querySelector('.tool-card[onclick="openTool(\'instagram\')"]');
+if (igCard) {
+    igCard.classList.add('maintenance');
+    const igTitle = igCard.querySelector('h4');
+    if (igTitle) igTitle.innerText = 'Instagram DL';
+}
+
+// Tandai Coming Soon (Otomatis dari list di HTML)
+const comingSoonList = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
+comingSoonList.forEach(toolName => {
+    const card = document.querySelector(`.tool-card[onclick="openTool('${toolName}')"]`);
+    if (card) {
+        card.classList.add('soon');
     }
+});
+
+// Tandai Bypass Link (Maintenance di Halaman Fun)
+const bypassCard = document.querySelector('.tool-card[onclick="openTool(\'linkvertise\')"]');
+if (bypassCard) {
+    bypassCard.classList.add('maintenance-fun');
+}
 
 });
