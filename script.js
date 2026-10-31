@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalContent.innerHTML = `
         ${closeSvg}
         <h3>Pinterest DL</h3>
-        <span class="desc-text">Download video & gambar dari Pinterest via KuroNeko.</span>
+        <span class="desc-text">Pilih mau download video atau gambarnya.</span>
         <input type="text" id="pin-url" placeholder="Paste link Pinterest (pin.it/...)">
         <button class="action-btn" id="btn-pin">Ambil Media</button>
         <div id="pin-res" style="display:none; margin-top:15px; text-align:center;"></div>
@@ -436,106 +436,97 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.error || 'Konten tidak ditemukan');
             }
 
-            // 1. AMBIL OBJECT UTAMA (Prioritas d1 karena biasanya lebih lengkap)
             const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
             if (!pinDataObj) throw new Error('Struktur data tidak dikenali');
 
-            // 2. BONGKAR VIDEO (Paksa cari di videoList & videoUrls)
+            // 1. CARI VIDEO (Bongkar paksa)
             if (pinDataObj.videos) {
-                // Cek v720P (MP4)
                 if (pinDataObj.videos.videoList?.v720P?.url) {
                     currentVideoUrl = pinDataObj.videos.videoList.v720P.url;
-                } 
-                // Kalau nggak ada, cari di array videoUrls yang ada .mp4 nya
-                else if (pinDataObj.videos.videoUrls && Array.isArray(pinDataObj.videos.videoUrls)) {
+                } else if (pinDataObj.videos.videoUrls && Array.isArray(pinDataObj.videos.videoUrls)) {
                     const mp4Url = pinDataObj.videos.videoUrls.find(u => u.includes('.mp4'));
                     if (mp4Url) currentVideoUrl = mp4Url;
                 }
             }
 
-            // 3. BONGKAR GAMBAR (Cuma buat cadangan/cover)
+            // 2. CARI GAMBAR
             if (pinDataObj.images_orig?.url) {
                 currentImageUrl = pinDataObj.images_orig.url;
             } else if (pinDataObj.images_736x?.url) {
                 currentImageUrl = pinDataObj.images_736x.url;
             }
 
-            // --- TAMPILAN UI ---
+            // --- TAMPILAN UI (SELALU 2 TOMBOL) ---
             let htmlContent = '';
 
-            // KALAU ADA VIDEO, TAMPILIN VIDEO (Jangan tampilin gambar kalau ada video)
+            // Preview
             if (currentVideoUrl) {
-                htmlContent += `
-                    <div style="margin-bottom: 20px;">
-                        <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--primary);">🎬 VIDEO (DARI PINTEREST)</p>
-                        <video src="${escapeHTML(currentVideoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 10px;"></video>
-                        <button class="action-btn" id="btn-dl-vid" style="background:#00ff9d; margin-bottom:0;">🎬 SIMPAN VIDEO</button>
-                    </div>
-                `;
-            } 
-            
-            // TAMPILIN GAMBAR (Kalau ada, atau kalau video nggak ada)
-            if (currentImageUrl) {
-                htmlContent += `
-                    <div style="${currentVideoUrl ? 'border-top: 2px dashed var(--border); padding-top: 15px;' : ''}">
-                        <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--primary);">🖼️ GAMBAR (COVER)</p>
-                        <img src="${escapeHTML(currentImageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 10px;">
-                        <button class="action-btn" id="btn-dl-img" style="background:var(--primary); margin-bottom:0;">🖼️ SIMPAN GAMBAR</button>
-                    </div>
-                `;
+                htmlContent += `<video src="${escapeHTML(currentVideoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;"></video>`;
+            } else if (currentImageUrl) {
+                htmlContent += `<img src="${escapeHTML(currentImageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;">`;
             }
 
-            if (!currentVideoUrl && !currentImageUrl) throw new Error('Media tidak ditemukan di link ini');
+            // DUA TOMBOL SELALU ADA
+            htmlContent += `
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="action-btn" id="btn-dl-vid" style="background:#00ff9d; margin-bottom:0;">🎬 DOWNLOAD VIDEO</button>
+                    <button class="action-btn" id="btn-dl-img" style="background:var(--primary); margin-bottom:0;">🖼️ DOWNLOAD GAMBAR</button>
+                </div>
+            `;
 
             box.innerHTML = htmlContent;
 
-            // --- LOGIKA SIMPAN VIDEO ---
-            if (currentVideoUrl) {
-                document.getElementById('btn-dl-vid').onclick = async (e) => {
-                    const saveBtn = e.target;
-                    setBtnLoading(saveBtn, true, 'Menyimpan...');
-                    try {
-                        const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ download_url: currentVideoUrl })
-                        });
-                        if (!dlRes.ok) throw new Error('Gagal');
-                        const blob = await dlRes.blob();
-                        const a = document.createElement('a');
-                        a.href = URL.createObjectURL(blob);
-                        a.download = `pin-vid-${Date.now()}.mp4`;
-                        a.click();
-                        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                        showToast('Video Tersimpan!');
-                    } catch (error) { showToast('Gagal simpan video.'); }
-                    setBtnLoading(saveBtn, false, '🎬 SIMPAN VIDEO');
-                };
-            }
+            // --- LOGIKA TOMBOL VIDEO ---
+            document.getElementById('btn-dl-vid').onclick = async (e) => {
+                if (!currentVideoUrl) {
+                    showToast('Link ini tidak memiliki video, cuma gambar.');
+                    return;
+                }
+                const saveBtn = e.target;
+                setBtnLoading(saveBtn, true, 'Menyimpan...');
+                try {
+                    const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ download_url: currentVideoUrl })
+                    });
+                    if (!dlRes.ok) throw new Error('Gagal');
+                    const blob = await dlRes.blob();
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `pin-vid-${Date.now()}.mp4`;
+                    a.click();
+                    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                    showToast('Video Tersimpan!');
+                } catch (error) { showToast('Gagal simpan video.'); }
+                setBtnLoading(saveBtn, false, '🎬 DOWNLOAD VIDEO');
+            };
 
-            // --- LOGIKA SIMPAN GAMBAR ---
-            if (currentImageUrl) {
-                document.getElementById('btn-dl-img').onclick = async (e) => {
-                    const saveBtn = e.target;
-                    setBtnLoading(saveBtn, true, 'Menyimpan...');
-                    try {
-                        const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ download_url: currentImageUrl })
-                        });
-                        if (!dlRes.ok) throw new Error('Gagal');
-                        const blob = await dlRes.blob();
-                        const a = document.createElement('a');
-                        a.href = URL.createObjectURL(blob);
-                        a.download = `pin-img-${Date.now()}.jpg`;
-                        a.click();
-                        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                        showToast('Gambar Tersimpan!');
-                    } catch (error) { showToast('Gagal simpan gambar.'); }
-                    setBtnLoading(saveBtn, false, '🖼️ SIMPAN GAMBAR');
-                };
-            }
+            // --- LOGIKA TOMBOL GAMBAR ---
+            document.getElementById('btn-dl-img').onclick = async (e) => {
+                if (!currentImageUrl) {
+                    showToast('Gambar tidak ditemukan.');
+                    return;
+                }
+                const saveBtn = e.target;
+                setBtnLoading(saveBtn, true, 'Menyimpan...');
+                try {
+                    const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ download_url: currentImageUrl })
+                    });
+                    if (!dlRes.ok) throw new Error('Gagal');
+                    const blob = await dlRes.blob();
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `pin-img-${Date.now()}.jpg`;
+                    a.click();
+                    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                    showToast('Gambar Tersimpan!');
+                } catch (error) { showToast('Gagal simpan gambar.'); }
+                setBtnLoading(saveBtn, false, '🖼️ DOWNLOAD GAMBAR');
+            };
 
         } catch (e) {
             box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
