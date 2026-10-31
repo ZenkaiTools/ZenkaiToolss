@@ -417,7 +417,6 @@ document.addEventListener('DOMContentLoaded', () => {
         box.innerHTML = '<div class="loader"></div>';
 
         try {
-            // NEMBAK EDGE FUNCTION SUPABASE LU SENDIRI
             const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -432,18 +431,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let mediaUrl = "";
             let isVideo = false;
+            
+            // Bongkar JSON
             const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
 
             if (!pinDataObj) throw new Error('Struktur data Pinterest tidak dikenali');
 
+            // 1. CEK VIDEO DULU (Prioritas Utama)
             if (pinDataObj.videos && pinDataObj.videos.videoList && pinDataObj.videos.videoList.v720P) {
                 mediaUrl = pinDataObj.videos.videoList.v720P.url;
                 isVideo = true;
-            } else if (pinDataObj.images_orig && pinDataObj.images_orig.url) {
+            } 
+            // 2. KALAU BUKAN VIDEO, BARU AMBIL GAMBAR
+            else if (pinDataObj.images_orig && pinDataObj.images_orig.url) {
                 mediaUrl = pinDataObj.images_orig.url;
-                isVideo = false;
-            } else if (pinDataObj.images_736x && pinDataObj.images_736x.url) {
-                mediaUrl = pinDataObj.images_736x.url;
                 isVideo = false;
             }
 
@@ -457,20 +458,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button class="action-btn" id="btn-save-pin" style="margin-top:10px;">Simpan ke Galeri</button>
             `;
 
+            // Tombol Simpan Anti-Gagal
             document.getElementById('btn-save-pin').onclick = async () => {
                 const saveBtn = document.getElementById('btn-save-pin');
-                setBtnLoading(saveBtn, true, 'Simpan ke Galeri');
+                setBtnLoading(saveBtn, true, 'Menyimpan...');
                 try {
-                    const blob = await (await fetch(mediaUrl)).blob();
+                    // Download lewat Supabase biar nggak kena blokir browser
+                    const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ download_url: mediaUrl })
+                    });
+                    
+                    if (!dlRes.ok) throw new Error('Gagal download');
+                    
+                    const blob = await dlRes.blob();
                     const ext = isVideo ? 'mp4' : 'jpg';
+                    
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
                     a.download = `pin-${Date.now()}.${ext}`;
                     a.click();
                     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                    showToast('Tersimpan!');
+                    showToast('Berhasil disimpan ke Galeri!');
                 } catch (e) { 
-                    showToast('Gagal simpan otomatis. Tekan lama pada media.'); 
+                    showToast('Gagal simpan, coba lagi.'); 
                 }
                 setBtnLoading(saveBtn, false, 'Simpan ke Galeri');
             };
