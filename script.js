@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalContent.innerHTML = `
         ${closeSvg}
         <h3>Pinterest DL</h3>
-        <span class="desc-text">Download gambar atau video dari Pinterest via Sylvatica.</span>
+        <span class="desc-text">Download gambar atau video dari Pinterest.</span>
         <input type="text" id="pin-url" placeholder="Paste link Pinterest (pin.it/...)">
         <button class="action-btn" id="btn-pin">Download</button>
         <div id="pin-res" style="display:none; margin-top:15px; text-align:center;"></div>
@@ -412,14 +412,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const API_KEY = 'sylva-e96de6848abe4ce410a0f85ceb0d25ce';
         
         if (!url) return showToast('Masukkan link!');
-        if (!/pinterest\.com|pin\.it/i.test(url)) return showToast('Link harus dari Pinterest!');
         
         box.style.display = 'block';
         setBtnLoading(btn, true, 'Download');
         box.innerHTML = '<div class="loader"></div>';
 
         try {
-            const res = await fetch(`https://sylvatica.my.id/api/download/pinterest?url=${encodeURIComponent(url)}&apikey=${API_KEY}`);
+            // 1. URL Asli API Sylvatica
+            const targetApi = `https://sylvatica.my.id/api/download/pinterest?url=${encodeURIComponent(url)}&apikey=${API_KEY}`;
+            
+            // 2. BUNGKUS PAKAI PROXY ALLORIGINS (Biar nggak diblokir)
+            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetApi)}`;
+            
+            const res = await fetch(proxyUrl);
             const data = await res.json();
             
             if (data.status === false || data.error) {
@@ -428,24 +433,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let mediaUrl = "";
             let isVideo = false;
-
-            // Bongkar nested object Pinterest
             const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
 
             if (!pinDataObj) throw new Error('Struktur data Pinterest tidak dikenali');
 
-            // Prioritas 1: Video
             if (pinDataObj.videos && pinDataObj.videos.videoList && pinDataObj.videos.videoList.v720P) {
                 mediaUrl = pinDataObj.videos.videoList.v720P.url;
                 isVideo = true;
-            } 
-            // Prioritas 2: Gambar HD (Orig)
-            else if (pinDataObj.images_orig && pinDataObj.images_orig.url) {
+            } else if (pinDataObj.images_orig && pinDataObj.images_orig.url) {
                 mediaUrl = pinDataObj.images_orig.url;
                 isVideo = false;
-            }
-            // Prioritas 3: Gambar 736x
-            else if (pinDataObj.images_736x && pinDataObj.images_736x.url) {
+            } else if (pinDataObj.images_736x && pinDataObj.images_736x.url) {
                 mediaUrl = pinDataObj.images_736x.url;
                 isVideo = false;
             }
