@@ -424,6 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentImageUrl = "";
 
         try {
+            // Tetap nembak ke Supabase lu
             const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -432,52 +433,33 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const data = await res.json();
             
-            if (data.status === false || data.error) {
+            if (!data.status || !data.data) {
                 throw new Error(data.error || 'Konten tidak ditemukan');
             }
 
-            const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
-            if (!pinDataObj) throw new Error('Struktur data tidak dikenali');
-
-            // 1. BONGKAR VIDEO (Sikat dari videoUrls)
-            if (pinDataObj.videos) {
-                if (pinDataObj.videos.videoList?.v720P?.url) {
-                    currentVideoUrl = pinDataObj.videos.videoList.v720P.url;
-                } else if (pinDataObj.videos.videoUrls && Array.isArray(pinDataObj.videos.videoUrls)) {
-                    // Cari yang .mp4 dulu
-                    const mp4Url = pinDataObj.videos.videoUrls.find(u => u.includes('.mp4'));
-                    if (mp4Url) {
-                        currentVideoUrl = mp4Url;
-                    } else {
-                        // Kalau nggak ada mp4, ambil m3u8
-                        const m3u8Url = pinDataObj.videos.videoUrls.find(u => u.includes('.m3u8'));
-                        if (m3u8Url) currentVideoUrl = m3u8Url;
-                    }
-                }
+            // BONGKAR FORMAT API BARU
+            if (data.data.video) currentVideoUrl = data.data.video;
+            if (data.data.image) currentImageUrl = data.data.image;
+            
+            // Kadang formatnya array (kalau isinya banyak gambar/video)
+            if (data.data.medias && Array.isArray(data.data.medias)) {
+                data.data.medias.forEach(media => {
+                    if (media.type === 'video') currentVideoUrl = media.url;
+                    if (media.type === 'image') currentImageUrl = media.url;
+                });
             }
 
-            // 2. BONGKAR GAMBAR
-            if (pinDataObj.images_orig?.url) {
-                currentImageUrl = pinDataObj.images_orig.url;
-            } else if (pinDataObj.images_736x?.url) {
-                currentImageUrl = pinDataObj.images_736x.url;
-            }
-
-            // --- TAMPILAN UI ---
+            // --- TAMPILAN UI (SELALU 2 TOMBOL) ---
             let htmlContent = '';
 
-            // Preview (Pake Video kalau ada, kalau nggak pake gambar)
-            if (currentVideoUrl && currentVideoUrl.includes('.mp4')) {
+            // Preview
+            if (currentVideoUrl) {
                 htmlContent += `<video src="${escapeHTML(currentVideoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;"></video>`;
             } else if (currentImageUrl) {
-                // Kalau videonya m3u8 (nggak bisa di preview), kita tampilin gambarnya aja
                 htmlContent += `<img src="${escapeHTML(currentImageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;">`;
-                if (currentVideoUrl) {
-                    htmlContent += `<p style="font-size:10px; opacity:0.7; margin-bottom:10px;">*(Video format HLS, silakan klik tombol download video)*</p>`;
-                }
             }
 
-            // DUA TOMBOL SELALU ADA
+            // DUA TOMBOL
             htmlContent += `
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <button class="action-btn" id="btn-dl-vid" style="background:#00ff9d; margin-bottom:0;">🎬 DOWNLOAD VIDEO</button>
@@ -487,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             box.innerHTML = htmlContent;
 
-            // --- LOGIKA TOMBOL VIDEO ---
+            // Logika Tombol Video
             document.getElementById('btn-dl-vid').onclick = async (e) => {
                 if (!currentVideoUrl) {
                     showToast('Link ini tidak memiliki video, cuma gambar.');
@@ -496,30 +478,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const saveBtn = e.target;
                 setBtnLoading(saveBtn, true, 'Menyimpan...');
                 try {
-                    // Sedot lewat Supabase
                     const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ download_url: currentVideoUrl })
                     });
-                    
                     if (!dlRes.ok) throw new Error('Gagal');
-                    
                     const blob = await dlRes.blob();
-                    const ext = currentVideoUrl.includes('.mp4') ? 'mp4' : 'm3u8'; 
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
-                    a.download = `pin-vid-${Date.now()}.${ext}`;
+                    a.download = `pin-vid-${Date.now()}.mp4`;
                     a.click();
                     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
                     showToast('Video Tersimpan!');
-                } catch (error) { 
-                    showToast('Gagal simpan video. Coba lagi.'); 
-                }
+                } catch (error) { showToast('Gagal simpan video.'); }
                 setBtnLoading(saveBtn, false, '🎬 DOWNLOAD VIDEO');
             };
 
-            // --- LOGIKA TOMBOL GAMBAR ---
+            // Logika Tombol Gambar
             document.getElementById('btn-dl-img').onclick = async (e) => {
                 if (!currentImageUrl) {
                     showToast('Gambar tidak ditemukan.');
