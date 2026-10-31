@@ -409,51 +409,95 @@ if (tool === 'linkvertise') {
         };
     }
 
-    else if (tool === 'instagram') {
+        else if (tool === 'instagram') {
         modalContent.innerHTML = `
             ${closeSvg}
             <h3>Instagram DL</h3>
-            <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">
-                🚧 SEDANG MAINTENANCE 🚧
-            </span>
-            <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">
-                Fitur downloader Instagram saat ini sedang dalam perbaikan oleh developer (API Down).<br><br>
-                Silakan gunakan tool lain atau coba lagi nanti.
-            </p>
-            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">
-                Pantau Update di WhatsApp
-            </a>
+            <span class="desc-text">Download foto, video, atau carousel dari Instagram. Cukup paste link-nya.</span>
+            <input type="text" id="ig-url" placeholder="Paste link Instagram...">
+            <button class="action-btn" id="btn-dl-ig">Proses Media</button>
+            <div id="ig-result" style="margin-top:15px;"></div>
         `;
-    }
-
-    else if (tool === 'facebook') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Facebook DL</h3>
-            <span class="desc-text">Simpan video dari Facebook dalam kualitas HD.</span>
-            <input type="text" id="fb-url" placeholder="Paste link Facebook...">
-            <button class="action-btn" id="btn-fb">Download</button>
-            <div id="fb-res" style="display:none; margin-top:15px; text-align:center;"></div>
-        `;
-        const btn = document.getElementById('btn-fb');
+        
+        const btn = document.getElementById('btn-dl-ig');
         btn.onclick = async () => {
-            const url = document.getElementById('fb-url').value.trim();
-            const box = document.getElementById('fb-res');
-            if (!url) return showToast('Masukkan link!');
-            box.style.display = 'block';
-            setBtnLoading(btn, true, 'Download');
+            const url = document.getElementById('ig-url').value.trim();
+            const box = document.getElementById('ig-result');
+            
+            if (!url) return showToast('Masukkan link Instagram dulu!');
+            if (!/instagram\.com|instagr\.am/i.test(url)) return showToast('Link harus dari Instagram!');
+            
+            setBtnLoading(btn, true);
             box.innerHTML = '<div class="loader"></div>';
+            
             try {
-                const res = await fetch(`https://api.vevioz.com/api/button/facebook?url=${encodeURIComponent(url)}`);
+                // Tembak langsung ke API AxAPI
+                const apiUrl = `https://api.axai.my.id/axnz/h?url=${encodeURIComponent(url)}`;
+                
+                const res = await fetch(apiUrl);
                 const data = await res.json();
-                const videoUrl = data.hd || data.sd || data.url;
-                if (!videoUrl) throw new Error('Video tidak ditemukan');
-                box.innerHTML = `
-                    <video src="${escapeHTML(videoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border);"></video>
-                    <a href="${escapeHTML(videoUrl)}" download class="action-btn" style="margin-top:10px;">Simpan Video</a>
-                `;
-            } catch (e) { box.innerHTML = '<p class="error-msg">Gagal. Video private atau API down.</p>'; }
-            setBtnLoading(btn, false, 'Download');
+                
+                // Validasi response
+                if (!data.status || !data.result || !data.result.downloads) {
+                    throw new Error('Gagal mengambil media. Pastikan akun tidak private.');
+                }
+                
+                const downloads = data.result.downloads;
+                let htmlContent = `<p style="font-size:12px; text-align:center; margin-bottom:10px; font-weight:bold; color:var(--primary);">Ditemukan ${downloads.length} media</p>`;
+                
+                htmlContent += `<div style="display:flex; flex-direction:column; gap:15px;">`;
+                
+                downloads.forEach((item, index) => {
+                    const isVideo = item.type === 'video';
+                    const mediaTag = isVideo 
+                        ? `<video src="${escapeHTML(item.url)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom:10px;"></video>`
+                        : `<img src="${escapeHTML(item.url)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom:10px;">`;
+                        
+                    htmlContent += `
+                        <div style="border:2px dashed var(--border); padding:10px; border-radius:12px; background:var(--bg);">
+                            ${mediaTag}
+                            <button class="action-btn" id="btn-save-ig-${index}" data-url="${escapeHTML(item.url)}" data-type="${item.type}">
+                                💾 Simpan ${isVideo ? 'Video' : 'Gambar'} ${downloads.length > 1 ? (index + 1) : ''}
+                            </button>
+                        </div>
+                    `;
+                });
+                
+                htmlContent += `</div>`;
+                box.innerHTML = htmlContent;
+                
+                // Pasang event listener untuk tombol simpan
+                downloads.forEach((item, index) => {
+                    const saveBtn = document.getElementById(`btn-save-ig-${index}`);
+                    if (saveBtn) {
+                        saveBtn.onclick = async () => {
+                            setBtnLoading(saveBtn, true, 'Menyimpan...');
+                            try {
+                                // Fetch sebagai blob agar bisa didownload langsung
+                                const dlRes = await fetch(item.url);
+                                if (!dlRes.ok) throw new Error('Gagal mengunduh');
+                                const blob = await dlRes.blob();
+                                
+                                const a = document.createElement('a');
+                                a.href = URL.createObjectURL(blob);
+                                a.download = `ig-${item.type}-${Date.now()}.${item.type === 'video' ? 'mp4' : 'jpg'}`;
+                                a.click();
+                                setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                                showToast('Tersimpan ke Galeri!');
+                            } catch (err) {
+                                // Fallback kalau CORS ngeblokir download via blob
+                                window.open(item.url, '_blank');
+                                showToast('Membuka media di tab baru...');
+                            }
+                            setBtnLoading(saveBtn, false, `💾 Simpan ${item.type === 'video' ? 'Video' : 'Gambar'}`);
+                        };
+                    }
+                });
+                
+            } catch (e) {
+                box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+            }
+            setBtnLoading(btn, false, 'Proses Media');
         };
     }
 
@@ -1330,13 +1374,6 @@ if (tool === 'linkvertise') {
     // =========================================
 // 12. UPDATE VISUAL: MAINTENANCE & COMING SOON
 // =========================================
-// Tandai Instagram (Maintenance)
-const igCard = document.querySelector('.tool-card[onclick="openTool(\'instagram\')"]');
-if (igCard) {
-    igCard.classList.add('maintenance');
-    const igTitle = igCard.querySelector('h4');
-    if (igTitle) igTitle.innerText = 'Instagram DL';
-}
 
 // Tandai Coming Soon (Otomatis dari list di HTML)
 const comingSoonList = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
