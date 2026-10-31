@@ -432,9 +432,11 @@ if (tool === 'linkvertise') {
             
             try {
                 // Tembak langsung ke API AxAPI
-                const apiUrl = `https://api.axai.my.id/axnz/h?url=${encodeURIComponent(url)}`;
-                
-                const res = await fetch(apiUrl);
+                const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-instagram', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: url })
+});
                 const data = await res.json();
                 
                 // Validasi response
