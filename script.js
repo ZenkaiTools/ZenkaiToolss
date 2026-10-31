@@ -432,41 +432,50 @@ document.addEventListener('DOMContentLoaded', () => {
             let videoUrl = "";
             let imageUrl = "";
             
+            // KUNCI UTAMANYA: Ambil object dari d1 atau d2
             const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
 
             if (!pinDataObj) throw new Error('Struktur data Pinterest tidak dikenali');
 
-            // 1. Ambil URL Video (Kalau ada)
-            if (pinDataObj.videos && pinDataObj.videos.videoList && pinDataObj.videos.videoList.v720P) {
-                videoUrl = pinDataObj.videos.videoList.v720P.url;
-            } 
-            
-            // 2. Ambil URL Gambar (Thumbnail/Asli)
+            // 1. BONGKAR VIDEO (Wajib di atas!)
+            if (pinDataObj.videos && pinDataObj.videos.videoList) {
+                // Kadang di v720P, kadang di vHLSV4, kita ambil yang ada URL-nya
+                const vList = pinDataObj.videos.videoList;
+                if (vList.v720P && vList.v720P.url) {
+                    videoUrl = vList.v720P.url;
+                } else if (vList.vHLSV4 && vList.vHLSV4.url) {
+                    videoUrl = vList.vHLSV4.url;
+                }
+            }
+
+            // 2. BONGKAR GAMBAR (Ambil yang paling HD)
             if (pinDataObj.images_orig && pinDataObj.images_orig.url) {
                 imageUrl = pinDataObj.images_orig.url;
             } else if (pinDataObj.images_736x && pinDataObj.images_736x.url) {
                 imageUrl = pinDataObj.images_736x.url;
             }
 
-            if (!videoUrl && !imageUrl) throw new Error('Media tidak ditemukan di dalam link ini');
+            if (!videoUrl && !imageUrl) throw new Error('Media tidak ditemukan');
 
             // --- TAMPILAN UI ---
             let htmlContent = '';
 
+            // Tampilkan Video jika ada
             if (videoUrl) {
                 htmlContent += `
                     <div style="margin-bottom: 20px;">
-                        <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--primary);">🎬 VIDEO</p>
+                        <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--primary);">🎬 VIDEO (HD)</p>
                         <video src="${escapeHTML(videoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 10px;"></video>
                         <button class="action-btn" id="btn-save-vid" style="background:#00ff9d;">Simpan Video</button>
                     </div>
                 `;
             }
 
+            // Tampilkan Gambar jika ada
             if (imageUrl) {
                 htmlContent += `
-                    <div style="margin-top: 15px; border-top: 2px dashed var(--border); padding-top: 15px;">
-                        <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--primary);">🖼️ GAMBAR (HD)</p>
+                    <div style="${videoUrl ? 'border-top: 2px dashed var(--border); padding-top: 15px;' : ''}">
+                        <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--primary);">🖼️ GAMBAR (COVER)</p>
                         <img src="${escapeHTML(imageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 10px;">
                         <button class="action-btn" id="btn-save-img">Simpan Gambar</button>
                     </div>
@@ -475,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             box.innerHTML = htmlContent;
 
-            // Fungsi pembantu untuk download lewat Supabase
+            // Fungsi Simpan Anti Gagal (Lewat Supabase)
             const downloadMedia = async (mediaUrl, ext, saveBtnElement) => {
                 setBtnLoading(saveBtnElement, true, 'Menyimpan...');
                 try {
@@ -500,7 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(saveBtnElement, false, saveBtnElement.id === 'btn-save-vid' ? 'Simpan Video' : 'Simpan Gambar');
             };
 
-            // Pasang event listener ke tombol yang muncul
+            // Pasang tombol
             if (videoUrl) {
                 document.getElementById('btn-save-vid').onclick = (e) => downloadMedia(videoUrl, 'mp4', e.target);
             }
