@@ -400,9 +400,9 @@ document.addEventListener('DOMContentLoaded', () => {
     modalContent.innerHTML = `
         ${closeSvg}
         <h3>Pinterest DL</h3>
-        <span class="desc-text">Download gambar atau video dari Pinterest via KuroNeko.</span>
+        <span class="desc-text">Download video & gambar dari Pinterest via KuroNeko.</span>
         <input type="text" id="pin-url" placeholder="Paste link Pinterest (pin.it/...)">
-        <button class="action-btn" id="btn-pin">Download</button>
+        <button class="action-btn" id="btn-pin">Ambil Media</button>
         <div id="pin-res" style="display:none; margin-top:15px; text-align:center;"></div>
     `;
     const btn = document.getElementById('btn-pin');
@@ -413,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!url) return showToast('Masukkan link!');
         
         box.style.display = 'block';
-        setBtnLoading(btn, true, 'Download');
+        setBtnLoading(btn, true, 'Mengambil...');
         box.innerHTML = '<div class="loader"></div>';
 
         try {
@@ -429,41 +429,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.error || 'Konten tidak ditemukan');
             }
 
-            let mediaUrl = "";
-            let isVideo = false;
+            let videoUrl = "";
+            let imageUrl = "";
             
-            // Bongkar JSON
             const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
 
             if (!pinDataObj) throw new Error('Struktur data Pinterest tidak dikenali');
 
-            // 1. CEK VIDEO DULU (Prioritas Utama)
+            // 1. Ambil URL Video (Kalau ada)
             if (pinDataObj.videos && pinDataObj.videos.videoList && pinDataObj.videos.videoList.v720P) {
-                mediaUrl = pinDataObj.videos.videoList.v720P.url;
-                isVideo = true;
+                videoUrl = pinDataObj.videos.videoList.v720P.url;
             } 
-            // 2. KALAU BUKAN VIDEO, BARU AMBIL GAMBAR
-            else if (pinDataObj.images_orig && pinDataObj.images_orig.url) {
-                mediaUrl = pinDataObj.images_orig.url;
-                isVideo = false;
+            
+            // 2. Ambil URL Gambar (Thumbnail/Asli)
+            if (pinDataObj.images_orig && pinDataObj.images_orig.url) {
+                imageUrl = pinDataObj.images_orig.url;
+            } else if (pinDataObj.images_736x && pinDataObj.images_736x.url) {
+                imageUrl = pinDataObj.images_736x.url;
             }
 
-            if (!mediaUrl) throw new Error('Media URL tidak ditemukan');
+            if (!videoUrl && !imageUrl) throw new Error('Media tidak ditemukan di dalam link ini');
 
-            box.innerHTML = `
-                ${isVideo
-                    ? `<video src="${escapeHTML(mediaUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border);"></video>`
-                    : `<img src="${escapeHTML(mediaUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border);">`
-                }
-                <button class="action-btn" id="btn-save-pin" style="margin-top:10px;">Simpan ke Galeri</button>
-            `;
+            // --- TAMPILAN UI ---
+            let htmlContent = '';
 
-            // Tombol Simpan Anti-Gagal
-            document.getElementById('btn-save-pin').onclick = async () => {
-                const saveBtn = document.getElementById('btn-save-pin');
-                setBtnLoading(saveBtn, true, 'Menyimpan...');
+            if (videoUrl) {
+                htmlContent += `
+                    <div style="margin-bottom: 20px;">
+                        <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--primary);">🎬 VIDEO</p>
+                        <video src="${escapeHTML(videoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 10px;"></video>
+                        <button class="action-btn" id="btn-save-vid" style="background:#00ff9d;">Simpan Video</button>
+                    </div>
+                `;
+            }
+
+            if (imageUrl) {
+                htmlContent += `
+                    <div style="margin-top: 15px; border-top: 2px dashed var(--border); padding-top: 15px;">
+                        <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--primary);">🖼️ GAMBAR (HD)</p>
+                        <img src="${escapeHTML(imageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 10px;">
+                        <button class="action-btn" id="btn-save-img">Simpan Gambar</button>
+                    </div>
+                `;
+            }
+
+            box.innerHTML = htmlContent;
+
+            // Fungsi pembantu untuk download lewat Supabase
+            const downloadMedia = async (mediaUrl, ext, saveBtnElement) => {
+                setBtnLoading(saveBtnElement, true, 'Menyimpan...');
                 try {
-                    // Download lewat Supabase biar nggak kena blokir browser
                     const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -473,24 +488,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!dlRes.ok) throw new Error('Gagal download');
                     
                     const blob = await dlRes.blob();
-                    const ext = isVideo ? 'mp4' : 'jpg';
-                    
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
                     a.download = `pin-${Date.now()}.${ext}`;
                     a.click();
                     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                    showToast('Berhasil disimpan ke Galeri!');
+                    showToast(`Berhasil disimpan!`);
                 } catch (e) { 
                     showToast('Gagal simpan, coba lagi.'); 
                 }
-                setBtnLoading(saveBtn, false, 'Simpan ke Galeri');
+                setBtnLoading(saveBtnElement, false, saveBtnElement.id === 'btn-save-vid' ? 'Simpan Video' : 'Simpan Gambar');
             };
+
+            // Pasang event listener ke tombol yang muncul
+            if (videoUrl) {
+                document.getElementById('btn-save-vid').onclick = (e) => downloadMedia(videoUrl, 'mp4', e.target);
+            }
+            if (imageUrl) {
+                document.getElementById('btn-save-img').onclick = (e) => downloadMedia(imageUrl, 'jpg', e.target);
+            }
 
         } catch (e) {
             box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
         }
-        setBtnLoading(btn, false, 'Download');
+        setBtnLoading(btn, false, 'Ambil Media');
     };
 }
 
