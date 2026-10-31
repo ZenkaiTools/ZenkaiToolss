@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalContent.innerHTML = `
         ${closeSvg}
         <h3>Pinterest DL</h3>
-        <span class="desc-text">Download gambar atau video dari Pinterest.</span>
+        <span class="desc-text">Download gambar atau video dari Pinterest via KuroNeko.</span>
         <input type="text" id="pin-url" placeholder="Paste link Pinterest (pin.it/...)">
         <button class="action-btn" id="btn-pin">Download</button>
         <div id="pin-res" style="display:none; margin-top:15px; text-align:center;"></div>
@@ -409,7 +409,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.onclick = async () => {
         const url = document.getElementById('pin-url').value.trim();
         const box = document.getElementById('pin-res');
-        const API_KEY = 'sylva-e96de6848abe4ce410a0f85ceb0d25ce';
         
         if (!url) return showToast('Masukkan link!');
         
@@ -418,13 +417,13 @@ document.addEventListener('DOMContentLoaded', () => {
         box.innerHTML = '<div class="loader"></div>';
 
         try {
-            // 1. URL Asli API Sylvatica
-            const targetApi = `https://sylvatica.my.id/api/download/pinterest?url=${encodeURIComponent(url)}&apikey=${API_KEY}`;
+            // NEMBAK EDGE FUNCTION SUPABASE LU SENDIRI
+            const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: url })
+            });
             
-            // 2. BUNGKUS PAKAI PROXY ALLORIGINS (Biar nggak diblokir)
-            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetApi)}`;
-            
-            const res = await fetch(proxyUrl);
             const data = await res.json();
             
             if (data.status === false || data.error) {
