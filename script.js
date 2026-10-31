@@ -430,26 +430,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ url: url })
             });
             
-            const result = await res.json();
+            const data = await res.json();
             
-            if (result.status === false) {
-                throw new Error(result.error || 'Konten tidak ditemukan');
+            if (data.status === false || data.error) {
+                throw new Error(data.error || 'Konten tidak ditemukan');
             }
 
-            // BONGKAR DATA DARI API BARU (pinterestdownloader.pro)
-            const data = result.data;
-            
-            // Cek format array medias
-            if (data.data && data.data.medias && Array.isArray(data.data.medias)) {
-                data.data.medias.forEach(media => {
-                    if (media.type === 'video') currentVideoUrl = media.url;
-                    if (media.type === 'image') currentImageUrl = media.url;
-                });
-            } 
-            // Fallback kalau formatnya langsung
-            else if (data.data) {
-                if (data.data.video) currentVideoUrl = data.data.video;
-                if (data.data.image) currentImageUrl = data.data.image;
+            const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
+            if (!pinDataObj) throw new Error('Struktur data tidak dikenali');
+
+            // 1. BONGKAR VIDEO (Paksa cari .mp4 di videoUrls)
+            if (pinDataObj.videos) {
+                if (pinDataObj.videos.videoList?.v720P?.url) {
+                    currentVideoUrl = pinDataObj.videos.videoList.v720P.url;
+                } else if (pinDataObj.videos.videoUrls && Array.isArray(pinDataObj.videos.videoUrls)) {
+                    const mp4Url = pinDataObj.videos.videoUrls.find(u => u.includes('.mp4'));
+                    if (mp4Url) currentVideoUrl = mp4Url;
+                }
+            }
+
+            // 2. BONGKAR GAMBAR
+            if (pinDataObj.images_orig?.url) {
+                currentImageUrl = pinDataObj.images_orig.url;
+            } else if (pinDataObj.images_736x?.url) {
+                currentImageUrl = pinDataObj.images_736x.url;
             }
 
             // --- TAMPILAN UI (SELALU 2 TOMBOL) ---
