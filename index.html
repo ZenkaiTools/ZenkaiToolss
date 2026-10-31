@@ -69,8 +69,24 @@
             </div>
 
             <div class="welcome-box">
-                <h2>Halo, Netrunner! </h2>
-                <p>Selamat datang di Zenkai Tools. Akses berbagai modul utilitas dan generator lo di sini.</p>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <h2>Halo, Netrunner! </h2>
+                        <p style="margin-top:5px; font-size:12px; line-height:1.5;">Akses berbagai modul utilitas, generator, dan fitur sultan lo di sini. Semua gratis!</p>
+                    </div>
+                    <div style="background:var(--primary); color:#000; font-weight:800; font-size:10px; padding:4px 8px; border-radius:6px; border:2px solid var(--border); box-shadow:2px 2px 0 #000;">v1.0</div>
+                </div>
+                <div style="margin-top:15px; display:flex; gap:8px;">
+                    <div style="flex:1; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px; text-align:center; border:1px dashed var(--border);">
+                        <b style="font-size:14px; display:block;">26</b><span style="font-size:9px; opacity:0.7;">Tools</span>
+                    </div>
+                    <div style="flex:1; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px; text-align:center; border:1px dashed var(--border);">
+                        <b style="font-size:14px; display:block;">24/7</b><span style="font-size:9px; opacity:0.7;">Online</span>
+                    </div>
+                    <div style="flex:1; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px; text-align:center; border:1px dashed var(--border);">
+                        <b style="font-size:14px; display:block;">100%</b><span style="font-size:9px; opacity:0.7;">Gratis</span>
+                    </div>
+                </div>
             </div>
 
             <div class="tools-section">
@@ -113,6 +129,14 @@
                     <div class="tool-card press" onclick="openTool('timer')"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h4>Timer</h4></div>
                     <div class="tool-card press" onclick="openTool('umur')"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><h4>Hitung Umur</h4></div>
                     <div class="tool-card press" onclick="openTool('warna')"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div><h4>Gen Warna</h4></div>
+
+                    <!-- FITUR BARU KURONEKO -->
+                    <div class="tool-card press" onclick="openTool('tempmail')"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div><h4>Temp Mail</h4></div>
+                    <div class="tool-card press" onclick="openTool('nik')"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></div><h4>NIK Parser</h4></div>
+                    <div class="tool-card press" onclick="openTool('mlbb')"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>Stalk MLBB</h4></div>
+                    <div class="tool-card press" onclick="openTool('spotify')"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 15c2-2 6-2 8 0"/><path d="M8 11c3-2.5 8-2 10 1"/><path d="M8 7c4-3 10-2 12 2"/></svg></div><h4>Spotify DL</h4></div>
+                    <div class="tool-card press" onclick="openTool('iplookup')"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>IP Lookup</h4></div>
+                    <div class="tool-card press" onclick="openTool('removebg')"><div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div><h4>RemoveBg</h4></div>
                 </div>
             </div>
             <div class="credit-text">Dibuat oleh <b>Andika T.M</b></div>
@@ -128,21 +152,31 @@
                 </div>
             </header>
 
-            <div class="welcome-box">
-                <h2>Fitur Sultan </h2>
-                <p>Bypass link dan ambil file premium.</p>
+            <div class="welcome-box" style="text-align:center; padding:25px 15px;">
+                <h2 style="font-size:24px; margin-bottom:10px;">Fitur Sultan </h2>
+                <p style="font-size:12px; opacity:0.8;">Bypass link iklan dan ambil aplikasi premium secara instan. Tanpa ribet, tanpa bayar.</p>
             </div>
 
             <div class="tools-section">
                 <div class="grid-tools">
                     <!-- LINKVERTISE BYPASS -->
-                    <div class="tool-card press" onclick="openTool('linkvertise')"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div><h4>Bypass Link</h4></div>
+                    <div class="tool-card press" onclick="openTool('linkvertise')">
+                        <div class="t-icon bg-purple" style="width:60px; height:60px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        </div>
+                        <h4 style="font-size:11px; margin-top:5px;">Bypass Link</h4>
+                    </div>
                     
                     <!-- ALIGHT MOTION -->
-                    <div class="tool-card press" onclick="openTool('alightmotion')"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><h4>Alight Motion</h4></div>
+                    <div class="tool-card press" onclick="openTool('alightmotion')">
+                        <div class="t-icon bg-blue" style="width:60px; height:60px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <h4 style="font-size:11px; margin-top:5px;">Alight Motion</h4>
+                    </div>
                 </div>
             </div>
-            <div class="credit-text">Powered by <b>KuroNeko API</b></div>
+            <div class="credit-text" style="margin-top:30px;">Powered by <b>Zenkai Tools</b></div>
         </main>
 
         <!-- ========================================= -->
@@ -161,9 +195,9 @@
             <div class="tools-section" style="margin-bottom:15px;">
                 <h3 style="margin-bottom:15px; font-family:var(--font-head);">Pilih Tema</h3>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                    <button class="action-btn press" onclick="setTheme('comic')">Comic (Warna Cerah)</button>
-                    <button class="action-btn press" onclick="setTheme('cyber')">Cyberpunk (Gelap)</button>
-                    <button class="action-btn press" onclick="setTheme('minimal')">Minimalist (Putih)</button>
+                    <button class="action-btn press" onclick="setTheme('comic')" style="background:#ff007f; color:#fff;">Comic (Warna Cerah)</button>
+                    <button class="action-btn press" onclick="setTheme('cyber')" style="background:#09090b; color:#00ffcc; border-color:#00ffcc;">Cyberpunk (Gelap)</button>
+                    <button class="action-btn press" onclick="setTheme('minimal')" style="background:#f9f9f9; color:#1a1a1a;">Minimalist (Putih)</button>
                 </div>
             </div>
 
@@ -200,7 +234,7 @@
                 <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; border-top:2px dashed var(--border); padding-top:15px;">
                     <div style="display:flex; justify-content:space-between;"><span>Versi:</span> <b>1.0.0 (Stable)</b></div>
                     <div style="display:flex; justify-content:space-between;"><span>Developer:</span> <b>Andika T.M</b></div>
-                    <div style="display:flex; justify-content:space-between;"><span>Total Tools:</span> <b>20+ Modul</b></div>
+                    <div style="display:flex; justify-content:space-between;"><span>Total Tools:</span> <b>26 Modul</b></div>
                     <div style="display:flex; justify-content:space-between;"><span>Framework:</span> <b>Vanilla JS</b></div>
                     <div style="display:flex; justify-content:space-between;"><span>Status:</span> <b style="color:#27ae60;">Online</b></div>
                 </div>
