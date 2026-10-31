@@ -146,9 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.openTool = (tool) => {
         modal.classList.add('active');
         
-        // =========================================
-        // DOWNLOADER
-        // =========================================
         if (tool === 'tiktok') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -271,9 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // =========================================
-        // STALKER
-        // =========================================
         else if (tool === 'stalkig') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -394,11 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
         }
-
-        // =========================================
-        // TOOLS GAMBAR & TEKS
-        // =========================================
-
+                // TOOLS GAMBAR & TEKS
         else if (tool === 'qr') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -622,9 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 screen.innerText = window.calcExpression;
             };
         } 
-                // =========================================
-        // SISA FITUR TOOLS
-        // =========================================
+
         else if (tool === 'zodiak') {
             let tgls = ''; for(let i=1; i<=31; i++) tgls += `<div onclick="setZ('tgl',${i},this)" style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer;">${i}</div>`;
             let blns = ''; const b = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
@@ -847,58 +835,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================
-    // 10. LOGIKA ZENKOMIK (MANGA DEX)
+    // 10. LOGIKA ZENFUN (BYPASS & ALIGHT VIA SUPABASE)
     // =========================================
-    const KURO_KEY = 'sylva-e96de6848abe4ce410a0f85ceb0d25ce';
-
-    window.cariAnime = async () => {
-        const keyword = document.getElementById('anime-search').value;
-        const listBox = document.getElementById('anime-list');
-        
-        if(!keyword) return showToast('Ketik judul komik dulu!');
-        listBox.innerHTML = '<div class="loader" style="grid-column:span 2; margin:20px auto;"></div>';
-        
-        try {
-            const res = await fetch(`https://sylvatica.my.id/api/anime/mangadex-search?query=${encodeURIComponent(keyword)}&page=1&apikey=${KURO_KEY}`);
-            const response = await res.json();
-
-            if (!response.status || !response.result || response.result.length === 0) {
-                throw new Error('Komik tidak ditemukan.');
-            }
-
-            document.getElementById('anime-section-title').innerText = 'Hasil: ' + keyword;
-            listBox.innerHTML = ''; 
-            
-            response.result.forEach(komik => {
-                let imgUrl = 'https://via.placeholder.com/150';
-                if (komik.relationships) {
-                    const cover = komik.relationships.find(rel => rel.type === 'cover_art');
-                    if (cover && cover.attributes && cover.attributes.fileName) {
-                        imgUrl = `https://uploads.mangadex.org/covers/${komik.id}/${cover.attributes.fileName}.256.jpg`;
-                    }
-                }
-
-                const title = komik.attributes.title.en || Object.values(komik.attributes.title)[0] || 'Tanpa Judul';
-
-                listBox.innerHTML += `
-                    <div class="anime-card press" onclick="bacaKomik('${komik.id}')">
-                        <img src="${imgUrl}" onerror="this.src='https://via.placeholder.com/150'">
-                        <div class="info">
-                            <h4>${title}</h4>
-                        </div>
-                    </div>
-                `;
-            });
-        } catch(e) {
-            listBox.innerHTML = `<p style="grid-column:span 2; color:red; text-align:center; font-size:12px;">${e.message}</p>`;
-        }
-    };
-
-    // =========================================
-    // 11. LOGIKA ZENFUN (BYPASS & ALIGHT)
-    // =========================================
-    
-    // TAMBAHAN FITUR BYPASS & ALIGHT MOTION DI SINI
     const originalOpenTool = window.openTool;
     window.openTool = (tool) => {
         originalOpenTool(tool);
@@ -919,7 +857,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 box.style.display = 'block';
                 box.innerHTML = '<div class="loader"></div><p>Memproses...</p>';
                 try {
-                    const res = await fetch(`https://sylvatica.my.id/api/bypass/linkvertise?url=${encodeURIComponent(url)}&apikey=${KURO_KEY}`);
+                    const res = await fetch(`https://sylvatica.my.id/api/bypass/linkvertise?url=${encodeURIComponent(url)}&apikey=sylva-e96de6848abe4ce410a0f85ceb0d25ce`);
                     const data = await res.json();
                     if(!data.status) throw new Error(data.error || 'Gagal');
                     box.innerHTML = `
@@ -934,7 +872,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Alight Motion</h3>
-                <span class="desc-text">Bypass Premium Alight Motion.</span>
+                <span class="desc-text">Bypass Premium via Supabase.</span>
                 <input type="email" id="am-email" placeholder="Email (bebas)">
                 <button class="action-btn" id="btn-am">Generate Link</button>
                 <div id="am-res" style="display:none; margin-top:15px; text-align:center; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
@@ -943,17 +881,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const email = document.getElementById('am-email').value.trim() || "user@zenkai.com";
                 const box = document.getElementById('am-res');
                 box.style.display = 'block';
-                box.innerHTML = '<div class="loader"></div><p>Memproses...</p>';
+                box.innerHTML = '<div class="loader"></div><p>Memproses PoW & Mengirim email...</p>';
                 try {
-                    const res = await fetch(`https://sylvatica.my.id/api/tools/alightmotion?email=${encodeURIComponent(email)}&options=premium&url=&apikey=${KURO_KEY}`);
+                    const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/amprem`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email })
+                    });
                     const data = await res.json();
-                    if(!data.status) throw new Error(data.error || 'Gagal');
+                    
+                    if (data.status === false || data.error) throw new Error(data.message || 'Gagal');
+                    
                     box.innerHTML = `
-                        <a href="${data.result.url || data.result.download}" target="_blank" class="action-btn" style="display:block; text-decoration:none;">Download Alight Motion</a>
+                        <p style="color:#00ff9d; font-size:13px; font-weight:bold; margin-bottom:5px;">Berhasil Terkirim! ✅</p>
+                        <p style="font-size:11px; opacity:0.8;">Cek kotak masuk (Inbox/Spam) di email <b>${email}</b>.</p>
                     `;
-                } catch(e) { box.innerHTML = `<p style="color:red;">Gagal: ${e.message}</p>`; }
+                } catch(e) { box.innerHTML = `<p style="color:#ff3333;">Gagal: ${e.message}</p>`; }
             };
         }
     };
 
-});
+}); // <--- PENUTUP DOMContentLoaded
