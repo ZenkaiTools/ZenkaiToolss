@@ -884,7 +884,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 box.innerHTML = '<div class="loader"></div><p>Memproses via KuroNeko...</p>';
                 
                 try {
-                    const res = await fetch(`https://sylvatica.my.id/api/tools/alightmotion?email=${encodeURIComponent(email)}&options=premium&url=&apikey=sylva-e96de6848abe4ce410a0f85ceb0d25ce`);
+                    // YANG BARU (BENER)
+const res = await fetch(`https://sylvatica.my.id/api/tools/alightmotion?email=${encodeURIComponent(email)}&options=send&url=&apikey=sylva-e96de6848abe4ce410a0f85ceb0d25ce`);
                     const data = await res.json();
                     
                     if(!data.status) throw new Error(data.message || 'Gagal ambil data.');
