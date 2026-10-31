@@ -869,39 +869,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         else if (tool === 'alightmotion') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Alight Motion</h3>
-                <span class="desc-text">Bypass Premium via KuroNeko API.</span>
-                <input type="email" id="am-email" placeholder="Email (bebas)">
-                <button class="action-btn" id="btn-am">Generate Link</button>
-                <div id="am-res" style="display:none; margin-top:15px; text-align:center; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <h3>Alight Motion</h3>
+        <span class="desc-text">Bypass Premium via KuroNeko (Backend).</span>
+        <input type="email" id="am-email" placeholder="Email (bebas)">
+        <button class="action-btn" id="btn-am">Generate Link</button>
+        <div id="am-res" style="display:none; margin-top:15px; text-align:center; border:2px dashed var(--border); padding:15px; border-radius:8px;"></div>
+    `;
+    document.getElementById('btn-am').onclick = async () => {
+        const email = document.getElementById('am-email').value.trim() || "user@zenkai.com";
+        const box = document.getElementById('am-res');
+        box.style.display = 'block';
+        box.innerHTML = '<div class="loader"></div><p>Memproses...</p>';
+        
+        try {
+            // NEMBAK KE SUPABASE (BUKAN KE KURONEKO)
+            const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/amprem`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            });
+            const data = await res.json();
+            
+            if (data.status === false || data.error) throw new Error(data.message || 'Gagal');
+            
+            box.innerHTML = `
+                <p style="color:#00ff9d; font-size:13px; font-weight:bold; margin-bottom:5px;">Berhasil Terkirim! ✅</p>
+                <p style="font-size:11px; opacity:0.8;">Cek kotak masuk (Inbox/Spam) di email <b>${email}</b>.</p>
             `;
-            document.getElementById('btn-am').onclick = async () => {
-                const email = document.getElementById('am-email').value.trim() || "user@zenkai.com";
-                const box = document.getElementById('am-res');
-                box.style.display = 'block';
-                box.innerHTML = '<div class="loader"></div><p>Memproses via KuroNeko...</p>';
-                
-                try {
-                    // YANG BARU (BENER)
-const res = await fetch(`https://sylvatica.my.id/api/tools/alightmotion?email=${encodeURIComponent(email)}&options=send&url=&apikey=sylva-e96de6848abe4ce410a0f85ceb0d25ce`);
-                    const data = await res.json();
-                    
-                    if(!data.status) throw new Error(data.message || 'Gagal ambil data.');
-                    
-                    const downloadUrl = data.result.url || data.result.download;
-                    
-                    box.innerHTML = `
-                        <p style="color:#00ff9d; font-size:13px; font-weight:bold; margin-bottom:10px;">Berhasil! ✅</p>
-                        <a href="${downloadUrl}" target="_blank" class="action-btn press" style="display:block; text-decoration:none;">📥 Download Alight Motion</a>
-                        <p style="font-size:11px; opacity:0.7; margin-top:10px;">Link siap dipakai. Cek email <b>${email}</b> jika diminta verifikasi.</p>
-                    `;
-                } catch(e) { 
-                    box.innerHTML = `<p style="color:#ff3333;">Gagal: ${e.message}</p>`; 
-                }
-            };
-        }
+        } catch(e) { box.innerHTML = `<p style="color:#ff3333;">Gagal: ${e.message}</p>`; }
+    };
+}
     }; // <--- PENUTUP openTool
 
 }); // <--- PENUTUP DOMContentLoaded
