@@ -844,17 +844,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-// =========================================
-// OTAK ANIME
-// =========================================
+    // =========================================
+    // OTAK ANIME + STREAMING
+    // =========================================
+    
+    const ANIME_API_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/anime-api";
 
-// =========================================
-// LOGIKA ANIME + STREAMING
-// =========================================
-const ANIME_API_URL = "https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/anime-api";
-
-// 1. Cari Anime
-window.cariAnime = async () => {
+    // 1. Cari Anime
+    window.cariAnime = async () => {
     const keyword = document.getElementById('anime-search').value;
     const listBox = document.getElementById('anime-list');
     
@@ -862,30 +859,28 @@ window.cariAnime = async () => {
     listBox.innerHTML = '<div class="loader" style="grid-column:span 2; margin:20px auto;"></div>';
     
     try {
-        const res = await fetch(`${ANIME_API_URL}?action=search&q=${encodeURIComponent(keyword)}`);
+        const res = await fetch(`${ANIME_API_URL}?q=${encodeURIComponent(keyword)}`);
         const response = await res.json();
 
-        // TRIK PALU GODAM: Nyari Array di Mana Pun
-        let animeList = response;
-        if (response.data) animeList = response.data;
-        if (animeList.animeList) animeList = animeList.animeList; // Kadang disimpen di sini
-        if (!Array.isArray(animeList)) {
-            const foundArray = Object.values(animeList).find(val => Array.isArray(val));
-            if (foundArray) animeList = foundArray;
+        // LOGIKA BARU: Ambil dari data.animeList, kalo gak ada ambil data-nya langsung
+        let data = response.data?.animeList || response.data || response;
+
+        // Kalo datanya kosong / bukan array
+        if(!data || !Array.isArray(data) || data.length === 0) {
+            throw new Error('Anime tidak ditemukan. Coba kata kunci lain (cth: "Solo").');
         }
 
-        if (!Array.isArray(animeList)) throw new Error('Format data dari server aneh.');
-
         listBox.innerHTML = ''; 
-        animeList.forEach(anime => {
-            const imgUrl = anime.poster || anime.image || anime.thumb || 'https://via.placeholder.com/150';
-            const animeTitle = anime.title || 'Tanpa Judul';
+        data.forEach(anime => {
+            // Pake 'poster' dan 'animeId' sesuai API Wajik
+            const imgUrl = anime.poster || 'https://via.placeholder.com/150';
+            const animeId = anime.animeId;
             
             listBox.innerHTML += `
-                <div class="press" onclick="bukaAnime('${anime.animeId || anime.slug || anime.id}')" style="border:2px solid var(--border); border-radius:8px; overflow:hidden; background:var(--card-bg); box-shadow:var(--shadow); cursor:pointer;">
-                    <img src="${imgUrl}" style="width:100%; height:150px; object-fit:cover;">
+                <div class="press" onclick="bukaAnime('${animeId}')" style="border:2px solid var(--border); border-radius:8px; overflow:hidden; background:var(--card-bg); box-shadow:var(--shadow); cursor:pointer;">
+                    <img src="${imgUrl}" style="width:100%; height:150px; object-fit:cover;" onerror="this.src='https://via.placeholder.com/150'">
                     <div style="padding:8px; text-align:center;">
-                        <h4 style="font-size:10px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${animeTitle}</h4>
+                        <h4 style="font-size:10px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${anime.title}</h4>
                     </div>
                 </div>
             `;
@@ -895,54 +890,54 @@ window.cariAnime = async () => {
     }
 };
 
-// 2. Buka Anime & Ambil Episode
-window.bukaAnime = async (slug) => {
-    showToast('Mengambil daftar episode...');
-    try {
-        const res = await fetch(`${ANIME_API_URL}?action=detail&slug=${encodeURIComponent(slug)}`);
-        const data = await res.json();
-        
-        let epHtml = '<h3 style="margin-bottom:15px; font-family:var(--font-head);">Pilih Episode:</h3>';
-        const episodes = data.episodeList || data.episodes || [];
-        
-        if(episodes.length > 0) {
-            episodes.forEach(ep => {
-                epHtml += `<button class="action-btn" onclick="nontonAnime('${ep.episodeId || ep.slug}')" style="margin-bottom:5px; font-size:11px;">${ep.title || ep.episode}</button>`;
-            });
-        } else {
-            epHtml += '<p>Episode belum tersedia.</p>';
+    // 2. Buka Anime & Ambil Episode
+    window.bukaAnime = async (slug) => {
+        showToast('Mengambil daftar episode...');
+        try {
+            const res = await fetch(`${ANIME_API_URL}?action=detail&slug=${encodeURIComponent(slug)}`);
+            const data = await res.json();
+            
+            let epHtml = '<h3 style="margin-bottom:15px; font-family:var(--font-head);">Pilih Episode:</h3>';
+            const episodes = data.episodeList || data.episodes || [];
+            
+            if(episodes.length > 0) {
+                episodes.forEach(ep => {
+                    epHtml += `<button class="action-btn" onclick="nontonAnime('${ep.episodeId || ep.slug}')" style="margin-bottom:5px; font-size:11px;">${ep.title || ep.episode}</button>`;
+                });
+            } else {
+                epHtml += '<p>Episode belum tersedia.</p>';
+            }
+            
+            openModalCustom(epHtml); 
+        } catch (e) {
+            showToast('Gagal ambil episode: ' + e.message);
         }
-        
-        openModalCustom(epHtml); 
-    } catch (e) {
-        showToast('Gagal ambil episode: ' + e.message);
-    }
-};
+    };
 
-// 3. Nonton Video
-window.nontonAnime = async (slug) => {
-    showToast('Memuat video...');
-    try {
-        const res = await fetch(`${ANIME_API_URL}?action=stream&slug=${encodeURIComponent(slug)}`);
-        const data = await res.json();
-        
-        const iframeUrl = data.streamUrl || data.iframe || data.link;
-        
-        const videoHtml = `
-            <h3 style="margin-bottom:10px; font-family:var(--font-head);">Nonton Anime</h3>
-            <iframe src="${iframeUrl}" width="100%" height="250" frameborder="0" allowfullscreen style="border-radius:8px; border:2px solid var(--border);"></iframe>
-        `;
-        openModalCustom(videoHtml);
-    } catch (e) {
-        showToast('Gagal memuat video: ' + e.message);
-    }
-};
+    // 3. Nonton Video
+    window.nontonAnime = async (slug) => {
+        showToast('Memuat video...');
+        try {
+            const res = await fetch(`${ANIME_API_URL}?action=stream&slug=${encodeURIComponent(slug)}`);
+            const data = await res.json();
+            
+            const iframeUrl = data.streamUrl || data.iframe || data.link;
+            
+            const videoHtml = `
+                <h3 style="margin-bottom:10px; font-family:var(--font-head);">Nonton Anime</h3>
+                <iframe src="${iframeUrl}" width="100%" height="250" frameborder="0" allowfullscreen style="border-radius:8px; border:2px solid var(--border);"></iframe>
+            `;
+            openModalCustom(videoHtml);
+        } catch (e) {
+            showToast('Gagal memuat video: ' + e.message);
+        }
+    };
 
-// Helper buka modal
-window.openModalCustom = (html) => {
-    const modal = document.getElementById('tool-modal');
-    const modalContent = document.getElementById('modal-content');
-    modalContent.innerHTML = `<button class="modal-close press" onclick="closeModal()">X</button>` + html;
-    modal.classList.add('active');
-};
+    // Helper buka modal
+    window.openModalCustom = (html) => {
+        const modal = document.getElementById('tool-modal');
+        const modalContent = document.getElementById('modal-content');
+        modalContent.innerHTML = `<button class="modal-close press" onclick="closeModal()">X</button>` + html;
+        modal.classList.add('active');
+    };
 });
