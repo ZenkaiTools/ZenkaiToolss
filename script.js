@@ -1317,17 +1317,7 @@ else if (tool === 'password') {
                 }
             };
         }
-
-        // ---------- FALLBACK ----------
-        else {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Tool Tidak Ditemukan</h3>
-                <span class="desc-text">Modul "${escapeHTML(tool)}" belum tersedia atau sedang dalam pengembangan.</span>
-            `;
-        }
-    };
-    // =========================================
+// =========================================
 // FUNGSI LOGOUT (BIAR TOMBOL KELUAR JALAN)
 // =========================================
 window.logoutUser = async () => {
@@ -1361,4 +1351,13 @@ window.logoutUser = async () => {
 
     document.getElementById('custom-alert').style.display = 'flex';
 };
+        // ---------- FALLBACK ----------
+        else {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Tool Tidak Ditemukan</h3>
+                <span class="desc-text">Modul "${escapeHTML(tool)}" belum tersedia atau sedang dalam pengembangan.</span>
+            `;
+        }
+    };
 });
