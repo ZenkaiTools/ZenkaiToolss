@@ -100,7 +100,6 @@ body { background-color: var(--bg); color: var(--text); padding-bottom: 110px; t
 
 .credit-text { text-align: center; font-size: 10px; opacity: 0.6; margin-top: 20px; margin-bottom: 10px; font-weight: 600; }
 .credit-text b { color: var(--primary); }
-
 /* =========================================
    NAV BAWAH (FLOATING)
    ========================================= */
@@ -176,6 +175,7 @@ body[data-theme="comic"] .bottom-nav, body[data-theme="cyber"] .bottom-nav, body
 .calc-btn { background: var(--card-bg); border: 2px solid var(--border); color: var(--text); font-size: 18px; font-weight: 700; padding: 12px 0; border-radius: calc(var(--radius)/2); cursor: pointer; transition: 0.1s; box-shadow: 2px 2px 0 var(--border); }
 .calc-btn:active { transform: translateY(2px); box-shadow: none; }
 .calc-btn.op { background: var(--primary); color: #000; }
+
 /* TOAST & LOADER */
 .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 100000; width: 90%; pointer-events: none; }
 .toast { background: var(--card-bg); border: 3px solid var(--border); padding: 12px; border-radius: var(--radius); box-shadow: var(--shadow); color: var(--text); text-align: center; font-weight: 700; font-size: 12px; animation: slideUp 0.3s; pointer-events: auto; }
@@ -205,6 +205,7 @@ body[data-theme="comic"] .tools-section, body[data-theme="comic"] .welcome-box, 
 body[data-theme="comic"] .section-header { border-bottom: 2px dashed var(--border); padding-bottom: 10px; margin-bottom: 15px; }
 body[data-theme="comic"] .t-icon { border-radius: 2px !important; }
 body[data-theme="comic"] .logo-text h1 { letter-spacing: 2px; text-transform: uppercase; }
+
 /* ---------- 14. CARD PRESS: RIPPLE ---------- */
 .tool-card.press { position: relative; overflow: visible; }
 .tool-card.press:active::after {
@@ -390,6 +391,7 @@ body.intro-active .music-widget, body.intro-active .bottom-nav, body.intro-activ
     font-family: var(--font-main);
     letter-spacing: 0.5px;
 }
+
 /* =========================================
    PEMBATAS COMING SOON
    ========================================= */
