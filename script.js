@@ -1327,6 +1327,21 @@ else if (tool === 'password') {
             `;
         }
     };
+    // =========================================
+// FUNGSI LOGOUT (BIAR TOMBOL KELUAR JALAN)
+// =========================================
+window.logoutUser = async () => {
+    const token = localStorage.getItem('zenkai_token');
+    if (token) {
+        await fetch(`${SUPA_URL}/functions/v1/zen-auth`, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ action: 'logout', token }) 
+        }).catch(()=>{});
+    }
+    localStorage.clear();
+    location.reload();
+};
     window.tampilkanAlert = (title, msg, buttons) => {
     document.getElementById('alert-title').innerText = title;
     document.getElementById('alert-msg').innerText = msg;
