@@ -34,9 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2500);
     };
 
-    // =========================================
-    // HELPER: TAMPILKAN ALERT (DIPINDAH KE ATAS)
-    // =========================================
     window.tampilkanAlert = (title, msg, buttons) => {
         const alertEl = document.getElementById('custom-alert');
         if (!alertEl) { alert(msg); return; }
@@ -58,9 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         alertEl.style.display = 'flex';
     };
 
-    // =========================================
-    // HELPER: LOGOUT (DIPINDAH KE ATAS)
-    // =========================================
     window.logoutUser = async () => {
         const token = localStorage.getItem('zenkai_token');
         if (token) {
@@ -283,11 +277,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.resetData = () => {
-        if (confirm("Yakin mau hapus cache dan muat ulang web?")) {
-            sessionStorage.clear();
-            localStorage.removeItem('wa_popup_last');
-            location.reload();
-        }
+        tampilkanAlert(
+            "Hapus Cache",
+            "Yakin mau hapus cache dan muat ulang web?\n\nKamu bakal logout & harus login lagi.",
+            [
+                { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+                { label: "Hapus", action: "sessionStorage.clear(); localStorage.removeItem('wa_popup_last'); location.reload();", type: "primary" }
+            ]
+        );
     };
 
     // =========================================
@@ -356,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fbCard) fbCard.classList.add('maintenance-fb');
 
     // =========================================
-    // 8. SISTEM GERBANG LOGIN (AUTH + AUTO LOGIN)
+    // 8. SISTEM GERBANG LOGIN (AUTH)
     // =========================================
     let modeAuth = 'login';
     const savedToken = localStorage.getItem('zenkai_token');
@@ -366,6 +363,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const gate = document.getElementById('auth-gate');
         if (gate) gate.style.display = 'none';
         document.body.style.overflow = '';
+        const welcome = document.getElementById('welcome-username');
+        if (welcome) welcome.innerText = savedUser;
     } else {
         document.body.style.overflow = 'hidden';
     }
@@ -416,61 +415,92 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     async function eksekusiAuth(user, pass, mode) {
-        document.getElementById('btn-submit').disabled = true;
-        document.getElementById('btn-submit').innerText = 'Memproses...';
+        const btnSubmit = document.getElementById('btn-submit');
+        btnSubmit.disabled = true;
+        btnSubmit.innerText = 'Memproses...';
 
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: mode, username: user, password: pass })
             });
-            const data = await res.json();
+            
+            let data;
+            try { data = await res.json(); } catch { throw new Error('Respons server tidak valid'); }
 
-            if (data.status) {
-                if (mode === 'register') {
-                    showToast("Daftar sukses! Otomatis masuk...");
-                    const resLogin = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'login', username: user, password: pass })
-                    });
-                    const dataLogin = await resLogin.json();
+            if (!data.status) {
+                const pesan = (data.message || '').toLowerCase();
+                
+                const isUsernameTaken = pesan.includes('sudah') || pesan.includes('terdaftar') || pesan.includes('dipakai') || pesan.includes('exists') || pesan.includes('taken') || pesan.includes('already');
+                const isWrongCreds = pesan.includes('salah') || pesan.includes('tidak ditemukan') || pesan.includes('invalid') || pesan.includes('wrong') || pesan.includes('not found') || pesan.includes('incorrect');
 
-                    if (dataLogin.status) {
-                        localStorage.setItem('zenkai_token', dataLogin.token);
-                        localStorage.setItem('zenkai_username', dataLogin.username);
-                        const gate = document.getElementById('auth-gate');
-                        if (gate) gate.style.display = 'none';
-                        document.body.style.overflow = '';
-                        const welcome = document.getElementById('welcome-username');
-                        if (welcome) welcome.innerText = dataLogin.username;
-                        showToast(`Selamat datang, ${dataLogin.username}!`);
-                    } else {
-                        tampilkanForm('login');
-                        showToast("Daftar sukses, silakan login manual.");
-                    }
+                if (mode === 'register' && isUsernameTaken) {
+                    tampilkanAlert(
+                        "Username Sudah Dipakai",
+                        `Username "${user}" sudah terdaftar.\n\nSilakan gunakan username lain, atau masuk kalau itu akun kamu.`,
+                        [
+                            { label: "Coba Lagi", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+                            { label: "Masuk", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }
+                        ]
+                    );
+                } else if (mode === 'login' && isWrongCreds) {
+                    tampilkanAlert(
+                        "Login Gagal",
+                        "Username atau password yang kamu masukkan salah.\n\nCek lagi huruf besar/kecilnya, atau daftar kalau belum punya akun.",
+                        [
+                            { label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+                            { label: "Daftar", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('register')", type: "primary" }
+                        ]
+                    );
                 } else {
-                    localStorage.setItem('zenkai_token', data.token);
-                    localStorage.setItem('zenkai_username', data.username);
-                    const gate = document.getElementById('auth-gate');
-                    if (gate) gate.style.display = 'none';
-                    document.body.style.overflow = '';
-                    const welcome = document.getElementById('welcome-username');
-                    if (welcome) welcome.innerText = data.username;
-                    showToast(`Selamat datang, ${data.username}!`);
+                    tampilkanAlert(
+                        mode === 'register' ? "Pendaftaran Gagal" : "Login Gagal",
+                        data.message || "Terjadi kesalahan. Coba lagi.",
+                        [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]
+                    );
                 }
-            } else {
-                showToast(data.message || "Gagal masuk");
+
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
+                return;
             }
+
+            if (mode === 'register') {
+                tampilkanAlert(
+                    "Pendaftaran Berhasil",
+                    "Akun berhasil dibuat! Silakan masuk menggunakan username dan password barumu.",
+                    [{ label: "Masuk Sekarang", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }]
+                );
+                document.getElementById('auth-pass').value = '';
+            } else {
+                localStorage.setItem('zenkai_token', data.token);
+                localStorage.setItem('zenkai_username', data.username);
+                
+                const gate = document.getElementById('auth-gate');
+                if (gate) gate.style.display = 'none';
+                document.body.style.overflow = '';
+                
+                const welcome = document.getElementById('welcome-username');
+                if (welcome) welcome.innerText = data.username;
+                
+                showToast(`Selamat datang, ${data.username}!`);
+            }
+
         } catch (e) {
-            showToast("Gagal konek server");
+            tampilkanAlert(
+                "Koneksi Gagal",
+                "Nggak bisa nyambung ke server. Cek internet kamu, lalu coba lagi.",
+                [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]
+            );
         }
 
-        document.getElementById('btn-submit').disabled = false;
-        document.getElementById('btn-submit').innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
     }
 
     // =========================================
-    // 9. SISTEM SETTINGS & MAINTENANCE (REAL-TIME)
+    // 9. SISTEM SETTINGS & MAINTENANCE
     // =========================================
     async function fetchSettings() {
         try {
@@ -535,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================
-    // 10. PINTU RAHASIA OWNER & TRAFFIC
+    // 10. PINTU RAHASIA OWNER
     // =========================================
     let clicks = 0;
     document.querySelector('.logo-area')?.addEventListener('click', () => {
@@ -568,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem(OWNER_SESSION_KEY, 'true');
                 document.getElementById('owner-modal').remove();
                 showToast("Akses Owner Diberikan!");
-                setTimeout(() => { tampilkanPanelRahasia(); }, 500);
+                setTimeout(() => { if (typeof tampilkanPanelRahasia === 'function') tampilkanPanelRahasia(); }, 500);
             } else { showToast("Passcode Salah!"); }
         } catch(e) { showToast("Error"); }
     };
@@ -579,8 +609,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'heartbeat', session_id: mySession }) }).catch(()=>{});
     }, 30000);
 
-    // ===== BATAS 1a =====
-// =========================================
+    // ===== BATAS BAGIAN 1 =====
+    // =========================================
 // 11. FUNGSI OPEN TOOL
 // =========================================
 window.openTool = (tool) => {
@@ -942,248 +972,247 @@ window.openTool = (tool) => {
         };
     }
 
-    // ===== BATAS 1b-1 =====
-    // --- ARTI NAMA ---
-else if (tool === 'artinama') {
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3>Arti Nama</h3>
-        <span class="desc-text">Cari tahu arti dan asal-usul dari sebuah nama.</span>
-        <input type="text" id="nama-in" placeholder="Ketik nama...">
-        <button class="action-btn" id="btn-nama">Cari Arti</button>
-        <div id="nama-res" style="display:none; text-align:left; line-height:1.6; border:3px dashed var(--border); padding:15px; border-radius:8px; margin-top:15px; background:var(--card-bg);"></div>
-    `;
-    document.getElementById('btn-nama').onclick = () => {
-        const nama = document.getElementById('nama-in').value.trim().toLowerCase();
-        if (!nama) return showToast('Masukkan nama!');
-        const b = document.getElementById('nama-res');
-        const database = {
-            "andika": "Pemuda yang tampan dan cerdas (Jawa).",
-            "budi": "Berakal, cerdas, dan berjiwa pemimpin (Sansekerta).",
-            "putri": "Anak perempuan yang cantik dan lembut (Indonesia).",
-            "siti": "Wanita yang mulia dan dihormati (Arab).",
-            "tulus": "Ikhlas dan tulus dalam bertindak (Jawa).",
-            "zacky": "Cerdas dan penuh berkah (Arab).",
-            "zenkai": "Semangat pantang menyerah (Jepang)."
-        };
-        b.style.display = 'block';
-        if (database[nama]) {
-            b.innerHTML = `<b>Arti Nama ${escapeHTML(nama.toUpperCase())}:</b><br><br>${escapeHTML(database[nama])}`;
-        } else {
-            b.innerHTML = `Maaf, arti nama <b>${escapeHTML(nama)}</b> belum ada di database. Silakan coba nama lain.`;
+// ===== BATAS BAGIAN 2a =====
+        // --- ARTI NAMA ---
+        else if (tool === 'artinama') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Arti Nama</h3>
+                <span class="desc-text">Cari tahu arti dan asal-usul dari sebuah nama.</span>
+                <input type="text" id="nama-in" placeholder="Ketik nama...">
+                <button class="action-btn" id="btn-nama">Cari Arti</button>
+                <div id="nama-res" style="display:none; text-align:left; line-height:1.6; border:3px dashed var(--border); padding:15px; border-radius:8px; margin-top:15px; background:var(--card-bg);"></div>
+            `;
+            document.getElementById('btn-nama').onclick = () => {
+                const nama = document.getElementById('nama-in').value.trim().toLowerCase();
+                if (!nama) return showToast('Masukkan nama!');
+                const b = document.getElementById('nama-res');
+                const database = {
+                    "andika": "Pemuda yang tampan dan cerdas (Jawa).",
+                    "budi": "Berakal, cerdas, dan berjiwa pemimpin (Sansekerta).",
+                    "putri": "Anak perempuan yang cantik dan lembut (Indonesia).",
+                    "siti": "Wanita yang mulia dan dihormati (Arab).",
+                    "tulus": "Ikhlas dan tulus dalam bertindak (Jawa).",
+                    "zacky": "Cerdas dan penuh berkah (Arab).",
+                    "zenkai": "Semangat pantang menyerah (Jepang)."
+                };
+                b.style.display = 'block';
+                if (database[nama]) {
+                    b.innerHTML = `<b>Arti Nama ${escapeHTML(nama.toUpperCase())}:</b><br><br>${escapeHTML(database[nama])}`;
+                } else {
+                    b.innerHTML = `Maaf, arti nama <b>${escapeHTML(nama)}</b> belum ada di database. Silakan coba nama lain.`;
+                }
+            };
         }
-    };
-}
 
-// --- PASSWORD GEN ---
-else if (tool === 'password') {
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3>Password Gen</h3>
-        <span class="desc-text">Buat password acak 16 karakter yang susah ditebak.</span>
-        <button class="action-btn" id="btn-pass">Generate Password</button>
-        <div id="pass-res" style="display:none; font-size:20px; font-weight:800; color:var(--primary); text-align:center; margin-top:15px; border:3px dashed var(--border); padding:15px; border-radius:8px; word-break:break-all; background:var(--card-bg);"></div>
-    `;
-    document.getElementById('btn-pass').onclick = () => {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-        let pass = "";
-        const arr = new Uint32Array(16);
-        crypto.getRandomValues(arr);
-        for (let i = 0; i < 16; i++) pass += chars.charAt(arr[i] % chars.length);
-        const b = document.getElementById('pass-res');
-        b.style.display = 'block'; b.innerText = pass;
-    };
-}
+        // --- PASSWORD GEN ---
+        else if (tool === 'password') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Password Gen</h3>
+                <span class="desc-text">Buat password acak 16 karakter yang susah ditebak.</span>
+                <button class="action-btn" id="btn-pass">Generate Password</button>
+                <div id="pass-res" style="display:none; font-size:20px; font-weight:800; color:var(--primary); text-align:center; margin-top:15px; border:3px dashed var(--border); padding:15px; border-radius:8px; word-break:break-all; background:var(--card-bg);"></div>
+            `;
+            document.getElementById('btn-pass').onclick = () => {
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+                let pass = "";
+                const arr = new Uint32Array(16);
+                crypto.getRandomValues(arr);
+                for (let i = 0; i < 16; i++) pass += chars.charAt(arr[i] % chars.length);
+                const b = document.getElementById('pass-res');
+                b.style.display = 'block'; b.innerText = pass;
+            };
+        }
 
-// --- ZODIAK ---
-else if (tool === 'zodiak') {
-    let tgls = ''; for (let i = 1; i <= 31; i++) tgls += `<div onclick="setZ('tgl',${i},this)" style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer;">${i}</div>`;
-    let blns = ''; const b = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
-    b.forEach((nm, i) => blns += `<div onclick="setZ('bln',${i+1},this)" style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer;">${nm}</div>`);
+        // --- ZODIAK ---
+        else if (tool === 'zodiak') {
+            let tgls = ''; for (let i = 1; i <= 31; i++) tgls += `<div onclick="setZ('tgl',${i},this)" style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer;">${i}</div>`;
+            let blns = ''; const b = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
+            b.forEach((nm, i) => blns += `<div onclick="setZ('bln',${i+1},this)" style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer;">${nm}</div>`);
 
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3>Cek Zodiak</h3>
-        <span class="desc-text">Pilih tanggal lahir lu, langsung ketahuan zodiaknya.</span>
-        <div style="display:flex; gap:10px; margin-bottom:15px; justify-content:center;">
-            <div style="flex:1; position:relative;">
-                <button class="action-btn" onclick="toggleList('tgl')" id="btn-tgl" style="margin-bottom:0;">Tgl</button>
-                <div id="list-tgl" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--card-bg); border:2px solid var(--border); border-radius:8px; max-height:150px; overflow-y:auto; z-index:10; margin-top:5px;">${tgls}</div>
-            </div>
-            <div style="flex:2; position:relative;">
-                <button class="action-btn" onclick="toggleList('bln')" id="btn-bln" style="margin-bottom:0;">Bulan</button>
-                <div id="list-bln" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--card-bg); border:2px solid var(--border); border-radius:8px; max-height:150px; overflow-y:auto; z-index:10; margin-top:5px;">${blns}</div>
-            </div>
-        </div>
-        <button class="action-btn" onclick="cekZodiak()">Cek Sekarang</button>
-        <div id="z-res" style="display:none; text-align:center; font-size:20px; margin-top:15px; font-weight:bold;"></div>
-    `;
-    window.zTgl = null; window.zBln = null;
-    window.toggleList = (t) => {
-        document.getElementById('list-tgl').style.display = 'none';
-        document.getElementById('list-bln').style.display = 'none';
-        const el = document.getElementById('list-' + t);
-        el.style.display = el.style.display === 'none' ? 'block' : 'none';
-    };
-    window.setZ = (t, v, el) => {
-        if (t === 'tgl') { window.zTgl = v; document.getElementById('btn-tgl').innerText = v; }
-        if (t === 'bln') { window.zBln = v; document.getElementById('btn-bln').innerText = el.innerText; }
-        document.getElementById('list-tgl').style.display = 'none';
-        document.getElementById('list-bln').style.display = 'none';
-    };
-    window.cekZodiak = () => {
-        if (!window.zTgl || !window.zBln) return showToast('Pilih dulu!');
-        const t = window.zTgl, bl = window.zBln;
-        const maxDays = [31,29,31,30,31,30,31,31,30,31,30,31][bl-1];
-        if (t > maxDays) return showToast(`Tanggal ${t} tidak valid untuk bulan ini!`);
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Cek Zodiak</h3>
+                <span class="desc-text">Pilih tanggal lahir lu, langsung ketahuan zodiaknya.</span>
+                <div style="display:flex; gap:10px; margin-bottom:15px; justify-content:center;">
+                    <div style="flex:1; position:relative;">
+                        <button class="action-btn" onclick="toggleList('tgl')" id="btn-tgl" style="margin-bottom:0;">Tgl</button>
+                        <div id="list-tgl" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--card-bg); border:2px solid var(--border); border-radius:8px; max-height:150px; overflow-y:auto; z-index:10; margin-top:5px;">${tgls}</div>
+                    </div>
+                    <div style="flex:2; position:relative;">
+                        <button class="action-btn" onclick="toggleList('bln')" id="btn-bln" style="margin-bottom:0;">Bulan</button>
+                        <div id="list-bln" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--card-bg); border:2px solid var(--border); border-radius:8px; max-height:150px; overflow-y:auto; z-index:10; margin-top:5px;">${blns}</div>
+                    </div>
+                </div>
+                <button class="action-btn" onclick="cekZodiak()">Cek Sekarang</button>
+                <div id="z-res" style="display:none; text-align:center; font-size:20px; margin-top:15px; font-weight:bold;"></div>
+            `;
+            window.zTgl = null; window.zBln = null;
+            window.toggleList = (t) => {
+                document.getElementById('list-tgl').style.display = 'none';
+                document.getElementById('list-bln').style.display = 'none';
+                const el = document.getElementById('list-' + t);
+                el.style.display = el.style.display === 'none' ? 'block' : 'none';
+            };
+            window.setZ = (t, v, el) => {
+                if (t === 'tgl') { window.zTgl = v; document.getElementById('btn-tgl').innerText = v; }
+                if (t === 'bln') { window.zBln = v; document.getElementById('btn-bln').innerText = el.innerText; }
+                document.getElementById('list-tgl').style.display = 'none';
+                document.getElementById('list-bln').style.display = 'none';
+            };
+            window.cekZodiak = () => {
+                if (!window.zTgl || !window.zBln) return showToast('Pilih dulu!');
+                const t = window.zTgl, bl = window.zBln;
+                const maxDays = [31,29,31,30,31,30,31,31,30,31,30,31][bl-1];
+                if (t > maxDays) return showToast(`Tanggal ${t} tidak valid untuk bulan ini!`);
 
-        let z = "";
-        if ((bl == 1 && t >= 20) || (bl == 2 && t <= 18)) z = "Aquarius ♒";
-        else if ((bl == 2 && t >= 19) || (bl == 3 && t <= 20)) z = "Pisces ♓";
-        else if ((bl == 3 && t >= 21) || (bl == 4 && t <= 19)) z = "Aries ♈";
-        else if ((bl == 4 && t >= 20) || (bl == 5 && t <= 20)) z = "Taurus ♉";
-        else if ((bl == 5 && t >= 21) || (bl == 6 && t <= 20)) z = "Gemini ♊";
-        else if ((bl == 6 && t >= 21) || (bl == 7 && t <= 22)) z = "Cancer ♋";
-        else if ((bl == 7 && t >= 23) || (bl == 8 && t <= 22)) z = "Leo ♌";
-        else if ((bl == 8 && t >= 23) || (bl == 9 && t <= 22)) z = "Virgo ♍";
-        else if ((bl == 9 && t >= 23) || (bl == 10 && t <= 22)) z = "Libra ♎";
-        else if ((bl == 10 && t >= 23) || (bl == 11 && t <= 21)) z = "Scorpio ♏";
-        else if ((bl == 11 && t >= 22) || (bl == 12 && t <= 21)) z = "Sagittarius ♐";
-        else z = "Capricorn ♑";
+                let z = "";
+                if ((bl == 1 && t >= 20) || (bl == 2 && t <= 18)) z = "Aquarius ♒";
+                else if ((bl == 2 && t >= 19) || (bl == 3 && t <= 20)) z = "Pisces ♓";
+                else if ((bl == 3 && t >= 21) || (bl == 4 && t <= 19)) z = "Aries ♈";
+                else if ((bl == 4 && t >= 20) || (bl == 5 && t <= 20)) z = "Taurus ♉";
+                else if ((bl == 5 && t >= 21) || (bl == 6 && t <= 20)) z = "Gemini ♊";
+                else if ((bl == 6 && t >= 21) || (bl == 7 && t <= 22)) z = "Cancer ♋";
+                else if ((bl == 7 && t >= 23) || (bl == 8 && t <= 22)) z = "Leo ♌";
+                else if ((bl == 8 && t >= 23) || (bl == 9 && t <= 22)) z = "Virgo ♍";
+                else if ((bl == 9 && t >= 23) || (bl == 10 && t <= 22)) z = "Libra ♎";
+                else if ((bl == 10 && t >= 23) || (bl == 11 && t <= 21)) z = "Scorpio ♏";
+                else if ((bl == 11 && t >= 22) || (bl == 12 && t <= 21)) z = "Sagittarius ♐";
+                else z = "Capricorn ♑";
 
-        const res = document.getElementById('z-res');
-        res.style.display = 'block';
-        res.innerHTML = `Zodiak: <b style="color:var(--primary); font-size:24px; display:block;">${z}</b>`;
-    };
-}
+                const res = document.getElementById('z-res');
+                res.style.display = 'block';
+                res.innerHTML = `Zodiak: <b style="color:var(--primary); font-size:24px; display:block;">${z}</b>`;
+            };
+        }
 
-// --- BASE64 ---
-else if (tool === 'base64') {
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3>Base64</h3>
-        <span class="desc-text">Encode teks jadi kode rahasia, atau decode balik ke teks asli.</span>
-        <textarea id="b64-in" rows="3" placeholder="Teks..."></textarea>
-        <div style="display:flex;gap:10px; justify-content:center;">
-            <button class="action-btn" id="btn-enc" style="flex:1;">Encode</button>
-            <button class="action-btn" id="btn-dec" style="flex:1;">Decode</button>
-        </div>
-        <div id="b64-res" style="display:none; margin-top:15px; word-break:break-all; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
-    `;
-    const doB64 = (type) => {
-        const v = document.getElementById('b64-in').value;
-        const b = document.getElementById('b64-res');
-        if (!v) return showToast('Isi teks!');
-        b.style.display = 'block';
-        try {
-            if (type === 'enc') {
-                const bytes = new TextEncoder().encode(v);
-                let bin = '';
-                bytes.forEach(x => bin += String.fromCharCode(x));
-                b.innerText = btoa(bin);
-            } else {
-                const bin = atob(v);
-                const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-                b.innerText = new TextDecoder().decode(bytes);
-            }
-        } catch (e) { b.innerText = 'Gagal memproses.'; }
-    };
-    document.getElementById('btn-enc').onclick = () => doB64('enc');
-    document.getElementById('btn-dec').onclick = () => doB64('dec');
-}
+        // --- BASE64 ---
+        else if (tool === 'base64') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Base64</h3>
+                <span class="desc-text">Encode teks jadi kode rahasia, atau decode balik ke teks asli.</span>
+                <textarea id="b64-in" rows="3" placeholder="Teks..."></textarea>
+                <div style="display:flex;gap:10px; justify-content:center;">
+                    <button class="action-btn" id="btn-enc" style="flex:1;">Encode</button>
+                    <button class="action-btn" id="btn-dec" style="flex:1;">Decode</button>
+                </div>
+                <div id="b64-res" style="display:none; margin-top:15px; word-break:break-all; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+            `;
+            const doB64 = (type) => {
+                const v = document.getElementById('b64-in').value;
+                const b = document.getElementById('b64-res');
+                if (!v) return showToast('Isi teks!');
+                b.style.display = 'block';
+                try {
+                    if (type === 'enc') {
+                        const bytes = new TextEncoder().encode(v);
+                        let bin = '';
+                        bytes.forEach(x => bin += String.fromCharCode(x));
+                        b.innerText = btoa(bin);
+                    } else {
+                        const bin = atob(v);
+                        const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+                        b.innerText = new TextDecoder().decode(bytes);
+                    }
+                } catch (e) { b.innerText = 'Gagal memproses.'; }
+            };
+            document.getElementById('btn-enc').onclick = () => doB64('enc');
+            document.getElementById('btn-dec').onclick = () => doB64('dec');
+        }
 
-// --- HITUNG UMUR ---
-else if (tool === 'umur') {
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3>Hitung Umur</h3>
-        <span class="desc-text">Hitung umur berdasarkan tanggal lahir.</span>
-        <input type="date" id="umur-in">
-        <button class="action-btn" id="btn-umur">Hitung</button>
-        <div id="umur-res" style="display:none; margin-top:15px; text-align:center; font-size:18px; font-weight:bold; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
-    `;
-    document.getElementById('btn-umur').onclick = () => {
-        const v = document.getElementById('umur-in').value;
-        if (!v) return showToast('Pilih tanggal!');
-        const tglLahir = new Date(v);
-        const hariIni = new Date();
-        let umur = hariIni.getFullYear() - tglLahir.getFullYear();
-        const m = hariIni.getMonth() - tglLahir.getMonth();
-        if (m < 0 || (m === 0 && hariIni.getDate() < tglLahir.getDate())) { umur--; }
-        const b = document.getElementById('umur-res');
-        b.style.display = 'block'; b.innerText = `Umur Lo: ${umur} Tahun`;
-    };
-}
+        // --- HITUNG UMUR ---
+        else if (tool === 'umur') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Hitung Umur</h3>
+                <span class="desc-text">Hitung umur berdasarkan tanggal lahir.</span>
+                <input type="date" id="umur-in">
+                <button class="action-btn" id="btn-umur">Hitung</button>
+                <div id="umur-res" style="display:none; margin-top:15px; text-align:center; font-size:18px; font-weight:bold; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+            `;
+            document.getElementById('btn-umur').onclick = () => {
+                const v = document.getElementById('umur-in').value;
+                if (!v) return showToast('Pilih tanggal!');
+                const tglLahir = new Date(v);
+                const hariIni = new Date();
+                let umur = hariIni.getFullYear() - tglLahir.getFullYear();
+                const m = hariIni.getMonth() - tglLahir.getMonth();
+                if (m < 0 || (m === 0 && hariIni.getDate() < tglLahir.getDate())) { umur--; }
+                const b = document.getElementById('umur-res');
+                b.style.display = 'block'; b.innerText = `Umur Lo: ${umur} Tahun`;
+            };
+        }
 
-// --- ALIGHT MOTION ---
-else if (tool === 'alightmotion') {
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3>Alight Motion</h3>
-        <span class="desc-text">Bypass akun Premium Alight Motion secara gratis. Ikuti tutorial di bawah ini.</span>
-        <div style="text-align:left; font-size:11px; background:rgba(0,0,0,0.05); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed var(--border); line-height:1.5;">
-            <b style="color:var(--primary);">📌 TUTORIAL:</b><br>
-            1. Buka Aplikasi Alight Motion.<br>
-            2. Login pakai <b>Email atau Google</b>.<br>
-            3. Masukkan email yang sama di bawah.<br>
-            4. Generate &amp; cek Inbox/Spam.<br>
-            5. Klik link verifikasi. Aplikasi otomatis Premium! ✅
-        </div>
-        <input type="email" id="am-email" placeholder="Ketik email aktif lu...">
-        <button class="action-btn" id="btn-am">Generate Link</button>
-        <div id="am-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
-        <div style="font-size:9px; opacity:0.6; margin-top:15px; text-align:center;">⚠️ Gunakan dengan bijak.</div>
-    `;
-    const btn = document.getElementById('btn-am');
-    btn.onclick = async () => {
-        const email = document.getElementById('am-email').value.trim();
-        const box = document.getElementById('am-res');
-        if (!email) return showToast('Masukkan email dulu bro!');
-        box.style.display = 'block';
-        setBtnLoading(btn, true, 'Generate Link');
-        box.innerHTML = '<div class="loader"></div>';
-        try {
-            const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/amprem`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: email })
-            });
-            const data = await res.json();
-            if (data.status === false || data.error) throw new Error(data.message || 'Gagal');
-            box.innerHTML = `<p class="success-msg">Berhasil Terkirim! ✅<br><span style="font-size:11px; font-weight:normal;">Cek Inbox/Spam di <b>${escapeHTML(email)}</b>.</span></p>`;
-        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-        setBtnLoading(btn, false, 'Generate Link');
-    };
-}
+        // --- ALIGHT MOTION ---
+        else if (tool === 'alightmotion') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Alight Motion</h3>
+                <span class="desc-text">Bypass akun Premium Alight Motion secara gratis. Ikuti tutorial di bawah ini.</span>
+                <div style="text-align:left; font-size:11px; background:rgba(0,0,0,0.05); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed var(--border); line-height:1.5;">
+                    <b style="color:var(--primary);">📌 TUTORIAL:</b><br>
+                    1. Buka Aplikasi Alight Motion.<br>
+                    2. Login pakai <b>Email atau Google</b>.<br>
+                    3. Masukkan email yang sama di bawah.<br>
+                    4. Generate &amp; cek Inbox/Spam.<br>
+                    5. Klik link verifikasi. Aplikasi otomatis Premium! ✅
+                </div>
+                <input type="email" id="am-email" placeholder="Ketik email aktif lu...">
+                <button class="action-btn" id="btn-am">Generate Link</button>
+                <div id="am-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+                <div style="font-size:9px; opacity:0.6; margin-top:15px; text-align:center;">⚠️ Gunakan dengan bijak.</div>
+            `;
+            const btn = document.getElementById('btn-am');
+            btn.onclick = async () => {
+                const email = document.getElementById('am-email').value.trim();
+                const box = document.getElementById('am-res');
+                if (!email) return showToast('Masukkan email dulu bro!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Generate Link');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/amprem`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email })
+                    });
+                    const data = await res.json();
+                    if (data.status === false || data.error) throw new Error(data.message || 'Gagal');
+                    box.innerHTML = `<p class="success-msg">Berhasil Terkirim! ✅<br><span style="font-size:11px; font-weight:normal;">Cek Inbox/Spam di <b>${escapeHTML(email)}</b>.</span></p>`;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Generate Link');
+            };
+        }
 
-// --- TEMP MAIL ---
-else if (tool === 'tempmail') {
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3>Temp Mail</h3>
-        <span class="desc-text">Bikin email sementara (dummy) buat verifikasi. Aman dari spam dan nggak perlu daftar.</span>
-        <button class="action-btn" id="btn-tm">Buat Email</button>
-        <div id="tm-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
-    `;
-    const btn = document.getElementById('btn-tm');
-    btn.onclick = async () => {
-        const box = document.getElementById('tm-res');
-        box.style.display = 'block';
-        setBtnLoading(btn, true, 'Buat Email');
-        box.innerHTML = '<div class="loader"></div>';
-        try {
-            const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-tools`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ path: 'tempmail_create', params: {} })
-            });
-            const data = await res.json();
-            if (!data.status) throw new Error(data.message || 'Gagal');
-            box.innerHTML = `<p style="font-size:12px; margin-bottom:10px;">Email Lu:</p><b style="font-size:16px; color:var(--primary); word-break:break-all;">${escapeHTML(data.result.email)}</b><br><p style="font-size:11px; opacity:0.8; margin-top:5px;">(Token: ${escapeHTML(data.result.token)})</p>`;
-        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-        setBtnLoading(btn, false, 'Buat Email');
-    };
-}
+        // --- TEMP MAIL ---
+        else if (tool === 'tempmail') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Temp Mail</h3>
+                <span class="desc-text">Bikin email sementara (dummy) buat verifikasi. Aman dari spam dan nggak perlu daftar.</span>
+                <button class="action-btn" id="btn-tm">Buat Email</button>
+                <div id="tm-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+            `;
+            const btn = document.getElementById('btn-tm');
+            btn.onclick = async () => {
+                const box = document.getElementById('tm-res');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Buat Email');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-tools`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ path: 'tempmail_create', params: {} })
+                    });
+                    const data = await res.json();
+                    if (!data.status) throw new Error(data.message || 'Gagal');
+                    box.innerHTML = `<p style="font-size:12px; margin-bottom:10px;">Email Lu:</p><b style="font-size:16px; color:var(--primary); word-break:break-all;">${escapeHTML(data.result.email)}</b><br><p style="font-size:11px; opacity:0.8; margin-top:5px;">(Token: ${escapeHTML(data.result.token)})</p>`;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Buat Email');
+            };
+        }
 
-// ===== BATAS 1b-2 =====
         // --- NIK PARSER ---
         else if (tool === 'nik') {
             modalContent.innerHTML = `
