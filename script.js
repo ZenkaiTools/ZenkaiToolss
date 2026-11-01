@@ -347,65 +347,89 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.prosesAuth = async () => {
-        const user = document.getElementById('auth-user').value.trim();
-        const pass = document.getElementById('auth-pass').value;
-        
-        if (!user || !pass) return showToast("Isi username & password!");
-        if (modeAuth === 'register' && user.length < 3) return showToast("Username minimal 3 huruf!");
+    const user = document.getElementById('auth-user').value.trim();
+    const pass = document.getElementById('auth-pass').value;
+    
+    if (!user || !pass) return showToast("Isi username & password!");
+    if (modeAuth === 'register' && user.length < 3) return showToast("Username minimal 3 huruf!");
 
-        if (modeAuth === 'register') {
-            const setuju = confirm("Dengan mendaftar, Anda setuju bahwa Username & Password ini BUKAN data sensitif dan hanya untuk login ke ZenkaiTools.\n\nLanjut?");
-            if (!setuju) return;
-        }
+    // --- GANTI CONFIRM JELEK PAKAI MODAL KEREN ---
+    if (modeAuth === 'register') {
+        tampilkanAlert(
+            "Pendaftaran Akun", 
+            "Dengan mendaftar, Anda setuju bahwa Username & Password ini BUKAN data sensitif dan hanya digunakan untuk login ke ZenkaiTools.\n\nLanjutkan?",
+            [
+                { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+                { label: "Oke", action: "lanjutRegister()", type: "primary" }
+            ]
+        );
+        return;
+    }
 
-        document.getElementById('btn-submit').disabled = true;
-        document.getElementById('btn-submit').innerText = 'Memproses...';
+    eksekusiAuth(user, pass, modeAuth);
+};
 
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: modeAuth, username: user, password: pass })
-            });
-            const data = await res.json();
+// Fungsi lanjutan kalau user klik "Oke" di modal
+window.lanjutRegister = () => {
+    document.getElementById('custom-alert').style.display = 'none';
+    const user = document.getElementById('auth-user').value.trim();
+    const pass = document.getElementById('auth-pass').value;
+    eksekusiAuth(user, pass, 'register');
+};
 
-            if (data.status) {
-                if (modeAuth === 'register') {
-                    showToast("Daftar sukses! Otomatis masuk...");
-                    const resLogin = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'login', username: user, password: pass })
-                    });
-                    const dataLogin = await resLogin.json();
-                    
-                    if (dataLogin.status) {
-                        localStorage.setItem('zenkai_token', dataLogin.token);
-                        localStorage.setItem('zenkai_username', dataLogin.username);
-                        document.getElementById('my-username').innerText = dataLogin.username;
-                        document.getElementById('auth-gate').style.display = 'none';
-                        document.body.style.overflow = '';
-                        showToast(`Selamat datang, ${dataLogin.username}!`);
-                    } else {
-                        tampilkanForm('login');
-                        showToast("Daftar sukses, silakan login manual.");
-                    }
-                } else {
-                    localStorage.setItem('zenkai_token', data.token);
-                    localStorage.setItem('zenkai_username', data.username);
-                    document.getElementById('my-username').innerText = data.username;
+// Fungsi inti buat nembak API
+async function eksekusiAuth(user, pass, mode) {
+    document.getElementById('btn-submit').disabled = true;
+    document.getElementById('btn-submit').innerText = 'Memproses...';
+
+    try {
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: mode, username: user, password: pass })
+        });
+        const data = await res.json();
+
+        if (data.status) {
+            if (mode === 'register') {
+                showToast("Daftar sukses! Otomatis masuk...");
+                const resLogin = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'login', username: user, password: pass })
+                });
+                const dataLogin = await resLogin.json();
+                
+                if (dataLogin.status) {
+                    localStorage.setItem('zenkai_token', dataLogin.token);
+                    localStorage.setItem('zenkai_username', dataLogin.username);
+                    document.getElementById('my-username').innerText = dataLogin.username;
                     document.getElementById('auth-gate').style.display = 'none';
                     document.body.style.overflow = '';
-                    showToast(`Selamat datang, ${data.username}!`);
+                    document.getElementById('welcome-username').innerText = dataLogin.username; // Ganti Halo User
+                    showToast(`Selamat datang, ${dataLogin.username}!`);
+                } else {
+                    tampilkanForm('login');
+                    showToast("Daftar sukses, silakan login manual.");
                 }
-            } else { 
-                showToast(data.message); 
+            } else {
+                localStorage.setItem('zenkai_token', data.token);
+                localStorage.setItem('zenkai_username', data.username);
+                document.getElementById('my-username').innerText = data.username;
+                document.getElementById('auth-gate').style.display = 'none';
+                document.body.style.overflow = '';
+                document.getElementById('welcome-username').innerText = data.username; // Ganti Halo User
+                showToast(`Selamat datang, ${data.username}!`);
             }
-        } catch (e) { 
-            showToast("Gagal konek server"); 
+        } else { 
+            // --- PESAN ERROR DARI BACKEND (Username dipake/Pass salah) ---
+            showToast(data.message); 
         }
+    } catch (e) { 
+        showToast("Gagal konek server"); 
+    }
 
-        document.getElementById('btn-submit').disabled = false;
-        document.getElementById('btn-submit').innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
-    };
+    document.getElementById('btn-submit').disabled = false;
+    document.getElementById('btn-submit').innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
+}
 
     window.logoutUser = async () => {
         const token = localStorage.getItem('zenkai_token');
@@ -502,17 +526,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.verifikasiOwner = async () => {
-        const pass = document.getElementById('owner-pass').value;
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass, action: 'login' }) });
-            const data = await res.json();
-            if (data.status) {
-                localStorage.setItem(OWNER_SESSION_KEY, 'true');
-                document.getElementById('owner-modal').remove();
-                showToast("Akses Owner Diberikan!");
-            } else { showToast("Passcode Salah!"); }
-        } catch(e) { showToast("Error"); }
-    };
+    const pass = document.getElementById('owner-pass').value;
+    try {
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass, action: 'login' }) });
+        const data = await res.json();
+        if (data.status) {
+            localStorage.setItem(OWNER_SESSION_KEY, 'true');
+            document.getElementById('owner-modal').remove(); // Tutup modal login
+            showToast("Akses Owner Diberikan!");
+            // --- LANGSUNG BUKA PANEL RAHASIA ---
+            setTimeout(() => { tampilkanPanelRahasia(); }, 500); 
+        } else { showToast("Passcode Salah!"); }
+    } catch(e) { showToast("Error"); }
+};
 
     let mySession = localStorage.getItem('zenkai_sess');
     if (!mySession) { mySession = 'sess_' + Date.now(); localStorage.setItem('zenkai_sess', mySession); }
@@ -1301,4 +1327,23 @@ else if (tool === 'password') {
             `;
         }
     };
+    window.tampilkanAlert = (title, msg, buttons) => {
+    document.getElementById('alert-title').innerText = title;
+    document.getElementById('alert-msg').innerText = msg;
+    const btnContainer = document.getElementById('alert-btns');
+    btnContainer.innerHTML = '';
+    
+    buttons.forEach(btn => {
+        const b = document.createElement('button');
+        b.innerText = btn.label;
+        b.style.cssText = `flex:1; padding:12px; border:2px solid var(--border); border-radius:8px; font-weight:bold; cursor:pointer; font-family:var(--font-main);`;
+        if (btn.type === 'primary') b.style.background = 'var(--primary)';
+        else b.style.background = '#ff3333';
+        b.style.color = btn.type === 'primary' ? '#000' : '#fff';
+        b.setAttribute('onclick', btn.action);
+        btnContainer.appendChild(b);
+    });
+
+    document.getElementById('custom-alert').style.display = 'flex';
+};
 });

@@ -109,11 +109,13 @@
 <!-- ========================================= -->
 <main id="page-tools" class="page active">
     <header class="header-box">
-        <div class="logo-area">
-            <div class="logo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-            <div class="logo-text"><h1>ZenkaiTools</h1><p class="version">v1.0 // Andika T.M</p></div>
-        </div>
-    </header>
+    <div class="logo-area">
+        <div class="logo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div class="logo-text"><h1>ZenkaiTools</h1><p class="version">v1.0 // Andika T.M</p></div>
+    </div>
+    <!-- TOMBOL LOGOUT BARU -->
+    <button onclick="logoutUser()" style="background:#ff3333; color:#fff; border:2px solid var(--border); border-radius:6px; padding:6px 10px; font-size:10px; font-weight:bold; cursor:pointer;">Keluar</button>
+</header>
 
     <div class="custom-hero-block">
         <div class="hero-media">
@@ -130,7 +132,7 @@
     <div class="welcome-box">
         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
             <div>
-                <h2>Halo, User! </h2>
+                <h2>Halo, <span id="welcome-username" style="color:var(--primary);">User</span>! </h2>
                 <p style="margin-top:5px; font-size:12px; line-height:1.5;">Akses berbagai modul utilitas, generator, dan fitur sultan lo di sini. Semua gratis!</p>
             </div>
             <div style="background:var(--primary); color:#000; font-weight:800; font-size:10px; padding:4px 8px; border-radius:6px; border:2px solid var(--border); box-shadow:2px 2px 0 #000;">v1.0</div>
@@ -293,13 +295,6 @@
                 <p style="font-size:12px; line-height:1.6; opacity:0.8; margin-bottom:15px;">Halo! Zenkai Tools ini dibuat dan dikembangkan oleh <b>Andika T.M</b>. Jika ada saran atau bug, silakan hubungi lewat WhatsApp Channel di bawah ini.</p>
                 <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn press" style="text-decoration:none; display:block; text-align:center;">Hubungi Developer</a>
             </div>
-
-            <!-- TOMBOL LOGOUT USER -->
-            <div class="tools-section" style="margin-top:15px;">
-                <h3 style="margin-bottom:15px; font-family:var(--font-head);">Akun Lo</h3>
-                <p style="font-size:12px; margin-bottom:10px;">Login sebagai: <b id="my-username" style="color:var(--primary);">...</b></p>
-                <button class="action-btn press" onclick="logoutUser()" style="background:#ff3333; color:#fff;">KELUAR / LOGOUT</button>
-            </div>
         </main>
 
         <!-- ========================================= -->
@@ -366,6 +361,14 @@
     </div>
 
     <!-- SCRIPT JS -->
+    <!-- CUSTOM MODAL NOTIFIKASI -->
+<div id="custom-alert" style="position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:100001; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(5px);">
+    <div style="background:var(--card-bg); border:3px solid var(--border); border-radius:12px; padding:25px; width:100%; max-width:320px; text-align:center; box-shadow:var(--shadow);">
+        <h3 id="alert-title" style="font-family:var(--font-head); color:var(--primary); font-size:20px; margin-bottom:10px;">Pemberitahuan</h3>
+        <p id="alert-msg" style="font-size:13px; line-height:1.5; margin-bottom:20px;"></p>
+        <div id="alert-btns" style="display:flex; gap:10px;"></div>
+    </div>
+</div>
     <script src="script.js" defer></script>
 </body>
 </html>
