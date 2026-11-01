@@ -415,89 +415,99 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     async function eksekusiAuth(user, pass, mode) {
-        const btnSubmit = document.getElementById('btn-submit');
-        btnSubmit.disabled = true;
-        btnSubmit.innerText = 'Memproses...';
+    const btnSubmit = document.getElementById('btn-submit');
+    btnSubmit.disabled = true;
+    btnSubmit.innerText = 'Memproses...';
 
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: mode, username: user, password: pass })
-            });
+    try {
+        // --- MULAI BLOK TIMEOUT ---
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 detik
+
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: mode, username: user, password: pass }),
+            signal: controller.signal // <--- Masukin sinyal timeout
+        });
+        
+        clearTimeout(timeoutId); // Matikan timeout kalau server jawab
+        // --- SELESAI BLOK TIMEOUT ---
+
+        let data;
+        try { data = await res.json(); } catch { throw new Error('Respons server tidak valid'); }
+
+        if (!data.status) {
+            const pesan = (data.message || '').toLowerCase();
             
-            let data;
-            try { data = await res.json(); } catch { throw new Error('Respons server tidak valid'); }
+            const isUsernameTaken = pesan.includes('sudah') || pesan.includes('terdaftar') || pesan.includes('dipakai') || pesan.includes('exists') || pesan.includes('taken') || pesan.includes('already');
+            const isWrongCreds = pesan.includes('salah') || pesan.includes('tidak ditemukan') || pesan.includes('invalid') || pesan.includes('wrong') || pesan.includes('not found') || pesan.includes('incorrect');
 
-            if (!data.status) {
-                const pesan = (data.message || '').toLowerCase();
-                
-                const isUsernameTaken = pesan.includes('sudah') || pesan.includes('terdaftar') || pesan.includes('dipakai') || pesan.includes('exists') || pesan.includes('taken') || pesan.includes('already');
-                const isWrongCreds = pesan.includes('salah') || pesan.includes('tidak ditemukan') || pesan.includes('invalid') || pesan.includes('wrong') || pesan.includes('not found') || pesan.includes('incorrect');
-
-                if (mode === 'register' && isUsernameTaken) {
-                    tampilkanAlert(
-                        "Username Sudah Dipakai",
-                        `Username "${user}" sudah terdaftar.\n\nSilakan gunakan username lain, atau masuk kalau itu akun kamu.`,
-                        [
-                            { label: "Coba Lagi", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                            { label: "Masuk", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }
-                        ]
-                    );
-                } else if (mode === 'login' && isWrongCreds) {
-                    tampilkanAlert(
-                        "Login Gagal",
-                        "Username atau password yang kamu masukkan salah.\n\nCek lagi huruf besar/kecilnya, atau daftar kalau belum punya akun.",
-                        [
-                            { label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                            { label: "Daftar", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('register')", type: "primary" }
-                        ]
-                    );
-                } else {
-                    tampilkanAlert(
-                        mode === 'register' ? "Pendaftaran Gagal" : "Login Gagal",
-                        data.message || "Terjadi kesalahan. Coba lagi.",
-                        [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]
-                    );
-                }
-
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
-                return;
-            }
-
-            if (mode === 'register') {
+            if (mode === 'register' && isUsernameTaken) {
                 tampilkanAlert(
-                    "Pendaftaran Berhasil",
-                    "Akun berhasil dibuat! Silakan masuk menggunakan username dan password barumu.",
-                    [{ label: "Masuk Sekarang", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }]
+                    "Username Sudah Dipakai",
+                    `Username "${user}" sudah terdaftar.\n\nSilakan gunakan username lain, atau masuk kalau itu akun kamu.`,
+                    [
+                        { label: "Coba Lagi", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+                        { label: "Masuk", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }
+                    ]
                 );
-                document.getElementById('auth-pass').value = '';
+            } else if (mode === 'login' && isWrongCreds) {
+                tampilkanAlert(
+                    "Login Gagal",
+                    "Username atau password yang kamu masukkan salah.\n\nCek lagi huruf besar/kecilnya, atau daftar kalau belum punya akun.",
+                    [
+                        { label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+                        { label: "Daftar", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('register')", type: "primary" }
+                    ]
+                );
             } else {
-                localStorage.setItem('zenkai_token', data.token);
-                localStorage.setItem('zenkai_username', data.username);
-                
-                const gate = document.getElementById('auth-gate');
-                if (gate) gate.style.display = 'none';
-                document.body.style.overflow = '';
-                
-                const welcome = document.getElementById('welcome-username');
-                if (welcome) welcome.innerText = data.username;
-                
-                showToast(`Selamat datang, ${data.username}!`);
+                tampilkanAlert(
+                    mode === 'register' ? "Pendaftaran Gagal" : "Login Gagal",
+                    data.message || "Terjadi kesalahan. Coba lagi.",
+                    [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]
+                );
             }
 
-        } catch (e) {
-            tampilkanAlert(
-                "Koneksi Gagal",
-                "Nggak bisa nyambung ke server. Cek internet kamu, lalu coba lagi.",
-                [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]
-            );
+            btnSubmit.disabled = false;
+            btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
+            return;
         }
 
-        btnSubmit.disabled = false;
-        btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
+        if (mode === 'register') {
+            tampilkanAlert(
+                "Pendaftaran Berhasil",
+                "Akun berhasil dibuat! Silakan masuk menggunakan username dan password barumu.",
+                [{ label: "Masuk Sekarang", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }]
+            );
+            document.getElementById('auth-pass').value = '';
+        } else {
+            localStorage.setItem('zenkai_token', data.token);
+            localStorage.setItem('zenkai_username', data.username);
+            
+            const gate = document.getElementById('auth-gate');
+            if (gate) gate.style.display = 'none';
+            document.body.style.overflow = '';
+            
+            const welcome = document.getElementById('welcome-username');
+            if (welcome) welcome.innerText = data.username;
+            
+            showToast(`Selamat datang, ${data.username}!`);
+        }
+
+    } catch (e) {
+        // Kalau error-nya karena timeout
+        const msg = e.name === 'AbortError' ? 'Server lambat atau tidak merespon. Cek internet dan coba lagi.' : 'Gagal konek ke server.';
+        tampilkanAlert(
+            "Gagal Koneksi",
+            msg,
+            [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]
+        );
     }
+
+    btnSubmit.disabled = false;
+    btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
+}
 
     // =========================================
     // 9. SISTEM SETTINGS & MAINTENANCE
