@@ -409,14 +409,14 @@ if (tool === 'linkvertise') {
         };
     }
 
-        else if (tool === 'instagram') {
+            else if (tool === 'instagram') {
         modalContent.innerHTML = `
             ${closeSvg}
             <h3>Instagram DL</h3>
             <span class="desc-text">Download foto, video, atau carousel dari Instagram. Cukup paste link-nya.</span>
             <input type="text" id="ig-url" placeholder="Paste link Instagram...">
             <button class="action-btn" id="btn-dl-ig">Proses Media</button>
-            <div id="ig-result" style="margin-top:15px;"></div>
+            <div id="ig-result" style="margin-top:15px; max-height: 250px; overflow-y: auto;"></div>
         `;
         
         const btn = document.getElementById('btn-dl-ig');
@@ -425,79 +425,49 @@ if (tool === 'linkvertise') {
             const box = document.getElementById('ig-result');
             
             if (!url) return showToast('Masukkan link Instagram dulu!');
-            if (!/instagram\.com|instagr\.am/i.test(url)) return showToast('Link harus dari Instagram!');
             
             setBtnLoading(btn, true);
             box.innerHTML = '<div class="loader"></div>';
             
             try {
-                // Tembak langsung ke API AxAPI
+                // Tembak ke Supabase Edge Function
                 const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-instagram', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url: url })
-});
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+                
                 const data = await res.json();
                 
-                // Validasi response
-                if (!data.status || !data.result || !data.result.downloads) {
-                    throw new Error('Gagal mengambil media. Pastikan akun tidak private.');
+                // --- MULAI DEBUGGING ---
+                // KITA TAMPILKAN JSON ASLINYA KE LAYAR
+                // (Nanti kalau udah berhasil, baris di bawah ini bisa dihapus)
+                box.innerHTML = `
+                    <p style="font-size:10px; margin-bottom:5px; font-weight:bold; color:red;">DEBUG RESPON API:</p>
+                    <pre style="font-size:9px; text-align:left; background:#fff; padding:10px; border-radius:8px; border:2px solid var(--border); white-space: pre-wrap;">${escapeHTML(JSON.stringify(data, null, 2))}</pre>
+                `;
+                // --- SELESAI DEBUGGING ---
+
+                // Kalau ternyata formatnya beneran sesuai ekspektasi, kode di bawah ini yang bakal jalan
+                if (data.status && data.result && data.result.downloads) {
+                    const downloads = data.result.downloads;
+                    let htmlContent = `<p style="font-size:12px; text-align:center; margin-bottom:10px; font-weight:bold; color:var(--primary);">Berhasil! Ditemukan ${downloads.length} media</p>`;
+                    
+                    downloads.forEach((item, index) => {
+                        const isVideo = item.type === 'video';
+                        htmlContent += `
+                            <div style="border:2px dashed var(--border); padding:10px; border-radius:12px; background:var(--bg); margin-bottom:10px;">
+                                <button class="action-btn" onclick="window.open('${escapeHTML(item.url)}', '_blank')" style="margin-bottom:0;">
+                                    💾 Download ${isVideo ? 'Video' : 'Gambar'} ${downloads.length > 1 ? (index + 1) : ''}
+                                </button>
+                            </div>
+                        `;
+                    });
+                    box.innerHTML = htmlContent; // Timpa kotak debug dengan tombol download
                 }
-                
-                const downloads = data.result.downloads;
-                let htmlContent = `<p style="font-size:12px; text-align:center; margin-bottom:10px; font-weight:bold; color:var(--primary);">Ditemukan ${downloads.length} media</p>`;
-                
-                htmlContent += `<div style="display:flex; flex-direction:column; gap:15px;">`;
-                
-                downloads.forEach((item, index) => {
-                    const isVideo = item.type === 'video';
-                    const mediaTag = isVideo 
-                        ? `<video src="${escapeHTML(item.url)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom:10px;"></video>`
-                        : `<img src="${escapeHTML(item.url)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom:10px;">`;
-                        
-                    htmlContent += `
-                        <div style="border:2px dashed var(--border); padding:10px; border-radius:12px; background:var(--bg);">
-                            ${mediaTag}
-                            <button class="action-btn" id="btn-save-ig-${index}" data-url="${escapeHTML(item.url)}" data-type="${item.type}">
-                                💾 Simpan ${isVideo ? 'Video' : 'Gambar'} ${downloads.length > 1 ? (index + 1) : ''}
-                            </button>
-                        </div>
-                    `;
-                });
-                
-                htmlContent += `</div>`;
-                box.innerHTML = htmlContent;
-                
-                // Pasang event listener untuk tombol simpan
-                downloads.forEach((item, index) => {
-                    const saveBtn = document.getElementById(`btn-save-ig-${index}`);
-                    if (saveBtn) {
-                        saveBtn.onclick = async () => {
-                            setBtnLoading(saveBtn, true, 'Menyimpan...');
-                            try {
-                                // Fetch sebagai blob agar bisa didownload langsung
-                                const dlRes = await fetch(item.url);
-                                if (!dlRes.ok) throw new Error('Gagal mengunduh');
-                                const blob = await dlRes.blob();
-                                
-                                const a = document.createElement('a');
-                                a.href = URL.createObjectURL(blob);
-                                a.download = `ig-${item.type}-${Date.now()}.${item.type === 'video' ? 'mp4' : 'jpg'}`;
-                                a.click();
-                                setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                                showToast('Tersimpan ke Galeri!');
-                            } catch (err) {
-                                // Fallback kalau CORS ngeblokir download via blob
-                                window.open(item.url, '_blank');
-                                showToast('Membuka media di tab baru...');
-                            }
-                            setBtnLoading(saveBtn, false, `💾 Simpan ${item.type === 'video' ? 'Video' : 'Gambar'}`);
-                        };
-                    }
-                });
-                
+
             } catch (e) {
-                box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                box.innerHTML = `<p class="error-msg">Error Fetch: ${escapeHTML(e.message)}</p>`;
             }
             setBtnLoading(btn, false, 'Proses Media');
         };
