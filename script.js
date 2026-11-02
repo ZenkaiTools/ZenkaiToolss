@@ -825,13 +825,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
 
                     if (chapters.length === 0) {
-                        // Trik Jere: Endpoint Detail gak ngasih list chapter, jadi kita bikin tombol "Baca Chapter 1"
-                        html += `
-                            <p style="font-size: 11px; opacity: 0.7; margin-bottom: 10px;">API tidak menyediakan daftar lengkap, tapi lu bisa langsung mulai baca dari Chapter 1:</p>
-                            <button class="action-btn press" onclick="bacaKomik('${escapeHTML(title)}', '${slug}-chapter-1')" style="background:var(--primary); color:#000;">Baca Chapter 1</button>
-                            <p style="font-size: 11px; opacity: 0.7; margin-top: 10px; text-align: center;">Atau kunjungi web aslinya:</p>
-                            <a href="https://komikindo.ch/komik/${slug}/" target="_blank" class="action-btn" style="background:var(--card-bg); color:var(--text); text-decoration:none; display:block;">Buka di Web Asli</a>
-                        `;
+                        // JEMBATAN AJAIB: Judul Jere dilempar ke MangaDex
+                        html += `<p style="font-size: 11px; opacity: 0.7; margin-bottom: 10px;">Klik tombol di bawah untuk membaca komik ini (Server Baca):</p>`;
+                        html += `<button class="action-btn press" onclick="bacaDariMangaDex('${escapeHTML(title)}')" style="background:var(--primary); color:#000;">Baca Komik</button>`;
+                        
+                        // Fallback link web asli dibiarin
+                        html += `<p style="font-size: 11px; opacity: 0.7; margin-top: 10px; text-align: center;">Atau kunjungi web aslinya:</p>`;
+                        html += `<a href="https://komikindo.ch/komik/${slug}/" target="_blank" class="action-btn" style="background:var(--card-bg); color:var(--text); text-decoration:none; display:block;">Buka di Web Asli</a>`;
                     } else {
                         chapters.forEach(ch => {
                             const chTitle = ch.title || ch.chapter || 'Chapter';
@@ -856,6 +856,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             window.bacaKomik = async (title, slug) => {
+                const box = document.getElementById('komik-res');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
@@ -1826,40 +1827,130 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // FUNGSI KOMIK (STREAM JERE API)
+    // JEMBATAN: JERE (KATALOG) -> MANGADEX (BACA)
     // =========================================
-    window.bacaKomik = async (title, slug) => {
+    window.bacaDariMangaDex = async (title) => {
+        const box = document.getElementById('komik-res');
+        box.innerHTML = `<div class="loader"></div><p style="text-align:center; font-size:12px;">Mencari "${escapeHTML(title)}" di server baca...</p>`;
+        
+        try {
+            // 1. Cari judul komik dari Jere ke MangaDex
+            const mdRes = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'search', q: title })
+            });
+            const mdData = await mdRes.json();
+
+            // 2. Kalau ketemu, buka list chapter MangaDex
+            if (mdData.data && mdData.data.length > 0) {
+                // Ambil ID komik pertama yang paling relevan
+                const mangaId = mdData.data[0].id;
+                window.bukaChapterKomik(mdData.data[0].id, title);
+            } else {
+                // 3. Kalau nggak ketemu, baru kasih tau user
+                box.innerHTML = `
+                    <div style="text-align:center; padding: 20px;">
+                        <p class="error-msg">Komik "${escapeHTML(title)}" tidak ditemukan di server baca. Coba cari judul lain atau baca di web asli.</p>
+                        <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali ke Katalog</button>
+                    </div>
+                `;
+            }
+        } catch (err) {
+            box.innerHTML = `<p class="error-msg">Gagal konek ke server baca.</p>`;
+        }
+    };
+
+    // =========================================
+    // FUNGSI KOMIK MANGADEX (DIPANGGIL DARI JEMBATAN)
+    // =========================================
+    window.bukaChapterKomik = async (mangaId, title) => {
         const box = document.getElementById('komik-res');
         box.innerHTML = '<div class="loader"></div>';
         try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'stream', slug: slug })
+                body: JSON.stringify({ action: 'chapters', mangaId: mangaId })
             });
             const data = await res.json();
             
-            const images = data.result?.pages || []; 
+            if (!data.data || data.data.length === 0) throw new Error('Chapter komik belum tersedia di server.');
             
-            if (images.length === 0) throw new Error('Gambar tidak ditemukan / Server Stream sedang down');
-
-            let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
-            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
-            images.forEach(imgUrl => {
-                html += `<img src="${imgUrl}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
+            let html = `
+                <div style="display:flex; gap:15px; margin-bottom:20px; align-items:flex-start;">
+                    <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <div>
+                        <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <span style="font-size:10px; font-weight:bold; background:var(--primary); color:#000; padding:3px 8px; border-radius:4px;">ZENKAI SERVER</span>
+                            <span style="font-size:11px; color:var(--text); opacity:0.6;">${data.data.length} Chapters</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; flex-direction:column;">
+            `;
+            
+            data.data.forEach((ch) => {
+                const chNum = ch.attributes.chapter || '?';
+                const chTitle = ch.attributes.title || '';
+                const date = new Date(ch.attributes.publishAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
+                
+                html += `
+                    <div class="press" onclick="bacaGambarKomik('${escapeHTML(ch.id)}', '${escapeHTML(chNum)}')" style="display:flex; align-items:center; padding:15px 10px; border-bottom:1px solid var(--border); cursor:pointer; transition:0.2s;">
+                        <div style="width:35px; height:35px; background:var(--card-bg); border:2px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:12px; flex-shrink:0; color:var(--text);">
+                            ${chNum}
+                        </div>
+                        <div style="margin-left:15px; flex:1;">
+                            <h5 style="margin:0; font-size:13px; font-weight:800; color:var(--text);">Chapter ${chNum}</h5>
+                            <p style="margin:2px 0 0 0; font-size:10px; color:var(--text); opacity:0.6;">${date} ${chTitle ? '• ' + escapeHTML(chTitle) : ''}</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+                    </div>
+                `;
             });
+            
             html += `</div>`;
-
-            html += `<button class="action-btn press" onclick="openTool('komik')" style="margin-top:15px; background:#ff3333;">Kembali ke Katalog</button>`;
             box.innerHTML = html;
-
+            
         } catch (e) { 
             box.innerHTML = `
-                <div style="text-align:center; padding: 20px;">
+                <div style="text-align:center; padding:40px 20px;">
+                    <div style="font-size:40px; margin-bottom:10px;">😔</div>
                     <p class="error-msg">${escapeHTML(e.message)}</p>
-                    <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
+                    <button onclick="openTool('komik')" class="action-btn" style="margin-top:20px;">Kembali ke Katalog</button>
                 </div>
             `; 
         }
+    };
+
+    window.bacaGambarKomik = async (chapterId, chNum) => {
+        const box = document.getElementById('komik-res');
+        box.innerHTML = '<div class="loader"></div>';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'images', chapterId: chapterId })
+            });
+            const data = await res.json();
+
+            const baseUrl = data.baseUrl;
+            const hash = data.chapter?.hash;
+            const images = data.chapter?.data;
+
+            if (!baseUrl || !hash || !images) throw new Error('Gagal mengambil gambar chapter');
+
+            let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${escapeHTML(chNum)}</h4>`;
+            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+            images.forEach(img => {
+                const rawUrl = `${baseUrl}/data/${hash}/${img}`;
+                html += `<img src="${rawUrl}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
+            });
+            html += `</div>`;
+
+            html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
+            box.innerHTML = html;
+        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
     };
 
 }); // <- PENUTUP DOMContentLoaded, JANGAN DIHAPUS
