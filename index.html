@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="description" content="Zenkai Tools — Modul utilitas, downloader, generator, dan fitur sultan. Gratis, ringan, tanpa install.">
-    <meta name="theme-color" content="#ff007f">
+    <meta name="theme-color" content="#00ffcc">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Zenkai Tools // Andika T.M</title>
@@ -17,45 +17,54 @@
 <body data-theme="cyber">
 
     <!-- ========================================= -->
-    <!-- 1. GERBANG LOGIN (AUTH GATE)              -->
+    <!-- 1. SPLASH SCREEN VIDEO (PINTU MASUK)      -->
     <!-- ========================================= -->
-    <div id="auth-gate" style="position:fixed; inset:0; background:var(--bg); z-index:999999; display:flex; align-items:center; justify-content:center; padding:20px;">
-        <div style="background:var(--card-bg); border:3px solid var(--border); border-radius:12px; padding:25px; width:100%; max-width:340px; box-shadow:var(--shadow); text-align:center;">
+    <div id="auth-gate" style="position:fixed !important; top:0 !important; left:0 !important; width:100vw !important; height:100vh !important; background:#000 !important; z-index:1000000 !important; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        
+        <!-- VIDEO INTRO -->
+        <video id="welcome-video" autoplay muted playsinline style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+            <source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/69f209fc07b94f9b2a09e6b5e1b1b1cf52e89f86/0a220ffe6ffe05c3243dfef08d96253b_720w.mp4" type="video/mp4">
+        </video>
+
+        <!-- Efek Overlay & Scanline Sinematik -->
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.9) 100%); z-index:2; pointer-events:none;"></div>
+        <div style="position:absolute; inset:0; background:repeating-linear-gradient(0deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 3px); z-index:2; pointer-events:none;"></div>
+
+        <!-- Teks Branding & Tombol Skip (Desain Sinematik) -->
+        <div style="position:absolute; bottom:0; left:0; right:0; padding:50px 20px 40px 20px; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); text-align:center; z-index:3; display:flex; flex-direction:column; align-items:center;">
             
-            <div id="auth-choice">
-                <h2 style="font-family:var(--font-head); color:var(--primary); font-size:28px; margin-bottom:5px;">ZENKAI ACCESS</h2>
-                <p style="font-size:12px; opacity:0.8; margin-bottom:25px;">Silakan pilih untuk melanjutkan</p>
-                <button onclick="tampilkanForm('login')" style="width:100%; padding:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:8px; font-weight:800; font-size:14px; box-shadow:2px 2px 0 var(--border); margin-bottom:10px;">MASUK KE AKUN</button>
-                <button onclick="tampilkanForm('register')" style="width:100%; padding:14px; background:var(--bg); color:var(--text); border:2px solid var(--border); border-radius:8px; font-weight:800; font-size:14px;">BUAT AKUN BARU</button>
+            <div style="display:flex; align-items:center; justify-content:center; gap:15px; margin-bottom:25px; width:100%; max-width:350px;">
+                <div style="flex:1; height:1px; background:linear-gradient(to right, transparent, var(--primary));"></div>
+                <h1 style="font-family:var(--font-head); color:#fff; font-size:24px; letter-spacing:6px; margin:0; text-shadow:0 0 15px rgba(0,255,204,0.6);">
+                    ZENKAI<span style="color:var(--primary);">TOOLS</span>
+                </h1>
+                <div style="flex:1; height:1px; background:linear-gradient(to left, transparent, var(--primary));"></div>
             </div>
 
-            <div id="auth-form-container" style="display:none;">
-                <button onclick="kembaliKePilihan()" style="background:none; border:none; color:var(--text); font-size:12px; font-weight:bold; margin-bottom:15px; cursor:pointer;"> Kembali</button>
-                <h2 id="auth-title" style="font-family:var(--font-head); color:var(--primary); font-size:24px; margin-bottom:15px;">MASUK</h2>
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <input type="text" id="auth-user" placeholder="Username" style="padding:12px; border:2px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text);">
-                    <input type="password" id="auth-pass" placeholder="Password" style="padding:12px; border:2px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text);">
-                    <button id="btn-submit" onclick="prosesAuth()" style="padding:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:8px; font-weight:800; box-shadow:2px 2px 0 var(--border); margin-top:5px;">LANJUTKAN</button>
-                </div>
-                <div id="privacy-note" style="display:none; margin-top:15px; padding:10px; background:rgba(0,255,204,0.1); border:1px dashed #00ffcc; border-radius:8px; text-align:left;">
-                    <p style="font-size:10px; line-height:1.4; opacity:0.9;"> <b>Privasi Terjamin:</b> Kami <b>TIDAK</b> meminta email atau nomor HP. Username & Password hanya untuk masuk ke web ini, dan Password Anda dienkripsi secara aman.</p>
-                </div>
-            </div>
-            <div id="auth-loading" style="display:none; font-size:12px; font-weight:bold; color:var(--primary); margin-top:15px;">Memproses...</div>
+            <button onclick="masukKeWeb()" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 30px; border-radius:8px; font-weight:600; font-size:12px; letter-spacing:2px; cursor:pointer; backdrop-filter:blur(5px); transition:0.3s; display:flex; align-items:center; gap:10px;">
+                SKIP INTRO <span style="color:var(--primary); font-size:16px;">»</span>
+            </button>
+            
+            <p style="color:rgba(255,255,255,0.3); font-size:9px; margin-top:15px; letter-spacing:1px;">© 2026 ZENKAI SYSTEM</p>
         </div>
     </div>
 
     <!-- ========================================= -->
-    <!-- 2. LAYAR MAINTENANCE & BROADCAST          -->
+    <!-- 2. LAYAR MAINTENANCE - CYBERPUNK          -->
     <!-- ========================================= -->
-    <div id="maintenance-screen" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(9, 9, 11, 0.95); backdrop-filter:blur(15px); flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:30px;">
-        <div style="background:var(--card-bg); border:3px solid #ff3333; padding:40px 30px; border-radius:24px; max-width:380px; width:100%; box-shadow:0 0 50px rgba(255, 51, 51, 0.2);">
-            <div style="font-size:50px; margin-bottom:20px; animation: spin 4s linear infinite;"></div>
-            <h1 style="font-family:var(--font-head); font-size:28px; color:#ff3333; margin-bottom:15px; letter-spacing:1px; text-transform:uppercase;">Sedang Maintenance</h1>
-            <p style="font-size:13px; line-height:1.6; opacity:0.8; margin-bottom:25px;">Kami sedang melakukan pembaruan sistem untuk meningkatkan kualitas layanan. Silakan kembali beberapa saat lagi.</p>
-            <div style="width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:10px; overflow:hidden;">
-                <div style="height:100%; width:50%; background:#ff3333; border-radius:10px; animation: loadingBar 2s ease-in-out infinite alternate;"></div>
+    <div id="maintenance-screen" style="display:none; position:fixed; inset:0; z-index:99999; background:#09090b; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; overflow:hidden;">
+        <!-- Efek Grid Latar Belakang -->
+        <div style="position:absolute; inset:0; background-image: linear-gradient(rgba(255, 51, 51, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 51, 51, 0.05) 1px, transparent 1px); background-size: 40px 40px; z-index:0;"></div>
+        
+        <div style="background:rgba(24, 24, 27, 0.9); border:1px solid rgba(255, 51, 51, 0.4); padding:40px 30px; border-radius:16px; max-width:400px; width:100%; box-shadow:0 0 50px rgba(255, 51, 51, 0.15), inset 0 0 20px rgba(255, 51, 51, 0.05); position:relative; z-index:1;">
+            <div style="font-size:60px; margin-bottom:20px; color:#ff3333; text-shadow:0 0 20px rgba(255,51,51,0.5); line-height:1; animation:glitch 2s infinite;"></div>
+            <h1 style="font-family:var(--font-head); font-size:26px; color:#ff3333; margin-bottom:15px; letter-spacing:2px; text-transform:uppercase;">SYSTEM OFFLINE</h1>
+            <p style="font-size:13px; line-height:1.6; color:#a1a1aa; margin-bottom:30px; font-family:monospace;">Server sedang dalam pemeliharaan rutin untuk optimalisasi. Silakan kembali beberapa saat lagi.</p>
+            
+            <div style="width:100%; height:4px; background:rgba(255,51,51,0.2); border-radius:10px; overflow:hidden; margin-bottom:10px;">
+                <div style="height:100%; width:50%; background:#ff3333; border-radius:10px; animation: loadingBar 1.5s ease-in-out infinite alternate; box-shadow:0 0 10px #ff3333;"></div>
             </div>
+            <p style="font-size:10px; color:#ff3333; font-family:monospace; letter-spacing:1px; animation:pulse 1s infinite;">MENUNGGU KONEKSI...</p>
         </div>
     </div>
     
@@ -64,20 +73,8 @@
     <a href="#page-tools" class="skip-link">Lewati ke konten utama</a>
 
     <!-- ========================================= -->
-    <!-- 3. INTRO SCREEN & POPUP WHATSAPP          -->
+    <!-- 3. POPUP WHATSAPP                         -->
     <!-- ========================================= -->
-    <div id="intro-screen" class="intro-screen" aria-hidden="true">
-        <video id="intro-video" autoplay muted playsinline class="intro-video">
-            <source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/e27b1de96f73698b9a1a15553ccf6ff00c7ac265/0a220ffe6ffe05c3243dfef08d96253b_720w.mp4" type="video/mp4">
-        </video>
-        <button class="intro-skip press" onclick="skipIntro()" aria-label="Lewati intro">Skip »</button>
-        <div class="intro-loader" aria-hidden="true"><div class="intro-loader-bar" id="intro-loader-bar"></div></div>
-        <div class="intro-brand" id="intro-brand">
-            <h1>ZENKAI<span>TOOLS</span></h1>
-            <p>by Andika T.M</p>
-        </div>
-    </div>
-
     <div class="wa-popup-overlay" id="wa-popup" role="dialog" aria-modal="true" aria-labelledby="wa-title">
         <div class="wa-popup-box">
             <button class="wa-close" onclick="closeWaPopup()" aria-label="Tutup popup">×</button>
@@ -92,6 +89,7 @@
         </div>
     </div>
 
+    <!-- MUSIK WIDGET -->
     <div class="music-widget" role="group" aria-label="Pemutar musik">
         <button onclick="prevSong()" class="press" aria-label="Lagu sebelumnya"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg></button>
         <button onclick="toggleMusic()" id="btn-play" class="press" aria-label="Play / Pause" style="width: 40px; height: 40px;">
@@ -136,7 +134,7 @@
         <div class="welcome-box">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
-                    <h2>Halo, <span id="welcome-username" style="color:var(--primary);">User</span>! </h2>
+                    <h2>Halo, <span id="welcome-username" style="color:var(--primary);">Sultan</span>! </h2>
                     <p style="margin-top:5px; font-size:12px; line-height:1.5;">Akses berbagai modul utilitas, generator, dan fitur sultan lo di sini. Semua gratis!</p>
                 </div>
                 <div style="background:var(--primary); color:#000; font-weight:800; font-size:10px; padding:4px 8px; border-radius:6px; border:2px solid var(--border); box-shadow:2px 2px 0 #000;">v1.0</div>
@@ -260,6 +258,22 @@
                     </div>
                     <h4 style="font-size:11px; margin-top:5px;">Alight Motion</h4>
                 </div>
+
+                <!-- AI CHAT -->
+                <div class="tool-card press" onclick="openTool('ai-chat')" role="button" tabindex="0">
+                    <div class="t-icon bg-cyan" style="width:60px; height:60px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <h4 style="font-size:11px; margin-top:5px;">AI Chat</h4>
+                </div>
+
+                <!-- AI IMAGE -->
+                <div class="tool-card press" onclick="openTool('ai-image')" role="button" tabindex="0">
+                    <div class="t-icon bg-purple" style="width:60px; height:60px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                    <h4 style="font-size:11px; margin-top:5px;">AI Image</h4>
+                </div>
             </div>
         </div>
         <div class="credit-text" style="margin-top:30px;">Powered by <b>Zenkai Tools</b></div>
@@ -347,8 +361,15 @@
         </div>
 
         <div class="tools-section" style="padding:20px; margin-bottom:15px;">
-            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;">Penafian (Disclaimer)</h3>
-            <p style="font-size:11px; line-height:1.6; opacity:0.7;">Zenkai Tools tidak berafiliasi dengan TikTok, Instagram, Facebook, Pinterest, atau Roblox. Segala konten yang diunduh melalui tool ini adalah tanggung jawab pengguna. Mohon gunakan dengan bijak dan hormati hak cipta.</p>
+            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px; color:#ff3333;"> Penafian & Keamanan (Disclaimer)</h3>
+            <p style="font-size:11px; line-height:1.6; opacity:0.8; margin-bottom:10px;">
+                Zenkai Tools tidak berafiliasi dengan TikTok, Instagram, Facebook, Pinterest, atau Roblox. Segala konten yang diunduh melalui tool ini adalah tanggung jawab pengguna. Mohon gunakan dengan bijak dan hormati hak cipta.
+            </p>
+            <div style="background:rgba(255, 51, 51, 0.1); border-left:3px solid #ff3333; padding:10px;">
+                <p style="font-size:11px; line-height:1.6; color:#ff9999; margin:0;">
+                    <b>JANGAN PERNAH</b> memasukkan data sensitif seperti Email Utama, Nomor HP, Password penting, atau informasi perbankan ke dalam sistem ini. Sistem ini dibuat untuk keperluan utilitas publik. Segala risiko kebocoran data akibat kelalaian pengguna sepenuhnya menjadi tanggung jawab pengguna.
+                </p>
+            </div>
         </div>
 
         <div class="tools-section" style="padding:20px;">

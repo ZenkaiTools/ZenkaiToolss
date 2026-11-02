@@ -56,88 +56,62 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.logoutUser = async () => {
-        const token = localStorage.getItem('zenkai_token');
-        if (token) {
-            await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'logout', token })
-            }).catch(() => {});
-        }
-        localStorage.clear();
+        localStorage.removeItem(OWNER_TOKEN_KEY);
         location.reload();
     };
 
     // =========================================
-    // 2. INTRO SCREEN & POPUP WA
+    // 2. SPLASH SCREEN VIDEO (PINTU MASUK)
     // =========================================
-    const introScreen = document.getElementById('intro-screen');
-    const introVideo = document.getElementById('intro-video');
-    const introBar = document.getElementById('intro-loader-bar');
-    const introBrand = document.getElementById('intro-brand');
+    const welcomeVideo = document.getElementById('welcome-video');
+    const authGate = document.getElementById('auth-gate');
 
-    if (introScreen) {
-        const hasSeenIntro = sessionStorage.getItem('intro_shown');
-        if (hasSeenIntro === 'true' || isReducedMotion()) {
-            introScreen.remove();
-            document.body.classList.remove('intro-active');
-        } else {
-            document.body.classList.add('intro-active');
-            document.body.style.overflow = 'hidden';
-
-            if (introVideo) {
-                introVideo.addEventListener('timeupdate', () => {
-                    if (introVideo.duration) {
-                        const percent = (introVideo.currentTime / introVideo.duration) * 100;
-                        if (introBar) introBar.style.width = percent + '%';
-                        if (introVideo.currentTime / introVideo.duration > 0.7 && introBrand) introBrand.classList.add('show');
-                    }
-                });
-                introVideo.addEventListener('ended', () => {
-                    if (introScreen) introScreen.classList.add('shake');
-                    if (introBar) introBar.style.width = '100%';
-                    if (introBrand) introBrand.classList.add('show');
-                    setTimeout(() => { window.closeIntro(); }, 800);
-                });
-                introVideo.play().catch(() => {
-                    introVideo.addEventListener('click', () => introVideo.play());
-                });
-            }
-
-            window.closeIntro = () => {
-                if (!introScreen) return;
-                sessionStorage.setItem('intro_shown', 'true');
-                introScreen.classList.add('hide');
-                document.body.classList.remove('intro-active');
+    window.masukKeWeb = () => {
+        if (authGate) {
+            authGate.style.opacity = '0';
+            authGate.style.transform = 'scale(1.05)';
+            authGate.style.transition = '0.8s ease';
+            setTimeout(() => {
+                authGate.style.display = 'none';
                 document.body.style.overflow = '';
-                setTimeout(() => { if (introScreen && introScreen.parentNode) introScreen.remove(); }, 800);
-                scheduleWaPopup();
-            };
-
-            window.skipIntro = () => {
-                if (introVideo) introVideo.pause();
-                window.closeIntro();
-            };
+            }, 800);
         }
+    };
+
+    if (welcomeVideo) {
+        // TRIK: Coba autoplay, lalu paksa nyalain suara
+        welcomeVideo.play().then(() => {
+            welcomeVideo.muted = false; 
+        }).catch(() => {
+            console.log("Autoplay dengan suara diblokir browser.");
+            // Fallback kalau browser ngeblok total, tambahin listener klik di video
+            welcomeVideo.addEventListener('click', () => {
+                welcomeVideo.muted = false;
+                welcomeVideo.play();
+            });
+        });
+
+        // Kalau video selesai, masuk ke web
+        welcomeVideo.addEventListener('ended', () => {
+            window.masukKeWeb();
+        });
     }
 
-    const waPopup = document.getElementById('wa-popup');
-    let waScheduled = false;
-    function scheduleWaPopup() {
-        if (waScheduled) return;
-        waScheduled = true;
-        if (!waPopup) return;
-        setTimeout(() => { if (waPopup) waPopup.classList.add('active'); }, 1500);
+    // =========================================
+    // 3. BEBAS AKSES
+    // =========================================
+    const welcome = document.getElementById('welcome-username');
+    if (welcome) welcome.innerText = 'Sultan'; 
+
+    if (localStorage.getItem(OWNER_TOKEN_KEY)) {
+        const navOwner = document.getElementById('nav-owner');
+        if (navOwner) navOwner.style.display = 'flex';
     }
-    if (!introScreen || sessionStorage.getItem('intro_shown') === 'true' || isReducedMotion()) {
-        scheduleWaPopup();
-    }
-    window.closeWaPopup = () => { if (waPopup) waPopup.classList.remove('active'); };
 
     // =========================================
-    // 3. TEMA & NAVIGASI
+    // 4. TEMA & NAVIGASI
     // =========================================
-    const savedTheme = localStorage.getItem('zenkai_theme') || 'cyber'; // Default Cyberpunk
+    const savedTheme = localStorage.getItem('zenkai_theme') || 'cyber';
     document.body.setAttribute('data-theme', savedTheme);
 
     window.setTheme = (themeName) => {
@@ -189,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 4. DEVICE, BATERAI, JAM
+    // 5. DEVICE, BATERAI, JAM
     // =========================================
     function updateTime() {
         const now = new Date();
@@ -221,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================
-    // 5. MUSIK WIDGET
+    // 6. MUSIK WIDGET
     // =========================================
     const bgm = document.getElementById('bgm');
     const icPlay = document.getElementById('ic-play');
@@ -279,16 +253,16 @@ document.addEventListener('DOMContentLoaded', () => {
     window.resetData = () => {
         tampilkanAlert(
             "Hapus Cache",
-            "Yakin mau hapus cache dan muat ulang web?\n\nKamu bakal logout & harus login lagi.",
+            "Yakin mau hapus cache dan muat ulang web?",
             [
                 { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                { label: "Hapus", action: "sessionStorage.clear(); localStorage.removeItem('wa_popup_last'); location.reload();", type: "primary" }
+                { label: "Hapus", action: "sessionStorage.clear(); localStorage.clear(); location.reload();", type: "primary" }
             ]
         );
     };
 
     // =========================================
-    // 6. MODAL BOTTOM SHEET
+    // 7. MODAL BOTTOM SHEET
     // =========================================
     const modal = document.getElementById('tool-modal');
     const modalContent = document.getElementById('modal-content');
@@ -319,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // =========================================
-    // 7. SEARCH & VISUAL FILTER
+    // 8. SEARCH & VISUAL FILTER
     // =========================================
     const sInput = document.getElementById('search-tools');
     if (sInput) {
@@ -337,163 +311,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // PATCH: HANYA TOOLS COMING SOON YANG DI-HARDCODE UNTUK LABEL "SOON"
-    // Instagram, Facebook, dan Bypass sudah dihapus dari sini agar statusnya murni dari Owner Panel
     const comingSoonList = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
     comingSoonList.forEach(toolName => {
         const card = document.querySelector(`.tool-card[onclick="openTool('${toolName}')"]`);
         if (card) card.classList.add('soon');
     });
-
-    // =========================================
-    // 8. SISTEM GERBANG LOGIN (AUTH)
-    // =========================================
-    let modeAuth = 'login';
-    const savedToken = localStorage.getItem('zenkai_token');
-    const savedUser = localStorage.getItem('zenkai_username');
-
-    if (savedToken && savedUser) {
-        const gate = document.getElementById('auth-gate');
-        if (gate) gate.style.display = 'none';
-        document.body.style.overflow = '';
-        const welcome = document.getElementById('welcome-username');
-        if (welcome) welcome.innerText = savedUser;
-        
-        if (localStorage.getItem(OWNER_TOKEN_KEY)) {
-            const navOwner = document.getElementById('nav-owner');
-            if (navOwner) navOwner.style.display = 'flex';
-        }
-    } else {
-        document.body.style.overflow = 'hidden';
-    }
-
-    window.tampilkanForm = (mode) => {
-        modeAuth = mode;
-        document.getElementById('auth-choice').style.display = 'none';
-        document.getElementById('auth-form-container').style.display = 'block';
-        document.getElementById('auth-title').innerText = mode === 'login' ? 'MASUK' : 'DAFTAR BARU';
-        document.getElementById('btn-submit').innerText = mode === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
-        document.getElementById('privacy-note').style.display = mode === 'register' ? 'block' : 'none';
-        document.getElementById('auth-user').value = '';
-        document.getElementById('auth-pass').value = '';
-    };
-
-    window.kembaliKePilihan = () => {
-        document.getElementById('auth-choice').style.display = 'block';
-        document.getElementById('auth-form-container').style.display = 'none';
-    };
-
-    window.prosesAuth = async () => {
-        const user = document.getElementById('auth-user').value.trim();
-        const pass = document.getElementById('auth-pass').value;
-
-        if (!user || !pass) return showToast("Isi username & password!");
-        if (modeAuth === 'register' && user.length < 3) return showToast("Username minimal 3 huruf!");
-
-        if (modeAuth === 'register') {
-            tampilkanAlert(
-                "Pendaftaran Akun",
-                "Dengan mendaftar, Anda setuju bahwa Username & Password ini BUKAN data sensitif dan hanya digunakan untuk login ke ZenkaiTools.\n\nLanjutkan?",
-                [
-                    { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                    { label: "Oke", action: "lanjutRegister()", type: "primary" }
-                ]
-            );
-            return;
-        }
-
-        eksekusiAuth(user, pass, modeAuth);
-    };
-
-    window.lanjutRegister = () => {
-        document.getElementById('custom-alert').style.display = 'none';
-        const user = document.getElementById('auth-user').value.trim();
-        const pass = document.getElementById('auth-pass').value;
-        eksekusiAuth(user, pass, 'register');
-    };
-
-    async function eksekusiAuth(user, pass, mode) {
-        const btnSubmit = document.getElementById('btn-submit');
-        btnSubmit.disabled = true;
-        btnSubmit.innerText = 'Memproses...';
-
-        try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: mode, username: user, password: pass }),
-                signal: controller.signal
-            });
-
-            clearTimeout(timeoutId);
-
-            let data;
-            try { data = await res.json(); } catch { throw new Error('Respons server tidak valid'); }
-
-            if (!data.status) {
-                const pesan = (data.message || '').toLowerCase();
-                const isUsernameTaken = pesan.includes('sudah') || pesan.includes('terdaftar') || pesan.includes('dipakai') || pesan.includes('exists') || pesan.includes('taken') || pesan.includes('already');
-                const isWrongCreds = pesan.includes('salah') || pesan.includes('tidak ditemukan') || pesan.includes('invalid') || pesan.includes('wrong') || pesan.includes('not found') || pesan.includes('incorrect');
-
-                if (mode === 'register' && isUsernameTaken) {
-                    tampilkanAlert("Username Sudah Dipakai",
-                        `Username "${user}" sudah terdaftar.\n\nSilakan gunakan username lain, atau masuk kalau itu akun kamu.`,
-                        [
-                            { label: "Coba Lagi", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                            { label: "Masuk", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }
-                        ]
-                    );
-                } else if (mode === 'login' && isWrongCreds) {
-                    tampilkanAlert("Login Gagal",
-                        "Username atau password yang kamu masukkan salah.\n\nCek lagi huruf besar/kecilnya, atau daftar kalau belum punya akun.",
-                        [
-                            { label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                            { label: "Daftar", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('register')", type: "primary" }
-                        ]
-                    );
-                } else {
-                    tampilkanAlert(mode === 'register' ? "Pendaftaran Gagal" : "Login Gagal",
-                        data.message || "Terjadi kesalahan. Coba lagi.",
-                        [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]
-                    );
-                }
-
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
-                return;
-            }
-
-            if (mode === 'register') {
-                tampilkanAlert("Pendaftaran Berhasil",
-                    "Akun berhasil dibuat! Silakan masuk menggunakan username dan password barumu.",
-                    [{ label: "Masuk Sekarang", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }]
-                );
-                document.getElementById('auth-pass').value = '';
-            } else {
-                localStorage.setItem('zenkai_token', data.token);
-                localStorage.setItem('zenkai_username', data.username);
-
-                const gate = document.getElementById('auth-gate');
-                if (gate) gate.style.display = 'none';
-                document.body.style.overflow = '';
-
-                const welcome = document.getElementById('welcome-username');
-                if (welcome) welcome.innerText = data.username;
-
-                showToast(`Selamat datang, ${data.username}!`);
-            }
-
-        } catch (e) {
-            const msg = e.name === 'AbortError' ? 'Server lambat atau tidak merespon. Cek internet dan coba lagi.' : 'Gagal konek ke server.';
-            tampilkanAlert("Gagal Koneksi", msg, [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]);
-        }
-
-        btnSubmit.disabled = false;
-        btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
-    }
 
     // =========================================
     // 9. SISTEM SETTINGS & MAINTENANCE
@@ -523,12 +345,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 w.style = 'position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); color:#fff; z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-family:var(--font-main); padding:20px;';
                 
                 w.innerHTML = `
-                    <div style="background:var(--card-bg); border:3px solid var(--border); padding:30px 20px; border-radius:20px; max-width:320px; width:100%; box-shadow:0 0 30px rgba(255, 51, 51, 0.3);">
-                        <div style="font-size:40px; margin-bottom:15px; animation: pulse 1.5s infinite;">⚠️</div>
-                        <h2 style="color:#ff3333; margin-bottom:10px; font-family:var(--font-head); font-size:22px;">MAINTENANCE</h2>
-                        <p style="font-size:13px; opacity:0.8; margin-bottom:20px; line-height:1.5;">Sistem akan masuk ke mode perbaikan dalam <b id="mt-cd" style="color:var(--primary); font-size:16px;">10</b> detik.</p>
-                        <div style="width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:10px; overflow:hidden;">
-                            <div id="mt-bar" style="height:100%; width:0%; background:#ff3333; transition:width 1s linear;"></div>
+                    <div style="background:rgba(24, 24, 27, 0.95); border:1px solid rgba(255, 51, 51, 0.5); padding:30px 20px; border-radius:12px; max-width:320px; width:100%; box-shadow:0 0 40px rgba(255, 51, 51, 0.2); text-align:center; position:relative; overflow:hidden;">
+                        <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:#ff3333; box-shadow:0 0 10px #ff3333; animation:scanline 2s linear infinite;"></div>
+                        
+                        <h2 style="color:#ff3333; margin-bottom:5px; font-family:monospace; font-size:18px; letter-spacing:2px; text-shadow:0 0 10px rgba(255,51,51,0.5);">SYSTEM LOCK</h2>
+                        <p style="font-size:11px; color:#a1a1aa; margin-bottom:20px; font-family:monospace;">SHUTDOWN IN <b id="mt-cd" style="color:#ff3333; font-size:18px;">10</b> SECONDS</p>
+                        
+                        <div style="width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden;">
+                            <div id="mt-bar" style="height:100%; width:0%; background:#ff3333; transition:width 1s linear; box-shadow:0 0 10px #ff3333;"></div>
                         </div>
                     </div>
                 `;
@@ -590,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // =========================================
-    // 10. PINTU RAHASIA OWNER (PATCHED)
+    // 10. PINTU RAHASIA OWNER
     // =========================================
     let clicks = 0;
     document.querySelector('.logo-area')?.addEventListener('click', () => {
@@ -714,7 +538,6 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:20px;">
                 
-                <!-- Card 1: General Settings -->
                 <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
                     <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px; display:flex; align-items:center; gap:8px;">⚙️ Pengaturan Umum</h3>
                     
@@ -725,7 +548,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan" style="width:100%; padding:12px; margin-top:5px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
                 </div>
 
-                <!-- Card 2: Maintenance Mode -->
                 <div style="background:rgba(255,51,51,0.1); padding:15px; border-radius:12px; border:2px dashed #ff3333;">
                     <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
                         <div>
@@ -736,19 +558,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     </label>
                 </div>
 
-                <!-- Card 3: Block Tools -->
                 <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
                     <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">🚫 Nonaktifkan Tools</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${toolsHtml}</div>
                 </div>
 
-                <!-- Card 4: Block Pages -->
                 <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
                     <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">🔒 Kunci Halaman</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${pagesHtml}</div>
                 </div>
 
-                <!-- Action Buttons -->
                 <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px; margin-bottom:20px;">
                     <button onclick="simpanSettingOwner(event)" class="action-btn press" style="padding:16px; font-size:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:12px; font-weight:900; box-shadow:0 4px 0 var(--border);">💾 SIMPAN PERUBAHAN</button>
                     <button onclick="forceRefreshUser()" class="action-btn press" style="padding:16px; font-size:14px; background:#a855f7; color:#fff; border:2px solid var(--border); border-radius:12px; font-weight:900; box-shadow:0 4px 0 var(--border);">🔄 PAKSA REFRESH USER</button>
@@ -825,7 +644,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.openTool = (tool) => {
         if (!modal || !modalContent) return;
 
-        // CEK APAKAH TOOL DINONAKTIFKAN DARI PANEL OWNER
         const currentDisabledTools = window.currentDisabledTools || [];
         if (currentDisabledTools.includes(tool)) {
             modal.classList.add('active');
@@ -841,7 +659,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal.classList.add('active');
 
-        // TOOLS COMING SOON (HARDCODE)
         const comingSoonTools = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
         if (comingSoonTools.includes(tool)) {
             modalContent.innerHTML = `
@@ -853,7 +670,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // FUNGSI TOOL ASLI
         if (tool === 'tiktok') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -872,38 +688,127 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'tiktok', url: url })
+                        body: JSON.stringify({ 
+                            provider: 'sairi', 
+                            endpoint: 'download/tiktok', 
+                            params: { url: url } 
+                        })
                     });
                     const data = await res.json();
-                    if (data.code !== 0) throw new Error('Gagal mengambil video');
-                    const vid = data.data.hdplay || data.data.play;
-                    box.innerHTML = `
-                        <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(vid)}" controls></video>
-                        <button class="action-btn" id="btn-save-tt">Simpan ke Galeri</button>
-                    `;
-                    document.getElementById('btn-save-tt').onclick = async () => {
-                        const saveBtn = document.getElementById('btn-save-tt');
-                        setBtnLoading(saveBtn, true, 'Menyimpan...');
-                        try {
-                            const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
-                                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ download_url: vid })
-                            });
-                            if (!dlRes.ok) throw new Error('Gagal download');
-                            const blob = await dlRes.blob();
-                            const a = document.createElement('a');
-                            a.href = URL.createObjectURL(blob);
-                            a.download = `tt-${Date.now()}.mp4`;
-                            a.click();
-                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                            showToast('Tersimpan!');
-                        } catch (e) { showToast('Gagal simpan, coba lagi.'); }
-                        setBtnLoading(saveBtn, false, 'Simpan ke Galeri');
-                    };
+                    
+                    if (!data.status) throw new Error(data.message || 'Gagal mengambil data');
+                    
+                    const result = data.result;
+                    let htmlContent = '';
+
+                    if (result.type === 'video') {
+                        const vidUrl = result.video.nowatermark_hd || result.video.nowatermark;
+                        htmlContent += `
+                            <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(vidUrl)}" controls></video>
+                            <a href="${escapeHTML(vidUrl)}" target="_blank" class="action-btn" style="text-align:center; text-decoration:none; background:#00ff9d;">Download HD</a>
+                        `;
+                    } else if (result.images && result.images.length > 0) {
+                        htmlContent += `<p style="font-size:12px; margin-bottom:10px;">Foto Slide (${result.images.length}):</p>`;
+                        result.images.forEach((img, index) => {
+                            htmlContent += `
+                                <img src="${escapeHTML(img)}" style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
+                                <a href="${escapeHTML(img)}" target="_blank" class="action-btn" style="margin-bottom:15px; font-size:12px;">Simpan Foto ${index+1}</a>
+                            `;
+                        });
+                    }
+
+                    box.innerHTML = htmlContent;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Proses Video');
+            };
+        }
+        else if (tool === 'instagram') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Instagram DL</h3>
+                <span class="desc-text">Download video/foto dari Post atau Reels Instagram.</span>
+                <input type="text" id="ig-url" placeholder="Paste link Instagram...">
+                <button class="action-btn" id="btn-dl-ig">Ambil Media</button>
+                <div id="ig-result"></div>
+            `;
+            const btn = document.getElementById('btn-dl-ig');
+            btn.onclick = async () => {
+                const url = document.getElementById('ig-url').value.trim();
+                const box = document.getElementById('ig-result');
+                if (!url) return showToast('Masukkan link dulu!');
+                setBtnLoading(btn, true);
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            provider: 'sairi', 
+                            endpoint: 'download/instagram', 
+                            params: { url: url } 
+                        })
+                    });
+                    const data = await res.json();
+                    
+                    if (!data.status) throw new Error(data.message || 'Postingan tidak ditemukan');
+                    
+                    let htmlContent = '';
+                    data.result.media.forEach((media, index) => {
+                        if (media.type === 'video') {
+                            htmlContent += `
+                                <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(media.url)}" controls></video>
+                                <a href="${escapeHTML(media.url)}" target="_blank" class="action-btn" style="text-align:center; text-decoration:none; background:#00ff9d;">Download Video</a>
+                            `;
+                        } else {
+                            htmlContent += `
+                                <img src="${escapeHTML(media.url)}" style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
+                                <a href="${escapeHTML(media.url)}" target="_blank" class="action-btn" style="margin-bottom:15px; font-size:12px;">Download Foto ${index+1}</a>
+                            `;
+                        }
+                    });
+
+                    box.innerHTML = htmlContent;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Ambil Media');
+            };
+        }
+        else if (tool === 'facebook') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Facebook DL</h3>
+                <span class="desc-text">Download video dari Facebook.</span>
+                <input type="text" id="fb-url" placeholder="Paste link Facebook...">
+                <button class="action-btn" id="btn-dl-fb">Ambil Video</button>
+                <div id="fb-result"></div>
+            `;
+            const btn = document.getElementById('btn-dl-fb');
+            btn.onclick = async () => {
+                const url = document.getElementById('fb-url').value.trim();
+                const box = document.getElementById('fb-result');
+                if (!url) return showToast('Masukkan link dulu!');
+                setBtnLoading(btn, true);
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            provider: 'sairi', 
+                            endpoint: 'download/facebook', 
+                            params: { url: url } 
+                        })
+                    });
+                    const data = await res.json();
+                    
+                    if (!data.status) throw new Error(data.message || 'Video tidak ditemukan');
+                    
+                    const vidUrl = data.result.hd || data.result.video;
+                    box.innerHTML = `
+                        <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(vidUrl)}" controls></video>
+                        <a href="${escapeHTML(vidUrl)}" target="_blank" class="action-btn" style="text-align:center; text-decoration:none; background:#00ff9d;">Download Video</a>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Ambil Video');
             };
         }
         else if (tool === 'pinterest') {
@@ -928,73 +833,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentVideoUrl = "";
                 currentImageUrl = "";
                 try {
-                    const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url: url })
+                        body: JSON.stringify({ provider: 'sairi', endpoint: 'download/pinterest', params: { url: url } })
                     });
                     const data = await res.json();
-                    if (data.status === false || data.error) throw new Error(data.error || 'Konten tidak ditemukan');
-                    const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
-                    if (!pinDataObj) throw new Error('Struktur data tidak dikenali');
-                    if (pinDataObj.videos) {
-                        if (pinDataObj.videos.videoList?.v720P?.url) currentVideoUrl = pinDataObj.videos.videoList.v720P.url;
-                        else if (pinDataObj.videos.videoUrls && Array.isArray(pinDataObj.videos.videoUrls)) {
-                            const mp4Url = pinDataObj.videos.videoUrls.find(u => u.includes('.mp4'));
-                            if (mp4Url) currentVideoUrl = mp4Url;
-                        }
+                    if (!data.status) throw new Error(data.message || 'Konten tidak ditemukan');
+                    
+                    const mediaArray = data.result.media || [];
+                    if(mediaArray.length > 0) {
+                        const firstMedia = mediaArray[0];
+                        if(firstMedia.type === 'video') currentVideoUrl = firstMedia.url;
+                        if(firstMedia.type === 'image') currentImageUrl = firstMedia.url;
                     }
-                    if (pinDataObj.images_orig?.url) currentImageUrl = pinDataObj.images_orig.url;
-                    else if (pinDataObj.images_736x?.url) currentImageUrl = pinDataObj.images_736x.url;
+
                     let htmlContent = '';
                     if (currentVideoUrl) htmlContent += `<video src="${escapeHTML(currentVideoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;"></video>`;
                     else if (currentImageUrl) htmlContent += `<img src="${escapeHTML(currentImageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;">`;
+                    
                     htmlContent += `
                         <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <button class="action-btn" id="btn-dl-vid" style="background:#00ff9d; margin-bottom:0;">🎬 DOWNLOAD VIDEO</button>
-                            <button class="action-btn" id="btn-dl-img" style="background:var(--primary); margin-bottom:0;">🖼️ DOWNLOAD GAMBAR</button>
+                            <button class="action-btn" id="btn-dl-vid" style="background:#00ff9d; margin-bottom:0;" ${!currentVideoUrl ? 'disabled' : ''}>🎬 DOWNLOAD VIDEO</button>
+                            <button class="action-btn" id="btn-dl-img" style="background:var(--primary); margin-bottom:0;" ${!currentImageUrl ? 'disabled' : ''}>🖼️ DOWNLOAD GAMBAR</button>
                         </div>
                     `;
                     box.innerHTML = htmlContent;
-                    document.getElementById('btn-dl-vid').onclick = async (e) => {
-                        if (!currentVideoUrl) return showToast('Link ini tidak memiliki video.');
-                        const saveBtn = e.target;
-                        setBtnLoading(saveBtn, true, 'Menyimpan...');
-                        try {
-                            const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
-                                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ download_url: currentVideoUrl })
-                            });
-                            if (!dlRes.ok) throw new Error('Gagal');
-                            const blob = await dlRes.blob();
-                            const a = document.createElement('a');
-                            a.href = URL.createObjectURL(blob);
-                            a.download = `pin-vid-${Date.now()}.mp4`;
-                            a.click();
-                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                            showToast('Video Tersimpan!');
-                        } catch (error) { showToast('Gagal simpan video.'); }
-                        setBtnLoading(saveBtn, false, '🎬 DOWNLOAD VIDEO');
-                    };
-                    document.getElementById('btn-dl-img').onclick = async (e) => {
-                        if (!currentImageUrl) return showToast('Gambar tidak ditemukan.');
-                        const saveBtn = e.target;
-                        setBtnLoading(saveBtn, true, 'Menyimpan...');
-                        try {
-                            const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
-                                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ download_url: currentImageUrl })
-                            });
-                            if (!dlRes.ok) throw new Error('Gagal');
-                            const blob = await dlRes.blob();
-                            const a = document.createElement('a');
-                            a.href = URL.createObjectURL(blob);
-                            a.download = `pin-img-${Date.now()}.jpg`;
-                            a.click();
-                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                            showToast('Gambar Tersimpan!');
-                        } catch (error) { showToast('Gagal simpan gambar.'); }
-                        setBtnLoading(saveBtn, false, '🖼️ DOWNLOAD GAMBAR');
-                    };
+                    
+                    if(currentVideoUrl) {
+                        document.getElementById('btn-dl-vid').onclick = () => window.open(currentVideoUrl, '_blank');
+                    }
+                    if(currentImageUrl) {
+                        document.getElementById('btn-dl-img').onclick = () => window.open(currentImageUrl, '_blank');
+                    }
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Ambil Media');
             };
@@ -1017,27 +887,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Cari');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-tiktok', {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username: user })
+                        body: JSON.stringify({ provider: 'kuroneko', endpoint: 'stalktt', params: { username: user } })
                     });
                     const data = await res.json();
-                    if (!data.status || !data.result) throw new Error('Akun tidak ditemukan atau private');
-                    const d = data.result;
+                    if (!data.status) throw new Error(data.message || 'Akun tidak ditemukan');
+                    const d = data.result || data.data;
                     box.innerHTML = `
                         <div style="text-align:center; margin-bottom:10px;">
-                            <img src="${escapeHTML(d.avatar.medium)}" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--border); object-fit:cover;">
+                            <img src="${escapeHTML(d.avatar?.medium || d.avatar)}" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--border); object-fit:cover;">
                         </div>
                         <b>Username:</b> @${escapeHTML(d.username)}<br>
                         <b>Nama:</b> ${escapeHTML(d.nickname)}<br>
-                        <b>Bio:</b> ${escapeHTML(d.bio || '-')}<br>
-                        <b>Region:</b> ${escapeHTML(d.region || 'Tidak diketahui')}<br>
-                        <hr style="border:1px dashed var(--border); margin:10px 0;">
-                        <b>Followers:</b> ${escapeHTML(d.stats.followers.toLocaleString())}<br>
-                        <b>Following:</b> ${escapeHTML(d.stats.following.toLocaleString())}<br>
-                        <b>Total Likes:</b> ${escapeHTML(d.stats.likes.toLocaleString())}<br>
-                        <b>Total Video:</b> ${escapeHTML(d.stats.videos.toLocaleString())}<br>
-                        <b>Status:</b> ${d.private_account ? '🔒 Private' : '🌐 Public'}
+                        <b>Bio:</b> ${escapeHTML(d.bio || d.signature || '-')}<br>
+                        <b>Followers:</b> ${escapeHTML((d.stats?.followers || d.followerCount || 0).toLocaleString())}<br>
                     `;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Cari');
@@ -1061,27 +925,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Cari');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-roblox', {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username: user })
+                        body: JSON.stringify({ provider: 'kuroneko', endpoint: 'stalkroblox', params: { username: user } })
                     });
                     const data = await res.json();
-                    if (!data.status || !data.data) throw new Error(data.error || 'Akun tidak ditemukan');
-                    const d = data.data;
-                    const tglDibuat = new Date(d.created).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+                    if (!data.status) throw new Error(data.message || 'Akun tidak ditemukan');
+                    const d = data.data || data.result;
+                    const tglDibuat = d.created ? new Date(d.created).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
                     box.innerHTML = `
                         <div style="text-align:center; margin-bottom:10px;">
                             <img src="${escapeHTML(d.avatar)}" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--border); object-fit:cover;">
                         </div>
-                        <b>Username:</b> @${escapeHTML(d.username)}<br>
-                        <b>Display Name:</b> ${escapeHTML(d.display_name)}<br>
+                        <b>Username:</b> @${escapeHTML(d.username || d.name)}<br>
+                        <b>Display Name:</b> ${escapeHTML(d.display_name || d.displayName || '-')}<br>
                         <b>Bio:</b> ${escapeHTML(d.description || '-')}<br>
                         <b>Dibuat:</b> ${tglDibuat}<br>
                         <hr style="border:1px dashed var(--border); margin:10px 0;">
-                        <b>Friends:</b> ${escapeHTML(d.stats.friends.toLocaleString())}<br>
-                        <b>Followers:</b> ${escapeHTML(d.stats.followers.toLocaleString())}<br>
-                        <b>Following:</b> ${escapeHTML(d.stats.following.toLocaleString())}<br>
-                        <b>Status:</b> ${d.is_banned ? '🔴 Banned' : (d.verified ? '✅ Verified' : '🟢 Normal')}
+                        <b>Friends:</b> ${escapeHTML((d.stats?.friends || 0).toLocaleString())}<br>
+                        <b>Followers:</b> ${escapeHTML((d.stats?.followers || 0).toLocaleString())}<br>
                     `;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Cari');
@@ -1342,12 +1204,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Generate Link');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/amprem`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: email })
+                        body: JSON.stringify({ provider: 'kuroneko', endpoint: 'amprem', params: { email: email } })
                     });
                     const data = await res.json();
-                    if (data.status === false || data.error) throw new Error(data.message || 'Gagal');
+                    if (!data.status) throw new Error(data.message || 'Gagal');
                     box.innerHTML = `<p class="success-msg">Berhasil Terkirim! ✅<br><span style="font-size:11px; font-weight:normal;">Cek Inbox/Spam di <b>${escapeHTML(email)}</b>.</span></p>`;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Generate Link');
@@ -1368,13 +1230,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Buat Email');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-tools`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ path: 'tempmail_create', params: {} })
+                        body: JSON.stringify({ provider: 'kuroneko', endpoint: 'tempmail', params: {} })
                     });
                     const data = await res.json();
                     if (!data.status) throw new Error(data.message || 'Gagal');
-                    box.innerHTML = `<p style="font-size:12px; margin-bottom:10px;">Email Lu:</p><b style="font-size:16px; color:var(--primary); word-break:break-all;">${escapeHTML(data.result.email)}</b><br><p style="font-size:11px; opacity:0.8; margin-top:5px;">(Token: ${escapeHTML(data.result.token)})</p>`;
+                    box.innerHTML = `<p style="font-size:12px; margin-bottom:10px;">Email Lu:</p><b style="font-size:16px; color:var(--primary); word-break:break-all;">${escapeHTML(data.result?.email || data.email)}</b>`;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Buat Email');
             };
@@ -1437,19 +1299,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Download');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-tools`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ path: 'spotify', params: { url: url } })
+                        body: JSON.stringify({ provider: 'sairi', endpoint: 'download/spotify', params: { url: url } })
                     });
                     const data = await res.json();
                     if (!data.status) throw new Error(data.message || 'Gagal');
-                    const s = data.data;
+                    const s = data.result;
                     box.innerHTML = `
                         <img src="${escapeHTML(s.cover)}" style="width:100px; height:100px; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
                         <b>${escapeHTML(s.title)}</b><br>
-                        <p style="font-size:11px; opacity:0.8;">${escapeHTML(s.artist)} • ${escapeHTML(s.album)}</p>
-                        <audio src="${escapeHTML(s.download_mp3)}" controls style="width:100%; margin-top:10px;"></audio>
-                        <a href="${escapeHTML(s.download_mp3)}" class="action-btn" style="margin-top:10px; display:block; text-decoration:none;" download>Simpan MP3</a>
+                        <p style="font-size:11px; opacity:0.8;">${escapeHTML(s.artist)} • ${escapeHTML(s.album || '-')}</p>
+                        <audio src="${escapeHTML(s.download)}" controls style="width:100%; margin-top:10px;"></audio>
+                        <a href="${escapeHTML(s.download)}" class="action-btn" style="margin-top:10px; display:block; text-decoration:none;" download>Simpan MP3</a>
                     `;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Download');
@@ -1542,7 +1404,71 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
         }
-        // ---------- FALLBACK (Kalau tool tidak ada fungsinya) ----------
+        else if (tool === 'ai-chat') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>AI Chat</h3>
+                <span class="desc-text">Tanya apa aja ke AI pintar (DeepSeek).</span>
+                <textarea id="ai-prompt" rows="3" placeholder="Ketik pertanyaanmu di sini..."></textarea>
+                <button class="action-btn" id="btn-ai">Tanya AI</button>
+                <div id="ai-res" style="display:none; margin-top:15px; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg); text-align:left; line-height:1.6;"></div>
+            `;
+            const btn = document.getElementById('btn-ai');
+            btn.onclick = async () => {
+                const text = document.getElementById('ai-prompt').value.trim();
+                const box = document.getElementById('ai-res');
+                if (!text) return showToast('Ketik pertanyaan dulu!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Berpikir...');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ provider: 'sairi', endpoint: 'ai/deepseek', params: { text: text } })
+                    });
+                    const data = await res.json();
+                    if (!data.status) throw new Error(data.message || 'Gagal memproses AI');
+                    box.innerHTML = `<b>AI:</b><br><br>${escapeHTML(data.result.answer || data.answer).replace(/\n/g, '<br>')}`;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Tanya AI');
+            };
+        }
+        else if (tool === 'ai-image') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>AI Image</h3>
+                <span class="desc-text">Buat gambar dari teks (Bahasa Inggris lebih bagus).</span>
+                <input type="text" id="ai-img-prompt" placeholder="Cth: cute orange cat, digital art">
+                <button class="action-btn" id="btn-ai-img">Generate Gambar</button>
+                <div id="ai-img-res" style="display:none; margin-top:15px; text-align:center;"></div>
+            `;
+            const btn = document.getElementById('btn-ai-img');
+            btn.onclick = async () => {
+                const prompt = document.getElementById('ai-img-prompt').value.trim();
+                const box = document.getElementById('ai-img-res');
+                if (!prompt) return showToast('Ketik deskripsi gambar!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Membuat...');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ provider: 'sairi', endpoint: 'ai/text2img', params: { prompt: prompt } })
+                    });
+                    
+                    const contentType = res.headers.get('content-type');
+                    if(contentType && contentType.includes('image/')) {
+                        const blob = await res.blob();
+                        const imgUrl = URL.createObjectURL(blob);
+                        box.innerHTML = `<img src="${imgUrl}" style="width:100%; border-radius:8px; border:3px solid var(--border);">`;
+                    } else {
+                        const data = await res.json();
+                        throw new Error(data.message || 'Gagal membuat gambar');
+                    }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Generate Gambar');
+            };
+        }
         else {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1553,4 +1479,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-}); // <- INI PENUTUP DOMContentLoaded, JANGAN DIHAPUS
+}); // <- INI PENUTUP DOMContentLoaded, JANGAN DIHAPUS.
