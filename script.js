@@ -760,110 +760,66 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <div style="background:var(--bg); min-height: 80vh; padding-bottom: 20px; font-family: var(--font-main);">
-                    
-                    <!-- HEADER WEBTOON STYLE -->
                     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:15px; padding: 0 5px;">
                         <div>
                             <h3 style="font-family:var(--font-head); color:var(--text); font-size:22px; margin:0; letter-spacing:1px;">KATALOG</h3>
-                            <p style="font-size:10px; color:var(--primary); margin:0; font-weight:bold; letter-spacing:2px;">ZENKAI COMICS</p>
-                        </div>
-                        <div style="background:var(--primary); color:#000; padding:4px 10px; border-radius:20px; font-size:10px; font-weight:800; border:2px solid var(--border);">
-                            MangaDex ID
+                            <p style="font-size:10px; color:var(--primary); margin:0; font-weight:bold; letter-spacing:2px;">SAIRI COMICS</p>
                         </div>
                     </div>
-
-                    <!-- SEARCH BAR WEBTOON STYLE -->
                     <div style="position:relative; margin-bottom:20px;">
-                        <input type="text" id="komik-q" placeholder="Cari judul manga, manhwa..." style="width:100%; padding:14px 14px 14px 45px; border:none; border-radius:12px; background:var(--card-bg); color:var(--text); font-size:13px; outline:none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border:2px solid var(--border);">
+                        <input type="text" id="komik-q" placeholder="Cari judul komik (cth: Lookism)..." style="width:100%; padding:14px 14px 14px 45px; border:none; border-radius:12px; background:var(--card-bg); color:var(--text); font-size:13px; outline:none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border:2px solid var(--border);">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </div>
-                    
                     <div id="komik-res"></div>
                 </div>
             `;
             
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
-            
-            // Fungsi URL Gambar Asli (FIX GAMBAR BLANK)
-            const getImgUrl = (url) => url || '';
 
-            const loadKomik = async (query) => {
+            // ==========================================
+            // 1. FUNGSI TAMPILKAN KATALOG (SAIRI)
+            // ==========================================
+            const loadKatalogSairi = async (query) => {
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-sairi`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'search', q: query || '' })
+                        body: JSON.stringify({ action: 'search', q: query || 'lookism' })
                     });
                     const data = await res.json();
                     
-                    if (!data.data || data.data.length === 0) {
-                        box.innerHTML = '<p class="error-msg">Komik tidak ditemukan. Coba kata kunci lain.</p>';
+                    const komikList = data.result || []; 
+
+                    if (komikList.length === 0) {
+                        box.innerHTML = '<p class="error-msg">Komik tidak ditemukan.</p>';
                         return;
                     }
 
-                    // RENDER KARTU GAYA WEBTOON
-                    const renderCard = (manga) => {
-                        const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
-                        const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
-                        const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
-                        const coverUrl = getImgUrl(rawCoverUrl);
-                        const id = escapeHTML(manga.id);
+                    let html = `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
+                    
+                    komikList.forEach(manga => {
+                        const title = manga.title || 'Tanpa Judul';
+                        const cover = manga.cover || 'https://via.placeholder.com/150';
+                        const url = manga.url;
                         const t = escapeHTML(title);
                         
-                        // Status & Rating palsu agar mirip Webtoon (karena MangaDex API search jarang kasih rating)
-                        const isNew = Math.random() > 0.7;
-                        const views = Math.floor(Math.random() * 900 + 100) + "K";
-
-                        return `
-                            <div class="komik-card-webtoon" data-id="${id}" data-title="${t}" style="cursor:pointer; display:flex; flex-direction:column; gap:6px;">
+                        html += `
+                            <div class="komik-card-sairi" data-title="${t}" data-url="${url}" style="cursor:pointer; display:flex; flex-direction:column; gap:6px;">
                                 <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:8px; overflow:hidden; background:#222;">
-                                    <img src="${coverUrl}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
-                                    ${isNew ? `<div style="position:absolute; top:6px; left:6px; background:#00ff9d; color:#000; font-size:8px; font-weight:900; padding:2px 6px; border-radius:4px;">NEW</div>` : ''}
-                                    <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding:15px 6px 6px 6px; display:flex; align-items:center; gap:4px;">
-                                        <svg viewBox="0 0 24 24" width="10" height="10" fill="#fff"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                                        <span style="color:#fff; font-size:9px; font-weight:bold;">${views}</span>
-                                    </div>
+                                    <img src="${cover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
                                 </div>
                                 <h4 style="font-size:11px; font-weight:800; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${t}</h4>
-                                <span style="font-size:9px; color:var(--primary); font-weight:bold;">Manga</span>
                             </div>
                         `;
-                    };
-
-                    // TAMPILAN BANNER ATAS (Ambil 1 komik random dari hasil)
-                    const featuredManga = data.data[0];
-                    const featuredTitle = featuredManga.attributes.title.id || featuredManga.attributes.title.en || 'Rekomendasi';
-                    const featuredCoverFile = featuredManga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
-                    const featuredCover = featuredCoverFile ? `https://uploads.mangadex.org/covers/${featuredManga.id}/${featuredCoverFile}` : '';
-
-                    let html = `
-                        <!-- BANNER HERO WEBTOON -->
-                        <div class="komik-banner" data-id="${escapeHTML(featuredManga.id)}" data-title="${escapeHTML(featuredTitle)}" style="position:relative; width:100%; height:180px; border-radius:12px; overflow:hidden; margin-bottom:20px; cursor:pointer; border:2px solid var(--border);">
-                            <img src="${featuredCover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover; filter:brightness(0.6);">
-                            <div style="position:absolute; bottom:15px; left:15px; right:15px;">
-                                <span style="background:var(--primary); color:#000; font-size:9px; font-weight:900; padding:3px 8px; border-radius:4px; display:inline-block; margin-bottom:5px;">SPOTLIGHT</span>
-                                <h2 style="color:#fff; font-family:var(--font-head); font-size:20px; margin:0; line-height:1.2; text-shadow:0 2px 4px rgba(0,0,0,0.8);">${escapeHTML(featuredTitle)}</h2>
-                            </div>
-                        </div>
-
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                            <h4 style="font-family:var(--font-head); font-size:18px; color:var(--text); margin:0;">Populer Minggu Ini</h4>
-                        </div>
-                        
-                        <!-- GRID KARTU -->
-                        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">
-                    `;
-                    
-                    data.data.forEach(m => { html += renderCard(m); });
+                    });
                     html += `</div>`;
-                    
                     box.innerHTML = html;
-                    
-                    // Event Listener (Banner & Kartu)
-                    box.querySelectorAll('.komik-card-webtoon, .komik-banner').forEach(el => {
+
+                    // Event Listener: Buka Detail
+                    box.querySelectorAll('.komik-card-sairi').forEach(el => {
                         el.addEventListener('click', () => {
-                            window.bukaChapterKomik(el.dataset.id, el.dataset.title);
+                            bukaDetailSairi(el.dataset.title, el.dataset.url);
                         });
                     });
 
@@ -871,15 +827,104 @@ document.addEventListener('DOMContentLoaded', () => {
                     box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
                 }
             };
-            
-            loadKomik(''); 
+
+            // ==========================================
+            // 2. FUNGSI TAMPILKAN DETAIL & EPISODE (SAIRI)
+            // ==========================================
+            const bukaDetailSairi = async (title, url) => {
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-sairi`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'detail', url: url })
+                    });
+                    const data = await res.json();
+                    
+                    if (!data.status) throw new Error('Gagal mengambil detail');
+                    const detail = data.result;
+                    const episodes = detail.latest_episodes || []; 
+                    
+                    let html = `
+                        <div style="margin-bottom:20px;">
+                            <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:15px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
+                            </button>
+                            
+                            <div style="display:flex; gap:15px;">
+                                <img src="${detail.cover}" style="width:100px; height:130px; object-fit:cover; border-radius:8px; border:2px solid var(--border);">
+                                <div>
+                                    <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0;">${escapeHTML(detail.title)}</h3>
+                                    <p style="font-size:11px; color:var(--primary); font-weight:bold; margin:0 0 5px 0;">${escapeHTML(detail.genre || '-')} • ${escapeHTML(detail.views || '0')}</p>
+                                    <p style="font-size:11px; color:var(--text); opacity:0.8; line-height:1.4;">${escapeHTML(detail.synopsis || 'Tidak ada sinopsis.')}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 style="margin-bottom:10px; font-size:14px;">Episode Terbaru (Sairi):</h4>
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                    `;
+
+                    if (episodes.length === 0) {
+                        html += `<p class="error-msg">Belum ada episode.</p>`;
+                    } else {
+                        episodes.forEach(ep => {
+                            const epNum = ep.number;
+                            const epTitle = ep.title || `Episode ${epNum}`;
+                            html += `
+                                <div class="press" onclick="bacaDariMangaDex('${escapeHTML(detail.title)}', '${epNum}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px; border-radius:8px; cursor:pointer;">
+                                    <img src="${ep.thumbnail}" style="width:60px; height:45px; object-fit:cover; border-radius:4px;">
+                                    <div style="flex:1;">
+                                        <h5 style="margin:0; font-size:12px; font-weight:800; color:var(--text);">${escapeHTML(epTitle)}</h5>
+                                        <p style="margin:2px 0 0 0; font-size:10px; color:var(--text); opacity:0.6;">${escapeHTML(ep.date)}</p>
+                                    </div>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+                                </div>
+                            `;
+                        });
+                    }
+
+                    html += `</div>`;
+                    box.innerHTML = html;
+
+                } catch (e) { 
+                    box.innerHTML = `<p class="error-msg">Gagal memuat detail: ${escapeHTML(e.message)}</p>`; 
+                }
+            };
+
+            // ==========================================
+            // 3. JEMBATAN: BACA DI MANGADEX
+            // ==========================================
+            window.bacaDariMangaDex = async (title, epNum) => {
+                box.innerHTML = `<div class="loader"></div><p style="text-align:center; font-size:12px;">Mencari "${escapeHTML(title)}" di server baca...</p>`;
+                try {
+                    const mdRes = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'search', q: title })
+                    });
+                    const mdData = await mdRes.json();
+
+                    if (mdData.data && mdData.data.length > 0) {
+                        // Lempar ke fungsi bawaan MangaDex kamu
+                        window.bukaChapterKomik(mdData.data[0].id, title);
+                    } else {
+                        box.innerHTML = `
+                            <div style="text-align:center; padding: 20px;">
+                                <p class="error-msg">Komik "${escapeHTML(title)}" belum tersedia di server baca (MangaDex).</p>
+                                <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
+                            </div>`;
+                    }
+                } catch (err) {
+                    box.innerHTML = `<p class="error-msg">Gagal konek ke server baca.</p>`;
+                }
+            };
+
+            loadKatalogSairi('lookism'); 
             
             let timeout = null;
             input.addEventListener('input', (e) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
-                    loadKomik(e.target.value.trim());
-                }, 500);
+                    loadKatalogSairi(e.target.value.trim());
+                }, 800);
             });
         }
         else if (tool === 'tiktok') {
@@ -1813,7 +1858,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // FUNGSI KOMIK (DIPANGGIL DARI DALAM MODAL)
+    // FUNGSI KOMIK MANGADEX (DIPANGGIL DARI JEMBATAN)
     // =========================================
     window.bukaChapterKomik = async (mangaId, title) => {
         const box = document.getElementById('komik-res');
@@ -1825,37 +1870,27 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const data = await res.json();
             
-            if (!data.data || data.data.length === 0) throw new Error('Chapter komik belum tersedia di server.');
+            if (!data.data || data.data.length === 0) throw new Error('Chapter komik belum tersedia di MangaDex.');
             
-            // TAMPILAN LIST CHAPTER GAYA WEBTOON
             let html = `
-                <div style="background:var(--bg); min-height: 70vh; padding-bottom: 20px; font-family: var(--font-main);">
-                    
-                    <!-- HEADER KOMIK -->
-                    <div style="display:flex; gap:15px; margin-bottom:20px; align-items:flex-start;">
-                        <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
-                        </button>
-                        <div>
-                            <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
-                            <div style="display:flex; gap:8px; align-items:center;">
-                                <span style="font-size:10px; font-weight:bold; background:var(--primary); color:#000; padding:3px 8px; border-radius:4px;">UPDATE</span>
-                                <span style="font-size:11px; color:var(--text); opacity:0.6;">${data.data.length} Chapters</span>
-                            </div>
+                <div style="display:flex; gap:15px; margin-bottom:20px; align-items:flex-start;">
+                    <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <div>
+                        <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <span style="font-size:10px; font-weight:bold; background:var(--primary); color:#000; padding:3px 8px; border-radius:4px;">MANGADEX</span>
+                            <span style="font-size:11px; color:var(--text); opacity:0.6;">${data.data.length} Chapters</span>
                         </div>
                     </div>
-
-                    <button class="action-btn press" onclick="bacaGambarKomik('${escapeHTML(data.data[0].id)}', '${escapeHTML(data.data[0].attributes.chapter || '1')}')" style="background:var(--primary); color:#000; border:3px solid var(--border); border-radius:10px; font-weight:900; padding:15px; box-shadow:0 4px 0 var(--border); margin-bottom:15px; display:flex; justify-content:center; align-items:center; gap:8px;">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg> Mulai Baca (Chapter ${escapeHTML(data.data[0].attributes.chapter || '1')})
-                    </button>
-
-                    <div style="display:flex; flex-direction:column;">
+                </div>
+                <div style="display:flex; flex-direction:column;">
             `;
             
-            data.data.forEach((ch, index) => {
+            data.data.forEach((ch) => {
                 const chNum = ch.attributes.chapter || '?';
                 const chTitle = ch.attributes.title || '';
-                // Format tanggal
                 const date = new Date(ch.attributes.publishAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
                 
                 html += `
@@ -1872,11 +1907,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             });
             
-            html += `
-                    </div>
-                    <p style="text-align:center; font-size:10px; opacity:0.5; margin-top:20px;">Terakhir diupdate dari MangaDex</p>
-                </div>
-            `;
+            html += `</div>`;
             box.innerHTML = html;
             
         } catch (e) { 
