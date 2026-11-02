@@ -514,7 +514,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
         const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
-        // TAMBAHKAN 'komik' ke DAFTAR TOOLS OWNER
         const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'komik', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise'];
         const listPages = ['fun', 'setting', 'info'];
 
@@ -668,101 +667,103 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         else if (tool === 'komik') {
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <div style="background:var(--bg); min-height: 70vh; padding-bottom: 20px;">
-            <h3 style="font-family:var(--font-head); color:var(--primary); font-size:26px; margin-bottom:5px; text-align:center;">KATALOG KOMIK</h3>
-            <p style="text-align:center; font-size:11px; opacity:0.7; margin-bottom:20px;">Sumber: MangaDex (Bahasa Indonesia)</p>
-            
-            <div style="position:relative; margin-bottom:20px;">
-                <input type="text" id="komik-q" placeholder="Cari judul manga..." style="width:100%; padding:12px 12px 12px 40px; border:2px solid var(--border); border-radius:30px; background:var(--card-bg); color:var(--text); font-size:14px; outline:none;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            </div>
-            
-            <div id="komik-res"></div>
-        </div>
-    `;
-    
-    const input = document.getElementById('komik-q');
-    const box = document.getElementById('komik-res');
-    
-    const getProxyUrl = (url) => {
-        // Pake domain supabase lo buat proxy
-        return `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(url)}`;
-    };
-
-    const loadKomik = async (query) => {
-        box.innerHTML = '<div class="loader"></div>';
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'search', q: query || '' })
-            });
-            const data = await res.json();
-            
-            if (!data.data || data.data.length === 0) {
-                box.innerHTML = '<p class="error-msg">Komik tidak ditemukan. Coba kata kunci lain.</p>';
-                return;
-            }
-            
-            let html = `
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <h4 style="font-family:var(--font-head); font-size:16px;">Trending & Rekomendasi</h4>
-                    <span style="font-size:11px; color:var(--primary);">Lihat Semua</span>
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <div style="background:var(--bg); min-height: 70vh; padding-bottom: 20px;">
+                    <h3 style="font-family:var(--font-head); color:var(--primary); font-size:26px; margin-bottom:5px; text-align:center;">KATALOG KOMIK</h3>
+                    <p style="text-align:center; font-size:11px; opacity:0.7; margin-bottom:20px;">Sumber: MangaDex (Bahasa Indonesia)</p>
+                    
+                    <!-- Search Bar -->
+                    <div style="position:relative; margin-bottom:20px;">
+                        <input type="text" id="komik-q" placeholder="Cari judul manga..." style="width:100%; padding:12px 12px 12px 40px; border:2px solid var(--border); border-radius:30px; background:var(--card-bg); color:var(--text); font-size:14px; outline:none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
+                    
+                    <div id="komik-res"></div>
                 </div>
-                <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none; margin-bottom:20px;">
             `;
             
-            data.data.slice(0, 10).forEach(manga => {
-                const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
-                const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
-                const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
-                const coverUrl = rawCoverUrl ? getProxyUrl(rawCoverUrl) : '';
-                
-                html += `
-                    <div style="min-width:120px; max-width:120px; cursor:pointer;" onclick="bukaChapterKomik('${manga.id}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
-                        <div style="width:120px; height:170px; border-radius:10px; overflow:hidden; border:2px solid var(--border); background:#000;">
-                            <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;">
-                        </div>
-                        <p style="font-size:11px; font-weight:bold; margin-top:5px; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(title)}</p>
-                    </div>
-                `;
-            });
-            html += `</div>`;
+            const input = document.getElementById('komik-q');
+            const box = document.getElementById('komik-res');
             
-            html += `<h4 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;">Semua Hasil</h4>`;
-            html += `<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">`;
-            data.data.forEach(manga => {
-                const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
-                const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
-                const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
-                const coverUrl = rawCoverUrl ? getProxyUrl(rawCoverUrl) : '';
-                
-                html += `
-                    <div style="cursor:pointer; text-align:center;" onclick="bukaChapterKomik('${manga.id}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
-                        <div style="width:100%; aspect-ratio:2/3; border-radius:8px; overflow:hidden; border:2px solid var(--border); background:#000;">
-                            <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;">
+            // Fungsi Proxy Gambar
+            const getProxyUrl = (url) => {
+                if (!url) return '';
+                return `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(url)}`;
+            };
+
+            const loadKomik = async (query) => {
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'search', q: query || '' })
+                    });
+                    const data = await res.json();
+                    
+                    if (!data.data || data.data.length === 0) {
+                        box.innerHTML = '<p class="error-msg">Komik tidak ditemukan. Coba kata kunci lain.</p>';
+                        return;
+                    }
+                    
+                    let html = `
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <h4 style="font-family:var(--font-head); font-size:16px;">Trending & Rekomendasi</h4>
+                            <span style="font-size:11px; color:var(--primary);">Lihat Semua</span>
                         </div>
-                        <p style="font-size:10px; font-weight:bold; margin-top:5px; line-height:1.1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(title)}</p>
-                    </div>
-                `;
-            });
-            html += `</div>`;
+                        <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none; margin-bottom:20px;">
+                    `;
+                    
+                    data.data.slice(0, 10).forEach(manga => {
+                        const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
+                        const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
+                        const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
+                        const coverUrl = getProxyUrl(rawCoverUrl);
+                        
+                        html += `
+                            <div style="min-width:120px; max-width:120px; cursor:pointer;" onclick="bukaChapterKomik('${manga.id}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
+                                <div style="width:120px; height:170px; border-radius:10px; overflow:hidden; border:2px solid var(--border); background:#000;">
+                                    <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;">
+                                </div>
+                                <p style="font-size:11px; font-weight:bold; margin-top:5px; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(title)}</p>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                    
+                    html += `<h4 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;">Semua Hasil</h4>`;
+                    html += `<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">`;
+                    data.data.forEach(manga => {
+                        const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
+                        const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
+                        const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
+                        const coverUrl = getProxyUrl(rawCoverUrl);
+                        
+                        html += `
+                            <div style="cursor:pointer; text-align:center;" onclick="bukaChapterKomik('${manga.id}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
+                                <div style="width:100%; aspect-ratio:2/3; border-radius:8px; overflow:hidden; border:2px solid var(--border); background:#000;">
+                                    <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;">
+                                </div>
+                                <p style="font-size:10px; font-weight:bold; margin-top:5px; line-height:1.1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(title)}</p>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                    
+                    box.innerHTML = html;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+            };
             
-            box.innerHTML = html;
-        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-    };
-    
-    loadKomik(''); 
-    
-    let timeout = null;
-    input.addEventListener('input', (e) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            loadKomik(e.target.value.trim());
-        }, 500);
-    });
-}
+            loadKomik(''); 
+            
+            let timeout = null;
+            input.addEventListener('input', (e) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    loadKomik(e.target.value.trim());
+                }, 500);
+            });
+        }
         else if (tool === 'tiktok') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1714,31 +1715,33 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.bacaGambarKomik = async (chapterId, chNum) => {
-    const box = document.getElementById('komik-res');
-    box.innerHTML = '<div class="loader"></div>';
-    try {
-        const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'images', chapterId: chapterId })
-        });
-        const data = await res.json();
-        
-        const baseUrl = data.baseUrl;
-        const hash = data.chapter.hash;
-        const images = data.chapter.data;
-        
-        let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${chNum}</h4>`;
-        html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
-        images.forEach(img => {
-            const rawImgUrl = `${baseUrl}/data/${hash}/${img}`;
-            const proxyImgUrl = `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(rawImgUrl)}`;
-            html += `<img src="${proxyImgUrl}" style="width:100%; border-radius:4px;" loading="lazy">`;
-        });
-        html += `</div>`;
-        
-        html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
-        box.innerHTML = html;
-    } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-};
+        const box = document.getElementById('komik-res');
+        box.innerHTML = '<div class="loader"></div>';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'images', chapterId: chapterId })
+            });
+            const data = await res.json();
+            
+            const baseUrl = data.baseUrl;
+            const hash = data.chapter.hash;
+            const images = data.chapter.data;
+            
+            let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${chNum}</h4>`;
+            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+            images.forEach(img => {
+                // PAKAI PROXY GAMBAR BIAR MUNCUL
+                const rawImgUrl = `${baseUrl}/data/${hash}/${img}`;
+                const proxyImgUrl = `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(rawImgUrl)}`;
+                html += `<img src="${proxyImgUrl}" style="width:100%; border-radius:4px;" loading="lazy">`;
+            });
+            html += `</div>`;
+            
+            // Tombol Kembali
+            html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
+            box.innerHTML = html;
+        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+    };
 
 }); // <- INI PENUTUP DOMContentLoaded, JANGAN DIHAPUS
