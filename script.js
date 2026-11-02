@@ -741,9 +741,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const loadKatalog = async (query) => {
                 box.innerHTML = '<div class="loader"></div>';
                 try {
+                    let bodyData = {};
+                    if (query) {
+                        bodyData = { action: 'search', q: query };
+                    } else {
+                        bodyData = { action: 'latest' };
+                    }
+
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'search', q: query || 'martial peak' })
+                        body: JSON.stringify(bodyData)
                     });
                     const data = await res.json();
                     
@@ -757,10 +764,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     let html = `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
                     
                     komikList.forEach(manga => {
-                        const title = manga.title || 'Tanpa Judul';
+                        const title = (manga.title || 'Tanpa Judul').replace(/^Komik\s+/i, '');
                         const cover = manga.cover || 'https://via.placeholder.com/150';
                         const slug = manga.slug; 
-                        const t = escapeHTML(title.replace('Komik ', '')); // Hapus kata "Komik" biar rapi
+                        const t = escapeHTML(title);
                         
                         html += `
                             <div class="komik-card-jere" data-title="${t}" data-slug="${slug}" style="cursor:pointer; display:flex; flex-direction:column; gap:6px;">
@@ -796,7 +803,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (!data.status) throw new Error('Gagal mengambil detail');
                     const detail = data.result || data.data;
-                    // Kalo Jere ngasih list chapter di 'chapters' atau 'chapter_list'
+                    
                     const chapters = detail.chapters || detail.chapter_list || detail.list_chapters || []; 
                     
                     let html = `
@@ -806,19 +813,25 @@ document.addEventListener('DOMContentLoaded', () => {
                             </button>
                             
                             <div style="display:flex; gap:15px;">
-                                <img src="${detail.cover || detail.thumbnail}" style="width:100px; height:130px; object-fit:cover; border-radius:8px; border:2px solid var(--border);">
+                                <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:100px; height:130px; object-fit:cover; border-radius:8px; border:2px solid var(--border);">
                                 <div>
-                                    <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0;">${escapeHTML(detail.title || title)}</h3>
-                                    <p style="font-size:11px; color:var(--text); opacity:0.8; line-height:1.4;">${escapeHTML(detail.sinopsis || detail.synopsis || detail.description || 'Tidak ada sinopsis.')}</p>
+                                    <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0;">${escapeHTML(title)}</h3>
+                                    <p style="font-size:11px; color:var(--text); opacity:0.8; line-height:1.4; max-height: 100px; overflow-y: auto;">${escapeHTML(detail.sinopsis || detail.synopsis || detail.description || 'Tidak ada sinopsis.')}</p>
                                 </div>
                             </div>
                         </div>
-                        <h4 style="margin-bottom:10px; font-size:14px;">Daftar Chapter (${chapters.length}):</h4>
+                        <h4 style="margin-bottom:10px; font-size:14px;">Daftar Chapter:</h4>
                         <div style="display:flex; flex-direction:column; gap:8px; max-height: 300px; overflow-y:auto;">
                     `;
 
                     if (chapters.length === 0) {
-                        html += `<p class="error-msg">Belum ada chapter.</p>`;
+                        // Trik Jere: Endpoint Detail gak ngasih list chapter, jadi kita bikin tombol "Baca Chapter 1"
+                        html += `
+                            <p style="font-size: 11px; opacity: 0.7; margin-bottom: 10px;">API tidak menyediakan daftar lengkap, tapi lu bisa langsung mulai baca dari Chapter 1:</p>
+                            <button class="action-btn press" onclick="bacaKomik('${escapeHTML(title)}', '${slug}-chapter-1')" style="background:var(--primary); color:#000;">Baca Chapter 1</button>
+                            <p style="font-size: 11px; opacity: 0.7; margin-top: 10px; text-align: center;">Atau kunjungi web aslinya:</p>
+                            <a href="https://komikindo.ch/komik/${slug}/" target="_blank" class="action-btn" style="background:var(--card-bg); color:var(--text); text-decoration:none; display:block;">Buka di Web Asli</a>
+                        `;
                     } else {
                         chapters.forEach(ch => {
                             const chTitle = ch.title || ch.chapter || 'Chapter';
@@ -851,10 +864,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     const data = await res.json();
                     
-                    // Sesuai JSON, array gambarnya ada di data.result.pages
                     const images = data.result?.pages || []; 
                     
-                    if (images.length === 0) throw new Error('Gambar tidak ditemukan / API Stream sedang down');
+                    if (images.length === 0) throw new Error('Gambar tidak ditemukan / Server Stream sedang down');
 
                     let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
                     html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
@@ -875,7 +887,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            loadKatalog('martial peak'); 
+            loadKatalog(''); 
             
             let timeout = null;
             input.addEventListener('input', (e) => {
@@ -1826,7 +1838,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const data = await res.json();
             
-            // Ambil array images dari result.pages
             const images = data.result?.pages || []; 
             
             if (images.length === 0) throw new Error('Gambar tidak ditemukan / Server Stream sedang down');
