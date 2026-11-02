@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
 
-    // Daftar tool "Coming Soon" — dipakai di banyak tempat (deduplikasi)
     const COMING_SOON_TOOLS = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
 
     const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
@@ -78,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.style.overflow = '';
             }, 800);
         }
-        // Trigger popup WA setelah splash hilang
         setTimeout(showWaPopupOnce, 1500);
     };
 
@@ -107,25 +105,17 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeWaPopup = () => {
         if (!waPopup) return;
         waPopup.classList.remove('active');
-        // Tandai sudah ditampilkan hari ini (biar tidak spam)
-        try {
-            localStorage.setItem(WA_POPUP_KEY, Date.now().toString());
-        } catch(e) {}
+        try { localStorage.setItem(WA_POPUP_KEY, Date.now().toString()); } catch(e) {}
     };
 
     function showWaPopupOnce() {
         if (!waPopup) return;
-
-        // Cek apakah sudah pernah tampil dalam 24 jam terakhir
         const lastShown = parseInt(localStorage.getItem(WA_POPUP_KEY) || '0');
         const ONE_DAY = 24 * 60 * 60 * 1000;
         if (Date.now() - lastShown < ONE_DAY) return;
-
-        // Tampilkan popup
         waPopup.classList.add('active');
     }
 
-    // Klik overlay untuk close popup
     if (waPopup) {
         waPopup.addEventListener('click', (e) => {
             if (e.target.id === 'wa-popup') window.closeWaPopup();
@@ -253,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.toggleMusic = () => {
         if (!bgm) return;
         if (!isPlaying) {
-            // loadSong(0) sudah dipanggil saat init di bawah, jadi guard
             if (!bgm.currentSrc && !bgm.src) loadSong(0);
             bgm.volume = 0.5;
             bgm.play().then(() => {
@@ -286,7 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadSong(0);
     }
 
-    // Reset cache: PERTAHANKAN preferensi (tema & owner token)
     window.resetData = () => {
         tampilkanAlert(
             "Hapus Cache",
@@ -361,7 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Tandai "SOON" SEKALI SAJA di sini (tanpa duplikasi di openTool)
     COMING_SOON_TOOLS.forEach(toolName => {
         const card = document.querySelector(`.tool-card[onclick="openTool('${toolName}')"]`);
         if (card) card.classList.add('soon');
@@ -380,7 +367,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.status && result.data) applySettings(result.data);
         } catch (e) {}
     }
-    // Polling 60 detik (sebelumnya 15 detik)
     setInterval(fetchSettings, 60000);
     fetchSettings();
 
@@ -399,24 +385,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 w.innerHTML = `
                     <div style="background:rgba(24, 24, 27, 0.95); border:1px solid rgba(255, 51, 51, 0.5); padding:30px 20px; border-radius:12px; max-width:320px; width:100%; box-shadow:0 0 40px rgba(255, 51, 51, 0.2); text-align:center; position:relative; overflow:hidden;">
                         <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:#ff3333; box-shadow:0 0 10px #ff3333; animation:scanline 2s linear infinite;"></div>
-
                         <h2 style="color:#ff3333; margin-bottom:5px; font-family:monospace; font-size:18px; letter-spacing:2px; text-shadow:0 0 10px rgba(255,51,51,0.5);">SYSTEM LOCK</h2>
                         <p style="font-size:11px; color:#a1a1aa; margin-bottom:20px; font-family:monospace;">SHUTDOWN IN <b id="mt-cd" style="color:#ff3333; font-size:18px;">10</b> SECONDS</p>
-
                         <div style="width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden;">
                             <div id="mt-bar" style="height:100%; width:0%; background:#ff3333; transition:width 1s linear; box-shadow:0 0 10px #ff3333;"></div>
                         </div>
                     </div>
                 `;
                 document.body.appendChild(w);
-
                 setTimeout(() => { const bar = document.getElementById('mt-bar'); if(bar) bar.style.width = '100%'; }, 50);
 
                 const int = setInterval(() => {
                     cd--;
                     const el = document.getElementById('mt-cd');
                     if (el) el.innerText = cd;
-
                     if (cd <= 0) {
                         clearInterval(int);
                         w.remove();
@@ -458,12 +440,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const dTools = setting.disabled_tools ? setting.disabled_tools.split(',') : [];
         window.currentDisabledTools = dTools;
 
-        // Hanya tambah/hapus .maintenance-mode — JANGAN sentuh .soon
         document.querySelectorAll('.tool-card').forEach(c => {
             const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
             if (!m) return;
             const toolName = m[1];
-
             if (dTools.includes(toolName)) {
                 c.classList.add('maintenance-mode');
             } else {
@@ -484,7 +464,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.bukaPanelOwnerLangsung = async () => {
         const token = localStorage.getItem(OWNER_TOKEN_KEY);
         if (!token) return bukaPintuRahasia();
-
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
                 method: 'POST',
@@ -492,7 +471,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ action: 'verify_token', owner_token: token })
             });
             const data = await res.json();
-
             if (data.status) {
                 const btnOwner = document.getElementById('nav-owner');
                 window.switchPage('owner', btnOwner);
@@ -522,7 +500,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `);
     }
 
-    // Rate-limit login owner (client-side, tambahan dari server)
     let loginAttempts = 0;
     let loginLockUntil = 0;
 
@@ -532,10 +509,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const sisa = Math.ceil((loginLockUntil - now) / 1000);
             return showToast(`Terlalu banyak percobaan. Coba lagi dalam ${sisa}s.`);
         }
-
         const pass = document.getElementById('owner-pass').value;
         if (!pass) return showToast('Masukkan passcode!');
-
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
                 method: 'POST',
@@ -543,16 +518,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ password: pass, action: 'login' })
             });
             const data = await res.json();
-
             if (data.status && data.owner_token) {
                 loginAttempts = 0;
                 localStorage.setItem(OWNER_TOKEN_KEY, data.owner_token);
                 document.getElementById('owner-modal')?.remove();
                 showToast("Akses Owner Diberikan!");
-
                 const navOwner = document.getElementById('nav-owner');
                 if (navOwner) navOwner.style.display = 'flex';
-
                 setTimeout(() => {
                     const btnOwner = document.getElementById('nav-owner');
                     window.switchPage('owner', btnOwner);
@@ -573,7 +545,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Session ID lebih aman (tambah random suffix)
     let mySession = localStorage.getItem('zenkai_sess');
     if (!mySession) {
         mySession = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
@@ -593,9 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.tampilkanPanelRahasia = async () => {
         const container = document.getElementById('owner-page-content');
         if (!container) return;
-
         container.innerHTML = '<div class="loader"></div>';
-
         let set = { site_title: '', broadcast_text: '', is_maintenance: false, disabled_pages: '', disabled_tools: '' };
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'get_settings' }) });
@@ -624,17 +593,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:20px;">
-
                 <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
                     <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px; display:flex; align-items:center; gap:8px;">⚙️ Pengaturan Umum</h3>
-
                     <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Judul Web</label>
                     <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:12px; margin-top:5px; margin-bottom:15px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
-
                     <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Broadcast Banner</label>
                     <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan" style="width:100%; padding:12px; margin-top:5px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
                 </div>
-
                 <div style="background:rgba(255,51,51,0.1); padding:15px; border-radius:12px; border:2px dashed #ff3333;">
                     <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
                         <div>
@@ -644,22 +609,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input type="checkbox" id="own-mt" ${set.is_maintenance ? 'checked' : ''} style="width:24px; height:24px; accent-color:#ff3333; cursor:pointer;">
                     </label>
                 </div>
-
                 <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
                     <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">🚫 Nonaktifkan Tools</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${toolsHtml}</div>
                 </div>
-
                 <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
                     <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">🔒 Kunci Halaman</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${pagesHtml}</div>
                 </div>
-
                 <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px; margin-bottom:20px;">
                     <button onclick="simpanSettingOwner(event)" class="action-btn press" style="padding:16px; font-size:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:12px; font-weight:900; box-shadow:0 4px 0 var(--border);">💾 SIMPAN PERUBAHAN</button>
                     <button onclick="forceRefreshUser()" class="action-btn press" style="padding:16px; font-size:14px; background:#a855f7; color:#fff; border:2px solid var(--border); border-radius:12px; font-weight:900; box-shadow:0 4px 0 var(--border);">🔄 PAKSA REFRESH USER</button>
                 </div>
-
             </div>
         `;
     };
@@ -763,11 +724,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:15px; padding: 0 5px;">
                         <div>
                             <h3 style="font-family:var(--font-head); color:var(--text); font-size:22px; margin:0; letter-spacing:1px;">KATALOG</h3>
-                            <p style="font-size:10px; color:var(--primary); margin:0; font-weight:bold; letter-spacing:2px;">SAIRI COMICS</p>
+                            <p style="font-size:10px; color:var(--primary); margin:0; font-weight:bold; letter-spacing:2px;">ZENKAI COMICS</p>
                         </div>
                     </div>
                     <div style="position:relative; margin-bottom:20px;">
-                        <input type="text" id="komik-q" placeholder="Cari judul komik (cth: Lookism)..." style="width:100%; padding:14px 14px 14px 45px; border:none; border-radius:12px; background:var(--card-bg); color:var(--text); font-size:13px; outline:none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border:2px solid var(--border);">
+                        <input type="text" id="komik-q" placeholder="Cari judul komik..." style="width:100%; padding:14px 14px 14px 45px; border:none; border-radius:12px; background:var(--card-bg); color:var(--text); font-size:13px; outline:none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border:2px solid var(--border);">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </div>
                     <div id="komik-res"></div>
@@ -777,24 +738,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
 
-            // PROXY GAMBAR BIAR NGGAK BLANK
             const proxyImg = (url) => {
                 if (!url) return '';
                 return `https://wsrv.nl/?url=${encodeURIComponent(url)}`;
             };
 
-            const loadKatalogSairi = async (query) => {
+            const loadKatalog = async (query) => {
                 box.innerHTML = '<div class="loader"></div>';
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-sairi`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'search', q: query || 'lookism' })
+                        body: JSON.stringify({ action: 'search', q: query || 'action' })
                     });
                     const data = await res.json();
                     const komikList = data.result || []; 
 
                     if (komikList.length === 0) {
-                        box.innerHTML = '<p class="error-msg">Komik tidak ditemukan.</p>';
+                        box.innerHTML = '<p class="error-msg">Komik tidak ditemukan di ZenkaiTools.</p>';
                         return;
                     }
 
@@ -820,7 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     box.querySelectorAll('.komik-card-sairi').forEach(el => {
                         el.addEventListener('click', () => {
-                            bukaDetailSairi(el.dataset.title, el.dataset.url);
+                            bukaDetail(el.dataset.title, el.dataset.url);
                         });
                     });
 
@@ -829,7 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            const bukaDetailSairi = async (title, url) => {
+            const bukaDetail = async (title, url) => {
                 box.innerHTML = '<div class="loader"></div>';
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-sairi`, {
@@ -857,7 +817,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                             </div>
                         </div>
-                        <h4 style="margin-bottom:10px; font-size:14px;">Episode Terbaru (Sairi):</h4>
+                        <h4 style="margin-bottom:10px; font-size:14px;">Daftar Episode:</h4>
                         <div style="display:flex; flex-direction:column; gap:8px;">
                     `;
 
@@ -867,10 +827,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         episodes.forEach(ep => {
                             const epNum = ep.number;
                             const epTitle = ep.title || `Episode ${epNum}`;
+                            // Gambar episode di-hide karena pasti diblokir server, ganti pakai kotak angka
                             html += `
-                                <div class="press" onclick="bacaDariMangaDex('${escapeHTML(detail.title)}', '${epNum}', '${ep.url}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px; border-radius:8px; cursor:pointer;">
-                                    <img src="${proxyImg(ep.thumbnail)}" style="width:60px; height:45px; object-fit:cover; border-radius:4px;">
-                                    <div style="flex:1;">
+                                <div class="press" onclick="bacaDariServer('${escapeHTML(detail.title)}', '${epNum}', '${ep.url}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px 15px; border-radius:8px; cursor:pointer;">
+                                    <div style="font-size:18px; font-weight:900; color:var(--primary); width:30px; text-align:center;">${epNum}</div>
+                                    <div style="flex:1; border-left:2px solid var(--border); padding-left:10px;">
                                         <h5 style="margin:0; font-size:12px; font-weight:800; color:var(--text);">${escapeHTML(epTitle)}</h5>
                                         <p style="margin:2px 0 0 0; font-size:10px; color:var(--text); opacity:0.6;">${escapeHTML(ep.date)}</p>
                                     </div>
@@ -888,8 +849,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            window.bacaDariMangaDex = async (title, epNum, webtoonUrl) => {
-                box.innerHTML = `<div class="loader"></div><p style="text-align:center; font-size:12px;">Mencari "${escapeHTML(title)}" di server baca...</p>`;
+            window.bacaDariServer = async (title, epNum, webtoonUrl) => {
+                box.innerHTML = `<div class="loader"></div><p style="text-align:center; font-size:12px;">Mencari "${escapeHTML(title)}" di server...</p>`;
                 try {
                     const mdRes = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -900,29 +861,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (mdData.data && mdData.data.length > 0) {
                         window.bukaChapterKomik(mdData.data[0].id, title);
                     } else {
-                        // KALAU GAGAL DI MANGADEX, KASIH OPSI BACA DI WEBTOON ASLI
+                        // Tampilan kalau nggak ketemu (tanpa kata MangaDex)
                         box.innerHTML = `
                             <div style="text-align:center; padding: 30px 10px;">
                                 <div style="font-size:40px; margin-bottom:10px;">📖</div>
-                                <h4 style="margin:0 0 10px 0;">Komik Belum Ada di Server</h4>
-                                <p style="font-size:12px; opacity:0.8; margin-bottom:20px;">Komik "${escapeHTML(title)}" tidak ditemukan di MangaDex. Kamu bisa membacanya langsung di aplikasi Webtoon.</p>
+                                <h4 style="margin:0 0 10px 0;">Komik Belum Tersedia di Server</h4>
+                                <p style="font-size:12px; opacity:0.8; margin-bottom:20px;">Komik "${escapeHTML(title)}" tidak ditemukan di ZenkaiTools. Kamu bisa membaca chapter ini langsung di aplikasi Webtoon.</p>
                                 
                                 <a href="${webtoonUrl}" target="_blank" class="action-btn" style="background:#00ff9d; text-decoration:none; display:block; margin-bottom:10px;">Baca di Webtoon Asli</a>
-                                <button onclick="openTool('komik')" class="action-btn" style="background:var(--card-bg); color:var(--text);">Kembali</button>
+                                <button onclick="openTool('komik')" class="action-btn" style="background:var(--card-bg); color:var(--text);">Kembali ke Katalog</button>
                             </div>`;
                     }
                 } catch (err) {
-                    box.innerHTML = `<p class="error-msg">Gagal konek ke server baca.</p>`;
+                    box.innerHTML = `<p class="error-msg">Gagal konek ke server.</p>`;
                 }
             };
 
-            loadKatalogSairi('lookism'); 
+            // Default pencarian dibikin 'action' biar banyak isinya
+            loadKatalog('action'); 
             
             let timeout = null;
             input.addEventListener('input', (e) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
-                    loadKatalogSairi(e.target.value.trim());
+                    loadKatalog(e.target.value.trim());
                 }, 800);
             });
         }
@@ -1197,7 +1159,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 box.innerHTML = '<div class="loader"></div>';
 
                 try {
-                    // Tembak ke Edge Function zen-youtube
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-youtube`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ type: tipeTerpilih, url: url })
@@ -1857,7 +1818,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // FUNGSI KOMIK MANGADEX (DIPANGGIL DARI JEMBATAN)
+    // FUNGSI KOMIK BACA GAMBAR
     // =========================================
     window.bukaChapterKomik = async (mangaId, title) => {
         const box = document.getElementById('komik-res');
@@ -1869,7 +1830,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const data = await res.json();
             
-            if (!data.data || data.data.length === 0) throw new Error('Chapter komik belum tersedia di MangaDex.');
+            if (!data.data || data.data.length === 0) throw new Error('Chapter komik belum tersedia di server.');
             
             let html = `
                 <div style="display:flex; gap:15px; margin-bottom:20px; align-items:flex-start;">
@@ -1879,7 +1840,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div>
                         <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
                         <div style="display:flex; gap:8px; align-items:center;">
-                            <span style="font-size:10px; font-weight:bold; background:var(--primary); color:#000; padding:3px 8px; border-radius:4px;">MANGADEX</span>
+                            <span style="font-size:10px; font-weight:bold; background:var(--primary); color:#000; padding:3px 8px; border-radius:4px;">ZENKAI SERVER</span>
                             <span style="font-size:11px; color:var(--text); opacity:0.6;">${data.data.length} Chapters</span>
                         </div>
                     </div>
