@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     const SUPA_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
     const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
-    const OWNER_SESSION_KEY = 'zenkai_is_owner';
+    const OWNER_TOKEN_KEY = 'zenkai_owner_token'; // PATCH: Menggunakan Token, bukan flag 'true'
 
     const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -365,7 +365,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
         const welcome = document.getElementById('welcome-username');
         if (welcome) welcome.innerText = savedUser;
-        if (localStorage.getItem(OWNER_SESSION_KEY) === 'true') {
+        
+        // PATCH: Cek token owner (bukan flag 'true' lagi)
+        if (localStorage.getItem(OWNER_TOKEN_KEY)) {
             const navOwner = document.getElementById('nav-owner');
             if (navOwner) navOwner.style.display = 'flex';
         }
@@ -517,7 +519,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(fetchSettings, 15000); fetchSettings();
 
     function applySettings(setting) {
-        const isOwner = localStorage.getItem(OWNER_SESSION_KEY) === 'true';
+        // PATCH: Cek token owner (bukan flag 'true')
+        const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
 
         if (setting.is_maintenance && !isOwner) {
             if (!window.mtTimer) {
@@ -565,10 +568,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // ===== BATAS BAGIAN 1 =====
     // =========================================
-// 10. PINTU RAHASIA OWNER
+// 10. PINTU RAHASIA OWNER (PATCHED)
 // =========================================
 let clicks = 0;
 document.querySelector('.logo-area')?.addEventListener('click', () => {
@@ -576,15 +577,31 @@ document.querySelector('.logo-area')?.addEventListener('click', () => {
     if (clicks === 5) { clicks = 0; bukaPintuRahasia(); }
 });
 
-window.bukaPanelOwnerLangsung = () => {
-    if (localStorage.getItem(OWNER_SESSION_KEY) === 'true') {
-        if (typeof window.tampilkanPanelRahasia === 'function') {
-            window.tampilkanPanelRahasia();
+// PATCH: Fungsi ini sekarang ngecek token ke database, bukan cuma baca localStorage
+window.bukaPanelOwnerLangsung = async () => {
+    const token = localStorage.getItem(OWNER_TOKEN_KEY);
+    if (!token) return bukaPintuRahasia();
+
+    try {
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'verify_token', owner_token: token })
+        });
+        const data = await res.json();
+
+        if (data.status) {
+            if (typeof window.tampilkanPanelRahasia === 'function') {
+                window.tampilkanPanelRahasia();
+            } else {
+                showToast("Panel belum siap, coba refresh.");
+            }
         } else {
-            showToast("Panel belum siap, coba refresh.");
+            localStorage.removeItem(OWNER_TOKEN_KEY);
+            bukaPintuRahasia();
         }
-    } else {
-        bukaPintuRahasia();
+    } catch (e) {
+        showToast("Gagal verifikasi owner.");
     }
 };
 
@@ -604,6 +621,7 @@ function bukaPintuRahasia() {
     `);
 }
 
+// PATCH: Fungsi login owner, simpan token yang didapat dari server
 window.verifikasiOwner = async () => {
     const pass = document.getElementById('owner-pass').value;
     try {
@@ -614,8 +632,8 @@ window.verifikasiOwner = async () => {
         });
         const data = await res.json();
 
-        if (data.status) {
-            localStorage.setItem(OWNER_SESSION_KEY, 'true');
+        if (data.status && data.owner_token) {
+            localStorage.setItem(OWNER_TOKEN_KEY, data.owner_token);
             document.getElementById('owner-modal').remove();
             showToast("Akses Owner Diberikan!");
 
@@ -687,7 +705,7 @@ window.tampilkanPanelRahasia = async () => {
                         <input type="checkbox" id="own-mt" ${set.is_maintenance ? 'checked' : ''} style="width:20px; height:20px;"> ⏳ Mode Maintenance Global
                     </label>
                 </div>
-                <button onclick="simpanSettingOwner()" style="width:100%; padding:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:8px; font-weight:900; font-size:14px; cursor:pointer; box-shadow:2px 2px 0 var(--border); margin-bottom:10px;">💾 SIMPAN PENGATURAN</button>
+                <button onclick="simpanSettingOwner(event)" style="width:100%; padding:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:8px; font-weight:900; font-size:14px; cursor:pointer; box-shadow:2px 2px 0 var(--border); margin-bottom:10px;">💾 SIMPAN PENGATURAN</button>
                 <button onclick="forceRefreshUser()" style="width:100%; padding:14px; background:#a855f7; color:#fff; border:2px solid var(--border); border-radius:8px; font-weight:900; font-size:14px; cursor:pointer; box-shadow:2px 2px 0 var(--border); margin-bottom:10px;">🔄 Paksa Refresh Semua User</button>
                 <button onclick="document.getElementById('owner-panel').remove()" style="width:100%; padding:10px; background:var(--card-bg); color:var(--text); border:2px solid var(--border); border-radius:8px; font-weight:bold; cursor:pointer;">Tutup Panel</button>
             </div>
@@ -695,17 +713,17 @@ window.tampilkanPanelRahasia = async () => {
     `);
 };
 
-window.simpanSettingOwner = async () => {
-    const btn = event.target;
-    const oldText = btn.innerText;
-    btn.innerText = 'Menyimpan...';
-    btn.disabled = true;
+window.simpanSettingOwner = async (e) => {
+    const btn = e?.target || document.activeElement;
+    const oldText = btn?.innerText || 'SIMPAN';
+    if (btn) { btn.innerText = 'Menyimpan...'; btn.disabled = true; }
 
     const checkedTools = Array.from(document.querySelectorAll('.tool-chk:checked')).map(cb => cb.value).join(',');
     const checkedPages = Array.from(document.querySelectorAll('.page-chk:checked')).map(cb => cb.value).join(',');
 
     const payload = {
         action: 'update_settings',
+        owner_token: localStorage.getItem(OWNER_TOKEN_KEY),
         site_title: document.getElementById('own-title').value,
         broadcast_text: document.getElementById('own-broadcast').value,
         disabled_pages: checkedPages,
@@ -723,34 +741,45 @@ window.simpanSettingOwner = async () => {
             showToast("Pengaturan disimpan!");
             fetchSettings();
         } else {
-            showToast("Gagal: " + data.message);
+            showToast("Gagal: " + (data.message || 'Token invalid'));
         }
-    } catch(e) {
+    } catch(err) {
         showToast("Error koneksi ke server.");
     }
-    btn.innerText = oldText;
-    btn.disabled = false;
+    if (btn) { btn.innerText = oldText; btn.disabled = false; }
 };
 
 window.forceRefreshUser = async () => {
-    if (!confirm("Yakin mau maksa semua user buat refresh?")) return;
-    try {
-        await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'force_refresh' })
-        });
-        showToast("Sinyal Force Refresh terkirim!");
-    } catch(e) {}
+    tampilkanAlert("Force Refresh", "Yakin mau maksa semua user buat refresh?", [
+        { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+        { label: "Lanjut", action: "eksekusiForceRefresh()", type: "primary" }
+    ]);
 };
 
-// ===== BATAS BAGIAN 2a =====
+window.eksekusiForceRefresh = async () => {
+    document.getElementById('custom-alert').style.display = 'none';
+    try {
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'force_refresh',
+                owner_token: localStorage.getItem(OWNER_TOKEN_KEY)
+            })
+        });
+        const data = await res.json();
+        if (data.status) showToast("Sinyal Force Refresh terkirim!");
+        else showToast("Gagal: " + (data.message || 'Token invalid'));
+    } catch(e) {
+        showToast("Error koneksi.");
+    }
+};
 // =========================================
 // 11. FUNGSI OPEN TOOL
 // =========================================
 window.openTool = (tool) => {
     if (!modal || !modalContent) return;
 
-    // AWAL PATCH NOTIF MAINTENANCE
+    // PATCH NOTIF MAINTENANCE
     const currentDisabledTools = window.currentDisabledTools || [];
     if (currentDisabledTools.includes(tool)) {
         modal.classList.add('active');
@@ -763,7 +792,6 @@ window.openTool = (tool) => {
         `;
         return;
     }
-    // AKHIR PATCH NOTIF MAINTENANCE
 
     modal.classList.add('active');
 
@@ -1049,80 +1077,78 @@ window.openTool = (tool) => {
             setBtnLoading(btn, false, 'Cari');
         };
     }
-
-    // --- QR CODE ---
-    else if (tool === 'qr') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>QR Code</h3>
-            <span class="desc-text">Ubah teks, link website, atau nomor WA jadi gambar QR Code.</span>
-            <input type="text" id="qr-text" placeholder="Teks/Link..." value="ZenkaiTools">
-            <button class="action-btn" id="btn-qr">Generate QR</button>
-            <div style="text-align:center; margin-top:15px;"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ZenkaiTools" style="max-width:100%; border-radius:8px; border:3px solid var(--border);"></div>
-        `;
-        document.getElementById('btn-qr').onclick = () => {
-            const txt = document.getElementById('qr-text').value || "ZenkaiTools";
-            document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(txt)}`;
-        };
-    }
-
-    // --- IMAGE TO JPG ---
-    else if (tool === 'imgtojpg') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Image to JPG</h3>
-            <span class="desc-text">Ubah format gambar (PNG/WebP) jadi JPG.</span>
-            <input type="file" id="jpg-in" accept="image/*">
-            <div id="jpg-res" style="display:none; text-align:center;">
-                <img id="jpg-preview" style="max-width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom:10px;">
-                <a id="jpg-dl" class="action-btn" download="gambar.jpg">Download JPG</a>
-            </div>
-        `;
-        document.getElementById('jpg-in').onchange = (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width; canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.fillStyle = '#FFFFFF';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(img, 0, 0);
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-                    document.getElementById('jpg-res').style.display = 'block';
-                    document.getElementById('jpg-preview').src = dataUrl;
-                    document.getElementById('jpg-dl').href = dataUrl;
-                };
-                img.src = ev.target.result;
+            // --- QR CODE ---
+        else if (tool === 'qr') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>QR Code</h3>
+                <span class="desc-text">Ubah teks, link website, atau nomor WA jadi gambar QR Code.</span>
+                <input type="text" id="qr-text" placeholder="Teks/Link..." value="ZenkaiTools">
+                <button class="action-btn" id="btn-qr">Generate QR</button>
+                <div style="text-align:center; margin-top:15px;"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ZenkaiTools" style="max-width:100%; border-radius:8px; border:3px solid var(--border);"></div>
+            `;
+            document.getElementById('btn-qr').onclick = () => {
+                const txt = document.getElementById('qr-text').value || "ZenkaiTools";
+                document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(txt)}`;
             };
-            reader.readAsDataURL(file);
-        };
-    }
+        }
 
-    // --- USERNAME GEN ---
-    else if (tool === 'username') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Username Gen</h3>
-            <span class="desc-text">Bingung cari username? Generate aja di sini.</span>
-            <input type="text" id="user-name" placeholder="Nama kamu (cth: andika)">
-            <button class="action-btn" id="btn-user">Generate</button>
-            <div id="user-res" style="display:none; text-align:center; font-size:18px; font-weight:bold; border:3px dashed var(--border); padding:15px; border-radius:8px; margin-top:15px; background:var(--card-bg);"></div>
-        `;
-        document.getElementById('btn-user').onclick = () => {
-            const name = document.getElementById('user-name').value.trim() || "user";
-            const rand = Math.floor(Math.random() * 9999);
-            const suffix = Math.random() > 0.5 ? "._" : "_";
-            const b = document.getElementById('user-res');
-            b.style.display = 'block';
-            b.innerHTML = `@${escapeHTML(name)}${suffix}${rand}<br><span style="font-size:12px; opacity:0.7;">(Klik generate lagi buat ganti)</span>`;
-        };
-    }
+        // --- IMAGE TO JPG ---
+        else if (tool === 'imgtojpg') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Image to JPG</h3>
+                <span class="desc-text">Ubah format gambar (PNG/WebP) jadi JPG.</span>
+                <input type="file" id="jpg-in" accept="image/*">
+                <div id="jpg-res" style="display:none; text-align:center;">
+                    <img id="jpg-preview" style="max-width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom:10px;">
+                    <a id="jpg-dl" class="action-btn" download="gambar.jpg">Download JPG</a>
+                </div>
+            `;
+            document.getElementById('jpg-in').onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width; canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+                        document.getElementById('jpg-res').style.display = 'block';
+                        document.getElementById('jpg-preview').src = dataUrl;
+                        document.getElementById('jpg-dl').href = dataUrl;
+                    };
+                    img.src = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+            };
+        }
 
-// ===== BATAS BAGIAN 2b-1 =====
+        // --- USERNAME GEN ---
+        else if (tool === 'username') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Username Gen</h3>
+                <span class="desc-text">Bingung cari username? Generate aja di sini.</span>
+                <input type="text" id="user-name" placeholder="Nama kamu (cth: andika)">
+                <button class="action-btn" id="btn-user">Generate</button>
+                <div id="user-res" style="display:none; text-align:center; font-size:18px; font-weight:bold; border:3px dashed var(--border); padding:15px; border-radius:8px; margin-top:15px; background:var(--card-bg);"></div>
+            `;
+            document.getElementById('btn-user').onclick = () => {
+                const name = document.getElementById('user-name').value.trim() || "user";
+                const rand = Math.floor(Math.random() * 9999);
+                const suffix = Math.random() > 0.5 ? "._" : "_";
+                const b = document.getElementById('user-res');
+                b.style.display = 'block';
+                b.innerHTML = `@${escapeHTML(name)}${suffix}${rand}<br><span style="font-size:12px; opacity:0.7;">(Klik generate lagi buat ganti)</span>`;
+            };
+        }
+
         // --- ARTI NAMA ---
         else if (tool === 'artinama') {
             modalContent.innerHTML = `
@@ -1544,4 +1570,4 @@ window.openTool = (tool) => {
         }
     };
 
-});
+}); // <- INI PENUTUP DOMContentLoaded, JANGAN DIHAPUS
