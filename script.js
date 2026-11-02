@@ -61,10 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const welcomeVideo = document.getElementById('welcome-video');
     const authGate = document.getElementById('auth-gate');
 
-    // Fungsi Masuk ke Web (SKIP INTRO)
     window.masukKeWeb = () => {
         if (welcomeVideo) {
-            welcomeVideo.pause(); // <--- MATIIN SUARA PAS SKIP
+            welcomeVideo.pause();
             welcomeVideo.muted = true;
         }
         if (authGate) {
@@ -78,14 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Fungsi Aktifkan Suara (Audio Lanjut)
     window.aktifkanSuara = () => {
         if (welcomeVideo) {
             welcomeVideo.muted = false;
-            welcomeVideo.play(); // Lanjut dari detik terakhir, nggak ngulang
+            welcomeVideo.play();
         }
         const btn = document.getElementById('btn-unmute');
-        if (btn) btn.style.display = 'none'; // Sembunyiin tombol
+        if (btn) btn.style.display = 'none';
     };
 
     if (welcomeVideo) {
@@ -99,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. BEBAS AKSES (NAMA USER)
     // =========================================
     const welcome = document.getElementById('welcome-username');
-    if (welcome) welcome.innerText = 'User'; // <--- NAMA USER SET DEFAULT
+    if (welcome) welcome.innerText = 'User';
 
     if (localStorage.getItem(OWNER_TOKEN_KEY)) {
         const navOwner = document.getElementById('nav-owner');
@@ -686,38 +684,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            provider: 'sairi', 
-                            endpoint: 'download/tiktok', 
-                            params: { url: url } 
-                        })
+                        body: JSON.stringify({ action: 'tiktok', url: url })
                     });
                     const data = await res.json();
-                    
-                    if (!data.status) throw new Error(data.message || 'Gagal mengambil data');
-                    
-                    const result = data.result;
-                    let htmlContent = '';
-
-                    if (result.type === 'video') {
-                        const vidUrl = result.video.nowatermark_hd || result.video.nowatermark;
-                        htmlContent += `
-                            <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(vidUrl)}" controls></video>
-                            <a href="${escapeHTML(vidUrl)}" target="_blank" class="action-btn" style="text-align:center; text-decoration:none; background:#00ff9d;">Download HD</a>
-                        `;
-                    } else if (result.images && result.images.length > 0) {
-                        htmlContent += `<p style="font-size:12px; margin-bottom:10px;">Foto Slide (${result.images.length}):</p>`;
-                        result.images.forEach((img, index) => {
-                            htmlContent += `
-                                <img src="${escapeHTML(img)}" style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
-                                <a href="${escapeHTML(img)}" target="_blank" class="action-btn" style="margin-bottom:15px; font-size:12px;">Simpan Foto ${index+1}</a>
-                            `;
-                        });
-                    }
-
-                    box.innerHTML = htmlContent;
+                    if (data.code !== 0) throw new Error('Gagal mengambil video');
+                    const vid = data.data.hdplay || data.data.play;
+                    box.innerHTML = `
+                        <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(vid)}" controls></video>
+                        <button class="action-btn" id="btn-save-tt">Simpan ke Galeri</button>
+                    `;
+                    document.getElementById('btn-save-tt').onclick = async () => {
+                        const saveBtn = document.getElementById('btn-save-tt');
+                        setBtnLoading(saveBtn, true, 'Menyimpan...');
+                        try {
+                            const dlRes = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ download_url: vid })
+                            });
+                            if (!dlRes.ok) throw new Error('Gagal download');
+                            const blob = await dlRes.blob();
+                            const a = document.createElement('a');
+                            a.href = URL.createObjectURL(blob);
+                            a.download = `tt-${Date.now()}.mp4`;
+                            a.click();
+                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                            showToast('Tersimpan!');
+                        } catch (e) { showToast('Gagal simpan, coba lagi.'); }
+                        setBtnLoading(saveBtn, false, 'Simpan ke Galeri');
+                    };
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Proses Video');
             };
@@ -739,20 +735,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-instagram`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            provider: 'sairi', 
-                            endpoint: 'download/instagram', 
-                            params: { url: url } 
-                        })
+                        body: JSON.stringify({ url: url })
                     });
                     const data = await res.json();
                     
                     if (!data.status) throw new Error(data.message || 'Postingan tidak ditemukan');
                     
                     let htmlContent = '';
-                    data.result.media.forEach((media, index) => {
+                    // Sesuaikan logika array media dengan respons API lo
+                    const mediaArray = data.result?.media || data.media || [];
+                    mediaArray.forEach((media, index) => {
                         if (media.type === 'video') {
                             htmlContent += `
                                 <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(media.url)}" controls></video>
@@ -766,47 +760,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
 
+                    if (htmlContent === '') throw new Error('Media tidak ditemukan');
                     box.innerHTML = htmlContent;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Ambil Media');
-            };
-        }
-        else if (tool === 'facebook') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Facebook DL</h3>
-                <span class="desc-text">Download video dari Facebook.</span>
-                <input type="text" id="fb-url" placeholder="Paste link Facebook...">
-                <button class="action-btn" id="btn-dl-fb">Ambil Video</button>
-                <div id="fb-result"></div>
-            `;
-            const btn = document.getElementById('btn-dl-fb');
-            btn.onclick = async () => {
-                const url = document.getElementById('fb-url').value.trim();
-                const box = document.getElementById('fb-result');
-                if (!url) return showToast('Masukkan link dulu!');
-                setBtnLoading(btn, true);
-                box.innerHTML = '<div class="loader"></div>';
-                try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            provider: 'sairi', 
-                            endpoint: 'download/facebook', 
-                            params: { url: url } 
-                        })
-                    });
-                    const data = await res.json();
-                    
-                    if (!data.status) throw new Error(data.message || 'Video tidak ditemukan');
-                    
-                    const vidUrl = data.result.hd || data.result.video;
-                    box.innerHTML = `
-                        <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(vidUrl)}" controls></video>
-                        <a href="${escapeHTML(vidUrl)}" target="_blank" class="action-btn" style="text-align:center; text-decoration:none; background:#00ff9d;">Download Video</a>
-                    `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-                setBtnLoading(btn, false, 'Ambil Video');
             };
         }
         else if (tool === 'pinterest') {
@@ -831,38 +788,73 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentVideoUrl = "";
                 currentImageUrl = "";
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ provider: 'sairi', endpoint: 'download/pinterest', params: { url: url } })
+                        body: JSON.stringify({ url: url })
                     });
                     const data = await res.json();
-                    if (!data.status) throw new Error(data.message || 'Konten tidak ditemukan');
-                    
-                    const mediaArray = data.result.media || [];
-                    if(mediaArray.length > 0) {
-                        const firstMedia = mediaArray[0];
-                        if(firstMedia.type === 'video') currentVideoUrl = firstMedia.url;
-                        if(firstMedia.type === 'image') currentImageUrl = firstMedia.url;
+                    if (data.status === false || data.error) throw new Error(data.error || 'Konten tidak ditemukan');
+                    const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
+                    if (!pinDataObj) throw new Error('Struktur data tidak dikenali');
+                    if (pinDataObj.videos) {
+                        if (pinDataObj.videos.videoList?.v720P?.url) currentVideoUrl = pinDataObj.videos.videoList.v720P.url;
+                        else if (pinDataObj.videos.videoUrls && Array.isArray(pinDataObj.videos.videoUrls)) {
+                            const mp4Url = pinDataObj.videos.videoUrls.find(u => u.includes('.mp4'));
+                            if (mp4Url) currentVideoUrl = mp4Url;
+                        }
                     }
-
+                    if (pinDataObj.images_orig?.url) currentImageUrl = pinDataObj.images_orig.url;
+                    else if (pinDataObj.images_736x?.url) currentImageUrl = pinDataObj.images_736x.url;
                     let htmlContent = '';
                     if (currentVideoUrl) htmlContent += `<video src="${escapeHTML(currentVideoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;"></video>`;
                     else if (currentImageUrl) htmlContent += `<img src="${escapeHTML(currentImageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;">`;
-                    
                     htmlContent += `
                         <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <button class="action-btn" id="btn-dl-vid" style="background:#00ff9d; margin-bottom:0;" ${!currentVideoUrl ? 'disabled' : ''}>🎬 DOWNLOAD VIDEO</button>
-                            <button class="action-btn" id="btn-dl-img" style="background:var(--primary); margin-bottom:0;" ${!currentImageUrl ? 'disabled' : ''}>🖼️ DOWNLOAD GAMBAR</button>
+                            <button class="action-btn" id="btn-dl-vid" style="background:#00ff9d; margin-bottom:0;">🎬 DOWNLOAD VIDEO</button>
+                            <button class="action-btn" id="btn-dl-img" style="background:var(--primary); margin-bottom:0;">🖼️ DOWNLOAD GAMBAR</button>
                         </div>
                     `;
                     box.innerHTML = htmlContent;
-                    
-                    if(currentVideoUrl) {
-                        document.getElementById('btn-dl-vid').onclick = () => window.open(currentVideoUrl, '_blank');
-                    }
-                    if(currentImageUrl) {
-                        document.getElementById('btn-dl-img').onclick = () => window.open(currentImageUrl, '_blank');
-                    }
+                    document.getElementById('btn-dl-vid').onclick = async (e) => {
+                        if (!currentVideoUrl) return showToast('Link ini tidak memiliki video.');
+                        const saveBtn = e.target;
+                        setBtnLoading(saveBtn, true, 'Menyimpan...');
+                        try {
+                            const dlRes = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ download_url: currentVideoUrl })
+                            });
+                            if (!dlRes.ok) throw new Error('Gagal');
+                            const blob = await dlRes.blob();
+                            const a = document.createElement('a');
+                            a.href = URL.createObjectURL(blob);
+                            a.download = `pin-vid-${Date.now()}.mp4`;
+                            a.click();
+                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                            showToast('Video Tersimpan!');
+                        } catch (error) { showToast('Gagal simpan video.'); }
+                        setBtnLoading(saveBtn, false, '🎬 DOWNLOAD VIDEO');
+                    };
+                    document.getElementById('btn-dl-img').onclick = async (e) => {
+                        if (!currentImageUrl) return showToast('Gambar tidak ditemukan.');
+                        const saveBtn = e.target;
+                        setBtnLoading(saveBtn, true, 'Menyimpan...');
+                        try {
+                            const dlRes = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ download_url: currentImageUrl })
+                            });
+                            if (!dlRes.ok) throw new Error('Gagal');
+                            const blob = await dlRes.blob();
+                            const a = document.createElement('a');
+                            a.href = URL.createObjectURL(blob);
+                            a.download = `pin-img-${Date.now()}.jpg`;
+                            a.click();
+                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                            showToast('Gambar Tersimpan!');
+                        } catch (error) { showToast('Gagal simpan gambar.'); }
+                        setBtnLoading(saveBtn, false, '🖼️ DOWNLOAD GAMBAR');
+                    };
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Ambil Media');
             };
@@ -885,21 +877,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Cari');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tiktok`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ provider: 'kuroneko', endpoint: 'stalktt', params: { username: user } })
+                        body: JSON.stringify({ username: user })
                     });
                     const data = await res.json();
-                    if (!data.status) throw new Error(data.message || 'Akun tidak ditemukan');
-                    const d = data.result || data.data;
+                    if (!data.status || !data.result) throw new Error('Akun tidak ditemukan atau private');
+                    const d = data.result;
                     box.innerHTML = `
                         <div style="text-align:center; margin-bottom:10px;">
-                            <img src="${escapeHTML(d.avatar?.medium || d.avatar)}" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--border); object-fit:cover;">
+                            <img src="${escapeHTML(d.avatar.medium)}" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--border); object-fit:cover;">
                         </div>
                         <b>Username:</b> @${escapeHTML(d.username)}<br>
                         <b>Nama:</b> ${escapeHTML(d.nickname)}<br>
-                        <b>Bio:</b> ${escapeHTML(d.bio || d.signature || '-')}<br>
-                        <b>Followers:</b> ${escapeHTML((d.stats?.followers || d.followerCount || 0).toLocaleString())}<br>
+                        <b>Bio:</b> ${escapeHTML(d.bio || '-')}<br>
+                        <b>Region:</b> ${escapeHTML(d.region || 'Tidak diketahui')}<br>
+                        <hr style="border:1px dashed var(--border); margin:10px 0;">
+                        <b>Followers:</b> ${escapeHTML(d.stats.followers.toLocaleString())}<br>
+                        <b>Following:</b> ${escapeHTML(d.stats.following.toLocaleString())}<br>
+                        <b>Total Likes:</b> ${escapeHTML(d.stats.likes.toLocaleString())}<br>
+                        <b>Total Video:</b> ${escapeHTML(d.stats.videos.toLocaleString())}<br>
+                        <b>Status:</b> ${d.private_account ? '🔒 Private' : '🌐 Public'}
                     `;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Cari');
@@ -923,25 +921,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Cari');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-roblox`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ provider: 'kuroneko', endpoint: 'stalkroblox', params: { username: user } })
+                        body: JSON.stringify({ username: user })
                     });
                     const data = await res.json();
-                    if (!data.status) throw new Error(data.message || 'Akun tidak ditemukan');
-                    const d = data.data || data.result;
-                    const tglDibuat = d.created ? new Date(d.created).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
+                    if (!data.status || !data.data) throw new Error(data.error || 'Akun tidak ditemukan');
+                    const d = data.data;
+                    const tglDibuat = new Date(d.created).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
                     box.innerHTML = `
                         <div style="text-align:center; margin-bottom:10px;">
                             <img src="${escapeHTML(d.avatar)}" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--border); object-fit:cover;">
                         </div>
-                        <b>Username:</b> @${escapeHTML(d.username || d.name)}<br>
-                        <b>Display Name:</b> ${escapeHTML(d.display_name || d.displayName || '-')}<br>
+                        <b>Username:</b> @${escapeHTML(d.username)}<br>
+                        <b>Display Name:</b> ${escapeHTML(d.display_name)}<br>
                         <b>Bio:</b> ${escapeHTML(d.description || '-')}<br>
                         <b>Dibuat:</b> ${tglDibuat}<br>
                         <hr style="border:1px dashed var(--border); margin:10px 0;">
-                        <b>Friends:</b> ${escapeHTML((d.stats?.friends || 0).toLocaleString())}<br>
-                        <b>Followers:</b> ${escapeHTML((d.stats?.followers || 0).toLocaleString())}<br>
+                        <b>Friends:</b> ${escapeHTML(d.stats.friends.toLocaleString())}<br>
+                        <b>Followers:</b> ${escapeHTML(d.stats.followers.toLocaleString())}<br>
+                        <b>Following:</b> ${escapeHTML(d.stats.following.toLocaleString())}<br>
+                        <b>Status:</b> ${d.is_banned ? '🔴 Banned' : (d.verified ? '✅ Verified' : '🟢 Normal')}
                     `;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Cari');
@@ -1202,12 +1202,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Generate Link');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/amprem`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ provider: 'kuroneko', endpoint: 'amprem', params: { email: email } })
+                        body: JSON.stringify({ email: email })
                     });
                     const data = await res.json();
-                    if (!data.status) throw new Error(data.message || 'Gagal');
+                    if (data.status === false || data.error) throw new Error(data.message || 'Gagal');
                     box.innerHTML = `<p class="success-msg">Berhasil Terkirim! ✅<br><span style="font-size:11px; font-weight:normal;">Cek Inbox/Spam di <b>${escapeHTML(email)}</b>.</span></p>`;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Generate Link');
@@ -1228,13 +1228,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Buat Email');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ provider: 'kuroneko', endpoint: 'tempmail', params: {} })
+                        body: JSON.stringify({ path: 'tempmail_create', params: {} })
                     });
                     const data = await res.json();
                     if (!data.status) throw new Error(data.message || 'Gagal');
-                    box.innerHTML = `<p style="font-size:12px; margin-bottom:10px;">Email Lu:</p><b style="font-size:16px; color:var(--primary); word-break:break-all;">${escapeHTML(data.result?.email || data.email)}</b>`;
+                    box.innerHTML = `<p style="font-size:12px; margin-bottom:10px;">Email Lu:</p><b style="font-size:16px; color:var(--primary); word-break:break-all;">${escapeHTML(data.result.email)}</b><br><p style="font-size:11px; opacity:0.8; margin-top:5px;">(Token: ${escapeHTML(data.result.token)})</p>`;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Buat Email');
             };
@@ -1258,7 +1258,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Lacak NIK');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-tools`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ path: 'nik', params: { nik: nik } })
                     });
@@ -1297,19 +1297,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Download');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ provider: 'sairi', endpoint: 'download/spotify', params: { url: url } })
+                        body: JSON.stringify({ path: 'spotify', params: { url: url } })
                     });
                     const data = await res.json();
                     if (!data.status) throw new Error(data.message || 'Gagal');
-                    const s = data.result;
+                    const s = data.data;
                     box.innerHTML = `
                         <img src="${escapeHTML(s.cover)}" style="width:100px; height:100px; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
                         <b>${escapeHTML(s.title)}</b><br>
                         <p style="font-size:11px; opacity:0.8;">${escapeHTML(s.artist)} • ${escapeHTML(s.album || '-')}</p>
-                        <audio src="${escapeHTML(s.download)}" controls style="width:100%; margin-top:10px;"></audio>
-                        <a href="${escapeHTML(s.download)}" class="action-btn" style="margin-top:10px; display:block; text-decoration:none;" download>Simpan MP3</a>
+                        <audio src="${escapeHTML(s.download_mp3)}" controls style="width:100%; margin-top:10px;"></audio>
+                        <a href="${escapeHTML(s.download_mp3)}" class="action-btn" style="margin-top:10px; display:block; text-decoration:none;" download>Simpan MP3</a>
                     `;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Download');
@@ -1333,7 +1333,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Lacak');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-tools`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ path: 'iplookup', params: { ip: ip } })
                     });
@@ -1379,7 +1379,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const base64Image = e.target.result;
 
                         try {
-                            const res = await fetch(`https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-tools`, {
+                            const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools`, {
                                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ path: 'removebg', params: { image: base64Image } })
                             });
@@ -1420,9 +1420,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Berpikir...');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/chat-ai`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ provider: 'sairi', endpoint: 'ai/deepseek', params: { text: text } })
+                        body: JSON.stringify({ text: text })
                     });
                     const data = await res.json();
                     if (!data.status) throw new Error(data.message || 'Gagal memproses AI');
@@ -1449,9 +1449,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Membuat...');
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/chat-ai`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ provider: 'sairi', endpoint: 'ai/text2img', params: { prompt: prompt } })
+                        body: JSON.stringify({ prompt: prompt, type: 'image' })
                     });
                     
                     const contentType = res.headers.get('content-type');
