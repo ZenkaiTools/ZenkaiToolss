@@ -1790,25 +1790,26 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // FUNGSI BACA KOMIK (SCRAPING LANGSUNG)
+    // FUNGSI BACA KOMIK (SCRAPING VIA SUPABASE)
     // =========================================
     window.bacaKomik = async (title, slug) => {
         const box = document.getElementById('komik-res');
         box.innerHTML = '<div class="loader"></div><p style="text-align:center; font-size:12px;">Mengambil gambar komik...</p>';
         
         try {
-            // 1. Tembak link komik asli lewat Proxy biar nggak kena blokir CORS
-            const targetUrl = `https://komikindo.ch/${slug}/`;
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+            // 1. Tembak Edge Function Supabase lu sendiri (JAUH LEBIH CEPAT)
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-scrape`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug: slug })
+            });
+            const data = await res.json();
             
-            const response = await fetch(proxyUrl);
-            const data = await response.json();
-            
-            if (!data.contents) throw new Error('Gagal mengambil data dari server komik.');
+            if (!data.status || !data.html) throw new Error('Gagal mengambil data dari server komik.');
 
-            // 2. Parse HTML-nya pake DOMParser
+            // 2. Parse HTML-nya
             const parser = new DOMParser();
-            const doc = parser.parseFromString(data.contents, "text/html");
+            const doc = parser.parseFromString(data.html, "text/html");
             
             // 3. Cari gambar panel di dalam div id="readerarea"
             const imgElements = doc.querySelectorAll('#readerarea img');
@@ -1821,7 +1822,7 @@ document.addEventListener('DOMContentLoaded', () => {
             imgElements.forEach(img => {
                 const src = img.getAttribute('src');
                 if (src && !src.includes('blank.png') && !src.includes('loading')) {
-                    // Pakai proxy wsrv.nl biar gambar dijamin muncul di web kita
+                    // Tetep pakai proxy wsrv.nl buat render gambar biar gak kena hotlink block
                     const proxiedImg = `https://wsrv.nl/?url=${encodeURIComponent(src)}`;
                     html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy">`;
                 }
