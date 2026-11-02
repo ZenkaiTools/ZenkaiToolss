@@ -55,6 +55,24 @@
         </div>
     </div>
 
+    <!-- FALLBACK VIDEO ERROR: auto-skip jika video gagal load -->
+    <script>
+        (function(){
+            var v = document.getElementById('welcome-video');
+            if (!v) return;
+            v.addEventListener('error', function(){
+                if (typeof window.masukKeWeb === 'function') window.masukKeWeb();
+            });
+            // Fallback: jika video stuck loading > 6 detik, auto skip
+            var t = setTimeout(function(){
+                if (v.readyState < 2 && typeof window.masukKeWeb === 'function') {
+                    window.masukKeWeb();
+                }
+            }, 6000);
+            v.addEventListener('canplay', function(){ clearTimeout(t); });
+        })();
+    </script>
+
     <!-- ========================================= -->
     <!-- 2. LAYAR MAINTENANCE - CYBERPUNK          -->
     <!-- ========================================= -->
@@ -63,7 +81,7 @@
         <div style="position:absolute; inset:0; background-image: linear-gradient(rgba(255, 51, 51, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 51, 51, 0.05) 1px, transparent 1px); background-size: 40px 40px; z-index:0;"></div>
         
         <div style="background:rgba(24, 24, 27, 0.9); border:1px solid rgba(255, 51, 51, 0.4); padding:40px 30px; border-radius:16px; max-width:400px; width:100%; box-shadow:0 0 50px rgba(255, 51, 51, 0.15), inset 0 0 20px rgba(255, 51, 51, 0.05); position:relative; z-index:1;">
-            <div style="font-size:60px; margin-bottom:20px; color:#ff3333; text-shadow:0 0 20px rgba(255,51,51,0.5); line-height:1; animation:glitch 2s infinite;"></div>
+            <div style="font-size:60px; margin-bottom:20px; color:#ff3333; text-shadow:0 0 20px rgba(255,51,51,0.5); line-height:1; animation:glitch 2s infinite;"></div>
             <h1 style="font-family:var(--font-head); font-size:26px; color:#ff3333; margin-bottom:15px; letter-spacing:2px; text-transform:uppercase;">SYSTEM OFFLINE</h1>
             <p style="font-size:13px; line-height:1.6; color:#a1a1aa; margin-bottom:30px; font-family:monospace;">Server sedang dalam pemeliharaan rutin untuk optimalisasi. Silakan kembali beberapa saat lagi.</p>
             
@@ -386,7 +404,7 @@
         </div>
 
         <div class="tools-section" style="padding:20px; margin-bottom:15px;">
-            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px; color:#ff3333;"> Penafian & Keamanan (Disclaimer)</h3>
+            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px; color:#ff3333;"> Penafian & Keamanan (Disclaimer)</h3>
             <p style="font-size:11px; line-height:1.6; opacity:0.8; margin-bottom:10px;">
                 Zenkai Tools tidak berafiliasi dengan TikTok, Instagram, Facebook, Pinterest, atau Roblox. Segala konten yang diunduh melalui tool ini adalah tanggung jawab pengguna. Mohon gunakan dengan bijak dan hormati hak cipta.
             </p>
@@ -436,7 +454,6 @@
         <div class="bottom-sheet-content" id="modal-content"></div>
     </div>
 
-    <!-- SCRIPT JS -->
     <!-- CUSTOM MODAL NOTIFIKASI -->
     <div id="custom-alert" style="position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:1000001; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(5px);">
         <div style="background:var(--card-bg); border:3px solid var(--border); border-radius:12px; padding:25px; width:100%; max-width:320px; text-align:center; box-shadow:var(--shadow);">

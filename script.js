@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
 
+    // Daftar tool "Coming Soon" — dipakai di banyak tempat (deduplikasi)
+    const COMING_SOON_TOOLS = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
+
     const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     }[c]));
@@ -75,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.style.overflow = '';
             }, 800);
         }
+        // Trigger popup WA setelah splash hilang
+        setTimeout(showWaPopupOnce, 1500);
     };
 
     window.aktifkanSuara = () => {
@@ -90,6 +95,40 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeVideo.play().catch(() => {});
         welcomeVideo.addEventListener('ended', () => {
             window.masukKeWeb();
+        });
+    }
+
+    // =========================================
+    // 2b. POPUP WHATSAPP CHANNEL
+    // =========================================
+    const waPopup = document.getElementById('wa-popup');
+    const WA_POPUP_KEY = 'zenkai_wa_popup_shown';
+
+    window.closeWaPopup = () => {
+        if (!waPopup) return;
+        waPopup.classList.remove('active');
+        // Tandai sudah ditampilkan hari ini (biar tidak spam)
+        try {
+            localStorage.setItem(WA_POPUP_KEY, Date.now().toString());
+        } catch(e) {}
+    };
+
+    function showWaPopupOnce() {
+        if (!waPopup) return;
+
+        // Cek apakah sudah pernah tampil dalam 24 jam terakhir
+        const lastShown = parseInt(localStorage.getItem(WA_POPUP_KEY) || '0');
+        const ONE_DAY = 24 * 60 * 60 * 1000;
+        if (Date.now() - lastShown < ONE_DAY) return;
+
+        // Tampilkan popup
+        waPopup.classList.add('active');
+    }
+
+    // Klik overlay untuk close popup
+    if (waPopup) {
+        waPopup.addEventListener('click', (e) => {
+            if (e.target.id === 'wa-popup') window.closeWaPopup();
         });
     }
 
@@ -214,7 +253,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.toggleMusic = () => {
         if (!bgm) return;
         if (!isPlaying) {
-            if (!bgm.src) loadSong(0);
+            // loadSong(0) sudah dipanggil saat init di bawah, jadi guard
+            if (!bgm.currentSrc && !bgm.src) loadSong(0);
             bgm.volume = 0.5;
             bgm.play().then(() => {
                 isPlaying = true;
@@ -246,15 +286,28 @@ document.addEventListener('DOMContentLoaded', () => {
         loadSong(0);
     }
 
+    // Reset cache: PERTAHANKAN preferensi (tema & owner token)
     window.resetData = () => {
         tampilkanAlert(
             "Hapus Cache",
-            "Yakin mau hapus cache dan muat ulang web?",
+            "Yakin mau hapus cache dan muat ulang web? Tema & login owner tetap tersimpan.",
             [
                 { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                { label: "Hapus", action: "sessionStorage.clear(); localStorage.clear(); location.reload();", type: "primary" }
+                { label: "Hapus", action: "hapusCacheAman()", type: "primary" }
             ]
         );
+    };
+
+    window.hapusCacheAman = () => {
+        const keep = {
+            zenkai_theme: localStorage.getItem('zenkai_theme'),
+            zenkai_owner_token: localStorage.getItem(OWNER_TOKEN_KEY)
+        };
+        sessionStorage.clear();
+        localStorage.clear();
+        if (keep.zenkai_theme) localStorage.setItem('zenkai_theme', keep.zenkai_theme);
+        if (keep.zenkai_owner_token) localStorage.setItem(OWNER_TOKEN_KEY, keep.zenkai_owner_token);
+        location.reload();
     };
 
     // =========================================
@@ -276,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             if (modal && modal.classList.contains('active')) closeModal();
-            if (waPopup && waPopup.classList.contains('active')) closeWaPopup();
+            if (waPopup && waPopup.classList.contains('active')) window.closeWaPopup();
         }
     });
 
@@ -301,14 +354,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 allBtn.classList.add('active');
             }
             document.querySelectorAll('.tool-card').forEach(card => {
-                const title = card.querySelector('h4').innerText.toLowerCase();
+                const titleEl = card.querySelector('h4');
+                const title = titleEl ? titleEl.innerText.toLowerCase() : '';
                 card.style.display = title.includes(term) ? 'flex' : 'none';
             });
         });
     }
 
-    const comingSoonList = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
-    comingSoonList.forEach(toolName => {
+    // Tandai "SOON" SEKALI SAJA di sini (tanpa duplikasi di openTool)
+    COMING_SOON_TOOLS.forEach(toolName => {
         const card = document.querySelector(`.tool-card[onclick="openTool('${toolName}')"]`);
         if (card) card.classList.add('soon');
     });
@@ -326,7 +380,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.status && result.data) applySettings(result.data);
         } catch (e) {}
     }
-    setInterval(fetchSettings, 15000); fetchSettings();
+    // Polling 60 detik (sebelumnya 15 detik)
+    setInterval(fetchSettings, 60000);
+    fetchSettings();
 
     function applySettings(setting) {
         const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
@@ -335,37 +391,37 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!window.mtTimer && !sessionStorage.getItem('maintenance_triggered')) {
                 window.mtTimer = true;
                 let cd = 10;
-                
+
                 const w = document.createElement('div');
-                w.id = 'mt-warn'; 
+                w.id = 'mt-warn';
                 w.style = 'position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); color:#fff; z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-family:var(--font-main); padding:20px;';
-                
+
                 w.innerHTML = `
                     <div style="background:rgba(24, 24, 27, 0.95); border:1px solid rgba(255, 51, 51, 0.5); padding:30px 20px; border-radius:12px; max-width:320px; width:100%; box-shadow:0 0 40px rgba(255, 51, 51, 0.2); text-align:center; position:relative; overflow:hidden;">
                         <div style="position:absolute; top:0; left:0; width:100%; height:2px; background:#ff3333; box-shadow:0 0 10px #ff3333; animation:scanline 2s linear infinite;"></div>
-                        
+
                         <h2 style="color:#ff3333; margin-bottom:5px; font-family:monospace; font-size:18px; letter-spacing:2px; text-shadow:0 0 10px rgba(255,51,51,0.5);">SYSTEM LOCK</h2>
                         <p style="font-size:11px; color:#a1a1aa; margin-bottom:20px; font-family:monospace;">SHUTDOWN IN <b id="mt-cd" style="color:#ff3333; font-size:18px;">10</b> SECONDS</p>
-                        
+
                         <div style="width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden;">
                             <div id="mt-bar" style="height:100%; width:0%; background:#ff3333; transition:width 1s linear; box-shadow:0 0 10px #ff3333;"></div>
                         </div>
                     </div>
                 `;
                 document.body.appendChild(w);
-                
+
                 setTimeout(() => { const bar = document.getElementById('mt-bar'); if(bar) bar.style.width = '100%'; }, 50);
 
                 const int = setInterval(() => {
-                    cd--; 
-                    const el = document.getElementById('mt-cd'); 
+                    cd--;
+                    const el = document.getElementById('mt-cd');
                     if (el) el.innerText = cd;
-                    
-                    if (cd <= 0) { 
-                        clearInterval(int); 
-                        w.remove(); 
-                        const ms = document.getElementById('maintenance-screen'); 
-                        if (ms) ms.style.display = 'flex'; 
+
+                    if (cd <= 0) {
+                        clearInterval(int);
+                        w.remove();
+                        const ms = document.getElementById('maintenance-screen');
+                        if (ms) ms.style.display = 'flex';
                         sessionStorage.setItem('maintenance_triggered', 'true');
                     }
                 }, 1000);
@@ -382,13 +438,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (setting.site_title) { const t = document.querySelector('.logo-text h1'); if (t) t.innerText = setting.site_title; }
-        
+
         const bc = document.getElementById('broadcast-banner');
         if (bc) {
-            if (setting.broadcast_text) { 
-                const bt = document.getElementById('broadcast-text'); 
-                if (bt) bt.innerText = setting.broadcast_text; 
-                bc.style.display = 'block'; 
+            if (setting.broadcast_text) {
+                const bt = document.getElementById('broadcast-text');
+                if (bt) bt.innerText = setting.broadcast_text;
+                bc.style.display = 'block';
             } else bc.style.display = 'none';
         }
 
@@ -402,13 +458,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const dTools = setting.disabled_tools ? setting.disabled_tools.split(',') : [];
         window.currentDisabledTools = dTools;
 
+        // Hanya tambah/hapus .maintenance-mode — JANGAN sentuh .soon
         document.querySelectorAll('.tool-card').forEach(c => {
             const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
-            if (m && dTools.includes(m[1])) { c.classList.add('maintenance-mode'); } 
-            else { c.classList.remove('maintenance-mode'); }
+            if (!m) return;
+            const toolName = m[1];
+
+            if (dTools.includes(toolName)) {
+                c.classList.add('maintenance-mode');
+            } else {
+                c.classList.remove('maintenance-mode');
+            }
         });
     }
-    
+
     // =========================================
     // 10. PINTU RAHASIA OWNER
     // =========================================
@@ -459,8 +522,20 @@ document.addEventListener('DOMContentLoaded', () => {
         `);
     }
 
+    // Rate-limit login owner (client-side, tambahan dari server)
+    let loginAttempts = 0;
+    let loginLockUntil = 0;
+
     window.verifikasiOwner = async () => {
+        const now = Date.now();
+        if (now < loginLockUntil) {
+            const sisa = Math.ceil((loginLockUntil - now) / 1000);
+            return showToast(`Terlalu banyak percobaan. Coba lagi dalam ${sisa}s.`);
+        }
+
         const pass = document.getElementById('owner-pass').value;
+        if (!pass) return showToast('Masukkan passcode!');
+
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
                 method: 'POST',
@@ -470,8 +545,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
 
             if (data.status && data.owner_token) {
+                loginAttempts = 0;
                 localStorage.setItem(OWNER_TOKEN_KEY, data.owner_token);
-                document.getElementById('owner-modal').remove();
+                document.getElementById('owner-modal')?.remove();
                 showToast("Akses Owner Diberikan!");
 
                 const navOwner = document.getElementById('nav-owner');
@@ -483,17 +559,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.tampilkanPanelRahasia();
                 }, 500);
             } else {
-                showToast("Passcode Salah!");
+                loginAttempts++;
+                if (loginAttempts >= 3) {
+                    loginLockUntil = Date.now() + 60000;
+                    loginAttempts = 0;
+                    showToast("Terlalu banyak salah. Tunggu 60 detik.");
+                } else {
+                    showToast(`Passcode Salah! (${3 - loginAttempts}x lagi)`);
+                }
             }
         } catch(e) {
             showToast("Error koneksi ke server.");
         }
     };
 
+    // Session ID lebih aman (tambah random suffix)
     let mySession = localStorage.getItem('zenkai_sess');
-    if (!mySession) { mySession = 'sess_' + Date.now(); localStorage.setItem('zenkai_sess', mySession); }
+    if (!mySession) {
+        mySession = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+        localStorage.setItem('zenkai_sess', mySession);
+    }
     setInterval(() => {
-        fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'heartbeat', session_id: mySession }) }).catch(()=>{});
+        fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'heartbeat', session_id: mySession })
+        }).catch(()=>{});
     }, 30000);
 
     // =========================================
@@ -502,7 +593,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.tampilkanPanelRahasia = async () => {
         const container = document.getElementById('owner-page-content');
         if (!container) return;
-        
+
         container.innerHTML = '<div class="loader"></div>';
 
         let set = { site_title: '', broadcast_text: '', is_maintenance: false, disabled_pages: '', disabled_tools: '' };
@@ -523,7 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <input type="checkbox" class="tool-chk" value="${t}" ${disabledToolsArr.includes(t) ? 'checked' : ''} style="width:18px; height:18px; accent-color:var(--primary); cursor:pointer;">
             </label>
         `).join('');
-        
+
         let pagesHtml = listPages.map(p => `
             <label style="display:flex; align-items:center; justify-content:space-between; background:var(--card-bg); padding:10px 12px; border-radius:8px; border:2px solid var(--border); cursor:pointer; font-size:11px; font-weight:bold; transition:0.2s;">
                 <span>${p.toUpperCase()}</span>
@@ -533,13 +624,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:20px;">
-                
+
                 <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
                     <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px; display:flex; align-items:center; gap:8px;">⚙️ Pengaturan Umum</h3>
-                    
+
                     <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Judul Web</label>
                     <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:12px; margin-top:5px; margin-bottom:15px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
-                    
+
                     <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Broadcast Banner</label>
                     <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan" style="width:100%; padding:12px; margin-top:5px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
                 </div>
@@ -655,8 +746,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal.classList.add('active');
 
-        const comingSoonTools = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
-        if (comingSoonTools.includes(tool)) {
+        if (COMING_SOON_TOOLS.includes(tool)) {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Coming Soon</h3>
@@ -672,20 +762,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="background:var(--bg); min-height: 70vh; padding-bottom: 20px;">
                     <h3 style="font-family:var(--font-head); color:var(--primary); font-size:26px; margin-bottom:5px; text-align:center;">KATALOG KOMIK</h3>
                     <p style="text-align:center; font-size:11px; opacity:0.7; margin-bottom:20px;">Sumber: MangaDex (Bahasa Indonesia)</p>
-                    
+
                     <!-- Search Bar -->
                     <div style="position:relative; margin-bottom:20px;">
                         <input type="text" id="komik-q" placeholder="Cari judul manga..." style="width:100%; padding:12px 12px 12px 40px; border:2px solid var(--border); border-radius:30px; background:var(--card-bg); color:var(--text); font-size:14px; outline:none;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </div>
-                    
+
                     <div id="komik-res"></div>
                 </div>
             `;
-            
+
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
-            
+
             // Fungsi Proxy Gambar
             const getProxyUrl = (url) => {
                 if (!url) return '';
@@ -700,12 +790,39 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ action: 'search', q: query || '' })
                     });
                     const data = await res.json();
-                    
+
                     if (!data.data || data.data.length === 0) {
                         box.innerHTML = '<p class="error-msg">Komik tidak ditemukan. Coba kata kunci lain.</p>';
                         return;
                     }
-                    
+
+                    // Render card — pakai data-* + event delegation (AMAN dari XSS)
+                    const renderCard = (manga, size) => {
+                        const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
+                        const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
+                        const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
+                        const coverUrl = getProxyUrl(rawCoverUrl);
+                        const id = escapeHTML(manga.id);
+                        const t = escapeHTML(title);
+
+                        if (size === 'lg') {
+                            return `
+                                <div class="komik-card-lg" data-id="${id}" data-title="${t}" style="min-width:120px; max-width:120px; cursor:pointer;">
+                                    <div style="width:120px; height:170px; border-radius:10px; overflow:hidden; border:2px solid var(--border); background:#000;">
+                                        <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                    </div>
+                                    <p style="font-size:11px; font-weight:bold; margin-top:5px; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${t}</p>
+                                </div>`;
+                        }
+                        return `
+                            <div class="komik-card-sm" data-id="${id}" data-title="${t}" style="cursor:pointer; text-align:center;">
+                                <div style="width:100%; aspect-ratio:2/3; border-radius:8px; overflow:hidden; border:2px solid var(--border); background:#000;">
+                                    <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                </div>
+                                <p style="font-size:10px; font-weight:bold; margin-top:5px; line-height:1.1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${t}</p>
+                            </div>`;
+                    };
+
                     let html = `
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                             <h4 style="font-family:var(--font-head); font-size:16px;">Trending & Rekomendasi</h4>
@@ -713,49 +830,29 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none; margin-bottom:20px;">
                     `;
-                    
-                    data.data.slice(0, 10).forEach(manga => {
-                        const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
-                        const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
-                        const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
-                        const coverUrl = getProxyUrl(rawCoverUrl);
-                        
-                        html += `
-                            <div style="min-width:120px; max-width:120px; cursor:pointer;" onclick="bukaChapterKomik('${manga.id}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
-                                <div style="width:120px; height:170px; border-radius:10px; overflow:hidden; border:2px solid var(--border); background:#000;">
-                                    <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;">
-                                </div>
-                                <p style="font-size:11px; font-weight:bold; margin-top:5px; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(title)}</p>
-                            </div>
-                        `;
-                    });
+                    data.data.slice(0, 10).forEach(m => { html += renderCard(m, 'lg'); });
                     html += `</div>`;
-                    
+
                     html += `<h4 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;">Semua Hasil</h4>`;
                     html += `<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">`;
-                    data.data.forEach(manga => {
-                        const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
-                        const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
-                        const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
-                        const coverUrl = getProxyUrl(rawCoverUrl);
-                        
-                        html += `
-                            <div style="cursor:pointer; text-align:center;" onclick="bukaChapterKomik('${manga.id}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
-                                <div style="width:100%; aspect-ratio:2/3; border-radius:8px; overflow:hidden; border:2px solid var(--border); background:#000;">
-                                    <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;">
-                                </div>
-                                <p style="font-size:10px; font-weight:bold; margin-top:5px; line-height:1.1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(title)}</p>
-                            </div>
-                        `;
-                    });
+                    data.data.forEach(m => { html += renderCard(m, 'sm'); });
                     html += `</div>`;
-                    
+
                     box.innerHTML = html;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+
+                    // EVENT DELEGATION — aman dari XSS
+                    box.querySelectorAll('.komik-card-lg, .komik-card-sm').forEach(el => {
+                        el.addEventListener('click', () => {
+                            window.bukaChapterKomik(el.dataset.id, el.dataset.title);
+                        });
+                    });
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
             };
-            
-            loadKomik(''); 
-            
+
+            loadKomik('');
+
             let timeout = null;
             input.addEventListener('input', (e) => {
                 clearTimeout(timeout);
@@ -838,9 +935,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ url: url })
                     });
                     const data = await res.json();
-                    
+
                     if (!data.status) throw new Error(data.message || 'Postingan tidak ditemukan');
-                    
+
                     let htmlContent = '';
                     const mediaArray = data.result?.media || data.media || [];
                     mediaArray.forEach((media, index) => {
@@ -882,16 +979,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            provider: 'sairi', 
-                            endpoint: 'download/facebook', 
-                            params: { url: url } 
+                        body: JSON.stringify({
+                            provider: 'sairi',
+                            endpoint: 'download/facebook',
+                            params: { url: url }
                         })
                     });
                     const data = await res.json();
-                    
+
                     if (!data.status) throw new Error(data.message || 'Video tidak ditemukan');
-                    
+
                     const vidUrl = data.result.hd || data.result.video;
                     box.innerHTML = `
                         <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(vidUrl)}" controls></video>
@@ -1000,7 +1097,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>YouTube DL</h3>
                 <span class="desc-text">Pilih mau download Audio (MP3) atau Video (MP4).</span>
                 <input type="text" id="yt-url" placeholder="Paste link YouTube...">
-                
+
                 <!-- DESAIN BARU: Tombol Pilihan Kustom -->
                 <div style="display:flex; gap:10px; margin-bottom:15px;">
                     <button id="btn-type-mp3" onclick="pilihTipeYt('mp3')" class="action-btn" style="flex:1; background:var(--primary); color:#000; border:2px solid var(--border); box-shadow:0 4px 0 var(--border); margin:0;">🎵 MP3</button>
@@ -1010,7 +1107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button class="action-btn" id="btn-dl-yt">Proses</button>
                 <div id="yt-result"></div>
             `;
-            
+
             let tipeTerpilih = 'mp3'; // Default
             window.pilihTipeYt = (tipe) => {
                 tipeTerpilih = tipe;
@@ -1030,22 +1127,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 const url = document.getElementById('yt-url').value.trim();
                 const box = document.getElementById('yt-result');
                 if (!url) return showToast('Masukkan link YouTube dulu!');
-                
+
                 setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
-                
+
                 try {
                     // Tembak ke Edge Function zen-youtube
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-youtube`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ type: tipeTerpilih, url: url })
                     });
-                    
+
                     const data = await res.json();
                     if (!data.status) throw new Error(data.message || 'Gagal download');
-                    
+
                     const result = data.result;
-                    
+
                     if (tipeTerpilih === 'mp3') {
                         box.innerHTML = `
                             <img src="${escapeHTML(result.thumbnail)}" style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
@@ -1060,8 +1157,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP4</a>
                         `;
                     }
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
                 setBtnLoading(btn, false, 'Proses');
             };
@@ -1660,15 +1757,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ prompt: prompt, type: 'image' })
                     });
-                    
-                    const contentType = res.headers.get('content-type');
-                    if(contentType && contentType.includes('image/')) {
+
+                    if (!res.ok) {
+                        let errMsg = `HTTP ${res.status}`;
+                        try { const j = await res.json(); errMsg = j.message || errMsg; } catch {}
+                        throw new Error(errMsg);
+                    }
+
+                    const contentType = res.headers.get('content-type') || '';
+                    if (contentType.includes('image/')) {
                         const blob = await res.blob();
                         const imgUrl = URL.createObjectURL(blob);
-                        box.innerHTML = `<img src="${imgUrl}" style="width:100%; border-radius:8px; border:3px solid var(--border);">`;
+                        box.innerHTML = `<img src="${imgUrl}" style="width:100%; border-radius:8px; border:3px solid var(--border);" onload="URL.revokeObjectURL(this.src)">`;
                     } else {
                         const data = await res.json();
-                        throw new Error(data.message || 'Gagal membuat gambar');
+                        if (data.image_url) {
+                            box.innerHTML = `<img src="${escapeHTML(data.image_url)}" style="width:100%; border-radius:8px; border:3px solid var(--border);">`;
+                        } else {
+                            throw new Error(data.message || 'Gagal membuat gambar');
+                        }
                     }
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Generate Gambar');
@@ -1696,16 +1803,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ action: 'chapters', mangaId: mangaId })
             });
             const data = await res.json();
-            
+
             if (!data.data || data.data.length === 0) throw new Error('Belum ada chapter Indonesia');
-            
+
             let html = `<h4 style="margin-bottom:10px; color:var(--primary);">${escapeHTML(title)}</h4>`;
             html += `<div style="max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;">`;
             data.data.forEach(ch => {
                 const chNum = ch.attributes.chapter || '?';
                 html += `
-                    <button class="action-btn press" style="margin-bottom:5px; font-size:12px; padding:10px;" onclick="bacaGambarKomik('${ch.id}', '${chNum}')">
-                        Chapter ${chNum}
+                    <button class="action-btn press" style="margin-bottom:5px; font-size:12px; padding:10px;" onclick="bacaGambarKomik('${escapeHTML(ch.id)}', '${escapeHTML(chNum)}')">
+                        Chapter ${escapeHTML(chNum)}
                     </button>
                 `;
             });
@@ -1715,33 +1822,35 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.bacaGambarKomik = async (chapterId, chNum) => {
-    const box = document.getElementById('komik-res');
-    box.innerHTML = '<div class="loader"></div>';
-    try {
-        const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'images', chapterId: chapterId })
-        });
-        const data = await res.json();
-        
-        // Kalo API MangaDex ngasih struktur beda, kita handle
-        const baseUrl = data.baseUrl;
-        const hash = data.chapter?.hash;
-        const images = data.chapter?.data;
+        const box = document.getElementById('komik-res');
+        box.innerHTML = '<div class="loader"></div>';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'images', chapterId: chapterId })
+            });
+            const data = await res.json();
 
-        if (!baseUrl || !hash || !images) throw new Error('Gagal mengambil gambar chapter');
+            const baseUrl = data.baseUrl;
+            const hash = data.chapter?.hash;
+            const images = data.chapter?.data;
 
-        let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${chNum}</h4>`;
-        html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
-        images.forEach(img => {
-            const imgUrl = `${baseUrl}/data/${hash}/${img}`;
-            html += `<img src="${imgUrl}" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
-        });
-        html += `</div>`;
-        
-        html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
-        box.innerHTML = html;
-    } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-};
+            if (!baseUrl || !hash || !images) throw new Error('Gagal mengambil gambar chapter');
 
-}); // <- INI PENUTUP DOMContentLoaded, JANGAN DIHAPUS
+            // PROXY GAMBAR — konsisten dengan search
+            const proxyImg = (u) => `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(u)}`;
+
+            let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${escapeHTML(chNum)}</h4>`;
+            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+            images.forEach(img => {
+                const rawUrl = `${baseUrl}/data/${hash}/${img}`;
+                html += `<img src="${proxyImg(rawUrl)}" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
+            });
+            html += `</div>`;
+
+            html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
+            box.innerHTML = html;
+        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+    };
+
+}); // <- PENUTUP DOMContentLoaded, JANGAN DIHAPUS

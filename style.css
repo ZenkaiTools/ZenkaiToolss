@@ -281,5 +281,26 @@ input:focus { border-color: var(--primary) !important; box-shadow: 0 0 15px rgba
 /* Animasi Teks Berjalan (Marquee) */
 @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-/* Animasi Masuk Halaman Login */
+/* Animasi Masuk Halaman Login (SATU-SATUNYA definisi slideUp) */
 @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+/* =========================================
+   FIX BENTROK: SOON + MAINTENANCE
+   ========================================= */
+.tool-card.soon.maintenance-mode h4::after { content: 'SOON'; background: #636e72 !important; }
+.tool-card.soon.maintenance-mode h4 { color: #636e72 !important; }
+.tool-card.soon.maintenance-mode .t-icon { background: #b2bec3 !important; }
+
+/* =========================================
+   KOMIK CARD (hasil refactor event delegation)
+   ========================================= */
+.komik-card-lg:active, .komik-card-sm:active {
+    transform: scale(0.96);
+    transition: transform 0.1s;
+}
+.komik-card-lg img, .komik-card-sm img {
+    transition: opacity 0.2s;
+}
+.komik-card-lg img[loading], .komik-card-sm img[loading] {
+    opacity: 0.5;
+}
