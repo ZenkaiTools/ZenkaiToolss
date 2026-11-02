@@ -365,12 +365,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
         const welcome = document.getElementById('welcome-username');
         if (welcome) welcome.innerText = savedUser;
-        // AWAL PATCH 3A: MUNCULIN MENU OWNER
-if (localStorage.getItem(OWNER_SESSION_KEY) === 'true') {
-    const navOwner = document.getElementById('nav-owner');
-    if (navOwner) navOwner.style.display = 'flex';
-}
-// AKHIR PATCH 3A
+        if (localStorage.getItem(OWNER_SESSION_KEY) === 'true') {
+            const navOwner = document.getElementById('nav-owner');
+            if (navOwner) navOwner.style.display = 'flex';
+        }
     } else {
         document.body.style.overflow = 'hidden';
     }
@@ -421,99 +419,87 @@ if (localStorage.getItem(OWNER_SESSION_KEY) === 'true') {
     };
 
     async function eksekusiAuth(user, pass, mode) {
-    const btnSubmit = document.getElementById('btn-submit');
-    btnSubmit.disabled = true;
-    btnSubmit.innerText = 'Memproses...';
+        const btnSubmit = document.getElementById('btn-submit');
+        btnSubmit.disabled = true;
+        btnSubmit.innerText = 'Memproses...';
 
-    try {
-        // --- MULAI BLOK TIMEOUT ---
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 detik
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-        const res = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: mode, username: user, password: pass }),
-            signal: controller.signal // <--- Masukin sinyal timeout
-        });
-        
-        clearTimeout(timeoutId); // Matikan timeout kalau server jawab
-        // --- SELESAI BLOK TIMEOUT ---
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-auth`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: mode, username: user, password: pass }),
+                signal: controller.signal
+            });
 
-        let data;
-        try { data = await res.json(); } catch { throw new Error('Respons server tidak valid'); }
+            clearTimeout(timeoutId);
 
-        if (!data.status) {
-            const pesan = (data.message || '').toLowerCase();
-            
-            const isUsernameTaken = pesan.includes('sudah') || pesan.includes('terdaftar') || pesan.includes('dipakai') || pesan.includes('exists') || pesan.includes('taken') || pesan.includes('already');
-            const isWrongCreds = pesan.includes('salah') || pesan.includes('tidak ditemukan') || pesan.includes('invalid') || pesan.includes('wrong') || pesan.includes('not found') || pesan.includes('incorrect');
+            let data;
+            try { data = await res.json(); } catch { throw new Error('Respons server tidak valid'); }
 
-            if (mode === 'register' && isUsernameTaken) {
-                tampilkanAlert(
-                    "Username Sudah Dipakai",
-                    `Username "${user}" sudah terdaftar.\n\nSilakan gunakan username lain, atau masuk kalau itu akun kamu.`,
-                    [
-                        { label: "Coba Lagi", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                        { label: "Masuk", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }
-                    ]
-                );
-            } else if (mode === 'login' && isWrongCreds) {
-                tampilkanAlert(
-                    "Login Gagal",
-                    "Username atau password yang kamu masukkan salah.\n\nCek lagi huruf besar/kecilnya, atau daftar kalau belum punya akun.",
-                    [
-                        { label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                        { label: "Daftar", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('register')", type: "primary" }
-                    ]
-                );
-            } else {
-                tampilkanAlert(
-                    mode === 'register' ? "Pendaftaran Gagal" : "Login Gagal",
-                    data.message || "Terjadi kesalahan. Coba lagi.",
-                    [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]
-                );
+            if (!data.status) {
+                const pesan = (data.message || '').toLowerCase();
+                const isUsernameTaken = pesan.includes('sudah') || pesan.includes('terdaftar') || pesan.includes('dipakai') || pesan.includes('exists') || pesan.includes('taken') || pesan.includes('already');
+                const isWrongCreds = pesan.includes('salah') || pesan.includes('tidak ditemukan') || pesan.includes('invalid') || pesan.includes('wrong') || pesan.includes('not found') || pesan.includes('incorrect');
+
+                if (mode === 'register' && isUsernameTaken) {
+                    tampilkanAlert("Username Sudah Dipakai",
+                        `Username "${user}" sudah terdaftar.\n\nSilakan gunakan username lain, atau masuk kalau itu akun kamu.`,
+                        [
+                            { label: "Coba Lagi", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+                            { label: "Masuk", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }
+                        ]
+                    );
+                } else if (mode === 'login' && isWrongCreds) {
+                    tampilkanAlert("Login Gagal",
+                        "Username atau password yang kamu masukkan salah.\n\nCek lagi huruf besar/kecilnya, atau daftar kalau belum punya akun.",
+                        [
+                            { label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+                            { label: "Daftar", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('register')", type: "primary" }
+                        ]
+                    );
+                } else {
+                    tampilkanAlert(mode === 'register' ? "Pendaftaran Gagal" : "Login Gagal",
+                        data.message || "Terjadi kesalahan. Coba lagi.",
+                        [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]
+                    );
+                }
+
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
+                return;
             }
 
-            btnSubmit.disabled = false;
-            btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
-            return;
+            if (mode === 'register') {
+                tampilkanAlert("Pendaftaran Berhasil",
+                    "Akun berhasil dibuat! Silakan masuk menggunakan username dan password barumu.",
+                    [{ label: "Masuk Sekarang", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }]
+                );
+                document.getElementById('auth-pass').value = '';
+            } else {
+                localStorage.setItem('zenkai_token', data.token);
+                localStorage.setItem('zenkai_username', data.username);
+
+                const gate = document.getElementById('auth-gate');
+                if (gate) gate.style.display = 'none';
+                document.body.style.overflow = '';
+
+                const welcome = document.getElementById('welcome-username');
+                if (welcome) welcome.innerText = data.username;
+
+                showToast(`Selamat datang, ${data.username}!`);
+            }
+
+        } catch (e) {
+            const msg = e.name === 'AbortError' ? 'Server lambat atau tidak merespon. Cek internet dan coba lagi.' : 'Gagal konek ke server.';
+            tampilkanAlert("Gagal Koneksi", msg, [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]);
         }
 
-        if (mode === 'register') {
-            tampilkanAlert(
-                "Pendaftaran Berhasil",
-                "Akun berhasil dibuat! Silakan masuk menggunakan username dan password barumu.",
-                [{ label: "Masuk Sekarang", action: "document.getElementById('custom-alert').style.display='none'; tampilkanForm('login')", type: "primary" }]
-            );
-            document.getElementById('auth-pass').value = '';
-        } else {
-            localStorage.setItem('zenkai_token', data.token);
-            localStorage.setItem('zenkai_username', data.username);
-            
-            const gate = document.getElementById('auth-gate');
-            if (gate) gate.style.display = 'none';
-            document.body.style.overflow = '';
-            
-            const welcome = document.getElementById('welcome-username');
-            if (welcome) welcome.innerText = data.username;
-            
-            showToast(`Selamat datang, ${data.username}!`);
-        }
-
-    } catch (e) {
-        // Kalau error-nya karena timeout
-        const msg = e.name === 'AbortError' ? 'Server lambat atau tidak merespon. Cek internet dan coba lagi.' : 'Gagal konek ke server.';
-        tampilkanAlert(
-            "Gagal Koneksi",
-            msg,
-            [{ label: "Tutup", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" }]
-        );
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
     }
-
-    btnSubmit.disabled = false;
-    btnSubmit.innerText = modeAuth === 'login' ? 'MASUK' : 'DAFTAR SEKARANG';
-}
 
     // =========================================
     // 9. SISTEM SETTINGS & MAINTENANCE
@@ -560,79 +546,103 @@ if (localStorage.getItem(OWNER_SESSION_KEY) === 'true') {
             else bc.style.display = 'none';
         }
 
-            const dPages = setting.disabled_pages ? setting.disabled_pages.split(',') : [];
-    document.querySelectorAll('.nav-item').forEach(b => {
-        const m = (b.getAttribute('onclick')||'').match(/switchPage\('(.*?)'/);
-        if (m && dPages.includes(m[1])) { b.style.opacity='0.3'; b.style.pointerEvents='none'; }
-        else { b.style.opacity='1'; b.style.pointerEvents='auto'; }
-    });
+        const dPages = setting.disabled_pages ? setting.disabled_pages.split(',') : [];
+        document.querySelectorAll('.nav-item').forEach(b => {
+            const m = (b.getAttribute('onclick')||'').match(/switchPage\('(.*?)'/);
+            if (m && dPages.includes(m[1])) { b.style.opacity='0.3'; b.style.pointerEvents='none'; }
+            else { b.style.opacity='1'; b.style.pointerEvents='auto'; }
+        });
 
-    // --- PATCH 3C FIXED: MAINTENANCE SERAGAM ---
-    const dTools = setting.disabled_tools ? setting.disabled_tools.split(',') : []; // <--- INI YANG KETINGGALAN
-    window.currentDisabledTools = dTools;
+        const dTools = setting.disabled_tools ? setting.disabled_tools.split(',') : [];
+        window.currentDisabledTools = dTools;
 
-    document.querySelectorAll('.tool-card').forEach(c => {
-        const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
-        if (m && dTools.includes(m[1])) {
-            c.classList.add('maintenance-mode');
-        } else {
-            c.classList.remove('maintenance-mode');
-        }
-    });
-    // --- END PATCH 3C FIXED ---
-}
-
-    // =========================================
-    // 10. PINTU RAHASIA OWNER
-    // =========================================
-    let clicks = 0;
-    document.querySelector('.logo-area')?.addEventListener('click', () => {
-        clicks++; setTimeout(() => { clicks = 0; }, 1000);
-        if (clicks === 5) { clicks = 0; bukaPintuRahasia(); }
-    });
-
-    function bukaPintuRahasia() {
-        if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
-        document.body.insertAdjacentHTML('beforeend', `
-            <div id="owner-modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:100000; display:flex; align-items:center; justify-content:center;">
-                <div style="background:var(--bg); padding:20px; border-radius:12px; border:3px solid var(--border); width:90%; max-width:340px; text-align:center;">
-                    <h2 style="color:var(--primary); font-family:var(--font-head); margin-bottom:15px;">SYSTEM OVERRIDE</h2>
-                    <input type="password" id="owner-pass" placeholder="Passcode" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:2px solid var(--border); background:var(--card-bg); color:var(--text); text-align:center;">
-                    <div style="display:flex; gap:10px;">
-                        <button onclick="document.getElementById('owner-modal').remove()" style="flex:1; padding:10px; background:#ff3333; color:#fff; border:none; border-radius:6px; font-weight:bold;">Batal</button>
-                        <button onclick="verifikasiOwner()" style="flex:1; padding:10px; background:var(--primary); color:#000; border:none; border-radius:6px; font-weight:bold;">Masuk</button>
-                    </div>
-                </div>
-            </div>
-        `);
+        document.querySelectorAll('.tool-card').forEach(c => {
+            const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
+            if (m && dTools.includes(m[1])) {
+                c.classList.add('maintenance-mode');
+            } else {
+                c.classList.remove('maintenance-mode');
+            }
+        });
     }
 
-    window.verifikasiOwner = async () => {
-        const pass = document.getElementById('owner-pass').value;
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass, action: 'login' }) });
-            const data = await res.json();
-            if (data.status) {
-                localStorage.setItem(OWNER_SESSION_KEY, 'true');
-                document.getElementById('owner-modal').remove();
-                showToast("Akses Owner Diberikan!");
-                setTimeout(() => { if (typeof tampilkanPanelRahasia === 'function') tampilkanPanelRahasia(); }, 500);
-            } else { showToast("Passcode Salah!"); }
-        } catch(e) { showToast("Error"); }
-    };
+    // ===== BATAS BAGIAN 1 =====
+    // =========================================
+// 10. PINTU RAHASIA OWNER
+// =========================================
+let clicks = 0;
+document.querySelector('.logo-area')?.addEventListener('click', () => {
+    clicks++; setTimeout(() => { clicks = 0; }, 1000);
+    if (clicks === 5) { clicks = 0; bukaPintuRahasia(); }
+});
 
-    let mySession = localStorage.getItem('zenkai_sess');
-    if (!mySession) { mySession = 'sess_' + Date.now(); localStorage.setItem('zenkai_sess', mySession); }
-    setInterval(() => {
-        fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'heartbeat', session_id: mySession }) }).catch(()=>{});
-    }, 30000);
+window.bukaPanelOwnerLangsung = () => {
+    if (localStorage.getItem(OWNER_SESSION_KEY) === 'true') {
+        if (typeof window.tampilkanPanelRahasia === 'function') {
+            window.tampilkanPanelRahasia();
+        } else {
+            showToast("Panel belum siap, coba refresh.");
+        }
+    } else {
+        bukaPintuRahasia();
+    }
+};
 
+function bukaPintuRahasia() {
+    if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
+    document.body.insertAdjacentHTML('beforeend', `
+        <div id="owner-modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:100000; display:flex; align-items:center; justify-content:center;">
+            <div style="background:var(--bg); padding:20px; border-radius:12px; border:3px solid var(--border); width:90%; max-width:340px; text-align:center;">
+                <h2 style="color:var(--primary); font-family:var(--font-head); margin-bottom:15px;">SYSTEM OVERRIDE</h2>
+                <input type="password" id="owner-pass" placeholder="Passcode" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:2px solid var(--border); background:var(--card-bg); color:var(--text); text-align:center;">
+                <div style="display:flex; gap:10px;">
+                    <button onclick="document.getElementById('owner-modal').remove()" style="flex:1; padding:10px; background:#ff3333; color:#fff; border:none; border-radius:6px; font-weight:bold;">Batal</button>
+                    <button onclick="verifikasiOwner()" style="flex:1; padding:10px; background:var(--primary); color:#000; border:none; border-radius:6px; font-weight:bold;">Masuk</button>
+                </div>
+            </div>
+        </div>
+    `);
+}
+
+window.verifikasiOwner = async () => {
+    const pass = document.getElementById('owner-pass').value;
+    try {
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: pass, action: 'login' })
+        });
+        const data = await res.json();
+
+        if (data.status) {
+            localStorage.setItem(OWNER_SESSION_KEY, 'true');
+            document.getElementById('owner-modal').remove();
+            showToast("Akses Owner Diberikan!");
+
+            const navOwner = document.getElementById('nav-owner');
+            if (navOwner) navOwner.style.display = 'flex';
+
+            setTimeout(() => {
+                if (typeof window.tampilkanPanelRahasia === 'function') {
+                    window.tampilkanPanelRahasia();
+                }
+            }, 500);
+        } else {
+            showToast("Passcode Salah!");
+        }
+    } catch(e) {
+        showToast("Error koneksi ke server.");
+    }
+};
+
+let mySession = localStorage.getItem('zenkai_sess');
+if (!mySession) { mySession = 'sess_' + Date.now(); localStorage.setItem('zenkai_sess', mySession); }
+setInterval(() => {
+    fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'heartbeat', session_id: mySession }) }).catch(()=>{});
+}, 30000);
 
 // =========================================
-// PANEL RAHASIA OWNER (MODE BLOK / TOMBOL)
-// =========================================
-// =========================================
-// AWAL PATCH 3B: PANEL OWNER MODE CENTANG
+// PANEL RAHASIA OWNER (MODE CENTANG)
 // =========================================
 window.tampilkanPanelRahasia = async () => {
     if (document.getElementById('owner-panel')) document.getElementById('owner-panel').remove();
@@ -711,7 +721,7 @@ window.simpanSettingOwner = async () => {
         const data = await res.json();
         if (data.status) {
             showToast("Pengaturan disimpan!");
-            fetchSettings(); 
+            fetchSettings();
         } else {
             showToast("Gagal: " + data.message);
         }
@@ -732,30 +742,29 @@ window.forceRefreshUser = async () => {
         showToast("Sinyal Force Refresh terkirim!");
     } catch(e) {}
 };
-// =========================================
-// AKHIR PATCH 3B
-// =========================================
 
-    // ===== BATAS BAGIAN 1 =====
-    // =========================================
+// ===== BATAS BAGIAN 2a =====
+// =========================================
 // 11. FUNGSI OPEN TOOL
 // =========================================
 window.openTool = (tool) => {
     if (!modal || !modalContent) return;
+
     // AWAL PATCH NOTIF MAINTENANCE
-const currentDisabledTools = window.currentDisabledTools || [];
-if (currentDisabledTools.includes(tool)) {
-    modal.classList.add('active');
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3>Tool Maintenance</h3>
-        <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
-        <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur ini sedang dinonaktifkan sementara oleh Admin.</p>
-        <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
-    `;
-    return;
-}
-// AKHIR PATCH NOTIF MAINTENANCE
+    const currentDisabledTools = window.currentDisabledTools || [];
+    if (currentDisabledTools.includes(tool)) {
+        modal.classList.add('active');
+        modalContent.innerHTML = `
+            ${closeSvg}
+            <h3>Tool Maintenance</h3>
+            <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
+            <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur ini sedang dinonaktifkan sementara oleh Admin.</p>
+            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
+        `;
+        return;
+    }
+    // AKHIR PATCH NOTIF MAINTENANCE
+
     modal.classList.add('active');
 
     const comingSoonTools = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
@@ -1113,7 +1122,7 @@ if (currentDisabledTools.includes(tool)) {
         };
     }
 
-// ===== BATAS BAGIAN 2a =====
+// ===== BATAS BAGIAN 2b-1 =====
         // --- ARTI NAMA ---
         else if (tool === 'artinama') {
             modalContent.innerHTML = `

@@ -457,3 +457,23 @@ body.intro-active .music-widget, body.intro-active .bottom-nav, body.intro-activ
 /* =========================================
    AKHIR PATCH 2
    ========================================= */
+   /* =========================================
+   FIX: NAV BAWAH 5 MENU BIAR GAK TABRAKAN
+   ========================================= */
+.bottom-nav {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 8px 5px !important;
+}
+.nav-item {
+    min-width: auto !important;
+    padding: 4px 2px !important;
+    flex: 1 !important;
+}
+.nav-item span {
+    font-size: 8px !important;
+}
+.nav-item svg {
+    width: 16px !important;
+    height: 16px !important;
+}
