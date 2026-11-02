@@ -55,18 +55,18 @@ document.addEventListener('DOMContentLoaded', () => {
         alertEl.style.display = 'flex';
     };
 
-    window.logoutUser = async () => {
-        localStorage.removeItem(OWNER_TOKEN_KEY);
-        location.reload();
-    };
-
     // =========================================
-    // 2. SPLASH SCREEN VIDEO (PINTU MASUK)
+    // 2. SPLASH SCREEN VIDEO & AUDIO
     // =========================================
     const welcomeVideo = document.getElementById('welcome-video');
     const authGate = document.getElementById('auth-gate');
 
+    // Fungsi Masuk ke Web (SKIP INTRO)
     window.masukKeWeb = () => {
+        if (welcomeVideo) {
+            welcomeVideo.pause(); // <--- MATIIN SUARA PAS SKIP
+            welcomeVideo.muted = true;
+        }
         if (authGate) {
             authGate.style.opacity = '0';
             authGate.style.transform = 'scale(1.05)';
@@ -78,30 +78,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    if (welcomeVideo) {
-        // TRIK: Coba autoplay, lalu paksa nyalain suara
-        welcomeVideo.play().then(() => {
-            welcomeVideo.muted = false; 
-        }).catch(() => {
-            console.log("Autoplay dengan suara diblokir browser.");
-            // Fallback kalau browser ngeblok total, tambahin listener klik di video
-            welcomeVideo.addEventListener('click', () => {
-                welcomeVideo.muted = false;
-                welcomeVideo.play();
-            });
-        });
+    // Fungsi Aktifkan Suara (Audio Lanjut)
+    window.aktifkanSuara = () => {
+        if (welcomeVideo) {
+            welcomeVideo.muted = false;
+            welcomeVideo.play(); // Lanjut dari detik terakhir, nggak ngulang
+        }
+        const btn = document.getElementById('btn-unmute');
+        if (btn) btn.style.display = 'none'; // Sembunyiin tombol
+    };
 
-        // Kalau video selesai, masuk ke web
+    if (welcomeVideo) {
+        welcomeVideo.play().catch(() => {});
         welcomeVideo.addEventListener('ended', () => {
             window.masukKeWeb();
         });
     }
 
     // =========================================
-    // 3. BEBAS AKSES
+    // 3. BEBAS AKSES (NAMA USER)
     // =========================================
     const welcome = document.getElementById('welcome-username');
-    if (welcome) welcome.innerText = 'Sultan'; 
+    if (welcome) welcome.innerText = 'User'; // <--- NAMA USER SET DEFAULT
 
     if (localStorage.getItem(OWNER_TOKEN_KEY)) {
         const navOwner = document.getElementById('nav-owner');
@@ -1479,4 +1477,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-}); // <- INI PENUTUP DOMContentLoaded, JANGAN DIHAPUS.
+}); // <- INI PENUTUP DOMContentLoaded, JANGAN DIHAPUS

@@ -30,7 +30,7 @@
         <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.9) 100%); z-index:2; pointer-events:none;"></div>
         <div style="position:absolute; inset:0; background:repeating-linear-gradient(0deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 3px); z-index:2; pointer-events:none;"></div>
 
-        <!-- Teks Branding & Tombol Skip (Desain Sinematik) -->
+        <!-- Teks Branding & Tombol -->
         <div style="position:absolute; bottom:0; left:0; right:0; padding:50px 20px 40px 20px; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); text-align:center; z-index:3; display:flex; flex-direction:column; align-items:center;">
             
             <div style="display:flex; align-items:center; justify-content:center; gap:15px; margin-bottom:25px; width:100%; max-width:350px;">
@@ -41,6 +41,12 @@
                 <div style="flex:1; height:1px; background:linear-gradient(to left, transparent, var(--primary));"></div>
             </div>
 
+            <!-- TOMBOL AKTIFKAN SUARA -->
+            <button onclick="aktifkanSuara()" id="btn-unmute" class="btn-shimmer" style="padding:12px 30px; background:var(--primary); color:#000; border:none; border-radius:8px; font-weight:900; font-size:13px; letter-spacing:1px; box-shadow:0 0 20px rgba(0,255,204,0.5); cursor:pointer; margin-bottom:15px; display:flex; align-items:center; gap:8px;">
+                 AKTIFKAN SUARA
+            </button>
+
+            <!-- TOMBOL SKIP INTRO -->
             <button onclick="masukKeWeb()" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 30px; border-radius:8px; font-weight:600; font-size:12px; letter-spacing:2px; cursor:pointer; backdrop-filter:blur(5px); transition:0.3s; display:flex; align-items:center; gap:10px;">
                 SKIP INTRO <span style="color:var(--primary); font-size:16px;">»</span>
             </button>
@@ -112,12 +118,11 @@
     <!-- ========================================= -->
     <main id="page-tools" class="page active">
         <header class="header-box">
-        <div class="logo-area">
-            <div class="logo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-            <div class="logo-text"><h1>ZenkaiTools</h1><p class="version">v1.0 // Andika T.M</p></div>
-        </div>
-        <button onclick="logoutUser()" style="background:#ff3333; color:#fff; border:2px solid var(--border); border-radius:6px; padding:6px 10px; font-size:10px; font-weight:bold; cursor:pointer;">Keluar</button>
-    </header>
+            <div class="logo-area">
+                <div class="logo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+                <div class="logo-text"><h1>ZenkaiTools</h1><p class="version">v1.0 // Andika T.M</p></div>
+            </div>
+        </header>
 
         <div class="custom-hero-block">
             <div class="hero-media">
@@ -134,7 +139,7 @@
         <div class="welcome-box">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
-                    <h2>Halo, <span id="welcome-username" style="color:var(--primary);">Sultan</span>! </h2>
+                    <h2>Halo, <span id="welcome-username" style="color:var(--primary);">User</span>! </h2>
                     <p style="margin-top:5px; font-size:12px; line-height:1.5;">Akses berbagai modul utilitas, generator, dan fitur sultan lo di sini. Semua gratis!</p>
                 </div>
                 <div style="background:var(--primary); color:#000; font-weight:800; font-size:10px; padding:4px 8px; border-radius:6px; border:2px solid var(--border); box-shadow:2px 2px 0 #000;">v1.0</div>
