@@ -514,8 +514,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
         const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
-        // DAFTAR TOOLS (SUDAH DITAMBAH YOUTUBE)
-        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise'];
+        // TAMBAHKAN 'komik' ke DAFTAR TOOLS OWNER
+        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'komik', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise'];
         const listPages = ['fun', 'setting', 'info'];
 
         let toolsHtml = listTools.map(t => `
@@ -667,7 +667,104 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (tool === 'tiktok') {
+        else if (tool === 'komik') {
+    // Bikin modal full-screen
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <div style="background:var(--bg); min-height: 70vh; padding-bottom: 20px;">
+            <h3 style="font-family:var(--font-head); color:var(--primary); font-size:26px; margin-bottom:5px; text-align:center;">KATALOG KOMIK</h3>
+            <p style="text-align:center; font-size:11px; opacity:0.7; margin-bottom:20px;">Sumber: MangaDex (Bahasa Indonesia)</p>
+            
+            <!-- Search Bar -->
+            <div style="position:relative; margin-bottom:20px;">
+                <input type="text" id="komik-q" placeholder="Cari judul manga..." style="width:100%; padding:12px 12px 12px 40px; border:2px solid var(--border); border-radius:30px; background:var(--card-bg); color:var(--text); font-size:14px; outline:none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            
+            <div id="komik-res"></div>
+        </div>
+    `;
+    
+    const input = document.getElementById('komik-q');
+    const box = document.getElementById('komik-res');
+    
+    // Fungsi Load Data
+    const loadKomik = async (query) => {
+        box.innerHTML = '<div class="loader"></div>';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'search', q: query || '' })
+            });
+            const data = await res.json();
+            
+            if (!data.data || data.data.length === 0) {
+                box.innerHTML = '<p class="error-msg">Komik tidak ditemukan. Coba kata kunci lain.</p>';
+                return;
+            }
+            
+            // Bikin Layout Baris Horizontal (Mirip Continue Watching)
+            let html = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <h4 style="font-family:var(--font-head); font-size:16px;">Trending & Rekomendasi</h4>
+                    <span style="font-size:11px; color:var(--primary);">Lihat Semua</span>
+                </div>
+                <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none; margin-bottom:20px;">
+            `;
+            
+            // Ambil 10 komik teratas buat baris horizontal
+            data.data.slice(0, 10).forEach(manga => {
+                const title = manga.attributes.title.id || manga.attributes.title.en || 'Tanpa Judul';
+                const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
+                const coverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
+                
+                html += `
+                    <div style="min-width:120px; max-width:120px; cursor:pointer;" onclick="bukaChapterKomik('${manga.id}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
+                        <div style="width:120px; height:170px; border-radius:10px; overflow:hidden; border:2px solid var(--border); background:#000;">
+                            <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                        <p style="font-size:11px; font-weight:bold; margin-top:5px; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(title)}</p>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            
+            // Bikin Layout Grid (Semua Komik)
+            html += `<h4 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;">Semua Hasil</h4>`;
+            html += `<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">`;
+            data.data.forEach(manga => {
+                const title = manga.attributes.title.id || manga.attributes.title.en || 'Tanpa Judul';
+                const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
+                const coverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
+                
+                html += `
+                    <div style="cursor:pointer; text-align:center;" onclick="bukaChapterKomik('${manga.id}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
+                        <div style="width:100%; aspect-ratio:2/3; border-radius:8px; overflow:hidden; border:2px solid var(--border); background:#000;">
+                            <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                        <p style="font-size:10px; font-weight:bold; margin-top:5px; line-height:1.1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(title)}</p>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            
+            box.innerHTML = html;
+        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+    };
+    
+    // Load pertama kali (ambil komik populer / default)
+loadKomik(''); // <--- Ganti jadi string kosong
+    
+    // Kalau user ngetik di search, filter
+    let timeout = null;
+    input.addEventListener('input', (e) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            loadKomik(e.target.value.trim());
+        }, 500);
+    });
+}
+        else if (tool === 'tiktok') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>TikTok DL</h3>
@@ -898,77 +995,77 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         else if (tool === 'youtube') {
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3>YouTube DL</h3>
-        <span class="desc-text">Pilih mau download Audio (MP3) atau Video (MP4).</span>
-        <input type="text" id="yt-url" placeholder="Paste link YouTube...">
-        
-        <!-- DESAIN BARU: Tombol Pilihan Kustom -->
-        <div style="display:flex; gap:10px; margin-bottom:15px;">
-            <button id="btn-type-mp3" onclick="pilihTipeYt('mp3')" class="action-btn" style="flex:1; background:var(--primary); color:#000; border:2px solid var(--border); box-shadow:0 4px 0 var(--border); margin:0;">🎵 MP3</button>
-            <button id="btn-type-mp4" onclick="pilihTipeYt('mp4')" class="action-btn" style="flex:1; background:var(--bg); color:var(--text); border:2px solid var(--border); box-shadow:0 4px 0 var(--border); margin:0;">🎬 MP4</button>
-        </div>
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>YouTube DL</h3>
+                <span class="desc-text">Pilih mau download Audio (MP3) atau Video (MP4).</span>
+                <input type="text" id="yt-url" placeholder="Paste link YouTube...">
+                
+                <!-- DESAIN BARU: Tombol Pilihan Kustom -->
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <button id="btn-type-mp3" onclick="pilihTipeYt('mp3')" class="action-btn" style="flex:1; background:var(--primary); color:#000; border:2px solid var(--border); box-shadow:0 4px 0 var(--border); margin:0;">🎵 MP3</button>
+                    <button id="btn-type-mp4" onclick="pilihTipeYt('mp4')" class="action-btn" style="flex:1; background:var(--bg); color:var(--text); border:2px solid var(--border); box-shadow:0 4px 0 var(--border); margin:0;">🎬 MP4</button>
+                </div>
 
-        <button class="action-btn" id="btn-dl-yt">Proses</button>
-        <div id="yt-result"></div>
-    `;
-    
-    let tipeTerpilih = 'mp3'; // Default
-    window.pilihTipeYt = (tipe) => {
-        tipeTerpilih = tipe;
-        const btnMp3 = document.getElementById('btn-type-mp3');
-        const btnMp4 = document.getElementById('btn-type-mp4');
-        if (tipe === 'mp3') {
-            btnMp3.style.background = 'var(--primary)'; btnMp3.style.color = '#000';
-            btnMp4.style.background = 'var(--bg)'; btnMp4.style.color = 'var(--text)';
-        } else {
-            btnMp4.style.background = 'var(--primary)'; btnMp4.style.color = '#000';
-            btnMp3.style.background = 'var(--bg)'; btnMp3.style.color = 'var(--text)';
-        }
-    };
+                <button class="action-btn" id="btn-dl-yt">Proses</button>
+                <div id="yt-result"></div>
+            `;
+            
+            let tipeTerpilih = 'mp3'; // Default
+            window.pilihTipeYt = (tipe) => {
+                tipeTerpilih = tipe;
+                const btnMp3 = document.getElementById('btn-type-mp3');
+                const btnMp4 = document.getElementById('btn-type-mp4');
+                if (tipe === 'mp3') {
+                    btnMp3.style.background = 'var(--primary)'; btnMp3.style.color = '#000';
+                    btnMp4.style.background = 'var(--bg)'; btnMp4.style.color = 'var(--text)';
+                } else {
+                    btnMp4.style.background = 'var(--primary)'; btnMp4.style.color = '#000';
+                    btnMp3.style.background = 'var(--bg)'; btnMp3.style.color = 'var(--text)';
+                }
+            };
 
-    const btn = document.getElementById('btn-dl-yt');
-    btn.onclick = async () => {
-        const url = document.getElementById('yt-url').value.trim();
-        const box = document.getElementById('yt-result');
-        if (!url) return showToast('Masukkan link YouTube dulu!');
-        
-        setBtnLoading(btn, true);
-        box.innerHTML = '<div class="loader"></div>';
-        
-        try {
-            // Tembak ke Edge Function zen-sairi (atau zen-youtube)
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-youtube`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: tipeTerpilih, url: url })
-            });
-            
-            const data = await res.json();
-            if (!data.status) throw new Error(data.message || 'Gagal download');
-            
-            const result = data.result;
-            
-            if (tipeTerpilih === 'mp3') {
-                box.innerHTML = `
-                    <img src="${escapeHTML(result.thumbnail)}" style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
-                    <b>${escapeHTML(result.title)}</b><br>
-                    <audio src="${escapeHTML(result.download)}" controls style="width:100%; margin-top:10px;"></audio>
-                    <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP3</a>
-                `;
-            } else {
-                box.innerHTML = `
-                    <video src="${escapeHTML(result.download)}" controls style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);"></video>
-                    <b>${escapeHTML(result.title)}</b><br>
-                    <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP4</a>
-                `;
-            }
-        } catch (e) { 
-            box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+            const btn = document.getElementById('btn-dl-yt');
+            btn.onclick = async () => {
+                const url = document.getElementById('yt-url').value.trim();
+                const box = document.getElementById('yt-result');
+                if (!url) return showToast('Masukkan link YouTube dulu!');
+                
+                setBtnLoading(btn, true);
+                box.innerHTML = '<div class="loader"></div>';
+                
+                try {
+                    // Tembak ke Edge Function zen-youtube
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-youtube`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type: tipeTerpilih, url: url })
+                    });
+                    
+                    const data = await res.json();
+                    if (!data.status) throw new Error(data.message || 'Gagal download');
+                    
+                    const result = data.result;
+                    
+                    if (tipeTerpilih === 'mp3') {
+                        box.innerHTML = `
+                            <img src="${escapeHTML(result.thumbnail)}" style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
+                            <b>${escapeHTML(result.title)}</b><br>
+                            <audio src="${escapeHTML(result.download)}" controls style="width:100%; margin-top:10px;"></audio>
+                            <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP3</a>
+                        `;
+                    } else {
+                        box.innerHTML = `
+                            <video src="${escapeHTML(result.download)}" controls style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);"></video>
+                            <b>${escapeHTML(result.title)}</b><br>
+                            <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP4</a>
+                        `;
+                    }
+                } catch (e) { 
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                }
+                setBtnLoading(btn, false, 'Proses');
+            };
         }
-        setBtnLoading(btn, false, 'Proses');
-    };
-}
         else if (tool === 'stalktt') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1585,6 +1682,63 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update</a>
             `;
         }
+    };
+
+    // =========================================
+    // FUNGSI KOMIK (DIPANGGIL DARI DALAM MODAL)
+    // =========================================
+    window.bukaChapterKomik = async (mangaId, title) => {
+        const box = document.getElementById('komik-res');
+        box.innerHTML = '<div class="loader"></div>';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'chapters', mangaId: mangaId })
+            });
+            const data = await res.json();
+            
+            if (!data.data || data.data.length === 0) throw new Error('Belum ada chapter Indonesia');
+            
+            let html = `<h4 style="margin-bottom:10px; color:var(--primary);">${escapeHTML(title)}</h4>`;
+            html += `<div style="max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;">`;
+            data.data.forEach(ch => {
+                const chNum = ch.attributes.chapter || '?';
+                html += `
+                    <button class="action-btn press" style="margin-bottom:5px; font-size:12px; padding:10px;" onclick="bacaGambarKomik('${ch.id}', '${chNum}')">
+                        Chapter ${chNum}
+                    </button>
+                `;
+            });
+            html += `</div>`;
+            box.innerHTML = html;
+        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+    };
+
+    window.bacaGambarKomik = async (chapterId, chNum) => {
+        const box = document.getElementById('komik-res');
+        box.innerHTML = '<div class="loader"></div>';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'images', chapterId: chapterId })
+            });
+            const data = await res.json();
+            
+            const baseUrl = data.baseUrl;
+            const hash = data.chapter.hash;
+            const images = data.chapter.data;
+            
+            let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${chNum}</h4>`;
+            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+            images.forEach(img => {
+                html += `<img src="${baseUrl}/data/${hash}/${img}" style="width:100%; border-radius:4px;" loading="lazy">`;
+            });
+            html += `</div>`;
+            
+            // Tombol Kembali
+            html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
+            box.innerHTML = html;
+        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
     };
 
 }); // <- INI PENUTUP DOMContentLoaded, JANGAN DIHAPUS
