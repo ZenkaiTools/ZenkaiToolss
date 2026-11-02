@@ -898,60 +898,77 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         else if (tool === 'youtube') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>YouTube DL</h3>
-                <span class="desc-text">Pilih mau download Audio (MP3) atau Video (MP4).</span>
-                <input type="text" id="yt-url" placeholder="Paste link YouTube...">
-                <select id="yt-type" style="width:100%; padding:12px; margin-bottom:15px; border:3px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-weight:bold;">
-                    <option value="mp3">🎵 Audio (MP3)</option>
-                    <option value="mp4">🎬 Video (MP4)</option>
-                </select>
-                <button class="action-btn" id="btn-dl-yt">Proses</button>
-                <div id="yt-result"></div>
-            `;
-            const btn = document.getElementById('btn-dl-yt');
-            btn.onclick = async () => {
-                const url = document.getElementById('yt-url').value.trim();
-                const type = document.getElementById('yt-type').value;
-                const box = document.getElementById('yt-result');
-                if (!url) return showToast('Masukkan link YouTube dulu!');
-                
-                setBtnLoading(btn, true);
-                box.innerHTML = '<div class="loader"></div>';
-                
-                try {
-                    // Tembak ke Edge Function zen-youtube
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-youtube`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ type: type, url: url })
-                    });
-                    
-                    const data = await res.json();
-                    if (!data.status) throw new Error(data.message || 'Gagal download');
-                    
-                    const result = data.result;
-                    
-                    if (type === 'mp3') {
-                        box.innerHTML = `
-                            <img src="${escapeHTML(result.thumbnail)}" style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
-                            <b>${escapeHTML(result.title)}</b><br>
-                            <audio src="${escapeHTML(result.download)}" controls style="width:100%; margin-top:10px;"></audio>
-                            <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP3</a>
-                        `;
-                    } else {
-                        box.innerHTML = `
-                            <video src="${escapeHTML(result.download)}" controls style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);"></video>
-                            <b>${escapeHTML(result.title)}</b><br>
-                            <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP4</a>
-                        `;
-                    }
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
-                }
-                setBtnLoading(btn, false, 'Proses');
-            };
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <h3>YouTube DL</h3>
+        <span class="desc-text">Pilih mau download Audio (MP3) atau Video (MP4).</span>
+        <input type="text" id="yt-url" placeholder="Paste link YouTube...">
+        
+        <!-- DESAIN BARU: Tombol Pilihan Kustom -->
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <button id="btn-type-mp3" onclick="pilihTipeYt('mp3')" class="action-btn" style="flex:1; background:var(--primary); color:#000; border:2px solid var(--border); box-shadow:0 4px 0 var(--border); margin:0;">🎵 MP3</button>
+            <button id="btn-type-mp4" onclick="pilihTipeYt('mp4')" class="action-btn" style="flex:1; background:var(--bg); color:var(--text); border:2px solid var(--border); box-shadow:0 4px 0 var(--border); margin:0;">🎬 MP4</button>
+        </div>
+
+        <button class="action-btn" id="btn-dl-yt">Proses</button>
+        <div id="yt-result"></div>
+    `;
+    
+    let tipeTerpilih = 'mp3'; // Default
+    window.pilihTipeYt = (tipe) => {
+        tipeTerpilih = tipe;
+        const btnMp3 = document.getElementById('btn-type-mp3');
+        const btnMp4 = document.getElementById('btn-type-mp4');
+        if (tipe === 'mp3') {
+            btnMp3.style.background = 'var(--primary)'; btnMp3.style.color = '#000';
+            btnMp4.style.background = 'var(--bg)'; btnMp4.style.color = 'var(--text)';
+        } else {
+            btnMp4.style.background = 'var(--primary)'; btnMp4.style.color = '#000';
+            btnMp3.style.background = 'var(--bg)'; btnMp3.style.color = 'var(--text)';
         }
+    };
+
+    const btn = document.getElementById('btn-dl-yt');
+    btn.onclick = async () => {
+        const url = document.getElementById('yt-url').value.trim();
+        const box = document.getElementById('yt-result');
+        if (!url) return showToast('Masukkan link YouTube dulu!');
+        
+        setBtnLoading(btn, true);
+        box.innerHTML = '<div class="loader"></div>';
+        
+        try {
+            // Tembak ke Edge Function zen-sairi (atau zen-youtube)
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-youtube`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: tipeTerpilih, url: url })
+            });
+            
+            const data = await res.json();
+            if (!data.status) throw new Error(data.message || 'Gagal download');
+            
+            const result = data.result;
+            
+            if (tipeTerpilih === 'mp3') {
+                box.innerHTML = `
+                    <img src="${escapeHTML(result.thumbnail)}" style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
+                    <b>${escapeHTML(result.title)}</b><br>
+                    <audio src="${escapeHTML(result.download)}" controls style="width:100%; margin-top:10px;"></audio>
+                    <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP3</a>
+                `;
+            } else {
+                box.innerHTML = `
+                    <video src="${escapeHTML(result.download)}" controls style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);"></video>
+                    <b>${escapeHTML(result.title)}</b><br>
+                    <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP4</a>
+                `;
+            }
+        } catch (e) { 
+            box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+        }
+        setBtnLoading(btn, false, 'Proses');
+    };
+}
         else if (tool === 'stalktt') {
             modalContent.innerHTML = `
                 ${closeSvg}
