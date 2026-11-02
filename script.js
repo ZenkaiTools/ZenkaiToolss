@@ -777,9 +777,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
 
-            // ==========================================
-            // 1. FUNGSI TAMPILKAN KATALOG (SAIRI)
-            // ==========================================
+            // PROXY GAMBAR BIAR NGGAK BLANK
+            const proxyImg = (url) => {
+                if (!url) return '';
+                return `https://wsrv.nl/?url=${encodeURIComponent(url)}`;
+            };
+
             const loadKatalogSairi = async (query) => {
                 box.innerHTML = '<div class="loader"></div>';
                 try {
@@ -788,7 +791,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ action: 'search', q: query || 'lookism' })
                     });
                     const data = await res.json();
-                    
                     const komikList = data.result || []; 
 
                     if (komikList.length === 0) {
@@ -800,14 +802,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     komikList.forEach(manga => {
                         const title = manga.title || 'Tanpa Judul';
-                        const cover = manga.cover || 'https://via.placeholder.com/150';
+                        const cover = proxyImg(manga.cover); 
                         const url = manga.url;
                         const t = escapeHTML(title);
                         
                         html += `
                             <div class="komik-card-sairi" data-title="${t}" data-url="${url}" style="cursor:pointer; display:flex; flex-direction:column; gap:6px;">
                                 <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:8px; overflow:hidden; background:#222;">
-                                    <img src="${cover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                    <img src="${cover}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
                                 </div>
                                 <h4 style="font-size:11px; font-weight:800; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${t}</h4>
                             </div>
@@ -816,7 +818,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     html += `</div>`;
                     box.innerHTML = html;
 
-                    // Event Listener: Buka Detail
                     box.querySelectorAll('.komik-card-sairi').forEach(el => {
                         el.addEventListener('click', () => {
                             bukaDetailSairi(el.dataset.title, el.dataset.url);
@@ -828,9 +829,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // ==========================================
-            // 2. FUNGSI TAMPILKAN DETAIL & EPISODE (SAIRI)
-            // ==========================================
             const bukaDetailSairi = async (title, url) => {
                 box.innerHTML = '<div class="loader"></div>';
                 try {
@@ -851,7 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </button>
                             
                             <div style="display:flex; gap:15px;">
-                                <img src="${detail.cover}" style="width:100px; height:130px; object-fit:cover; border-radius:8px; border:2px solid var(--border);">
+                                <img src="${proxyImg(detail.cover)}" style="width:100px; height:130px; object-fit:cover; border-radius:8px; border:2px solid var(--border);">
                                 <div>
                                     <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0;">${escapeHTML(detail.title)}</h3>
                                     <p style="font-size:11px; color:var(--primary); font-weight:bold; margin:0 0 5px 0;">${escapeHTML(detail.genre || '-')} • ${escapeHTML(detail.views || '0')}</p>
@@ -870,8 +868,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             const epNum = ep.number;
                             const epTitle = ep.title || `Episode ${epNum}`;
                             html += `
-                                <div class="press" onclick="bacaDariMangaDex('${escapeHTML(detail.title)}', '${epNum}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px; border-radius:8px; cursor:pointer;">
-                                    <img src="${ep.thumbnail}" style="width:60px; height:45px; object-fit:cover; border-radius:4px;">
+                                <div class="press" onclick="bacaDariMangaDex('${escapeHTML(detail.title)}', '${epNum}', '${ep.url}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px; border-radius:8px; cursor:pointer;">
+                                    <img src="${proxyImg(ep.thumbnail)}" style="width:60px; height:45px; object-fit:cover; border-radius:4px;">
                                     <div style="flex:1;">
                                         <h5 style="margin:0; font-size:12px; font-weight:800; color:var(--text);">${escapeHTML(epTitle)}</h5>
                                         <p style="margin:2px 0 0 0; font-size:10px; color:var(--text); opacity:0.6;">${escapeHTML(ep.date)}</p>
@@ -890,10 +888,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // ==========================================
-            // 3. JEMBATAN: BACA DI MANGADEX
-            // ==========================================
-            window.bacaDariMangaDex = async (title, epNum) => {
+            window.bacaDariMangaDex = async (title, epNum, webtoonUrl) => {
                 box.innerHTML = `<div class="loader"></div><p style="text-align:center; font-size:12px;">Mencari "${escapeHTML(title)}" di server baca...</p>`;
                 try {
                     const mdRes = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
@@ -903,13 +898,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     const mdData = await mdRes.json();
 
                     if (mdData.data && mdData.data.length > 0) {
-                        // Lempar ke fungsi bawaan MangaDex kamu
                         window.bukaChapterKomik(mdData.data[0].id, title);
                     } else {
+                        // KALAU GAGAL DI MANGADEX, KASIH OPSI BACA DI WEBTOON ASLI
                         box.innerHTML = `
-                            <div style="text-align:center; padding: 20px;">
-                                <p class="error-msg">Komik "${escapeHTML(title)}" belum tersedia di server baca (MangaDex).</p>
-                                <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
+                            <div style="text-align:center; padding: 30px 10px;">
+                                <div style="font-size:40px; margin-bottom:10px;">📖</div>
+                                <h4 style="margin:0 0 10px 0;">Komik Belum Ada di Server</h4>
+                                <p style="font-size:12px; opacity:0.8; margin-bottom:20px;">Komik "${escapeHTML(title)}" tidak ditemukan di MangaDex. Kamu bisa membacanya langsung di aplikasi Webtoon.</p>
+                                
+                                <a href="${webtoonUrl}" target="_blank" class="action-btn" style="background:#00ff9d; text-decoration:none; display:block; margin-bottom:10px;">Baca di Webtoon Asli</a>
+                                <button onclick="openTool('komik')" class="action-btn" style="background:var(--card-bg); color:var(--text);">Kembali</button>
                             </div>`;
                     }
                 } catch (err) {
