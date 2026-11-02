@@ -668,14 +668,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         else if (tool === 'komik') {
-    // Bikin modal full-screen
     modalContent.innerHTML = `
         ${closeSvg}
         <div style="background:var(--bg); min-height: 70vh; padding-bottom: 20px;">
             <h3 style="font-family:var(--font-head); color:var(--primary); font-size:26px; margin-bottom:5px; text-align:center;">KATALOG KOMIK</h3>
             <p style="text-align:center; font-size:11px; opacity:0.7; margin-bottom:20px;">Sumber: MangaDex (Bahasa Indonesia)</p>
             
-            <!-- Search Bar -->
             <div style="position:relative; margin-bottom:20px;">
                 <input type="text" id="komik-q" placeholder="Cari judul manga..." style="width:100%; padding:12px 12px 12px 40px; border:2px solid var(--border); border-radius:30px; background:var(--card-bg); color:var(--text); font-size:14px; outline:none;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -688,7 +686,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('komik-q');
     const box = document.getElementById('komik-res');
     
-    // Fungsi Load Data
+    const getProxyUrl = (url) => {
+        // Pake domain supabase lo buat proxy
+        return `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(url)}`;
+    };
+
     const loadKomik = async (query) => {
         box.innerHTML = '<div class="loader"></div>';
         try {
@@ -703,7 +705,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            // Bikin Layout Baris Horizontal (Mirip Continue Watching)
             let html = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                     <h4 style="font-family:var(--font-head); font-size:16px;">Trending & Rekomendasi</h4>
@@ -712,11 +713,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none; margin-bottom:20px;">
             `;
             
-            // Ambil 10 komik teratas buat baris horizontal
             data.data.slice(0, 10).forEach(manga => {
-                const title = manga.attributes.title.id || manga.attributes.title.en || 'Tanpa Judul';
+                const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
                 const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
-                const coverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
+                const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
+                const coverUrl = rawCoverUrl ? getProxyUrl(rawCoverUrl) : '';
                 
                 html += `
                     <div style="min-width:120px; max-width:120px; cursor:pointer;" onclick="bukaChapterKomik('${manga.id}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
@@ -729,13 +730,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             html += `</div>`;
             
-            // Bikin Layout Grid (Semua Komik)
             html += `<h4 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;">Semua Hasil</h4>`;
             html += `<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">`;
             data.data.forEach(manga => {
-                const title = manga.attributes.title.id || manga.attributes.title.en || 'Tanpa Judul';
+                const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
                 const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
-                const coverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
+                const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
+                const coverUrl = rawCoverUrl ? getProxyUrl(rawCoverUrl) : '';
                 
                 html += `
                     <div style="cursor:pointer; text-align:center;" onclick="bukaChapterKomik('${manga.id}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
@@ -752,10 +753,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
     };
     
-    // Load pertama kali (ambil komik populer / default)
-loadKomik(''); // <--- Ganti jadi string kosong
+    loadKomik(''); 
     
-    // Kalau user ngetik di search, filter
     let timeout = null;
     input.addEventListener('input', (e) => {
         clearTimeout(timeout);
