@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const comingSoonList = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
+    const comingSoonList = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
     comingSoonList.forEach(toolName => {
         const card = document.querySelector(`.tool-card[onclick="openTool('${toolName}')"]`);
         if (card) card.classList.add('soon');
@@ -514,7 +514,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
         const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
-        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise'];
+        // DAFTAR TOOLS (SUDAH DITAMBAH YOUTUBE)
+        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise'];
         const listPages = ['fun', 'setting', 'info'];
 
         let toolsHtml = listTools.map(t => `
@@ -655,7 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal.classList.add('active');
 
-        const comingSoonTools = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
+        const comingSoonTools = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
         if (comingSoonTools.includes(tool)) {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -744,7 +745,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!data.status) throw new Error(data.message || 'Postingan tidak ditemukan');
                     
                     let htmlContent = '';
-                    // Sesuaikan logika array media dengan respons API lo
                     const mediaArray = data.result?.media || data.media || [];
                     mediaArray.forEach((media, index) => {
                         if (media.type === 'video') {
@@ -764,6 +764,44 @@ document.addEventListener('DOMContentLoaded', () => {
                     box.innerHTML = htmlContent;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Ambil Media');
+            };
+        }
+        else if (tool === 'facebook') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Facebook DL</h3>
+                <span class="desc-text">Download video dari Facebook.</span>
+                <input type="text" id="fb-url" placeholder="Paste link Facebook...">
+                <button class="action-btn" id="btn-dl-fb">Ambil Video</button>
+                <div id="fb-result"></div>
+            `;
+            const btn = document.getElementById('btn-dl-fb');
+            btn.onclick = async () => {
+                const url = document.getElementById('fb-url').value.trim();
+                const box = document.getElementById('fb-result');
+                if (!url) return showToast('Masukkan link dulu!');
+                setBtnLoading(btn, true);
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            provider: 'sairi', 
+                            endpoint: 'download/facebook', 
+                            params: { url: url } 
+                        })
+                    });
+                    const data = await res.json();
+                    
+                    if (!data.status) throw new Error(data.message || 'Video tidak ditemukan');
+                    
+                    const vidUrl = data.result.hd || data.result.video;
+                    box.innerHTML = `
+                        <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(vidUrl)}" controls></video>
+                        <a href="${escapeHTML(vidUrl)}" target="_blank" class="action-btn" style="text-align:center; text-decoration:none; background:#00ff9d;">Download Video</a>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Ambil Video');
             };
         }
         else if (tool === 'pinterest') {
@@ -857,6 +895,61 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Ambil Media');
+            };
+        }
+        else if (tool === 'youtube') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>YouTube DL</h3>
+                <span class="desc-text">Pilih mau download Audio (MP3) atau Video (MP4).</span>
+                <input type="text" id="yt-url" placeholder="Paste link YouTube...">
+                <select id="yt-type" style="width:100%; padding:12px; margin-bottom:15px; border:3px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-weight:bold;">
+                    <option value="mp3">🎵 Audio (MP3)</option>
+                    <option value="mp4">🎬 Video (MP4)</option>
+                </select>
+                <button class="action-btn" id="btn-dl-yt">Proses</button>
+                <div id="yt-result"></div>
+            `;
+            const btn = document.getElementById('btn-dl-yt');
+            btn.onclick = async () => {
+                const url = document.getElementById('yt-url').value.trim();
+                const type = document.getElementById('yt-type').value;
+                const box = document.getElementById('yt-result');
+                if (!url) return showToast('Masukkan link YouTube dulu!');
+                
+                setBtnLoading(btn, true);
+                box.innerHTML = '<div class="loader"></div>';
+                
+                try {
+                    // Tembak ke Edge Function zen-youtube
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-youtube`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type: type, url: url })
+                    });
+                    
+                    const data = await res.json();
+                    if (!data.status) throw new Error(data.message || 'Gagal download');
+                    
+                    const result = data.result;
+                    
+                    if (type === 'mp3') {
+                        box.innerHTML = `
+                            <img src="${escapeHTML(result.thumbnail)}" style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);">
+                            <b>${escapeHTML(result.title)}</b><br>
+                            <audio src="${escapeHTML(result.download)}" controls style="width:100%; margin-top:10px;"></audio>
+                            <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP3</a>
+                        `;
+                    } else {
+                        box.innerHTML = `
+                            <video src="${escapeHTML(result.download)}" controls style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);"></video>
+                            <b>${escapeHTML(result.title)}</b><br>
+                            <a href="${escapeHTML(result.download)}" target="_blank" class="action-btn" style="margin-top:10px; text-align:center; text-decoration:none; background:#00ff9d;">Simpan MP4</a>
+                        `;
+                    }
+                } catch (e) { 
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                }
+                setBtnLoading(btn, false, 'Proses');
             };
         }
         else if (tool === 'stalktt') {
