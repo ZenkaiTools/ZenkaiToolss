@@ -1715,33 +1715,35 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.bacaGambarKomik = async (chapterId, chNum) => {
-        const box = document.getElementById('komik-res');
-        box.innerHTML = '<div class="loader"></div>';
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'images', chapterId: chapterId })
-            });
-            const data = await res.json();
-            
-            const baseUrl = data.baseUrl;
-            const hash = data.chapter.hash;
-            const images = data.chapter.data;
-            
-            let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${chNum}</h4>`;
-            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
-            images.forEach(img => {
-                // PAKAI PROXY GAMBAR BIAR MUNCUL
-                const rawImgUrl = `${baseUrl}/data/${hash}/${img}`;
-                const proxyImgUrl = `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(rawImgUrl)}`;
-                html += `<img src="${proxyImgUrl}" style="width:100%; border-radius:4px;" loading="lazy">`;
-            });
-            html += `</div>`;
-            
-            // Tombol Kembali
-            html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
-            box.innerHTML = html;
-        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-    };
+    const box = document.getElementById('komik-res');
+    box.innerHTML = '<div class="loader"></div>';
+    try {
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'images', chapterId: chapterId })
+        });
+        const data = await res.json();
+        
+        const baseUrl = data.baseUrl;
+        const hash = data.chapter.hash;
+        const images = data.chapter.data;
+        
+        // Bikin gambar 1x1 pixel transparan buat placeholder
+        const blankImg = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+        let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${chNum}</h4>`;
+        html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+        images.forEach(img => {
+            // PAKAI PROXY GAMBAR BIAR MUNCUL
+            const rawImgUrl = `${baseUrl}/data/${hash}/${img}`;
+            const proxyImgUrl = `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(rawImgUrl)}`;
+            html += `<img src="${proxyImgUrl}" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.src='${blankImg}'">`;
+        });
+        html += `</div>`;
+        
+        html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
+        box.innerHTML = html;
+    } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+};
 
 }); // <- INI PENUTUP DOMContentLoaded, JANGAN DIHAPUS
