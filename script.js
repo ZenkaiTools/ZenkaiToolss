@@ -1714,30 +1714,31 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.bacaGambarKomik = async (chapterId, chNum) => {
-        const box = document.getElementById('komik-res');
-        box.innerHTML = '<div class="loader"></div>';
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'images', chapterId: chapterId })
-            });
-            const data = await res.json();
-            
-            const baseUrl = data.baseUrl;
-            const hash = data.chapter.hash;
-            const images = data.chapter.data;
-            
-            let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${chNum}</h4>`;
-            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
-            images.forEach(img => {
-                html += `<img src="${baseUrl}/data/${hash}/${img}" style="width:100%; border-radius:4px;" loading="lazy">`;
-            });
-            html += `</div>`;
-            
-            // Tombol Kembali
-            html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
-            box.innerHTML = html;
-        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-    };
+    const box = document.getElementById('komik-res');
+    box.innerHTML = '<div class="loader"></div>';
+    try {
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'images', chapterId: chapterId })
+        });
+        const data = await res.json();
+        
+        const baseUrl = data.baseUrl;
+        const hash = data.chapter.hash;
+        const images = data.chapter.data;
+        
+        let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${chNum}</h4>`;
+        html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+        images.forEach(img => {
+            const rawImgUrl = `${baseUrl}/data/${hash}/${img}`;
+            const proxyImgUrl = `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(rawImgUrl)}`;
+            html += `<img src="${proxyImgUrl}" style="width:100%; border-radius:4px;" loading="lazy">`;
+        });
+        html += `</div>`;
+        
+        html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
+        box.innerHTML = html;
+    } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+};
 
 }); // <- INI PENUTUP DOMContentLoaded, JANGAN DIHAPUS
