@@ -738,23 +738,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
 
-            const proxyImg = (url) => {
-                if (!url) return '';
-                return `https://wsrv.nl/?url=${encodeURIComponent(url)}`;
-            };
-
             const loadKatalog = async (query) => {
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-sairi`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'search', q: query || 'action' })
+                        body: JSON.stringify({ action: 'search', q: query || 'martial peak' })
                     });
                     const data = await res.json();
-                    const komikList = data.result || []; 
+                    
+                    const komikList = data.results || []; 
 
                     if (komikList.length === 0) {
-                        box.innerHTML = '<p class="error-msg">Komik tidak ditemukan di ZenkaiTools.</p>';
+                        box.innerHTML = '<p class="error-msg">Komik tidak ditemukan.</p>';
                         return;
                     }
 
@@ -762,14 +758,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     komikList.forEach(manga => {
                         const title = manga.title || 'Tanpa Judul';
-                        const cover = proxyImg(manga.cover); 
-                        const url = manga.url;
-                        const t = escapeHTML(title);
+                        const cover = manga.cover || 'https://via.placeholder.com/150';
+                        const slug = manga.slug; 
+                        const t = escapeHTML(title.replace('Komik ', '')); // Hapus kata "Komik" biar rapi
                         
                         html += `
-                            <div class="komik-card-sairi" data-title="${t}" data-url="${url}" style="cursor:pointer; display:flex; flex-direction:column; gap:6px;">
+                            <div class="komik-card-jere" data-title="${t}" data-slug="${slug}" style="cursor:pointer; display:flex; flex-direction:column; gap:6px;">
                                 <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:8px; overflow:hidden; background:#222;">
-                                    <img src="${cover}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                    <img src="${cover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
                                 </div>
                                 <h4 style="font-size:11px; font-weight:800; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${t}</h4>
                             </div>
@@ -778,9 +774,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     html += `</div>`;
                     box.innerHTML = html;
 
-                    box.querySelectorAll('.komik-card-sairi').forEach(el => {
+                    box.querySelectorAll('.komik-card-jere').forEach(el => {
                         el.addEventListener('click', () => {
-                            bukaDetail(el.dataset.title, el.dataset.url);
+                            bukaDetail(el.dataset.title, el.dataset.slug);
                         });
                     });
 
@@ -789,18 +785,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            const bukaDetail = async (title, url) => {
+            const bukaDetail = async (title, slug) => {
                 box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-sairi`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'detail', url: url })
+                        body: JSON.stringify({ action: 'detail', slug: slug })
                     });
                     const data = await res.json();
                     
                     if (!data.status) throw new Error('Gagal mengambil detail');
-                    const detail = data.result;
-                    const episodes = detail.latest_episodes || []; 
+                    const detail = data.result || data.data;
+                    // Kalo Jere ngasih list chapter di 'chapters' atau 'chapter_list'
+                    const chapters = detail.chapters || detail.chapter_list || detail.list_chapters || []; 
                     
                     let html = `
                         <div style="margin-bottom:20px;">
@@ -809,31 +806,27 @@ document.addEventListener('DOMContentLoaded', () => {
                             </button>
                             
                             <div style="display:flex; gap:15px;">
-                                <img src="${proxyImg(detail.cover)}" style="width:100px; height:130px; object-fit:cover; border-radius:8px; border:2px solid var(--border);">
+                                <img src="${detail.cover || detail.thumbnail}" style="width:100px; height:130px; object-fit:cover; border-radius:8px; border:2px solid var(--border);">
                                 <div>
-                                    <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0;">${escapeHTML(detail.title)}</h3>
-                                    <p style="font-size:11px; color:var(--primary); font-weight:bold; margin:0 0 5px 0;">${escapeHTML(detail.genre || '-')} • ${escapeHTML(detail.views || '0')}</p>
-                                    <p style="font-size:11px; color:var(--text); opacity:0.8; line-height:1.4;">${escapeHTML(detail.synopsis || 'Tidak ada sinopsis.')}</p>
+                                    <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0;">${escapeHTML(detail.title || title)}</h3>
+                                    <p style="font-size:11px; color:var(--text); opacity:0.8; line-height:1.4;">${escapeHTML(detail.sinopsis || detail.synopsis || detail.description || 'Tidak ada sinopsis.')}</p>
                                 </div>
                             </div>
                         </div>
-                        <h4 style="margin-bottom:10px; font-size:14px;">Daftar Episode:</h4>
-                        <div style="display:flex; flex-direction:column; gap:8px;">
+                        <h4 style="margin-bottom:10px; font-size:14px;">Daftar Chapter (${chapters.length}):</h4>
+                        <div style="display:flex; flex-direction:column; gap:8px; max-height: 300px; overflow-y:auto;">
                     `;
 
-                    if (episodes.length === 0) {
-                        html += `<p class="error-msg">Belum ada episode.</p>`;
+                    if (chapters.length === 0) {
+                        html += `<p class="error-msg">Belum ada chapter.</p>`;
                     } else {
-                        episodes.forEach(ep => {
-                            const epNum = ep.number;
-                            const epTitle = ep.title || `Episode ${epNum}`;
-                            // Gambar episode di-hide karena pasti diblokir server, ganti pakai kotak angka
+                        chapters.forEach(ch => {
+                            const chTitle = ch.title || ch.chapter || 'Chapter';
+                            const chSlug = ch.slug || ch.link;
                             html += `
-                                <div class="press" onclick="bacaDariServer('${escapeHTML(detail.title)}', '${epNum}', '${ep.url}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px 15px; border-radius:8px; cursor:pointer;">
-                                    <div style="font-size:18px; font-weight:900; color:var(--primary); width:30px; text-align:center;">${epNum}</div>
-                                    <div style="flex:1; border-left:2px solid var(--border); padding-left:10px;">
-                                        <h5 style="margin:0; font-size:12px; font-weight:800; color:var(--text);">${escapeHTML(epTitle)}</h5>
-                                        <p style="margin:2px 0 0 0; font-size:10px; color:var(--text); opacity:0.6;">${escapeHTML(ep.date)}</p>
+                                <div class="press" onclick="bacaKomik('${escapeHTML(title)}', '${escapeHTML(chSlug)}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px 15px; border-radius:8px; cursor:pointer;">
+                                    <div style="flex:1;">
+                                        <h5 style="margin:0; font-size:12px; font-weight:800; color:var(--text);">${escapeHTML(chTitle)}</h5>
                                     </div>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
                                 </div>
@@ -849,36 +842,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            window.bacaDariServer = async (title, epNum, webtoonUrl) => {
-                box.innerHTML = `<div class="loader"></div><p style="text-align:center; font-size:12px;">Mencari "${escapeHTML(title)}" di server...</p>`;
+            window.bacaKomik = async (title, slug) => {
+                box.innerHTML = '<div class="loader"></div>';
                 try {
-                    const mdRes = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'search', q: title })
+                        body: JSON.stringify({ action: 'stream', slug: slug })
                     });
-                    const mdData = await mdRes.json();
+                    const data = await res.json();
+                    
+                    // Sesuai JSON, array gambarnya ada di data.result.pages
+                    const images = data.result?.pages || []; 
+                    
+                    if (images.length === 0) throw new Error('Gambar tidak ditemukan / API Stream sedang down');
 
-                    if (mdData.data && mdData.data.length > 0) {
-                        window.bukaChapterKomik(mdData.data[0].id, title);
-                    } else {
-                        // Tampilan kalau nggak ketemu (tanpa kata MangaDex)
-                        box.innerHTML = `
-                            <div style="text-align:center; padding: 30px 10px;">
-                                <div style="font-size:40px; margin-bottom:10px;">📖</div>
-                                <h4 style="margin:0 0 10px 0;">Komik Belum Tersedia di Server</h4>
-                                <p style="font-size:12px; opacity:0.8; margin-bottom:20px;">Komik "${escapeHTML(title)}" tidak ditemukan di ZenkaiTools. Kamu bisa membaca chapter ini langsung di aplikasi Webtoon.</p>
-                                
-                                <a href="${webtoonUrl}" target="_blank" class="action-btn" style="background:#00ff9d; text-decoration:none; display:block; margin-bottom:10px;">Baca di Webtoon Asli</a>
-                                <button onclick="openTool('komik')" class="action-btn" style="background:var(--card-bg); color:var(--text);">Kembali ke Katalog</button>
-                            </div>`;
-                    }
-                } catch (err) {
-                    box.innerHTML = `<p class="error-msg">Gagal konek ke server.</p>`;
+                    let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
+                    html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+                    images.forEach(imgUrl => {
+                        html += `<img src="${imgUrl}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
+                    });
+                    html += `</div>`;
+                    html += `<button class="action-btn press" onclick="openTool('komik')" style="margin-top:15px; background:#ff3333;">Kembali ke Katalog</button>`;
+                    box.innerHTML = html;
+
+                } catch (e) { 
+                    box.innerHTML = `
+                        <div style="text-align:center; padding: 20px;">
+                            <p class="error-msg">${escapeHTML(e.message)}</p>
+                            <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
+                        </div>
+                    `; 
                 }
             };
 
-            // Default pencarian dibikin 'action' biar banyak isinya
-            loadKatalog('action'); 
+            loadKatalog('martial peak'); 
             
             let timeout = null;
             input.addEventListener('input', (e) => {
@@ -1125,7 +1122,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="desc-text">Pilih mau download Audio (MP3) atau Video (MP4).</span>
                 <input type="text" id="yt-url" placeholder="Paste link YouTube...">
 
-                <!-- DESAIN BARU: Tombol Pilihan Kustom -->
                 <div style="display:flex; gap:10px; margin-bottom:15px;">
                     <button id="btn-type-mp3" onclick="pilihTipeYt('mp3')" class="action-btn" style="flex:1; background:var(--primary); color:#000; border:2px solid var(--border); box-shadow:0 4px 0 var(--border); margin:0;">🎵 MP3</button>
                     <button id="btn-type-mp4" onclick="pilihTipeYt('mp4')" class="action-btn" style="flex:1; background:var(--bg); color:var(--text); border:2px solid var(--border); box-shadow:0 4px 0 var(--border); margin:0;">🎬 MP4</button>
@@ -1135,7 +1131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div id="yt-result"></div>
             `;
 
-            let tipeTerpilih = 'mp3'; // Default
+            let tipeTerpilih = 'mp3'; 
             window.pilihTipeYt = (tipe) => {
                 tipeTerpilih = tipe;
                 const btnMp3 = document.getElementById('btn-type-mp3');
@@ -1818,96 +1814,41 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // FUNGSI KOMIK BACA GAMBAR
+    // FUNGSI KOMIK (STREAM JERE API)
     // =========================================
-    window.bukaChapterKomik = async (mangaId, title) => {
+    window.bacaKomik = async (title, slug) => {
         const box = document.getElementById('komik-res');
         box.innerHTML = '<div class="loader"></div>';
         try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'chapters', mangaId: mangaId })
+                body: JSON.stringify({ action: 'stream', slug: slug })
             });
             const data = await res.json();
             
-            if (!data.data || data.data.length === 0) throw new Error('Chapter komik belum tersedia di server.');
+            // Ambil array images dari result.pages
+            const images = data.result?.pages || []; 
             
-            let html = `
-                <div style="display:flex; gap:15px; margin-bottom:20px; align-items:flex-start;">
-                    <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
-                    </button>
-                    <div>
-                        <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
-                        <div style="display:flex; gap:8px; align-items:center;">
-                            <span style="font-size:10px; font-weight:bold; background:var(--primary); color:#000; padding:3px 8px; border-radius:4px;">ZENKAI SERVER</span>
-                            <span style="font-size:11px; color:var(--text); opacity:0.6;">${data.data.length} Chapters</span>
-                        </div>
-                    </div>
-                </div>
-                <div style="display:flex; flex-direction:column;">
-            `;
-            
-            data.data.forEach((ch) => {
-                const chNum = ch.attributes.chapter || '?';
-                const chTitle = ch.attributes.title || '';
-                const date = new Date(ch.attributes.publishAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
-                
-                html += `
-                    <div class="press" onclick="bacaGambarKomik('${escapeHTML(ch.id)}', '${escapeHTML(chNum)}')" style="display:flex; align-items:center; padding:15px 10px; border-bottom:1px solid var(--border); cursor:pointer; transition:0.2s;">
-                        <div style="width:35px; height:35px; background:var(--card-bg); border:2px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:12px; flex-shrink:0; color:var(--text);">
-                            ${chNum}
-                        </div>
-                        <div style="margin-left:15px; flex:1;">
-                            <h5 style="margin:0; font-size:13px; font-weight:800; color:var(--text);">Chapter ${chNum}</h5>
-                            <p style="margin:2px 0 0 0; font-size:10px; color:var(--text); opacity:0.6;">${date} ${chTitle ? '• ' + escapeHTML(chTitle) : ''}</p>
-                        </div>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
-                    </div>
-                `;
+            if (images.length === 0) throw new Error('Gambar tidak ditemukan / Server Stream sedang down');
+
+            let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
+            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+            images.forEach(imgUrl => {
+                html += `<img src="${imgUrl}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
             });
-            
             html += `</div>`;
+
+            html += `<button class="action-btn press" onclick="openTool('komik')" style="margin-top:15px; background:#ff3333;">Kembali ke Katalog</button>`;
             box.innerHTML = html;
-            
+
         } catch (e) { 
             box.innerHTML = `
-                <div style="text-align:center; padding:40px 20px;">
-                    <div style="font-size:40px; margin-bottom:10px;">😔</div>
+                <div style="text-align:center; padding: 20px;">
                     <p class="error-msg">${escapeHTML(e.message)}</p>
-                    <button onclick="openTool('komik')" class="action-btn" style="margin-top:20px;">Kembali ke Katalog</button>
+                    <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
                 </div>
             `; 
         }
-    };
-
-    window.bacaGambarKomik = async (chapterId, chNum) => {
-        const box = document.getElementById('komik-res');
-        box.innerHTML = '<div class="loader"></div>';
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'images', chapterId: chapterId })
-            });
-            const data = await res.json();
-
-            const baseUrl = data.baseUrl;
-            const hash = data.chapter?.hash;
-            const images = data.chapter?.data;
-
-            if (!baseUrl || !hash || !images) throw new Error('Gagal mengambil gambar chapter');
-
-            let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${escapeHTML(chNum)}</h4>`;
-            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
-            images.forEach(img => {
-                const rawUrl = `${baseUrl}/data/${hash}/${img}`;
-                html += `<img src="${rawUrl}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
-            });
-            html += `</div>`;
-
-            html += `<button class="action-btn press" onclick="closeModal()" style="margin-top:15px; background:#ff3333;">Tutup</button>`;
-            box.innerHTML = html;
-        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
     };
 
 }); // <- PENUTUP DOMContentLoaded, JANGAN DIHAPUS
