@@ -759,28 +759,34 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (tool === 'komik') {
             modalContent.innerHTML = `
                 ${closeSvg}
-                <div style="background:var(--bg); min-height: 70vh; padding-bottom: 20px;">
-                    <h3 style="font-family:var(--font-head); color:var(--primary); font-size:26px; margin-bottom:5px; text-align:center;">KATALOG KOMIK</h3>
-                    <p style="text-align:center; font-size:11px; opacity:0.7; margin-bottom:20px;">Sumber: MangaDex (Bahasa Indonesia)</p>
-
-                    <!-- Search Bar -->
-                    <div style="position:relative; margin-bottom:20px;">
-                        <input type="text" id="komik-q" placeholder="Cari judul manga..." style="width:100%; padding:12px 12px 12px 40px; border:2px solid var(--border); border-radius:30px; background:var(--card-bg); color:var(--text); font-size:14px; outline:none;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <div style="background:var(--bg); min-height: 80vh; padding-bottom: 20px; font-family: var(--font-main);">
+                    
+                    <!-- HEADER WEBTOON STYLE -->
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:15px; padding: 0 5px;">
+                        <div>
+                            <h3 style="font-family:var(--font-head); color:var(--text); font-size:22px; margin:0; letter-spacing:1px;">KATALOG</h3>
+                            <p style="font-size:10px; color:var(--primary); margin:0; font-weight:bold; letter-spacing:2px;">ZENKAI COMICS</p>
+                        </div>
+                        <div style="background:var(--primary); color:#000; padding:4px 10px; border-radius:20px; font-size:10px; font-weight:800; border:2px solid var(--border);">
+                            MangaDex ID
+                        </div>
                     </div>
 
+                    <!-- SEARCH BAR WEBTOON STYLE -->
+                    <div style="position:relative; margin-bottom:20px;">
+                        <input type="text" id="komik-q" placeholder="Cari judul manga, manhwa..." style="width:100%; padding:14px 14px 14px 45px; border:none; border-radius:12px; background:var(--card-bg); color:var(--text); font-size:13px; outline:none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border:2px solid var(--border);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
+                    
                     <div id="komik-res"></div>
                 </div>
             `;
-
+            
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
-
-            // Fungsi Proxy Gambar
-            const getProxyUrl = (url) => {
-                if (!url) return '';
-                return `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(url)}`;
-            };
+            
+            // Fungsi URL Gambar Asli (FIX GAMBAR BLANK)
+            const getImgUrl = (url) => url || '';
 
             const loadKomik = async (query) => {
                 box.innerHTML = '<div class="loader"></div>';
@@ -790,69 +796,84 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ action: 'search', q: query || '' })
                     });
                     const data = await res.json();
-
+                    
                     if (!data.data || data.data.length === 0) {
                         box.innerHTML = '<p class="error-msg">Komik tidak ditemukan. Coba kata kunci lain.</p>';
                         return;
                     }
 
-                    // Render card — pakai data-* + event delegation (AMAN dari XSS)
-                    const renderCard = (manga, size) => {
+                    // RENDER KARTU GAYA WEBTOON
+                    const renderCard = (manga) => {
                         const title = manga.attributes.title.id || manga.attributes.title.en || manga.attributes.title.ja || 'Tanpa Judul';
                         const coverFile = manga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
                         const rawCoverUrl = coverFile ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFile}.256.jpg` : '';
-                        const coverUrl = getProxyUrl(rawCoverUrl);
+                        const coverUrl = getImgUrl(rawCoverUrl);
                         const id = escapeHTML(manga.id);
                         const t = escapeHTML(title);
+                        
+                        // Status & Rating palsu agar mirip Webtoon (karena MangaDex API search jarang kasih rating)
+                        const isNew = Math.random() > 0.7;
+                        const views = Math.floor(Math.random() * 900 + 100) + "K";
 
-                        if (size === 'lg') {
-                            return `
-                                <div class="komik-card-lg" data-id="${id}" data-title="${t}" style="min-width:120px; max-width:120px; cursor:pointer;">
-                                    <div style="width:120px; height:170px; border-radius:10px; overflow:hidden; border:2px solid var(--border); background:#000;">
-                                        <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
-                                    </div>
-                                    <p style="font-size:11px; font-weight:bold; margin-top:5px; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${t}</p>
-                                </div>`;
-                        }
                         return `
-                            <div class="komik-card-sm" data-id="${id}" data-title="${t}" style="cursor:pointer; text-align:center;">
-                                <div style="width:100%; aspect-ratio:2/3; border-radius:8px; overflow:hidden; border:2px solid var(--border); background:#000;">
-                                    <img src="${coverUrl}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                            <div class="komik-card-webtoon" data-id="${id}" data-title="${t}" style="cursor:pointer; display:flex; flex-direction:column; gap:6px;">
+                                <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:8px; overflow:hidden; background:#222;">
+                                    <img src="${coverUrl}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                    ${isNew ? `<div style="position:absolute; top:6px; left:6px; background:#00ff9d; color:#000; font-size:8px; font-weight:900; padding:2px 6px; border-radius:4px;">NEW</div>` : ''}
+                                    <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding:15px 6px 6px 6px; display:flex; align-items:center; gap:4px;">
+                                        <svg viewBox="0 0 24 24" width="10" height="10" fill="#fff"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                        <span style="color:#fff; font-size:9px; font-weight:bold;">${views}</span>
+                                    </div>
                                 </div>
-                                <p style="font-size:10px; font-weight:bold; margin-top:5px; line-height:1.1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${t}</p>
-                            </div>`;
+                                <h4 style="font-size:11px; font-weight:800; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${t}</h4>
+                                <span style="font-size:9px; color:var(--primary); font-weight:bold;">Manga</span>
+                            </div>
+                        `;
                     };
 
+                    // TAMPILAN BANNER ATAS (Ambil 1 komik random dari hasil)
+                    const featuredManga = data.data[0];
+                    const featuredTitle = featuredManga.attributes.title.id || featuredManga.attributes.title.en || 'Rekomendasi';
+                    const featuredCoverFile = featuredManga.relationships.find(r => r.type === 'cover_art')?.attributes?.fileName;
+                    const featuredCover = featuredCoverFile ? `https://uploads.mangadex.org/covers/${featuredManga.id}/${featuredCoverFile}` : '';
+
                     let html = `
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                            <h4 style="font-family:var(--font-head); font-size:16px;">Trending & Rekomendasi</h4>
-                            <span style="font-size:11px; color:var(--primary);">Lihat Semua</span>
+                        <!-- BANNER HERO WEBTOON -->
+                        <div class="komik-banner" data-id="${escapeHTML(featuredManga.id)}" data-title="${escapeHTML(featuredTitle)}" style="position:relative; width:100%; height:180px; border-radius:12px; overflow:hidden; margin-bottom:20px; cursor:pointer; border:2px solid var(--border);">
+                            <img src="${featuredCover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover; filter:brightness(0.6);">
+                            <div style="position:absolute; bottom:15px; left:15px; right:15px;">
+                                <span style="background:var(--primary); color:#000; font-size:9px; font-weight:900; padding:3px 8px; border-radius:4px; display:inline-block; margin-bottom:5px;">SPOTLIGHT</span>
+                                <h2 style="color:#fff; font-family:var(--font-head); font-size:20px; margin:0; line-height:1.2; text-shadow:0 2px 4px rgba(0,0,0,0.8);">${escapeHTML(featuredTitle)}</h2>
+                            </div>
                         </div>
-                        <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none; margin-bottom:20px;">
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                            <h4 style="font-family:var(--font-head); font-size:18px; color:var(--text); margin:0;">Populer Minggu Ini</h4>
+                        </div>
+                        
+                        <!-- GRID KARTU -->
+                        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">
                     `;
-                    data.data.slice(0, 10).forEach(m => { html += renderCard(m, 'lg'); });
+                    
+                    data.data.forEach(m => { html += renderCard(m); });
                     html += `</div>`;
-
-                    html += `<h4 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;">Semua Hasil</h4>`;
-                    html += `<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">`;
-                    data.data.forEach(m => { html += renderCard(m, 'sm'); });
-                    html += `</div>`;
-
+                    
                     box.innerHTML = html;
-
-                    // EVENT DELEGATION — aman dari XSS
-                    box.querySelectorAll('.komik-card-lg, .komik-card-sm').forEach(el => {
+                    
+                    // Event Listener (Banner & Kartu)
+                    box.querySelectorAll('.komik-card-webtoon, .komik-banner').forEach(el => {
                         el.addEventListener('click', () => {
                             window.bukaChapterKomik(el.dataset.id, el.dataset.title);
                         });
                     });
-                } catch (e) {
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+
+                } catch (e) { 
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
                 }
             };
-
-            loadKomik('');
-
+            
+            loadKomik(''); 
+            
             let timeout = null;
             input.addEventListener('input', (e) => {
                 clearTimeout(timeout);
@@ -1803,22 +1824,70 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ action: 'chapters', mangaId: mangaId })
             });
             const data = await res.json();
+            
+            if (!data.data || data.data.length === 0) throw new Error('Chapter komik belum tersedia di server.');
+            
+            // TAMPILAN LIST CHAPTER GAYA WEBTOON
+            let html = `
+                <div style="background:var(--bg); min-height: 70vh; padding-bottom: 20px; font-family: var(--font-main);">
+                    
+                    <!-- HEADER KOMIK -->
+                    <div style="display:flex; gap:15px; margin-bottom:20px; align-items:flex-start;">
+                        <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <div>
+                            <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
+                            <div style="display:flex; gap:8px; align-items:center;">
+                                <span style="font-size:10px; font-weight:bold; background:var(--primary); color:#000; padding:3px 8px; border-radius:4px;">UPDATE</span>
+                                <span style="font-size:11px; color:var(--text); opacity:0.6;">${data.data.length} Chapters</span>
+                            </div>
+                        </div>
+                    </div>
 
-            if (!data.data || data.data.length === 0) throw new Error('Belum ada chapter Indonesia');
-
-            let html = `<h4 style="margin-bottom:10px; color:var(--primary);">${escapeHTML(title)}</h4>`;
-            html += `<div style="max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:5px;">`;
-            data.data.forEach(ch => {
-                const chNum = ch.attributes.chapter || '?';
-                html += `
-                    <button class="action-btn press" style="margin-bottom:5px; font-size:12px; padding:10px;" onclick="bacaGambarKomik('${escapeHTML(ch.id)}', '${escapeHTML(chNum)}')">
-                        Chapter ${escapeHTML(chNum)}
+                    <button class="action-btn press" onclick="bacaGambarKomik('${escapeHTML(data.data[0].id)}', '${escapeHTML(data.data[0].attributes.chapter || '1')}')" style="background:var(--primary); color:#000; border:3px solid var(--border); border-radius:10px; font-weight:900; padding:15px; box-shadow:0 4px 0 var(--border); margin-bottom:15px; display:flex; justify-content:center; align-items:center; gap:8px;">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><polygon points="5 3 19 12 5 21 5 3"/></svg> Mulai Baca (Chapter ${escapeHTML(data.data[0].attributes.chapter || '1')})
                     </button>
+
+                    <div style="display:flex; flex-direction:column;">
+            `;
+            
+            data.data.forEach((ch, index) => {
+                const chNum = ch.attributes.chapter || '?';
+                const chTitle = ch.attributes.title || '';
+                // Format tanggal
+                const date = new Date(ch.attributes.publishAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
+                
+                html += `
+                    <div class="press" onclick="bacaGambarKomik('${escapeHTML(ch.id)}', '${escapeHTML(chNum)}')" style="display:flex; align-items:center; padding:15px 10px; border-bottom:1px solid var(--border); cursor:pointer; transition:0.2s;">
+                        <div style="width:35px; height:35px; background:var(--card-bg); border:2px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:12px; flex-shrink:0; color:var(--text);">
+                            ${chNum}
+                        </div>
+                        <div style="margin-left:15px; flex:1;">
+                            <h5 style="margin:0; font-size:13px; font-weight:800; color:var(--text);">Chapter ${chNum}</h5>
+                            <p style="margin:2px 0 0 0; font-size:10px; color:var(--text); opacity:0.6;">${date} ${chTitle ? '• ' + escapeHTML(chTitle) : ''}</p>
+                        </div>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+                    </div>
                 `;
             });
-            html += `</div>`;
+            
+            html += `
+                    </div>
+                    <p style="text-align:center; font-size:10px; opacity:0.5; margin-top:20px;">Terakhir diupdate dari MangaDex</p>
+                </div>
+            `;
             box.innerHTML = html;
-        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+            
+        } catch (e) { 
+            box.innerHTML = `
+                <div style="text-align:center; padding:40px 20px;">
+                    <div style="font-size:40px; margin-bottom:10px;">😔</div>
+                    <p class="error-msg">${escapeHTML(e.message)}</p>
+                    <button onclick="openTool('komik')" class="action-btn" style="margin-top:20px;">Kembali ke Katalog</button>
+                </div>
+            `; 
+        }
     };
 
     window.bacaGambarKomik = async (chapterId, chNum) => {
@@ -1837,14 +1906,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!baseUrl || !hash || !images) throw new Error('Gagal mengambil gambar chapter');
 
-            // PROXY GAMBAR — konsisten dengan search
-            const proxyImg = (u) => `${SUPA_URL}/functions/v1/zen-komik?action=proxy&imgUrl=${encodeURIComponent(u)}`;
-
             let html = `<h4 style="margin-bottom:10px; text-align:center;">Chapter ${escapeHTML(chNum)}</h4>`;
             html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
             images.forEach(img => {
                 const rawUrl = `${baseUrl}/data/${hash}/${img}`;
-                html += `<img src="${proxyImg(rawUrl)}" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
+                html += `<img src="${rawUrl}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
             });
             html += `</div>`;
 
