@@ -337,20 +337,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // PATCH: HANYA TOOLS COMING SOON YANG DI-HARDCODE UNTUK LABEL "SOON"
+    // Instagram, Facebook, dan Bypass sudah dihapus dari sini agar statusnya murni dari Owner Panel
     const comingSoonList = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
     comingSoonList.forEach(toolName => {
         const card = document.querySelector(`.tool-card[onclick="openTool('${toolName}')"]`);
         if (card) card.classList.add('soon');
     });
-
-    const bypassCard = document.querySelector('.tool-card[onclick="openTool(\'linkvertise\')"]');
-    if (bypassCard) bypassCard.classList.add('maintenance-fun');
-
-    const igCard = document.querySelector('.tool-card[onclick="openTool(\'instagram\')"]');
-    if (igCard) { igCard.classList.add('maintenance'); const igTitle = igCard.querySelector('h4'); if (igTitle) igTitle.innerText = 'Instagram DL'; }
-
-    const fbCard = document.querySelector('.tool-card[onclick="openTool(\'facebook\')"]');
-    if (fbCard) fbCard.classList.add('maintenance-fb');
 
     // =========================================
     // 8. SISTEM GERBANG LOGIN (AUTH)
@@ -701,7 +694,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
         const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
-        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg'];
+        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise'];
         const listPages = ['fun', 'setting', 'info'];
 
         let toolsHtml = listTools.map(t => `
@@ -832,6 +825,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.openTool = (tool) => {
         if (!modal || !modalContent) return;
 
+        // CEK APAKAH TOOL DINONAKTIFKAN DARI PANEL OWNER
         const currentDisabledTools = window.currentDisabledTools || [];
         if (currentDisabledTools.includes(tool)) {
             modal.classList.add('active');
@@ -847,6 +841,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal.classList.add('active');
 
+        // TOOLS COMING SOON (HARDCODE)
         const comingSoonTools = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
         if (comingSoonTools.includes(tool)) {
             modalContent.innerHTML = `
@@ -858,39 +853,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (tool === 'linkvertise') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Bypass Link</h3>
-                <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
-                <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur bypass link saat ini sedang dalam perbaikan sistem keamanan.</p>
-                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
-            `;
-            return;
-        }
-
-        if (tool === 'instagram') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Instagram DL</h3>
-                <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
-                <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur downloader Instagram saat ini sedang dalam perbaikan oleh developer (API Down).</p>
-                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
-            `;
-            return;
-        }
-
-        if (tool === 'facebook') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Facebook DL</h3>
-                <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
-                <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur downloader Facebook saat ini sedang dalam perbaikan oleh developer (API Down).</p>
-                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
-            `;
-            return;
-        }
-
+        // FUNGSI TOOL ASLI
         if (tool === 'tiktok') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1579,11 +1542,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
         }
+        // ---------- FALLBACK (Kalau tool tidak ada fungsinya) ----------
         else {
             modalContent.innerHTML = `
                 ${closeSvg}
-                <h3>Tool Tidak Ditemukan</h3>
-                <span class="desc-text">Modul "${escapeHTML(tool)}" belum tersedia atau sedang dalam pengembangan.</span>
+                <h3>Coming Soon</h3>
+                <span class="desc-text">Fitur "${escapeHTML(tool)}" sedang dalam tahap pengembangan atau belum tersedia.</span>
+                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update</a>
             `;
         }
     };
