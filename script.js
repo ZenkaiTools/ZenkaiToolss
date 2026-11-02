@@ -619,6 +619,99 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'heartbeat', session_id: mySession }) }).catch(()=>{});
     }, 30000);
 
+
+// =========================================
+// PANEL RAHASIA OWNER (LAYAR REMOTE)
+// =========================================
+window.tampilkanPanelRahasia = async () => {
+    if (document.getElementById('owner-panel')) document.getElementById('owner-panel').remove();
+
+    let set = { site_title: '', broadcast_text: '', is_maintenance: false, disabled_pages: '', disabled_tools: '' };
+    try {
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'get_settings' }) });
+        const data = await res.json();
+        if (data.status && data.data) set = data.data;
+    } catch(e) {}
+
+    document.body.insertAdjacentHTML('beforeend', `
+        <div id="owner-panel" style="position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000002; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:15px; backdrop-filter:blur(10px); overflow-y:auto;">
+            <div style="background:var(--bg); padding:20px; border-radius:12px; border:3px solid var(--primary); width:100%; max-width:400px; text-align:left; box-shadow:0 0 20px var(--primary); max-height:90vh; overflow-y:auto;">
+                
+                <h2 style="color:var(--primary); font-family:var(--font-head); margin-bottom:15px; font-size:24px; text-align:center;">OWNER CONTROL</h2>
+                
+                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🏷️ Judul Web (Header)</label>
+                <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
+
+                <label style="font-size:11px; font-weight:bold; opacity:0.8;">📢 Broadcast Banner (Kosongkan untuk mematikan)</label>
+                <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Cth: Update V2 segera rilis!" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
+
+                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🔒 Kunci Halaman (Pisahkan koma)</label>
+                <input type="text" id="own-pages" value="${escapeHTML(set.disabled_pages || '')}" placeholder="Cth: fun,setting" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
+
+                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🚫 Matikan Tool (Pisahkan koma)</label>
+                <input type="text" id="own-tools" value="${escapeHTML(set.disabled_tools || '')}" placeholder="Cth: tiktok,amprem" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
+
+                <div style="background:rgba(255,51,51,0.1); padding:12px; border:2px dashed #ff3333; border-radius:8px; margin-bottom:15px;">
+                    <label style="font-size:12px; font-weight:bold; color:#ff3333; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="checkbox" id="own-mt" ${set.is_maintenance ? 'checked' : ''} style="width:20px; height:20px;"> ⏳ Mode Maintenance Global
+                    </label>
+                </div>
+
+                <button onclick="simpanSettingOwner()" style="width:100%; padding:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:8px; font-weight:900; font-size:14px; cursor:pointer; box-shadow:2px 2px 0 var(--border); margin-bottom:10px;">💾 SIMPAN PENGATURAN</button>
+                
+                <button onclick="forceRefreshUser()" style="width:100%; padding:14px; background:#a855f7; color:#fff; border:2px solid var(--border); border-radius:8px; font-weight:900; font-size:14px; cursor:pointer; box-shadow:2px 2px 0 var(--border); margin-bottom:10px;">🔄 Paksa Refresh Semua User</button>
+
+                <button onclick="document.getElementById('owner-panel').remove()" style="width:100%; padding:10px; background:var(--card-bg); color:var(--text); border:2px solid var(--border); border-radius:8px; font-weight:bold; cursor:pointer;">Tutup Panel</button>
+            </div>
+        </div>
+    `);
+};
+
+window.simpanSettingOwner = async () => {
+    const btn = event.target;
+    const oldText = btn.innerText;
+    btn.innerText = 'Menyimpan...';
+    btn.disabled = true;
+
+    const payload = {
+        action: 'update_settings',
+        site_title: document.getElementById('own-title').value,
+        broadcast_text: document.getElementById('own-broadcast').value,
+        disabled_pages: document.getElementById('own-pages').value,
+        disabled_tools: document.getElementById('own-tools').value,
+        is_maintenance: document.getElementById('own-mt').checked
+    };
+
+    try {
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status) {
+            showToast("Pengaturan disimpan!");
+            fetchSettings(); 
+        } else {
+            showToast("Gagal: " + data.message);
+        }
+    } catch(e) {
+        showToast("Error koneksi ke server.");
+    }
+    btn.innerText = oldText;
+    btn.disabled = false;
+};
+
+window.forceRefreshUser = async () => {
+    if (!confirm("Yakin mau maksa semua user buat refresh?")) return;
+    try {
+        await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'force_refresh' })
+        });
+        showToast("Sinyal Force Refresh terkirim!");
+    } catch(e) {}
+};
+
     // ===== BATAS BAGIAN 1 =====
     // =========================================
 // 11. FUNGSI OPEN TOOL
