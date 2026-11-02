@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     const SUPA_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
     const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
-    const OWNER_TOKEN_KEY = 'zenkai_owner_token'; // PATCH: Menggunakan Token, bukan flag 'true'
+    const OWNER_TOKEN_KEY = 'zenkai_owner_token';
 
     const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -137,8 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     // 3. TEMA & NAVIGASI
     // =========================================
-    const savedTheme = localStorage.getItem('zenkai_theme');
-    if (savedTheme) document.body.setAttribute('data-theme', savedTheme);
+    const savedTheme = localStorage.getItem('zenkai_theme') || 'cyber'; // Default Cyberpunk
+    document.body.setAttribute('data-theme', savedTheme);
 
     window.setTheme = (themeName) => {
         document.body.setAttribute('data-theme', themeName);
@@ -366,7 +366,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const welcome = document.getElementById('welcome-username');
         if (welcome) welcome.innerText = savedUser;
         
-        // PATCH: Cek token owner (bukan flag 'true' lagi)
         if (localStorage.getItem(OWNER_TOKEN_KEY)) {
             const navOwner = document.getElementById('nav-owner');
             if (navOwner) navOwner.style.display = 'flex';
@@ -519,34 +518,65 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(fetchSettings, 15000); fetchSettings();
 
     function applySettings(setting) {
-        // PATCH: Cek token owner (bukan flag 'true')
         const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
 
         if (setting.is_maintenance && !isOwner) {
-            if (!window.mtTimer) {
+            if (!window.mtTimer && !sessionStorage.getItem('maintenance_triggered')) {
                 window.mtTimer = true;
                 let cd = 10;
+                
                 const w = document.createElement('div');
-                w.id = 'mt-warn'; w.style = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#ff3333; color:#fff; padding:15px; border-radius:8px; z-index:99999; font-weight:bold; border:3px solid #000; text-align:center;';
-                w.innerHTML = `⚠️ Web maintenance dalam <span id="mt-cd">10</span> detik...`;
+                w.id = 'mt-warn'; 
+                w.style = 'position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); color:#fff; z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-family:var(--font-main); padding:20px;';
+                
+                w.innerHTML = `
+                    <div style="background:var(--card-bg); border:3px solid var(--border); padding:30px 20px; border-radius:20px; max-width:320px; width:100%; box-shadow:0 0 30px rgba(255, 51, 51, 0.3);">
+                        <div style="font-size:40px; margin-bottom:15px; animation: pulse 1.5s infinite;">⚠️</div>
+                        <h2 style="color:#ff3333; margin-bottom:10px; font-family:var(--font-head); font-size:22px;">MAINTENANCE</h2>
+                        <p style="font-size:13px; opacity:0.8; margin-bottom:20px; line-height:1.5;">Sistem akan masuk ke mode perbaikan dalam <b id="mt-cd" style="color:var(--primary); font-size:16px;">10</b> detik.</p>
+                        <div style="width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:10px; overflow:hidden;">
+                            <div id="mt-bar" style="height:100%; width:0%; background:#ff3333; transition:width 1s linear;"></div>
+                        </div>
+                    </div>
+                `;
                 document.body.appendChild(w);
+                
+                setTimeout(() => { const bar = document.getElementById('mt-bar'); if(bar) bar.style.width = '100%'; }, 50);
+
                 const int = setInterval(() => {
-                    cd--; const el = document.getElementById('mt-cd'); if (el) el.innerText = cd;
-                    if (cd <= 0) { clearInterval(int); w.remove(); const ms = document.getElementById('maintenance-screen'); if (ms) ms.style.display = 'flex'; }
+                    cd--; 
+                    const el = document.getElementById('mt-cd'); 
+                    if (el) el.innerText = cd;
+                    
+                    if (cd <= 0) { 
+                        clearInterval(int); 
+                        w.remove(); 
+                        const ms = document.getElementById('maintenance-screen'); 
+                        if (ms) ms.style.display = 'flex'; 
+                        sessionStorage.setItem('maintenance_triggered', 'true');
+                    }
                 }, 1000);
+            } else {
+                const ms = document.getElementById('maintenance-screen');
+                if (ms) ms.style.display = 'flex';
             }
         } else {
             const ms = document.getElementById('maintenance-screen');
             if (ms) ms.style.display = 'none';
             window.mtTimer = false;
             const w = document.getElementById('mt-warn'); if (w) w.remove();
+            sessionStorage.removeItem('maintenance_triggered');
         }
 
         if (setting.site_title) { const t = document.querySelector('.logo-text h1'); if (t) t.innerText = setting.site_title; }
+        
         const bc = document.getElementById('broadcast-banner');
         if (bc) {
-            if (setting.broadcast_text) { const bt = document.getElementById('broadcast-text'); if (bt) bt.innerText = setting.broadcast_text; bc.style.display = 'block'; }
-            else bc.style.display = 'none';
+            if (setting.broadcast_text) { 
+                const bt = document.getElementById('broadcast-text'); 
+                if (bt) bt.innerText = setting.broadcast_text; 
+                bc.style.display = 'block'; 
+            } else bc.style.display = 'none';
         }
 
         const dPages = setting.disabled_pages ? setting.disabled_pages.split(',') : [];
@@ -561,523 +591,539 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('.tool-card').forEach(c => {
             const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
-            if (m && dTools.includes(m[1])) {
-                c.classList.add('maintenance-mode');
-            } else {
-                c.classList.remove('maintenance-mode');
-            }
+            if (m && dTools.includes(m[1])) { c.classList.add('maintenance-mode'); } 
+            else { c.classList.remove('maintenance-mode'); }
         });
     }
+    
     // =========================================
-// 10. PINTU RAHASIA OWNER (PATCHED)
-// =========================================
-let clicks = 0;
-document.querySelector('.logo-area')?.addEventListener('click', () => {
-    clicks++; setTimeout(() => { clicks = 0; }, 1000);
-    if (clicks === 5) { clicks = 0; bukaPintuRahasia(); }
-});
+    // 10. PINTU RAHASIA OWNER (PATCHED)
+    // =========================================
+    let clicks = 0;
+    document.querySelector('.logo-area')?.addEventListener('click', () => {
+        clicks++; setTimeout(() => { clicks = 0; }, 1000);
+        if (clicks === 5) { clicks = 0; bukaPintuRahasia(); }
+    });
 
-// PATCH: Fungsi ini sekarang ngecek token ke database, bukan cuma baca localStorage
-window.bukaPanelOwnerLangsung = async () => {
-    const token = localStorage.getItem(OWNER_TOKEN_KEY);
-    if (!token) return bukaPintuRahasia();
+    window.bukaPanelOwnerLangsung = async () => {
+        const token = localStorage.getItem(OWNER_TOKEN_KEY);
+        if (!token) return bukaPintuRahasia();
 
-    try {
-        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'verify_token', owner_token: token })
-        });
-        const data = await res.json();
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'verify_token', owner_token: token })
+            });
+            const data = await res.json();
 
-        if (data.status) {
-            if (typeof window.tampilkanPanelRahasia === 'function') {
+            if (data.status) {
+                const btnOwner = document.getElementById('nav-owner');
+                window.switchPage('owner', btnOwner);
                 window.tampilkanPanelRahasia();
             } else {
-                showToast("Panel belum siap, coba refresh.");
+                localStorage.removeItem(OWNER_TOKEN_KEY);
+                bukaPintuRahasia();
             }
-        } else {
-            localStorage.removeItem(OWNER_TOKEN_KEY);
-            bukaPintuRahasia();
+        } catch (e) {
+            showToast("Gagal verifikasi owner.");
         }
-    } catch (e) {
-        showToast("Gagal verifikasi owner.");
-    }
-};
-
-function bukaPintuRahasia() {
-    if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
-    document.body.insertAdjacentHTML('beforeend', `
-        <div id="owner-modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:100000; display:flex; align-items:center; justify-content:center;">
-            <div style="background:var(--bg); padding:20px; border-radius:12px; border:3px solid var(--border); width:90%; max-width:340px; text-align:center;">
-                <h2 style="color:var(--primary); font-family:var(--font-head); margin-bottom:15px;">SYSTEM OVERRIDE</h2>
-                <input type="password" id="owner-pass" placeholder="Passcode" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:2px solid var(--border); background:var(--card-bg); color:var(--text); text-align:center;">
-                <div style="display:flex; gap:10px;">
-                    <button onclick="document.getElementById('owner-modal').remove()" style="flex:1; padding:10px; background:#ff3333; color:#fff; border:none; border-radius:6px; font-weight:bold;">Batal</button>
-                    <button onclick="verifikasiOwner()" style="flex:1; padding:10px; background:var(--primary); color:#000; border:none; border-radius:6px; font-weight:bold;">Masuk</button>
-                </div>
-            </div>
-        </div>
-    `);
-}
-
-// PATCH: Fungsi login owner, simpan token yang didapat dari server
-window.verifikasiOwner = async () => {
-    const pass = document.getElementById('owner-pass').value;
-    try {
-        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password: pass, action: 'login' })
-        });
-        const data = await res.json();
-
-        if (data.status && data.owner_token) {
-            localStorage.setItem(OWNER_TOKEN_KEY, data.owner_token);
-            document.getElementById('owner-modal').remove();
-            showToast("Akses Owner Diberikan!");
-
-            const navOwner = document.getElementById('nav-owner');
-            if (navOwner) navOwner.style.display = 'flex';
-
-            setTimeout(() => {
-                if (typeof window.tampilkanPanelRahasia === 'function') {
-                    window.tampilkanPanelRahasia();
-                }
-            }, 500);
-        } else {
-            showToast("Passcode Salah!");
-        }
-    } catch(e) {
-        showToast("Error koneksi ke server.");
-    }
-};
-
-let mySession = localStorage.getItem('zenkai_sess');
-if (!mySession) { mySession = 'sess_' + Date.now(); localStorage.setItem('zenkai_sess', mySession); }
-setInterval(() => {
-    fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'heartbeat', session_id: mySession }) }).catch(()=>{});
-}, 30000);
-
-// =========================================
-// PANEL RAHASIA OWNER (MODE CENTANG)
-// =========================================
-window.tampilkanPanelRahasia = async () => {
-    if (document.getElementById('owner-panel')) document.getElementById('owner-panel').remove();
-
-    let set = { site_title: '', broadcast_text: '', is_maintenance: false, disabled_pages: '', disabled_tools: '' };
-    try {
-        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'get_settings' }) });
-        const data = await res.json();
-        if (data.status && data.data) set = data.data;
-    } catch(e) {}
-
-    const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
-    const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
-    const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg'];
-    const listPages = ['fun', 'setting', 'info'];
-
-    let toolsHtml = listTools.map(t => `
-        <label style="display:flex; align-items:center; gap:8px; background:var(--card-bg); padding:8px; border-radius:6px; border:1px solid var(--border); cursor:pointer; font-size:11px; font-weight:bold;">
-            <input type="checkbox" class="tool-chk" value="${t}" ${disabledToolsArr.includes(t) ? 'checked' : ''} style="width:16px; height:16px;"> ${t.toUpperCase()}
-        </label>
-    `).join('');
-    let pagesHtml = listPages.map(p => `
-        <label style="display:flex; align-items:center; gap:8px; background:var(--card-bg); padding:8px; border-radius:6px; border:1px solid var(--border); cursor:pointer; font-size:11px; font-weight:bold;">
-            <input type="checkbox" class="page-chk" value="${p}" ${disabledPagesArr.includes(p) ? 'checked' : ''} style="width:16px; height:16px;"> ${p.toUpperCase()}
-        </label>
-    `).join('');
-
-    document.body.insertAdjacentHTML('beforeend', `
-        <div id="owner-panel" style="position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000002; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:15px; backdrop-filter:blur(10px); overflow-y:auto;">
-            <div style="background:var(--bg); padding:20px; border-radius:12px; border:3px solid var(--primary); width:100%; max-width:400px; text-align:left; box-shadow:0 0 20px var(--primary); max-height:90vh; overflow-y:auto;">
-                <h2 style="color:var(--primary); font-family:var(--font-head); margin-bottom:15px; font-size:24px; text-align:center;">OWNER CONTROL</h2>
-                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🏷️ Judul Web</label>
-                <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
-                <label style="font-size:11px; font-weight:bold; opacity:0.8;">📢 Broadcast Banner</label>
-                <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
-                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🚫 Matikan Tools (Centang)</label>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:15px;">${toolsHtml}</div>
-                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🔒 Kunci Halaman (Centang)</label>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:15px;">${pagesHtml}</div>
-                <div style="background:rgba(255,51,51,0.1); padding:12px; border:2px dashed #ff3333; border-radius:8px; margin-bottom:15px;">
-                    <label style="font-size:12px; font-weight:bold; color:#ff3333; display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <input type="checkbox" id="own-mt" ${set.is_maintenance ? 'checked' : ''} style="width:20px; height:20px;"> ⏳ Mode Maintenance Global
-                    </label>
-                </div>
-                <button onclick="simpanSettingOwner(event)" style="width:100%; padding:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:8px; font-weight:900; font-size:14px; cursor:pointer; box-shadow:2px 2px 0 var(--border); margin-bottom:10px;">💾 SIMPAN PENGATURAN</button>
-                <button onclick="forceRefreshUser()" style="width:100%; padding:14px; background:#a855f7; color:#fff; border:2px solid var(--border); border-radius:8px; font-weight:900; font-size:14px; cursor:pointer; box-shadow:2px 2px 0 var(--border); margin-bottom:10px;">🔄 Paksa Refresh Semua User</button>
-                <button onclick="document.getElementById('owner-panel').remove()" style="width:100%; padding:10px; background:var(--card-bg); color:var(--text); border:2px solid var(--border); border-radius:8px; font-weight:bold; cursor:pointer;">Tutup Panel</button>
-            </div>
-        </div>
-    `);
-};
-
-window.simpanSettingOwner = async (e) => {
-    const btn = e?.target || document.activeElement;
-    const oldText = btn?.innerText || 'SIMPAN';
-    if (btn) { btn.innerText = 'Menyimpan...'; btn.disabled = true; }
-
-    const checkedTools = Array.from(document.querySelectorAll('.tool-chk:checked')).map(cb => cb.value).join(',');
-    const checkedPages = Array.from(document.querySelectorAll('.page-chk:checked')).map(cb => cb.value).join(',');
-
-    const payload = {
-        action: 'update_settings',
-        owner_token: localStorage.getItem(OWNER_TOKEN_KEY),
-        site_title: document.getElementById('own-title').value,
-        broadcast_text: document.getElementById('own-broadcast').value,
-        disabled_pages: checkedPages,
-        disabled_tools: checkedTools,
-        is_maintenance: document.getElementById('own-mt').checked
     };
 
-    try {
-        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (data.status) {
-            showToast("Pengaturan disimpan!");
-            fetchSettings();
-        } else {
-            showToast("Gagal: " + (data.message || 'Token invalid'));
+    function bukaPintuRahasia() {
+        if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
+        document.body.insertAdjacentHTML('beforeend', `
+            <div id="owner-modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:100000; display:flex; align-items:center; justify-content:center;">
+                <div style="background:var(--bg); padding:20px; border-radius:12px; border:3px solid var(--border); width:90%; max-width:340px; text-align:center;">
+                    <h2 style="color:var(--primary); font-family:var(--font-head); margin-bottom:15px;">SYSTEM OVERRIDE</h2>
+                    <input type="password" id="owner-pass" placeholder="Passcode" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:2px solid var(--border); background:var(--card-bg); color:var(--text); text-align:center;">
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="document.getElementById('owner-modal').remove()" style="flex:1; padding:10px; background:#ff3333; color:#fff; border:none; border-radius:6px; font-weight:bold;">Batal</button>
+                        <button onclick="verifikasiOwner()" style="flex:1; padding:10px; background:var(--primary); color:#000; border:none; border-radius:6px; font-weight:bold;">Masuk</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+
+    window.verifikasiOwner = async () => {
+        const pass = document.getElementById('owner-pass').value;
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pass, action: 'login' })
+            });
+            const data = await res.json();
+
+            if (data.status && data.owner_token) {
+                localStorage.setItem(OWNER_TOKEN_KEY, data.owner_token);
+                document.getElementById('owner-modal').remove();
+                showToast("Akses Owner Diberikan!");
+
+                const navOwner = document.getElementById('nav-owner');
+                if (navOwner) navOwner.style.display = 'flex';
+
+                setTimeout(() => {
+                    const btnOwner = document.getElementById('nav-owner');
+                    window.switchPage('owner', btnOwner);
+                    window.tampilkanPanelRahasia();
+                }, 500);
+            } else {
+                showToast("Passcode Salah!");
+            }
+        } catch(e) {
+            showToast("Error koneksi ke server.");
         }
-    } catch(err) {
-        showToast("Error koneksi ke server.");
-    }
-    if (btn) { btn.innerText = oldText; btn.disabled = false; }
-};
+    };
 
-window.forceRefreshUser = async () => {
-    tampilkanAlert("Force Refresh", "Yakin mau maksa semua user buat refresh?", [
-        { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-        { label: "Lanjut", action: "eksekusiForceRefresh()", type: "primary" }
-    ]);
-};
+    let mySession = localStorage.getItem('zenkai_sess');
+    if (!mySession) { mySession = 'sess_' + Date.now(); localStorage.setItem('zenkai_sess', mySession); }
+    setInterval(() => {
+        fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'heartbeat', session_id: mySession }) }).catch(()=>{});
+    }, 30000);
 
-window.eksekusiForceRefresh = async () => {
-    document.getElementById('custom-alert').style.display = 'none';
-    try {
-        const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                action: 'force_refresh',
-                owner_token: localStorage.getItem(OWNER_TOKEN_KEY)
-            })
-        });
-        const data = await res.json();
-        if (data.status) showToast("Sinyal Force Refresh terkirim!");
-        else showToast("Gagal: " + (data.message || 'Token invalid'));
-    } catch(e) {
-        showToast("Error koneksi.");
-    }
-};
-// =========================================
-// 11. FUNGSI OPEN TOOL
-// =========================================
-window.openTool = (tool) => {
-    if (!modal || !modalContent) return;
+    // =========================================
+    // PANEL RAHASIA OWNER (UI BARU)
+    // =========================================
+    window.tampilkanPanelRahasia = async () => {
+        const container = document.getElementById('owner-page-content');
+        if (!container) return;
+        
+        container.innerHTML = '<div class="loader"></div>';
 
-    // PATCH NOTIF MAINTENANCE
-    const currentDisabledTools = window.currentDisabledTools || [];
-    if (currentDisabledTools.includes(tool)) {
+        let set = { site_title: '', broadcast_text: '', is_maintenance: false, disabled_pages: '', disabled_tools: '' };
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'get_settings' }) });
+            const data = await res.json();
+            if (data.status && data.data) set = data.data;
+        } catch(e) {}
+
+        const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
+        const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
+        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg'];
+        const listPages = ['fun', 'setting', 'info'];
+
+        let toolsHtml = listTools.map(t => `
+            <label style="display:flex; align-items:center; justify-content:space-between; background:var(--card-bg); padding:10px 12px; border-radius:8px; border:2px solid var(--border); cursor:pointer; font-size:11px; font-weight:bold; transition:0.2s;">
+                <span>${t.toUpperCase()}</span>
+                <input type="checkbox" class="tool-chk" value="${t}" ${disabledToolsArr.includes(t) ? 'checked' : ''} style="width:18px; height:18px; accent-color:var(--primary); cursor:pointer;">
+            </label>
+        `).join('');
+        
+        let pagesHtml = listPages.map(p => `
+            <label style="display:flex; align-items:center; justify-content:space-between; background:var(--card-bg); padding:10px 12px; border-radius:8px; border:2px solid var(--border); cursor:pointer; font-size:11px; font-weight:bold; transition:0.2s;">
+                <span>${p.toUpperCase()}</span>
+                <input type="checkbox" class="page-chk" value="${p}" ${disabledPagesArr.includes(p) ? 'checked' : ''} style="width:18px; height:18px; accent-color:var(--primary); cursor:pointer;">
+            </label>
+        `).join('');
+
+        container.innerHTML = `
+            <div style="display:flex; flex-direction:column; gap:20px;">
+                
+                <!-- Card 1: General Settings -->
+                <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
+                    <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px; display:flex; align-items:center; gap:8px;">⚙️ Pengaturan Umum</h3>
+                    
+                    <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Judul Web</label>
+                    <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:12px; margin-top:5px; margin-bottom:15px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
+                    
+                    <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Broadcast Banner</label>
+                    <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan" style="width:100%; padding:12px; margin-top:5px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
+                </div>
+
+                <!-- Card 2: Maintenance Mode -->
+                <div style="background:rgba(255,51,51,0.1); padding:15px; border-radius:12px; border:2px dashed #ff3333;">
+                    <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
+                        <div>
+                            <b style="font-size:14px; color:#ff3333; display:block;">Mode Maintenance</b>
+                            <span style="font-size:11px; opacity:0.8;">Kunci semua akses web sementara waktu.</span>
+                        </div>
+                        <input type="checkbox" id="own-mt" ${set.is_maintenance ? 'checked' : ''} style="width:24px; height:24px; accent-color:#ff3333; cursor:pointer;">
+                    </label>
+                </div>
+
+                <!-- Card 3: Block Tools -->
+                <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
+                    <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">🚫 Nonaktifkan Tools</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${toolsHtml}</div>
+                </div>
+
+                <!-- Card 4: Block Pages -->
+                <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
+                    <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">🔒 Kunci Halaman</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${pagesHtml}</div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px; margin-bottom:20px;">
+                    <button onclick="simpanSettingOwner(event)" class="action-btn press" style="padding:16px; font-size:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:12px; font-weight:900; box-shadow:0 4px 0 var(--border);">💾 SIMPAN PERUBAHAN</button>
+                    <button onclick="forceRefreshUser()" class="action-btn press" style="padding:16px; font-size:14px; background:#a855f7; color:#fff; border:2px solid var(--border); border-radius:12px; font-weight:900; box-shadow:0 4px 0 var(--border);">🔄 PAKSA REFRESH USER</button>
+                </div>
+
+            </div>
+        `;
+    };
+
+    window.simpanSettingOwner = async (e) => {
+        const btn = e?.target || document.activeElement;
+        const oldText = btn?.innerText || 'SIMPAN';
+        if (btn) { btn.innerText = 'Menyimpan...'; btn.disabled = true; }
+
+        const checkedTools = Array.from(document.querySelectorAll('.tool-chk:checked')).map(cb => cb.value).join(',');
+        const checkedPages = Array.from(document.querySelectorAll('.page-chk:checked')).map(cb => cb.value).join(',');
+
+        const payload = {
+            action: 'update_settings',
+            owner_token: localStorage.getItem(OWNER_TOKEN_KEY),
+            site_title: document.getElementById('own-title').value,
+            broadcast_text: document.getElementById('own-broadcast').value,
+            disabled_pages: checkedPages,
+            disabled_tools: checkedTools,
+            is_maintenance: document.getElementById('own-mt').checked
+        };
+
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.status) {
+                showToast("Pengaturan disimpan!");
+                fetchSettings();
+            } else {
+                showToast("Gagal: " + (data.message || 'Token invalid'));
+            }
+        } catch(err) {
+            showToast("Error koneksi ke server.");
+        }
+        if (btn) { btn.innerText = oldText; btn.disabled = false; }
+    };
+
+    window.forceRefreshUser = async () => {
+        tampilkanAlert("Force Refresh", "Yakin mau maksa semua user buat refresh?", [
+            { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+            { label: "Lanjut", action: "eksekusiForceRefresh()", type: "primary" }
+        ]);
+    };
+
+    window.eksekusiForceRefresh = async () => {
+        document.getElementById('custom-alert').style.display = 'none';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'force_refresh',
+                    owner_token: localStorage.getItem(OWNER_TOKEN_KEY)
+                })
+            });
+            const data = await res.json();
+            if (data.status) showToast("Sinyal Force Refresh terkirim!");
+            else showToast("Gagal: " + (data.message || 'Token invalid'));
+        } catch(e) {
+            showToast("Error koneksi.");
+        }
+    };
+
+    // =========================================
+    // 11. FUNGSI OPEN TOOL
+    // =========================================
+    window.openTool = (tool) => {
+        if (!modal || !modalContent) return;
+
+        const currentDisabledTools = window.currentDisabledTools || [];
+        if (currentDisabledTools.includes(tool)) {
+            modal.classList.add('active');
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Tool Maintenance</h3>
+                <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
+                <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur ini sedang dinonaktifkan sementara oleh Admin.</p>
+                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
+            `;
+            return;
+        }
+
         modal.classList.add('active');
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Tool Maintenance</h3>
-            <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
-            <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur ini sedang dinonaktifkan sementara oleh Admin.</p>
-            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
-        `;
-        return;
-    }
 
-    modal.classList.add('active');
+        const comingSoonTools = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
+        if (comingSoonTools.includes(tool)) {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Coming Soon</h3>
+                <span class="desc-text">Fitur ini sedang dalam tahap pengembangan. Nantikan update-nya di Channel WhatsApp kami ya!</span>
+                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update</a>
+            `;
+            return;
+        }
 
-    const comingSoonTools = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];
-    if (comingSoonTools.includes(tool)) {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Coming Soon</h3>
-            <span class="desc-text">Fitur ini sedang dalam tahap pengembangan. Nantikan update-nya di Channel WhatsApp kami ya!</span>
-            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update</a>
-        `;
-        return;
-    }
+        if (tool === 'linkvertise') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Bypass Link</h3>
+                <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
+                <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur bypass link saat ini sedang dalam perbaikan sistem keamanan.</p>
+                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
+            `;
+            return;
+        }
 
-    if (tool === 'linkvertise') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Bypass Link</h3>
-            <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
-            <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur bypass link saat ini sedang dalam perbaikan sistem keamanan.</p>
-            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
-        `;
-        return;
-    }
+        if (tool === 'instagram') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Instagram DL</h3>
+                <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
+                <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur downloader Instagram saat ini sedang dalam perbaikan oleh developer (API Down).</p>
+                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
+            `;
+            return;
+        }
 
-    if (tool === 'instagram') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Instagram DL</h3>
-            <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
-            <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur downloader Instagram saat ini sedang dalam perbaikan oleh developer (API Down).</p>
-            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
-        `;
-        return;
-    }
+        if (tool === 'facebook') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Facebook DL</h3>
+                <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
+                <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur downloader Facebook saat ini sedang dalam perbaikan oleh developer (API Down).</p>
+                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
+            `;
+            return;
+        }
 
-    if (tool === 'facebook') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Facebook DL</h3>
-            <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
-            <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur downloader Facebook saat ini sedang dalam perbaikan oleh developer (API Down).</p>
-            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
-        `;
-        return;
-    }
-
-    if (tool === 'tiktok') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>TikTok DL</h3>
-            <span class="desc-text">Download video TikTok tanpa watermark. Cukup paste link videonya.</span>
-            <input type="text" id="tt-url" placeholder="Paste link TikTok...">
-            <button class="action-btn" id="btn-dl-tt">Proses Video</button>
-            <div id="tt-result"></div>
-        `;
-        const btn = document.getElementById('btn-dl-tt');
-        btn.onclick = async () => {
-            const url = document.getElementById('tt-url').value.trim();
-            const box = document.getElementById('tt-result');
-            if (!url) return showToast('Masukkan link dulu!');
-            if (!/tiktok\.com|vt\.tiktok\.com/i.test(url)) return showToast('Link harus dari TikTok!');
-            setBtnLoading(btn, true);
-            box.innerHTML = '<div class="loader"></div>';
-            try {
-                const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'tiktok', url: url })
-                });
-                const data = await res.json();
-                if (data.code !== 0) throw new Error('Gagal mengambil video');
-                const vid = data.data.hdplay || data.data.play;
-                box.innerHTML = `
-                    <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(vid)}" controls></video>
-                    <button class="action-btn" id="btn-save-tt">Simpan ke Galeri</button>
-                `;
-                document.getElementById('btn-save-tt').onclick = async () => {
-                    const saveBtn = document.getElementById('btn-save-tt');
-                    setBtnLoading(saveBtn, true, 'Menyimpan...');
-                    try {
-                        const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ download_url: vid })
-                        });
-                        if (!dlRes.ok) throw new Error('Gagal download');
-                        const blob = await dlRes.blob();
-                        const a = document.createElement('a');
-                        a.href = URL.createObjectURL(blob);
-                        a.download = `tt-${Date.now()}.mp4`;
-                        a.click();
-                        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                        showToast('Tersimpan!');
-                    } catch (e) { showToast('Gagal simpan, coba lagi.'); }
-                    setBtnLoading(saveBtn, false, 'Simpan ke Galeri');
-                };
-            } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-            setBtnLoading(btn, false, 'Proses Video');
-        };
-    }
-    // --- PINTEREST DL ---
-    else if (tool === 'pinterest') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Pinterest DL</h3>
-            <span class="desc-text">Pilih mau download video atau gambarnya.</span>
-            <input type="text" id="pin-url" placeholder="Paste link Pinterest (pin.it/...)">
-            <button class="action-btn" id="btn-pin">Ambil Media</button>
-            <div id="pin-res" style="display:none; margin-top:15px; text-align:center;"></div>
-        `;
-        const btn = document.getElementById('btn-pin');
-        let currentVideoUrl = "";
-        let currentImageUrl = "";
-        btn.onclick = async () => {
-            const url = document.getElementById('pin-url').value.trim();
-            const box = document.getElementById('pin-res');
-            if (!url) return showToast('Masukkan link!');
-            box.style.display = 'block';
-            setBtnLoading(btn, true, 'Mengambil...');
-            box.innerHTML = '<div class="loader"></div>';
-            currentVideoUrl = "";
-            currentImageUrl = "";
-            try {
-                const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: url })
-                });
-                const data = await res.json();
-                if (data.status === false || data.error) throw new Error(data.error || 'Konten tidak ditemukan');
-                const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
-                if (!pinDataObj) throw new Error('Struktur data tidak dikenali');
-                if (pinDataObj.videos) {
-                    if (pinDataObj.videos.videoList?.v720P?.url) currentVideoUrl = pinDataObj.videos.videoList.v720P.url;
-                    else if (pinDataObj.videos.videoUrls && Array.isArray(pinDataObj.videos.videoUrls)) {
-                        const mp4Url = pinDataObj.videos.videoUrls.find(u => u.includes('.mp4'));
-                        if (mp4Url) currentVideoUrl = mp4Url;
+        if (tool === 'tiktok') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>TikTok DL</h3>
+                <span class="desc-text">Download video TikTok tanpa watermark. Cukup paste link videonya.</span>
+                <input type="text" id="tt-url" placeholder="Paste link TikTok...">
+                <button class="action-btn" id="btn-dl-tt">Proses Video</button>
+                <div id="tt-result"></div>
+            `;
+            const btn = document.getElementById('btn-dl-tt');
+            btn.onclick = async () => {
+                const url = document.getElementById('tt-url').value.trim();
+                const box = document.getElementById('tt-result');
+                if (!url) return showToast('Masukkan link dulu!');
+                if (!/tiktok\.com|vt\.tiktok\.com/i.test(url)) return showToast('Link harus dari TikTok!');
+                setBtnLoading(btn, true);
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'tiktok', url: url })
+                    });
+                    const data = await res.json();
+                    if (data.code !== 0) throw new Error('Gagal mengambil video');
+                    const vid = data.data.hdplay || data.data.play;
+                    box.innerHTML = `
+                        <video style="width:100%; border-radius:8px; margin-bottom:10px; border:3px solid var(--border);" src="${escapeHTML(vid)}" controls></video>
+                        <button class="action-btn" id="btn-save-tt">Simpan ke Galeri</button>
+                    `;
+                    document.getElementById('btn-save-tt').onclick = async () => {
+                        const saveBtn = document.getElementById('btn-save-tt');
+                        setBtnLoading(saveBtn, true, 'Menyimpan...');
+                        try {
+                            const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ download_url: vid })
+                            });
+                            if (!dlRes.ok) throw new Error('Gagal download');
+                            const blob = await dlRes.blob();
+                            const a = document.createElement('a');
+                            a.href = URL.createObjectURL(blob);
+                            a.download = `tt-${Date.now()}.mp4`;
+                            a.click();
+                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                            showToast('Tersimpan!');
+                        } catch (e) { showToast('Gagal simpan, coba lagi.'); }
+                        setBtnLoading(saveBtn, false, 'Simpan ke Galeri');
+                    };
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Proses Video');
+            };
+        }
+        else if (tool === 'pinterest') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Pinterest DL</h3>
+                <span class="desc-text">Pilih mau download video atau gambarnya.</span>
+                <input type="text" id="pin-url" placeholder="Paste link Pinterest (pin.it/...)">
+                <button class="action-btn" id="btn-pin">Ambil Media</button>
+                <div id="pin-res" style="display:none; margin-top:15px; text-align:center;"></div>
+            `;
+            const btn = document.getElementById('btn-pin');
+            let currentVideoUrl = "";
+            let currentImageUrl = "";
+            btn.onclick = async () => {
+                const url = document.getElementById('pin-url').value.trim();
+                const box = document.getElementById('pin-res');
+                if (!url) return showToast('Masukkan link!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Mengambil...');
+                box.innerHTML = '<div class="loader"></div>';
+                currentVideoUrl = "";
+                currentImageUrl = "";
+                try {
+                    const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: url })
+                    });
+                    const data = await res.json();
+                    if (data.status === false || data.error) throw new Error(data.error || 'Konten tidak ditemukan');
+                    const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
+                    if (!pinDataObj) throw new Error('Struktur data tidak dikenali');
+                    if (pinDataObj.videos) {
+                        if (pinDataObj.videos.videoList?.v720P?.url) currentVideoUrl = pinDataObj.videos.videoList.v720P.url;
+                        else if (pinDataObj.videos.videoUrls && Array.isArray(pinDataObj.videos.videoUrls)) {
+                            const mp4Url = pinDataObj.videos.videoUrls.find(u => u.includes('.mp4'));
+                            if (mp4Url) currentVideoUrl = mp4Url;
+                        }
                     }
-                }
-                if (pinDataObj.images_orig?.url) currentImageUrl = pinDataObj.images_orig.url;
-                else if (pinDataObj.images_736x?.url) currentImageUrl = pinDataObj.images_736x.url;
-                let htmlContent = '';
-                if (currentVideoUrl) htmlContent += `<video src="${escapeHTML(currentVideoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;"></video>`;
-                else if (currentImageUrl) htmlContent += `<img src="${escapeHTML(currentImageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;">`;
-                htmlContent += `
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <button class="action-btn" id="btn-dl-vid" style="background:#00ff9d; margin-bottom:0;">🎬 DOWNLOAD VIDEO</button>
-                        <button class="action-btn" id="btn-dl-img" style="background:var(--primary); margin-bottom:0;">🖼️ DOWNLOAD GAMBAR</button>
-                    </div>
-                `;
-                box.innerHTML = htmlContent;
-                document.getElementById('btn-dl-vid').onclick = async (e) => {
-                    if (!currentVideoUrl) return showToast('Link ini tidak memiliki video.');
-                    const saveBtn = e.target;
-                    setBtnLoading(saveBtn, true, 'Menyimpan...');
-                    try {
-                        const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ download_url: currentVideoUrl })
-                        });
-                        if (!dlRes.ok) throw new Error('Gagal');
-                        const blob = await dlRes.blob();
-                        const a = document.createElement('a');
-                        a.href = URL.createObjectURL(blob);
-                        a.download = `pin-vid-${Date.now()}.mp4`;
-                        a.click();
-                        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                        showToast('Video Tersimpan!');
-                    } catch (error) { showToast('Gagal simpan video.'); }
-                    setBtnLoading(saveBtn, false, '🎬 DOWNLOAD VIDEO');
-                };
-                document.getElementById('btn-dl-img').onclick = async (e) => {
-                    if (!currentImageUrl) return showToast('Gambar tidak ditemukan.');
-                    const saveBtn = e.target;
-                    setBtnLoading(saveBtn, true, 'Menyimpan...');
-                    try {
-                        const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ download_url: currentImageUrl })
-                        });
-                        if (!dlRes.ok) throw new Error('Gagal');
-                        const blob = await dlRes.blob();
-                        const a = document.createElement('a');
-                        a.href = URL.createObjectURL(blob);
-                        a.download = `pin-img-${Date.now()}.jpg`;
-                        a.click();
-                        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                        showToast('Gambar Tersimpan!');
-                    } catch (error) { showToast('Gagal simpan gambar.'); }
-                    setBtnLoading(saveBtn, false, '🖼️ DOWNLOAD GAMBAR');
-                };
-            } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-            setBtnLoading(btn, false, 'Ambil Media');
-        };
-    }
-
-    // --- STALK TIKTOK ---
-    else if (tool === 'stalktt') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Stalk TikTok</h3>
-            <span class="desc-text">Cek statistik akun TikTok tanpa buka aplikasinya.</span>
-            <input type="text" id="stalktt-user" placeholder="Username (tanpa @)">
-            <button class="action-btn" id="btn-stt">Cari</button>
-            <div id="stalktt-res" style="display:none; margin-top:15px; border:3px solid var(--border); padding:15px; border-radius:8px; text-align:left;"></div>
-        `;
-        const btn = document.getElementById('btn-stt');
-        btn.onclick = async () => {
-            const user = document.getElementById('stalktt-user').value.trim();
-            const box = document.getElementById('stalktt-res');
-            if (!user) return showToast('Masukkan username!');
-            box.style.display = 'block';
-            setBtnLoading(btn, true, 'Cari');
-            box.innerHTML = '<div class="loader"></div>';
-            try {
-                const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-tiktok', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: user })
-                });
-                const data = await res.json();
-                if (!data.status || !data.result) throw new Error('Akun tidak ditemukan atau private');
-                const d = data.result;
-                box.innerHTML = `
-                    <div style="text-align:center; margin-bottom:10px;">
-                        <img src="${escapeHTML(d.avatar.medium)}" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--border); object-fit:cover;">
-                    </div>
-                    <b>Username:</b> @${escapeHTML(d.username)}<br>
-                    <b>Nama:</b> ${escapeHTML(d.nickname)}<br>
-                    <b>Bio:</b> ${escapeHTML(d.bio || '-')}<br>
-                    <b>Region:</b> ${escapeHTML(d.region || 'Tidak diketahui')}<br>
-                    <hr style="border:1px dashed var(--border); margin:10px 0;">
-                    <b>Followers:</b> ${escapeHTML(d.stats.followers.toLocaleString())}<br>
-                    <b>Following:</b> ${escapeHTML(d.stats.following.toLocaleString())}<br>
-                    <b>Total Likes:</b> ${escapeHTML(d.stats.likes.toLocaleString())}<br>
-                    <b>Total Video:</b> ${escapeHTML(d.stats.videos.toLocaleString())}<br>
-                    <b>Status:</b> ${d.private_account ? '🔒 Private' : '🌐 Public'}
-                `;
-            } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-            setBtnLoading(btn, false, 'Cari');
-        };
-    }
-
-    // --- STALK ROBLOX ---
-    else if (tool === 'stalkroblox') {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3>Stalk Roblox</h3>
-            <span class="desc-text">Lacak profil Roblox player lain via Server Zenkai.</span>
-            <input type="text" id="stalkrbx-user" placeholder="Username Roblox">
-            <button class="action-btn" id="btn-srbx">Cari</button>
-            <div id="stalkrbx-res" style="display:none; margin-top:15px; border:3px solid var(--border); padding:15px; border-radius:8px; text-align:left;"></div>
-        `;
-        const btn = document.getElementById('btn-srbx');
-        btn.onclick = async () => {
-            const user = document.getElementById('stalkrbx-user').value.trim();
-            const box = document.getElementById('stalkrbx-res');
-            if (!user) return showToast('Masukkan username!');
-            box.style.display = 'block';
-            setBtnLoading(btn, true, 'Cari');
-            box.innerHTML = '<div class="loader"></div>';
-            try {
-                const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-roblox', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: user })
-                });
-                const data = await res.json();
-                if (!data.status || !data.data) throw new Error(data.error || 'Akun tidak ditemukan');
-                const d = data.data;
-                const tglDibuat = new Date(d.created).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-                box.innerHTML = `
-                    <div style="text-align:center; margin-bottom:10px;">
-                        <img src="${escapeHTML(d.avatar)}" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--border); object-fit:cover;">
-                    </div>
-                    <b>Username:</b> @${escapeHTML(d.username)}<br>
-                    <b>Display Name:</b> ${escapeHTML(d.display_name)}<br>
-                    <b>Bio:</b> ${escapeHTML(d.description || '-')}<br>
-                    <b>Dibuat:</b> ${tglDibuat}<br>
-                    <hr style="border:1px dashed var(--border); margin:10px 0;">
-                    <b>Friends:</b> ${escapeHTML(d.stats.friends.toLocaleString())}<br>
-                    <b>Followers:</b> ${escapeHTML(d.stats.followers.toLocaleString())}<br>
-                    <b>Following:</b> ${escapeHTML(d.stats.following.toLocaleString())}<br>
-                    <b>Status:</b> ${d.is_banned ? '🔴 Banned' : (d.verified ? '✅ Verified' : '🟢 Normal')}
-                `;
-            } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-            setBtnLoading(btn, false, 'Cari');
-        };
-    }
-            // --- QR CODE ---
+                    if (pinDataObj.images_orig?.url) currentImageUrl = pinDataObj.images_orig.url;
+                    else if (pinDataObj.images_736x?.url) currentImageUrl = pinDataObj.images_736x.url;
+                    let htmlContent = '';
+                    if (currentVideoUrl) htmlContent += `<video src="${escapeHTML(currentVideoUrl)}" controls style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;"></video>`;
+                    else if (currentImageUrl) htmlContent += `<img src="${escapeHTML(currentImageUrl)}" style="width:100%; border-radius:8px; border:3px solid var(--border); margin-bottom: 15px;">`;
+                    htmlContent += `
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button class="action-btn" id="btn-dl-vid" style="background:#00ff9d; margin-bottom:0;">🎬 DOWNLOAD VIDEO</button>
+                            <button class="action-btn" id="btn-dl-img" style="background:var(--primary); margin-bottom:0;">🖼️ DOWNLOAD GAMBAR</button>
+                        </div>
+                    `;
+                    box.innerHTML = htmlContent;
+                    document.getElementById('btn-dl-vid').onclick = async (e) => {
+                        if (!currentVideoUrl) return showToast('Link ini tidak memiliki video.');
+                        const saveBtn = e.target;
+                        setBtnLoading(saveBtn, true, 'Menyimpan...');
+                        try {
+                            const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ download_url: currentVideoUrl })
+                            });
+                            if (!dlRes.ok) throw new Error('Gagal');
+                            const blob = await dlRes.blob();
+                            const a = document.createElement('a');
+                            a.href = URL.createObjectURL(blob);
+                            a.download = `pin-vid-${Date.now()}.mp4`;
+                            a.click();
+                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                            showToast('Video Tersimpan!');
+                        } catch (error) { showToast('Gagal simpan video.'); }
+                        setBtnLoading(saveBtn, false, '🎬 DOWNLOAD VIDEO');
+                    };
+                    document.getElementById('btn-dl-img').onclick = async (e) => {
+                        if (!currentImageUrl) return showToast('Gambar tidak ditemukan.');
+                        const saveBtn = e.target;
+                        setBtnLoading(saveBtn, true, 'Menyimpan...');
+                        try {
+                            const dlRes = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-pinterest', {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ download_url: currentImageUrl })
+                            });
+                            if (!dlRes.ok) throw new Error('Gagal');
+                            const blob = await dlRes.blob();
+                            const a = document.createElement('a');
+                            a.href = URL.createObjectURL(blob);
+                            a.download = `pin-img-${Date.now()}.jpg`;
+                            a.click();
+                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                            showToast('Gambar Tersimpan!');
+                        } catch (error) { showToast('Gagal simpan gambar.'); }
+                        setBtnLoading(saveBtn, false, '🖼️ DOWNLOAD GAMBAR');
+                    };
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Ambil Media');
+            };
+        }
+        else if (tool === 'stalktt') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Stalk TikTok</h3>
+                <span class="desc-text">Cek statistik akun TikTok tanpa buka aplikasinya.</span>
+                <input type="text" id="stalktt-user" placeholder="Username (tanpa @)">
+                <button class="action-btn" id="btn-stt">Cari</button>
+                <div id="stalktt-res" style="display:none; margin-top:15px; border:3px solid var(--border); padding:15px; border-radius:8px; text-align:left;"></div>
+            `;
+            const btn = document.getElementById('btn-stt');
+            btn.onclick = async () => {
+                const user = document.getElementById('stalktt-user').value.trim();
+                const box = document.getElementById('stalktt-res');
+                if (!user) return showToast('Masukkan username!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Cari');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-tiktok', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: user })
+                    });
+                    const data = await res.json();
+                    if (!data.status || !data.result) throw new Error('Akun tidak ditemukan atau private');
+                    const d = data.result;
+                    box.innerHTML = `
+                        <div style="text-align:center; margin-bottom:10px;">
+                            <img src="${escapeHTML(d.avatar.medium)}" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--border); object-fit:cover;">
+                        </div>
+                        <b>Username:</b> @${escapeHTML(d.username)}<br>
+                        <b>Nama:</b> ${escapeHTML(d.nickname)}<br>
+                        <b>Bio:</b> ${escapeHTML(d.bio || '-')}<br>
+                        <b>Region:</b> ${escapeHTML(d.region || 'Tidak diketahui')}<br>
+                        <hr style="border:1px dashed var(--border); margin:10px 0;">
+                        <b>Followers:</b> ${escapeHTML(d.stats.followers.toLocaleString())}<br>
+                        <b>Following:</b> ${escapeHTML(d.stats.following.toLocaleString())}<br>
+                        <b>Total Likes:</b> ${escapeHTML(d.stats.likes.toLocaleString())}<br>
+                        <b>Total Video:</b> ${escapeHTML(d.stats.videos.toLocaleString())}<br>
+                        <b>Status:</b> ${d.private_account ? '🔒 Private' : '🌐 Public'}
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Cari');
+            };
+        }
+        else if (tool === 'stalkroblox') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Stalk Roblox</h3>
+                <span class="desc-text">Lacak profil Roblox player lain via Server Zenkai.</span>
+                <input type="text" id="stalkrbx-user" placeholder="Username Roblox">
+                <button class="action-btn" id="btn-srbx">Cari</button>
+                <div id="stalkrbx-res" style="display:none; margin-top:15px; border:3px solid var(--border); padding:15px; border-radius:8px; text-align:left;"></div>
+            `;
+            const btn = document.getElementById('btn-srbx');
+            btn.onclick = async () => {
+                const user = document.getElementById('stalkrbx-user').value.trim();
+                const box = document.getElementById('stalkrbx-res');
+                if (!user) return showToast('Masukkan username!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Cari');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch('https://chcfvbqyygtkfcvhywoa.supabase.co/functions/v1/zen-roblox', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: user })
+                    });
+                    const data = await res.json();
+                    if (!data.status || !data.data) throw new Error(data.error || 'Akun tidak ditemukan');
+                    const d = data.data;
+                    const tglDibuat = new Date(d.created).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+                    box.innerHTML = `
+                        <div style="text-align:center; margin-bottom:10px;">
+                            <img src="${escapeHTML(d.avatar)}" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--border); object-fit:cover;">
+                        </div>
+                        <b>Username:</b> @${escapeHTML(d.username)}<br>
+                        <b>Display Name:</b> ${escapeHTML(d.display_name)}<br>
+                        <b>Bio:</b> ${escapeHTML(d.description || '-')}<br>
+                        <b>Dibuat:</b> ${tglDibuat}<br>
+                        <hr style="border:1px dashed var(--border); margin:10px 0;">
+                        <b>Friends:</b> ${escapeHTML(d.stats.friends.toLocaleString())}<br>
+                        <b>Followers:</b> ${escapeHTML(d.stats.followers.toLocaleString())}<br>
+                        <b>Following:</b> ${escapeHTML(d.stats.following.toLocaleString())}<br>
+                        <b>Status:</b> ${d.is_banned ? '🔴 Banned' : (d.verified ? '✅ Verified' : '🟢 Normal')}
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Cari');
+            };
+        }
         else if (tool === 'qr') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1092,8 +1138,6 @@ window.openTool = (tool) => {
                 document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(txt)}`;
             };
         }
-
-        // --- IMAGE TO JPG ---
         else if (tool === 'imgtojpg') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1128,8 +1172,6 @@ window.openTool = (tool) => {
                 reader.readAsDataURL(file);
             };
         }
-
-        // --- USERNAME GEN ---
         else if (tool === 'username') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1148,8 +1190,6 @@ window.openTool = (tool) => {
                 b.innerHTML = `@${escapeHTML(name)}${suffix}${rand}<br><span style="font-size:12px; opacity:0.7;">(Klik generate lagi buat ganti)</span>`;
             };
         }
-
-        // --- ARTI NAMA ---
         else if (tool === 'artinama') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1180,8 +1220,6 @@ window.openTool = (tool) => {
                 }
             };
         }
-
-        // --- PASSWORD GEN ---
         else if (tool === 'password') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1200,8 +1238,6 @@ window.openTool = (tool) => {
                 b.style.display = 'block'; b.innerText = pass;
             };
         }
-
-        // --- ZODIAK ---
         else if (tool === 'zodiak') {
             let tgls = ''; for (let i = 1; i <= 31; i++) tgls += `<div onclick="setZ('tgl',${i},this)" style="padding:12px; border-bottom:1px solid var(--border); cursor:pointer;">${i}</div>`;
             let blns = ''; const b = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
@@ -1262,8 +1298,6 @@ window.openTool = (tool) => {
                 res.innerHTML = `Zodiak: <b style="color:var(--primary); font-size:24px; display:block;">${z}</b>`;
             };
         }
-
-        // --- BASE64 ---
         else if (tool === 'base64') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1297,8 +1331,6 @@ window.openTool = (tool) => {
             document.getElementById('btn-enc').onclick = () => doB64('enc');
             document.getElementById('btn-dec').onclick = () => doB64('dec');
         }
-
-        // --- HITUNG UMUR ---
         else if (tool === 'umur') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1320,8 +1352,6 @@ window.openTool = (tool) => {
                 b.style.display = 'block'; b.innerText = `Umur Lo: ${umur} Tahun`;
             };
         }
-
-        // --- ALIGHT MOTION ---
         else if (tool === 'alightmotion') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1360,8 +1390,6 @@ window.openTool = (tool) => {
                 setBtnLoading(btn, false, 'Generate Link');
             };
         }
-
-        // --- TEMP MAIL ---
         else if (tool === 'tempmail') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1388,8 +1416,6 @@ window.openTool = (tool) => {
                 setBtnLoading(btn, false, 'Buat Email');
             };
         }
-
-        // --- NIK PARSER ---
         else if (tool === 'nik') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1430,8 +1456,6 @@ window.openTool = (tool) => {
                 setBtnLoading(btn, false, 'Lacak NIK');
             };
         }
-
-        // --- SPOTIFY DL ---
         else if (tool === 'spotify') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1468,8 +1492,6 @@ window.openTool = (tool) => {
                 setBtnLoading(btn, false, 'Download');
             };
         }
-
-        // --- IP LOOKUP ---
         else if (tool === 'iplookup') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1507,8 +1529,6 @@ window.openTool = (tool) => {
                 setBtnLoading(btn, false, 'Lacak');
             };
         }
-
-        // --- REMOVE BG ---
         else if (tool === 'removebg') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1559,8 +1579,6 @@ window.openTool = (tool) => {
                 }
             };
         }
-
-        // ---------- FALLBACK ----------
         else {
             modalContent.innerHTML = `
                 ${closeSvg}
