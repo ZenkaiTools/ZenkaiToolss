@@ -365,6 +365,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
         const welcome = document.getElementById('welcome-username');
         if (welcome) welcome.innerText = savedUser;
+        // AWAL PATCH 3A: MUNCULIN MENU OWNER
+if (localStorage.getItem(OWNER_SESSION_KEY) === 'true') {
+    const navOwner = document.getElementById('nav-owner');
+    if (navOwner) navOwner.style.display = 'flex';
+}
+// AKHIR PATCH 3A
     } else {
         document.body.style.overflow = 'hidden';
     }
@@ -554,25 +560,27 @@ document.addEventListener('DOMContentLoaded', () => {
             else bc.style.display = 'none';
         }
 
-        const dPages = setting.disabled_pages ? setting.disabled_pages.split(',') : [];
-        document.querySelectorAll('.nav-item').forEach(b => {
-            const m = (b.getAttribute('onclick')||'').match(/switchPage\('(.*?)'/);
-            if (m && dPages.includes(m[1])) { b.style.opacity='0.3'; b.style.pointerEvents='none'; }
-            else { b.style.opacity='1'; b.style.pointerEvents='auto'; }
-        });
+            const dPages = setting.disabled_pages ? setting.disabled_pages.split(',') : [];
+    document.querySelectorAll('.nav-item').forEach(b => {
+        const m = (b.getAttribute('onclick')||'').match(/switchPage\('(.*?)'/);
+        if (m && dPages.includes(m[1])) { b.style.opacity='0.3'; b.style.pointerEvents='none'; }
+        else { b.style.opacity='1'; b.style.pointerEvents='auto'; }
+    });
 
-        const dTools = setting.disabled_tools ? setting.disabled_tools.split(',') : [];
-        document.querySelectorAll('.tool-card').forEach(c => {
-            const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
-            if (m && dTools.includes(m[1])) {
-                c.style.filter='grayscale(100%)'; c.style.opacity='0.5'; c.style.pointerEvents='none';
-                if (!c.querySelector('.badge-mt')) { c.innerHTML += `<div class="badge-mt" style="position:absolute; top:-5px; right:-5px; background:#ff3333; color:#fff; font-size:8px; padding:2px 4px; border-radius:4px;">MT</div>`; c.style.position='relative'; }
-            } else {
-                c.style.filter='none'; c.style.opacity='1'; c.style.pointerEvents='auto';
-                const b = c.querySelector('.badge-mt'); if (b) b.remove();
-            }
-        });
-    }
+    // --- PATCH 3C FIXED: MAINTENANCE SERAGAM ---
+    const dTools = setting.disabled_tools ? setting.disabled_tools.split(',') : []; // <--- INI YANG KETINGGALAN
+    window.currentDisabledTools = dTools;
+
+    document.querySelectorAll('.tool-card').forEach(c => {
+        const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
+        if (m && dTools.includes(m[1])) {
+            c.classList.add('maintenance-mode');
+        } else {
+            c.classList.remove('maintenance-mode');
+        }
+    });
+    // --- END PATCH 3C FIXED ---
+}
 
     // =========================================
     // 10. PINTU RAHASIA OWNER
@@ -621,7 +629,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // =========================================
-// PANEL RAHASIA OWNER (LAYAR REMOTE)
+// PANEL RAHASIA OWNER (MODE BLOK / TOMBOL)
+// =========================================
+// =========================================
+// AWAL PATCH 3B: PANEL OWNER MODE CENTANG
 // =========================================
 window.tampilkanPanelRahasia = async () => {
     if (document.getElementById('owner-panel')) document.getElementById('owner-panel').remove();
@@ -633,34 +644,41 @@ window.tampilkanPanelRahasia = async () => {
         if (data.status && data.data) set = data.data;
     } catch(e) {}
 
+    const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
+    const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
+    const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg'];
+    const listPages = ['fun', 'setting', 'info'];
+
+    let toolsHtml = listTools.map(t => `
+        <label style="display:flex; align-items:center; gap:8px; background:var(--card-bg); padding:8px; border-radius:6px; border:1px solid var(--border); cursor:pointer; font-size:11px; font-weight:bold;">
+            <input type="checkbox" class="tool-chk" value="${t}" ${disabledToolsArr.includes(t) ? 'checked' : ''} style="width:16px; height:16px;"> ${t.toUpperCase()}
+        </label>
+    `).join('');
+    let pagesHtml = listPages.map(p => `
+        <label style="display:flex; align-items:center; gap:8px; background:var(--card-bg); padding:8px; border-radius:6px; border:1px solid var(--border); cursor:pointer; font-size:11px; font-weight:bold;">
+            <input type="checkbox" class="page-chk" value="${p}" ${disabledPagesArr.includes(p) ? 'checked' : ''} style="width:16px; height:16px;"> ${p.toUpperCase()}
+        </label>
+    `).join('');
+
     document.body.insertAdjacentHTML('beforeend', `
         <div id="owner-panel" style="position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000002; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:15px; backdrop-filter:blur(10px); overflow-y:auto;">
             <div style="background:var(--bg); padding:20px; border-radius:12px; border:3px solid var(--primary); width:100%; max-width:400px; text-align:left; box-shadow:0 0 20px var(--primary); max-height:90vh; overflow-y:auto;">
-                
                 <h2 style="color:var(--primary); font-family:var(--font-head); margin-bottom:15px; font-size:24px; text-align:center;">OWNER CONTROL</h2>
-                
-                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🏷️ Judul Web (Header)</label>
+                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🏷️ Judul Web</label>
                 <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
-
-                <label style="font-size:11px; font-weight:bold; opacity:0.8;">📢 Broadcast Banner (Kosongkan untuk mematikan)</label>
-                <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Cth: Update V2 segera rilis!" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
-
-                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🔒 Kunci Halaman (Pisahkan koma)</label>
-                <input type="text" id="own-pages" value="${escapeHTML(set.disabled_pages || '')}" placeholder="Cth: fun,setting" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
-
-                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🚫 Matikan Tool (Pisahkan koma)</label>
-                <input type="text" id="own-tools" value="${escapeHTML(set.disabled_tools || '')}" placeholder="Cth: tiktok,amprem" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
-
+                <label style="font-size:11px; font-weight:bold; opacity:0.8;">📢 Broadcast Banner</label>
+                <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan" style="width:100%; padding:10px; margin-bottom:15px; border:2px solid var(--border); border-radius:6px; background:var(--card-bg); color:var(--text);">
+                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🚫 Matikan Tools (Centang)</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:15px;">${toolsHtml}</div>
+                <label style="font-size:11px; font-weight:bold; opacity:0.8;">🔒 Kunci Halaman (Centang)</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:15px;">${pagesHtml}</div>
                 <div style="background:rgba(255,51,51,0.1); padding:12px; border:2px dashed #ff3333; border-radius:8px; margin-bottom:15px;">
                     <label style="font-size:12px; font-weight:bold; color:#ff3333; display:flex; align-items:center; gap:8px; cursor:pointer;">
                         <input type="checkbox" id="own-mt" ${set.is_maintenance ? 'checked' : ''} style="width:20px; height:20px;"> ⏳ Mode Maintenance Global
                     </label>
                 </div>
-
                 <button onclick="simpanSettingOwner()" style="width:100%; padding:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:8px; font-weight:900; font-size:14px; cursor:pointer; box-shadow:2px 2px 0 var(--border); margin-bottom:10px;">💾 SIMPAN PENGATURAN</button>
-                
                 <button onclick="forceRefreshUser()" style="width:100%; padding:14px; background:#a855f7; color:#fff; border:2px solid var(--border); border-radius:8px; font-weight:900; font-size:14px; cursor:pointer; box-shadow:2px 2px 0 var(--border); margin-bottom:10px;">🔄 Paksa Refresh Semua User</button>
-
                 <button onclick="document.getElementById('owner-panel').remove()" style="width:100%; padding:10px; background:var(--card-bg); color:var(--text); border:2px solid var(--border); border-radius:8px; font-weight:bold; cursor:pointer;">Tutup Panel</button>
             </div>
         </div>
@@ -673,12 +691,15 @@ window.simpanSettingOwner = async () => {
     btn.innerText = 'Menyimpan...';
     btn.disabled = true;
 
+    const checkedTools = Array.from(document.querySelectorAll('.tool-chk:checked')).map(cb => cb.value).join(',');
+    const checkedPages = Array.from(document.querySelectorAll('.page-chk:checked')).map(cb => cb.value).join(',');
+
     const payload = {
         action: 'update_settings',
         site_title: document.getElementById('own-title').value,
         broadcast_text: document.getElementById('own-broadcast').value,
-        disabled_pages: document.getElementById('own-pages').value,
-        disabled_tools: document.getElementById('own-tools').value,
+        disabled_pages: checkedPages,
+        disabled_tools: checkedTools,
         is_maintenance: document.getElementById('own-mt').checked
     };
 
@@ -711,6 +732,9 @@ window.forceRefreshUser = async () => {
         showToast("Sinyal Force Refresh terkirim!");
     } catch(e) {}
 };
+// =========================================
+// AKHIR PATCH 3B
+// =========================================
 
     // ===== BATAS BAGIAN 1 =====
     // =========================================
@@ -718,6 +742,20 @@ window.forceRefreshUser = async () => {
 // =========================================
 window.openTool = (tool) => {
     if (!modal || !modalContent) return;
+    // AWAL PATCH NOTIF MAINTENANCE
+const currentDisabledTools = window.currentDisabledTools || [];
+if (currentDisabledTools.includes(tool)) {
+    modal.classList.add('active');
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <h3>Tool Maintenance</h3>
+        <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
+        <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur ini sedang dinonaktifkan sementara oleh Admin.</p>
+        <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
+    `;
+    return;
+}
+// AKHIR PATCH NOTIF MAINTENANCE
     modal.classList.add('active');
 
     const comingSoonTools = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'youtube', 'imghd'];

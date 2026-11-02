@@ -422,3 +422,38 @@ body.intro-active .music-widget, body.intro-active .bottom-nav, body.intro-activ
     position: relative;
     z-index: 1;
 }
+/* =========================================
+   AWAL PATCH 2: TAMPILAN MAINTENANCE SERAGAM
+   ========================================= */
+.tool-card.maintenance-mode .t-icon {
+    background: #b2bec3 !important;
+    color: #636e72 !important;
+    filter: grayscale(100%) !important;
+    border-color: #636e72 !important;
+    box-shadow: 2px 2px 0 #636e72 !important;
+    transform: none !important;
+}
+.tool-card.maintenance-mode h4 {
+    color: #ff3333 !important;
+}
+.tool-card.maintenance-mode h4::after {
+    content: 'MAINTENANCE';
+    display: block;
+    font-size: 7px;
+    background: #ff3333;
+    color: #fff;
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-top: 4px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.5px;
+}
+.tool-card.maintenance-mode.soon h4::after {
+    display: none !important;
+}
+.tool-card.maintenance-mode.soon h4 {
+    color: #ff3333 !important;
+}
+/* =========================================
+   AKHIR PATCH 2
+   ========================================= */
