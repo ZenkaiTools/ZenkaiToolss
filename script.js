@@ -1790,55 +1790,57 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // FUNGSI BACA KOMIK (SCRAPING VIA SUPABASE)
+    // FUNGSI BACA KOMIK (JERE API + JARING PENGAMAN)
     // =========================================
     window.bacaKomik = async (title, slug) => {
         const box = document.getElementById('komik-res');
-        box.innerHTML = '<div class="loader"></div><p style="text-align:center; font-size:12px;">Mengambil gambar komik...</p>';
-        
+        box.innerHTML = '<div class="loader"></div>';
         try {
-            // 1. Tembak Edge Function Supabase lu sendiri (JAUH LEBIH CEPAT)
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-scrape`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slug: slug })
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'stream', slug: slug })
             });
             const data = await res.json();
             
-            if (!data.status || !data.html) throw new Error('Gagal mengambil data dari server komik.');
-
-            // 2. Parse HTML-nya
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data.html, "text/html");
+            const images = data.result?.pages || []; 
             
-            // 3. Cari gambar panel di dalam div id="readerarea"
-            const imgElements = doc.querySelectorAll('#readerarea img');
-            
-            if (imgElements.length === 0) throw new Error('Gambar panel tidak ditemukan di halaman.');
+            // JARING PENGAMAN: Kalau gambar kosong, kasih tombol ke web asli
+            if (images.length === 0) {
+                const baseSlug = slug.split('-chapter-')[0]; 
+                const originalUrl = `https://komikindo.ch/komik/${baseSlug}/`;
+                
+                let html = `
+                    <div style="text-align:center; padding: 20px;">
+                        <div style="font-size:40px; margin-bottom:10px;">📖</div>
+                        <h4 style="margin-bottom:10px;">Gambar Belum Tersedia</h4>
+                        <p style="font-size:12px; opacity:0.8; margin-bottom:20px;">API gagal mengambil gambar panel. Tapi lu bisa baca chapter ini langsung di web aslinya:</p>
+                        
+                        <a href="${originalUrl}" target="_blank" class="action-btn" style="background:#00ff9d; text-decoration:none; display:block; margin-bottom:10px;">Baca di Web Asli</a>
+                        <button onclick="openTool('komik')" class="action-btn" style="background:var(--card-bg); color:var(--text);">Kembali ke Katalog</button>
+                    </div>
+                `;
+                box.innerHTML = html;
+                return;
+            }
 
+            // KALAU GAMBAR ADA, TAMPILKAN
             let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
             html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
-            
-            imgElements.forEach(img => {
-                const src = img.getAttribute('src');
-                if (src && !src.includes('blank.png') && !src.includes('loading')) {
-                    // Tetep pakai proxy wsrv.nl buat render gambar biar gak kena hotlink block
-                    const proxiedImg = `https://wsrv.nl/?url=${encodeURIComponent(src)}`;
-                    html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy">`;
-                }
+            images.forEach(imgUrl => {
+                html += `<img src="${imgUrl}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
             });
-            
             html += `</div>`;
+
             html += `<button class="action-btn press" onclick="openTool('komik')" style="margin-top:15px; background:#ff3333;">Kembali ke Katalog</button>`;
             box.innerHTML = html;
-            
-        } catch (e) {
+
+        } catch (e) { 
             box.innerHTML = `
                 <div style="text-align:center; padding: 20px;">
-                    <p class="error-msg">Gagal Memuat Gambar: ${escapeHTML(e.message)}</p>
+                    <p class="error-msg">${escapeHTML(e.message)}</p>
                     <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
                 </div>
-            `;
+            `; 
         }
     };
 
