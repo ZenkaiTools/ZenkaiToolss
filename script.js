@@ -790,13 +790,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (t.includes('manga')) return { label: 'MANGA', color: '#ffcc00' };
                 }
                 
-                // Tebak dari judul jika type null
+                // Otak kedua: Tebak dari judul jika type null
                 const t = (titleString || '').toLowerCase();
-                if (t.includes('manager kim') || t.includes('youngest') || t.includes('bloodthirsty') || t.includes('heavenly') || t.includes('northern') || t.includes('shepherd') || t.includes('reborn as')) {
-                    return { label: 'MANHWA', color: '#00ffcc' };
+                // Keyword Manhwa (Korea)
+                const manhwaKeywords = ['manager kim', 'youngest', 'bloodthirsty', 'heavenly', 'northern', 'shepherd', 'reborn as', 'awakening', 'lookism', 'temporarily', 'fostering', 'grand duke', 'hunared'];
+                // Keyword Manhua (China)
+                const manhuaKeywords = ['martial', 'immortal', 'cultivation', 'sovereign', 'god', 'technique', 'senki', 'jinx', 'demonic', 'magic', 'sword', 'hundred'];
+
+                for (const kw of manhwaKeywords) {
+                    if (t.includes(kw)) return { label: 'MANHWA', color: '#00ffcc' };
                 }
-                if (t.includes('martial') || t.includes('immortal') || t.includes('cultivation') || t.includes('sovereign') || t.includes('god')) {
-                    return { label: 'MANHUA', color: '#ff007f' };
+                for (const kw of manhuaKeywords) {
+                    if (t.includes(kw)) return { label: 'MANHUA', color: '#ff007f' };
                 }
                 return { label: 'MANGA', color: '#ffcc00' }; // Default
             };
@@ -928,7 +933,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (currentPage === 1) {
                         html = historyHtml + titleSection + `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;" id="komik-grid-container">`;
                     } else {
-                        html = `<div style="display:contents;" id="komik-grid-container">`; // Lanjutan grid
+                        html = `<div style="display:contents;" id="komik-grid-container">`;
                     }
                     
                     komikList.forEach(manga => {
@@ -955,7 +960,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         box.innerHTML = html;
                     } else {
                         html += `</div>`;
-                        // Append ke container grid yang sudah ada
                         const gridContainer = document.getElementById('komik-grid-container');
                         if(gridContainer) {
                             const tempDiv = document.createElement('div');
@@ -967,7 +971,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Event listener untuk komik yang baru dimuat
                     box.querySelectorAll('.komik-card-jere').forEach(el => {
-                        // Hapus listener lama agar tidak dobel
                         const newEl = el.cloneNode(true);
                         el.parentNode.replaceChild(newEl, el);
                         newEl.addEventListener('click', () => bukaDetail(newEl.dataset.title, newEl.dataset.slug));
@@ -979,7 +982,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         loadMoreEl.style.display = 'none';
                     } else {
                         currentPage++;
-                        loadMoreEl.style.display = 'none'; // Sembunyikan loader kalau sukses
+                        loadMoreEl.style.display = 'none'; 
                     }
 
                 } catch (e) { 
@@ -991,9 +994,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // DETEKSI SCROLL SAMPAI BAWAH (INFINITE SCROLL)
             const handleScroll = (e) => {
                 const target = e.target;
-                // Cek apakah scroll terjadi di dalam modal komik
                 if (target.id === 'tool-modal' || target.classList.contains('bottom-sheet-content')) {
-                    if (target.scrollHeight - target.scrollTop <= target.clientHeight + 100) {
+                    if (target.scrollHeight - target.scrollTop <= target.clientHeight + 150) {
                         if (!isLoading && hasMore && currentTab !== 'favorit') {
                             loadKatalog(input.value.trim());
                         }
@@ -1001,7 +1003,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // Pasang listener scroll di container modal
+            // Pasang listener scroll
             const modalBody = document.querySelector('.bottom-sheet-content');
             if (modalBody) {
                 modalBody.removeEventListener('scroll', handleScroll);
@@ -1118,7 +1120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // EVENT LISTENER
                     box.querySelector('.btn-back').addEventListener('click', () => {
-                        box.innerHTML = ''; // Reset
+                        box.innerHTML = '';
                         currentPage = 1;
                         hasMore = true;
                         loadKatalog(input.value.trim());
