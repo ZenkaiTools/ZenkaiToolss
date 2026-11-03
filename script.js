@@ -567,7 +567,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
         const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
         const vipToolsArr = set.vip_tools ? set.vip_tools.split(',') : [];
-        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'komik', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise', 'ai-chat', 'ai-image', 'alightmotion', 'spamotp', 'wa-bot'];
+        
+        // ========================================================
+        // AUTO-DETECTOR: Otomatis ambil nama tool dari index.html
+        // ========================================================
+        const listTools = [];
+        document.querySelectorAll('.tool-card').forEach(card => {
+            const onclickAttr = card.getAttribute('onclick') || '';
+            const match = onclickAttr.match(/openTool\('(.*?)'\)/);
+            if (match && match[1]) {
+                const toolName = match[1];
+                // Pengecualian: Tool 'support' dan 'vip' gak perlu dimasukin ke list
+                if (toolName !== 'support' && toolName !== 'vip') {
+                    listTools.push(toolName);
+                }
+            }
+        });
+        // ========================================================
+
         const listPages = ['fun', 'setting', 'info'];
 
         let toolsHtml = listTools.map(t => `
