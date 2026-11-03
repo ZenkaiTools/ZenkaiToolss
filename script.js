@@ -552,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // PANEL OWNER UI (UDAH ADA VIP TOGGLE)
+    // PANEL OWNER UI
     window.tampilkanPanelRahasia = async () => {
         const container = document.getElementById('owner-page-content');
         if (!container) return;
@@ -629,7 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     };
 
-    // LOAD DAFTAR KODE VIP (DENGAN FITUR GENERATE & COPY)
+    // LOAD DAFTAR KODE VIP
     window.loadVipCodes = async () => {
         const container = document.getElementById('vip-list-container');
         if (!container) return;
@@ -678,7 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div style="display:flex; gap:8px;">
                             <!-- Tombol Salin Kode -->
                             <button onclick="copyToClipboard('${escapeHTML(v.code)}')" style="flex:1; padding:8px; font-size:11px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">
-                                📋 Salin Kode
+                                📋 Salin
                             </button>
                             
                             <!-- Tombol Reset (Cuma muncul kalo udah kepake) -->
@@ -713,7 +713,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!data.status) throw new Error(data.message);
             
             showToast(`✅ Kode dibuat: ${data.code}`);
-            loadVipCodes(); // Refresh list
+            loadVipCodes();
         } catch (e) {
             showToast('Gagal buat kode: ' + e.message);
             btn.innerText = oldText;
@@ -726,7 +726,6 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.clipboard.writeText(text).then(() => {
             showToast(`📋 Kode disalin: ${text}`);
         }).catch(() => {
-            // Fallback kalau browser nolak
             const temp = document.createElement('textarea');
             temp.value = text;
             document.body.appendChild(temp);
@@ -1006,7 +1005,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, true, 'Memverifikasi...');
 
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zenkai-vip`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-vip`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ action: 'activate', code: code })
@@ -1057,8 +1056,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>Google Gemini Plus 👑</h3>
                 <span class="desc-text" style="color:#ffcc00; border-color:#ffcc00; background: rgba(255,204,0,0.1);">Sisa Kuota VIP Lu: <b>${2 - usage.count}x</b> hari ini.</span>
                 
+                <!-- TUTORIAL BOX -->
+                <div style="text-align:left; font-size:11px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed var(--border); line-height:1.5;">
+                    <b style="color:var(--primary);">📌 TUTORIAL:</b><br>
+                    1. Masukkan <b>Email Google aktif</b> lu di bawah.<br>
+                    2. Klik <b>Kirim Kode OTP</b>.<br>
+                    3. Cek <b>Inbox/Spam</b> email lu, salin 6 digit OTP.<br>
+                    4. Masukkan OTP, lalu klik <b>Klaim Akses</b>.<br>
+                    5. Link Offer 12 Bulan akan muncul. Ikuti panduannya!
+                </div>
+
                 <div id="step-email">
-                    <p style="font-size:11px; text-align:center; opacity:0.8; margin-bottom:15px;">Masukkan email Google aktif lu. Sistem bakal ngirim Kode OTP 6 digit ke email lu.</p>
                     <input type="email" id="gemini-email" placeholder="Masukkan email Google aktif...">
                     <button class="action-btn" id="btn-send-otp">Kirim Kode OTP</button>
                 </div>
@@ -1099,7 +1107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     stepEmail.style.display = 'none';
                     stepOtp.style.display = 'block';
-                    resBox.innerHTML = `<p class="success-msg">✅ OTP Berhasil Dikirim!<br><span style="font-size:11px; font-weight:normal;">Cek Inbox/Spam email <b>${escapeHTML(email)}</b>.</span></p>`;
+                    resBox.innerHTML = `<p class="success-msg" style="font-size:12px;">✅ OTP Terkirim!<br><span style="font-weight:normal;">Cek Inbox/Spam email <b>${escapeHTML(email)}</b>.</span></p>`;
                     showToast('Kode OTP Terkirim!');
                 } catch (e) {
                     resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
@@ -1123,18 +1131,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     const data = await res.json();
                     
-                    if (!data.status) throw new Error(data.message || 'OTP Salah / Kadaluarsa');
+                    if (!data.status) throw new Error(data.message || data.result?.message || 'OTP Salah / Kadaluarsa');
 
                     usage.count++;
                     localStorage.setItem('zenkai_gemini_vip_usage', JSON.stringify(usage));
 
-                    closeModal();
-                    showToast('🎉 Berhasil! Akses Gemini Plus Aktif.');
-                    setTimeout(() => {
-                        tampilkanAlert("Sukses!", "Akses Google Gemini Plus 12 Bulan berhasil diklaim. Cek email lu untuk link verifikasi terakhir.", [
-                            { label: "Oke", action: "document.getElementById('custom-alert').style.display='none'", type: "primary" }
-                        ]);
-                    }, 500);
+                    // TAMPILKAN LINK & PANDUAN DARI API JERE
+                    const offerLink = data.result?.offerLink || '#';
+                    const guideText = data.result?.guide || 'Buka link offer di browser dengan login akun Google target.';
+
+                    stepOtp.style.display = 'none';
+                    resBox.innerHTML = `
+                        <div style="text-align:left;">
+                            <p class="success-msg" style="font-size:12px; margin-bottom:15px;">🎉 Berhasil Diklaim!</p>
+                            
+                            <p style="font-size:11px; margin-bottom:5px; font-weight:bold;">📌 PANDUAN:</p>
+                            <p style="font-size:10px; opacity:0.8; margin-bottom:15px;">${escapeHTML(guideText)}</p>
+
+                            <a href="${escapeHTML(offerLink)}" target="_blank" class="action-btn" style="background:#00ff9d; color:#000; text-decoration:none; text-align:center; font-size:13px;">
+                                Buka Link Offer
+                            </a>
+                        </div>
+                    `;
+                    showToast('Akses Gemini Plus Berhasil!');
                 } catch (e) {
                     resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
