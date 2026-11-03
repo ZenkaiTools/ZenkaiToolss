@@ -367,6 +367,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function applySettings(setting) {
         const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
 
+        // Simpan limit ke global variable
+        window.geminiLimit = setting.gemini_limit || 1;
+
         if (setting.is_maintenance && !isOwner) {
             if (!window.mtTimer && !sessionStorage.getItem('maintenance_triggered')) {
                 window.mtTimer = true;
@@ -557,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('owner-page-content');
         if (!container) return;
         container.innerHTML = '<div class="loader"></div>';
-        let set = { site_title: '', broadcast_text: '', is_maintenance: false, disabled_pages: '', disabled_tools: '', vip_tools: '' };
+        let set = { site_title: '', broadcast_text: '', is_maintenance: false, disabled_pages: '', disabled_tools: '', vip_tools: '', gemini_limit: 1 };
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'get_settings' }) });
             const data = await res.json();
@@ -603,6 +606,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:12px; margin-top:5px; margin-bottom:15px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
                     <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Broadcast Banner</label>
                     <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan" style="width:100%; padding:12px; margin-top:5px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
+                    
+                    <!-- INPUT LIMIT GEMINI -->
+                    <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px; margin-top:15px; display:block;">Limit Gemini (Per Hari)</label>
+                    <input type="number" id="own-gemini-limit" value="${set.gemini_limit || 1}" min="1" style="width:100%; padding:12px; margin-top:5px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
                 </div>
                 <div style="background:rgba(255,51,51,0.1); padding:15px; border-radius:12px; border:2px dashed #ff3333;">
                     <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
@@ -649,7 +656,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!result.status) throw new Error(result.message || 'Gagal memuat');
             const data = result.data || [];
             
-            // Tombol Buat Kode Baru
             let html = `
                 <button onclick="generateVipCode(event)" class="action-btn press" style="background:#00ff9d; color:#000; font-size:12px; padding:10px; margin-bottom:15px; box-shadow:0 3px 0 var(--border);">
                     ➕ Buat Kode VIP Baru
@@ -676,12 +682,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${v.is_used ? `<p style="font-size:10px; opacity:0.6; margin-bottom:10px;">Dipakai: ${escapeHTML(date)}</p>` : ''}
                         
                         <div style="display:flex; gap:8px;">
-                            <!-- Tombol Salin Kode -->
                             <button onclick="copyToClipboard('${escapeHTML(v.code)}')" style="flex:1; padding:8px; font-size:11px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">
                                 📋 Salin
                             </button>
                             
-                            <!-- Tombol Reset (Cuma muncul kalo udah kepake) -->
                             ${v.is_used ? `<button onclick="resetVipCode(${Number(v.id)})" style="flex:1; padding:8px; font-size:11px; background:#ff3333; color:#fff; border:2px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">🔄 Reset</button>` : ''}
                         </div>
                     </div>
@@ -786,7 +790,8 @@ document.addEventListener('DOMContentLoaded', () => {
             disabled_pages: checkedPages,
             disabled_tools: checkedTools,
             vip_tools: checkedVipTools,
-            is_maintenance: document.getElementById('own-mt').checked
+            is_maintenance: document.getElementById('own-mt').checked,
+            gemini_limit: document.getElementById('own-gemini-limit').value
         };
 
         try {
@@ -1030,31 +1035,16 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         // =========================================
-        // FITUR GEMINI PLUS BYPASS (STRICT VIP, 2x/HARI, 2-STEP)
+        // FITUR GEMINI PLUS BYPASS
         // =========================================
         else if (tool === 'ai-chat') {
-            const today = new Date().toDateString();
-            let usage = JSON.parse(localStorage.getItem('zenkai_gemini_vip_usage') || '{"date":"","count":0}');
-            if (usage.date !== today) usage = { date: today, count: 0 };
-
-            if (usage.count >= 2) {
-                modalContent.innerHTML = `
-                    ${closeSvg}
-                    <div style="text-align:center; padding: 20px 0;">
-                        <div style="font-size: 60px; margin-bottom: 15px;">⏳</div>
-                        <h3 style="font-family: var(--font-head); font-size: 22px; color: #ff3333; margin-bottom: 10px;">Limit VIP Tercapai</h3>
-                        <p style="font-size: 13px; line-height: 1.6; opacity: 0.9; margin-bottom: 25px;">
-                            Member VIP dibatasi <b>2x sehari</b> buat fitur ini.<br>Kuota lu udah habis, besok balik lagi ya!
-                        </p>
-                    </div>
-                `;
-                return;
-            }
+            // Cek limit cuma buat nampilin info, pengecekan asli ada di server
+            const limit = window.geminiLimit || 1;
 
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Google Gemini Plus 👑</h3>
-                <span class="desc-text" style="color:#ffcc00; border-color:#ffcc00; background: rgba(255,204,0,0.1);">Sisa Kuota VIP Lu: <b>${2 - usage.count}x</b> hari ini.</span>
+                <span class="desc-text" style="color:#ffcc00; border-color:#ffcc00; background: rgba(255,204,0,0.1);">Limit Harian Email: <b>${limit}x</b></span>
                 
                 <!-- TUTORIAL BOX -->
                 <div style="text-align:left; font-size:11px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed var(--border); line-height:1.5;">
@@ -1131,10 +1121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     const data = await res.json();
                     
-                    if (!data.status) throw new Error(data.message || data.result?.message || 'OTP Salah / Kadaluarsa');
-
-                    usage.count++;
-                    localStorage.setItem('zenkai_gemini_vip_usage', JSON.stringify(usage));
+                    if (!data.status) throw new Error(data.message || 'Gagal klaim');
 
                     // TAMPILKAN LINK & PANDUAN DARI API JERE
                     const offerLink = data.result?.offerLink || '#';
