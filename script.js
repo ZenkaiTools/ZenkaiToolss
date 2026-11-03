@@ -715,44 +715,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================
-// FITUR SUPPORT (DONASI) - TANPA ANIMASI
-// =========================================
-else if (tool === 'support') {
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <div style="padding: 10px 0;">
-            <h3 style="font-family: var(--font-head); font-size: 24px; color: #ffcc00; text-align: center; text-shadow: 2px 2px 0 var(--border); margin-bottom: 5px;">Halo, Gue Andika</h3>
-            <p style="font-size: 10px; color: var(--primary); font-weight: 800; letter-spacing: 2px; text-align: center; margin-bottom: 25px;">DEVELOPER ZENKAI TOOLS</p>
+        // FITUR SUPPORT (DONASI) - SIMPLE
+        // =========================================
+        else if (tool === 'support') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <div style="padding: 10px 0;">
+                    <h3 style="font-family: var(--font-head); font-size: 24px; color: #ffcc00; text-align: center; text-shadow: 2px 2px 0 var(--border); margin-bottom: 5px;">Halo, Gue Andika</h3>
+                    <p style="font-size: 10px; color: var(--primary); font-weight: 800; letter-spacing: 2px; text-align: center; margin-bottom: 25px;">DEVELOPER ZENKAI TOOLS</p>
 
-            <div style="font-size: 13px; line-height: 1.7; color: var(--text); opacity: 0.9; text-align: left; margin-bottom: 25px; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 12px; border: 2px dashed var(--border);">
-                <p style="margin-bottom: 15px;">
-                    Gue bikin <b>Zenkai Tools</b> ini berawal dari rasa kesel. Kenapa sih buat download video atau baca komik harus lewat banyak banget iklan pop-up yang bikin HP lemot?
-                </p>
-                <p style="margin-bottom: 15px;">
-                    Akhirnya gue bikin tempat di mana lu bisa akses <b>30+ tools gratis</b>, tanpa daftar, dan yang paling penting: <b>bebas iklan judol</b>.
-                </p>
-                <p style="margin-bottom: 15px;">
-                    Tapi ada satu masalah: biaya <b>Server & API</b> bulanan itu nggak murah. Gue belum pernah masang iklan sepeser pun, dan pengen tetep gitu.
-                </p>
-                <p style="margin-bottom: 0; font-weight: 800; color: #ff3333; text-align: center;">
-                    Kalau lu ngerasa terbantu, bantu traktir kopi biar server ini tetep nyala ya!
-                </p>
-            </div>
+                    <div style="font-size: 13px; line-height: 1.7; color: var(--text); opacity: 0.9; text-align: left; margin-bottom: 25px; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 12px; border: 2px dashed var(--border);">
+                        <p style="margin-bottom: 15px;">
+                            Gue bikin <b>Zenkai Tools</b> ini berawal dari rasa kesel. Kenapa sih buat download video atau baca komik harus lewat banyak banget iklan pop-up yang bikin HP lemot?
+                        </p>
+                        <p style="margin-bottom: 15px;">
+                            Akhirnya gue bikin tempat di mana lu bisa akses <b>30+ tools gratis</b>, tanpa daftar, dan yang paling penting: <b>bebas iklan judol</b>.
+                        </p>
+                        <p style="margin-bottom: 15px;">
+                            Tapi ada satu masalah: biaya <b>Server & API</b> bulanan itu nggak murah. Gue belum pernah masang iklan sepeser pun, dan pengen tetep gitu.
+                        </p>
+                        <p style="margin-bottom: 0; font-weight: 800; color: #ff3333; text-align: center;">
+                            Kalau lu ngerasa terbantu, bantu traktir kopi biar server ini tetep nyala ya!
+                        </p>
+                    </div>
 
-            <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" rel="noopener noreferrer" 
-               class="action-btn" 
-               style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; 
-                      background: #ffcc00; color: #000; border: 3px solid var(--border); border-radius: 12px; 
-                      font-weight: 900; font-size: 15px; padding: 16px; box-shadow: 0 5px 0 var(--border); 
-                      margin-bottom: 15px; text-transform: uppercase;">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                Traktir Kopi Sekarang
-            </a>
-            
-            <p style="text-align: center; font-size: 10px; opacity: 0.6; font-style: italic;">"Sekecil apapun donasinya, sangat berarti. Makasih!"</p>
-        </div>
-    `;
-}
+                    <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" rel="noopener noreferrer" 
+                       class="action-btn" 
+                       style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; 
+                              background: #ffcc00; color: #000; border: 3px solid var(--border); border-radius: 12px; 
+                              font-weight: 900; font-size: 15px; padding: 16px; box-shadow: 0 5px 0 var(--border); 
+                              margin-bottom: 15px; text-transform: uppercase;">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        Traktir Kopi Sekarang
+                    </a>
+                    
+                    <p style="text-align: center; font-size: 10px; opacity: 0.6; font-style: italic;">"Sekecil apapun donasinya, sangat berarti. Makasih!"</p>
+                </div>
+            `;
+        }
         else if (tool === 'komik') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -817,8 +817,16 @@ else if (tool === 'support') {
             let isLoading = false;
             let hasMore = true;
 
-            // FUNGSI DETEKSI CERDAS (KALAU API NGASIH TYPE NULL)
+            // FUNGSI DETEKSI CERDAS (DENGAN AUTO-LEARNING CACHE)
             const getTipeKomik = (typeString, titleString = '') => {
+                let typeCache = JSON.parse(localStorage.getItem('zenkai_type_cache') || '{}');
+                if (titleString && typeCache[titleString]) {
+                    const t = typeCache[titleString].toLowerCase();
+                    if (t.includes('manhwa')) return { label: 'MANHWA', color: '#00ffcc' };
+                    if (t.includes('manhua')) return { label: 'MANHUA', color: '#ff007f' };
+                    if (t.includes('manga')) return { label: 'MANGA', color: '#ffcc00' };
+                }
+
                 if (typeString) {
                     const t = typeString.toLowerCase();
                     if (t.includes('manhwa')) return { label: 'MANHWA', color: '#00ffcc' };
@@ -826,20 +834,14 @@ else if (tool === 'support') {
                     if (t.includes('manga')) return { label: 'MANGA', color: '#ffcc00' };
                 }
                 
-                // Otak kedua: Tebak dari judul jika type null
                 const t = (titleString || '').toLowerCase();
-                // Keyword Manhwa (Korea)
-                const manhwaKeywords = ['manager kim', 'youngest', 'bloodthirsty', 'heavenly', 'northern', 'shepherd', 'reborn as', 'awakening', 'lookism', 'temporarily', 'fostering', 'grand duke', 'hunared'];
-                // Keyword Manhua (China)
-                const manhuaKeywords = ['martial', 'immortal', 'cultivation', 'sovereign', 'god', 'technique', 'senki', 'jinx', 'demonic', 'magic', 'sword', 'hundred'];
+                const manhwaKeywords = ['manager kim', 'youngest', 'bloodthirsty', 'heavenly', 'northern', 'shepherd', 'reborn as', 'awakening', 'lookism', 'temporarily', 'fostering', 'grand duke', 'hunared', 'regression', 'regressor', 'player', 'tower', 'guild', 'hunter', 'princess'];
+                const manhuaKeywords = ['martial', 'immortal', 'cultivation', 'sovereign', 'god', 'technique', 'senki', 'jinx', 'demonic', 'magic', 'sword', 'hundred', 'academic', 'system', 'villain', 'master', 'class', 'transition', 'flame', 'global'];
 
-                for (const kw of manhwaKeywords) {
-                    if (t.includes(kw)) return { label: 'MANHWA', color: '#00ffcc' };
-                }
-                for (const kw of manhuaKeywords) {
-                    if (t.includes(kw)) return { label: 'MANHUA', color: '#ff007f' };
-                }
-                return { label: 'MANGA', color: '#ffcc00' }; // Default
+                for (const kw of manhwaKeywords) if (t.includes(kw)) return { label: 'MANHWA', color: '#00ffcc' };
+                for (const kw of manhuaKeywords) if (t.includes(kw)) return { label: 'MANHUA', color: '#ff007f' };
+                
+                return { label: 'MANGA', color: '#ffcc00' };
             };
 
             // Fungsi Pindah Tab
@@ -864,7 +866,6 @@ else if (tool === 'support') {
                     loadMoreEl.style.display = 'block';
                 }
 
-                // JIKA TAB FAVORIT DIPILIH
                 if (currentTab === 'favorit' && !query) {
                     loadMoreEl.style.display = 'none';
                     const favoritList = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
@@ -907,9 +908,7 @@ else if (tool === 'support') {
                     return;
                 }
 
-                // FETCH API (BERANDA / KATALOG / SEARCH)
                 try {
-                    // LOGIKA PAGE YANG BENER BIAR NGGAK NGELOOP
                     let bodyData = {};
                     if (query) {
                         bodyData = { action: 'search', q: query, page: currentPage };
@@ -927,7 +926,6 @@ else if (tool === 'support') {
                     const data = await res.json();
                     const komikList = data.results || []; 
 
-                    // CEK DATA KOSONG ATAU NGGAK
                     if (komikList.length === 0) {
                         hasMore = false;
                         loadMoreEl.style.display = 'none';
@@ -936,7 +934,6 @@ else if (tool === 'support') {
                         return;
                     }
 
-                    // Render Lanjut Baca (Hanya di Page 1 Beranda)
                     const lastRead = localStorage.getItem('zenkai_last_read');
                     let historyHtml = '';
                     if (lastRead && !query && currentTab === 'terbaru' && currentPage === 1) {
@@ -962,11 +959,20 @@ else if (tool === 'support') {
                         `;
                     }
 
-                    // Header Katalog
+                    // Header Katalog dengan Disclaimer
                     let titleSection = '';
                     if (currentPage === 1) {
                         if (query) titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Hasil Pencarian "${escapeHTML(query)}"</h4>`;
-                        else if (currentTab === 'terbaru') titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Update Terbaru</h4>`;
+                        else if (currentTab === 'terbaru') {
+                            titleSection = `
+                                <div style="margin-bottom:15px;">
+                                    <h4 style="font-size:13px; font-weight:800; margin-bottom:5px;">Update Terbaru</h4>
+                                    <p style="font-size:9px; opacity:0.6; line-height:1.4;">
+                                        <i>*Label Manga/Manhwa/Manhua mungkin belum akurat. Klik komik untuk menyinkronkan tipe aslinya secara otomatis.</i>
+                                    </p>
+                                </div>
+                            `;
+                        }
                         else titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Semua Komik</h4>`;
                     }
 
@@ -1010,14 +1016,12 @@ else if (tool === 'support') {
                         }
                     }
 
-                    // Event listener untuk komik yang baru dimuat
                     box.querySelectorAll('.komik-card-jere').forEach(el => {
                         const newEl = el.cloneNode(true);
                         el.parentNode.replaceChild(newEl, el);
                         newEl.addEventListener('click', () => bukaDetail(newEl.dataset.title, newEl.dataset.slug));
                     });
 
-                    // Cek apakah masih ada halaman selanjutnya
                     if (data.hasNext === false || komikList.length < 10) {
                         hasMore = false;
                         loadMoreEl.style.display = 'none';
@@ -1032,7 +1036,6 @@ else if (tool === 'support') {
                 isLoading = false;
             };
 
-            // DETEKSI SCROLL SAMPAI BAWAH (INFINITE SCROLL)
             const handleScroll = (e) => {
                 const target = e.target;
                 if (target.id === 'tool-modal' || target.classList.contains('bottom-sheet-content')) {
@@ -1044,14 +1047,12 @@ else if (tool === 'support') {
                 }
             };
 
-            // Pasang listener scroll di container modal
             const modalBody = document.querySelector('.bottom-sheet-content');
             if (modalBody) {
                 modalBody.removeEventListener('scroll', handleScroll);
                 modalBody.addEventListener('scroll', handleScroll);
             }
 
-            // FUNGSI BUKA DETAIL
             const bukaDetail = async (title, slug) => {
                 box.innerHTML = '<div class="loader"></div>';
 
@@ -1065,6 +1066,13 @@ else if (tool === 'support') {
                     if (!data.status) throw new Error('Gagal mengambil detail');
                     const detail = data.result || data.data;
                     const tipe = getTipeKomik(detail.type, title);
+                    
+                    // AUTO-LEARNING: Simpan tipe asli ke Cache
+                    if (detail.type) {
+                        let typeCache = JSON.parse(localStorage.getItem('zenkai_type_cache') || '{}');
+                        typeCache[title] = detail.type;
+                        localStorage.setItem('zenkai_type_cache', JSON.stringify(typeCache));
+                    }
                     
                     let chapters = [];
                     if (detail.chapters && detail.chapters.length > 0) {
@@ -1104,12 +1112,10 @@ else if (tool === 'support') {
                     }
 
                     let html = `
-                        <!-- TOMBOL BACK -->
                         <button class="btn-back press" style="background:var(--card-bg); border:1px solid var(--border); width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:20px; cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg>
                         </button>
                         
-                        <!-- INFO KOMIK -->
                         <div style="display:flex; gap:15px; margin-bottom:20px;">
                             <div style="position:relative;">
                                 <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:110px; height:150px; object-fit:cover; border-radius:10px; border:2px solid var(--border); box-shadow:0 8px 20px rgba(0,0,0,0.3);">
@@ -1119,7 +1125,6 @@ else if (tool === 'support') {
                                 <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
                                 <p style="font-size:10px; color:var(--primary); font-weight:700; margin:0 0 15px 0;">Status: ${escapeHTML(detail.status || 'Berjalan')}</p>
                                 
-                                <!-- TOMBOL FAVORIT -->
                                 <button class="btn-fav" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" data-cover="${escapeHTML(detail.cover || '')}" style="align-self:flex-start; background:${isFav ? 'rgba(255,51,51,0.15)' : 'rgba(255,255,255,0.05)'}; color:${isFav ? '#ff3333' : 'var(--text)'}; border:1px solid ${isFav ? '#ff3333' : 'var(--border)'}; padding:8px 16px; border-radius:20px; font-weight:800; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:6px; transition:0.3s;">
                                     <svg viewBox="0 0 24 24" fill="${isFav ? '#ff3333' : 'none'}" stroke="${isFav ? '#ff3333' : 'currentColor'}" stroke-width="2" width="16" height="16"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                                     ${isFav ? 'Tersimpan' : '+ Favorit'}
@@ -1127,7 +1132,6 @@ else if (tool === 'support') {
                             </div>
                         </div>
 
-                        <!-- SINOPSIS -->
                         <div style="background:var(--card-bg); border:1px solid var(--border); padding:15px; border-radius:12px; margin-bottom:25px;">
                             <p style="font-size:12px; color:var(--text); opacity:0.8; line-height:1.6; max-height: 120px; overflow-y: auto; margin:0;">${escapeHTML(detail.sinopsis || detail.synopsis || detail.description || 'Tidak ada sinopsis.')}</p>
                         </div>
@@ -1159,7 +1163,6 @@ else if (tool === 'support') {
                     html += `</div>`;
                     box.innerHTML = html;
 
-                    // EVENT LISTENER
                     box.querySelector('.btn-back').addEventListener('click', () => {
                         box.innerHTML = '';
                         currentPage = 1;
@@ -1167,7 +1170,6 @@ else if (tool === 'support') {
                         loadKatalog(input.value.trim());
                     });
                     
-                    // Tombol Favorit
                     box.querySelector('.btn-fav').addEventListener('click', function() {
                         const t = this.dataset.title;
                         const s = this.dataset.slug;
@@ -1198,7 +1200,6 @@ else if (tool === 'support') {
                 }
             };
 
-            // Load Pertama Kali
             loadKatalog(''); 
             
             let timeout = null;
@@ -2175,7 +2176,6 @@ else if (tool === 'support') {
             const prevSlug = data.result?.navigation?.prevSlug || data.result?.prev || null;
             const nextSlug = data.result?.navigation?.nextSlug || data.result?.next || null;
 
-            // UI READER DENGAN TOMBOL YANG DIPERBAIKI
             let html = `
                 <div class="reader-header">
                     <button class="btn-back-reader press" style="background:var(--card-bg); border:2px solid var(--border); width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
@@ -2196,7 +2196,6 @@ else if (tool === 'support') {
             
             html += `</div>`;
 
-            // TOMBOL NEXT/PREV DIPERBAIKI (WARNA CYBERPUNK)
             html += `
                 <div style="display:flex; gap:10px; padding:15px 15px 5px 15px; background:var(--bg);">
                     <button class="btn-prev-next press" data-slug="${escapeHTML(prevSlug || '')}" data-title="${escapeHTML(title)}" ${!prevSlug ? 'disabled' : ''} 
@@ -2214,7 +2213,6 @@ else if (tool === 'support') {
             box.innerHTML = html;
             window.scrollTo({ top: 0, behavior: 'auto' });
 
-            // Event Listener
             box.querySelector('.btn-back-reader').addEventListener('click', () => openTool('komik'));
             box.querySelector('.btn-daftar-reader').addEventListener('click', () => openTool('komik'));
             box.querySelector('.btn-back-katalog').addEventListener('click', () => openTool('komik'));
