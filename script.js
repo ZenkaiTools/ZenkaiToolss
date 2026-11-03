@@ -748,25 +748,73 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p style="font-size:10px; color:var(--primary); margin:0; font-weight:bold; letter-spacing:2px;">ZENKAI COMICS</p>
                         </div>
                     </div>
-                    <div style="position:relative; margin-bottom:20px;">
-                        <input type="text" id="komik-q" placeholder="Cari judul komik..." style="width:100%; padding:14px 14px 14px 45px; border:none; border-radius:12px; background:var(--card-bg); color:var(--text); font-size:13px; outline:none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border:2px solid var(--border);">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    
+                    <!-- TAB POPULER / TERBARU -->
+                    <div style="display:flex; gap:10px; margin-bottom:15px; padding: 0 5px;">
+                        <button id="tab-terbaru" onclick="switchKomikTab('terbaru', this)" class="cat-btn active" style="flex:1; padding:10px; font-size:12px; border-radius:8px;">Terbaru</button>
+                        <button id="tab-semua" onclick="switchKomikTab('semua', this)" class="cat-btn" style="flex:1; padding:10px; font-size:12px; border-radius:8px;">Semua Komik</button>
                     </div>
-                    <div id="komik-res"></div>
+
+                    <div style="position:relative; margin-bottom:20px; padding: 0 5px;">
+                        <input type="text" id="komik-q" placeholder="Cari judul komik..." style="width:100%; padding:14px 14px 14px 45px; border:none; border-radius:12px; background:var(--card-bg); color:var(--text); font-size:13px; outline:none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border:2px solid var(--border);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:20px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
+                    
+                    <div id="komik-history" style="padding: 0 5px; margin-bottom: 15px;"></div>
+
+                    <div id="komik-res" style="padding: 0 5px;"></div>
                 </div>
             `;
             
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
+            let currentTab = 'terbaru'; // Default tab
+
+            // Fungsi ganti tab
+            window.switchKomikTab = (tab, btn) => {
+                currentTab = tab;
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                if (btn) btn.classList.add('active');
+                loadKatalog(input.value.trim()); // Reload data sesuai tab
+            };
 
             const loadKatalog = async (query) => {
+                // --- TAMPILKAN RIWAYAT BACA ---
+                const historyBox = document.getElementById('komik-history');
+                const lastRead = localStorage.getItem('zenkai_last_read');
+                if (lastRead && historyBox) {
+                    const h = JSON.parse(lastRead);
+                    historyBox.innerHTML = `
+                        <div style="background:var(--card-bg); border:2px solid var(--primary); padding:12px; border-radius:10px; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="bacaKomik('${escapeHTML(h.title)}', '${escapeHTML(h.slug)}')">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <div style="background:var(--primary); color:#000; padding:6px; border-radius:6px;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                                </div>
+                                <div>
+                                    <p style="font-size:10px; margin:0; opacity:0.7; font-weight:bold;">LANJUT BACA</p>
+                                    <h5 style="font-size:12px; margin:2px 0 0 0; font-weight:800;">${escapeHTML(h.title)}</h5>
+                                </div>
+                            </div>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="20" height="20"><path d="M9 18l6-6-6-6"/></svg>
+                        </div>
+                    `;
+                } else if (historyBox) {
+                    historyBox.innerHTML = '';
+                }
+
                 box.innerHTML = '<div class="loader"></div>';
                 try {
                     let bodyData = {};
+                    
+                    // LOGIKA PENGAMBILAN DATA BERDASARKAN TAB
                     if (query) {
-                        bodyData = { action: 'search', q: query };
+                        bodyData = { action: 'search', q: query }; // Kalau lagi nyari, tetep ke search
                     } else {
-                        bodyData = { action: 'latest' };
+                        if (currentTab === 'terbaru') {
+                            bodyData = { action: 'latest' }; // Nembak API Terbaru
+                        } else {
+                            bodyData = { action: 'daftar' }; // Nembak API Daftar/Populer
+                        }
                     }
 
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
@@ -788,12 +836,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         const title = (manga.title || 'Tanpa Judul').replace(/^Komik\s+/i, '');
                         const cover = manga.cover || 'https://via.placeholder.com/150';
                         const slug = manga.slug; 
+                        const updated = manga.updatedAt ? `<span style="position:absolute; bottom:5px; left:5px; font-size:8px; background:rgba(0,0,0,0.7); color:#fff; padding:2px 5px; border-radius:4px;">${escapeHTML(manga.updatedAt)}</span>` : '';
                         const t = escapeHTML(title);
                         
                         html += `
                             <div class="komik-card-jere" data-title="${t}" data-slug="${slug}" style="cursor:pointer; display:flex; flex-direction:column; gap:6px;">
                                 <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:8px; overflow:hidden; background:#222;">
                                     <img src="${cover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                    ${updated}
                                 </div>
                                 <h4 style="font-size:11px; font-weight:800; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${t}</h4>
                             </div>
@@ -1837,11 +1887,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // FUNGSI BACA KOMIK (JERE API STREAM)
+    // FUNGSI BACA KOMIK (FITUR WEBTOON)
     // =========================================
     window.bacaKomik = async (title, slug) => {
         const box = document.getElementById('komik-res');
         box.innerHTML = '<div class="loader"></div>';
+        
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1849,45 +1900,67 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const data = await res.json();
             
-            // AMBIL DARI ARRAY 'pages' ATAU 'images'
             let images = [];
-            if (data.result && data.result.pages && data.result.pages.length > 0) {
-                images = data.result.pages.map(p => p.url || p); // Handle kalau isinya objek atau string
-            } else if (data.result && data.result.images) {
+            if (data.result?.pages?.length > 0) {
+                images = data.result.pages.map(p => p.url || p);
+            } else if (data.result?.images) {
                 images = data.result.images;
             }
             
-            // Jaring Pengaman
-            if (images.length === 0) {
-                const baseSlug = slug.split('-chapter-')[0]; 
-                const originalUrl = `https://komikindo.ch/komik/${baseSlug}/`;
-                
-                let html = `
-                    <div style="text-align:center; padding: 20px;">
-                        <div style="font-size:40px; margin-bottom:10px;">📖</div>
-                        <h4 style="margin-bottom:10px;">Gambar Belum Tersedia</h4>
-                        <p style="font-size:12px; opacity:0.8; margin-bottom:20px;">API gagal mengambil gambar panel. Tapi lu bisa baca chapter ini langsung di web aslinya:</p>
-                        
-                        <a href="${originalUrl}" target="_blank" class="action-btn" style="background:#00ff9d; text-decoration:none; display:block; margin-bottom:10px;">Baca di Web Asli</a>
-                        <button onclick="openTool('komik')" class="action-btn" style="background:var(--card-bg); color:var(--text);">Kembali ke Katalog</button>
-                    </div>
-                `;
-                box.innerHTML = html;
-                return;
-            }
+            if (images.length === 0) throw new Error('Gambar tidak ditemukan.');
 
-            let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
-            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+            // --- SIMPAN RIWAYAT BACA ---
+            const history = {
+                title: title,
+                slug: slug,
+                cover: data.result?.mangaCover || '',
+                time: Date.now()
+            };
+            localStorage.setItem('zenkai_last_read', JSON.stringify(history));
+
+            // --- NAVIGASI PREV / NEXT ---
+            const prevSlug = data.result?.navigation?.prevSlug || data.result?.prev || null;
+            const nextSlug = data.result?.navigation?.nextSlug || data.result?.next || null;
+            const chapterTitle = data.result?.chapterTitle || title;
+
+            let html = `
+                <!-- HEADER BACA -->
+                <div style="position: sticky; top: 0; background: var(--bg); z-index: 10; padding: 10px 0; border-bottom: 2px solid var(--border); margin-bottom: 10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <div style="text-align:center; flex:1; padding: 0 10px;">
+                            <h4 style="font-size:13px; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(chapterTitle)}</h4>
+                        </div>
+                        <button onclick="openTool('komik')" class="press" style="background:var(--primary); color:#000; border:2px solid var(--border); padding:6px 10px; border-radius:8px; font-size:11px; font-weight:bold;">
+                            Daftar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- GAMBAR KOMIK (GAP DIHILANGKAN) -->
+                <div style="display:flex; flex-direction:column; gap:0; background:#000;">
+            `;
             
             images.forEach(imgUrl => {
-                // Pakai proxy wsrv.nl biar gambar nggak blank (karena domain gambar sering diblokir)
                 const proxiedImg = `https://wsrv.nl/?url=${encodeURIComponent(imgUrl)}`;
-                html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
+                html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" style="width:100%; display:block; margin:0; padding:0;" loading="lazy" onerror="this.style.display='none'">`;
             });
+            
             html += `</div>`;
 
-            html += `<button class="action-btn press" onclick="openTool('komik')" style="margin-top:15px; background:#ff3333;">Kembali ke Katalog</button>`;
+            // --- TOMBOL NEXT/PREV BAWAH ---
+            html += `
+                <div style="display:flex; gap:10px; margin-top:20px; margin-bottom:20px;">
+                    <button ${!prevSlug ? 'disabled style="opacity:0.3;"' : ''} onclick="bacaKomik('${escapeHTML(title)}', '${escapeHTML(prevSlug || '')}')" class="action-btn" style="flex:1; margin:0;">« Prev</button>
+                    <button ${!nextSlug ? 'disabled style="opacity:0.3;"' : ''} onclick="bacaKomik('${escapeHTML(title)}', '${escapeHTML(nextSlug || '')}')" class="action-btn" style="flex:1; margin:0;">Next »</button>
+                </div>
+                <button onclick="openTool('komik')" class="action-btn" style="background:#ff3333; margin-bottom:20px;">Kembali ke Katalog</button>
+            `;
+            
             box.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'instant' });
 
         } catch (e) { 
             box.innerHTML = `
