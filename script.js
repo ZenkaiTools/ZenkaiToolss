@@ -367,7 +367,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function applySettings(setting) {
         const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
 
-        // Simpan limit ke global variable
         window.geminiLimit = setting.gemini_limit || 1;
 
         if (setting.is_maintenance && !isOwner) {
@@ -437,7 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const dTools = setting.disabled_tools ? setting.disabled_tools.split(',') : [];
         window.currentDisabledTools = dTools;
 
-        // DATA VIP DINAMIS
         window.currentVipTools = setting.vip_tools ? setting.vip_tools.split(',') : [];
 
         document.querySelectorAll('.tool-card').forEach(c => {
@@ -450,7 +448,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 c.classList.remove('maintenance-mode');
             }
 
-            // Nambahin Label VIP di icon
             if (window.currentVipTools.includes(toolName)) {
                 if (!c.querySelector('.vip-badge')) {
                     const badge = document.createElement('div');
@@ -570,7 +567,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
         const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
         const vipToolsArr = set.vip_tools ? set.vip_tools.split(',') : [];
-        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'komik', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise', 'ai-chat', 'ai-image', 'alightmotion', 'spamotp'];
+        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'komik', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise', 'ai-chat', 'ai-image', 'alightmotion', 'spamotp', 'wa-bot'];
         const listPages = ['fun', 'setting', 'info'];
 
         let toolsHtml = listTools.map(t => `
@@ -1038,7 +1035,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // FITUR GEMINI PLUS BYPASS
         // =========================================
         else if (tool === 'ai-chat') {
-            // Cek limit cuma buat nampilin info, pengecekan asli ada di server
             const limit = window.geminiLimit || 1;
 
             modalContent.innerHTML = `
@@ -1046,7 +1042,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>Google Gemini Plus 👑</h3>
                 <span class="desc-text" style="color:#ffcc00; border-color:#ffcc00; background: rgba(255,204,0,0.1);">Limit Harian Email: <b>${limit}x</b></span>
                 
-                <!-- TUTORIAL BOX -->
                 <div style="text-align:left; font-size:11px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed var(--border); line-height:1.5;">
                     <b style="color:var(--primary);">📌 TUTORIAL:</b><br>
                     1. Masukkan <b>Email Google aktif</b> lu di bawah.<br>
@@ -1123,7 +1118,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (!data.status) throw new Error(data.message || 'Gagal klaim');
 
-                    // TAMPILKAN LINK & PANDUAN DARI API JERE
                     const offerLink = data.result?.offerLink || '#';
                     const guideText = data.result?.guide || 'Buka link offer di browser dengan login akun Google target.';
 
@@ -1171,7 +1165,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 box.innerHTML = '<div class="loader"></div>';
 
                 try {
-                    // NEMBAK KE EDGE FUNCTION KITA, BUKAN KE JERE LANGSUNG
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-spam`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -1200,6 +1193,135 @@ document.addEventListener('DOMContentLoaded', () => {
                     box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
                 setBtnLoading(btn, false, 'TEMBAK OTP!');
+            };
+        }
+        // =========================================
+        // FITUR WHATSAPP BOT (REACT & VOTE) - BARU
+        // =========================================
+        else if (tool === 'wa-bot') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>WA Automator</h3>
+                <span class="desc-text">Auto React Emoji & Vote Polling Channel WhatsApp.</span>
+                
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <button id="tab-react" onclick="switchWaTab('react')" class="action-btn" style="flex:1; background:var(--primary); color:#000; margin:0; box-shadow:0 4px 0 var(--border);">🔥 Auto React</button>
+                    <button id="tab-vote" onclick="switchWaTab('vote')" class="action-btn" style="flex:1; background:var(--bg); color:var(--text); margin:0; box-shadow:0 4px 0 var(--border);">🗳️ Auto Vote</button>
+                </div>
+
+                <!-- AREA REACT -->
+                <div id="area-react">
+                    <input type="text" id="wa-url-react" placeholder="Paste link postingan channel WA...">
+                    <input type="text" id="wa-reaction" placeholder="Emoji (cth: 🔥,❤️,😲)" value="🔥">
+                    <button class="action-btn" id="btn-wa-react" style="background:#00ff9d; color:#000;">Kirim Reaksi</button>
+                </div>
+
+                <!-- AREA VOTE -->
+                <div id="area-vote" style="display:none;">
+                    <input type="text" id="wa-url-vote" placeholder="Paste link polling channel WA...">
+                    <input type="text" id="wa-pesan" placeholder="Teks opsi (cth: Setuju, Iya, Nggak)">
+                    <button class="action-btn" id="btn-wa-vote" style="background:#ffcc00; color:#000;">Kirim Vote</button>
+                </div>
+
+                <div id="wa-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+            `;
+
+            window.switchWaTab = (tab) => {
+                const btnR = document.getElementById('tab-react');
+                const btnV = document.getElementById('tab-vote');
+                const areaR = document.getElementById('area-react');
+                const areaV = document.getElementById('area-vote');
+
+                if (tab === 'react') {
+                    btnR.style.background = 'var(--primary)'; btnR.style.color = '#000';
+                    btnV.style.background = 'var(--bg)'; btnV.style.color = 'var(--text)';
+                    areaR.style.display = 'block'; areaV.style.display = 'none';
+                } else {
+                    btnV.style.background = 'var(--primary)'; btnV.style.color = '#000';
+                    btnR.style.background = 'var(--bg)'; btnR.style.color = 'var(--text)';
+                    areaR.style.display = 'none'; areaV.style.display = 'block';
+                }
+            };
+
+            const btnReact = document.getElementById('btn-wa-react');
+            const btnVote = document.getElementById('btn-wa-vote');
+            const resBox = document.getElementById('wa-res');
+
+            // --- AKSI REACT ---
+            btnReact.onclick = async () => {
+                const url = document.getElementById('wa-url-react').value.trim();
+                const reaction = document.getElementById('wa-reaction').value.trim();
+                if (!url) return showToast('Masukkan link dulu!');
+
+                setBtnLoading(btnReact, true, 'Mengirim...');
+                resBox.style.display = 'block';
+                resBox.innerHTML = '<div class="loader"></div>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-whatsapp`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'react', url: url, reaction: reaction })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.status === false || !data.result) {
+                        throw new Error(data.message || 'Gagal mengirim reaksi');
+                    }
+
+                    const r = data.result;
+                    resBox.innerHTML = `
+                        <div style="text-align:left; font-size:12px;">
+                            <p style="color:#00ff9d; font-weight:bold; margin-bottom:5px;">✅ ${escapeHTML(r.message || 'Reaksi Terkirim!')}</p>
+                            <p>Target: <a href="${escapeHTML(r.target)}" target="_blank" style="color:var(--primary); word-break:break-all;">${escapeHTML(r.target)}</a></p>
+                            <p>Emoji: <b>${escapeHTML(r.reaction)}</b></p>
+                            <p>Status Task: <b>${escapeHTML(r.task?.status || 'Succes')}</b></p>
+                        </div>
+                    `;
+                    showToast('Reaksi Berhasil!');
+                } catch (e) {
+                    resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btnReact, false, 'Kirim Reaksi');
+            };
+
+            // --- AKSI VOTE ---
+            btnVote.onclick = async () => {
+                const url = document.getElementById('wa-url-vote').value.trim();
+                const pesan = document.getElementById('wa-pesan').value.trim();
+                if (!url) return showToast('Masukkan link polling dulu!');
+                if (!pesan) return showToast('Masukkan teks opsi polling!');
+
+                setBtnLoading(btnVote, true, 'Mengirim...');
+                resBox.style.display = 'block';
+                resBox.innerHTML = '<div class="loader"></div>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-whatsapp`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'votech', url: url, pesan: pesan })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.status === false || !data.result) {
+                        throw new Error(data.message || 'Gagal mengirim vote');
+                    }
+
+                    const r = data.result;
+                    resBox.innerHTML = `
+                        <div style="text-align:left; font-size:12px;">
+                            <p style="color:#00ff9d; font-weight:bold; margin-bottom:5px;">✅ Vote Berhasil Diproses!</p>
+                            <p>Target: <a href="${escapeHTML(r.target)}" target="_blank" style="color:var(--primary); word-break:break-all;">${escapeHTML(r.target)}</a></p>
+                            <p>Opsi: <b>${escapeHTML(r.pesan)}</b></p>
+                            <hr style="border:1px dashed var(--border); margin:8px 0;">
+                            <p>Sukses: <b style="color:#00ff9d;">${r.success}</b> | Gagal: <b style="color:#ff3333;">${r.failed}</b></p>
+                            <p style="margin-top:5px; opacity:0.8;">${escapeHTML(r.message)}</p>
+                        </div>
+                    `;
+                    showToast('Vote Berhasil!');
+                } catch (e) {
+                    resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btnVote, false, 'Kirim Vote');
             };
         }
         // =========================================
