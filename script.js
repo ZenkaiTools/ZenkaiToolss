@@ -684,7 +684,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 9. FUNGSI OPEN TOOL
+    // 9. FUNGSI OPEN TOOL (BAGIAN KOMIK SAJA)
     // =========================================
     window.openTool = (tool) => {
         if (!modal || !modalContent) return;
@@ -715,7 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================
-        // FITUR KOMIK (ZENKAI COMICS - NO HERO, AUTO TYPE DETECTOR)
+        // FITUR KOMIK (ZENKAI COMICS - 3 TAB, TYPE AKURAT)
         // =========================================
         else if (tool === 'komik') {
             modalContent.innerHTML = `
@@ -771,12 +771,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const box = document.getElementById('komik-res');
             let currentTab = 'terbaru'; 
 
-            // Fungsi Deteksi Tipe Komik (Manga/Manhwa/Manhua)
-            const getTipeKomik = (title) => {
-                const t = title.toLowerCase();
-                if (t.includes('manhwa') || t.includes('korea')) return { label: 'MANHWA', color: '#00ffcc' };
-                if (t.includes('manhua') || t.includes('china') || t.includes('chinese')) return { label: 'MANHUA', color: '#ff007f' };
-                return { label: 'MANGA', color: '#ffcc00' }; // Default Manga
+            // Fungsi Deteksi Tipe Komik (Manga/Manhwa/Manhua) AKURAT
+            const getTipeKomik = (typeString) => {
+                if (!typeString) return { label: 'MANGA', color: '#ffcc00' }; // Default
+                const t = typeString.toLowerCase();
+                if (t.includes('manhwa')) return { label: 'MANHWA', color: '#00ffcc' };
+                if (t.includes('manhua')) return { label: 'MANHUA', color: '#ff007f' };
+                return { label: 'MANGA', color: '#ffcc00' };
             };
 
             // Fungsi Pindah Tab
@@ -809,19 +810,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     htmlFav += `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
                     
                     favoritList.forEach(f => {
-                        const tipe = getTipeKomik(f.title);
+                        const tipe = getTipeKomik(f.type || '');
                         htmlFav += `
                             <div class="fav-item-detail" data-title="${escapeHTML(f.title)}" data-slug="${escapeHTML(f.slug)}" style="cursor:pointer; display:flex; flex-direction:column; gap:8px;">
                                 <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:10px; overflow:hidden; background:#222; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
                                     <img src="${escapeHTML(f.cover)}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                    <!-- LABEL TIPE DI POJOK KIRI ATAS -->
+                                    <span style="position:absolute; top:0; left:0; font-size:8px; font-weight:900; background:${tipe.color}; color:#000; padding:3px 6px; border-radius:0 0 6px 0; box-shadow:1px 1px 3px rgba(0,0,0,0.5);">${tipe.label}</span>
                                     <div style="position:absolute; top:5px; right:5px; background:rgba(255,51,51,0.9); padding:4px; border-radius:50%;">
                                         <svg viewBox="0 0 24 24" fill="#fff" width="12" height="12"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                                     </div>
                                 </div>
-                                <div>
-                                    <span style="font-size:8px; font-weight:900; background:${tipe.color}; color:#000; padding:2px 6px; border-radius:4px; display:inline-block; margin-bottom:4px;">${tipe.label}</span>
-                                    <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(f.title)}</h4>
-                                </div>
+                                <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(f.title)}</h4>
                             </div>
                         `;
                     });
@@ -894,19 +894,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         const title = (manga.title || 'Tanpa Judul').replace(/^Komik\s+/i, '');
                         const cover = manga.cover || 'https://via.placeholder.com/150';
                         const slug = manga.slug; 
-                        const tipe = getTipeKomik(title);
+                        const tipe = getTipeKomik(manga.type); // <--- PAKAI DATA TYPE DARI JSON
                         const updated = manga.updatedAt ? `<span style="position:absolute; bottom:0; left:0; right:0; font-size:8px; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); color:#fff; padding:20px 5px 5px 5px; text-align:center; font-weight:600;">${escapeHTML(manga.updatedAt)}</span>` : '';
                         
                         html += `
                             <div class="komik-card-jere" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" style="cursor:pointer; display:flex; flex-direction:column; gap:8px;">
                                 <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:10px; overflow:hidden; background:#222; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
                                     <img src="${cover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                    <!-- LABEL TIPE DI POJOK KIRI ATAS -->
+                                    <span style="position:absolute; top:0; left:0; font-size:8px; font-weight:900; background:${tipe.color}; color:#000; padding:3px 6px; border-radius:0 0 6px 0; box-shadow:1px 1px 3px rgba(0,0,0,0.5);">${tipe.label}</span>
                                     ${updated}
                                 </div>
-                                <div>
-                                    <span style="font-size:8px; font-weight:900; background:${tipe.color}; color:#000; padding:2px 6px; border-radius:4px; display:inline-block; margin-bottom:4px;">${tipe.label}</span>
-                                    <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(title)}</h4>
-                                </div>
+                                <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(title)}</h4>
                             </div>
                         `;
                     });
@@ -935,7 +934,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (!data.status) throw new Error('Gagal mengambil detail');
                     const detail = data.result || data.data;
-                    const tipe = getTipeKomik(title);
+                    const tipe = getTipeKomik(detail.type); // <--- PAKAI DATA TYPE DARI JSON DETAIL
                     
                     let chapters = [];
                     if (detail.chapters && detail.chapters.length > 0) {
@@ -982,11 +981,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         <!-- INFO KOMIK -->
                         <div style="display:flex; gap:15px; margin-bottom:20px;">
-                            <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:110px; height:150px; object-fit:cover; border-radius:10px; border:2px solid var(--border); box-shadow:0 8px 20px rgba(0,0,0,0.3);">
+                            <div style="position:relative;">
+                                <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:110px; height:150px; object-fit:cover; border-radius:10px; border:2px solid var(--border); box-shadow:0 8px 20px rgba(0,0,0,0.3);">
+                                <span style="position:absolute; top:0; left:0; font-size:9px; font-weight:900; background:${tipe.color}; color:#000; padding:3px 8px; border-radius:10px 0 6px 0;">${tipe.label}</span>
+                            </div>
                             <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
-                                <span style="font-size:9px; font-weight:900; background:${tipe.color}; color:#000; padding:3px 8px; border-radius:4px; display:inline-block; align-self:flex-start; margin-bottom:5px;">${tipe.label}</span>
                                 <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
-                                <p style="font-size:10px; color:var(--primary); font-weight:700; margin:0 0 15px 0;">Status: Berjalan</p>
+                                <p style="font-size:10px; color:var(--primary); font-weight:700; margin:0 0 15px 0;">Status: ${escapeHTML(detail.status || 'Berjalan')}</p>
                                 
                                 <!-- TOMBOL FAVORIT -->
                                 <button class="btn-fav" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" data-cover="${escapeHTML(detail.cover || '')}" style="align-self:flex-start; background:${isFav ? 'rgba(255,51,51,0.15)' : 'rgba(255,255,255,0.05)'}; color:${isFav ? '#ff3333' : 'var(--text)'}; border:1px solid ${isFav ? '#ff3333' : 'var(--border)'}; padding:8px 16px; border-radius:20px; font-weight:800; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:6px; transition:0.3s;">
@@ -1031,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // EVENT LISTENER
                     box.querySelector('.btn-back').addEventListener('click', () => openTool('komik'));
                     
-                    // Tombol Favorit
+                    // Tombol Favorit (SIMPAN TYPE KE LOCALSTORAGE)
                     box.querySelector('.btn-fav').addEventListener('click', function() {
                         const t = this.dataset.title;
                         const s = this.dataset.slug;
@@ -2097,4 +2098,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-}); // <- PENUTUP DOMContentLoaded
+}); // <- PENUTUP DOMContentLoaded, JANGAN DIHAPUS
