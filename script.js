@@ -570,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
         const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
         const vipToolsArr = set.vip_tools ? set.vip_tools.split(',') : [];
-        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'komik', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise', 'ai-chat', 'ai-image', 'alightmotion'];
+        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'komik', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise', 'ai-chat', 'ai-image', 'alightmotion', 'spamotp'];
         const listPages = ['fun', 'setting', 'info'];
 
         let toolsHtml = listTools.map(t => `
@@ -1145,6 +1145,61 @@ document.addEventListener('DOMContentLoaded', () => {
                     resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
                 setBtnLoading(btnClaim, false, 'Klaim Akses Gemini Plus');
+            };
+        }
+        // =========================================
+        // FITUR SPAM OTP (EDGE FUNCTION)
+        // =========================================
+        else if (tool === 'spamotp') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Spam OTP</h3>
+                <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255,51,51,0.1);">⚠️ HATI-HATI PENGGUNAAN! (TES DOANG)</span>
+                <input type="text" id="spam-nomor" placeholder="Masukkan Nomor Target..." inputmode="numeric">
+                <button class="action-btn" id="btn-spam" style="background: #ff3333; color: #fff;">TEMBAK OTP!</button>
+                <div id="spam-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+            `;
+
+            const btn = document.getElementById('btn-spam');
+            btn.onclick = async () => {
+                const nomor = document.getElementById('spam-nomor').value.trim();
+                const box = document.getElementById('spam-res');
+                if (!nomor) return showToast('Masukkan nomor dulu!');
+                
+                setBtnLoading(btn, true, 'Menembak...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+
+                try {
+                    // NEMBAK KE EDGE FUNCTION KITA, BUKAN KE JERE LANGSUNG
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-spam`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nomor: nomor })
+                    });
+                    const data = await res.json();
+                    
+                    if (!data.status) throw new Error(data.message || 'Gagal nembak');
+
+                    const r = data.result;
+                    let html = `<div style="text-align:left; font-size:12px;">`;
+                    html += `<p style="color:#00ff9d; font-weight:bold; margin-bottom:10px;">✅ Selesai dalam ${r.time_elapsed_seconds}s</p>`;
+                    html += `<p>Target: <b>${escapeHTML(r.target)}</b></p>`;
+                    html += `<p>Berhasil: <b style="color:#00ff9d;">${r.success}</b> | Gagal: <b style="color:#ff3333;">${r.failed}</b></p>`;
+                    
+                    if (r.delivered_list.length > 0) {
+                        html += `<p style="margin-top:10px; font-weight:bold; color:#00ff9d;">OTP MASUK:</p>`;
+                        r.delivered_list.forEach(item => {
+                            html += `<div style="background:rgba(0,255,157,0.1); padding:6px; margin-top:4px; border-radius:4px;">${escapeHTML(item)}</div>`;
+                        });
+                    }
+                    html += `</div>`;
+                    box.innerHTML = html;
+                    showToast('Tembakan Selesai!');
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btn, false, 'TEMBAK OTP!');
             };
         }
         // =========================================
