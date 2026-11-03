@@ -1824,57 +1824,62 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // FUNGSI BACA KOMIK (JERE API STREAM)
-    // =========================================
-    window.bacaKomik = async (title, slug) => {
-        const box = document.getElementById('komik-res');
-        box.innerHTML = '<div class="loader"></div>';
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'stream', slug: slug })
-            });
-            const data = await res.json();
+// FUNGSI BACA KOMIK (JERE API STREAM)
+// =========================================
+window.bacaKomik = async (title, slug) => {
+    const box = document.getElementById('komik-res');
+    box.innerHTML = '<div class="loader"></div>';
+    try {
+        const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'stream', slug: slug })
+        });
+        const data = await res.json();
+        
+        // AMBIL DARI ARRAY 'pages' (Sesuai JSON Baru)
+        const pagesArray = data.result?.pages || []; 
+        
+        // Jaring Pengaman
+        if (pagesArray.length === 0) {
+            const baseSlug = slug.split('-chapter-')[0]; 
+            const originalUrl = `https://komikindo.ch/komik/${baseSlug}/`;
             
-            const images = data.result?.pages || []; 
-            
-            // Jaring Pengaman
-            if (images.length === 0) {
-                const baseSlug = slug.split('-chapter-')[0]; 
-                const originalUrl = `https://komikindo.ch/komik/${baseSlug}/`;
-                
-                let html = `
-                    <div style="text-align:center; padding: 20px;">
-                        <div style="font-size:40px; margin-bottom:10px;">📖</div>
-                        <h4 style="margin-bottom:10px;">Gambar Belum Tersedia</h4>
-                        <p style="font-size:12px; opacity:0.8; margin-bottom:20px;">API gagal mengambil gambar panel. Tapi lu bisa baca chapter ini langsung di web aslinya:</p>
-                        
-                        <a href="${originalUrl}" target="_blank" class="action-btn" style="background:#00ff9d; text-decoration:none; display:block; margin-bottom:10px;">Baca di Web Asli</a>
-                        <button onclick="openTool('komik')" class="action-btn" style="background:var(--card-bg); color:var(--text);">Kembali ke Katalog</button>
-                    </div>
-                `;
-                box.innerHTML = html;
-                return;
-            }
-
-            let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
-            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
-            images.forEach(imgUrl => {
-                html += `<img src="${imgUrl}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
-            });
-            html += `</div>`;
-
-            html += `<button class="action-btn press" onclick="openTool('komik')" style="margin-top:15px; background:#ff3333;">Kembali ke Katalog</button>`;
-            box.innerHTML = html;
-
-        } catch (e) { 
-            box.innerHTML = `
+            let html = `
                 <div style="text-align:center; padding: 20px;">
-                    <p class="error-msg">${escapeHTML(e.message)}</p>
-                    <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
+                    <div style="font-size:40px; margin-bottom:10px;">📖</div>
+                    <h4 style="margin-bottom:10px;">Gambar Belum Tersedia</h4>
+                    <p style="font-size:12px; opacity:0.8; margin-bottom:20px;">API gagal mengambil gambar panel. Tapi lu bisa baca chapter ini langsung di web aslinya:</p>
+                    
+                    <a href="${originalUrl}" target="_blank" class="action-btn" style="background:#00ff9d; text-decoration:none; display:block; margin-bottom:10px;">Baca di Web Asli</a>
+                    <button onclick="openTool('komik')" class="action-btn" style="background:var(--card-bg); color:var(--text);">Kembali ke Katalog</button>
                 </div>
-            `; 
+            `;
+            box.innerHTML = html;
+            return;
         }
-    };
+
+        let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
+        html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+        
+        // LOOPING GAMBAR PAKAI PROXY ANTI-BLANK
+        pagesArray.forEach(page => {
+            const imgUrl = page.url;
+            const proxiedImg = `https://wsrv.nl/?url=${encodeURIComponent(imgUrl)}`;
+            html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
+        });
+        html += `</div>`;
+
+        html += `<button class="action-btn press" onclick="openTool('komik')" style="margin-top:15px; background:#ff3333;">Kembali ke Katalog</button>`;
+        box.innerHTML = html;
+
+    } catch (e) { 
+        box.innerHTML = `
+            <div style="text-align:center; padding: 20px;">
+                <p class="error-msg">${escapeHTML(e.message)}</p>
+                <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
+            </div>
+        `; 
+    }
+};
 
 }); // <- PENUTUP DOMContentLoaded, JANGAN DIHAPUS
