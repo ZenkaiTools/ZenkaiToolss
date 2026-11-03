@@ -715,7 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================
-        // FITUR KOMIK (ZENKAI COMICS - INFINITE SCROLL & AUTO DETECT)
+        // FITUR KOMIK (ZENKAI COMICS - FIXED INFINITE SCROLL)
         // =========================================
         else if (tool === 'komik') {
             modalContent.innerHTML = `
@@ -828,7 +828,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     loadMoreEl.style.display = 'block';
                 }
 
-                // JIKA TAB FAVORIT DIPILIH (TIDAK PERLU SCROLL)
+                // JIKA TAB FAVORIT DIPILIH
                 if (currentTab === 'favorit' && !query) {
                     loadMoreEl.style.display = 'none';
                     const favoritList = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
@@ -873,11 +873,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // FETCH API (BERANDA / KATALOG / SEARCH)
                 try {
-                    let bodyData = { page: currentPage };
+                    // LOGIKA PAGE YANG BENER BIAR NGGAK NGELOOP
+                    let bodyData = {};
                     if (query) {
-                        bodyData = { action: 'search', q: query };
+                        bodyData = { action: 'search', q: query, page: currentPage };
                     } else {
-                        bodyData = { action: currentTab === 'terbaru' ? 'latest' : 'daftar', page: currentPage };
+                        bodyData = { 
+                            action: currentTab === 'terbaru' ? 'latest' : 'daftar',
+                            page: currentPage 
+                        };
                     }
 
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
@@ -887,6 +891,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = await res.json();
                     const komikList = data.results || []; 
 
+                    // CEK DATA KOSONG ATAU NGGAK
                     if (komikList.length === 0) {
                         hasMore = false;
                         loadMoreEl.style.display = 'none';
@@ -1003,7 +1008,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // Pasang listener scroll
+            // Pasang listener scroll di container modal
             const modalBody = document.querySelector('.bottom-sheet-content');
             if (modalBody) {
                 modalBody.removeEventListener('scroll', handleScroll);
