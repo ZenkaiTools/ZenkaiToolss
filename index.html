@@ -120,11 +120,17 @@
     <!-- 4. HALAMAN UTAMA (TOOLS)                  -->
     <!-- ========================================= -->
     <main id="page-tools" class="page active">
-        <header class="header-box">
+        <!-- HEADER DENGAN TOMBOL VIP -->
+        <header class="header-box" style="display: flex; justify-content: space-between; align-items: center;">
             <div class="logo-area">
                 <div class="logo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
                 <div class="logo-text"><h1>ZenkaiTools</h1><p class="version">v1.0 // Andika T.M</p></div>
             </div>
+            
+            <!-- TOMBOL VIP -->
+            <button onclick="openTool('vip')" style="background: linear-gradient(135deg, #ffcc00, #ff7300); color: #000; border: 2px solid var(--border); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 0 var(--border); cursor: pointer; transition: transform 0.1s;" class="press" aria-label="Beli VIP">
+                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
         </header>
 
         <div class="custom-hero-block">

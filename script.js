@@ -437,6 +437,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const dTools = setting.disabled_tools ? setting.disabled_tools.split(',') : [];
         window.currentDisabledTools = dTools;
 
+        // DATA VIP DINAMIS
+        window.currentVipTools = setting.vip_tools ? setting.vip_tools.split(',') : [];
+
         document.querySelectorAll('.tool-card').forEach(c => {
             const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
             if (!m) return;
@@ -445,6 +448,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 c.classList.add('maintenance-mode');
             } else {
                 c.classList.remove('maintenance-mode');
+            }
+
+            // Nambahin Label VIP di icon
+            if (window.currentVipTools.includes(toolName)) {
+                if (!c.querySelector('.vip-badge')) {
+                    const badge = document.createElement('div');
+                    badge.className = 'vip-badge';
+                    badge.innerText = 'VIP';
+                    badge.style.cssText = 'position:absolute; top:-5px; right:-5px; background:linear-gradient(135deg,#ffcc00,#ff7300); color:#000; font-size:9px; font-weight:900; padding:2px 6px; border-radius:6px; border:2px solid #000; box-shadow:0 2px 5px rgba(0,0,0,0.3); z-index:10;';
+                    c.style.position = 'relative';
+                    c.appendChild(badge);
+                }
+            } else {
+                const existingBadge = c.querySelector('.vip-badge');
+                if (existingBadge) existingBadge.remove();
             }
         });
 
@@ -537,12 +555,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // PANEL OWNER UI
+    // PANEL OWNER UI (UDAH ADA VIP TOGGLE)
     window.tampilkanPanelRahasia = async () => {
         const container = document.getElementById('owner-page-content');
         if (!container) return;
         container.innerHTML = '<div class="loader"></div>';
-        let set = { site_title: '', broadcast_text: '', is_maintenance: false, disabled_pages: '', disabled_tools: '' };
+        let set = { site_title: '', broadcast_text: '', is_maintenance: false, disabled_pages: '', disabled_tools: '', vip_tools: '' };
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'get_settings' }) });
             const data = await res.json();
@@ -551,14 +569,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
         const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
-        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'komik', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise'];
+        const vipToolsArr = set.vip_tools ? set.vip_tools.split(',') : [];
+        const listTools = ['tiktok', 'instagram', 'facebook', 'pinterest', 'youtube', 'komik', 'stalktt', 'stalkroblox', 'qr', 'imgtojpg', 'username', 'artinama', 'password', 'zodiak', 'base64', 'umur', 'tempmail', 'nik', 'spotify', 'iplookup', 'removebg', 'linkvertise', 'ai-chat', 'ai-image', 'alightmotion'];
         const listPages = ['fun', 'setting', 'info'];
 
         let toolsHtml = listTools.map(t => `
-            <label style="display:flex; align-items:center; justify-content:space-between; background:var(--card-bg); padding:10px 12px; border-radius:8px; border:2px solid var(--border); cursor:pointer; font-size:11px; font-weight:bold; transition:0.2s;">
-                <span>${t.toUpperCase()}</span>
-                <input type="checkbox" class="tool-chk" value="${t}" ${disabledToolsArr.includes(t) ? 'checked' : ''} style="width:18px; height:18px; accent-color:var(--primary); cursor:pointer;">
-            </label>
+            <div style="background:var(--card-bg); padding:10px 12px; border-radius:8px; border:2px solid var(--border); display:flex; flex-direction:column; gap:8px;">
+                <span style="font-size:11px; font-weight:bold;">${t.toUpperCase()}</span>
+                <label style="display:flex; align-items:center; gap:5px; font-size:10px; cursor:pointer;">
+                    <input type="checkbox" class="tool-chk" value="${t}" ${disabledToolsArr.includes(t) ? 'checked' : ''} style="accent-color:var(--primary);"> Off
+                </label>
+                <label style="display:flex; align-items:center; gap:5px; font-size:10px; cursor:pointer; color:#ffcc00;">
+                    <input type="checkbox" class="vip-chk" value="${t}" ${vipToolsArr.includes(t) ? 'checked' : ''} style="accent-color:#ffcc00;"> VIP
+                </label>
+            </div>
         `).join('');
 
         let pagesHtml = listPages.map(p => `
@@ -593,7 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </label>
                 </div>
                 <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
-                    <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">🚫 Nonaktifkan Tools</h3>
+                    <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">🚫 Nonaktifkan & VIP Tools</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${toolsHtml}</div>
                 </div>
                 <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
@@ -694,6 +718,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const checkedTools = Array.from(document.querySelectorAll('.tool-chk:checked')).map(cb => cb.value).join(',');
         const checkedPages = Array.from(document.querySelectorAll('.page-chk:checked')).map(cb => cb.value).join(',');
+        const checkedVipTools = Array.from(document.querySelectorAll('.vip-chk:checked')).map(cb => cb.value).join(',');
 
         const payload = {
             action: 'update_settings',
@@ -702,6 +727,7 @@ document.addEventListener('DOMContentLoaded', () => {
             broadcast_text: document.getElementById('own-broadcast').value,
             disabled_pages: checkedPages,
             disabled_tools: checkedTools,
+            vip_tools: checkedVipTools,
             is_maintenance: document.getElementById('own-mt').checked
         };
 
@@ -783,6 +809,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255, 51, 51, 0.1);">🚧 SEDANG MAINTENANCE 🚧</span>
                 <p style="text-align: center; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">Fitur ini sedang dinonaktifkan sementara oleh Admin.</p>
                 <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; background: #00ff9d;">Pantau Update di WhatsApp</a>
+            `;
+            return;
+        }
+
+        // PROTEKSI VIP DINAMIS
+        const vipTools = window.currentVipTools || [];
+        const isVip = localStorage.getItem('zenkai_vip') === 'true';
+        const vipUntil = localStorage.getItem('zenkai_vip_until');
+        const isVipValid = isVip && vipUntil && new Date(vipUntil) > new Date();
+
+        if (vipTools.includes(tool) && !isVipValid) {
+            modal.classList.add('active');
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <div style="text-align:center; padding: 20px 0;">
+                    <div style="background: linear-gradient(135deg, #ff3333, #ff7300); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; border: 3px solid var(--border); box-shadow: 0 0 20px rgba(255,51,51,0.4);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="40" height="40"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    <h3 style="font-family: var(--font-head); font-size: 24px; color: #ff3333; margin-bottom: 10px;">FITUR VIP</h3>
+                    <p style="font-size: 13px; line-height: 1.6; opacity: 0.9; margin-bottom: 25px;">
+                        Maaf, fitur ini <b>eksklusif buat member VIP</b>.<br>Lu harus beli VIP dulu buat nge-akses ini.
+                    </p>
+                    <button class="action-btn" onclick="openTool('vip')" style="background: linear-gradient(135deg, #ffcc00, #ff7300); color: #000; border: 3px solid var(--border); font-weight: 900;">👑 BELI VIP SEKARANG (Rp 10.000)</button>
+                </div>
             `;
             return;
         }
@@ -871,7 +921,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="action-btn" onclick="localStorage.removeItem('zenkai_vip'); localStorage.removeItem('zenkai_vip_until'); closeModal(); showToast('Status VIP dicabut.');" style="background:#ff3333; color:#fff;">Logout VIP (Test)</button>
                 ` : `
                     <div class="desc-text" style="text-align: left; font-size: 12px; line-height: 1.6;">
-                        Halo! Fitur <b>Gemini Plus Bypass</b> ini eksklusif VIP. Beli VIP buat dapet akses <b>30 hari</b>, dengan kuota 2x/hari.
+                        Halo! Fitur premium ini eksklusif VIP. Beli VIP buat dapet akses <b>30 hari</b>.
                     </div>
                     
                     <div style="background: var(--bg); border: 2px dashed var(--border); padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: center;">
@@ -909,7 +959,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         return resBox.innerHTML = `<p class="error-msg" style="font-size:12px;">❌ ${escapeHTML(data.message)}</p>`;
                     }
 
-                    // AKTIFKAN VIP 30 HARI
                     localStorage.setItem('zenkai_vip', 'true');
                     localStorage.setItem('zenkai_vip_until', data.expiry);
                     localStorage.removeItem('zenkai_gemini_vip_usage');
@@ -926,28 +975,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // FITUR GEMINI PLUS BYPASS (STRICT VIP, 2x/HARI, 2-STEP)
         // =========================================
         else if (tool === 'ai-chat') {
-            const isVip = localStorage.getItem('zenkai_vip') === 'true';
-            const vipUntil = localStorage.getItem('zenkai_vip_until');
-            let isVipValid = false;
-            if (isVip && vipUntil && new Date(vipUntil) > new Date()) isVipValid = true;
-
-            if (!isVipValid) {
-                modalContent.innerHTML = `
-                    ${closeSvg}
-                    <div style="text-align:center; padding: 20px 0;">
-                        <div style="background: linear-gradient(135deg, #ff3333, #ff7300); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; border: 3px solid var(--border); box-shadow: 0 0 20px rgba(255,51,51,0.4);">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="40" height="40"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                        </div>
-                        <h3 style="font-family: var(--font-head); font-size: 24px; color: #ff3333; margin-bottom: 10px;">FITUR VIP</h3>
-                        <p style="font-size: 13px; line-height: 1.6; opacity: 0.9; margin-bottom: 25px;">
-                            Maaf, fitur <b>Google Gemini Plus Bypass</b> ini <b>eksklusif buat member VIP</b>.<br>Lu harus beli VIP dulu buat nge-akses ini.
-                        </p>
-                        <button class="action-btn" onclick="openTool('vip')" style="background: linear-gradient(135deg, #ffcc00, #ff7300); color: #000; border: 3px solid var(--border); font-weight: 900;">👑 BELI VIP SEKARANG (Rp 10.000)</button>
-                    </div>
-                `;
-                return;
-            }
-
             const today = new Date().toDateString();
             let usage = JSON.parse(localStorage.getItem('zenkai_gemini_vip_usage') || '{"date":"","count":0}');
             if (usage.date !== today) usage = { date: today, count: 0 };
