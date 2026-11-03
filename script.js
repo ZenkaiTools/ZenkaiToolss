@@ -715,107 +715,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================
-// FITUR SUPPORT (DONASI) - FIX TOTAL
+// FITUR SUPPORT (DONASI) - TANPA ANIMASI
 // =========================================
 else if (tool === 'support') {
     modalContent.innerHTML = `
         ${closeSvg}
-        <style>
-            @keyframes pulseCoffee {
-                0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 204, 0, 0.4), 0 0 40px rgba(255, 204, 0, 0.2); }
-                50% { transform: scale(1.08); box-shadow: 0 0 30px rgba(255, 204, 0, 0.8), 0 0 60px rgba(255, 115, 0, 0.5); }
-            }
-            @keyframes shimmerBtn {
-                0% { background-position: -200% 0; }
-                100% { background-position: 200% 0; }
-            }
-            @keyframes fadeUp {
-                from { opacity: 0; transform: translateY(15px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            @keyframes fall {
-                0% { transform: translateY(-100vh) rotate(0deg); opacity: 0; }
-                10% { opacity: 1; }
-                90% { opacity: 1; }
-                100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-            }
-            .star-particle {
-                position: absolute;
-                background: #ffcc00;
-                border-radius: 50%;
-                box-shadow: 0 0 10px #ffcc00, 0 0 20px #ff7300;
-                animation: fall linear infinite;
-                pointer-events: none;
-                z-index: 0;
-            }
-            .support-content > * {
-                animation: fadeUp 0.6s ease-out forwards;
-                opacity: 0;
-                position: relative;
-                z-index: 1;
-            }
-            .support-content > *:nth-child(1) { animation-delay: 0.1s; }
-            .support-content > *:nth-child(2) { animation-delay: 0.2s; }
-            .support-content > *:nth-child(3) { animation-delay: 0.3s; }
-            .support-content > *:nth-child(4) { animation-delay: 0.4s; }
-            .support-content > *:nth-child(5) { animation-delay: 0.5s; }
-        </style>
-        
-        <!-- CONTAINER UTAMA: TANPA MIN-HEIGHT, AUTO AJUST -->
-        <div id="support-stars" style="background:var(--bg); padding: 30px 15px; font-family: var(--font-main); position:relative; overflow:hidden; border-radius:12px; display:flex; flex-direction:column; justify-content:center; min-height: 85vh;">
-            
-            <div class="support-content" style="text-align:center; width:100%;">
-                
-                <!-- IKON KOPI -->
-                <div style="width: 90px; height: 90px; background: linear-gradient(135deg, #ffcc00, #ff7300); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; border: 3px solid var(--border); animation: pulseCoffee 2.5s infinite ease-in-out;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" width="45" height="45"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
-                </div>
+        <div style="padding: 10px 0;">
+            <h3 style="font-family: var(--font-head); font-size: 24px; color: #ffcc00; text-align: center; text-shadow: 2px 2px 0 var(--border); margin-bottom: 5px;">Halo, Gue Andika</h3>
+            <p style="font-size: 10px; color: var(--primary); font-weight: 800; letter-spacing: 2px; text-align: center; margin-bottom: 25px;">DEVELOPER ZENKAI TOOLS</p>
 
-                <h3 style="font-family: var(--font-head); font-size: 30px; color: #ffcc00; margin-bottom: 5px; letter-spacing: 1px; text-transform: uppercase; text-shadow: 2px 2px 0 var(--border);">Halo, Gue Andika</h3>
-                <p style="font-size: 11px; color: var(--primary); font-weight: 800; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase;">Developer Zenkai Tools</p>
-
-                <!-- TEKS PENDEK -->
-                <div style="font-size: 14px; line-height: 1.7; color: var(--text); opacity: 0.95; margin-bottom: 35px; padding: 0 10px;">
-                    <p style="margin-bottom: 15px;">
-                        Gue bikin web ini <b>100% Gratis & Bebas Iklan</b> biar lu nyaman pakai tools-nya.
-                    </p>
-                    <p style="margin-bottom: 0;">
-                        Tapi biaya server & API bulanan mahal. <br>
-                        <b style="color: #ffcc00;">Bantu traktir kopi biar Zenkai tetap hidup!</b>
-                    </p>
-                </div>
-
-                <!-- TOMBOL EMAS -->
-                <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" rel="noopener noreferrer" 
-                   style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; 
-                          background: linear-gradient(90deg, #ffcc00, #ff7300, #ffcc00); 
-                          background-size: 200% 100%; animation: shimmerBtn 2.5s linear infinite;
-                          color: #000; border: 3px solid var(--border); border-radius: 12px; 
-                          font-weight: 900; font-size: 16px; padding: 16px; box-shadow: 0 6px 0 var(--border);">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    TRAKTIR KOPI SEKARANG
-                </a>
-                
-                <p style="font-size: 10px; opacity: 0.7; font-style: italic; margin-top: 25px;">"Makasih banyak buat kalian yang udah support."</p>
+            <div style="font-size: 13px; line-height: 1.7; color: var(--text); opacity: 0.9; text-align: left; margin-bottom: 25px; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 12px; border: 2px dashed var(--border);">
+                <p style="margin-bottom: 15px;">
+                    Gue bikin <b>Zenkai Tools</b> ini berawal dari rasa kesel. Kenapa sih buat download video atau baca komik harus lewat banyak banget iklan pop-up yang bikin HP lemot?
+                </p>
+                <p style="margin-bottom: 15px;">
+                    Akhirnya gue bikin tempat di mana lu bisa akses <b>30+ tools gratis</b>, tanpa daftar, dan yang paling penting: <b>bebas iklan judol</b>.
+                </p>
+                <p style="margin-bottom: 15px;">
+                    Tapi ada satu masalah: biaya <b>Server & API</b> bulanan itu nggak murah. Gue belum pernah masang iklan sepeser pun, dan pengen tetep gitu.
+                </p>
+                <p style="margin-bottom: 0; font-weight: 800; color: #ff3333; text-align: center;">
+                    Kalau lu ngerasa terbantu, bantu traktir kopi biar server ini tetep nyala ya!
+                </p>
             </div>
+
+            <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" rel="noopener noreferrer" 
+               class="action-btn" 
+               style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; 
+                      background: #ffcc00; color: #000; border: 3px solid var(--border); border-radius: 12px; 
+                      font-weight: 900; font-size: 15px; padding: 16px; box-shadow: 0 5px 0 var(--border); 
+                      margin-bottom: 15px; text-transform: uppercase;">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                Traktir Kopi Sekarang
+            </a>
+            
+            <p style="text-align: center; font-size: 10px; opacity: 0.6; font-style: italic;">"Sekecil apapun donasinya, sangat berarti. Makasih!"</p>
         </div>
     `;
-
-    // SCRIPT BINTANG
-    const starContainer = document.getElementById('support-stars');
-    if (starContainer) {
-        for (let i = 0; i < 30; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star-particle');
-            const size = Math.random() * 3 + 1;
-            star.style.width = size + 'px';
-            star.style.height = size + 'px';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.animationDuration = (Math.random() * 3 + 3) + 's';
-            star.style.animationDelay = (Math.random() * 5) + 's';
-            starContainer.appendChild(star);
-        }
-    }
 }
         else if (tool === 'komik') {
             modalContent.innerHTML = `
