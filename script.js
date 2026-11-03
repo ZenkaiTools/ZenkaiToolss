@@ -1154,7 +1154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Spam OTP</h3>
-                <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255,51,51,0.1);">⚠️ HATI-HATI PENGGUNAAN! (TES DOANG)</span>
+                <span class="desc-text" style="color: #ff3333; border-color: #ff3333; background: rgba(255,51,51,0.1);">⚠️ BELUM SEMPURNA</span>
                 <input type="text" id="spam-nomor" placeholder="Masukkan Nomor Target..." inputmode="numeric">
                 <button class="action-btn" id="btn-spam" style="background: #ff3333; color: #fff;">TEMBAK OTP!</button>
                 <div id="spam-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
