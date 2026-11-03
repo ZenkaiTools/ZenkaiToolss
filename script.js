@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 7. MODAL BOTTOM SHEET
+    // 7. MODAL BOTTOM SHEET & SEARCH
     // =========================================
     const modal = document.getElementById('tool-modal');
     const modalContent = document.getElementById('modal-content');
@@ -329,9 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // =========================================
-    // 8. SEARCH & VISUAL FILTER
-    // =========================================
     const sInput = document.getElementById('search-tools');
     if (sInput) {
         sInput.addEventListener('input', (e) => {
@@ -355,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // =========================================
-    // 9. SISTEM SETTINGS & MAINTENANCE
+    // 8. SISTEM SETTINGS, MAINTENANCE & OWNER
     // =========================================
     async function fetchSettings() {
         try {
@@ -472,37 +469,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // =========================================
-    // 10. PINTU RAHASIA OWNER
-    // =========================================
+    // LOGIN OWNER
     let clicks = 0;
     document.querySelector('.logo-area')?.addEventListener('click', () => {
         clicks++; setTimeout(() => { clicks = 0; }, 1000);
         if (clicks === 5) { clicks = 0; bukaPintuRahasia(); }
     });
-
-    window.bukaPanelOwnerLangsung = async () => {
-        const token = localStorage.getItem(OWNER_TOKEN_KEY);
-        if (!token) return bukaPintuRahasia();
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'verify_token', owner_token: token })
-            });
-            const data = await res.json();
-            if (data.status) {
-                const btnOwner = document.getElementById('nav-owner');
-                window.switchPage('owner', btnOwner);
-                window.tampilkanPanelRahasia();
-            } else {
-                localStorage.removeItem(OWNER_TOKEN_KEY);
-                bukaPintuRahasia();
-            }
-        } catch (e) {
-            showToast("Gagal verifikasi owner.");
-        }
-    };
 
     function bukaPintuRahasia() {
         if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
@@ -565,22 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    let mySession = localStorage.getItem('zenkai_sess');
-    if (!mySession) {
-        mySession = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
-        localStorage.setItem('zenkai_sess', mySession);
-    }
-    setInterval(() => {
-        fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'heartbeat', session_id: mySession })
-        }).catch(()=>{});
-    }, 30000);
-
-    // =========================================
-    // PANEL RAHASIA OWNER (UI BARU)
-    // =========================================
+    // PANEL OWNER UI
     window.tampilkanPanelRahasia = async () => {
         const container = document.getElementById('owner-page-content');
         if (!container) return;
@@ -706,9 +663,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // =========================================
-    // FITUR FAVORIT & RIWAYAT
-    // =========================================
+    // FITUR FAVORIT
     window.toggleFavorit = (title, slug, cover) => {
         let favorit = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
         const index = favorit.findIndex(f => f.slug === slug);
@@ -729,7 +684,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 11. FUNGSI OPEN TOOL
+    // 9. FUNGSI OPEN TOOL (BAGIAN 1)
     // =========================================
     window.openTool = (tool) => {
         if (!modal || !modalContent) return;
@@ -759,21 +714,23 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // =========================================
+        // FITUR KOMIK (DIPERBARUI)
+        // =========================================
         else if (tool === 'komik') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <div style="background:var(--bg); min-height: 80vh; padding-bottom: 20px; font-family: var(--font-main);">
-                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:15px; padding: 0 5px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; padding: 0 5px;">
                         <div>
-                            <h3 style="font-family:var(--font-head); color:var(--text); font-size:22px; margin:0; letter-spacing:1px;">KATALOG</h3>
-                            <p style="font-size:10px; color:var(--primary); margin:0; font-weight:bold; letter-spacing:2px;">ZENKAI COMICS</p>
+                            <h3 style="font-family:var(--font-head); color:var(--text); font-size:24px; margin:0; letter-spacing:1px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">KATALOG</h3>
+                            <p style="font-size:10px; color:var(--primary); margin:0; font-weight:800; letter-spacing:2px;">ZENKAI COMICS</p>
                         </div>
                     </div>
                     
-                    <!-- TAB POPULER / TERBARU -->
-                    <div style="display:flex; gap:10px; margin-bottom:15px; padding: 0 5px;">
-                        <button id="tab-terbaru" onclick="switchKomikTab('terbaru', this)" class="cat-btn active" style="flex:1; padding:10px; font-size:12px; border-radius:8px;">Terbaru</button>
-                        <button id="tab-semua" onclick="switchKomikTab('semua', this)" class="cat-btn" style="flex:1; padding:10px; font-size:12px; border-radius:8px;">Semua Komik</button>
+                    <div style="display:flex; gap:8px; margin-bottom:15px; padding: 0 5px; background:rgba(0,0,0,0.2); padding:5px; border-radius:10px;">
+                        <button id="tab-terbaru" onclick="switchKomikTab('terbaru', this)" class="cat-btn active" style="flex:1; padding:10px; font-size:12px; border-radius:8px; border:none; box-shadow:none; font-weight:800;">Terbaru</button>
+                        <button id="tab-semua" onclick="switchKomikTab('semua', this)" class="cat-btn" style="flex:1; padding:10px; font-size:12px; border-radius:8px; border:none; box-shadow:none; font-weight:800;">Semua</button>
                     </div>
 
                     <div style="position:relative; margin-bottom:20px; padding: 0 5px;">
@@ -781,9 +738,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:20px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </div>
                     
-                    <div id="komik-history" style="padding: 0 5px; margin-bottom: 15px;"></div>
-                    <div id="komik-favorit" style="padding: 0 5px; margin-bottom: 15px;"></div>
-
+                    <div id="komik-history" style="padding: 0 5px;"></div>
+                    <div id="komik-favorit" style="padding: 0 5px;"></div>
                     <div id="komik-res" style="padding: 0 5px;"></div>
                 </div>
             `;
@@ -800,93 +756,99 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             const loadKatalog = async (query) => {
-                // --- TAMPILKAN RIWAYAT BACA ---
                 const historyBox = document.getElementById('komik-history');
+                const favoritBox = document.getElementById('komik-favorit');
                 const lastRead = localStorage.getItem('zenkai_last_read');
-                if (lastRead && historyBox) {
+                const favoritList = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
+
+                if (lastRead && !query && currentTab === 'terbaru') {
                     const h = JSON.parse(lastRead);
                     historyBox.innerHTML = `
-                        <div style="background:var(--card-bg); border:2px solid var(--primary); padding:12px; border-radius:10px; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="bacaKomik('${escapeHTML(h.comicTitle)}', '${escapeHTML(h.slug)}')">
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <div style="background:var(--primary); color:#000; padding:6px; border-radius:6px;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                        <div style="background:linear-gradient(145deg, var(--card-bg), rgba(0,255,204,0.05)); border:2px solid var(--primary); padding:15px; border-radius:12px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; margin-bottom:15px; box-shadow: 0 4px 15px rgba(0,255,204,0.1);" onclick="bacaKomik('${h.comicTitle.replace(/'/g, "\\'")}', '${h.slug}')">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <div style="background:var(--primary); color:#000; padding:8px; border-radius:8px; box-shadow: 2px 2px 0 rgba(0,0,0,0.5);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                                 </div>
                                 <div>
-                                    <p style="font-size:10px; margin:0; opacity:0.7; font-weight:bold;">LANJUT BACA</p>
-                                    <h5 style="font-size:12px; margin:2px 0 0 0; font-weight:800;">${escapeHTML(h.chapterTitle)}</h5>
+                                    <p style="font-size:10px; margin:0; opacity:0.8; font-weight:800; letter-spacing:1px; color:var(--primary);">LANJUT BACA</p>
+                                    <h5 style="font-size:13px; margin:4px 0 0 0; font-weight:700; line-height:1.2; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(h.comicTitle)}</h5>
+                                    <p style="font-size:10px; margin:2px 0 0 0; opacity:0.6;">${escapeHTML(h.chapterTitle)}</p>
                                 </div>
                             </div>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="20" height="20"><path d="M9 18l6-6-6-6"/></svg>
+                            <div style="background:rgba(255,255,255,0.1); padding:6px; border-radius:50%;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+                            </div>
                         </div>
                     `;
-                } else if (historyBox) {
-                    historyBox.innerHTML = '';
-                }
+                } else if (historyBox) { historyBox.innerHTML = ''; }
 
-                // --- TAMPILKAN FAVORIT ---
-                const favoritBox = document.getElementById('komik-favorit');
-                const favoritList = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
-                if (favoritList.length > 0 && favoritBox) {
-                    let htmlFav = `<h4 style="font-size:14px; margin-bottom:10px;">❤️ Favorit Kamu</h4><div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none;">`;
+                if (favoritList.length > 0 && !query && currentTab === 'semua') {
+                    let htmlFav = `
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; margin-top:5px;">
+                            <svg viewBox="0 0 24 24" fill="#ff3333" stroke="#ff3333" width="16" height="16"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            <h4 style="font-size:13px; font-weight:800; margin:0; color:var(--text);">Koleksi Favorit</h4>
+                        </div>
+                        <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:15px; scrollbar-width:none; margin-bottom:15px;">
+                    `;
                     favoritList.forEach(f => {
                         htmlFav += `
-                            <div style="min-width:80px; max-width:80px; cursor:pointer;" onclick="openTool('komik')">
-                                <div style="width:80px; height:110px; border-radius:8px; overflow:hidden; border:2px solid var(--border);">
-                                    <img src="${f.cover}" style="width:100%; height:100%; object-fit:cover;">
+                            <div class="fav-item" data-title="${escapeHTML(f.title)}" data-slug="${escapeHTML(f.slug)}" style="min-width:90px; max-width:90px; cursor:pointer;">
+                                <div style="width:90px; height:120px; border-radius:10px; overflow:hidden; border:2px solid var(--border); position:relative; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                                    <img src="${escapeHTML(f.cover)}" style="width:100%; height:100%; object-fit:cover;">
+                                    <div style="position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.6); padding:4px; border-radius:50%; backdrop-filter:blur(2px);">
+                                        <svg viewBox="0 0 24 24" fill="#ff3333" width="12" height="12"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                    </div>
                                 </div>
-                                <p style="font-size:10px; font-weight:bold; margin-top:5px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(f.title)}</p>
+                                <p style="font-size:10px; font-weight:700; margin-top:8px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(f.title)}</p>
                             </div>
                         `;
                     });
                     htmlFav += `</div>`;
                     favoritBox.innerHTML = htmlFav;
-                } else if (favoritBox) {
-                    favoritBox.innerHTML = '';
-                }
+                    
+                    favoritBox.querySelectorAll('.fav-item').forEach(el => {
+                        el.addEventListener('click', () => bukaDetail(el.dataset.title, el.dataset.slug));
+                    });
+                } else if (favoritBox) { favoritBox.innerHTML = ''; }
 
-                box.innerHTML = '<div class="loader"></div>';
+                box.innerHTML = '<div class="loader" style="margin-top:30px;"></div>';
                 try {
                     let bodyData = {};
-                    
-                    if (query) {
-                        bodyData = { action: 'search', q: query };
-                    } else {
-                        if (currentTab === 'terbaru') {
-                            bodyData = { action: 'latest' };
-                        } else {
-                            bodyData = { action: 'daftar' };
-                        }
-                    }
+                    if (query) bodyData = { action: 'search', q: query };
+                    else bodyData = { action: currentTab === 'terbaru' ? 'latest' : 'daftar' };
 
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(bodyData)
                     });
                     const data = await res.json();
-                    
                     const komikList = data.results || []; 
 
                     if (komikList.length === 0) {
-                        box.innerHTML = '<p class="error-msg">Komik tidak ditemukan.</p>';
+                        box.innerHTML = '<p class="error-msg" style="margin-top:20px;">Komik tidak ditemukan.</p>';
                         return;
                     }
 
-                    let html = `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
+                    let headerHtml = '';
+                    if (query) headerHtml = `<h4 style="font-size:12px; margin-bottom:12px; opacity:0.7;">Hasil pencarian: "${escapeHTML(query)}"</h4>`;
+                    else if (currentTab === 'semua') headerHtml = `<h4 style="font-size:14px; margin-bottom:15px; font-weight:800; border-bottom:2px dashed var(--border); padding-bottom:10px;">Semua Katalog</h4>`;
+                    else headerHtml = `<h4 style="font-size:14px; margin-bottom:15px; font-weight:800; border-bottom:2px dashed var(--border); padding-bottom:10px;">Update Terbaru</h4>`;
+
+                    let html = headerHtml + `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
                     
                     komikList.forEach(manga => {
                         const title = (manga.title || 'Tanpa Judul').replace(/^Komik\s+/i, '');
                         const cover = manga.cover || 'https://via.placeholder.com/150';
                         const slug = manga.slug; 
-                        const updated = manga.updatedAt ? `<span style="position:absolute; bottom:5px; left:5px; font-size:8px; background:rgba(0,0,0,0.7); color:#fff; padding:2px 5px; border-radius:4px;">${escapeHTML(manga.updatedAt)}</span>` : '';
-                        const t = escapeHTML(title);
+                        const updated = manga.updatedAt ? `<span style="position:absolute; bottom:0; left:0; right:0; font-size:8px; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); color:#fff; padding:15px 5px 5px 5px; text-align:center;">${escapeHTML(manga.updatedAt)}</span>` : '';
                         
                         html += `
-                            <div class="komik-card-jere" data-title="${t}" data-slug="${slug}" style="cursor:pointer; display:flex; flex-direction:column; gap:6px;">
-                                <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:8px; overflow:hidden; background:#222;">
+                            <div class="komik-card-jere" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" style="cursor:pointer; display:flex; flex-direction:column; gap:8px;">
+                                <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:10px; overflow:hidden; background:#222; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
                                     <img src="${cover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
                                     ${updated}
                                 </div>
-                                <h4 style="font-size:11px; font-weight:800; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${t}</h4>
+                                <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(title)}</h4>
                             </div>
                         `;
                     });
@@ -894,9 +856,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     box.innerHTML = html;
 
                     box.querySelectorAll('.komik-card-jere').forEach(el => {
-                        el.addEventListener('click', () => {
-                            bukaDetail(el.dataset.title, el.dataset.slug);
-                        });
+                        el.addEventListener('click', () => bukaDetail(el.dataset.title, el.dataset.slug));
                     });
 
                 } catch (e) { 
@@ -906,6 +866,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const bukaDetail = async (title, slug) => {
                 box.innerHTML = '<div class="loader"></div>';
+                document.getElementById('komik-history').innerHTML = '';
+                document.getElementById('komik-favorit').innerHTML = '';
+
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -917,7 +880,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const detail = data.result || data.data;
                     
                     let chapters = [];
-
                     if (detail.chapters && detail.chapters.length > 0) {
                         chapters = detail.chapters.map(ch => ({
                             title: ch.title || 'Chapter',
@@ -938,47 +900,46 @@ document.addEventListener('DOMContentLoaded', () => {
                         const numB = parseFloat(b.title.replace(/[^0-9.]/g, ''));
                         return numB - numA;
                     });
-                    
-                    // --- CEK APAKAH ADA HISTORY BUAT KOMIK INI ---
+
+                    const isFav = cekFavorit(slug);
                     const lastRead = localStorage.getItem('zenkai_last_read');
                     let historyBtn = '';
                     if (lastRead) {
                         const h = JSON.parse(lastRead);
                         if (h.comicTitle === title) {
                             historyBtn = `
-                                <button onclick="bacaKomik('${escapeHTML(h.comicTitle)}', '${escapeHTML(h.slug)}')" class="action-btn press" style="background:var(--primary); color:#000; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:15px;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                                    Lanjut Baca (${escapeHTML(h.chapterTitle.split('Chapter ')[1] || 'Chapter')})
+                                <button class="btn-lanjut" data-title="${escapeHTML(h.comicTitle)}" data-slug="${escapeHTML(h.slug)}" style="width:100%; background:var(--primary); color:#000; border:2px solid var(--border); padding:14px; border-radius:12px; font-weight:900; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:20px; box-shadow:0 4px 0 var(--border);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="18" height="18"><path d="M5 3l14 9-14 9V3z"/></svg>
+                                    Lanjut Baca Chapter ${escapeHTML(h.chapterTitle.split('Chapter ')[1] || '')}
                                 </button>
                             `;
                         }
                     }
-                    
+
                     let html = `
-                        <div style="margin-bottom:20px;">
-                            <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:15px;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
-                            </button>
-                            
-                            <div style="display:flex; gap:15px;">
-                                <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:100px; height:130px; object-fit:cover; border-radius:8px; border:2px solid var(--border);">
-                                <div style="flex:1;">
-                                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                                        <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0;">${escapeHTML(title)}</h3>
-                                        <button onclick="toggleFavorit('${escapeHTML(title)}', '${escapeHTML(slug)}', '${escapeHTML(detail.cover || '')}')" style="background:none; border:none; font-size:24px; cursor:pointer;">
-                                            ${cekFavorit(slug) ? '❤️' : '🤍'}
-                                        </button>
-                                    </div>
-                                    <p style="font-size:11px; color:var(--text); opacity:0.8; line-height:1.4; max-height: 100px; overflow-y: auto;">${escapeHTML(detail.sinopsis || detail.synopsis || detail.description || 'Tidak ada sinopsis.')}</p>
-                                </div>
+                        <button class="btn-back press" style="background:var(--card-bg); border:2px solid var(--border); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; cursor:pointer;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        
+                        <div style="display:flex; gap:15px; margin-bottom:20px;">
+                            <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:110px; height:150px; object-fit:cover; border-radius:12px; border:2px solid var(--border); box-shadow:0 5px 15px rgba(0,0,0,0.3);">
+                            <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+                                <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 10px 0; line-height:1.2;">${escapeHTML(title)}</h3>
+                                <button class="btn-fav" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" data-cover="${escapeHTML(detail.cover || '')}" style="align-self:flex-start; background:${isFav ? 'rgba(255,51,51,0.15)' : 'rgba(255,255,255,0.05)'}; color:${isFav ? '#ff3333' : 'var(--text)'}; border:2px solid ${isFav ? '#ff3333' : 'var(--border)'}; padding:8px 16px; border-radius:20px; font-weight:800; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:6px; transition:0.3s;">
+                                    <svg viewBox="0 0 24 24" fill="${isFav ? '#ff3333' : 'none'}" stroke="${isFav ? '#ff3333' : 'currentColor'}" stroke-width="2" width="16" height="16"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                    ${isFav ? 'Tersimpan' : 'Favorit'}
+                                </button>
                             </div>
                         </div>
 
-                        <!-- TOMBOL LANJUT BACA -->
+                        <div style="background:var(--card-bg); border:2px dashed var(--border); padding:15px; border-radius:10px; margin-bottom:20px;">
+                            <p style="font-size:12px; color:var(--text); opacity:0.8; line-height:1.6; max-height: 120px; overflow-y: auto; margin:0;">${escapeHTML(detail.sinopsis || detail.synopsis || detail.description || 'Tidak ada sinopsis.')}</p>
+                        </div>
+
                         ${historyBtn}
 
-                        <h4 style="margin-bottom:10px; font-size:14px;">Daftar Chapter (${chapters.length}):</h4>
-                        <div style="display:flex; flex-direction:column; gap:8px; max-height: 300px; overflow-y:auto;">
+                        <h4 style="margin-bottom:15px; font-size:14px; font-weight:800; border-bottom:2px solid var(--border); padding-bottom:10px;">Daftar Chapter (${chapters.length})</h4>
+                        <div style="display:flex; flex-direction:column; gap:10px;">
                     `;
 
                     if (chapters.length === 0) {
@@ -986,12 +947,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         chapters.forEach(ch => {
                             html += `
-                                <div class="press" onclick="bacaKomik('${escapeHTML(title)}', '${escapeHTML(ch.slug)}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px 15px; border-radius:8px; cursor:pointer;">
-                                    <div style="flex:1;">
-                                        <h5 style="margin:0; font-size:12px; font-weight:800; color:var(--text);">${escapeHTML(ch.title)}</h5>
-                                        <p style="margin:2px 0 0 0; font-size:10px; color:var(--text); opacity:0.6;">${escapeHTML(ch.date || '')}</p>
+                                <div class="chapter-item press" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(ch.slug)}" style="display:flex; align-items:center; justify-content:space-between; background:var(--card-bg); border:2px solid var(--border); padding:12px 15px; border-radius:10px; cursor:pointer; transition:0.2s;">
+                                    <div>
+                                        <h5 style="margin:0 0 4px 0; font-size:13px; font-weight:800; color:var(--text);">${escapeHTML(ch.title)}</h5>
+                                        <p style="margin:0; font-size:10px; color:var(--text); opacity:0.6;">${escapeHTML(ch.date || '')}</p>
                                     </div>
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+                                    <div style="background:rgba(0,255,204,0.1); padding:6px; border-radius:50%;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+                                    </div>
                                 </div>
                             `;
                         });
@@ -999,6 +962,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     html += `</div>`;
                     box.innerHTML = html;
+
+                    box.querySelector('.btn-back').addEventListener('click', () => openTool('komik'));
+                    
+                    box.querySelector('.btn-fav').addEventListener('click', function() {
+                        const t = this.dataset.title;
+                        const s = this.dataset.slug;
+                        const c = this.dataset.cover;
+                        toggleFavorit(t, s, c);
+                        
+                        const isNowFav = cekFavorit(s);
+                        this.style.background = isNowFav ? 'rgba(255,51,51,0.15)' : 'rgba(255,255,255,0.05)';
+                        this.style.color = isNowFav ? '#ff3333' : 'var(--text)';
+                        this.style.borderColor = isNowFav ? '#ff3333' : 'var(--border)';
+                        this.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="${isNowFav ? '#ff3333' : 'none'}" stroke="${isNowFav ? '#ff3333' : 'currentColor'}" stroke-width="2" width="16" height="16"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            ${isNowFav ? 'Tersimpan' : 'Favorit'}
+                        `;
+                    });
+
+                    const btnLanjut = box.querySelector('.btn-lanjut');
+                    if (btnLanjut) {
+                        btnLanjut.addEventListener('click', () => bacaKomik(btnLanjut.dataset.title, btnLanjut.dataset.slug));
+                    }
+
+                    box.querySelectorAll('.chapter-item').forEach(el => {
+                        el.addEventListener('click', () => bacaKomik(el.dataset.title, el.dataset.slug));
+                    });
 
                 } catch (e) { 
                     box.innerHTML = `<p class="error-msg">Gagal memuat detail: ${escapeHTML(e.message)}</p>`; 
@@ -1950,6 +1940,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const box = document.getElementById('komik-res');
         box.innerHTML = '<div class="loader"></div>';
         
+        const histEl = document.getElementById('komik-history');
+        const favEl = document.getElementById('komik-favorit');
+        if(histEl) histEl.innerHTML = '';
+        if(favEl) favEl.innerHTML = '';
+
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1966,7 +1961,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (images.length === 0) throw new Error('Gambar tidak ditemukan.');
 
-            // --- SIMPAN RIWAYAT BACA (PER CHAPTER) ---
             const chapterTitle = data.result?.chapterTitle || title;
             const history = {
                 comicTitle: title,
@@ -1976,23 +1970,19 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             localStorage.setItem('zenkai_last_read', JSON.stringify(history));
 
-            // --- NAVIGASI PREV / NEXT ---
             const prevSlug = data.result?.navigation?.prevSlug || data.result?.prev || null;
             const nextSlug = data.result?.navigation?.nextSlug || data.result?.next || null;
 
             let html = `
-                <!-- HEADER BACA (STICKY) -->
                 <div class="reader-header">
-                    <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                    <button class="btn-back-reader press" style="background:var(--card-bg); border:2px solid var(--border); width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg>
                     </button>
                     <div class="reader-title">${escapeHTML(chapterTitle)}</div>
-                    <button onclick="openTool('komik')" class="press" style="background:var(--primary); color:#000; border:2px solid var(--border); padding:6px 10px; border-radius:8px; font-size:11px; font-weight:bold;">
+                    <button class="btn-daftar-reader press" style="background:var(--primary); color:#000; border:2px solid var(--border); padding:6px 10px; border-radius:8px; font-size:11px; font-weight:bold; cursor:pointer;">
                         Daftar
                     </button>
                 </div>
-
-                <!-- GAMBAR KOMIK (FIX KEPOTONG) -->
                 <div class="reader-container">
             `;
             
@@ -2003,23 +1993,38 @@ document.addEventListener('DOMContentLoaded', () => {
             
             html += `</div>`;
 
-            // --- TOMBOL NEXT/PREV BAWAH ---
             html += `
                 <div class="reader-nav">
-                    <button ${!prevSlug ? 'disabled style="opacity:0.3;"' : ''} onclick="bacaKomik('${escapeHTML(title)}', '${escapeHTML(prevSlug || '')}')" class="action-btn" style="flex:1; margin:0;">« Prev</button>
-                    <button ${!nextSlug ? 'disabled style="opacity:0.3;"' : ''} onclick="bacaKomik('${escapeHTML(title)}', '${escapeHTML(nextSlug || '')}')" class="action-btn" style="flex:1; margin:0;">Next »</button>
+                    <button class="btn-prev-next press" data-slug="${escapeHTML(prevSlug || '')}" data-title="${escapeHTML(title)}" ${!prevSlug ? 'disabled style="opacity:0.3; flex:1; margin:0;"' : 'style="flex:1; margin:0;"'}>
+                        « Prev
+                    </button>
+                    <button class="btn-prev-next press" data-slug="${escapeHTML(nextSlug || '')}" data-title="${escapeHTML(title)}" ${!nextSlug ? 'disabled style="opacity:0.3; flex:1; margin:0;"' : 'style="flex:1; margin:0;"'}>
+                        Next »
+                    </button>
                 </div>
-                <button onclick="openTool('komik')" class="action-btn" style="background:#ff3333; margin: 0 15px 20px 15px;">Kembali ke Katalog</button>
+                <button class="btn-back-katalog action-btn press" style="background:#ff3333; margin: 0 15px 20px 15px; color:#fff;">Kembali ke Katalog</button>
             `;
             
             box.innerHTML = html;
-            window.scrollTo({ top: 0, behavior: 'instant' });
+            window.scrollTo({ top: 0, behavior: 'auto' });
+
+            box.querySelector('.btn-back-reader').addEventListener('click', () => openTool('komik'));
+            box.querySelector('.btn-daftar-reader').addEventListener('click', () => openTool('komik'));
+            box.querySelector('.btn-back-katalog').addEventListener('click', () => openTool('komik'));
+            
+            box.querySelectorAll('.btn-prev-next').forEach(btn => {
+                if(!btn.disabled) {
+                    btn.addEventListener('click', () => {
+                        bacaKomik(btn.dataset.title, btn.dataset.slug);
+                    });
+                }
+            });
 
         } catch (e) { 
             box.innerHTML = `
                 <div style="text-align:center; padding: 20px;">
                     <p class="error-msg">${escapeHTML(e.message)}</p>
-                    <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
+                    <button class="action-btn" onclick="openTool('komik')" style="margin-top:15px;">Kembali</button>
                 </div>
             `; 
         }
