@@ -451,7 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // === LOGIKA BANNER KOMIK (PAKAI CLASS "soon-banner") ===
         const komikBanner = document.getElementById('tool-komik');
         if (komikBanner) {
             const isKomikDisabled = dTools.includes('komik');
@@ -708,6 +707,28 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
+    // FITUR FAVORIT & RIWAYAT
+    // =========================================
+    window.toggleFavorit = (title, slug, cover) => {
+        let favorit = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
+        const index = favorit.findIndex(f => f.slug === slug);
+        
+        if (index > -1) {
+            favorit.splice(index, 1);
+            showToast('Dihapus dari Favorit');
+        } else {
+            favorit.push({ title, slug, cover, time: Date.now() });
+            showToast('Ditambahkan ke Favorit ❤️');
+        }
+        localStorage.setItem('zenkai_favorit', JSON.stringify(favorit));
+    };
+
+    window.cekFavorit = (slug) => {
+        const favorit = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
+        return favorit.some(f => f.slug === slug);
+    };
+
+    // =========================================
     // 11. FUNGSI OPEN TOOL
     // =========================================
     window.openTool = (tool) => {
@@ -761,6 +782,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     
                     <div id="komik-history" style="padding: 0 5px; margin-bottom: 15px;"></div>
+                    <div id="komik-favorit" style="padding: 0 5px; margin-bottom: 15px;"></div>
 
                     <div id="komik-res" style="padding: 0 5px;"></div>
                 </div>
@@ -768,14 +790,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
-            let currentTab = 'terbaru'; // Default tab
+            let currentTab = 'terbaru'; 
 
-            // Fungsi ganti tab
             window.switchKomikTab = (tab, btn) => {
                 currentTab = tab;
                 document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
                 if (btn) btn.classList.add('active');
-                loadKatalog(input.value.trim()); // Reload data sesuai tab
+                loadKatalog(input.value.trim());
             };
 
             const loadKatalog = async (query) => {
@@ -785,14 +806,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (lastRead && historyBox) {
                     const h = JSON.parse(lastRead);
                     historyBox.innerHTML = `
-                        <div style="background:var(--card-bg); border:2px solid var(--primary); padding:12px; border-radius:10px; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="bacaKomik('${escapeHTML(h.title)}', '${escapeHTML(h.slug)}')">
+                        <div style="background:var(--card-bg); border:2px solid var(--primary); padding:12px; border-radius:10px; display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="bacaKomik('${escapeHTML(h.comicTitle)}', '${escapeHTML(h.slug)}')">
                             <div style="display:flex; align-items:center; gap:10px;">
                                 <div style="background:var(--primary); color:#000; padding:6px; border-radius:6px;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                                 </div>
                                 <div>
                                     <p style="font-size:10px; margin:0; opacity:0.7; font-weight:bold;">LANJUT BACA</p>
-                                    <h5 style="font-size:12px; margin:2px 0 0 0; font-weight:800;">${escapeHTML(h.title)}</h5>
+                                    <h5 style="font-size:12px; margin:2px 0 0 0; font-weight:800;">${escapeHTML(h.chapterTitle)}</h5>
                                 </div>
                             </div>
                             <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="20" height="20"><path d="M9 18l6-6-6-6"/></svg>
@@ -802,18 +823,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     historyBox.innerHTML = '';
                 }
 
+                // --- TAMPILKAN FAVORIT ---
+                const favoritBox = document.getElementById('komik-favorit');
+                const favoritList = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
+                if (favoritList.length > 0 && favoritBox) {
+                    let htmlFav = `<h4 style="font-size:14px; margin-bottom:10px;">❤️ Favorit Kamu</h4><div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none;">`;
+                    favoritList.forEach(f => {
+                        htmlFav += `
+                            <div style="min-width:80px; max-width:80px; cursor:pointer;" onclick="openTool('komik')">
+                                <div style="width:80px; height:110px; border-radius:8px; overflow:hidden; border:2px solid var(--border);">
+                                    <img src="${f.cover}" style="width:100%; height:100%; object-fit:cover;">
+                                </div>
+                                <p style="font-size:10px; font-weight:bold; margin-top:5px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(f.title)}</p>
+                            </div>
+                        `;
+                    });
+                    htmlFav += `</div>`;
+                    favoritBox.innerHTML = htmlFav;
+                } else if (favoritBox) {
+                    favoritBox.innerHTML = '';
+                }
+
                 box.innerHTML = '<div class="loader"></div>';
                 try {
                     let bodyData = {};
                     
-                    // LOGIKA PENGAMBILAN DATA BERDASARKAN TAB
                     if (query) {
-                        bodyData = { action: 'search', q: query }; // Kalau lagi nyari, tetep ke search
+                        bodyData = { action: 'search', q: query };
                     } else {
                         if (currentTab === 'terbaru') {
-                            bodyData = { action: 'latest' }; // Nembak API Terbaru
+                            bodyData = { action: 'latest' };
                         } else {
-                            bodyData = { action: 'daftar' }; // Nembak API Daftar/Populer
+                            bodyData = { action: 'daftar' };
                         }
                     }
 
@@ -877,34 +918,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     let chapters = [];
 
-                    // 1. Cek apakah ada array 'chapters' (Pake API Key Baru)
                     if (detail.chapters && detail.chapters.length > 0) {
                         chapters = detail.chapters.map(ch => ({
                             title: ch.title || 'Chapter',
                             slug: ch.slug || ch.link,
                             date: ch.date || ''
                         }));
-                    } 
-                    // 2. Kalau kosong, balik ke trik lama (Filter 'genres')
-                    else if (detail.genres) {
+                    } else if (detail.genres) {
                         let rawChapters = detail.genres;
                         chapters = rawChapters.filter(item => typeof item === 'string' && item.includes('Chapter')).map(ch => {
                             const numMatch = ch.match(/Chapter\s+([\d.]+)/i);
                             const num = numMatch ? numMatch[1] : ch.replace('Chapter ', '');
-                            return {
-                                title: ch,
-                                slug: `${slug}-chapter-${num.replace('.', '-')}`,
-                                date: ''
-                            };
+                            return { title: ch, slug: `${slug}-chapter-${num.replace('.', '-')}`, date: '' };
                         });
                     }
                     
-                    // Urutkan dari chapter terbaru ke terlama
                     chapters.sort((a, b) => {
                         const numA = parseFloat(a.title.replace(/[^0-9.]/g, ''));
                         const numB = parseFloat(b.title.replace(/[^0-9.]/g, ''));
                         return numB - numA;
                     });
+                    
+                    // --- CEK APAKAH ADA HISTORY BUAT KOMIK INI ---
+                    const lastRead = localStorage.getItem('zenkai_last_read');
+                    let historyBtn = '';
+                    if (lastRead) {
+                        const h = JSON.parse(lastRead);
+                        if (h.comicTitle === title) {
+                            historyBtn = `
+                                <button onclick="bacaKomik('${escapeHTML(h.comicTitle)}', '${escapeHTML(h.slug)}')" class="action-btn press" style="background:var(--primary); color:#000; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:15px;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                                    Lanjut Baca (${escapeHTML(h.chapterTitle.split('Chapter ')[1] || 'Chapter')})
+                                </button>
+                            `;
+                        }
+                    }
                     
                     let html = `
                         <div style="margin-bottom:20px;">
@@ -914,12 +962,21 @@ document.addEventListener('DOMContentLoaded', () => {
                             
                             <div style="display:flex; gap:15px;">
                                 <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:100px; height:130px; object-fit:cover; border-radius:8px; border:2px solid var(--border);">
-                                <div>
-                                    <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0;">${escapeHTML(title)}</h3>
+                                <div style="flex:1;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0;">${escapeHTML(title)}</h3>
+                                        <button onclick="toggleFavorit('${escapeHTML(title)}', '${escapeHTML(slug)}', '${escapeHTML(detail.cover || '')}')" style="background:none; border:none; font-size:24px; cursor:pointer;">
+                                            ${cekFavorit(slug) ? '❤️' : '🤍'}
+                                        </button>
+                                    </div>
                                     <p style="font-size:11px; color:var(--text); opacity:0.8; line-height:1.4; max-height: 100px; overflow-y: auto;">${escapeHTML(detail.sinopsis || detail.synopsis || detail.description || 'Tidak ada sinopsis.')}</p>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- TOMBOL LANJUT BACA -->
+                        ${historyBtn}
+
                         <h4 style="margin-bottom:10px; font-size:14px;">Daftar Chapter (${chapters.length}):</h4>
                         <div style="display:flex; flex-direction:column; gap:8px; max-height: 300px; overflow-y:auto;">
                     `;
@@ -958,7 +1015,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 800);
             });
         }
-        else if (tool === 'tiktok') {
+                else if (tool === 'tiktok') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>TikTok DL</h3>
@@ -1909,11 +1966,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (images.length === 0) throw new Error('Gambar tidak ditemukan.');
 
-            // --- SIMPAN RIWAYAT BACA ---
+            // --- SIMPAN RIWAYAT BACA (PER CHAPTER) ---
+            const chapterTitle = data.result?.chapterTitle || title;
             const history = {
-                title: title,
+                comicTitle: title,
+                chapterTitle: chapterTitle,
                 slug: slug,
-                cover: data.result?.mangaCover || '',
                 time: Date.now()
             };
             localStorage.setItem('zenkai_last_read', JSON.stringify(history));
@@ -1921,42 +1979,37 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- NAVIGASI PREV / NEXT ---
             const prevSlug = data.result?.navigation?.prevSlug || data.result?.prev || null;
             const nextSlug = data.result?.navigation?.nextSlug || data.result?.next || null;
-            const chapterTitle = data.result?.chapterTitle || title;
 
             let html = `
-                <!-- HEADER BACA -->
-                <div style="position: sticky; top: 0; background: var(--bg); z-index: 10; padding: 10px 0; border-bottom: 2px solid var(--border); margin-bottom: 10px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg>
-                        </button>
-                        <div style="text-align:center; flex:1; padding: 0 10px;">
-                            <h4 style="font-size:13px; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(chapterTitle)}</h4>
-                        </div>
-                        <button onclick="openTool('komik')" class="press" style="background:var(--primary); color:#000; border:2px solid var(--border); padding:6px 10px; border-radius:8px; font-size:11px; font-weight:bold;">
-                            Daftar
-                        </button>
-                    </div>
+                <!-- HEADER BACA (STICKY) -->
+                <div class="reader-header">
+                    <button onclick="openTool('komik')" class="press" style="background:var(--card-bg); border:2px solid var(--border); width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <div class="reader-title">${escapeHTML(chapterTitle)}</div>
+                    <button onclick="openTool('komik')" class="press" style="background:var(--primary); color:#000; border:2px solid var(--border); padding:6px 10px; border-radius:8px; font-size:11px; font-weight:bold;">
+                        Daftar
+                    </button>
                 </div>
 
-                <!-- GAMBAR KOMIK (GAP DIHILANGKAN) -->
-                <div style="display:flex; flex-direction:column; gap:0; background:#000;">
+                <!-- GAMBAR KOMIK (FIX KEPOTONG) -->
+                <div class="reader-container">
             `;
             
             images.forEach(imgUrl => {
                 const proxiedImg = `https://wsrv.nl/?url=${encodeURIComponent(imgUrl)}`;
-                html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" style="width:100%; display:block; margin:0; padding:0;" loading="lazy" onerror="this.style.display='none'">`;
+                html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" loading="lazy" onerror="this.style.display='none'">`;
             });
             
             html += `</div>`;
 
             // --- TOMBOL NEXT/PREV BAWAH ---
             html += `
-                <div style="display:flex; gap:10px; margin-top:20px; margin-bottom:20px;">
+                <div class="reader-nav">
                     <button ${!prevSlug ? 'disabled style="opacity:0.3;"' : ''} onclick="bacaKomik('${escapeHTML(title)}', '${escapeHTML(prevSlug || '')}')" class="action-btn" style="flex:1; margin:0;">« Prev</button>
                     <button ${!nextSlug ? 'disabled style="opacity:0.3;"' : ''} onclick="bacaKomik('${escapeHTML(title)}', '${escapeHTML(nextSlug || '')}')" class="action-btn" style="flex:1; margin:0;">Next »</button>
                 </div>
-                <button onclick="openTool('komik')" class="action-btn" style="background:#ff3333; margin-bottom:20px;">Kembali ke Katalog</button>
+                <button onclick="openTool('komik')" class="action-btn" style="background:#ff3333; margin: 0 15px 20px 15px;">Kembali ke Katalog</button>
             `;
             
             box.innerHTML = html;
