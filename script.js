@@ -570,8 +570,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:20px;">
+                <div style="background:rgba(255,204,0,0.1); padding:15px; border-radius:12px; border:2px dashed #ffcc00;">
+                    <h3 style="font-family:var(--font-head); font-size:16px; color:#ffcc00; margin-bottom:12px;">👑 VIP Management</h3>
+                    <p style="font-size:11px; opacity:0.8; margin-bottom:10px;">Klik untuk reset kode VIP biar bisa dipakai ulang.</p>
+                    <button class="action-btn press" onclick="loadVipCodes()" style="background: var(--primary); color: #000; padding: 10px; font-size: 12px; margin-bottom: 10px;">🔄 Muat Daftar Kode VIP</button>
+                    <div id="vip-list-container" style="max-height: 300px; overflow-y: auto;"></div>
+                </div>
                 <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
-                    <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px; display:flex; align-items:center; gap:8px;">⚙️ Pengaturan Umum</h3>
+                    <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">⚙️ Pengaturan Umum</h3>
                     <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Judul Web</label>
                     <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:12px; margin-top:5px; margin-bottom:15px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
                     <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Broadcast Banner</label>
@@ -600,6 +606,85 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
         `;
+    };
+
+    // LOAD DAFTAR KODE VIP
+    window.loadVipCodes = async () => {
+        const container = document.getElementById('vip-list-container');
+        if (!container) return;
+        container.innerHTML = '<div class="loader" style="width:24px; height:24px;"></div>';
+        
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'list_vip_codes',
+                    owner_token: localStorage.getItem(OWNER_TOKEN_KEY)
+                })
+            });
+            const result = await res.json();
+            
+            if (!result.status) throw new Error(result.message || 'Gagal memuat');
+            const data = result.data || [];
+            
+            if (data.length === 0) {
+                container.innerHTML = '<p style="font-size:12px; text-align:center; opacity:0.6;">Belum ada kode VIP.</p>';
+                return;
+            }
+            
+            let html = '';
+            data.forEach(v => {
+                const badge = v.is_used ? '🔴 TERPAKAI' : '🟢 TERSEDIA';
+                const date = v.used_at ? new Date(v.used_at).toLocaleString('id-ID') : '-';
+                html += `
+                    <div style="background: var(--card-bg); border: 2px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 8px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                            <b style="font-family:monospace; font-size:13px;">${escapeHTML(v.code)}</b>
+                            <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:4px; background:${v.is_used ? 'rgba(255,51,51,0.2)' : 'rgba(0,255,157,0.2)'}; color:${v.is_used ? '#ff3333' : '#00ff9d'};">${badge}</span>
+                        </div>
+                        ${v.is_used ? `<p style="font-size:9px; opacity:0.6; margin-bottom:8px;">Dipakai: ${escapeHTML(date)}</p>` : ''}
+                        ${v.is_used ? `<button onclick="resetVipCode(${Number(v.id)})" style="width:100%; padding:8px; font-size:11px; background:#ff3333; color:#fff; border:2px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">🔄 RESET KODE</button>` : ''}
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        } catch(e) {
+            container.innerHTML = `<p style="font-size:11px; color:#ff3333;">Error: ${escapeHTML(e.message)}</p>`;
+        }
+    };
+
+    // RESET KODE VIP
+    window.resetVipCode = (id) => {
+        tampilkanAlert(
+            "Reset Kode VIP",
+            "Yakin mau reset kode ini? Kode bisa dipakai lagi.",
+            [
+                { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+                { label: "Reset", action: `eksekusiResetVip(${Number(id)})`, type: "primary" }
+            ]
+        );
+    };
+
+    window.eksekusiResetVip = async (id) => {
+        document.getElementById('custom-alert').style.display = 'none';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'reset_vip_code',
+                    owner_token: localStorage.getItem(OWNER_TOKEN_KEY),
+                    id
+                })
+            });
+            const data = await res.json();
+            if (!data.status) throw new Error(data.message || 'Gagal reset');
+            showToast('✅ Kode VIP berhasil direset!');
+            loadVipCodes();
+        } catch (e) {
+            showToast('Gagal reset: ' + e.message);
+        }
     };
 
     window.simpanSettingOwner = async (e) => {
@@ -753,12 +838,231 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         }
+        // =========================================
+        // FITUR VIP (PENDAFTARAN)
+        // =========================================
+        else if (tool === 'vip') {
+            const isVip = localStorage.getItem('zenkai_vip') === 'true';
+            const vipUntil = localStorage.getItem('zenkai_vip_until');
+            let daysLeft = 0;
+
+            if (isVip && vipUntil) {
+                const diff = new Date(vipUntil) - new Date();
+                daysLeft = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+                if (daysLeft <= 0) {
+                    localStorage.removeItem('zenkai_vip');
+                    localStorage.removeItem('zenkai_vip_until');
+                }
+            }
+
+            const isVipFinal = localStorage.getItem('zenkai_vip') === 'true';
+
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>${isVipFinal ? 'Status VIP' : 'Upgrade ke VIP'}</h3>
+                
+                ${isVipFinal ? `
+                    <div style="background: linear-gradient(135deg, #ffcc00, #ff7300); color: #000; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 3px solid var(--border);">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="40" height="40" style="margin-bottom: 10px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <h4 style="font-size: 20px; font-weight: 900; margin: 0;">VIP AKTIF</h4>
+                        <p style="font-size: 12px; margin-top: 5px; font-weight: 700;">Sisa Waktu: ${daysLeft} Hari Lagi</p>
+                    </div>
+                    <p style="text-align:center; font-size:11px; opacity:0.7; margin-bottom:20px;">Berakhir: ${new Date(vipUntil).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                    <button class="action-btn" onclick="localStorage.removeItem('zenkai_vip'); localStorage.removeItem('zenkai_vip_until'); closeModal(); showToast('Status VIP dicabut.');" style="background:#ff3333; color:#fff;">Logout VIP (Test)</button>
+                ` : `
+                    <div class="desc-text" style="text-align: left; font-size: 12px; line-height: 1.6;">
+                        Halo! Fitur <b>Gemini Plus Bypass</b> ini eksklusif VIP. Beli VIP buat dapet akses <b>30 hari</b>, dengan kuota 2x/hari.
+                    </div>
+                    
+                    <div style="background: var(--bg); border: 2px dashed var(--border); padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: center;">
+                        <p style="font-size: 12px; margin-bottom: 10px; font-weight: 800;">Harga VIP:</p>
+                        <h4 style="font-size: 28px; color: #ffcc00; font-weight: 900; margin-bottom: 10px;">Rp 10.000 / 30 Hari</h4>
+                        <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" class="action-btn" style="background: #ffcc00; color: #000; text-decoration: none;">Bayar via Sociabuzz</a>
+                    </div>
+                    
+                    <p style="font-size: 11px; text-align: center; margin-bottom: 15px; opacity: 0.8;">Setelah bayar, kirim bukti ke WhatsApp Admin untuk dapet kode VIP.</p>
+                    
+                    <input type="text" id="vip-code-input" placeholder="Masukkan Kode VIP (ZENKAI-XXXX)" style="text-align:center; text-transform:uppercase;">
+                    <button class="action-btn" onclick="aktivasiVip()" style="background: var(--primary); color: #000;">Tukar Kode VIP</button>
+                    <div id="vip-activation-res" style="margin-top: 15px;"></div>
+                `}
+            `;
+
+            window.aktivasiVip = async () => {
+                const code = document.getElementById('vip-code-input').value.trim().toUpperCase();
+                if (!code) return showToast('Masukkan kode dulu!');
+
+                const btn = document.querySelector('#modal-content button[onclick="aktivasiVip()"]');
+                const resBox = document.getElementById('vip-activation-res');
+                setBtnLoading(btn, true, 'Memverifikasi...');
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zenkai-vip`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'activate', code: code })
+                    });
+                    const data = await res.json();
+                    
+                    if (!data.status) {
+                        setBtnLoading(btn, false, 'Tukar Kode VIP');
+                        return resBox.innerHTML = `<p class="error-msg" style="font-size:12px;">❌ ${escapeHTML(data.message)}</p>`;
+                    }
+
+                    // AKTIFKAN VIP 30 HARI
+                    localStorage.setItem('zenkai_vip', 'true');
+                    localStorage.setItem('zenkai_vip_until', data.expiry);
+                    localStorage.removeItem('zenkai_gemini_vip_usage');
+
+                    closeModal();
+                    showToast('🎉 Selamat! VIP Aktif 30 Hari.');
+                } catch (e) {
+                    setBtnLoading(btn, false, 'Tukar Kode VIP');
+                    resBox.innerHTML = `<p class="error-msg" style="font-size:12px;">Error: ${escapeHTML(e.message)}</p>`;
+                }
+            };
+        }
+        // =========================================
+        // FITUR GEMINI PLUS BYPASS (STRICT VIP, 2x/HARI, 2-STEP)
+        // =========================================
+        else if (tool === 'ai-chat') {
+            const isVip = localStorage.getItem('zenkai_vip') === 'true';
+            const vipUntil = localStorage.getItem('zenkai_vip_until');
+            let isVipValid = false;
+            if (isVip && vipUntil && new Date(vipUntil) > new Date()) isVipValid = true;
+
+            if (!isVipValid) {
+                modalContent.innerHTML = `
+                    ${closeSvg}
+                    <div style="text-align:center; padding: 20px 0;">
+                        <div style="background: linear-gradient(135deg, #ff3333, #ff7300); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; border: 3px solid var(--border); box-shadow: 0 0 20px rgba(255,51,51,0.4);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" width="40" height="40"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </div>
+                        <h3 style="font-family: var(--font-head); font-size: 24px; color: #ff3333; margin-bottom: 10px;">FITUR VIP</h3>
+                        <p style="font-size: 13px; line-height: 1.6; opacity: 0.9; margin-bottom: 25px;">
+                            Maaf, fitur <b>Google Gemini Plus Bypass</b> ini <b>eksklusif buat member VIP</b>.<br>Lu harus beli VIP dulu buat nge-akses ini.
+                        </p>
+                        <button class="action-btn" onclick="openTool('vip')" style="background: linear-gradient(135deg, #ffcc00, #ff7300); color: #000; border: 3px solid var(--border); font-weight: 900;">👑 BELI VIP SEKARANG (Rp 10.000)</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const today = new Date().toDateString();
+            let usage = JSON.parse(localStorage.getItem('zenkai_gemini_vip_usage') || '{"date":"","count":0}');
+            if (usage.date !== today) usage = { date: today, count: 0 };
+
+            if (usage.count >= 2) {
+                modalContent.innerHTML = `
+                    ${closeSvg}
+                    <div style="text-align:center; padding: 20px 0;">
+                        <div style="font-size: 60px; margin-bottom: 15px;">⏳</div>
+                        <h3 style="font-family: var(--font-head); font-size: 22px; color: #ff3333; margin-bottom: 10px;">Limit VIP Tercapai</h3>
+                        <p style="font-size: 13px; line-height: 1.6; opacity: 0.9; margin-bottom: 25px;">
+                            Member VIP dibatasi <b>2x sehari</b> buat fitur ini.<br>Kuota lu udah habis, besok balik lagi ya!
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Google Gemini Plus 👑</h3>
+                <span class="desc-text" style="color:#ffcc00; border-color:#ffcc00; background: rgba(255,204,0,0.1);">Sisa Kuota VIP Lu: <b>${2 - usage.count}x</b> hari ini.</span>
+                
+                <div id="step-email">
+                    <p style="font-size:11px; text-align:center; opacity:0.8; margin-bottom:15px;">Masukkan email Google aktif lu. Sistem bakal ngirim Kode OTP 6 digit ke email lu.</p>
+                    <input type="email" id="gemini-email" placeholder="Masukkan email Google aktif...">
+                    <button class="action-btn" id="btn-send-otp">Kirim Kode OTP</button>
+                </div>
+
+                <div id="step-otp" style="display:none;">
+                    <p style="font-size:11px; text-align:center; opacity:0.8; margin-bottom:15px;">Cek Inbox/Spam email lu. Masukkan 6 digit kode OTP yang dikirim.</p>
+                    <input type="text" id="gemini-otp" placeholder="Masukkan 6 digit OTP..." maxlength="6" inputmode="numeric" style="text-align:center; letter-spacing:5px; font-size:20px;">
+                    <button class="action-btn" id="btn-claim-otp" style="background:#00ff9d; color:#000;">Klaim Akses Gemini Plus</button>
+                </div>
+
+                <div id="gemini-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+            `;
+
+            const emailInput = document.getElementById('gemini-email');
+            const otpInput = document.getElementById('gemini-otp');
+            const stepEmail = document.getElementById('step-email');
+            const stepOtp = document.getElementById('step-otp');
+            const resBox = document.getElementById('gemini-res');
+            const btnSend = document.getElementById('btn-send-otp');
+            const btnClaim = document.getElementById('btn-claim-otp');
+
+            btnSend.onclick = async () => {
+                const email = emailInput.value.trim();
+                if (!email) return showToast('Masukkan email dulu!');
+                
+                setBtnLoading(btnSend, true, 'Mengirim OTP...');
+                resBox.style.display = 'block';
+                resBox.innerHTML = '<div class="loader"></div>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-gemini`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'send', email: email })
+                    });
+                    const data = await res.json();
+                    
+                    if (!data.status) throw new Error(data.message || 'Gagal mengirim OTP');
+
+                    stepEmail.style.display = 'none';
+                    stepOtp.style.display = 'block';
+                    resBox.innerHTML = `<p class="success-msg">✅ OTP Berhasil Dikirim!<br><span style="font-size:11px; font-weight:normal;">Cek Inbox/Spam email <b>${escapeHTML(email)}</b>.</span></p>`;
+                    showToast('Kode OTP Terkirim!');
+                } catch (e) {
+                    resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btnSend, false, 'Kirim Kode OTP');
+            };
+
+            btnClaim.onclick = async () => {
+                const email = emailInput.value.trim();
+                const otp = otpInput.value.trim();
+                if (!otp || otp.length < 6) return showToast('Masukkan 6 digit OTP!');
+                
+                setBtnLoading(btnClaim, true, 'Memverifikasi...');
+                resBox.style.display = 'block';
+                resBox.innerHTML = '<div class="loader"></div>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-gemini`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'claim', email: email, otp: otp })
+                    });
+                    const data = await res.json();
+                    
+                    if (!data.status) throw new Error(data.message || 'OTP Salah / Kadaluarsa');
+
+                    usage.count++;
+                    localStorage.setItem('zenkai_gemini_vip_usage', JSON.stringify(usage));
+
+                    closeModal();
+                    showToast('🎉 Berhasil! Akses Gemini Plus Aktif.');
+                    setTimeout(() => {
+                        tampilkanAlert("Sukses!", "Akses Google Gemini Plus 12 Bulan berhasil diklaim. Cek email lu untuk link verifikasi terakhir.", [
+                            { label: "Oke", action: "document.getElementById('custom-alert').style.display='none'", type: "primary" }
+                        ]);
+                    }, 500);
+                } catch (e) {
+                    resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btnClaim, false, 'Klaim Akses Gemini Plus');
+            };
+        }
+        // =========================================
+        // FITUR KOMIK
+        // =========================================
         else if (tool === 'komik') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <div style="background:var(--bg); min-height: 100vh; padding-bottom: 20px; font-family: var(--font-main);">
                     
-                    <!-- HEADER WEBTOON STYLE -->
                     <div style="display:flex; align-items:center; justify-content:space-between; padding: 0 15px; margin-bottom: 15px; margin-top: 5px;">
                         <div style="display:flex; align-items:center; gap:10px;">
                             <div style="background:var(--primary); color:#000; padding:6px; border-radius:8px; font-weight:900; font-size:18px; transform: rotate(-5deg);">Z</div>
@@ -769,14 +1073,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
 
-                    <!-- TEKS DESKRIPSI -->
                     <div style="padding: 0 15px; margin-bottom: 20px;">
                         <p style="font-size:11px; color:var(--text); opacity:0.7; line-height:1.5; margin:0;">
                             Selamat datang di <b style="color:var(--primary);">Zenkai Comics</b>. Platform baca komik online (Manga, Manhwa, Manhua) Bahasa Indonesia terlengkap dan terupdate setiap hari secara gratis. Silakan telusuri katalog di bawah ini.
                         </p>
                     </div>
 
-                    <!-- TAB NAVIGASI -->
                     <div style="display:flex; gap:8px; margin-bottom:20px; padding: 0 15px; background:rgba(0,0,0,0.1); border-radius:12px;">
                         <button id="tab-terbaru" onclick="switchKomikTab('terbaru', this)" class="cat-btn active" style="flex:1; padding:10px; font-size:12px; border-radius:8px; border:none; box-shadow:none; font-weight:800; display:flex; flex-direction:column; align-items:center; gap:4px;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -792,16 +1094,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         </button>
                     </div>
 
-                    <!-- SEARCH BAR -->
                     <div style="position:relative; margin-bottom:20px; padding: 0 15px;">
                         <input type="text" id="komik-q" placeholder="Cari judul manga, manhwa..." style="width:100%; padding:14px 14px 14px 45px; border:none; border-radius:12px; background:var(--card-bg); color:var(--text); font-size:13px; outline:none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border:1px solid var(--border);">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:28px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </div>
                     
-                    <!-- CONTAINER UTAMA -->
                     <div id="komik-res" style="padding: 0 15px;"></div>
                     
-                    <!-- LOADER INFINITE SCROLL -->
                     <div id="komik-load-more" style="display:none; text-align:center; padding: 20px 0;">
                         <div class="loader" style="width:24px; height:24px; border-width:3px;"></div>
                     </div>
@@ -817,7 +1116,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let isLoading = false;
             let hasMore = true;
 
-            // FUNGSI DETEKSI CERDAS (DENGAN AUTO-LEARNING CACHE)
             const getTipeKomik = (typeString, titleString = '') => {
                 let typeCache = JSON.parse(localStorage.getItem('zenkai_type_cache') || '{}');
                 if (titleString && typeCache[titleString]) {
@@ -844,7 +1142,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return { label: 'MANGA', color: '#ffcc00' };
             };
 
-            // Fungsi Pindah Tab
             window.switchKomikTab = (tab, btn) => {
                 currentTab = tab;
                 currentPage = 1;
@@ -855,7 +1152,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadKatalog(input.value.trim());
             };
 
-            // FUNGSI LOAD KATALOG (DENGAN INFINITE SCROLL)
             const loadKatalog = async (query) => {
                 if (isLoading || !hasMore) return;
                 isLoading = true;
@@ -959,7 +1255,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         `;
                     }
 
-                    // Header Katalog dengan Disclaimer
                     let titleSection = '';
                     if (currentPage === 1) {
                         if (query) titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Hasil Pencarian "${escapeHTML(query)}"</h4>`;
@@ -1067,7 +1362,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const detail = data.result || data.data;
                     const tipe = getTipeKomik(detail.type, title);
                     
-                    // AUTO-LEARNING: Simpan tipe asli ke Cache
                     if (detail.type) {
                         let typeCache = JSON.parse(localStorage.getItem('zenkai_type_cache') || '{}');
                         typeCache[title] = detail.type;
@@ -2054,35 +2348,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                     setBtnLoading(btn, false, 'Proses Gambar');
                 }
-            };
-        }
-        else if (tool === 'ai-chat') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>AI Chat</h3>
-                <span class="desc-text">Tanya apa aja ke AI pintar (DeepSeek).</span>
-                <textarea id="ai-prompt" rows="3" placeholder="Ketik pertanyaanmu di sini..."></textarea>
-                <button class="action-btn" id="btn-ai">Tanya AI</button>
-                <div id="ai-res" style="display:none; margin-top:15px; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg); text-align:left; line-height:1.6;"></div>
-            `;
-            const btn = document.getElementById('btn-ai');
-            btn.onclick = async () => {
-                const text = document.getElementById('ai-prompt').value.trim();
-                const box = document.getElementById('ai-res');
-                if (!text) return showToast('Ketik pertanyaan dulu!');
-                box.style.display = 'block';
-                setBtnLoading(btn, true, 'Berpikir...');
-                box.innerHTML = '<div class="loader"></div>';
-                try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/chat-ai`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ text: text })
-                    });
-                    const data = await res.json();
-                    if (!data.status) throw new Error(data.message || 'Gagal memproses AI');
-                    box.innerHTML = `<b>AI:</b><br><br>${escapeHTML(data.result.answer || data.answer).replace(/\n/g, '<br>')}`;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-                setBtnLoading(btn, false, 'Tanya AI');
             };
         }
         else if (tool === 'ai-image') {
