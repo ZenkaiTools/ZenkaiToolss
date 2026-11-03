@@ -715,8 +715,114 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================
-        // FITUR KOMIK (ZENKAI COMICS - FIXED INFINITE SCROLL)
-        // =========================================
+// FITUR SUPPORT (DONASI) - FIX TOMBOL & LAYOUT
+// =========================================
+else if (tool === 'support') {
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <style>
+            @keyframes pulseCoffee {
+                0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 204, 0, 0.4), 0 0 40px rgba(255, 204, 0, 0.2); }
+                50% { transform: scale(1.08); box-shadow: 0 0 30px rgba(255, 204, 0, 0.8), 0 0 60px rgba(255, 115, 0, 0.5); }
+            }
+            @keyframes fadeUp {
+                from { opacity: 0; transform: translateY(15px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes fall {
+                0% { transform: translateY(-100vh) rotate(0deg); opacity: 0; }
+                10% { opacity: 1; }
+                90% { opacity: 1; }
+                100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+            }
+            @keyframes floatOrb {
+                0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+                33% { transform: translate(20px, -30px) scale(1.2); opacity: 0.5; }
+                66% { transform: translate(-20px, 20px) scale(0.8); opacity: 0.2; }
+            }
+            @keyframes btnGlow {
+                0%, 100% { box-shadow: 0 0 15px #ffcc00, 0 6px 0 var(--border); }
+                50% { box-shadow: 0 0 30px #ffcc00, 0 0 50px #ff7300, 0 6px 0 var(--border); }
+            }
+            .star-particle { position: absolute; background: #ffcc00; border-radius: 50%; box-shadow: 0 0 10px #ffcc00, 0 0 20px #ff7300; animation: fall linear infinite; pointer-events: none; z-index: 0; }
+            .orb-particle { position: absolute; background: radial-gradient(circle, rgba(255,204,0,0.4) 0%, transparent 70%); border-radius: 50%; filter: blur(20px); animation: floatOrb ease-in-out infinite; pointer-events: none; z-index: 0; }
+            
+            .support-content > * { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; position: relative; z-index: 1; }
+            .support-content > *:nth-child(1) { animation-delay: 0.1s; }
+            .support-content > *:nth-child(2) { animation-delay: 0.2s; }
+            .support-content > *:nth-child(3) { animation-delay: 0.3s; }
+            .support-content > *:nth-child(4) { animation-delay: 0.4s; }
+            .support-content > *:nth-child(5) { animation-delay: 0.5s; }
+        </style>
+        
+        <div id="support-stars" style="background:var(--bg); padding: 20px 15px 20px 15px; font-family: var(--font-main); position:relative; overflow:hidden; border-radius:12px;">
+            
+            <div class="support-content" style="text-align:center; width:100%;">
+                
+                <!-- IKON KOPI BERDENYUT -->
+                <div style="width: 90px; height: 90px; background: linear-gradient(135deg, #ffcc00, #ff7300); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; border: 3px solid var(--border); animation: pulseCoffee 2.5s infinite ease-in-out;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" width="45" height="45"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+                </div>
+
+                <h3 style="font-family: var(--font-head); font-size: 28px; color: #ffcc00; margin-bottom: 5px; letter-spacing: 1px; text-transform: uppercase; text-shadow: 3px 3px 0 var(--border);">Halo, Gue Andika</h3>
+                <p style="font-size: 11px; color: var(--primary); font-weight: 800; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase;">Developer Zenkai Tools</p>
+
+                <!-- TEKS PAS, PADAT, BERKELAS -->
+                <div style="font-size: 14px; line-height: 1.8; color: var(--text); opacity: 0.95; margin-bottom: 30px; text-align: center; padding: 0 10px;">
+                    <p style="margin-bottom: 15px;">
+                        Gue bikin web ini biar lu bisa akses <b>30+ tools gratis</b> tanpa iklan pop-up atau judol yang nyampah.
+                    </p>
+                    <p style="margin-bottom: 0;">
+                        Tapi biaya server & API bulanan nggak murah. <br>
+                        <b style="color: #ffcc00;">Bantu donasi biar web ini nggak mati.</b>
+                    </p>
+                </div>
+
+                <!-- TOMBOL SOLID EMAS MENYALA -->
+                <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" rel="noopener noreferrer" 
+                   style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; 
+                          background: #ffcc00; 
+                          color: #000; border: 3px solid var(--border); border-radius: 14px; 
+                          font-weight: 900; font-size: 15px; padding: 18px; 
+                          margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1.5px;
+                          animation: btnGlow 2s infinite ease-in-out;">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    Traktir Kopi Sekarang
+                </a>
+                
+                <p style="font-size: 10px; opacity: 0.7; font-style: italic;">Makasih banyak buat kalian yang udah support.</p>
+            </div>
+        </div>
+    `;
+
+    // SCRIPT BIKIN BINTANG BERJATUHAN & ORB
+    const starContainer = document.getElementById('support-stars');
+    if (starContainer) {
+        for (let i = 0; i < 25; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star-particle');
+            const size = Math.random() * 3 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            star.style.animationDelay = (Math.random() * 5) + 's';
+            starContainer.appendChild(star);
+        }
+        for (let i = 0; i < 3; i++) {
+            const orb = document.createElement('div');
+            orb.classList.add('orb-particle');
+            const size = Math.random() * 150 + 100;
+            orb.style.width = size + 'px';
+            orb.style.height = size + 'px';
+            orb.style.left = Math.random() * 80 + '%';
+            orb.style.top = Math.random() * 80 + '%';
+            orb.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            orb.style.animationDelay = (Math.random() * 5) + 's';
+            starContainer.appendChild(orb);
+        }
+    }
+}
         else if (tool === 'komik') {
             modalContent.innerHTML = `
                 ${closeSvg}
