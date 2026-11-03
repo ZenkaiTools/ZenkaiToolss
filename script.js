@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================
-    // 2b. POPUP WHATSAPP CHANNEL
+    // 3. POPUP WHATSAPP CHANNEL
     // =========================================
     const waPopup = document.getElementById('wa-popup');
     const WA_POPUP_KEY = 'zenkai_wa_popup_shown';
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================
-    // 3. BEBAS AKSES (NAMA USER)
+    // 4. TEMA & NAVIGASI
     // =========================================
     const welcome = document.getElementById('welcome-username');
     if (welcome) welcome.innerText = 'User';
@@ -133,9 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navOwner) navOwner.style.display = 'flex';
     }
 
-    // =========================================
-    // 4. TEMA & NAVIGASI
-    // =========================================
     const savedTheme = localStorage.getItem('zenkai_theme') || 'cyber';
     document.body.setAttribute('data-theme', savedTheme);
 
@@ -632,7 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     };
 
-    // LOAD DAFTAR KODE VIP
+    // LOAD DAFTAR KODE VIP (DENGAN FITUR GENERATE & COPY)
     window.loadVipCodes = async () => {
         const container = document.getElementById('vip-list-container');
         if (!container) return;
@@ -652,23 +649,41 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!result.status) throw new Error(result.message || 'Gagal memuat');
             const data = result.data || [];
             
+            // Tombol Buat Kode Baru
+            let html = `
+                <button onclick="generateVipCode(event)" class="action-btn press" style="background:#00ff9d; color:#000; font-size:12px; padding:10px; margin-bottom:15px; box-shadow:0 3px 0 var(--border);">
+                    ➕ Buat Kode VIP Baru
+                </button>
+            `;
+
             if (data.length === 0) {
-                container.innerHTML = '<p style="font-size:12px; text-align:center; opacity:0.6;">Belum ada kode VIP.</p>';
+                html += '<p style="font-size:12px; text-align:center; opacity:0.6;">Belum ada kode VIP.</p>';
+                container.innerHTML = html;
                 return;
             }
             
-            let html = '';
             data.forEach(v => {
                 const badge = v.is_used ? '🔴 TERPAKAI' : '🟢 TERSEDIA';
                 const date = v.used_at ? new Date(v.used_at).toLocaleString('id-ID') : '-';
+                
                 html += `
-                    <div style="background: var(--card-bg); border: 2px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 8px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-                            <b style="font-family:monospace; font-size:13px;">${escapeHTML(v.code)}</b>
-                            <span style="font-size:9px; font-weight:800; padding:2px 6px; border-radius:4px; background:${v.is_used ? 'rgba(255,51,51,0.2)' : 'rgba(0,255,157,0.2)'}; color:${v.is_used ? '#ff3333' : '#00ff9d'};">${badge}</span>
+                    <div style="background: var(--card-bg); border: 2px solid var(--border); padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <b style="font-family:monospace; font-size:14px; letter-spacing:1px;">${escapeHTML(v.code)}</b>
+                            <span style="font-size:9px; font-weight:800; padding:3px 8px; border-radius:6px; background:${v.is_used ? 'rgba(255,51,51,0.2)' : 'rgba(0,255,157,0.2)'}; color:${v.is_used ? '#ff3333' : '#00ff9d'};">${badge}</span>
                         </div>
-                        ${v.is_used ? `<p style="font-size:9px; opacity:0.6; margin-bottom:8px;">Dipakai: ${escapeHTML(date)}</p>` : ''}
-                        ${v.is_used ? `<button onclick="resetVipCode(${Number(v.id)})" style="width:100%; padding:8px; font-size:11px; background:#ff3333; color:#fff; border:2px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">🔄 RESET KODE</button>` : ''}
+                        
+                        ${v.is_used ? `<p style="font-size:10px; opacity:0.6; margin-bottom:10px;">Dipakai: ${escapeHTML(date)}</p>` : ''}
+                        
+                        <div style="display:flex; gap:8px;">
+                            <!-- Tombol Salin Kode -->
+                            <button onclick="copyToClipboard('${escapeHTML(v.code)}')" style="flex:1; padding:8px; font-size:11px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">
+                                📋 Salin Kode
+                            </button>
+                            
+                            <!-- Tombol Reset (Cuma muncul kalo udah kepake) -->
+                            ${v.is_used ? `<button onclick="resetVipCode(${Number(v.id)})" style="flex:1; padding:8px; font-size:11px; background:#ff3333; color:#fff; border:2px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">🔄 Reset</button>` : ''}
+                        </div>
                     </div>
                 `;
             });
@@ -678,7 +693,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // RESET KODE VIP
+    // FITUR GENERATE KODE VIP BARU
+    window.generateVipCode = async (e) => {
+        const btn = e.target;
+        const oldText = btn.innerText;
+        btn.innerText = 'Membuat...';
+        btn.disabled = true;
+
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'create_vip_code',
+                    owner_token: localStorage.getItem(OWNER_TOKEN_KEY)
+                })
+            });
+            const data = await res.json();
+            if (!data.status) throw new Error(data.message);
+            
+            showToast(`✅ Kode dibuat: ${data.code}`);
+            loadVipCodes(); // Refresh list
+        } catch (e) {
+            showToast('Gagal buat kode: ' + e.message);
+            btn.innerText = oldText;
+            btn.disabled = false;
+        }
+    };
+
+    // FITUR SALIN KE CLIPBOARD
+    window.copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast(`📋 Kode disalin: ${text}`);
+        }).catch(() => {
+            // Fallback kalau browser nolak
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            temp.remove();
+            showToast(`📋 Kode disalin: ${text}`);
+        });
+    };
+
+    // RESET KODE VIP (1 PER 1)
     window.resetVipCode = (id) => {
         tampilkanAlert(
             "Reset Kode VIP",
