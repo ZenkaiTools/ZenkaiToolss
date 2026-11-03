@@ -43,12 +43,14 @@
 
             <!-- TOMBOL AKTIFKAN SUARA -->
             <button onclick="aktifkanSuara()" id="btn-unmute" class="btn-shimmer" style="padding:12px 30px; background:var(--primary); color:#000; border:none; border-radius:8px; font-weight:900; font-size:13px; letter-spacing:1px; box-shadow:0 0 20px rgba(0,255,204,0.5); cursor:pointer; margin-bottom:15px; display:flex; align-items:center; gap:8px;">
-                 AKTIFKAN SUARA
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                AKTIFKAN SUARA
             </button>
 
             <!-- TOMBOL SKIP INTRO -->
             <button onclick="masukKeWeb()" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 30px; border-radius:8px; font-weight:600; font-size:12px; letter-spacing:2px; cursor:pointer; backdrop-filter:blur(5px); transition:0.3s; display:flex; align-items:center; gap:10px;">
-                SKIP INTRO <span style="color:var(--primary); font-size:16px;">»</span>
+                SKIP INTRO 
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" width="14" height="14"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
             </button>
             
             <p style="color:rgba(255,255,255,0.3); font-size:9px; margin-top:15px; letter-spacing:1px;">© 2026 ZENKAI SYSTEM</p>
@@ -59,11 +61,12 @@
     <!-- 2. LAYAR MAINTENANCE - CYBERPUNK          -->
     <!-- ========================================= -->
     <div id="maintenance-screen" style="display:none; position:fixed; inset:0; z-index:99999; background:#09090b; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; overflow:hidden;">
-        <!-- Efek Grid Latar Belakang -->
         <div style="position:absolute; inset:0; background-image: linear-gradient(rgba(255, 51, 51, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 51, 51, 0.05) 1px, transparent 1px); background-size: 40px 40px; z-index:0;"></div>
         
         <div style="background:rgba(24, 24, 27, 0.9); border:1px solid rgba(255, 51, 51, 0.4); padding:40px 30px; border-radius:16px; max-width:400px; width:100%; box-shadow:0 0 50px rgba(255, 51, 51, 0.15), inset 0 0 20px rgba(255, 51, 51, 0.05); position:relative; z-index:1;">
-            <div style="font-size:60px; margin-bottom:20px; color:#ff3333; text-shadow:0 0 20px rgba(255,51,51,0.5); line-height:1; animation:glitch 2s infinite;"></div>
+            <div style="font-size:60px; margin-bottom:20px; color:#ff3333; text-shadow:0 0 20px rgba(255,51,51,0.5); line-height:1; animation:glitch 2s infinite;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="60" height="60" style="margin:0 auto;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
             <h1 style="font-family:var(--font-head); font-size:26px; color:#ff3333; margin-bottom:15px; letter-spacing:2px; text-transform:uppercase;">SYSTEM OFFLINE</h1>
             <p style="font-size:13px; line-height:1.6; color:#a1a1aa; margin-bottom:30px; font-family:monospace;">Server sedang dalam pemeliharaan rutin untuk optimalisasi. Silakan kembali beberapa saat lagi.</p>
             
@@ -139,8 +142,8 @@
         <!-- ========================================= -->
         <!-- BANNER BACA KOMIK (ID: tool-komik)        -->
         <!-- ========================================= -->
-        <div class="tools-section" id="tool-komik" style="margin-bottom: 15px; padding: 0; overflow: hidden; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255, 115, 0, 0.1) 100%); border: 2px solid var(--border); border-radius: var(--radius);">
-            <div style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 15px;">
+        <div class="tools-section" id="tool-komik" style="margin-bottom: 15px; padding: 0; overflow: hidden; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255, 115, 0, 0.1) 100%); border: 2px solid var(--border); border-radius: var(--radius); cursor:pointer;" onclick="openTool('komik')">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <div class="t-icon bg-orange" style="width: 45px; height: 45px; border-radius: 12px; box-shadow: 0 4px 10px rgba(255,115,0,0.3);">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -150,8 +153,9 @@
                         <p style="font-size: 10px; opacity: 0.8;">Ribuan Manga & Manhwa Bahasa Indonesia!</p>
                     </div>
                 </div>
-                <div style="background: var(--primary); color: #000; font-weight: 900; font-size: 12px; padding: 8px 15px; border-radius: 20px; border: 2px solid var(--border); box-shadow: 2px 2px 0 var(--border);">
-                    BACA »
+                <div style="background: var(--primary); color: #000; font-weight: 900; font-size: 12px; padding: 8px 15px; border-radius: 20px; border: 2px solid var(--border); box-shadow: 2px 2px 0 var(--border); display:flex; align-items:center; gap:5px;">
+                    BACA 
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
             </div>
         </div>
@@ -256,13 +260,15 @@
     <main id="page-fun" class="page">
         <header class="header-box">
             <div class="logo-area">
-                <div class="logo-icon" style="background:#a855f7; color:#fff;" aria-hidden="true">F</div>
+                <div class="logo-icon" style="background:#a855f7; color:#fff;" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
                 <div class="logo-text"><h1>Zenkai Fun</h1><p class="version">Bypass &amp; Tools</p></div>
             </div>
         </header>
 
         <div class="welcome-box" style="text-align:center; padding:25px 15px;">
-            <h2 style="font-size:24px; margin-bottom:10px;">Fitur Sultan </h2>
+            <h2 style="font-size:24px; margin-bottom:10px;">Fitur Sultan</h2>
             <p style="font-size:12px; opacity:0.8;">Bypass link iklan dan ambil aplikasi premium secara instan. Tanpa ribet, tanpa bayar.</p>
         </div>
 
@@ -367,7 +373,9 @@
     <main id="page-info" class="page">
         <header class="header-box">
             <div class="logo-area">
-                <div class="logo-icon" style="background:var(--primary); color:#fff;" aria-hidden="true">i</div>
+                <div class="logo-icon" style="background:var(--primary); color:#fff;" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
                 <div class="logo-text"><h1>INFO APLIKASI</h1></div>
             </div>
         </header>
@@ -386,7 +394,7 @@
         </div>
 
         <div class="tools-section" style="padding:20px; margin-bottom:15px;">
-            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px; color:#ff3333;"> Penafian & Keamanan (Disclaimer)</h3>
+            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px; color:#ff3333;">Penafian & Keamanan (Disclaimer)</h3>
             <p style="font-size:11px; line-height:1.6; opacity:0.8; margin-bottom:10px;">
                 Zenkai Tools tidak berafiliasi dengan TikTok, Instagram, Facebook, Pinterest, atau Roblox. Segala konten yang diunduh melalui tool ini adalah tanggung jawab pengguna. Mohon gunakan dengan bijak dan hormati hak cipta.
             </p>
