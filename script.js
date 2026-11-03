@@ -715,15 +715,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================
-        // FITUR KOMIK (ZENKAI COMICS - 3 TAB)
+        // FITUR KOMIK (ZENKAI COMICS - NO HERO, AUTO TYPE DETECTOR)
         // =========================================
         else if (tool === 'komik') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <div style="background:var(--bg); min-height: 100vh; padding-bottom: 20px; font-family: var(--font-main);">
                     
-                    <!-- HEADER WEBTOON STYLE -->
-                    <div style="display:flex; align-items:center; justify-content:space-between; padding: 0 15px; margin-bottom: 20px; margin-top: 10px;">
+                    <!-- HEADER WEBTOON STYLE (RAPAT KE ATAS) -->
+                    <div style="display:flex; align-items:center; justify-content:space-between; padding: 0 15px; margin-bottom: 15px; margin-top: 5px;">
                         <div style="display:flex; align-items:center; gap:10px;">
                             <div style="background:var(--primary); color:#000; padding:6px; border-radius:8px; font-weight:900; font-size:18px; transform: rotate(-5deg);">Z</div>
                             <div>
@@ -733,13 +733,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
 
-                    <!-- BANNER HERO (Seperti Webtoon/KomikIndo) -->
-                    <div id="komik-hero" style="margin: 0 15px 20px 15px; border-radius: 16px; overflow: hidden; position: relative; background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border:2px solid var(--border); box-shadow: 0 10px 20px rgba(0,0,0,0.3); padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 140px;">
-                        <h4 style="color:#fff; font-size:16px; font-weight:800; margin:0 0 5px 0;">Selamat Datang di Zenkai Comics</h4>
-                        <p style="color:rgba(255,255,255,0.7); font-size:11px; margin:0; line-height:1.4;">Zenkai Comics adalah platform baca komik online (Manga, Manhwa, Manhua) Bahasa Indonesia terlengkap dan terupdate setiap hari secara gratis!</p>
+                    <!-- TEKS DESKRIPSI (PENGGANTI HERO BANNER) -->
+                    <div style="padding: 0 15px; margin-bottom: 20px;">
+                        <p style="font-size:11px; color:var(--text); opacity:0.7; line-height:1.5; margin:0;">
+                            Selamat datang di <b style="color:var(--primary);">Zenkai Comics</b>. Platform baca komik online (Manga, Manhwa, Manhua) Bahasa Indonesia terlengkap dan terupdate setiap hari secara gratis. Silakan telusuri katalog di bawah ini.
+                        </p>
                     </div>
 
-                    <!-- TAB NAVIGASI BARU (3 TAB) -->
+                    <!-- TAB NAVIGASI (3 TAB) -->
                     <div style="display:flex; gap:8px; margin-bottom:20px; padding: 0 15px; background:rgba(0,0,0,0.1); border-radius:12px;">
                         <button id="tab-terbaru" onclick="switchKomikTab('terbaru', this)" class="cat-btn active" style="flex:1; padding:10px; font-size:12px; border-radius:8px; border:none; box-shadow:none; font-weight:800; display:flex; flex-direction:column; align-items:center; gap:4px;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -768,31 +769,26 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
-            const heroBanner = document.getElementById('komik-hero');
             let currentTab = 'terbaru'; 
+
+            // Fungsi Deteksi Tipe Komik (Manga/Manhwa/Manhua)
+            const getTipeKomik = (title) => {
+                const t = title.toLowerCase();
+                if (t.includes('manhwa') || t.includes('korea')) return { label: 'MANHWA', color: '#00ffcc' };
+                if (t.includes('manhua') || t.includes('china') || t.includes('chinese')) return { label: 'MANHUA', color: '#ff007f' };
+                return { label: 'MANGA', color: '#ffcc00' }; // Default Manga
+            };
 
             // Fungsi Pindah Tab
             window.switchKomikTab = (tab, btn) => {
                 currentTab = tab;
                 document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
                 if (btn) btn.classList.add('active');
-                
-                // Sembunyikan banner hero jika bukan di tab beranda
-                if (tab === 'terbaru' && !input.value.trim()) {
-                    heroBanner.style.display = 'flex';
-                } else {
-                    heroBanner.style.display = 'none';
-                }
-                
                 loadKatalog(input.value.trim());
             };
 
             // FUNGSI LOAD KATALOG
             const loadKatalog = async (query) => {
-                // Sembunyikan banner kalau sedang mencari
-                if (query) heroBanner.style.display = 'none';
-                else if (currentTab === 'terbaru') heroBanner.style.display = 'flex';
-                
                 const favoritList = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
 
                 // JIKA TAB FAVORIT DIPILIH
@@ -808,11 +804,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
 
-                    // Render List Favorit (Grid Katalog)
+                    // Render List Favorit
                     let htmlFav = `<h4 style="font-size:14px; margin-bottom:15px; font-weight:800; border-bottom:2px dashed var(--border); padding-bottom:10px;">Daftar Favorit Kamu</h4>`;
                     htmlFav += `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
                     
                     favoritList.forEach(f => {
+                        const tipe = getTipeKomik(f.title);
                         htmlFav += `
                             <div class="fav-item-detail" data-title="${escapeHTML(f.title)}" data-slug="${escapeHTML(f.slug)}" style="cursor:pointer; display:flex; flex-direction:column; gap:8px;">
                                 <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:10px; overflow:hidden; background:#222; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
@@ -821,7 +818,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <svg viewBox="0 0 24 24" fill="#fff" width="12" height="12"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                                     </div>
                                 </div>
-                                <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(f.title)}</h4>
+                                <div>
+                                    <span style="font-size:8px; font-weight:900; background:${tipe.color}; color:#000; padding:2px 6px; border-radius:4px; display:inline-block; margin-bottom:4px;">${tipe.label}</span>
+                                    <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(f.title)}</h4>
+                                </div>
                             </div>
                         `;
                     });
@@ -834,7 +834,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // JIKA TAB BERANDA / KATALOG (FETCH API)
+                // JIKA TAB BERANDA / KATALOG
                 box.innerHTML = '<div class="loader" style="margin-top:30px;"></div>';
                 try {
                     let bodyData = {};
@@ -894,6 +894,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const title = (manga.title || 'Tanpa Judul').replace(/^Komik\s+/i, '');
                         const cover = manga.cover || 'https://via.placeholder.com/150';
                         const slug = manga.slug; 
+                        const tipe = getTipeKomik(title);
                         const updated = manga.updatedAt ? `<span style="position:absolute; bottom:0; left:0; right:0; font-size:8px; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); color:#fff; padding:20px 5px 5px 5px; text-align:center; font-weight:600;">${escapeHTML(manga.updatedAt)}</span>` : '';
                         
                         html += `
@@ -902,7 +903,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <img src="${cover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
                                     ${updated}
                                 </div>
-                                <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(title)}</h4>
+                                <div>
+                                    <span style="font-size:8px; font-weight:900; background:${tipe.color}; color:#000; padding:2px 6px; border-radius:4px; display:inline-block; margin-bottom:4px;">${tipe.label}</span>
+                                    <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(title)}</h4>
+                                </div>
                             </div>
                         `;
                     });
@@ -918,10 +922,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // FUNGSI BUKA DETAIL (Tampilan Dipercantik)
+            // FUNGSI BUKA DETAIL
             const bukaDetail = async (title, slug) => {
                 box.innerHTML = '<div class="loader"></div>';
-                heroBanner.style.display = 'none'; // Sembunyikan banner saat masuk detail
 
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
@@ -932,6 +935,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (!data.status) throw new Error('Gagal mengambil detail');
                     const detail = data.result || data.data;
+                    const tipe = getTipeKomik(title);
                     
                     let chapters = [];
                     if (detail.chapters && detail.chapters.length > 0) {
@@ -980,6 +984,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div style="display:flex; gap:15px; margin-bottom:20px;">
                             <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:110px; height:150px; object-fit:cover; border-radius:10px; border:2px solid var(--border); box-shadow:0 8px 20px rgba(0,0,0,0.3);">
                             <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+                                <span style="font-size:9px; font-weight:900; background:${tipe.color}; color:#000; padding:3px 8px; border-radius:4px; display:inline-block; align-self:flex-start; margin-bottom:5px;">${tipe.label}</span>
                                 <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
                                 <p style="font-size:10px; color:var(--primary); font-weight:700; margin:0 0 15px 0;">Status: Berjalan</p>
                                 
@@ -1996,15 +2001,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // FUNGSI BACA KOMIK (FITUR WEBTOON)
+    // FUNGSI BACA KOMIK (WEBTOON READER)
     // =========================================
     window.bacaKomik = async (title, slug) => {
         const box = document.getElementById('komik-res');
         box.innerHTML = '<div class="loader"></div>';
         
-        const heroBanner = document.getElementById('komik-hero');
-        if(heroBanner) heroBanner.style.display = 'none';
-
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -2033,6 +2035,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const prevSlug = data.result?.navigation?.prevSlug || data.result?.prev || null;
             const nextSlug = data.result?.navigation?.nextSlug || data.result?.next || null;
 
+            // UI READER DENGAN TOMBOL YANG DIPERBAIKI
             let html = `
                 <div class="reader-header">
                     <button class="btn-back-reader press" style="background:var(--card-bg); border:2px solid var(--border); width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
@@ -2043,31 +2046,35 @@ document.addEventListener('DOMContentLoaded', () => {
                         Daftar
                     </button>
                 </div>
-                <div class="reader-container">
+                <div class="reader-container" style="background:#000; padding:0; margin:0;">
             `;
             
             images.forEach(imgUrl => {
                 const proxiedImg = `https://wsrv.nl/?url=${encodeURIComponent(imgUrl)}`;
-                html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" loading="lazy" onerror="this.style.display='none'">`;
+                html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" loading="lazy" onerror="this.style.display='none'" style="width:100%; display:block; margin:0; padding:0;">`;
             });
             
             html += `</div>`;
 
+            // TOMBOL NEXT/PREV DIPERBAIKI (WARNA CYBERPUNK)
             html += `
-                <div class="reader-nav">
-                    <button class="btn-prev-next press" data-slug="${escapeHTML(prevSlug || '')}" data-title="${escapeHTML(title)}" ${!prevSlug ? 'disabled style="opacity:0.3; flex:1; margin:0;"' : 'style="flex:1; margin:0;"'}>
-                        « Prev
+                <div style="display:flex; gap:10px; padding:15px 15px 5px 15px; background:var(--bg);">
+                    <button class="btn-prev-next press" data-slug="${escapeHTML(prevSlug || '')}" data-title="${escapeHTML(title)}" ${!prevSlug ? 'disabled' : ''} 
+                        style="flex:1; background:var(--card-bg); color:var(--text); border:2px solid var(--border); padding:12px; border-radius:8px; font-weight:900; display:flex; align-items:center; justify-content:center; gap:5px; cursor:pointer; opacity:${!prevSlug ? '0.4' : '1'}; transition:0.2s;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="16" height="16"><path d="M15 18l-6-6 6-6"/></svg> Prev
                     </button>
-                    <button class="btn-prev-next press" data-slug="${escapeHTML(nextSlug || '')}" data-title="${escapeHTML(title)}" ${!nextSlug ? 'disabled style="opacity:0.3; flex:1; margin:0;"' : 'style="flex:1; margin:0;"'}>
-                        Next »
+                    <button class="btn-prev-next press" data-slug="${escapeHTML(nextSlug || '')}" data-title="${escapeHTML(title)}" ${!nextSlug ? 'disabled' : ''} 
+                        style="flex:1; background:var(--primary); color:#000; border:2px solid var(--border); padding:12px; border-radius:8px; font-weight:900; display:flex; align-items:center; justify-content:center; gap:5px; cursor:pointer; opacity:${!nextSlug ? '0.4' : '1'}; transition:0.2s;">
+                        Next <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
                     </button>
                 </div>
-                <button class="btn-back-katalog action-btn press" style="background:#ff3333; margin: 0 15px 20px 15px; color:#fff;">Kembali ke Katalog</button>
+                <button class="btn-back-katalog action-btn press" style="background:#ff3333; color:#fff; margin: 0 15px 20px 15px; width:calc(100% - 30px);">Kembali ke Katalog</button>
             `;
             
             box.innerHTML = html;
             window.scrollTo({ top: 0, behavior: 'auto' });
 
+            // Event Listener
             box.querySelector('.btn-back-reader').addEventListener('click', () => openTool('komik'));
             box.querySelector('.btn-daftar-reader').addEventListener('click', () => openTool('komik'));
             box.querySelector('.btn-back-katalog').addEventListener('click', () => openTool('komik'));
@@ -2090,4 +2097,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-}); // <- PENUTUP DOMContentLoaded, JANGAN DIHAPUS
+}); // <- PENUTUP DOMContentLoaded
