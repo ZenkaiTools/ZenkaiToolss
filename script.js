@@ -885,7 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            loadKatalog(''); 
+            loadKatalog('martial peak'); 
             
             let timeout = null;
             input.addEventListener('input', (e) => {
