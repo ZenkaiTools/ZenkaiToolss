@@ -684,7 +684,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 9. FUNGSI OPEN TOOL (BAGIAN 1)
+    // 9. FUNGSI OPEN TOOL
     // =========================================
     window.openTool = (tool) => {
         if (!modal || !modalContent) return;
@@ -715,107 +715,134 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================
-        // FITUR KOMIK (DIPERBARUI)
+        // FITUR KOMIK (ZENKAI COMICS - 3 TAB)
         // =========================================
         else if (tool === 'komik') {
             modalContent.innerHTML = `
                 ${closeSvg}
-                <div style="background:var(--bg); min-height: 80vh; padding-bottom: 20px; font-family: var(--font-main);">
-                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; padding: 0 5px;">
-                        <div>
-                            <h3 style="font-family:var(--font-head); color:var(--text); font-size:24px; margin:0; letter-spacing:1px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">KATALOG</h3>
-                            <p style="font-size:10px; color:var(--primary); margin:0; font-weight:800; letter-spacing:2px;">ZENKAI COMICS</p>
+                <div style="background:var(--bg); min-height: 100vh; padding-bottom: 20px; font-family: var(--font-main);">
+                    
+                    <!-- HEADER WEBTOON STYLE -->
+                    <div style="display:flex; align-items:center; justify-content:space-between; padding: 0 15px; margin-bottom: 20px; margin-top: 10px;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <div style="background:var(--primary); color:#000; padding:6px; border-radius:8px; font-weight:900; font-size:18px; transform: rotate(-5deg);">Z</div>
+                            <div>
+                                <h3 style="font-family:var(--font-head); color:var(--text); font-size:20px; margin:0; letter-spacing:1px;">Zenkai<span style="color:var(--primary);">Comics</span></h3>
+                                <p style="font-size:9px; color:var(--text); opacity:0.6; margin:0; font-weight:700; letter-spacing:1px;">BACA KOMIK GRATIS</p>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div style="display:flex; gap:8px; margin-bottom:15px; padding: 0 5px; background:rgba(0,0,0,0.2); padding:5px; border-radius:10px;">
-                        <button id="tab-terbaru" onclick="switchKomikTab('terbaru', this)" class="cat-btn active" style="flex:1; padding:10px; font-size:12px; border-radius:8px; border:none; box-shadow:none; font-weight:800;">Terbaru</button>
-                        <button id="tab-semua" onclick="switchKomikTab('semua', this)" class="cat-btn" style="flex:1; padding:10px; font-size:12px; border-radius:8px; border:none; box-shadow:none; font-weight:800;">Semua</button>
+
+                    <!-- BANNER HERO (Seperti Webtoon/KomikIndo) -->
+                    <div id="komik-hero" style="margin: 0 15px 20px 15px; border-radius: 16px; overflow: hidden; position: relative; background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border:2px solid var(--border); box-shadow: 0 10px 20px rgba(0,0,0,0.3); padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 140px;">
+                        <h4 style="color:#fff; font-size:16px; font-weight:800; margin:0 0 5px 0;">Selamat Datang di Zenkai Comics</h4>
+                        <p style="color:rgba(255,255,255,0.7); font-size:11px; margin:0; line-height:1.4;">Zenkai Comics adalah platform baca komik online (Manga, Manhwa, Manhua) Bahasa Indonesia terlengkap dan terupdate setiap hari secara gratis!</p>
                     </div>
 
-                    <div style="position:relative; margin-bottom:20px; padding: 0 5px;">
-                        <input type="text" id="komik-q" placeholder="Cari judul komik..." style="width:100%; padding:14px 14px 14px 45px; border:none; border-radius:12px; background:var(--card-bg); color:var(--text); font-size:13px; outline:none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border:2px solid var(--border);">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:20px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <!-- TAB NAVIGASI BARU (3 TAB) -->
+                    <div style="display:flex; gap:8px; margin-bottom:20px; padding: 0 15px; background:rgba(0,0,0,0.1); border-radius:12px;">
+                        <button id="tab-terbaru" onclick="switchKomikTab('terbaru', this)" class="cat-btn active" style="flex:1; padding:10px; font-size:12px; border-radius:8px; border:none; box-shadow:none; font-weight:800; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            Beranda
+                        </button>
+                        <button id="tab-semua" onclick="switchKomikTab('semua', this)" class="cat-btn" style="flex:1; padding:10px; font-size:12px; border-radius:8px; border:none; box-shadow:none; font-weight:800; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                            Katalog
+                        </button>
+                        <button id="tab-favorit" onclick="switchKomikTab('favorit', this)" class="cat-btn" style="flex:1; padding:10px; font-size:12px; border-radius:8px; border:none; box-shadow:none; font-weight:800; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            Favorit
+                        </button>
+                    </div>
+
+                    <!-- SEARCH BAR -->
+                    <div style="position:relative; margin-bottom:20px; padding: 0 15px;">
+                        <input type="text" id="komik-q" placeholder="Cari judul manga, manhwa..." style="width:100%; padding:14px 14px 14px 45px; border:none; border-radius:12px; background:var(--card-bg); color:var(--text); font-size:13px; outline:none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border:1px solid var(--border);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:28px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </div>
                     
-                    <div id="komik-history" style="padding: 0 5px;"></div>
-                    <div id="komik-favorit" style="padding: 0 5px;"></div>
-                    <div id="komik-res" style="padding: 0 5px;"></div>
+                    <!-- CONTAINER UTAMA -->
+                    <div id="komik-res" style="padding: 0 15px;"></div>
                 </div>
             `;
             
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
+            const heroBanner = document.getElementById('komik-hero');
             let currentTab = 'terbaru'; 
 
+            // Fungsi Pindah Tab
             window.switchKomikTab = (tab, btn) => {
                 currentTab = tab;
                 document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
                 if (btn) btn.classList.add('active');
+                
+                // Sembunyikan banner hero jika bukan di tab beranda
+                if (tab === 'terbaru' && !input.value.trim()) {
+                    heroBanner.style.display = 'flex';
+                } else {
+                    heroBanner.style.display = 'none';
+                }
+                
                 loadKatalog(input.value.trim());
             };
 
+            // FUNGSI LOAD KATALOG
             const loadKatalog = async (query) => {
-                const historyBox = document.getElementById('komik-history');
-                const favoritBox = document.getElementById('komik-favorit');
-                const lastRead = localStorage.getItem('zenkai_last_read');
+                // Sembunyikan banner kalau sedang mencari
+                if (query) heroBanner.style.display = 'none';
+                else if (currentTab === 'terbaru') heroBanner.style.display = 'flex';
+                
                 const favoritList = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
 
-                if (lastRead && !query && currentTab === 'terbaru') {
-                    const h = JSON.parse(lastRead);
-                    historyBox.innerHTML = `
-                        <div style="background:linear-gradient(145deg, var(--card-bg), rgba(0,255,204,0.05)); border:2px solid var(--primary); padding:15px; border-radius:12px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; margin-bottom:15px; box-shadow: 0 4px 15px rgba(0,255,204,0.1);" onclick="bacaKomik('${h.comicTitle.replace(/'/g, "\\'")}', '${h.slug}')">
-                            <div style="display:flex; align-items:center; gap:12px;">
-                                <div style="background:var(--primary); color:#000; padding:8px; border-radius:8px; box-shadow: 2px 2px 0 rgba(0,0,0,0.5);">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                                </div>
-                                <div>
-                                    <p style="font-size:10px; margin:0; opacity:0.8; font-weight:800; letter-spacing:1px; color:var(--primary);">LANJUT BACA</p>
-                                    <h5 style="font-size:13px; margin:4px 0 0 0; font-weight:700; line-height:1.2; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(h.comicTitle)}</h5>
-                                    <p style="font-size:10px; margin:2px 0 0 0; opacity:0.6;">${escapeHTML(h.chapterTitle)}</p>
-                                </div>
+                // JIKA TAB FAVORIT DIPILIH
+                if (currentTab === 'favorit' && !query) {
+                    if (favoritList.length === 0) {
+                        box.innerHTML = `
+                            <div style="text-align:center; padding: 40px 20px; opacity:0.7;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="60" height="60" style="margin-bottom:15px; opacity:0.5;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                <h4 style="font-size:14px; font-weight:800; margin-bottom:5px;">Belum Ada Favorit</h4>
+                                <p style="font-size:12px;">Jelajahi katalog dan tekan tombol ❤️ untuk menyimpan komik di sini.</p>
                             </div>
-                            <div style="background:rgba(255,255,255,0.1); padding:6px; border-radius:50%;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
-                            </div>
-                        </div>
-                    `;
-                } else if (historyBox) { historyBox.innerHTML = ''; }
+                        `;
+                        return;
+                    }
 
-                if (favoritList.length > 0 && !query && currentTab === 'semua') {
-                    let htmlFav = `
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; margin-top:5px;">
-                            <svg viewBox="0 0 24 24" fill="#ff3333" stroke="#ff3333" width="16" height="16"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                            <h4 style="font-size:13px; font-weight:800; margin:0; color:var(--text);">Koleksi Favorit</h4>
-                        </div>
-                        <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:15px; scrollbar-width:none; margin-bottom:15px;">
-                    `;
+                    // Render List Favorit (Grid Katalog)
+                    let htmlFav = `<h4 style="font-size:14px; margin-bottom:15px; font-weight:800; border-bottom:2px dashed var(--border); padding-bottom:10px;">Daftar Favorit Kamu</h4>`;
+                    htmlFav += `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
+                    
                     favoritList.forEach(f => {
                         htmlFav += `
-                            <div class="fav-item" data-title="${escapeHTML(f.title)}" data-slug="${escapeHTML(f.slug)}" style="min-width:90px; max-width:90px; cursor:pointer;">
-                                <div style="width:90px; height:120px; border-radius:10px; overflow:hidden; border:2px solid var(--border); position:relative; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-                                    <img src="${escapeHTML(f.cover)}" style="width:100%; height:100%; object-fit:cover;">
-                                    <div style="position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.6); padding:4px; border-radius:50%; backdrop-filter:blur(2px);">
-                                        <svg viewBox="0 0 24 24" fill="#ff3333" width="12" height="12"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            <div class="fav-item-detail" data-title="${escapeHTML(f.title)}" data-slug="${escapeHTML(f.slug)}" style="cursor:pointer; display:flex; flex-direction:column; gap:8px;">
+                                <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:10px; overflow:hidden; background:#222; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+                                    <img src="${escapeHTML(f.cover)}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                    <div style="position:absolute; top:5px; right:5px; background:rgba(255,51,51,0.9); padding:4px; border-radius:50%;">
+                                        <svg viewBox="0 0 24 24" fill="#fff" width="12" height="12"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                                     </div>
                                 </div>
-                                <p style="font-size:10px; font-weight:700; margin-top:8px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(f.title)}</p>
+                                <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(f.title)}</h4>
                             </div>
                         `;
                     });
                     htmlFav += `</div>`;
-                    favoritBox.innerHTML = htmlFav;
-                    
-                    favoritBox.querySelectorAll('.fav-item').forEach(el => {
+                    box.innerHTML = htmlFav;
+
+                    box.querySelectorAll('.fav-item-detail').forEach(el => {
                         el.addEventListener('click', () => bukaDetail(el.dataset.title, el.dataset.slug));
                     });
-                } else if (favoritBox) { favoritBox.innerHTML = ''; }
+                    return;
+                }
 
+                // JIKA TAB BERANDA / KATALOG (FETCH API)
                 box.innerHTML = '<div class="loader" style="margin-top:30px;"></div>';
                 try {
                     let bodyData = {};
-                    if (query) bodyData = { action: 'search', q: query };
-                    else bodyData = { action: currentTab === 'terbaru' ? 'latest' : 'daftar' };
+                    if (query) {
+                        bodyData = { action: 'search', q: query };
+                    } else {
+                        bodyData = { action: currentTab === 'terbaru' ? 'latest' : 'daftar' };
+                    }
 
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -829,18 +856,45 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
 
-                    let headerHtml = '';
-                    if (query) headerHtml = `<h4 style="font-size:12px; margin-bottom:12px; opacity:0.7;">Hasil pencarian: "${escapeHTML(query)}"</h4>`;
-                    else if (currentTab === 'semua') headerHtml = `<h4 style="font-size:14px; margin-bottom:15px; font-weight:800; border-bottom:2px dashed var(--border); padding-bottom:10px;">Semua Katalog</h4>`;
-                    else headerHtml = `<h4 style="font-size:14px; margin-bottom:15px; font-weight:800; border-bottom:2px dashed var(--border); padding-bottom:10px;">Update Terbaru</h4>`;
+                    // Render Lanjut Baca (Hanya di Beranda)
+                    const lastRead = localStorage.getItem('zenkai_last_read');
+                    let historyHtml = '';
+                    if (lastRead && !query && currentTab === 'terbaru') {
+                        const h = JSON.parse(lastRead);
+                        historyHtml = `
+                            <div style="margin-bottom: 25px;">
+                                <h4 style="font-size:13px; margin-bottom:12px; font-weight:800; color:var(--text);">Lanjut Baca</h4>
+                                <div style="background:linear-gradient(145deg, var(--card-bg), rgba(0,255,204,0.05)); border:2px solid var(--primary); padding:15px; border-radius:12px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; box-shadow: 0 4px 15px rgba(0,255,204,0.1);" onclick="bacaKomik('${h.comicTitle.replace(/'/g, "\\'")}', '${h.slug}')">
+                                    <div style="display:flex; align-items:center; gap:12px;">
+                                        <div style="background:var(--primary); color:#000; padding:10px; border-radius:8px; box-shadow: 2px 2px 0 rgba(0,0,0,0.5);">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                                        </div>
+                                        <div>
+                                            <h5 style="font-size:13px; margin:0 0 4px 0; font-weight:800; line-height:1.2; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(h.comicTitle)}</h5>
+                                            <p style="font-size:11px; margin:0; opacity:0.7; color:var(--primary); font-weight:700;">${escapeHTML(h.chapterTitle)}</p>
+                                        </div>
+                                    </div>
+                                    <div style="background:rgba(255,255,255,0.1); padding:8px; border-radius:50%;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
 
-                    let html = headerHtml + `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
+                    // Render Katalog Grid
+                    let titleSection = '';
+                    if (query) titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Hasil Pencarian "${escapeHTML(query)}"</h4>`;
+                    else if (currentTab === 'terbaru') titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Update Terbaru</h4>`;
+                    else titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Semua Komik</h4>`;
+
+                    let html = historyHtml + titleSection + `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
                     
                     komikList.forEach(manga => {
                         const title = (manga.title || 'Tanpa Judul').replace(/^Komik\s+/i, '');
                         const cover = manga.cover || 'https://via.placeholder.com/150';
                         const slug = manga.slug; 
-                        const updated = manga.updatedAt ? `<span style="position:absolute; bottom:0; left:0; right:0; font-size:8px; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); color:#fff; padding:15px 5px 5px 5px; text-align:center;">${escapeHTML(manga.updatedAt)}</span>` : '';
+                        const updated = manga.updatedAt ? `<span style="position:absolute; bottom:0; left:0; right:0; font-size:8px; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); color:#fff; padding:20px 5px 5px 5px; text-align:center; font-weight:600;">${escapeHTML(manga.updatedAt)}</span>` : '';
                         
                         html += `
                             <div class="komik-card-jere" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" style="cursor:pointer; display:flex; flex-direction:column; gap:8px;">
@@ -864,10 +918,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
+            // FUNGSI BUKA DETAIL (Tampilan Dipercantik)
             const bukaDetail = async (title, slug) => {
                 box.innerHTML = '<div class="loader"></div>';
-                document.getElementById('komik-history').innerHTML = '';
-                document.getElementById('komik-favorit').innerHTML = '';
+                heroBanner.style.display = 'none'; // Sembunyikan banner saat masuk detail
 
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
@@ -903,43 +957,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const isFav = cekFavorit(slug);
                     const lastRead = localStorage.getItem('zenkai_last_read');
-                    let historyBtn = '';
+                    let lanjutBacaBtn = '';
                     if (lastRead) {
                         const h = JSON.parse(lastRead);
                         if (h.comicTitle === title) {
-                            historyBtn = `
+                            lanjutBacaBtn = `
                                 <button class="btn-lanjut" data-title="${escapeHTML(h.comicTitle)}" data-slug="${escapeHTML(h.slug)}" style="width:100%; background:var(--primary); color:#000; border:2px solid var(--border); padding:14px; border-radius:12px; font-weight:900; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:20px; box-shadow:0 4px 0 var(--border);">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="18" height="18"><path d="M5 3l14 9-14 9V3z"/></svg>
-                                    Lanjut Baca Chapter ${escapeHTML(h.chapterTitle.split('Chapter ')[1] || '')}
+                                    Lanjut Chapter ${escapeHTML(h.chapterTitle.split('Chapter ')[1] || '')}
                                 </button>
                             `;
                         }
                     }
 
                     let html = `
-                        <button class="btn-back press" style="background:var(--card-bg); border:2px solid var(--border); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; cursor:pointer;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
+                        <!-- TOMBOL BACK -->
+                        <button class="btn-back press" style="background:var(--card-bg); border:1px solid var(--border); width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:20px; cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg>
                         </button>
                         
+                        <!-- INFO KOMIK -->
                         <div style="display:flex; gap:15px; margin-bottom:20px;">
-                            <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:110px; height:150px; object-fit:cover; border-radius:12px; border:2px solid var(--border); box-shadow:0 5px 15px rgba(0,0,0,0.3);">
+                            <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:110px; height:150px; object-fit:cover; border-radius:10px; border:2px solid var(--border); box-shadow:0 8px 20px rgba(0,0,0,0.3);">
                             <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
-                                <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 10px 0; line-height:1.2;">${escapeHTML(title)}</h3>
-                                <button class="btn-fav" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" data-cover="${escapeHTML(detail.cover || '')}" style="align-self:flex-start; background:${isFav ? 'rgba(255,51,51,0.15)' : 'rgba(255,255,255,0.05)'}; color:${isFav ? '#ff3333' : 'var(--text)'}; border:2px solid ${isFav ? '#ff3333' : 'var(--border)'}; padding:8px 16px; border-radius:20px; font-weight:800; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:6px; transition:0.3s;">
+                                <h3 style="font-family:var(--font-head); font-size:20px; color:var(--text); margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
+                                <p style="font-size:10px; color:var(--primary); font-weight:700; margin:0 0 15px 0;">Status: Berjalan</p>
+                                
+                                <!-- TOMBOL FAVORIT -->
+                                <button class="btn-fav" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" data-cover="${escapeHTML(detail.cover || '')}" style="align-self:flex-start; background:${isFav ? 'rgba(255,51,51,0.15)' : 'rgba(255,255,255,0.05)'}; color:${isFav ? '#ff3333' : 'var(--text)'}; border:1px solid ${isFav ? '#ff3333' : 'var(--border)'}; padding:8px 16px; border-radius:20px; font-weight:800; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:6px; transition:0.3s;">
                                     <svg viewBox="0 0 24 24" fill="${isFav ? '#ff3333' : 'none'}" stroke="${isFav ? '#ff3333' : 'currentColor'}" stroke-width="2" width="16" height="16"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                                    ${isFav ? 'Tersimpan' : 'Favorit'}
+                                    ${isFav ? 'Tersimpan' : '+ Favorit'}
                                 </button>
                             </div>
                         </div>
 
-                        <div style="background:var(--card-bg); border:2px dashed var(--border); padding:15px; border-radius:10px; margin-bottom:20px;">
+                        <!-- SINOPSIS -->
+                        <div style="background:var(--card-bg); border:1px solid var(--border); padding:15px; border-radius:12px; margin-bottom:25px;">
                             <p style="font-size:12px; color:var(--text); opacity:0.8; line-height:1.6; max-height: 120px; overflow-y: auto; margin:0;">${escapeHTML(detail.sinopsis || detail.synopsis || detail.description || 'Tidak ada sinopsis.')}</p>
                         </div>
 
-                        ${historyBtn}
+                        ${lanjutBacaBtn}
 
-                        <h4 style="margin-bottom:15px; font-size:14px; font-weight:800; border-bottom:2px solid var(--border); padding-bottom:10px;">Daftar Chapter (${chapters.length})</h4>
-                        <div style="display:flex; flex-direction:column; gap:10px;">
+                        <h4 style="margin-bottom:15px; font-size:14px; font-weight:800; border-bottom:2px dashed var(--border); padding-bottom:10px;">Daftar Chapter (${chapters.length})</h4>
+                        <div style="display:flex; flex-direction:column; gap:8px;">
                     `;
 
                     if (chapters.length === 0) {
@@ -947,13 +1007,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         chapters.forEach(ch => {
                             html += `
-                                <div class="chapter-item press" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(ch.slug)}" style="display:flex; align-items:center; justify-content:space-between; background:var(--card-bg); border:2px solid var(--border); padding:12px 15px; border-radius:10px; cursor:pointer; transition:0.2s;">
+                                <div class="chapter-item press" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(ch.slug)}" style="display:flex; align-items:center; justify-content:space-between; background:var(--card-bg); border:1px solid var(--border); padding:12px 15px; border-radius:10px; cursor:pointer; transition:0.2s;">
                                     <div>
-                                        <h5 style="margin:0 0 4px 0; font-size:13px; font-weight:800; color:var(--text);">${escapeHTML(ch.title)}</h5>
+                                        <h5 style="margin:0 0 4px 0; font-size:13px; font-weight:700; color:var(--text);">${escapeHTML(ch.title)}</h5>
                                         <p style="margin:0; font-size:10px; color:var(--text); opacity:0.6;">${escapeHTML(ch.date || '')}</p>
                                     </div>
-                                    <div style="background:rgba(0,255,204,0.1); padding:6px; border-radius:50%;">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
+                                    <div style="background:rgba(0,0,0,0.05); padding:6px; border-radius:50%;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" width="14" height="14"><path d="M9 18l6-6-6-6"/></svg>
                                     </div>
                                 </div>
                             `;
@@ -963,8 +1023,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     html += `</div>`;
                     box.innerHTML = html;
 
+                    // EVENT LISTENER
                     box.querySelector('.btn-back').addEventListener('click', () => openTool('komik'));
                     
+                    // Tombol Favorit
                     box.querySelector('.btn-fav').addEventListener('click', function() {
                         const t = this.dataset.title;
                         const s = this.dataset.slug;
@@ -977,7 +1039,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         this.style.borderColor = isNowFav ? '#ff3333' : 'var(--border)';
                         this.innerHTML = `
                             <svg viewBox="0 0 24 24" fill="${isNowFav ? '#ff3333' : 'none'}" stroke="${isNowFav ? '#ff3333' : 'currentColor'}" stroke-width="2" width="16" height="16"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                            ${isNowFav ? 'Tersimpan' : 'Favorit'}
+                            ${isNowFav ? 'Tersimpan' : '+ Favorit'}
                         `;
                     });
 
@@ -1005,7 +1067,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 800);
             });
         }
-                else if (tool === 'tiktok') {
+        else if (tool === 'tiktok') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>TikTok DL</h3>
@@ -1940,10 +2002,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const box = document.getElementById('komik-res');
         box.innerHTML = '<div class="loader"></div>';
         
-        const histEl = document.getElementById('komik-history');
-        const favEl = document.getElementById('komik-favorit');
-        if(histEl) histEl.innerHTML = '';
-        if(favEl) favEl.innerHTML = '';
+        const heroBanner = document.getElementById('komik-hero');
+        if(heroBanner) heroBanner.style.display = 'none';
 
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
