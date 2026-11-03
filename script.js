@@ -825,18 +825,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!data.status) throw new Error('Gagal mengambil detail');
                     const detail = data.result || data.data;
                     
-                    // Trik: Ambil chapter dari array 'genres' yang berantakan
-                    let rawChapters = detail.genres || detail.chapters || detail.chapter_list || []; 
-                    
-                    let chapters = rawChapters.filter(item => typeof item === 'string' && item.includes('Chapter')).map(ch => {
-                        const numMatch = ch.match(/Chapter\s+([\d.]+)/i);
-                        const num = numMatch ? numMatch[1] : ch.replace('Chapter ', '');
-                        return {
-                            title: ch,
-                            slug: `${slug}-chapter-${num.replace('.', '-')}` 
-                        };
-                    });
+                    let chapters = [];
 
+                    // 1. Cek apakah ada array 'chapters' (Pake API Key Baru)
+                    if (detail.chapters && detail.chapters.length > 0) {
+                        chapters = detail.chapters.map(ch => ({
+                            title: ch.title || 'Chapter',
+                            slug: ch.slug || ch.link,
+                            date: ch.date || ''
+                        }));
+                    } 
+                    // 2. Kalau kosong, balik ke trik lama (Filter 'genres')
+                    else if (detail.genres) {
+                        let rawChapters = detail.genres;
+                        chapters = rawChapters.filter(item => typeof item === 'string' && item.includes('Chapter')).map(ch => {
+                            const numMatch = ch.match(/Chapter\s+([\d.]+)/i);
+                            const num = numMatch ? numMatch[1] : ch.replace('Chapter ', '');
+                            return {
+                                title: ch,
+                                slug: `${slug}-chapter-${num.replace('.', '-')}`,
+                                date: ''
+                            };
+                        });
+                    }
+                    
                     // Urutkan dari chapter terbaru ke terlama
                     chapters.sort((a, b) => {
                         const numA = parseFloat(a.title.replace(/[^0-9.]/g, ''));
@@ -867,9 +879,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         chapters.forEach(ch => {
                             html += `
-                                <div class="press" onclick="bacaKomik('${escapeHTML(title)}', '${ch.slug}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px 15px; border-radius:8px; cursor:pointer;">
+                                <div class="press" onclick="bacaKomik('${escapeHTML(title)}', '${escapeHTML(ch.slug)}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px 15px; border-radius:8px; cursor:pointer;">
                                     <div style="flex:1;">
                                         <h5 style="margin:0; font-size:12px; font-weight:800; color:var(--text);">${escapeHTML(ch.title)}</h5>
+                                        <p style="margin:2px 0 0 0; font-size:10px; color:var(--text); opacity:0.6;">${escapeHTML(ch.date || '')}</p>
                                     </div>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
                                 </div>
@@ -1824,62 +1837,66 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-// FUNGSI BACA KOMIK (JERE API STREAM)
-// =========================================
-window.bacaKomik = async (title, slug) => {
-    const box = document.getElementById('komik-res');
-    box.innerHTML = '<div class="loader"></div>';
-    try {
-        const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'stream', slug: slug })
-        });
-        const data = await res.json();
-        
-        // AMBIL DARI ARRAY 'pages' (Sesuai JSON Baru)
-        const pagesArray = data.result?.pages || []; 
-        
-        // Jaring Pengaman
-        if (pagesArray.length === 0) {
-            const baseSlug = slug.split('-chapter-')[0]; 
-            const originalUrl = `https://komikindo.ch/komik/${baseSlug}/`;
+    // FUNGSI BACA KOMIK (JERE API STREAM)
+    // =========================================
+    window.bacaKomik = async (title, slug) => {
+        const box = document.getElementById('komik-res');
+        box.innerHTML = '<div class="loader"></div>';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'stream', slug: slug })
+            });
+            const data = await res.json();
             
-            let html = `
-                <div style="text-align:center; padding: 20px;">
-                    <div style="font-size:40px; margin-bottom:10px;">📖</div>
-                    <h4 style="margin-bottom:10px;">Gambar Belum Tersedia</h4>
-                    <p style="font-size:12px; opacity:0.8; margin-bottom:20px;">API gagal mengambil gambar panel. Tapi lu bisa baca chapter ini langsung di web aslinya:</p>
-                    
-                    <a href="${originalUrl}" target="_blank" class="action-btn" style="background:#00ff9d; text-decoration:none; display:block; margin-bottom:10px;">Baca di Web Asli</a>
-                    <button onclick="openTool('komik')" class="action-btn" style="background:var(--card-bg); color:var(--text);">Kembali ke Katalog</button>
-                </div>
-            `;
+            // AMBIL DARI ARRAY 'pages' ATAU 'images'
+            let images = [];
+            if (data.result && data.result.pages && data.result.pages.length > 0) {
+                images = data.result.pages.map(p => p.url || p); // Handle kalau isinya objek atau string
+            } else if (data.result && data.result.images) {
+                images = data.result.images;
+            }
+            
+            // Jaring Pengaman
+            if (images.length === 0) {
+                const baseSlug = slug.split('-chapter-')[0]; 
+                const originalUrl = `https://komikindo.ch/komik/${baseSlug}/`;
+                
+                let html = `
+                    <div style="text-align:center; padding: 20px;">
+                        <div style="font-size:40px; margin-bottom:10px;">📖</div>
+                        <h4 style="margin-bottom:10px;">Gambar Belum Tersedia</h4>
+                        <p style="font-size:12px; opacity:0.8; margin-bottom:20px;">API gagal mengambil gambar panel. Tapi lu bisa baca chapter ini langsung di web aslinya:</p>
+                        
+                        <a href="${originalUrl}" target="_blank" class="action-btn" style="background:#00ff9d; text-decoration:none; display:block; margin-bottom:10px;">Baca di Web Asli</a>
+                        <button onclick="openTool('komik')" class="action-btn" style="background:var(--card-bg); color:var(--text);">Kembali ke Katalog</button>
+                    </div>
+                `;
+                box.innerHTML = html;
+                return;
+            }
+
+            let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
+            html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
+            
+            images.forEach(imgUrl => {
+                // Pakai proxy wsrv.nl biar gambar nggak blank (karena domain gambar sering diblokir)
+                const proxiedImg = `https://wsrv.nl/?url=${encodeURIComponent(imgUrl)}`;
+                html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
+            });
+            html += `</div>`;
+
+            html += `<button class="action-btn press" onclick="openTool('komik')" style="margin-top:15px; background:#ff3333;">Kembali ke Katalog</button>`;
             box.innerHTML = html;
-            return;
+
+        } catch (e) { 
+            box.innerHTML = `
+                <div style="text-align:center; padding: 20px;">
+                    <p class="error-msg">${escapeHTML(e.message)}</p>
+                    <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
+                </div>
+            `; 
         }
-
-        let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
-        html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
-        
-        // LOOPING GAMBAR PAKAI PROXY ANTI-BLANK
-        pagesArray.forEach(page => {
-            const imgUrl = page.url;
-            const proxiedImg = `https://wsrv.nl/?url=${encodeURIComponent(imgUrl)}`;
-            html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" style="width:100%; border-radius:4px; min-height:100px; background:#111;" loading="lazy" onerror="this.style.display='none'">`;
-        });
-        html += `</div>`;
-
-        html += `<button class="action-btn press" onclick="openTool('komik')" style="margin-top:15px; background:#ff3333;">Kembali ke Katalog</button>`;
-        box.innerHTML = html;
-
-    } catch (e) { 
-        box.innerHTML = `
-            <div style="text-align:center; padding: 20px;">
-                <p class="error-msg">${escapeHTML(e.message)}</p>
-                <button onclick="openTool('komik')" class="action-btn" style="margin-top:15px;">Kembali</button>
-            </div>
-        `; 
-    }
-};
+    };
 
 }); // <- PENUTUP DOMContentLoaded, JANGAN DIHAPUS
