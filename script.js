@@ -684,7 +684,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // 9. FUNGSI OPEN TOOL (BAGIAN KOMIK SAJA)
+    // 9. FUNGSI OPEN TOOL
     // =========================================
     window.openTool = (tool) => {
         if (!modal || !modalContent) return;
@@ -715,14 +715,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================
-        // FITUR KOMIK (ZENKAI COMICS - 3 TAB, TYPE AKURAT)
+        // FITUR KOMIK (ZENKAI COMICS - INFINITE SCROLL & AUTO DETECT)
         // =========================================
         else if (tool === 'komik') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <div style="background:var(--bg); min-height: 100vh; padding-bottom: 20px; font-family: var(--font-main);">
                     
-                    <!-- HEADER WEBTOON STYLE (RAPAT KE ATAS) -->
+                    <!-- HEADER WEBTOON STYLE -->
                     <div style="display:flex; align-items:center; justify-content:space-between; padding: 0 15px; margin-bottom: 15px; margin-top: 5px;">
                         <div style="display:flex; align-items:center; gap:10px;">
                             <div style="background:var(--primary); color:#000; padding:6px; border-radius:8px; font-weight:900; font-size:18px; transform: rotate(-5deg);">Z</div>
@@ -733,14 +733,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
 
-                    <!-- TEKS DESKRIPSI (PENGGANTI HERO BANNER) -->
+                    <!-- TEKS DESKRIPSI -->
                     <div style="padding: 0 15px; margin-bottom: 20px;">
                         <p style="font-size:11px; color:var(--text); opacity:0.7; line-height:1.5; margin:0;">
                             Selamat datang di <b style="color:var(--primary);">Zenkai Comics</b>. Platform baca komik online (Manga, Manhwa, Manhua) Bahasa Indonesia terlengkap dan terupdate setiap hari secara gratis. Silakan telusuri katalog di bawah ini.
                         </p>
                     </div>
 
-                    <!-- TAB NAVIGASI (3 TAB) -->
+                    <!-- TAB NAVIGASI -->
                     <div style="display:flex; gap:8px; margin-bottom:20px; padding: 0 15px; background:rgba(0,0,0,0.1); border-radius:12px;">
                         <button id="tab-terbaru" onclick="switchKomikTab('terbaru', this)" class="cat-btn active" style="flex:1; padding:10px; font-size:12px; border-radius:8px; border:none; box-shadow:none; font-weight:800; display:flex; flex-direction:column; align-items:center; gap:4px;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -764,36 +764,70 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     <!-- CONTAINER UTAMA -->
                     <div id="komik-res" style="padding: 0 15px;"></div>
+                    
+                    <!-- LOADER INFINITE SCROLL -->
+                    <div id="komik-load-more" style="display:none; text-align:center; padding: 20px 0;">
+                        <div class="loader" style="width:24px; height:24px; border-width:3px;"></div>
+                    </div>
                 </div>
             `;
             
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
+            const loadMoreEl = document.getElementById('komik-load-more');
+            
             let currentTab = 'terbaru'; 
+            let currentPage = 1;
+            let isLoading = false;
+            let hasMore = true;
 
-            // Fungsi Deteksi Tipe Komik (Manga/Manhwa/Manhua) AKURAT
-            const getTipeKomik = (typeString) => {
-                if (!typeString) return { label: 'MANGA', color: '#ffcc00' }; // Default
-                const t = typeString.toLowerCase();
-                if (t.includes('manhwa')) return { label: 'MANHWA', color: '#00ffcc' };
-                if (t.includes('manhua')) return { label: 'MANHUA', color: '#ff007f' };
-                return { label: 'MANGA', color: '#ffcc00' };
+            // FUNGSI DETEKSI CERDAS (KALAU API NGASIH TYPE NULL)
+            const getTipeKomik = (typeString, titleString = '') => {
+                if (typeString) {
+                    const t = typeString.toLowerCase();
+                    if (t.includes('manhwa')) return { label: 'MANHWA', color: '#00ffcc' };
+                    if (t.includes('manhua')) return { label: 'MANHUA', color: '#ff007f' };
+                    if (t.includes('manga')) return { label: 'MANGA', color: '#ffcc00' };
+                }
+                
+                // Tebak dari judul jika type null
+                const t = (titleString || '').toLowerCase();
+                if (t.includes('manager kim') || t.includes('youngest') || t.includes('bloodthirsty') || t.includes('heavenly') || t.includes('northern') || t.includes('shepherd') || t.includes('reborn as')) {
+                    return { label: 'MANHWA', color: '#00ffcc' };
+                }
+                if (t.includes('martial') || t.includes('immortal') || t.includes('cultivation') || t.includes('sovereign') || t.includes('god')) {
+                    return { label: 'MANHUA', color: '#ff007f' };
+                }
+                return { label: 'MANGA', color: '#ffcc00' }; // Default
             };
 
             // Fungsi Pindah Tab
             window.switchKomikTab = (tab, btn) => {
                 currentTab = tab;
+                currentPage = 1;
+                hasMore = true;
                 document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
                 if (btn) btn.classList.add('active');
+                box.innerHTML = '';
                 loadKatalog(input.value.trim());
             };
 
-            // FUNGSI LOAD KATALOG
+            // FUNGSI LOAD KATALOG (DENGAN INFINITE SCROLL)
             const loadKatalog = async (query) => {
-                const favoritList = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
+                if (isLoading || !hasMore) return;
+                isLoading = true;
 
-                // JIKA TAB FAVORIT DIPILIH
+                if (currentPage === 1) {
+                    box.innerHTML = '<div class="loader" style="margin-top:30px;"></div>';
+                } else {
+                    loadMoreEl.style.display = 'block';
+                }
+
+                // JIKA TAB FAVORIT DIPILIH (TIDAK PERLU SCROLL)
                 if (currentTab === 'favorit' && !query) {
+                    loadMoreEl.style.display = 'none';
+                    const favoritList = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
+                    
                     if (favoritList.length === 0) {
                         box.innerHTML = `
                             <div style="text-align:center; padding: 40px 20px; opacity:0.7;">
@@ -802,46 +836,43 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <p style="font-size:12px;">Jelajahi katalog dan tekan tombol ❤️ untuk menyimpan komik di sini.</p>
                             </div>
                         `;
-                        return;
-                    }
-
-                    // Render List Favorit
-                    let htmlFav = `<h4 style="font-size:14px; margin-bottom:15px; font-weight:800; border-bottom:2px dashed var(--border); padding-bottom:10px;">Daftar Favorit Kamu</h4>`;
-                    htmlFav += `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
-                    
-                    favoritList.forEach(f => {
-                        const tipe = getTipeKomik(f.type || '');
-                        htmlFav += `
-                            <div class="fav-item-detail" data-title="${escapeHTML(f.title)}" data-slug="${escapeHTML(f.slug)}" style="cursor:pointer; display:flex; flex-direction:column; gap:8px;">
-                                <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:10px; overflow:hidden; background:#222; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
-                                    <img src="${escapeHTML(f.cover)}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
-                                    <!-- LABEL TIPE DI POJOK KIRI ATAS -->
-                                    <span style="position:absolute; top:0; left:0; font-size:8px; font-weight:900; background:${tipe.color}; color:#000; padding:3px 6px; border-radius:0 0 6px 0; box-shadow:1px 1px 3px rgba(0,0,0,0.5);">${tipe.label}</span>
-                                    <div style="position:absolute; top:5px; right:5px; background:rgba(255,51,51,0.9); padding:4px; border-radius:50%;">
-                                        <svg viewBox="0 0 24 24" fill="#fff" width="12" height="12"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    } else {
+                        let htmlFav = `<h4 style="font-size:14px; margin-bottom:15px; font-weight:800; border-bottom:2px dashed var(--border); padding-bottom:10px;">Daftar Favorit Kamu</h4>`;
+                        htmlFav += `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
+                        
+                        favoritList.forEach(f => {
+                            const tipe = getTipeKomik(f.type || '', f.title);
+                            htmlFav += `
+                                <div class="fav-item-detail" data-title="${escapeHTML(f.title)}" data-slug="${escapeHTML(f.slug)}" style="cursor:pointer; display:flex; flex-direction:column; gap:8px;">
+                                    <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:10px; overflow:hidden; background:#222; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+                                        <img src="${escapeHTML(f.cover)}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                        <span style="position:absolute; top:0; left:0; font-size:8px; font-weight:900; background:${tipe.color}; color:#000; padding:3px 6px; border-radius:0 0 6px 0; box-shadow:1px 1px 3px rgba(0,0,0,0.5);">${tipe.label}</span>
+                                        <div style="position:absolute; top:5px; right:5px; background:rgba(255,51,51,0.9); padding:4px; border-radius:50%;">
+                                            <svg viewBox="0 0 24 24" fill="#fff" width="12" height="12"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                        </div>
                                     </div>
+                                    <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(f.title)}</h4>
                                 </div>
-                                <h4 style="font-size:11px; font-weight:700; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(f.title)}</h4>
-                            </div>
-                        `;
-                    });
-                    htmlFav += `</div>`;
-                    box.innerHTML = htmlFav;
+                            `;
+                        });
+                        htmlFav += `</div>`;
+                        box.innerHTML = htmlFav;
 
-                    box.querySelectorAll('.fav-item-detail').forEach(el => {
-                        el.addEventListener('click', () => bukaDetail(el.dataset.title, el.dataset.slug));
-                    });
+                        box.querySelectorAll('.fav-item-detail').forEach(el => {
+                            el.addEventListener('click', () => bukaDetail(el.dataset.title, el.dataset.slug));
+                        });
+                    }
+                    isLoading = false;
                     return;
                 }
 
-                // JIKA TAB BERANDA / KATALOG
-                box.innerHTML = '<div class="loader" style="margin-top:30px;"></div>';
+                // FETCH API (BERANDA / KATALOG / SEARCH)
                 try {
-                    let bodyData = {};
+                    let bodyData = { page: currentPage };
                     if (query) {
                         bodyData = { action: 'search', q: query };
                     } else {
-                        bodyData = { action: currentTab === 'terbaru' ? 'latest' : 'daftar' };
+                        bodyData = { action: currentTab === 'terbaru' ? 'latest' : 'daftar', page: currentPage };
                     }
 
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
@@ -852,14 +883,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     const komikList = data.results || []; 
 
                     if (komikList.length === 0) {
-                        box.innerHTML = '<p class="error-msg" style="margin-top:20px;">Komik tidak ditemukan.</p>';
+                        hasMore = false;
+                        loadMoreEl.style.display = 'none';
+                        if (currentPage === 1) box.innerHTML = '<p class="error-msg" style="margin-top:20px;">Komik tidak ditemukan.</p>';
+                        isLoading = false;
                         return;
                     }
 
-                    // Render Lanjut Baca (Hanya di Beranda)
+                    // Render Lanjut Baca (Hanya di Page 1 Beranda)
                     const lastRead = localStorage.getItem('zenkai_last_read');
                     let historyHtml = '';
-                    if (lastRead && !query && currentTab === 'terbaru') {
+                    if (lastRead && !query && currentTab === 'terbaru' && currentPage === 1) {
                         const h = JSON.parse(lastRead);
                         historyHtml = `
                             <div style="margin-bottom: 25px;">
@@ -882,26 +916,32 @@ document.addEventListener('DOMContentLoaded', () => {
                         `;
                     }
 
-                    // Render Katalog Grid
+                    // Header Katalog
                     let titleSection = '';
-                    if (query) titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Hasil Pencarian "${escapeHTML(query)}"</h4>`;
-                    else if (currentTab === 'terbaru') titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Update Terbaru</h4>`;
-                    else titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Semua Komik</h4>`;
+                    if (currentPage === 1) {
+                        if (query) titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Hasil Pencarian "${escapeHTML(query)}"</h4>`;
+                        else if (currentTab === 'terbaru') titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Update Terbaru</h4>`;
+                        else titleSection = `<h4 style="font-size:13px; margin-bottom:15px; font-weight:800;">Semua Komik</h4>`;
+                    }
 
-                    let html = historyHtml + titleSection + `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
+                    let html = '';
+                    if (currentPage === 1) {
+                        html = historyHtml + titleSection + `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;" id="komik-grid-container">`;
+                    } else {
+                        html = `<div style="display:contents;" id="komik-grid-container">`; // Lanjutan grid
+                    }
                     
                     komikList.forEach(manga => {
                         const title = (manga.title || 'Tanpa Judul').replace(/^Komik\s+/i, '');
                         const cover = manga.cover || 'https://via.placeholder.com/150';
                         const slug = manga.slug; 
-                        const tipe = getTipeKomik(manga.type); // <--- PAKAI DATA TYPE DARI JSON
+                        const tipe = getTipeKomik(manga.type, title);
                         const updated = manga.updatedAt ? `<span style="position:absolute; bottom:0; left:0; right:0; font-size:8px; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); color:#fff; padding:20px 5px 5px 5px; text-align:center; font-weight:600;">${escapeHTML(manga.updatedAt)}</span>` : '';
                         
                         html += `
                             <div class="komik-card-jere" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" style="cursor:pointer; display:flex; flex-direction:column; gap:8px;">
                                 <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:10px; overflow:hidden; background:#222; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
                                     <img src="${cover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
-                                    <!-- LABEL TIPE DI POJOK KIRI ATAS -->
                                     <span style="position:absolute; top:0; left:0; font-size:8px; font-weight:900; background:${tipe.color}; color:#000; padding:3px 6px; border-radius:0 0 6px 0; box-shadow:1px 1px 3px rgba(0,0,0,0.5);">${tipe.label}</span>
                                     ${updated}
                                 </div>
@@ -909,17 +949,64 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         `;
                     });
-                    html += `</div>`;
-                    box.innerHTML = html;
+                    
+                    if (currentPage === 1) {
+                        html += `</div>`;
+                        box.innerHTML = html;
+                    } else {
+                        html += `</div>`;
+                        // Append ke container grid yang sudah ada
+                        const gridContainer = document.getElementById('komik-grid-container');
+                        if(gridContainer) {
+                            const tempDiv = document.createElement('div');
+                            tempDiv.innerHTML = html;
+                            const newItems = tempDiv.querySelectorAll('.komik-card-jere');
+                            newItems.forEach(item => gridContainer.appendChild(item));
+                        }
+                    }
 
+                    // Event listener untuk komik yang baru dimuat
                     box.querySelectorAll('.komik-card-jere').forEach(el => {
-                        el.addEventListener('click', () => bukaDetail(el.dataset.title, el.dataset.slug));
+                        // Hapus listener lama agar tidak dobel
+                        const newEl = el.cloneNode(true);
+                        el.parentNode.replaceChild(newEl, el);
+                        newEl.addEventListener('click', () => bukaDetail(newEl.dataset.title, newEl.dataset.slug));
                     });
+
+                    // Cek apakah masih ada halaman selanjutnya
+                    if (data.hasNext === false || komikList.length < 10) {
+                        hasMore = false;
+                        loadMoreEl.style.display = 'none';
+                    } else {
+                        currentPage++;
+                        loadMoreEl.style.display = 'none'; // Sembunyikan loader kalau sukses
+                    }
 
                 } catch (e) { 
                     box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
                 }
+                isLoading = false;
             };
+
+            // DETEKSI SCROLL SAMPAI BAWAH (INFINITE SCROLL)
+            const handleScroll = (e) => {
+                const target = e.target;
+                // Cek apakah scroll terjadi di dalam modal komik
+                if (target.id === 'tool-modal' || target.classList.contains('bottom-sheet-content')) {
+                    if (target.scrollHeight - target.scrollTop <= target.clientHeight + 100) {
+                        if (!isLoading && hasMore && currentTab !== 'favorit') {
+                            loadKatalog(input.value.trim());
+                        }
+                    }
+                }
+            };
+
+            // Pasang listener scroll di container modal
+            const modalBody = document.querySelector('.bottom-sheet-content');
+            if (modalBody) {
+                modalBody.removeEventListener('scroll', handleScroll);
+                modalBody.addEventListener('scroll', handleScroll);
+            }
 
             // FUNGSI BUKA DETAIL
             const bukaDetail = async (title, slug) => {
@@ -934,7 +1021,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (!data.status) throw new Error('Gagal mengambil detail');
                     const detail = data.result || data.data;
-                    const tipe = getTipeKomik(detail.type); // <--- PAKAI DATA TYPE DARI JSON DETAIL
+                    const tipe = getTipeKomik(detail.type, title);
                     
                     let chapters = [];
                     if (detail.chapters && detail.chapters.length > 0) {
@@ -1030,9 +1117,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     box.innerHTML = html;
 
                     // EVENT LISTENER
-                    box.querySelector('.btn-back').addEventListener('click', () => openTool('komik'));
+                    box.querySelector('.btn-back').addEventListener('click', () => {
+                        box.innerHTML = ''; // Reset
+                        currentPage = 1;
+                        hasMore = true;
+                        loadKatalog(input.value.trim());
+                    });
                     
-                    // Tombol Favorit (SIMPAN TYPE KE LOCALSTORAGE)
+                    // Tombol Favorit
                     box.querySelector('.btn-fav').addEventListener('click', function() {
                         const t = this.dataset.title;
                         const s = this.dataset.slug;
@@ -1063,12 +1155,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
+            // Load Pertama Kali
             loadKatalog(''); 
             
             let timeout = null;
             input.addEventListener('input', (e) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => {
+                    currentPage = 1;
+                    hasMore = true;
+                    box.innerHTML = '';
                     loadKatalog(e.target.value.trim());
                 }, 800);
             });
