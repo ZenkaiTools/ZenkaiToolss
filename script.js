@@ -804,7 +804,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!data.status) throw new Error('Gagal mengambil detail');
                     const detail = data.result || data.data;
                     
-                    const chapters = detail.chapters || detail.chapter_list || detail.list_chapters || []; 
+                    // Ambil chapter dari array 'genres' yang berantakan itu
+                    let rawChapters = detail.genres || detail.chapters || detail.chapter_list || []; 
+                    
+                    // Filter cuma yang ada kata "Chapter" dan proses jadi format yang bener
+                    let chapters = rawChapters.filter(item => typeof item === 'string' && item.includes('Chapter')).map(ch => {
+                        const numMatch = ch.match(/Chapter\s+([\d.]+)/i);
+                        const num = numMatch ? numMatch[1] : ch.replace('Chapter ', '');
+                        return {
+                            title: ch,
+                            number: num,
+                            slug: `${slug}-chapter-${num.replace('.', '-')}` 
+                        };
+                    });
+
+                    // Urutkan dari chapter terbaru ke terlama
+                    chapters.sort((a, b) => parseFloat(b.number) - parseFloat(a.number));
                     
                     let html = `
                         <div style="margin-bottom:20px;">
@@ -820,22 +835,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                             </div>
                         </div>
-                        <h4 style="margin-bottom:10px; font-size:14px;">Daftar Chapter:</h4>
+                        <h4 style="margin-bottom:10px; font-size:14px;">Daftar Chapter (${chapters.length}):</h4>
                         <div style="display:flex; flex-direction:column; gap:8px; max-height: 300px; overflow-y:auto;">
                     `;
 
                     if (chapters.length === 0) {
-                        // Kita bikin tombol langsung ke Chapter 1
-                        html += `<p style="font-size: 11px; opacity: 0.7; margin-bottom: 10px;">Klik tombol di bawah untuk mulai baca Chapter 1:</p>`;
-                        html += `<button class="action-btn press" onclick="bacaKomik('${escapeHTML(title)}', '${slug}-chapter-1')" style="background:var(--primary); color:#000;">Baca Chapter 1</button>`;
+                        html += `<p class="error-msg">Belum ada chapter.</p>`;
                     } else {
                         chapters.forEach(ch => {
-                            const chTitle = ch.title || ch.chapter || 'Chapter';
-                            const chSlug = ch.slug || ch.link;
                             html += `
-                                <div class="press" onclick="bacaKomik('${escapeHTML(title)}', '${escapeHTML(chSlug)}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px 15px; border-radius:8px; cursor:pointer;">
+                                <div class="press" onclick="bacaKomik('${escapeHTML(title)}', '${ch.slug}')" style="display:flex; align-items:center; gap:10px; background:var(--card-bg); border:2px solid var(--border); padding:10px 15px; border-radius:8px; cursor:pointer;">
                                     <div style="flex:1;">
-                                        <h5 style="margin:0; font-size:12px; font-weight:800; color:var(--text);">${escapeHTML(chTitle)}</h5>
+                                        <h5 style="margin:0; font-size:12px; font-weight:800; color:var(--text);">${escapeHTML(ch.title)}</h5>
                                     </div>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16"><path d="M9 18l6-6-6-6"/></svg>
                                 </div>
@@ -1790,7 +1801,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =========================================
-    // FUNGSI BACA KOMIK (JERE API + JARING PENGAMAN)
+    // FUNGSI BACA KOMIK (JERE API STREAM)
     // =========================================
     window.bacaKomik = async (title, slug) => {
         const box = document.getElementById('komik-res');
@@ -1804,7 +1815,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const images = data.result?.pages || []; 
             
-            // JARING PENGAMAN: Kalau gambar kosong, kasih tombol ke web asli
+            // Jaring Pengaman
             if (images.length === 0) {
                 const baseSlug = slug.split('-chapter-')[0]; 
                 const originalUrl = `https://komikindo.ch/komik/${baseSlug}/`;
@@ -1823,7 +1834,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // KALAU GAMBAR ADA, TAMPILKAN
             let html = `<h4 style="margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>`;
             html += `<div style="display:flex; flex-direction:column; gap:5px;">`;
             images.forEach(imgUrl => {
