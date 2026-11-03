@@ -450,6 +450,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 c.classList.remove('maintenance-mode');
             }
         });
+
+        // === LOGIKA BANNER KOMIK (PAKAI CLASS "soon-banner") ===
+        const komikBanner = document.getElementById('tool-komik');
+        if (komikBanner) {
+            const isKomikDisabled = dTools.includes('komik');
+            if (isKomikDisabled) {
+                komikBanner.classList.add('soon-banner');
+                komikBanner.style.opacity = '0.6';
+                komikBanner.style.filter = 'grayscale(100%)';
+                komikBanner.onclick = () => {
+                    tampilkanAlert("Coming Soon", "Fitur Komik sedang dalam pengembangan. Nantikan update-nya ya!", [
+                        { label: "Oke", action: "document.getElementById('custom-alert').style.display='none'", type: "primary" }
+                    ]);
+                };
+            } else {
+                komikBanner.classList.remove('soon-banner');
+                komikBanner.style.opacity = '1';
+                komikBanner.style.filter = 'none';
+                komikBanner.onclick = () => openTool('komik');
+            }
+        }
     }
 
     // =========================================
@@ -804,22 +825,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!data.status) throw new Error('Gagal mengambil detail');
                     const detail = data.result || data.data;
                     
-                    // Ambil chapter dari array 'genres' yang berantakan itu
+                    // Trik: Ambil chapter dari array 'genres' yang berantakan
                     let rawChapters = detail.genres || detail.chapters || detail.chapter_list || []; 
                     
-                    // Filter cuma yang ada kata "Chapter" dan proses jadi format yang bener
                     let chapters = rawChapters.filter(item => typeof item === 'string' && item.includes('Chapter')).map(ch => {
                         const numMatch = ch.match(/Chapter\s+([\d.]+)/i);
                         const num = numMatch ? numMatch[1] : ch.replace('Chapter ', '');
                         return {
                             title: ch,
-                            number: num,
                             slug: `${slug}-chapter-${num.replace('.', '-')}` 
                         };
                     });
 
                     // Urutkan dari chapter terbaru ke terlama
-                    chapters.sort((a, b) => parseFloat(b.number) - parseFloat(a.number));
+                    chapters.sort((a, b) => {
+                        const numA = parseFloat(a.title.replace(/[^0-9.]/g, ''));
+                        const numB = parseFloat(b.title.replace(/[^0-9.]/g, ''));
+                        return numB - numA;
+                    });
                     
                     let html = `
                         <div style="margin-bottom:20px;">

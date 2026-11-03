@@ -55,24 +55,6 @@
         </div>
     </div>
 
-    <!-- FALLBACK VIDEO ERROR: auto-skip jika video gagal load -->
-    <script>
-        (function(){
-            var v = document.getElementById('welcome-video');
-            if (!v) return;
-            v.addEventListener('error', function(){
-                if (typeof window.masukKeWeb === 'function') window.masukKeWeb();
-            });
-            // Fallback: jika video stuck loading > 6 detik, auto skip
-            var t = setTimeout(function(){
-                if (v.readyState < 2 && typeof window.masukKeWeb === 'function') {
-                    window.masukKeWeb();
-                }
-            }, 6000);
-            v.addEventListener('canplay', function(){ clearTimeout(t); });
-        })();
-    </script>
-
     <!-- ========================================= -->
     <!-- 2. LAYAR MAINTENANCE - CYBERPUNK          -->
     <!-- ========================================= -->
@@ -155,10 +137,10 @@
         </div>
 
         <!-- ========================================= -->
-        <!-- BANNER BACA KOMIK (TARUH DI ATAS)         -->
+        <!-- BANNER BACA KOMIK (ID: tool-komik)        -->
         <!-- ========================================= -->
-        <div class="tools-section" style="margin-bottom: 15px; padding: 0; overflow: hidden; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255, 115, 0, 0.1) 100%); border: 2px solid var(--border); border-radius: var(--radius);">
-            <div onclick="openTool('komik')" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 15px;">
+        <div class="tools-section" id="tool-komik" style="margin-bottom: 15px; padding: 0; overflow: hidden; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255, 115, 0, 0.1) 100%); border: 2px solid var(--border); border-radius: var(--radius);">
+            <div style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 15px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <div class="t-icon bg-orange" style="width: 45px; height: 45px; border-radius: 12px; box-shadow: 0 4px 10px rgba(255,115,0,0.3);">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
