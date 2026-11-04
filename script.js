@@ -97,22 +97,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================
-    // 3. POPUP WHATSAPP CHANNEL
+    // 3. POPUP WHATSAPP CHANNEL (UPDATED: Muncul Tiap Refresh)
     // =========================================
     const waPopup = document.getElementById('wa-popup');
-    const WA_POPUP_KEY = 'zenkai_wa_popup_shown';
 
     window.closeWaPopup = () => {
         if (!waPopup) return;
         waPopup.classList.remove('active');
-        try { localStorage.setItem(WA_POPUP_KEY, Date.now().toString()); } catch(e) {}
     };
 
     function showWaPopupOnce() {
         if (!waPopup) return;
-        const lastShown = parseInt(localStorage.getItem(WA_POPUP_KEY) || '0');
-        const ONE_DAY = 24 * 60 * 60 * 1000;
-        if (Date.now() - lastShown < ONE_DAY) return;
+        // Langsung munculin tanpa ngecek localStorage
         waPopup.classList.add('active');
     }
 
@@ -123,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================
-    // 4. TEMA & NAVIGASI
+    // 4. TEMA, NAVIGASI & SETTINGS
     // =========================================
     const welcome = document.getElementById('welcome-username');
     if (welcome) welcome.innerText = 'User';
@@ -183,6 +179,26 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.display = show ? 'flex' : 'none';
         });
     };
+
+    // FITUR BARU: Toggle Animasi (Hemat Baterai)
+    window.toggleAnimation = (checkbox) => {
+        if (checkbox.checked) {
+            document.body.classList.add('reduce-motion');
+            localStorage.setItem('zenkai_reduce_motion', 'true');
+            showToast('Animasi dimatikan (Hemat Baterai)');
+        } else {
+            document.body.classList.remove('reduce-motion');
+            localStorage.setItem('zenkai_reduce_motion', 'false');
+            showToast('Animasi dinyalakan');
+        }
+    };
+
+    // Cek status animasi saat pertama load
+    if (localStorage.getItem('zenkai_reduce_motion') === 'true') {
+        document.body.classList.add('reduce-motion');
+        const toggle = document.getElementById('toggle-anim');
+        if (toggle) toggle.checked = true;
+    }
 
     // =========================================
     // 5. DEVICE, BATERAI, JAM
@@ -552,7 +568,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // PANEL OWNER UI
+    // =========================================
+    // PANEL OWNER UI (TAB SYSTEM & RAPI)
+    // =========================================
     window.tampilkanPanelRahasia = async () => {
         const container = document.getElementById('owner-page-content');
         if (!container) return;
@@ -568,86 +586,113 @@ document.addEventListener('DOMContentLoaded', () => {
         const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
         const vipToolsArr = set.vip_tools ? set.vip_tools.split(',') : [];
         
-        // ========================================================
-        // AUTO-DETECTOR: Otomatis ambil nama tool dari index.html
-        // ========================================================
+        // AUTO-DETECTOR TOOLS
         const listTools = [];
         document.querySelectorAll('.tool-card').forEach(card => {
             const onclickAttr = card.getAttribute('onclick') || '';
             const match = onclickAttr.match(/openTool\('(.*?)'\)/);
             if (match && match[1]) {
                 const toolName = match[1];
-                // Pengecualian: Tool 'support' dan 'vip' gak perlu dimasukin ke list
-                if (toolName !== 'support' && toolName !== 'vip') {
-                    listTools.push(toolName);
-                }
+                if (toolName !== 'support' && toolName !== 'vip') listTools.push(toolName);
             }
         });
-        // ========================================================
 
         const listPages = ['fun', 'setting', 'info'];
 
         let toolsHtml = listTools.map(t => `
-            <div style="background:var(--card-bg); padding:10px 12px; border-radius:8px; border:2px solid var(--border); display:flex; flex-direction:column; gap:8px;">
-                <span style="font-size:11px; font-weight:bold;">${t.toUpperCase()}</span>
-                <label style="display:flex; align-items:center; gap:5px; font-size:10px; cursor:pointer;">
-                    <input type="checkbox" class="tool-chk" value="${t}" ${disabledToolsArr.includes(t) ? 'checked' : ''} style="accent-color:var(--primary);"> Off
-                </label>
-                <label style="display:flex; align-items:center; gap:5px; font-size:10px; cursor:pointer; color:#ffcc00;">
-                    <input type="checkbox" class="vip-chk" value="${t}" ${vipToolsArr.includes(t) ? 'checked' : ''} style="accent-color:#ffcc00;"> VIP
-                </label>
+            <div style="background:var(--card-bg); padding:8px 10px; border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column; gap:6px;">
+                <span style="font-size:11px; font-weight:800; color:var(--primary);">${t.toUpperCase()}</span>
+                <div style="display:flex; gap:10px;">
+                    <label style="display:flex; align-items:center; gap:4px; font-size:10px; cursor:pointer;">
+                        <input type="checkbox" class="tool-chk" value="${t}" ${disabledToolsArr.includes(t) ? 'checked' : ''} style="accent-color:var(--primary);"> Off
+                    </label>
+                    <label style="display:flex; align-items:center; gap:4px; font-size:10px; cursor:pointer; color:#ffcc00;">
+                        <input type="checkbox" class="vip-chk" value="${t}" ${vipToolsArr.includes(t) ? 'checked' : ''} style="accent-color:#ffcc00;"> VIP
+                    </label>
+                </div>
             </div>
         `).join('');
 
         let pagesHtml = listPages.map(p => `
-            <label style="display:flex; align-items:center; justify-content:space-between; background:var(--card-bg); padding:10px 12px; border-radius:8px; border:2px solid var(--border); cursor:pointer; font-size:11px; font-weight:bold; transition:0.2s;">
+            <label style="display:flex; align-items:center; justify-content:space-between; background:var(--card-bg); padding:8px 10px; border-radius:8px; border:1px solid var(--border); cursor:pointer; font-size:11px; font-weight:bold;">
                 <span>${p.toUpperCase()}</span>
-                <input type="checkbox" class="page-chk" value="${p}" ${disabledPagesArr.includes(p) ? 'checked' : ''} style="width:18px; height:18px; accent-color:var(--primary); cursor:pointer;">
+                <input type="checkbox" class="page-chk" value="${p}" ${disabledPagesArr.includes(p) ? 'checked' : ''} style="width:16px; height:16px; accent-color:var(--primary); cursor:pointer;">
             </label>
         `).join('');
 
         container.innerHTML = `
-            <div style="display:flex; flex-direction:column; gap:20px;">
-                <div style="background:rgba(255,204,0,0.1); padding:15px; border-radius:12px; border:2px dashed #ffcc00;">
+            <div style="display:flex; flex-direction:column; gap:15px;">
+                
+                <!-- TAB MENU -->
+                <div style="display:flex; gap:5px; background:var(--bg); padding:5px; border-radius:12px; border:2px solid var(--border); overflow-x:auto; scrollbar-width:none;">
+                    <button class="own-tab active press" onclick="switchOwnerTab('tab-umum', this)" style="flex:1; padding:8px; border-radius:8px; font-size:11px; font-weight:bold; border:none; background:var(--primary); color:#000; white-space:nowrap;">⚙️ Umum</button>
+                    <button class="own-tab press" onclick="switchOwnerTab('tab-vip', this)" style="flex:1; padding:8px; border-radius:8px; font-size:11px; font-weight:bold; border:none; background:transparent; color:var(--text); white-space:nowrap;">👑 VIP</button>
+                    <button class="own-tab press" onclick="switchOwnerTab('tab-tools', this)" style="flex:1; padding:8px; border-radius:8px; font-size:11px; font-weight:bold; border:none; background:transparent; color:var(--text); white-space:nowrap;">🚫 Tools</button>
+                    <button class="own-tab press" onclick="switchOwnerTab('tab-pages', this)" style="flex:1; padding:8px; border-radius:8px; font-size:11px; font-weight:bold; border:none; background:transparent; color:var(--text); white-space:nowrap;">🔒 Pages</button>
+                </div>
+
+                <!-- KONTEN TAB UMUM -->
+                <div id="tab-umum" class="own-content" style="display:block; background:var(--card-bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
+                    <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">⚙️ Pengaturan Umum</h3>
+                    <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase;">Judul Web</label>
+                    <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:10px; margin-top:5px; margin-bottom:15px; border:2px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-size:13px;">
+                    
+                    <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase;">Broadcast Banner</label>
+                    <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan" style="width:100%; padding:10px; margin-top:5px; margin-bottom:15px; border:2px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-size:13px;">
+                    
+                    <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; display:block;">Limit Gemini (Per Hari)</label>
+                    <input type="number" id="own-gemini-limit" value="${set.gemini_limit || 1}" min="1" style="width:100%; padding:10px; margin-top:5px; margin-bottom:15px; border:2px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-size:13px;">
+
+                    <div style="background:rgba(255,51,51,0.1); padding:12px; border-radius:8px; border:2px dashed #ff3333; margin-top:10px;">
+                        <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
+                            <div>
+                                <b style="font-size:13px; color:#ff3333; display:block;">Mode Maintenance</b>
+                                <span style="font-size:10px; opacity:0.8;">Kunci semua akses web.</span>
+                            </div>
+                            <input type="checkbox" id="own-mt" ${set.is_maintenance ? 'checked' : ''} style="width:20px; height:20px; accent-color:#ff3333; cursor:pointer;">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- KONTEN TAB VIP -->
+                <div id="tab-vip" class="own-content" style="display:none; background:var(--card-bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
                     <h3 style="font-family:var(--font-head); font-size:16px; color:#ffcc00; margin-bottom:12px;">👑 VIP Management</h3>
                     <p style="font-size:11px; opacity:0.8; margin-bottom:10px;">Klik untuk reset kode VIP biar bisa dipakai ulang.</p>
-                    <button class="action-btn press" onclick="loadVipCodes()" style="background: var(--primary); color: #000; padding: 10px; font-size: 12px; margin-bottom: 10px;">🔄 Muat Daftar Kode VIP</button>
-                    <div id="vip-list-container" style="max-height: 300px; overflow-y: auto;"></div>
+                    <button class="action-btn press" onclick="loadVipCodes()" style="background:#ffcc00; color:#000; padding:10px; font-size:12px; margin-bottom:10px;">🔄 Muat Daftar Kode VIP</button>
+                    <div id="vip-list-container" style="max-height: 250px; overflow-y: auto;"></div>
                 </div>
-                <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
-                    <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">⚙️ Pengaturan Umum</h3>
-                    <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Judul Web</label>
-                    <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:12px; margin-top:5px; margin-bottom:15px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
-                    <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px;">Broadcast Banner</label>
-                    <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan" style="width:100%; padding:12px; margin-top:5px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
-                    
-                    <!-- INPUT LIMIT GEMINI -->
-                    <label style="font-size:10px; font-weight:800; opacity:0.7; text-transform:uppercase; letter-spacing:1px; margin-top:15px; display:block;">Limit Gemini (Per Hari)</label>
-                    <input type="number" id="own-gemini-limit" value="${set.gemini_limit || 1}" min="1" style="width:100%; padding:12px; margin-top:5px; border:2px solid var(--border); border-radius:8px; background:var(--card-bg); color:var(--text); font-size:13px;">
-                </div>
-                <div style="background:rgba(255,51,51,0.1); padding:15px; border-radius:12px; border:2px dashed #ff3333;">
-                    <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
-                        <div>
-                            <b style="font-size:14px; color:#ff3333; display:block;">Mode Maintenance</b>
-                            <span style="font-size:11px; opacity:0.8;">Kunci semua akses web sementara waktu.</span>
-                        </div>
-                        <input type="checkbox" id="own-mt" ${set.is_maintenance ? 'checked' : ''} style="width:24px; height:24px; accent-color:#ff3333; cursor:pointer;">
-                    </label>
-                </div>
-                <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
+
+                <!-- KONTEN TAB TOOLS -->
+                <div id="tab-tools" class="own-content" style="display:none; background:var(--card-bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
                     <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">🚫 Nonaktifkan & VIP Tools</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${toolsHtml}</div>
                 </div>
-                <div style="background:var(--bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
+
+                <!-- KONTEN TAB PAGES -->
+                <div id="tab-pages" class="own-content" style="display:none; background:var(--card-bg); padding:15px; border-radius:12px; border:2px solid var(--border);">
                     <h3 style="font-family:var(--font-head); font-size:16px; color:var(--primary); margin-bottom:12px;">🔒 Kunci Halaman</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${pagesHtml}</div>
                 </div>
+
+                <!-- TOMBOL SIMPAN -->
                 <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px; margin-bottom:20px;">
                     <button onclick="simpanSettingOwner(event)" class="action-btn press" style="padding:16px; font-size:14px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:12px; font-weight:900; box-shadow:0 4px 0 var(--border);">💾 SIMPAN PERUBAHAN</button>
                     <button onclick="forceRefreshUser()" class="action-btn press" style="padding:16px; font-size:14px; background:#a855f7; color:#fff; border:2px solid var(--border); border-radius:12px; font-weight:900; box-shadow:0 4px 0 var(--border);">🔄 PAKSA REFRESH USER</button>
                 </div>
             </div>
         `;
+    };
+
+    // Fungsi Pindah Tab Owner
+    window.switchOwnerTab = (tabId, btn) => {
+        document.querySelectorAll('.own-content').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.own-tab').forEach(el => {
+            el.style.background = 'transparent';
+            el.style.color = 'var(--text)';
+        });
+        document.getElementById(tabId).style.display = 'block';
+        btn.style.background = 'var(--primary)';
+        btn.style.color = '#000';
     };
 
     // LOAD DAFTAR KODE VIP
@@ -658,23 +703,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'list_vip_codes',
-                    owner_token: localStorage.getItem(OWNER_TOKEN_KEY)
-                })
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'list_vip_codes', owner_token: localStorage.getItem(OWNER_TOKEN_KEY) })
             });
             const result = await res.json();
             
             if (!result.status) throw new Error(result.message || 'Gagal memuat');
             const data = result.data || [];
             
-            let html = `
-                <button onclick="generateVipCode(event)" class="action-btn press" style="background:#00ff9d; color:#000; font-size:12px; padding:10px; margin-bottom:15px; box-shadow:0 3px 0 var(--border);">
-                    ➕ Buat Kode VIP Baru
-                </button>
-            `;
+            let html = `<button onclick="generateVipCode(event)" class="action-btn press" style="background:#00ff9d; color:#000; font-size:12px; padding:10px; margin-bottom:15px;">➕ Buat Kode VIP Baru</button>`;
 
             if (data.length === 0) {
                 html += '<p style="font-size:12px; text-align:center; opacity:0.6;">Belum ada kode VIP.</p>';
@@ -687,20 +724,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const date = v.used_at ? new Date(v.used_at).toLocaleString('id-ID') : '-';
                 
                 html += `
-                    <div style="background: var(--card-bg); border: 2px solid var(--border); padding: 12px; border-radius: 8px; margin-bottom: 10px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                            <b style="font-family:monospace; font-size:14px; letter-spacing:1px;">${escapeHTML(v.code)}</b>
-                            <span style="font-size:9px; font-weight:800; padding:3px 8px; border-radius:6px; background:${v.is_used ? 'rgba(255,51,51,0.2)' : 'rgba(0,255,157,0.2)'}; color:${v.is_used ? '#ff3333' : '#00ff9d'};">${badge}</span>
+                    <div style="background: var(--bg); border: 1px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 8px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <b style="font-family:monospace; font-size:13px;">${escapeHTML(v.code)}</b>
+                            <span style="font-size:8px; font-weight:800; padding:2px 6px; border-radius:4px; background:${v.is_used ? 'rgba(255,51,51,0.2)' : 'rgba(0,255,157,0.2)'}; color:${v.is_used ? '#ff3333' : '#00ff9d'};">${badge}</span>
                         </div>
-                        
-                        ${v.is_used ? `<p style="font-size:10px; opacity:0.6; margin-bottom:10px;">Dipakai: ${escapeHTML(date)}</p>` : ''}
-                        
-                        <div style="display:flex; gap:8px;">
-                            <button onclick="copyToClipboard('${escapeHTML(v.code)}')" style="flex:1; padding:8px; font-size:11px; background:var(--primary); color:#000; border:2px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">
-                                📋 Salin
-                            </button>
-                            
-                            ${v.is_used ? `<button onclick="resetVipCode(${Number(v.id)})" style="flex:1; padding:8px; font-size:11px; background:#ff3333; color:#fff; border:2px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">🔄 Reset</button>` : ''}
+                        ${v.is_used ? `<p style="font-size:9px; opacity:0.6; margin-bottom:8px;">Dipakai: ${escapeHTML(date)}</p>` : ''}
+                        <div style="display:flex; gap:6px;">
+                            <button onclick="copyToClipboard('${escapeHTML(v.code)}')" style="flex:1; padding:6px; font-size:10px; background:var(--primary); color:#000; border:1px solid var(--border); border-radius:4px; font-weight:bold; cursor:pointer;">📋 Salin</button>
+                            ${v.is_used ? `<button onclick="resetVipCode(${Number(v.id)})" style="flex:1; padding:6px; font-size:10px; background:#ff3333; color:#fff; border:1px solid var(--border); border-radius:4px; font-weight:bold; cursor:pointer;">🔄 Reset</button>` : ''}
                         </div>
                     </div>
                 `;
@@ -711,25 +743,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // FITUR GENERATE KODE VIP BARU
     window.generateVipCode = async (e) => {
         const btn = e.target;
         const oldText = btn.innerText;
         btn.innerText = 'Membuat...';
         btn.disabled = true;
-
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'create_vip_code',
-                    owner_token: localStorage.getItem(OWNER_TOKEN_KEY)
-                })
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'create_vip_code', owner_token: localStorage.getItem(OWNER_TOKEN_KEY) })
             });
             const data = await res.json();
             if (!data.status) throw new Error(data.message);
-            
             showToast(`✅ Kode dibuat: ${data.code}`);
             loadVipCodes();
         } catch (e) {
@@ -739,7 +764,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // FITUR SALIN KE CLIPBOARD
     window.copyToClipboard = (text) => {
         navigator.clipboard.writeText(text).then(() => {
             showToast(`📋 Kode disalin: ${text}`);
@@ -754,29 +778,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // RESET KODE VIP (1 PER 1)
     window.resetVipCode = (id) => {
-        tampilkanAlert(
-            "Reset Kode VIP",
-            "Yakin mau reset kode ini? Kode bisa dipakai lagi.",
-            [
-                { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                { label: "Reset", action: `eksekusiResetVip(${Number(id)})`, type: "primary" }
-            ]
-        );
+        tampilkanAlert("Reset Kode VIP", "Yakin mau reset kode ini? Kode bisa dipakai lagi.", [
+            { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
+            { label: "Reset", action: `eksekusiResetVip(${Number(id)})`, type: "primary" }
+        ]);
     };
 
     window.eksekusiResetVip = async (id) => {
         document.getElementById('custom-alert').style.display = 'none';
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'reset_vip_code',
-                    owner_token: localStorage.getItem(OWNER_TOKEN_KEY),
-                    id
-                })
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'reset_vip_code', owner_token: localStorage.getItem(OWNER_TOKEN_KEY), id })
             });
             const data = await res.json();
             if (!data.status) throw new Error(data.message || 'Gagal reset');
@@ -838,10 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'force_refresh',
-                    owner_token: localStorage.getItem(OWNER_TOKEN_KEY)
-                })
+                body: JSON.stringify({ action: 'force_refresh', owner_token: localStorage.getItem(OWNER_TOKEN_KEY) })
             });
             const data = await res.json();
             if (data.status) showToast("Sinyal Force Refresh terkirim!");
@@ -855,7 +866,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.toggleFavorit = (title, slug, cover) => {
         let favorit = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
         const index = favorit.findIndex(f => f.slug === slug);
-        
         if (index > -1) {
             favorit.splice(index, 1);
             showToast('Dihapus dari Favorit');
@@ -890,7 +900,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // PROTEKSI VIP DINAMIS
         const vipTools = window.currentVipTools || [];
         const isVip = localStorage.getItem('zenkai_vip') === 'true';
         const vipUntil = localStorage.getItem('zenkai_vip_until');
@@ -927,27 +936,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================
-        // FITUR SUPPORT (DONASI) - SIMPLE
+        // FITUR SUPPORT (TEKS BARU)
         // =========================================
         else if (tool === 'support') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <div style="padding: 10px 0;">
-                    <h3 style="font-family: var(--font-head); font-size: 24px; color: #ffcc00; text-align: center; text-shadow: 2px 2px 0 var(--border); margin-bottom: 5px;">Halo, Gue Andika</h3>
-                    <p style="font-size: 10px; color: var(--primary); font-weight: 800; letter-spacing: 2px; text-align: center; margin-bottom: 25px;">DEVELOPER ZENKAI TOOLS</p>
+                    <h3 style="font-family: var(--font-head); font-size: 24px; color: #ffcc00; text-align: center; text-shadow: 2px 2px 0 var(--border); margin-bottom: 5px;">Level Up Pengalaman Lo</h3>
+                    <p style="font-size: 10px; color: var(--primary); font-weight: 800; letter-spacing: 2px; text-align: center; margin-bottom: 25px;">BUKAN SEKADAR WEB, TAPI GAYA HIDUP</p>
 
                     <div style="font-size: 13px; line-height: 1.7; color: var(--text); opacity: 0.9; text-align: left; margin-bottom: 25px; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 12px; border: 2px dashed var(--border);">
                         <p style="margin-bottom: 15px;">
-                            Gue bikin <b>Zenkai Tools</b> ini berawal dari rasa kesel. Kenapa sih buat download video atau baca komik harus lewat banyak banget iklan pop-up yang bikin HP lemot?
+                            Gue bikin <b>Zenkai Tools</b> biar lu bisa akses semua kebutuhan digital tanpa ribet. Tapi biar server tetep ngebut dan bebas dari iklan judol, gue butuh dukungan dari lu.
                         </p>
                         <p style="margin-bottom: 15px;">
-                            Akhirnya gue bikin tempat di mana lu bisa akses <b>30+ tools gratis</b>, tanpa daftar, dan yang paling penting: <b>bebas iklan judol</b>.
-                        </p>
-                        <p style="margin-bottom: 15px;">
-                            Tapi ada satu masalah: biaya <b>Server & API</b> bulanan itu nggak murah. Gue belum pernah masang iklan sepeser pun, dan pengen tetep gitu.
+                            Dengan traktir gue kopi, lu bukan cuma bantu server, tapi juga **membuka akses ke fitur-fitur eksklusif** yang gak ada di versi gratis.
                         </p>
                         <p style="margin-bottom: 0; font-weight: 800; color: #ff3333; text-align: center;">
-                            Kalau lu ngerasa terbantu, bantu traktir kopi biar server ini tetep nyala ya!
+                            Jadi, siap jadi bagian dari Sultan Zenkai?
                         </p>
                     </div>
 
@@ -958,7 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
                               font-weight: 900; font-size: 15px; padding: 16px; box-shadow: 0 5px 0 var(--border); 
                               margin-bottom: 15px; text-transform: uppercase;">
                         <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        Traktir Kopi Sekarang
+                        Traktir Kopi & Jadi Sultan
                     </a>
                     
                     <p style="text-align: center; font-size: 10px; opacity: 0.6; font-style: italic;">"Sekecil apapun donasinya, sangat berarti. Makasih!"</p>
@@ -966,7 +972,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
         // =========================================
-        // FITUR VIP (PENDAFTARAN)
+        // FITUR VIP (HARGA & PERBANDINGAN BARU)
         // =========================================
         else if (tool === 'vip') {
             const isVip = localStorage.getItem('zenkai_vip') === 'true';
@@ -998,16 +1004,64 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="action-btn" onclick="localStorage.removeItem('zenkai_vip'); localStorage.removeItem('zenkai_vip_until'); closeModal(); showToast('Status VIP dicabut.');" style="background:#ff3333; color:#fff;">Logout VIP (Test)</button>
                 ` : `
                     <div class="desc-text" style="text-align: left; font-size: 12px; line-height: 1.6;">
-                        Halo! Fitur premium ini eksklusif VIP. Beli VIP buat dapet akses <b>30 hari</b>.
+                        Buka akses tanpa batas ke semua fitur premium Zenkai Tools.
                     </div>
                     
-                    <div style="background: var(--bg); border: 2px dashed var(--border); padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: center;">
-                        <p style="font-size: 12px; margin-bottom: 10px; font-weight: 800;">Harga VIP:</p>
-                        <h4 style="font-size: 28px; color: #ffcc00; font-weight: 900; margin-bottom: 10px;">Rp 10.000 / 30 Hari</h4>
-                        <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" class="action-btn" style="background: #ffcc00; color: #000; text-decoration: none;">Bayar via Sociabuzz</a>
+                    <!-- TABEL PERBANDINGAN -->
+                    <div style="background: var(--bg); border: 2px solid var(--border); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+                        <table style="width:100%; border-collapse: collapse; font-size: 11px;">
+                            <tr style="border-bottom: 2px dashed var(--border);">
+                                <th style="text-align:left; padding-bottom:8px; opacity:0.7;">Fitur</th>
+                                <th style="text-align:center; padding-bottom:8px; opacity:0.7;">Biasa</th>
+                                <th style="text-align:center; padding-bottom:8px; color:#ffcc00;">VIP</th>
+                            </tr>
+                            <tr>
+                                <td style="padding:8px 0;">Akses Tools Dasar</td>
+                                <td style="text-align:center; color:#00ff9d;">✅</td>
+                                <td style="text-align:center; color:#00ff9d;">✅</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:8px 0;">Fitur Grey-Area (Netflix dll)</td>
+                                <td style="text-align:center; color:#ff3333;">❌</td>
+                                <td style="text-align:center; color:#00ff9d;">✅</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:8px 0;">Bypass Limit API</td>
+                                <td style="text-align:center; color:#ff3333;">❌</td>
+                                <td style="text-align:center; color:#00ff9d;">✅</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:8px 0;">Prioritas Server</td>
+                                <td style="text-align:center; color:#ff3333;">❌</td>
+                                <td style="text-align:center; color:#00ff9d;">✅</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- PAKET HARGA -->
+                    <p style="font-size: 12px; font-weight: 800; margin-bottom: 10px;">Pilih Paket VIP:</p>
+                    <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:15px;">
+                        <div style="background:var(--bg); border:2px solid var(--border); padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:13px; font-weight:bold;">7 Hari</span>
+                            <span style="font-size:14px; font-weight:900; color:#ffcc00;">Rp 10.000</span>
+                        </div>
+                        <div style="background:var(--bg); border:2px solid var(--border); padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:13px; font-weight:bold;">20 Hari</span>
+                            <span style="font-size:14px; font-weight:900; color:#ffcc00;">Rp 15.000</span>
+                        </div>
+                        <div style="background:linear-gradient(135deg, rgba(255,204,0,0.1), transparent); border:2px solid #ffcc00; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:13px; font-weight:bold;">30 Hari (Paling Laris)</span>
+                            <span style="font-size:14px; font-weight:900; color:#ffcc00;">Rp 20.000</span>
+                        </div>
                     </div>
                     
-                    <p style="font-size: 11px; text-align: center; margin-bottom: 15px; opacity: 0.8;">Setelah bayar, kirim bukti ke WhatsApp Admin untuk dapet kode VIP.</p>
+                    <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" class="action-btn" style="background: #ffcc00; color: #000; text-decoration: none; text-align:center; margin-bottom:15px;">Bayar via Sociabuzz</a>
+                    
+                    <p style="font-size: 11px; text-align: center; margin-bottom: 15px; opacity: 0.8;">
+                        Setelah bayar, kirim bukti ke WhatsApp Admin:<br>
+                        <a href="https://wa.me/6285352831643" target="_blank" style="color:var(--primary); font-weight:bold; text-decoration:none;">085352831643</a><br>
+                        untuk dapet kode VIP.
+                    </p>
                     
                     <input type="text" id="vip-code-input" placeholder="Masukkan Kode VIP (ZENKAI-XXXX)" style="text-align:center; text-transform:uppercase;">
                     <button class="action-btn" onclick="aktivasiVip()" style="background: var(--primary); color: #000;">Tukar Kode VIP</button>
@@ -1025,8 +1079,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-vip`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ action: 'activate', code: code })
                     });
                     const data = await res.json();
@@ -1041,7 +1094,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.removeItem('zenkai_gemini_vip_usage');
 
                     closeModal();
-                    showToast('🎉 Selamat! VIP Aktif 30 Hari.');
+                    showToast('🎉 Selamat! VIP Aktif.');
                 } catch (e) {
                     setBtnLoading(btn, false, 'Tukar Kode VIP');
                     resBox.innerHTML = `<p class="error-msg" style="font-size:12px;">Error: ${escapeHTML(e.message)}</p>`;
@@ -1183,8 +1236,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-spam`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ nomor: nomor })
                     });
                     const data = await res.json();
@@ -1382,8 +1434,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-netflix`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' }
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }
                     });
                     const data = await res.json();
                     
@@ -1424,7 +1475,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         // =========================================
-        // FITUR WEBBUILDER (GENERATE WEB TEMPLATE)
+        // FITUR WEBBUILDER (CUSTOM DROPDOWN BARU)
         // =========================================
         else if (tool === 'webbuilder') {
             modalContent.innerHTML = `
@@ -1442,27 +1493,73 @@ document.addEventListener('DOMContentLoaded', () => {
                     4. Extract, edit <code>config/settings.js</code>, lalu deploy ke Vercel/Netlify!
                 </div>
 
-                <select id="wb-type" style="width:100%; padding:14px; border-radius:12px; border:3px solid var(--border); background:var(--card-bg); color:var(--text); margin-bottom:10px; font-family:var(--font-main); font-weight:bold; outline:none;">
-                    <option value="portfolio">Portfolio</option>
-                    <option value="downloader">Downloader</option>
-                </select>
+                <!-- CUSTOM DROPDOWN: TIPE -->
+                <div class="custom-select-wrapper">
+                    <div class="custom-select press" id="custom-wb-type" onclick="toggleCustomSelect('custom-wb-type')">
+                        <div class="custom-select-trigger">
+                            <span>Portfolio</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option active" data-value="portfolio" onclick="selectCustomOption('custom-wb-type', 'portfolio', 'Portfolio')">Portfolio</div>
+                        <div class="custom-option" data-value="downloader" onclick="selectCustomOption('custom-wb-type', 'downloader', 'Downloader')">Downloader</div>
+                    </div>
+                </div>
 
-                <select id="wb-theme" style="width:100%; padding:14px; border-radius:12px; border:3px solid var(--border); background:var(--card-bg); color:var(--text); margin-bottom:15px; font-family:var(--font-main); font-weight:bold; outline:none;">
-                    <option value="1">Tema 1 - Midnight Aurora</option>
-                    <option value="2">Tema 2 - Neon Cyberpunk</option>
-                    <option value="3">Tema 3 - Minimalist White</option>
-                    <option value="4">Tema 4 - Nature Green</option>
-                    <option value="5">Tema 5 - Dark Mode</option>
-                </select>
+                <!-- CUSTOM DROPDOWN: TEMA -->
+                <div class="custom-select-wrapper">
+                    <div class="custom-select press" id="custom-wb-theme" onclick="toggleCustomSelect('custom-wb-theme')">
+                        <div class="custom-select-trigger">
+                            <span>Tema 1 - Midnight Aurora</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option active" data-value="1" onclick="selectCustomOption('custom-wb-theme', '1', 'Tema 1 - Midnight Aurora')">Tema 1 - Midnight Aurora</div>
+                        <div class="custom-option" data-value="2" onclick="selectCustomOption('custom-wb-theme', '2', 'Tema 2 - Neon Cyberpunk')">Tema 2 - Neon Cyberpunk</div>
+                        <div class="custom-option" data-value="3" onclick="selectCustomOption('custom-wb-theme', '3', 'Tema 3 - Minimalist White')">Tema 3 - Minimalist White</div>
+                        <div class="custom-option" data-value="4" onclick="selectCustomOption('custom-wb-theme', '4', 'Tema 4 - Nature Green')">Tema 4 - Nature Green</div>
+                        <div class="custom-option" data-value="5" onclick="selectCustomOption('custom-wb-theme', '5', 'Tema 5 - Dark Mode')">Tema 5 - Dark Mode</div>
+                    </div>
+                </div>
 
-                <button class="action-btn" id="btn-wb" style="background:var(--primary); color:#000;">Generate Website</button>
+                <button class="action-btn" id="btn-wb" style="background:var(--primary); color:#000; margin-top:10px;">Generate Website</button>
                 <div id="wb-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
             `;
 
+            // Logika Custom Dropdown
+            window.toggleCustomSelect = (id) => {
+                const el = document.getElementById(id);
+                const isActive = el.classList.contains('active');
+                document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('active'));
+                if (!isActive) el.classList.add('active');
+            };
+
+            window.selectCustomOption = (id, value, label) => {
+                const el = document.getElementById(id);
+                el.querySelector('.custom-select-trigger span').innerText = label;
+                el.classList.remove('active');
+                el.dataset.value = value;
+                
+                // Hapus class active dari semua opsi di dropdown ini
+                el.nextElementSibling.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('active'));
+                // Tambah class active ke opsi yang dipilih
+                const targetOpt = el.nextElementSibling.querySelector(`.custom-option[data-value="${value}"]`);
+                if(targetOpt) targetOpt.classList.add('active');
+            };
+
+            // Handle klik di luar dropdown buat nutup
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.custom-select-wrapper')) {
+                    document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('active'));
+                }
+            });
+
             const btn = document.getElementById('btn-wb');
             btn.onclick = async () => {
-                const type = document.getElementById('wb-type').value;
-                const theme = document.getElementById('wb-theme').value;
+                const type = document.getElementById('custom-wb-type').dataset.value || 'portfolio';
+                const theme = document.getElementById('custom-wb-theme').dataset.value || '1';
                 const box = document.getElementById('wb-res');
                 
                 setBtnLoading(btn, true, 'Membangun Web...');
@@ -1550,7 +1647,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     `;
                     
-                    // Bikin fitur download HTML
                     const blob = new Blob([htmlCode], { type: 'text/html' });
                     const urlBlob = URL.createObjectURL(blob);
                     document.getElementById('dl-html').href = urlBlob;
