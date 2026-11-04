@@ -1342,76 +1342,87 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         // =========================================
-        // FITUR NETFLIX TOKEN GENERATOR
-        // =========================================
-        else if (tool === 'netflix') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Netflix VIP Gen 👑</h3>
-                <span class="desc-text" style="color:#ff3333; border-color:#ff3333; background:rgba(255,51,51,0.1);">
-                    Dapatkan akses akun Netflix Premium secara instan.
-                </span>
-                
-                <button class="action-btn" id="btn-nf" style="background:#ff0000; color:#fff; font-size:16px; padding:16px;">Generate Akun</button>
-                
-                <div id="nf-res" style="display:none; margin-top:15px; text-align:left; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
-                
-                <div style="font-size:10px; opacity:0.6; margin-top:15px; text-align:center;">
-                    ⚠️ Akun ini bersifat sharing. Mohon jangan ganti email/password.
+// FITUR NETFLIX TOKEN GENERATOR
+// =========================================
+else if (tool === 'netflix') {
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <h3>Netflix VIP Gen 👑</h3>
+        <span class="desc-text" style="color:#ff0000; border-color:#ff0000; background:rgba(255,0,0,0.1);">
+            Dapatkan akses akun Netflix Premium secara instan.
+        </span>
+
+        <!-- TUTORIAL BOX (UPDATE) -->
+        <div style="text-align:left; font-size:11px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed var(--border); line-height:1.5;">
+            <b style="color:var(--primary);">📌 CARA PAKAI & TRIK:</b><br>
+            1. Klik <b>Generate Akun</b> di bawah.<br>
+            2. Pilih salah satu <b>Link Auto-Login</b>.<br>
+            3. <b style="color:#ffcc00;">TIPS 1:</b> Jika diminta verifikasi email (suruh cek email), <b>GANTI PAKE MODE INCOGNITO / SAMARAN</b> di browser lu.<br>
+            4. <b style="color:#ffcc00;">TIPS 2:</b> Jika mentok, coba klik <b>Buka di Desktop</b> dan aktifkan opsi <b>"Situs Desktop"</b> di HP lu.<br>
+            5. Jika masih gagal, coba <b>Salin Link Utama</b> dan paste ke browser lain (Chrome/Edge).<br>
+            6. Nikmati filmnya! 🍿
+        </div>
+        
+        <button class="action-btn" id="btn-nf" style="background:#ff0000; color:#fff; font-size:16px; padding:16px;">Generate Akun</button>
+        
+        <div id="nf-res" style="display:none; margin-top:15px; text-align:left; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+        
+        <div style="font-size:10px; opacity:0.6; margin-top:15px; text-align:center;">
+            ⚠️ Akun ini bersifat sharing. Mohon jangan ganti email/password.
+        </div>
+    `;
+
+    const btn = document.getElementById('btn-nf');
+    const box = document.getElementById('nf-res');
+
+    btn.onclick = async () => {
+        setBtnLoading(btn, true, 'Mencari Akun...');
+        box.style.display = 'block';
+        box.innerHTML = '<div class="loader"></div>';
+
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-netflix`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            
+            if (data.status === false || !data.data) {
+                throw new Error(data.message || 'Kuota akun habis atau API sedang down.');
+            }
+
+            const d = data.data;
+            const details = d.details;
+            
+            box.innerHTML = `
+                <div style="text-align:center; margin-bottom:15px;">
+                    <h3 style="color:#ff0000; font-family:var(--font-head); font-size:24px; margin:0;">NETFLIX PREMIUM</h3>
+                    <p style="font-size:12px; opacity:0.8;">Expired: <b>${escapeHTML(d.expires)}</b></p>
                 </div>
+
+                <div style="background:rgba(255,0,0,0.1); border:1px solid #ff0000; padding:10px; border-radius:8px; margin-bottom:15px; font-size:12px; line-height:1.6;">
+                    <b>Email:</b> ${escapeHTML(details.Email)}<br>
+                    <b>Plan:</b> ${escapeHTML(details.Plan)}<br>
+                    <b>Negara:</b> ${escapeHTML(details.Country)}<br>
+                    <b>Profile:</b> ${escapeHTML(details.Profile)}
+                </div>
+
+                <p style="font-size:11px; font-weight:bold; margin-bottom:5px;">Pilih Link Auto-Login:</p>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <a href="${escapeHTML(d.links.desktop)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">💻 Buka di Desktop</a>
+                    <a href="${escapeHTML(d.links.mobile)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">📱 Buka di HP</a>
+                    <a href="${escapeHTML(d.links.tv)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">📺 Buka di Smart TV</a>
+                </div>
+
+                <button class="action-btn" onclick="copyToClipboard('${escapeHTML(d.raw_url)}')" style="background:var(--primary); color:#000; margin-top:15px; margin-bottom:0;">📋 Salin Link Utama</button>
             `;
-
-            const btn = document.getElementById('btn-nf');
-            const box = document.getElementById('nf-res');
-
-            btn.onclick = async () => {
-                setBtnLoading(btn, true, 'Mencari Akun...');
-                box.style.display = 'block';
-                box.innerHTML = '<div class="loader"></div>';
-
-                try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-netflix`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                    const data = await res.json();
-                    
-                    if (data.status === false || !data.data) {
-                        throw new Error(data.message || 'Kuota akun habis atau API sedang down.');
-                    }
-
-                    const d = data.data;
-                    const details = d.details;
-                    
-                    box.innerHTML = `
-                        <div style="text-align:center; margin-bottom:15px;">
-                            <h3 style="color:#ff0000; font-family:var(--font-head); font-size:24px; margin:0;">NETFLIX PREMIUM</h3>
-                            <p style="font-size:12px; opacity:0.8;">Expired: <b>${escapeHTML(d.expires)}</b></p>
-                        </div>
-
-                        <div style="background:rgba(255,0,0,0.1); border:1px solid #ff0000; padding:10px; border-radius:8px; margin-bottom:15px; font-size:12px; line-height:1.6;">
-                            <b>Email:</b> ${escapeHTML(details.Email)}<br>
-                            <b>Plan:</b> ${escapeHTML(details.Plan)}<br>
-                            <b>Negara:</b> ${escapeHTML(details.Country)}<br>
-                            <b>Profile:</b> ${escapeHTML(details.Profile)}
-                        </div>
-
-                        <p style="font-size:11px; font-weight:bold; margin-bottom:5px;">Pilih Link Auto-Login:</p>
-                        <div style="display:flex; flex-direction:column; gap:8px;">
-                            <a href="${escapeHTML(d.links.desktop)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">💻 Buka di Desktop</a>
-                            <a href="${escapeHTML(d.links.mobile)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">📱 Buka di HP</a>
-                            <a href="${escapeHTML(d.links.tv)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">📺 Buka di Smart TV</a>
-                        </div>
-
-                        <button class="action-btn" onclick="copyToClipboard('${escapeHTML(d.raw_url)}')" style="background:var(--primary); color:#000; margin-top:15px; margin-bottom:0;">📋 Salin Link Utama</button>
-                    `;
-                    showToast('Akun Netflix Berhasil Digenerate!');
-                } catch (e) {
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
-                }
-                setBtnLoading(btn, false, 'Generate Akun');
-            };
+            showToast('Akun Netflix Berhasil Digenerate!');
+        } catch (e) {
+            box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
         }
+        setBtnLoading(btn, false, 'Generate Akun');
+    };
+}
         // =========================================
         // FITUR KOMIK
         // =========================================
