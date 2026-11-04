@@ -3526,6 +3526,183 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Generate Gambar');
             };
         }
+        // =========================================
+        // FITUR 1: AI IMAGE EDITOR V2 (UNCENSORED)
+        // =========================================
+        else if (tool === 'aiedit') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>AI Image Editor 🪄</h3>
+                <span class="desc-text" style="color: #a855f7; border-color: #a855f7; background: rgba(168,85,247,0.1);">
+                    Edit gambar pakai AI (GPT-Image). Tanpa batasan prompt!
+                </span>
+                
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <button id="tab-ai-upload" onclick="switchAiTab('upload')" class="action-btn" style="flex:1; background:var(--primary); color:#000; margin:0; box-shadow:0 4px 0 var(--border); font-size:12px;">📁 Upload</button>
+                    <button id="tab-ai-url" onclick="switchAiTab('url')" class="action-btn" style="flex:1; background:var(--bg); color:var(--text); margin:0; box-shadow:0 4px 0 var(--border); font-size:12px;">🔗 URL</button>
+                </div>
+
+                <div id="area-ai-upload"><input type="file" id="ai-edit-file" accept="image/*"></div>
+                <div id="area-ai-url" style="display:none;"><input type="text" id="ai-edit-url" placeholder="Paste URL gambar (https://...)"></div>
+
+                <textarea id="ai-edit-prompt" rows="2" placeholder="Ketik instruksi edit... (Wajib)"></textarea>
+                
+                <div style="display:flex; gap:10px; margin-bottom:15px; background:var(--bg); padding:10px; border-radius:8px; border:2px solid var(--border);">
+                    <label style="flex:1; font-size:11px; display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="ai-output" value="json" checked style="accent-color:var(--primary);"> Link (JSON)
+                    </label>
+                    <label style="flex:1; font-size:11px; display:flex; align-items:center; gap:5px; cursor:pointer;">
+                        <input type="radio" name="ai-output" value="image" style="accent-color:var(--primary);"> File Gambar
+                    </label>
+                </div>
+
+                <button class="action-btn" id="btn-ai-edit" style="background:#a855f7; color:#fff;">Proses Edit Gambar</button>
+                <div id="ai-edit-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+                <p style="font-size:10px; color:#ff3333; text-align:center; margin-top:15px;">⚠️ Dilarang mengedit foto orang lain tanpa izin!</p>
+            `;
+
+            window.switchAiTab = (tab) => {
+                const btnU = document.getElementById('tab-ai-upload'), btnR = document.getElementById('tab-ai-url');
+                const areaU = document.getElementById('area-ai-upload'), areaR = document.getElementById('area-ai-url');
+                if (tab === 'upload') {
+                    btnU.style.background = 'var(--primary)'; btnU.style.color = '#000'; btnR.style.background = 'var(--bg)'; btnR.style.color = 'var(--text)';
+                    areaU.style.display = 'block'; areaR.style.display = 'none';
+                } else {
+                    btnR.style.background = 'var(--primary)'; btnR.style.color = '#000'; btnU.style.background = 'var(--bg)'; btnU.style.color = 'var(--text)';
+                    areaU.style.display = 'none'; areaR.style.display = 'block';
+                }
+            };
+
+            const btn = document.getElementById('btn-ai-edit');
+            btn.onclick = async () => {
+                const prompt = document.getElementById('ai-edit-prompt').value.trim();
+                const fileInput = document.getElementById('ai-edit-file');
+                const urlInput = document.getElementById('ai-edit-url').value.trim();
+                const box = document.getElementById('ai-edit-res');
+                const isUploadTab = document.getElementById('area-ai-upload').style.display !== 'none';
+                const outputType = document.querySelector('input[name="ai-output"]:checked').value;
+
+                if (!prompt) return showToast('Masukkan instruksi edit!');
+                let imageBase64 = null;
+                if (isUploadTab) {
+                    if (!fileInput.files[0]) return showToast('Pilih gambar dulu!');
+                    imageBase64 = await new Promise((resolve) => {
+                        const reader = new FileReader(); reader.onload = (e) => resolve(e.target.result); reader.readAsDataURL(fileInput.files[0]);
+                    });
+                } else { if (!urlInput) return showToast('Masukkan URL gambar!'); }
+
+                setBtnLoading(btn, true, 'Memproses AI...');
+                box.style.display = 'block'; box.innerHTML = '<div class="loader"></div><p style="font-size:10px; opacity:0.6; margin-top:10px;">Tunggu 10-30 detik...</p>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-aiedit`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt, image_base64: imageBase64, image_url: isUploadTab ? null : urlInput, output_type: outputType })
+                    });
+                    const data = await res.json();
+                    if (data.status === false) throw new Error(data.message || 'Gagal');
+
+                    let finalImageUrl = (data.type === 'json') ? data.data.result : data.data;
+                    if (!finalImageUrl) throw new Error('Gagal mendapatkan gambar');
+
+                    box.innerHTML = `
+                        <p style="color:#00ff9d; font-weight:bold; margin-bottom:10px; font-size:12px;">✅ Berhasil Diedit!</p>
+                        <img src="${finalImageUrl}" style="width:100%; border-radius:8px; border:2px solid var(--border); margin-bottom:10px;">
+                        <a href="${finalImageUrl}" download="aiedit-${Date.now()}.png" target="_blank" class="action-btn" style="background:var(--primary); color:#000; text-decoration:none; display:block;">⬇️ Download / Buka Gambar</a>
+                    `;
+                    showToast('Gambar Berhasil Diedit!');
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Proses Edit Gambar');
+            };
+        }
+
+        // =========================================
+        // FITUR 2: NOTRACK AI CHAT (UNCENSORED)
+        // =========================================
+        else if (tool === 'notrack-chat') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>NoTrack AI 👑</h3>
+                <span class="desc-text" style="color: #ff007f; border-color: #ff007f; background: rgba(255,0,127,0.1);">
+                    Chat AI tanpa sensor. Support kirim gambar & ingat percakapan.
+                </span>
+                <div id="nt-chat-box" style="display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto; margin-bottom:15px; background:rgba(0,0,0,0.1); padding:10px; border-radius:12px; border:2px solid var(--border);">
+                    <div style="font-size:11px; opacity:0.6; text-align:center;">Mulai percakapan...</div>
+                </div>
+
+                <div style="display:flex; gap:8px; margin-bottom:10px;">
+                    <input type="file" id="nt-file" accept="image/*" style="display:none;" onchange="document.getElementById('nt-file-label').innerText = this.files[0] ? '🖼️ ' + this.files[0].name : '📎';">
+                    <button onclick="document.getElementById('nt-file').click()" id="nt-file-label" class="action-btn" style="width:45px; padding:0; margin:0; background:var(--bg); color:var(--text); font-size:18px;">📎</button>
+                    <input type="text" id="nt-input" placeholder="Tanya apa aja..." style="margin:0;" onkeypress="if(event.key === 'Enter') document.getElementById('btn-nt').click()">
+                </div>
+
+                <button class="action-btn" id="btn-nt" style="background:#ff007f; color:#fff;">Kirim Pesan</button>
+            `;
+
+            let ntSessionId = null;
+            let ntChatId = null;
+            const chatBox = document.getElementById('nt-chat-box');
+            const btn = document.getElementById('btn-nt');
+
+            const addMessage = (text, isUser) => {
+                const div = document.createElement('div');
+                div.style.cssText = `align-self: ${isUser ? 'flex-end' : 'flex-start'}; background: ${isUser ? 'var(--primary)' : 'var(--card-bg)'}; color: ${isUser ? '#000' : 'var(--text)'}; padding: 10px 14px; border-radius: 12px; border-bottom-${isUser ? 'right' : 'left'}-radius: 2px; font-size: 12px; max-width: 85%; border: 2px solid var(--border); box-shadow: 2px 2px 0 var(--border); line-height: 1.5; white-space: pre-wrap;`;
+                div.innerText = text;
+                chatBox.appendChild(div);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            };
+
+            btn.onclick = async () => {
+                const input = document.getElementById('nt-input');
+                const fileInput = document.getElementById('nt-file');
+                const prompt = input.value.trim();
+                const file = fileInput.files[0];
+
+                if (!prompt && !file) return showToast('Ketik pesan atau pilih gambar!');
+
+                addMessage(prompt || '📷 [Gambar dikirim]', true);
+                input.value = '';
+                fileInput.value = ''; document.getElementById('nt-file-label').innerText = '📎';
+
+                const loadingDiv = document.createElement('div');
+                loadingDiv.innerHTML = '<div class="loader" style="width:16px; height:16px; border-width:2px; margin:0;"></div>';
+                loadingDiv.style.cssText = `align-self: flex-start; background: var(--card-bg); padding: 10px; border-radius: 12px; border: 2px solid var(--border);`;
+                chatBox.appendChild(loadingDiv); chatBox.scrollTop = chatBox.scrollHeight;
+
+                setBtnLoading(btn, true, 'Mikir...');
+
+                try {
+                    let fileBase64 = null;
+                    if (file) {
+                        fileBase64 = await new Promise((resolve) => {
+                            const reader = new FileReader(); reader.onload = (e) => resolve(e.target.result); reader.readAsDataURL(file);
+                        });
+                    }
+
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-notrack`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt, sessionId: ntSessionId, chatId: ntChatId, file_base64: fileBase64 })
+                    });
+                    const data = await res.json();
+                    
+                    loadingDiv.remove();
+                    if (data.status === false) throw new Error(data.message || 'Gagal');
+
+                    // Simpan sessionId dan chatId biar inget percakapan
+                    if (data.data?.session) {
+                        ntSessionId = data.data.session.sessionId;
+                        ntChatId = data.data.session.chatId;
+                    }
+
+                    addMessage(data.data?.reply || 'Maaf, tidak ada balasan.', false);
+                } catch (e) {
+                    loadingDiv.remove();
+                    addMessage(`❌ Error: ${e.message}`, false);
+                }
+                setBtnLoading(btn, false, 'Kirim Pesan');
+            };
+        }
+
         else {
             modalContent.innerHTML = `
                 ${closeSvg}
