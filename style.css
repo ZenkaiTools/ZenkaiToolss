@@ -140,8 +140,21 @@ body[data-theme="comic"] .bottom-nav, body[data-theme="cyber"] .bottom-nav, body
 /* TOAST & LOADER */
 .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 100000; width: 90%; pointer-events: none; }
 .toast { background: var(--card-bg); border: 3px solid var(--border); padding: 12px; border-radius: var(--radius); box-shadow: var(--shadow); color: var(--text); text-align: center; font-weight: 700; font-size: 12px; animation: slideUp 0.3s; pointer-events: auto; }
-.loader { border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
+
+/* PATCH LOADER: PAKE GPU BIAR GAK FREEZE */
+.loader { 
+    border: 4px solid rgba(0,0,0,0.1); 
+    border-top: 4px solid var(--primary); 
+    border-radius: 50%; 
+    width: 30px; 
+    height: 30px; 
+    animation: spin 1s linear infinite; 
+    margin: 20px auto; 
+    will-change: transform;
+    transform: translateZ(0);
+}
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
 .page { display: none; }
 .page.active { display: block; animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -174,6 +187,13 @@ body[data-theme="comic"] .logo-text h1 { letter-spacing: 2px; text-transform: up
 
 /* REDUCED MOTION SUPPORT */
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }
+
+/* PATCH REDUCED MOTION: PAKSA LOADER TETEP MUTER */
+.reduce-motion .loader {
+    animation: spin 1s linear infinite !important;
+    animation-duration: 1s !important;
+    animation-iteration-count: infinite !important;
+}
 
 /* INTRO SCREEN FULLSCREEN (SPLASH SCREEN) */
 .intro-screen { position: fixed; inset: 0; z-index: 99999; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; transition: opacity 0.8s ease, transform 0.8s ease; }
