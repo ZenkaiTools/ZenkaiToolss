@@ -1342,87 +1342,292 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         // =========================================
-// FITUR NETFLIX TOKEN GENERATOR
-// =========================================
-else if (tool === 'netflix') {
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3>Netflix VIP Gen 👑</h3>
-        <span class="desc-text" style="color:#ff0000; border-color:#ff0000; background:rgba(255,0,0,0.1);">
-            Dapatkan akses akun Netflix Premium secara instan.
-        </span>
+        // FITUR NETFLIX TOKEN GENERATOR
+        // =========================================
+        else if (tool === 'netflix') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Netflix VIP Gen 👑</h3>
+                <span class="desc-text" style="color:#ff0000; border-color:#ff0000; background:rgba(255,0,0,0.1);">
+                    Dapatkan akses akun Netflix Premium secara instan.
+                </span>
 
-        <!-- TUTORIAL BOX (UPDATE) -->
-        <div style="text-align:left; font-size:11px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed var(--border); line-height:1.5;">
-            <b style="color:var(--primary);">📌 CARA PAKAI & TRIK:</b><br>
-            1. Klik <b>Generate Akun</b> di bawah.<br>
-            2. Pilih salah satu <b>Link Auto-Login</b>.<br>
-            3. <b style="color:#ffcc00;">TIPS 1:</b> Jika diminta verifikasi email (suruh cek email), <b>GANTI PAKE MODE INCOGNITO / SAMARAN</b> di browser lu.<br>
-            4. <b style="color:#ffcc00;">TIPS 2:</b> Jika mentok, coba klik <b>Buka di Desktop</b> dan aktifkan opsi <b>"Situs Desktop"</b> di HP lu.<br>
-            5. Jika masih gagal, coba <b>Salin Link Utama</b> dan paste ke browser lain (Chrome/Edge).<br>
-            6. Nikmati filmnya! 🍿
-        </div>
-        
-        <button class="action-btn" id="btn-nf" style="background:#ff0000; color:#fff; font-size:16px; padding:16px;">Generate Akun</button>
-        
-        <div id="nf-res" style="display:none; margin-top:15px; text-align:left; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
-        
-        <div style="font-size:10px; opacity:0.6; margin-top:15px; text-align:center;">
-            ⚠️ Akun ini bersifat sharing. Mohon jangan ganti email/password.
-        </div>
-    `;
-
-    const btn = document.getElementById('btn-nf');
-    const box = document.getElementById('nf-res');
-
-    btn.onclick = async () => {
-        setBtnLoading(btn, true, 'Mencari Akun...');
-        box.style.display = 'block';
-        box.innerHTML = '<div class="loader"></div>';
-
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-netflix`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            });
-            const data = await res.json();
-            
-            if (data.status === false || !data.data) {
-                throw new Error(data.message || 'Kuota akun habis atau API sedang down.');
-            }
-
-            const d = data.data;
-            const details = d.details;
-            
-            box.innerHTML = `
-                <div style="text-align:center; margin-bottom:15px;">
-                    <h3 style="color:#ff0000; font-family:var(--font-head); font-size:24px; margin:0;">NETFLIX PREMIUM</h3>
-                    <p style="font-size:12px; opacity:0.8;">Expired: <b>${escapeHTML(d.expires)}</b></p>
+                <!-- TUTORIAL BOX (UPDATE) -->
+                <div style="text-align:left; font-size:11px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed var(--border); line-height:1.5;">
+                    <b style="color:var(--primary);">📌 CARA PAKAI & TRIK:</b><br>
+                    1. Klik <b>Generate Akun</b> di bawah.<br>
+                    2. Pilih salah satu <b>Link Auto-Login</b>.<br>
+                    3. <b style="color:#ffcc00;">TIPS 1:</b> Jika diminta verifikasi email (suruh cek email), <b>GANTI PAKE MODE INCOGNITO / SAMARAN</b> di browser lu.<br>
+                    4. <b style="color:#ffcc00;">TIPS 2:</b> Jika mentok, coba klik <b>Buka di Desktop</b> dan aktifkan opsi <b>"Situs Desktop"</b> di HP lu.<br>
+                    5. Jika masih gagal, coba <b>Salin Link Utama</b> dan paste ke browser lain (Chrome/Edge).<br>
+                    6. Nikmati filmnya! 🍿
                 </div>
-
-                <div style="background:rgba(255,0,0,0.1); border:1px solid #ff0000; padding:10px; border-radius:8px; margin-bottom:15px; font-size:12px; line-height:1.6;">
-                    <b>Email:</b> ${escapeHTML(details.Email)}<br>
-                    <b>Plan:</b> ${escapeHTML(details.Plan)}<br>
-                    <b>Negara:</b> ${escapeHTML(details.Country)}<br>
-                    <b>Profile:</b> ${escapeHTML(details.Profile)}
+                
+                <button class="action-btn" id="btn-nf" style="background:#ff0000; color:#fff; font-size:16px; padding:16px;">Generate Akun</button>
+                
+                <div id="nf-res" style="display:none; margin-top:15px; text-align:left; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+                
+                <div style="font-size:10px; opacity:0.6; margin-top:15px; text-align:center;">
+                    ⚠️ Akun ini bersifat sharing. Mohon jangan ganti email/password.
                 </div>
-
-                <p style="font-size:11px; font-weight:bold; margin-bottom:5px;">Pilih Link Auto-Login:</p>
-                <div style="display:flex; flex-direction:column; gap:8px;">
-                    <a href="${escapeHTML(d.links.desktop)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">💻 Buka di Desktop</a>
-                    <a href="${escapeHTML(d.links.mobile)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">📱 Buka di HP</a>
-                    <a href="${escapeHTML(d.links.tv)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">📺 Buka di Smart TV</a>
-                </div>
-
-                <button class="action-btn" onclick="copyToClipboard('${escapeHTML(d.raw_url)}')" style="background:var(--primary); color:#000; margin-top:15px; margin-bottom:0;">📋 Salin Link Utama</button>
             `;
-            showToast('Akun Netflix Berhasil Digenerate!');
-        } catch (e) {
-            box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+
+            const btn = document.getElementById('btn-nf');
+            const box = document.getElementById('nf-res');
+
+            btn.onclick = async () => {
+                setBtnLoading(btn, true, 'Mencari Akun...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-netflix`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    const data = await res.json();
+                    
+                    if (data.status === false || !data.data) {
+                        throw new Error(data.message || 'Kuota akun habis atau API sedang down.');
+                    }
+
+                    const d = data.data;
+                    const details = d.details;
+                    
+                    box.innerHTML = `
+                        <div style="text-align:center; margin-bottom:15px;">
+                            <h3 style="color:#ff0000; font-family:var(--font-head); font-size:24px; margin:0;">NETFLIX PREMIUM</h3>
+                            <p style="font-size:12px; opacity:0.8;">Expired: <b>${escapeHTML(d.expires)}</b></p>
+                        </div>
+
+                        <div style="background:rgba(255,0,0,0.1); border:1px solid #ff0000; padding:10px; border-radius:8px; margin-bottom:15px; font-size:12px; line-height:1.6;">
+                            <b>Email:</b> ${escapeHTML(details.Email)}<br>
+                            <b>Plan:</b> ${escapeHTML(details.Plan)}<br>
+                            <b>Negara:</b> ${escapeHTML(details.Country)}<br>
+                            <b>Profile:</b> ${escapeHTML(details.Profile)}
+                        </div>
+
+                        <p style="font-size:11px; font-weight:bold; margin-bottom:5px;">Pilih Link Auto-Login:</p>
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                            <a href="${escapeHTML(d.links.desktop)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">💻 Buka di Desktop</a>
+                            <a href="${escapeHTML(d.links.mobile)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">📱 Buka di HP</a>
+                            <a href="${escapeHTML(d.links.tv)}" target="_blank" class="action-btn" style="background:#000; color:#fff; border:2px solid var(--border); text-decoration:none; text-align:center; margin-bottom:0;">📺 Buka di Smart TV</a>
+                        </div>
+
+                        <button class="action-btn" onclick="copyToClipboard('${escapeHTML(d.raw_url)}')" style="background:var(--primary); color:#000; margin-top:15px; margin-bottom:0;">📋 Salin Link Utama</button>
+                    `;
+                    showToast('Akun Netflix Berhasil Digenerate!');
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btn, false, 'Generate Akun');
+            };
         }
-        setBtnLoading(btn, false, 'Generate Akun');
-    };
-}
+        // =========================================
+        // FITUR WEBBUILDER (GENERATE WEB TEMPLATE)
+        // =========================================
+        else if (tool === 'webbuilder') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>WebBuilder Pro 👑</h3>
+                <span class="desc-text" style="color:var(--primary); border-color:var(--primary); background:rgba(0,255,204,0.1);">
+                    Generate Source Code Website Premium (Portfolio / Downloader)
+                </span>
+                
+                <div style="text-align:left; font-size:11px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed var(--border); line-height:1.5;">
+                    <b style="color:var(--primary);">📌 CARA PAKAI:</b><br>
+                    1. Pilih Tipe Website (Portfolio / Downloader).<br>
+                    2. Pilih Tema (1-5).<br>
+                    3. Klik Generate, lalu download ZIP-nya.<br>
+                    4. Extract, edit <code>config/settings.js</code>, lalu deploy ke Vercel/Netlify!
+                </div>
+
+                <select id="wb-type" style="width:100%; padding:14px; border-radius:12px; border:3px solid var(--border); background:var(--card-bg); color:var(--text); margin-bottom:10px; font-family:var(--font-main); font-weight:bold; outline:none;">
+                    <option value="portfolio">Portfolio</option>
+                    <option value="downloader">Downloader</option>
+                </select>
+
+                <select id="wb-theme" style="width:100%; padding:14px; border-radius:12px; border:3px solid var(--border); background:var(--card-bg); color:var(--text); margin-bottom:15px; font-family:var(--font-main); font-weight:bold; outline:none;">
+                    <option value="1">Tema 1 - Midnight Aurora</option>
+                    <option value="2">Tema 2 - Neon Cyberpunk</option>
+                    <option value="3">Tema 3 - Minimalist White</option>
+                    <option value="4">Tema 4 - Nature Green</option>
+                    <option value="5">Tema 5 - Dark Mode</option>
+                </select>
+
+                <button class="action-btn" id="btn-wb" style="background:var(--primary); color:#000;">Generate Website</button>
+                <div id="wb-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+            `;
+
+            const btn = document.getElementById('btn-wb');
+            btn.onclick = async () => {
+                const type = document.getElementById('wb-type').value;
+                const theme = document.getElementById('wb-theme').value;
+                const box = document.getElementById('wb-res');
+                
+                setBtnLoading(btn, true, 'Membangun Web...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-webbuilder`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type: type, theme: theme })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.status === false || !data.result) throw new Error(data.message || 'Gagal generate');
+
+                    const r = data.result;
+                    box.innerHTML = `
+                        <div style="text-align:left; font-size:12px;">
+                            <p style="color:#00ff9d; font-weight:bold; margin-bottom:10px;">✅ Website Berhasil Dibuat!</p>
+                            <p><b>Tipe:</b> ${escapeHTML(r.type)}</p>
+                            <p><b>Tema:</b> ${escapeHTML(r.theme)}</p>
+                            <p><b>Total File:</b> ${r.total_files} file</p>
+                            <hr style="border:1px dashed var(--border); margin:10px 0;">
+                            <p style="font-size:10px; opacity:0.8; margin-bottom:15px;">${escapeHTML(r.note)}</p>
+                        </div>
+                        <a href="${escapeHTML(r.download_url)}" target="_blank" class="action-btn" style="background:#00ff9d; color:#000; text-decoration:none; display:block; text-align:center; font-weight:900; margin:0;">⬇️ Download Source Code (ZIP)</a>
+                    `;
+                    showToast('Website Berhasil Digenerate!');
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btn, false, 'Generate Website');
+            };
+        }
+        // =========================================
+        // FITUR CF-SOURCE (BYPASS CLOUDFLARE)
+        // =========================================
+        else if (tool === 'cfsource') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>CF-Source Scraper</h3>
+                <span class="desc-text" style="color: #ffcc00; border-color: #ffcc00; background: rgba(255,204,0,0.1);">
+                    Bypass Cloudflare & ambil Source Code HTML
+                </span>
+                
+                <div style="text-align:left; font-size:11px; background:rgba(255,51,51,0.1); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed #ff3333; line-height:1.5; color:var(--text);">
+                    <b style="color:#ff3333;">⚠️ PERINGATAN:</b><br>
+                    Tool ini hanya untuk riset keamanan & edukasi. Dilarang menggunakan untuk mencuri data atau meretas situs orang lain!
+                </div>
+
+                <input type="text" id="cf-url" placeholder="Masukkan URL Website (cth: https://example.com)">
+                <button class="action-btn" id="btn-cf" style="background:#ffcc00; color:#000;">Scrape Source Code</button>
+                
+                <div id="cf-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+            `;
+
+            const btn = document.getElementById('btn-cf');
+            btn.onclick = async () => {
+                const url = document.getElementById('cf-url').value.trim();
+                const box = document.getElementById('cf-res');
+                if (!url) return showToast('Masukkan URL dulu!');
+                
+                setBtnLoading(btn, true, 'Scraping...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-cfsource`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: url })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.status === false || !data.data) throw new Error(data.message || 'Gagal Scrape');
+
+                    const htmlCode = data.data.html;
+                    const duration = data.data.duration;
+                    
+                    box.innerHTML = `
+                        <p style="color:#00ff9d; font-weight:bold; margin-bottom:10px; font-size:12px;">✅ Berhasil Scrape dalam ${duration}s</p>
+                        <textarea id="cf-code" readonly style="width:100%; height:200px; background:#000; color:#00ffcc; border:2px solid var(--border); border-radius:8px; padding:10px; font-family:monospace; font-size:11px; resize:vertical; outline:none; margin-bottom:10px;">${escapeHTML(htmlCode)}</textarea>
+                        <div style="display:flex; gap:10px;">
+                            <button class="action-btn" onclick="copyToClipboard(document.getElementById('cf-code').value)" style="background:var(--primary); color:#000; flex:1; margin:0;">📋 Copy Code</button>
+                            <a id="dl-html" class="action-btn" style="background:#3b82f6; color:#fff; flex:1; margin:0; text-decoration:none; display:flex; justify-content:center; align-items:center;">⬇️ Save HTML</a>
+                        </div>
+                    `;
+                    
+                    // Bikin fitur download HTML
+                    const blob = new Blob([htmlCode], { type: 'text/html' });
+                    const urlBlob = URL.createObjectURL(blob);
+                    document.getElementById('dl-html').href = urlBlob;
+                    document.getElementById('dl-html').download = `scraped-${Date.now()}.html`;
+
+                    showToast('Scrape Berhasil!');
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btn, false, 'Scrape Source Code');
+            };
+        }
+        // =========================================
+        // FITUR FAKE DANA (MAKER)
+        // =========================================
+        else if (tool === 'fakedana') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Fake Saldo DANA</h3>
+                <span class="desc-text" style="color: #ff007f; border-color: #ff007f; background: rgba(255,0,127,0.1);">
+                    Bikin gambar SS saldo DANA buat prank temen lu!
+                </span>
+                
+                <div style="text-align:left; font-size:11px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; margin-bottom:15px; border:2px dashed var(--border); line-height:1.5;">
+                    <b style="color:var(--primary);">📌 CARA PAKAI:</b><br>
+                    1. Masukkan nominal (tanpa titik/koma, misal: 1000000).<br>
+                    2. Klik Generate.<br>
+                    3. Tekan & tahan gambar untuk menyimpan.<br>
+                    <i>*Hanya untuk hiburan/prank. Jangan untuk nipu!</i>
+                </div>
+
+                <input type="number" id="dana-nominal" placeholder="Masukkan Nominal (cth: 1000000)" inputmode="numeric">
+                <button class="action-btn" id="btn-dana" style="background:#ff007f; color:#fff;">Generate Gambar</button>
+                
+                <div id="dana-res" style="display:none; margin-top:15px; text-align:center; border:3px dashed var(--border); padding:15px; border-radius:8px; background:var(--card-bg);"></div>
+            `;
+
+            const btn = document.getElementById('btn-dana');
+            btn.onclick = async () => {
+                const nominal = document.getElementById('dana-nominal').value.trim();
+                const box = document.getElementById('dana-res');
+                if (!nominal) return showToast('Masukkan nominal!');
+                
+                setBtnLoading(btn, true, 'Memproses...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-dana`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nominal: nominal })
+                    });
+                    
+                    if (!res.ok) throw new Error('Gagal memproses gambar');
+                    
+                    const contentType = res.headers.get('content-type') || '';
+                    if (!contentType.includes('image/')) {
+                        let errMsg = 'Gagal memproses gambar';
+                        try { const j = await res.json(); errMsg = j.message || errMsg; } catch {}
+                        throw new Error(errMsg);
+                    }
+
+                    const blob = await res.blob();
+                    const imgUrl = URL.createObjectURL(blob);
+                    
+                    box.innerHTML = `
+                        <p style="color:#00ff9d; font-weight:bold; margin-bottom:10px; font-size:12px;">✅ Berhasil Dibuat!</p>
+                        <img src="${imgUrl}" style="width:100%; max-width:300px; border-radius:8px; border:2px solid var(--border); margin-bottom:10px;">
+                        <a href="${imgUrl}" download="fake-dana-${nominal}.png" class="action-btn" style="background:var(--primary); color:#000; text-decoration:none; display:block;">⬇️ Download Gambar</a>
+                    `;
+                    showToast('Gambar Berhasil Dibuat!');
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btn, false, 'Generate Gambar');
+            };
+        }
         // =========================================
         // FITUR KOMIK
         // =========================================
