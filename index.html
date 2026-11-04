@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#00ffcc">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Zenkai Tools // Andika T.M</title>
+    <title>Zenkai Tools v2.0 // Andika T.M</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Bangers&family=Space+Mono&display=swap" rel="stylesheet">
@@ -53,7 +53,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" width="14" height="14"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
             </button>
             
-            <p style="color:rgba(255,255,255,0.3); font-size:9px; margin-top:15px; letter-spacing:1px;">© 2026 ZENKAI SYSTEM</p>
+            <p style="color:rgba(255,255,255,0.3); font-size:9px; margin-top:15px; letter-spacing:1px;">© 2026 ZENKAI SYSTEM v2.0</p>
         </div>
     </div>
 
@@ -127,7 +127,7 @@
         <header class="header-box" style="display: flex; justify-content: space-between; align-items: center;">
             <div class="logo-area">
                 <div class="logo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-                <div class="logo-text"><h1>ZenkaiTools</h1><p class="version">v1.0 // Andika T.M</p></div>
+                <div class="logo-text"><h1>ZenkaiTools</h1><p class="version">v2.0 // Andika T.M</p></div>
             </div>
             
             <!-- TOMBOL VIP -->
@@ -182,7 +182,7 @@
                     </div>
                     <div>
                         <h3 style="font-family: var(--font-head); font-size: 16px; margin-bottom: 2px; color: #ffcc00;">Traktir Developer</h3>
-                        <p style="font-size: 10px; opacity: 0.8; color: var(--text);">Bantu jaga server tetap nyala & bebas iklan</p>
+                        <p style="font-size: 10px; opacity: 0.8; color: var(--text);">Bantu jaga server tetap nyala & bebas iklan.</p>
                     </div>
                 </div>
                 <div style="background: #ffcc00; color: #000; font-weight: 900; font-size: 12px; padding: 8px 15px; border-radius: 20px; border: 2px solid var(--border); box-shadow: 2px 2px 0 var(--border); display:flex; align-items:center; gap:5px;">
@@ -198,12 +198,11 @@
                     <h2>Halo, <span id="welcome-username" style="color:var(--primary);">User</span>! </h2>
                     <p style="margin-top:5px; font-size:12px; line-height:1.5;">Akses berbagai modul utilitas, generator, dan fitur sultan lo di sini. Tanpa install!</p>
                 </div>
-                <div style="background:var(--primary); color:#000; font-weight:800; font-size:10px; padding:4px 8px; border-radius:6px; border:2px solid var(--border); box-shadow:2px 2px 0 #000;">v1.0</div>
+                <div style="background:var(--primary); color:#000; font-weight:800; font-size:10px; padding:4px 8px; border-radius:6px; border:2px solid var(--border); box-shadow:2px 2px 0 #000;">v2.0</div>
             </div>
             <div style="margin-top:15px; display:flex; gap:8px;">
-                <div style="flex:1; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px; text-align:center; border:1px dashed var(--border);"><b style="font-size:14px; display:block;">30+</b><span style="font-size:9px; opacity:0.7;">Tools</span></div>
+                <div style="flex:1; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px; text-align:center; border:1px dashed var(--border);"><b id="total-tools-count" style="font-size:14px; display:block;">30+</b><span style="font-size:9px; opacity:0.7;">Tools</span></div>
                 <div style="flex:1; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px; text-align:center; border:1px dashed var(--border);"><b style="font-size:14px; display:block;">24/7</b><span style="font-size:9px; opacity:0.7;">Online</span></div>
-                <!-- TEKS DIGANTI -->
                 <div style="flex:1; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px; text-align:center; border:1px dashed var(--border);"><b style="font-size:14px; display:block;">Bebas</b><span style="font-size:9px; opacity:0.7;">Iklan Judol</span></div>
             </div>
         </div>
@@ -316,6 +315,30 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
                     </div>
                     <h4>Fake DANA</h4>
+                </div>
+
+                <!-- ZENKAI CINEMA -->
+                <div class="tool-card press" data-category="utility" onclick="openTool('cinema')" role="button" tabindex="0">
+                    <div class="t-icon bg-red">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h20M2 15h20"/></svg>
+                    </div>
+                    <h4>Cinema</h4>
+                </div>
+
+                <!-- AI VIDEO GENERATOR -->
+                <div class="tool-card press" data-category="utility" onclick="openTool('vidgen')" role="button" tabindex="0">
+                    <div class="t-icon bg-purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                    </div>
+                    <h4>AI Video</h4>
+                </div>
+
+                <!-- TERABOX DL -->
+                <div class="tool-card press" data-category="downloader" onclick="openTool('terabox')" role="button" tabindex="0">
+                    <div class="t-icon bg-blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </div>
+                    <h4>Terabox</h4>
                 </div>
 
                 <div class="coming-soon-divider"><span>Coming Soon</span></div>
@@ -436,13 +459,12 @@
             </div>
         </div>
 
-        <!-- Fitur Tambahan (BARU) -->
+        <!-- Fitur Tambahan (BARU & BANYAK) -->
         <div class="tools-section" style="margin-bottom:15px;">
-            <h3 style="margin-bottom:15px; font-family:var(--font-head);">Fitur Tambahan</h3>
+            <h3 style="margin-bottom:15px; font-family:var(--font-head);">Pengaturan Lanjutan</h3>
             <div style="display:flex; flex-direction:column; gap:10px;">
-                <button class="action-btn press" onclick="toggleMusic()" style="background:var(--bg); color:var(--text); border-color:var(--border);">Nyalakan/Matikan Musik</button>
                 
-                <!-- Toggle Animasi (Baru) -->
+                <!-- Toggle Animasi -->
                 <div style="display:flex; justify-content:space-between; align-items:center; background:var(--card-bg); padding:12px; border-radius:8px; border:2px solid var(--border);">
                     <span style="font-size:12px; font-weight:bold;">Matikan Animasi (Hemat Baterai)</span>
                     <label class="switch">
@@ -451,25 +473,32 @@
                     </label>
                 </div>
 
-                <!-- Join Channel (Baru) -->
-                <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" class="action-btn press" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; background:#25D366; color:#fff; border-color:#1e9e4b;">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.031 2C6.502 2 2 6.502 2 12.031c0 1.77.46 3.49 1.34 5.01L2 22l5.09-1.33c1.47.8 3.13 1.22 4.84 1.22h.1c5.52 0 10.02-4.5 10.02-10.03C22.05 6.5 17.55 2 12.03 2zm0 18.05c-1.55 0-3.07-.42-4.4-1.2l-.32-.19-3.27.86.87-3.19-.2-.33A8.01 8.01 0 0 1 4 12.03C4 7.6 7.6 4 12.03 4c2.14 0 4.15.83 5.66 2.34a7.97 7.97 0 0 1 2.34 5.66c0 4.43-3.6 8.05-8 8.05z"/></svg>
-                    Gabung Saluran WA
-                </a>
+                <!-- Volume Musik -->
+                <div style="background:var(--card-bg); padding:12px; border-radius:8px; border:2px solid var(--border);">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <span style="font-size:12px; font-weight:bold;">Volume Musik</span>
+                        <span id="vol-label" style="font-size:12px; font-weight:bold; color:var(--primary);">50%</span>
+                    </div>
+                    <input type="range" id="vol-slider" min="0" max="100" value="50" oninput="ubahVolume(this.value)" style="width:100%; accent-color:var(--primary);">
+                </div>
 
+                <button class="action-btn press" onclick="toggleMusic()" style="background:var(--bg); color:var(--text); border-color:var(--border);">Nyalakan/Matikan Musik</button>
+                <button class="action-btn press" onclick="forceCekUpdate()" style="background:#3b82f6; color:#fff;">Cek Update Terbaru</button>
                 <button class="action-btn press" onclick="resetData()" style="background:#ff3333; color:#fff;">Hapus Cache Web</button>
             </div>
         </div>
 
+        <!-- Tentang Developer -->
         <div class="tools-section">
             <h3 style="margin-bottom:15px; font-family:var(--font-head);">Tentang Developer</h3>
             <p style="font-size:12px; line-height:1.6; opacity:0.8; margin-bottom:15px;">Halo! Zenkai Tools ini dibuat dan dikembangkan oleh <b>Andika T.M</b>. Jika ada saran atau bug, silakan hubungi lewat WhatsApp Channel di bawah ini.</p>
-            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn press" style="text-decoration:none; display:block; text-align:center;">Hubungi Developer</a>
+            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn press" style="text-decoration:none; display:block; text-align:center; background:#25D366; color:#fff; border-color:#1e9e4b;">Hubungi Developer</a>
+            <p style="text-align:center; font-size:10px; opacity:0.5; margin-top:15px;">Versi Aplikasi: 2.0.0 (Stable)</p>
         </div>
     </main>
 
     <!-- ========================================= -->
-    <!-- 7. HALAMAN INFO (BARU)                    -->
+    <!-- 7. HALAMAN INFO (BARU & BANYAK)           -->
     <!-- ========================================= -->
     <main id="page-info" class="page">
         <header class="header-box">
@@ -481,32 +510,50 @@
             </div>
         </header>
 
+        <!-- Info Umum & Statistik -->
         <div class="tools-section" style="padding:20px; margin-bottom:15px;">
-            <h2 style="font-family:var(--font-head); color:var(--primary); font-size:24px; margin-bottom:10px;">Zenkai Tools v1.0</h2>
+            <h2 style="font-family:var(--font-head); color:var(--primary); font-size:24px; margin-bottom:10px;">Zenkai Tools v2.0</h2>
             <p style="line-height:1.6; opacity:0.8; font-size:13px; margin-bottom:15px;">Aplikasi utilitas serba-serbi dengan antarmuka tebal, tegas, dan futuristik. Ringan, responsif, dan siap pakai di HP maupun PC tanpa install.</p>
             
             <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; border-top:2px dashed var(--border); padding-top:15px;">
-                <div style="display:flex; justify-content:space-between;"><span>Versi:</span> <b>1.0.0 (Stable)</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>Versi:</span> <b>2.0.0 (Stable)</b></div>
                 <div style="display:flex; justify-content:space-between;"><span>Developer:</span> <b>Andika T.M</b></div>
-                <div style="display:flex; justify-content:space-between;"><span>Total Tools:</span> <b>30+ Modul</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>Total Tools:</span> <b id="info-total-tools">30+</b></div>
                 <div style="display:flex; justify-content:space-between;"><span>Framework:</span> <b>Vanilla JS</b></div>
                 <div style="display:flex; justify-content:space-between;"><span>Status:</span> <b style="color:#27ae60;">Online</b></div>
             </div>
         </div>
 
-        <!-- Fitur Baru: Statistik & Pengumuman -->
+        <!-- Update Terbaru -->
         <div class="tools-section" style="padding:20px; margin-bottom:15px; background:rgba(0,255,204,0.05); border-color:var(--primary);">
-            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px; color:var(--primary);"> Update Terbaru</h3>
-            <p style="font-size:12px; line-height:1.6; opacity:0.8; margin:0;">Kami baru saja menambahkan fitur **WebBuilder**, **CF-Source**, dan **Fake DANA**. Cek di halaman Tools sekarang!</p>
+            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px; color:var(--primary);"> Update Terbaru (v2.0)</h3>
+            <ul style="font-size:11px; line-height:1.8; opacity:0.9; margin:0; padding-left:15px;">
+                <li>Fitur Baru: <b>Zenkai Cinema</b> (Drama China)</li>
+                <li>Fitur Baru: <b>AI Video Generator</b></li>
+                <li>Fitur Baru: <b>Terabox Downloader</b></li>
+                <li>Upgrade: <b>Bypass Link</b>, <b>Arti Nama</b>, <b>YT Downloader</b></li>
+                <li>UI Baru: Halaman Settings & Info</li>
+            </ul>
         </div>
 
+        <!-- Tutorial Singkat -->
+        <div class="tools-section" style="padding:20px; margin-bottom:15px;">
+            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;"> Panduan Singkat</h3>
+            <p style="font-size:11px; line-height:1.6; opacity:0.8; margin-bottom:5px;">
+                1. Pilih tool dari grid di halaman <b>Tools</b>.<br>
+                2. Masukkan URL/Teks yang diminta.<br>
+                3. Tunggu proses selesai, lalu simpan hasilnya.<br>
+                4. Tool dengan label <b>VIP</b> butuh kode aktivasi.
+            </p>
+        </div>
+
+        <!-- Penafian (Disclaimer) -->
         <div class="tools-section" style="padding:20px; margin-bottom:15px;">
             <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px; color:#ff3333;">Penafian (Disclaimer)</h3>
             <p style="font-size:11px; line-height:1.6; opacity:0.8; margin-bottom:10px;">
                 Zenkai Tools tidak berafiliasi dengan TikTok, Instagram, Facebook, Pinterest, atau Roblox. Segala konten yang diunduh melalui tool ini adalah tanggung jawab pengguna. Mohon gunakan dengan bijak dan hormati hak cipta.
             </p>
             <div style="background:rgba(255, 51, 51, 0.1); border-left:3px solid #ff3333; padding:10px;">
-                <!-- TEKS DISCLAIMER BARU (Nggak Ceramah) -->
                 <p style="font-size:11px; line-height:1.6; color:#ff9999; margin:0;">
                     <b>Penting:</b> Pengguna bertanggung jawab penuh atas data yang dimasukkan. Kami tidak menyimpan data sensitif Anda dan tidak bertanggung jawab atas penyalahgunaan fitur.
                 </p>
@@ -518,7 +565,7 @@
             <p style="font-size:11px; line-height:1.6; opacity:0.7;">Terima kasih yang sebesar-besarnya kepada seluruh pengguna setia <b>Zenkai Tools</b>. Tanpa kalian, project ini nggak akan berkembang sampai sejauh ini. Tetap semangat, jangan lupa istirahat, dan gunakan tools ini dengan bijak!</p>
         </div>
         
-        <div class="credit-text" style="margin-top:20px;">&copy; 2026 Zenkai Tools. All rights reserved.</div>
+        <div class="credit-text" style="margin-top:20px;">&copy; 2026 Zenkai Tools v2.0. All rights reserved.</div>
     </main>
     </div>
 
