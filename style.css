@@ -141,19 +141,29 @@ body[data-theme="comic"] .bottom-nav, body[data-theme="cyber"] .bottom-nav, body
 .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 100000; width: 90%; pointer-events: none; }
 .toast { background: var(--card-bg); border: 3px solid var(--border); padding: 12px; border-radius: var(--radius); box-shadow: var(--shadow); color: var(--text); text-align: center; font-weight: 700; font-size: 12px; animation: slideUp 0.3s; pointer-events: auto; }
 
-/* PATCH LOADER: PAKE GPU BIAR GAK FREEZE */
+/* PATCH LOADER: PAKE GPU BIAR GAK FREEZE & PAKSA MUTER */
 .loader { 
     border: 4px solid rgba(0,0,0,0.1); 
     border-top: 4px solid var(--primary); 
     border-radius: 50%; 
     width: 30px; 
     height: 30px; 
-    animation: spin 1s linear infinite; 
     margin: 20px auto; 
+    
+    /* PAKSA ANIMASI MUTER */
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite !important;
+    animation-play-state: running !important;
+    
     will-change: transform;
     transform: translateZ(0);
 }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes spin { 
+    0% { transform: rotate(0deg); } 
+    100% { transform: rotate(360deg); } 
+}
 
 .page { display: none; }
 .page.active { display: block; animation: fadeIn 0.3s ease; }
@@ -193,6 +203,7 @@ body[data-theme="comic"] .logo-text h1 { letter-spacing: 2px; text-transform: up
     animation: spin 1s linear infinite !important;
     animation-duration: 1s !important;
     animation-iteration-count: infinite !important;
+    animation-play-state: running !important;
 }
 
 /* INTRO SCREEN FULLSCREEN (SPLASH SCREEN) */
