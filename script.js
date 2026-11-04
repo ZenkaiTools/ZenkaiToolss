@@ -936,41 +936,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // =========================================
-        // FITUR SUPPORT (TEKS BARU)
-        // =========================================
-        else if (tool === 'support') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <div style="padding: 10px 0;">
-                    <h3 style="font-family: var(--font-head); font-size: 24px; color: #ffcc00; text-align: center; text-shadow: 2px 2px 0 var(--border); margin-bottom: 5px;">Level Up Pengalaman Lo</h3>
-                    <p style="font-size: 10px; color: var(--primary); font-weight: 800; letter-spacing: 2px; text-align: center; margin-bottom: 25px;">BUKAN SEKADAR WEB, TAPI GAYA HIDUP</p>
-
-                    <div style="font-size: 13px; line-height: 1.7; color: var(--text); opacity: 0.9; text-align: left; margin-bottom: 25px; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 12px; border: 2px dashed var(--border);">
-                        <p style="margin-bottom: 15px;">
-                            Gue bikin <b>Zenkai Tools</b> biar lu bisa akses semua kebutuhan digital tanpa ribet. Tapi biar server tetep ngebut dan bebas dari iklan judol, gue butuh dukungan dari lu.
-                        </p>
-                        <p style="margin-bottom: 15px;">
-                            Dengan traktir gue kopi, lu bukan cuma bantu server, tapi juga **membuka akses ke fitur-fitur eksklusif** yang gak ada di versi gratis.
-                        </p>
-                        <p style="margin-bottom: 0; font-weight: 800; color: #ff3333; text-align: center;">
-                            Jadi, siap jadi bagian dari Sultan Zenkai?
-                        </p>
-                    </div>
-
-                    <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" rel="noopener noreferrer" 
-                       class="action-btn" 
-                       style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; 
-                              background: #ffcc00; color: #000; border: 3px solid var(--border); border-radius: 12px; 
-                              font-weight: 900; font-size: 15px; padding: 16px; box-shadow: 0 5px 0 var(--border); 
-                              margin-bottom: 15px; text-transform: uppercase;">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        Traktir Kopi & Jadi Sultan
-                    </a>
-                    
-                    <p style="text-align: center; font-size: 10px; opacity: 0.6; font-style: italic;">"Sekecil apapun donasinya, sangat berarti. Makasih!"</p>
+// FITUR SUPPORT (DONASI) - UPDATED
+// =========================================
+else if (tool === 'support') {
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <div style="padding: 10px 0;">
+            <div style="text-align:center; margin-bottom:15px;">
+                <div style="background: linear-gradient(135deg, #ffcc00, #ff7300); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; border: 3px solid var(--border); box-shadow: 0 4px 10px rgba(255,115,0,0.3);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" width="30" height="30"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
                 </div>
-            `;
-        }
+            </div>
+            
+            <h3 style="font-family: var(--font-head); font-size: 22px; color: var(--text); text-align: center; margin-bottom: 5px;">Traktir Kopi Developer</h3>
+            <p style="font-size: 10px; color: var(--primary); font-weight: 800; letter-spacing: 1px; text-align: center; margin-bottom: 20px;">ZENKAI TOOLS x ANDIKA</p>
+
+            <div style="font-size: 12px; line-height: 1.7; color: var(--text); opacity: 0.9; text-align: left; margin-bottom: 20px; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 12px; border: 2px dashed var(--border);">
+                <p style="margin-bottom: 12px;">
+                    Halo! Web ini dibangun dari nol biar lu bisa akses <b>30+ tools</b> tanpa harus direcokin iklan pop-up judol yang bikin pusing.
+                </p>
+                <p style="margin-bottom: 12px;">
+                    Tapi jujur aja, biaya <b>Server & API</b> bulanan itu nggak murah. Gue belum pasang iklan sepeser pun dan pengen tetep gitu.
+                </p>
+                <p style="margin-bottom: 0; font-weight: 800; color: #ffcc00;">
+                    Kalau lu ngerasa web ini bermanfaat, bantu traktir kopi biar gue semangat update fitur baru terus. Makasih banget!
+                </p>
+            </div>
+
+            <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" rel="noopener noreferrer" 
+               class="action-btn" 
+               style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; 
+                      background: #ffcc00; color: #000; border: 3px solid var(--border); border-radius: 12px; 
+                      font-weight: 900; font-size: 15px; padding: 16px; box-shadow: 0 5px 0 var(--border); 
+                      margin-bottom: 15px; text-transform: uppercase;">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                Traktir Kopi Sekarang
+            </a>
+            
+            <p style="text-align: center; font-size: 10px; opacity: 0.6; font-style: italic;">"Sekecil apapun dukungan lu, sangat berarti buat server ini tetep nyala."</p>
+        </div>
+    `;
+}
         // =========================================
         // FITUR VIP (HARGA & PERBANDINGAN BARU)
         // =========================================
