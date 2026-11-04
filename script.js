@@ -441,14 +441,28 @@ document.addEventListener('DOMContentLoaded', () => {
         window.currentVipTools = setting.vip_tools ? setting.vip_tools.split(',') : [];
 
         document.querySelectorAll('.tool-card').forEach(c => {
-            const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
-            if (!m) return;
-            const toolName = m[1];
-            if (dTools.includes(toolName)) {
-                c.classList.add('maintenance-mode');
-            } else {
-                c.classList.remove('maintenance-mode');
-            }
+    const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
+    if (!m) return;
+    const toolName = m[1];
+    
+    // Hapus badge maintenance lama jika ada
+    const oldBadge = c.querySelector('.badge-maintenance');
+    if (oldBadge) oldBadge.remove();
+
+    if (dTools.includes(toolName)) {
+        c.classList.add('maintenance-mode');
+        // Paksa inject badge merah ke dalam HTML
+        const badge = document.createElement('div');
+        badge.className = 'badge-maintenance';
+        badge.innerText = 'MAINTENANCE';
+       
+        
+        // Masukkan ke dalam .t-info (di bawah judul H4)
+        const infoDiv = c.querySelector('.t-info');
+        if (infoDiv) infoDiv.appendChild(badge);
+    } else {
+        c.classList.remove('maintenance-mode');
+    }
 
             if (window.currentVipTools.includes(toolName)) {
                 if (!c.querySelector('.vip-badge')) {
