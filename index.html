@@ -3,140 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="description" content="Zenkai Tools — Kumpulan utilitas, downloader, dan generator dalam satu tempat.">
-    <meta name="theme-color" content="#1C1E22">
+    <meta name="description" content="Zenkai Tools — Modul utilitas, downloader, generator, dan fitur sultan. Gratis, ringan, tanpa install.">
+    <meta name="theme-color" content="#00ffcc">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Zenkai Tools</title>
+    <title>Zenkai Tools v2.2 // Andika T.M</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Bangers&family=Space+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+<!-- TEMA BAWAAN: CYBERPUNK -->
 <body data-theme="cyber">
 
-    <!-- 1. SPLASH SCREEN -->
-    <div id="auth-gate" class="splash-screen">
-        <video id="welcome-video" autoplay muted playsinline class="splash-video">
+    <!-- ========================================= -->
+    <!-- 1. SPLASH SCREEN VIDEO (PINTU MASUK)      -->
+    <!-- ========================================= -->
+    <div id="auth-gate" style="position:fixed !important; top:0 !important; left:0 !important; width:100vw !important; height:100vh !important; background:#000 !important; z-index:1000000 !important; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        
+        <!-- VIDEO INTRO -->
+        <video id="welcome-video" autoplay muted playsinline style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
             <source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/69f209fc07b94f9b2a09e6b5e1b1b1cf52e89f86/0a220ffe6ffe05c3243dfef08d96253b_720w.mp4" type="video/mp4">
         </video>
-        <div class="splash-overlay"></div>
-        <div class="splash-content">
-            <h1 class="splash-title">Zenkai Tools</h1>
-            <div class="splash-actions">
-                <button onclick="masukKeWeb()" class="btn btn-primary">Mulai Gunakan</button>
-                <button onclick="aktifkanSuara()" id="btn-unmute" class="btn btn-ghost">Nyalakan Suara</button>
+
+        <!-- Efek Overlay & Scanline Sinematik -->
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.9) 100%); z-index:2; pointer-events:none;"></div>
+        <div style="position:absolute; inset:0; background:repeating-linear-gradient(0deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 3px); z-index:2; pointer-events:none;"></div>
+
+        <!-- Teks Branding & Tombol -->
+        <div style="position:absolute; bottom:0; left:0; right:0; padding:50px 20px 40px 20px; background:linear-gradient(to top, rgba(0,0,0,0.9), transparent); text-align:center; z-index:3; display:flex; flex-direction:column; align-items:center;">
+            
+            <div style="display:flex; align-items:center; justify-content:center; gap:15px; margin-bottom:25px; width:100%; max-width:350px;">
+                <div style="flex:1; height:1px; background:linear-gradient(to right, transparent, var(--primary));"></div>
+                <h1 style="font-family:var(--font-head); color:#fff; font-size:24px; letter-spacing:6px; margin:0; text-shadow:0 0 15px rgba(0,255,204,0.6);">
+                    ZENKAI<span style="color:var(--primary);">TOOLS</span>
+                </h1>
+                <div style="flex:1; height:1px; background:linear-gradient(to left, transparent, var(--primary));"></div>
             </div>
+
+            <!-- TOMBOL AKTIFKAN SUARA -->
+            <button onclick="aktifkanSuara()" id="btn-unmute" class="btn-shimmer" style="padding:12px 30px; background:var(--primary); color:#000; border:none; border-radius:8px; font-weight:900; font-size:13px; letter-spacing:1px; box-shadow:0 0 20px rgba(0,255,204,0.5); cursor:pointer; margin-bottom:15px; display:flex; align-items:center; gap:8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                AKTIFKAN SUARA
+            </button>
+
+            <!-- TOMBOL SKIP INTRO -->
+            <button onclick="masukKeWeb()" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 30px; border-radius:8px; font-weight:600; font-size:12px; letter-spacing:2px; cursor:pointer; backdrop-filter:blur(5px); transition:0.3s; display:flex; align-items:center; gap:10px;">
+                SKIP INTRO 
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" width="14" height="14"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+            </button>
+            
+            <p style="color:rgba(255,255,255,0.3); font-size:9px; margin-top:15px; letter-spacing:1px;">© 2026 ZENKAI SYSTEM v2.2</p>
         </div>
     </div>
 
-    <!-- 2. MAINTENANCE -->
-    <div id="maintenance-screen" class="maintenance-screen">
-        <div class="maintenance-content">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="icon-lg"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            <h2>Sedang Perawatan</h2>
-            <p>Sistem sedang diperbarui. Silakan kembali beberapa saat lagi.</p>
+    <!-- ========================================= -->
+    <!-- 2. LAYAR MAINTENANCE - CYBERPUNK          -->
+    <!-- ========================================= -->
+    <div id="maintenance-screen" style="display:none; position:fixed; inset:0; z-index:99999; background:#09090b; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; overflow:hidden;">
+        <div style="position:absolute; inset:0; background-image: linear-gradient(rgba(255, 51, 51, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 51, 51, 0.05) 1px, transparent 1px); background-size: 40px 40px; z-index:0;"></div>
+        
+        <div style="background:rgba(24, 24, 27, 0.9); border:1px solid rgba(255, 51, 51, 0.4); padding:40px 30px; border-radius:16px; max-width:400px; width:100%; box-shadow:0 0 50px rgba(255, 51, 51, 0.15), inset 0 0 20px rgba(255, 51, 51, 0.05); position:relative; z-index:1;">
+            <div style="font-size:60px; margin-bottom:20px; color:#ff3333; text-shadow:0 0 20px rgba(255,51,51,0.5); line-height:1; animation:glitch 2s infinite;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="60" height="60" style="margin:0 auto;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <h1 style="font-family:var(--font-head); font-size:26px; color:#ff3333; margin-bottom:15px; letter-spacing:2px; text-transform:uppercase;">SYSTEM OFFLINE</h1>
+            <p style="font-size:13px; line-height:1.6; color:#a1a1aa; margin-bottom:30px; font-family:monospace;">Server sedang dalam pemeliharaan rutin untuk optimalisasi. Silakan kembali beberapa saat lagi.</p>
+            
+            <div style="width:100%; height:4px; background:rgba(255,51,51,0.2); border-radius:10px; overflow:hidden; margin-bottom:10px;">
+                <div style="height:100%; width:50%; background:#ff3333; border-radius:10px; animation: loadingBar 1.5s ease-in-out infinite alternate; box-shadow:0 0 10px #ff3333;"></div>
+            </div>
+            <p style="font-size:10px; color:#ff3333; font-family:monospace; letter-spacing:1px; animation:pulse 1s infinite;">MENUNGGU KONEKSI...</p>
         </div>
     </div>
     
-    <!-- 3. BROADCAST BANNER -->
-    <div id="broadcast-banner" class="broadcast-banner" style="display:none;"><span id="broadcast-text"></span></div>
+    <div id="broadcast-banner" style="display:none; position:fixed; top:10px; left:50%; transform:translateX(-50%); width:90%; max-width:440px; background:#ff007f; color:#fff; padding:10px; border-radius:8px; border:2px solid #000; z-index:99998; font-size:12px; font-weight:bold; text-align:center;"><span id="broadcast-text"></span></div>
 
     <a href="#page-tools" class="skip-link">Lewati ke konten utama</a>
 
-    <!-- 4. POPUP WHATSAPP -->
-    <div class="modal-overlay" id="wa-popup" role="dialog" aria-modal="true">
-        <div class="modal-box">
-            <button class="modal-close btn-icon" onclick="closeWaPopup()" aria-label="Tutup">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <!-- ========================================= -->
+    <!-- 3. POPUP WHATSAPP                         -->
+    <!-- ========================================= -->
+    <div class="wa-popup-overlay" id="wa-popup" role="dialog" aria-modal="true" aria-labelledby="wa-title">
+        <div class="wa-popup-box">
+            <!-- TOMBOL X PAKAI SVG -->
+            <button class="wa-close press" onclick="closeWaPopup()" aria-label="Tutup popup">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <h2>Saluran Informasi</h2>
-            <p>Dapatkan info pembaruan fitur dan berita penting langsung melalui saluran WhatsApp resmi kami.</p>
-            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                Gabung Saluran
+            <div class="wa-badge">UPDATE TERBARU</div>
+            <h2 id="wa-title">Gabung Saluran WhatsApp</h2>
+            <p>Dapatkan update fitur, tools terbaru, dan info penting langsung dari <b>Zenkai Tools</b>.</p>
+            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="wa-btn">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12.031 2C6.502 2 2 6.502 2 12.031c0 1.77.46 3.49 1.34 5.01L2 22l5.09-1.33c1.47.8 3.13 1.22 4.84 1.22h.1c5.52 0 10.02-4.5 10.02-10.03C22.05 6.5 17.55 2 12.03 2zm0 18.05c-1.55 0-3.07-.42-4.4-1.2l-.32-.19-3.27.86.87-3.19-.2-.33A8.01 8.01 0 0 1 4 12.03C4 7.6 7.6 4 12.03 4c2.14 0 4.15.83 5.66 2.34a7.97 7.97 0 0 1 2.34 5.66c0 4.43-3.6 8.05-8 8.05zm4.4-5.99c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.68 2.57 4.08 3.6.57.24 1.01.39 1.36.5.57.18 1.09.15 1.5.09.46-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/></svg>
+                Gabung ke Saluran
             </a>
+            <p class="wa-foot">Saluran resmi Zenkai Tools</p>
         </div>
     </div>
 
-    <!-- 5. MUSIK WIDGET -->
+    <!-- MUSIK WIDGET -->
     <div class="music-widget" role="group" aria-label="Pemutar musik">
-        <button onclick="prevSong()" class="btn-icon" aria-label="Sebelumnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>
-        <button onclick="toggleMusic()" id="btn-play" class="btn-icon btn-play" aria-label="Putar">
-            <svg id="ic-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            <svg id="ic-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <button onclick="prevSong()" class="press" aria-label="Lagu sebelumnya"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg></button>
+        <button onclick="toggleMusic()" id="btn-play" class="press" aria-label="Play / Pause" style="width: 40px; height: 40px;">
+            <svg id="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg id="ic-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
         </button>
-        <button onclick="nextSong()" class="btn-icon" aria-label="Berikutnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg></button>
+        <button onclick="nextSong()" class="press" aria-label="Lagu berikutnya"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg></button>
     </div>
     <audio id="bgm"></audio>
 
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
+    <noscript>
+        <div style="padding:20px; text-align:center; font-family:sans-serif;">Zenkai Tools butuh JavaScript. Aktifkan JavaScript di browser Anda.</div>
+    </noscript>
+
     <div class="app-container">
-    <!-- HALAMAN UTAMA (TOOLS) -->
+    <!-- ========================================= -->
+    <!-- 4. HALAMAN UTAMA (TOOLS)                  -->
+    <!-- ========================================= -->
     <main id="page-tools" class="page active">
-        <header class="top-header">
+        <!-- HEADER DENGAN TOMBOL VIP -->
+        <header class="header-box" style="display: flex; justify-content: space-between; align-items: center;">
             <div class="logo-area">
-                <div class="logo-mark">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                </div>
-                <div class="logo-text">
-                    <h1>Zenkai</h1>
-                    <span>v2.2.0</span>
-                </div>
+                <div class="logo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+                <div class="logo-text"><h1>ZenkaiTools</h1><p class="version">v2.2 // Andika T.M</p></div>
             </div>
-            <button onclick="openTool('vip')" class="btn-vip">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                VIP
+            
+            <!-- TOMBOL VIP -->
+            <button onclick="openTool('vip')" style="background: linear-gradient(135deg, #ffcc00, #ff7300); color: #000; border: 2px solid var(--border); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 0 var(--border); cursor: pointer; transition: transform 0.1s; z-index: 1000;" class="press" aria-label="Beli VIP">
+                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             </button>
         </header>
 
-        <div class="hero-section">
-            <div class="hero-video-wrapper">
-                <video autoplay loop muted playsinline><source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/main/ff159444c39001329443bf9fbc846fcc_720w.mp4" type="video/mp4"></video>
+        <div class="custom-hero-block">
+            <div class="hero-media">
+                <video autoplay loop muted playsinline class="theme-video" aria-hidden="true"><source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/main/ff159444c39001329443bf9fbc846fcc_720w.mp4" type="video/mp4"></video>
             </div>
-            <div class="device-info">
-                <div class="info-item"><span id="device-name">Memuat...</span></div>
-                <div class="info-item"><span id="battery-level">--%</span></div>
-                <div class="info-item"><span id="clock-now">--:--</span></div>
+            <div class="hero-divider"></div>
+            <div class="device-info-bar">
+                <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg><span id="device-name">HP</span></div>
+                <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg><span id="battery-level">--%</span></div>
+                <div class="info-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span id="clock-now">--:--</span></div>
             </div>
         </div>
 
-        <div class="banner-list">
-            <div class="banner-item" id="tool-komik" onclick="openTool('komik')">
-                <div class="banner-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-                <div class="banner-text">
-                    <h3>Baca Komik</h3>
-                    <p>Manga & Manhwa Bahasa Indonesia</p>
+        <!-- ========================================= -->
+        <!-- BANNER BACA KOMIK (ID: tool-komik)        -->
+        <!-- ========================================= -->
+        <div class="tools-section" id="tool-komik" style="margin-bottom: 15px; padding: 0; overflow: hidden; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255, 115, 0, 0.1) 100%); border: 2px solid var(--border); border-radius: var(--radius); cursor:pointer;" onclick="openTool('komik')">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="t-icon bg-orange" style="width: 45px; height: 45px; border-radius: 12px; box-shadow: 0 4px 10px rgba(255,115,0,0.3);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </div>
+                    <div>
+                        <h3 style="font-family: var(--font-head); font-size: 16px; margin-bottom: 2px; color: var(--text);">Baca Komik Gratis</h3>
+                        <p style="font-size: 10px; opacity: 0.8;">Ribuan Manga & Manhwa Bahasa Indonesia!</p>
+                    </div>
                 </div>
-                <svg class="banner-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-
-            <div class="banner-item" onclick="openTool('support')">
-                <div class="banner-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
-                <div class="banner-text">
-                    <h3>Dukungan Server</h3>
-                    <p>Bantu biaya operasional API</p>
+                <div style="background: var(--primary); color: #000; font-weight: 900; font-size: 12px; padding: 8px 15px; border-radius: 20px; border: 2px solid var(--border); box-shadow: 2px 2px 0 var(--border); display:flex; align-items:center; gap:5px;">
+                    BACA 
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
-                <svg class="banner-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
         </div>
 
-        <div class="welcome-section">
-            <h2>Halo, <span id="welcome-username">User</span></h2>
-            <p>Akses berbagai utilitas, downloader, dan generator gratis di sini.</p>
-            <div class="stat-grid">
-                <div class="stat-item"><b id="total-tools-count">30+</b><span>Alat</span></div>
-                <div class="stat-item"><b>24/7</b><span>Online</span></div>
-                <div class="stat-item"><b>Bebas</b><span>Iklan</span></div>
+        <!-- ========================================= -->
+        <!-- BANNER SUPPORT (TEKS BARU)                -->
+        <!-- ========================================= -->
+        <div class="tools-section" onclick="openTool('support')" style="margin-bottom: 15px; padding: 0; overflow: hidden; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255, 204, 0, 0.15) 100%); border: 2px solid #ffcc00; border-radius: var(--radius); cursor:pointer; box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="t-icon" style="width: 45px; height: 45px; border-radius: 12px; background: linear-gradient(135deg, #ffcc00, #ff7300); color:#000; box-shadow: 0 4px 10px rgba(255,115,0,0.3); border: 2px solid var(--border);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 24px; height: 24px;">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 style="font-family: var(--font-head); font-size: 16px; margin-bottom: 2px; color: #ffcc00;">Traktir Developer</h3>
+                        <p style="font-size: 10px; opacity: 0.8; color: var(--text);">Bantu jaga server tetap nyala & bebas iklan.</p>
+                    </div>
+                </div>
+                <div style="background: #ffcc00; color: #000; font-weight: 900; font-size: 12px; padding: 8px 15px; border-radius: 20px; border: 2px solid var(--border); box-shadow: 2px 2px 0 var(--border); display:flex; align-items:center; gap:5px;">
+                    SUPPORT 
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
             </div>
         </div>
 
-        <div class="catalog-section">
+        <div class="welcome-box">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div>
+                    <h2>Halo, <span id="welcome-username" style="color:var(--primary);">User</span>! </h2>
+                    <p style="margin-top:5px; font-size:12px; line-height:1.5;">Akses berbagai modul utilitas, generator, dan fitur sultan lo di sini. Tanpa install!</p>
+                </div>
+                <div style="background:var(--primary); color:#000; font-weight:800; font-size:10px; padding:4px 8px; border-radius:6px; border:2px solid var(--border); box-shadow:2px 2px 0 #000;">v2.2</div>
+            </div>
+            <div style="margin-top:15px; display:flex; gap:8px;">
+                <div style="flex:1; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px; text-align:center; border:1px dashed var(--border);"><b id="total-tools-count" style="font-size:14px; display:block;">30+</b><span style="font-size:9px; opacity:0.7;">Tools</span></div>
+                <div style="flex:1; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px; text-align:center; border:1px dashed var(--border);"><b style="font-size:14px; display:block;">24/7</b><span style="font-size:9px; opacity:0.7;">Online</span></div>
+                <div style="flex:1; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px; text-align:center; border:1px dashed var(--border);"><b style="font-size:14px; display:block;">Bebas</b><span style="font-size:9px; opacity:0.7;">Iklan Judol</span></div>
+            </div>
+        </div>
+
+        <div class="tools-section">
             <div class="section-header">
-                <h3>Katalog Alat</h3>
-                <div class="search-box">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" id="search-tools" placeholder="Cari alat..." aria-label="Cari alat">
+                <h3>MODULES</h3>
+                <div class="search-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="search-tools" placeholder="Cari..." aria-label="Cari tools">
                 </div>
             </div>
 
@@ -147,345 +223,411 @@
                 <button class="cat-btn" onclick="filterCategory('utility', this)">Utility</button>
             </div>
 
-            <!-- LIST TOOLS (Menyesuaikan ID/Class script.js) -->
-            <div class="tool-list">
+            <div class="grid-tools">
                 <!-- DOWNLOADER -->
-                <div class="tool-card press" data-category="downloader" onclick="openTool('tiktok')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
-                    <div class="t-info"><h4>TikTok Downloader</h4><p>Unduh video tanpa watermark</p></div>
-                </div>
-                <div class="tool-card press" data-category="downloader" onclick="openTool('instagram')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
-                    <div class="t-info"><h4>Instagram Downloader</h4><p>Unduh foto & video post/reels</p></div>
-                </div>
-                <div class="tool-card press" data-category="downloader" onclick="openTool('facebook')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
-                    <div class="t-info"><h4>Facebook Downloader</h4><p>Unduh video publik Facebook</p></div>
-                </div>
-                <div class="tool-card press" data-category="downloader" onclick="openTool('pinterest')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10 5.52 0 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6c-3.31 0-6 2.69-6 6 0 2.21 1.21 4.15 3 5.19V18h2v-1.81c1.79-1.04 3-2.98 3-5.19 0-3.31-2.69-6-6-6z"/></svg></div>
-                    <div class="t-info"><h4>Pinterest Downloader</h4><p>Unduh gambar & video Pinterest</p></div>
-                </div>
-                <div class="tool-card press" data-category="downloader" onclick="openTool('youtube')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2C5.12 19.5 12 19.5 12 19.5s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 11.75a29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></div>
-                    <div class="t-info"><h4>YouTube Downloader</h4><p>Unduh audio & video YouTube</p></div>
-                </div>
-                <div class="tool-card press" data-category="downloader" onclick="openTool('terabox')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
-                    <div class="t-info"><h4>Terabox Downloader</h4><p>Unduh file dari tautan Terabox</p></div>
-                </div>
+                <div class="tool-card press" data-category="downloader" onclick="openTool('tiktok')" role="button" tabindex="0"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><h4>TikTok DL</h4></div>
+                
+                <div class="tool-card press" data-category="downloader" onclick="openTool('instagram')" role="button" tabindex="0"><div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div><h4>Instagram DL</h4></div>
+                
+                <div class="tool-card press" data-category="downloader" onclick="openTool('facebook')" role="button" tabindex="0"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div><h4>Facebook DL</h4></div>
+                
+                <div class="tool-card press" data-category="downloader" onclick="openTool('pinterest')" role="button" tabindex="0"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10 5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M12 6c-3.31 0-6 2.69-6 6 0 2.21 1.21 4.15 3 5.19V18h2v-1.81c1.79-1.04 3-2.98 3-5.19 0-3.31-2.69-6-6-6z"/></svg></div><h4>Pinterest</h4></div>
+
+                <div class="tool-card press" data-category="downloader" onclick="openTool('youtube')" role="button" tabindex="0"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2C5.12 19.5 12 19.5 12 19.5s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 11.75a29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></div><h4>YouTube DL</h4></div>
 
                 <!-- STALKER -->
-                <div class="tool-card press" data-category="stalker" onclick="openTool('stalktt')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
-                    <div class="t-info"><h4>Stalk TikTok</h4><p>Cek statistik akun publik</p></div>
-                </div>
-                <div class="tool-card press" data-category="stalker" onclick="openTool('stalkroblox')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
-                    <div class="t-info"><h4>Stalk Roblox</h4><p>Lacak profil pemain Roblox</p></div>
-                </div>
+                <div class="tool-card press" data-category="stalker" onclick="openTool('stalktt')" role="button" tabindex="0"><div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk TT</h4></div>
+                
+                <div class="tool-card press" data-category="stalker" onclick="openTool('stalkroblox')" role="button" tabindex="0"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk Roblox</h4></div>
 
                 <!-- UTILITY -->
-                <div class="tool-card press" data-category="utility" onclick="openTool('qr')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
-                    <div class="t-info"><h4>QR Code Generator</h4><p>Ubah teks/tautan menjadi QR</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('imgtojpg')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-                    <div class="t-info"><h4>Konversi ke JPG</h4><p>Ubah format gambar ke JPG</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('username')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-                    <div class="t-info"><h4>Username Generator</h4><p>Buat ide nama pengguna unik</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('artinama')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-                    <div class="t-info"><h4>Arti Nama</h4><p>Cari makna nama (Primbon)</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('password')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-                    <div class="t-info"><h4>Password Generator</h4><p>Buat sandi acak yang aman</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('zodiak')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div>
-                    <div class="t-info"><h4>Cek Zodiak</h4><p>Ketahui zodiak dari tanggal lahir</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('base64')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-                    <div class="t-info"><h4>Base64 Converter</h4><p>Encode & decode format Base64</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('umur')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-                    <div class="t-info"><h4>Hitung Umur</h4><p>Ketahui usia berdasarkan tanggal</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('tempmail')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
-                    <div class="t-info"><h4>Temp Mail</h4><p>Buat email sementara</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('nik')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></div>
-                    <div class="t-info"><h4>NIK Parser</h4><p>Bongkar data dari NIK KTP</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('spotify')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 15c2-2 6-2 8 0"/><path d="M8 11c3-2.5 8-2 10 1"/><path d="M8 7c4-3 10-2 12 2"/></svg></div>
-                    <div class="t-info"><h4>Spotify Downloader</h4><p>Unduh lagu Spotify ke MP3</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('iplookup')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-                    <div class="t-info"><h4>IP Lookup</h4><p>Lacak informasi IP publik</p></div>
-                </div>
-                <div class="tool-card press" data-category="utility" onclick="openTool('removebg')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
-                    <div class="t-info"><h4>Remove Background</h4><p>Hapus latar belakang gambar</p></div>
-                </div>
+                <div class="tool-card press" data-category="utility" onclick="openTool('qr')" role="button" tabindex="0"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><h4>QR Code</h4></div>
                 
+                <div class="tool-card press" data-category="utility" onclick="openTool('imgtojpg')" role="button" tabindex="0"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9"/></svg></div><h4>Image to JPG</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('username')" role="button" tabindex="0"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h4>Username Gen</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('artinama')" role="button" tabindex="0"><div class="t-icon bg-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><h4>Arti Nama</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('password')" role="button" tabindex="0"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h4>Password</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('zodiak')" role="button" tabindex="0"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div><h4>Zodiak</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('base64')" role="button" tabindex="0"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><h4>Base64</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('umur')" role="button" tabindex="0"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><h4>Hitung Umur</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('tempmail')" role="button" tabindex="0"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div><h4>Temp Mail</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('nik')" role="button" tabindex="0"><div class="t-icon bg-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></div><h4>NIK Parser</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('spotify')" role="button" tabindex="0"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 15c2-2 6-2 8 0"/><path d="M8 11c3-2.5 8-2 10 1"/><path d="M8 7c4-3 10-2 12 2"/></svg></div><h4>Spotify DL</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('iplookup')" role="button" tabindex="0"><div class="t-icon bg-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>IP Lookup Pro</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('removebg')" role="button" tabindex="0"><div class="t-icon bg-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div><h4>RemoveBg</h4></div>
+                
+                <!-- SPAM OTP -->
                 <div class="tool-card press" data-category="utility" onclick="openTool('spamotp')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-                    <div class="t-info"><h4>Spam OTP</h4><p>Kirim OTP massal (Uji coba)</p></div>
+                    <div class="t-icon bg-red">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </div>
+                    <h4>Spam OTP</h4>
                 </div>
+
+                <!-- WHATSAPP AUTOMATOR -->
                 <div class="tool-card press" data-category="utility" onclick="openTool('wa-bot')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
-                    <div class="t-info"><h4>WA Automator</h4><p>Otomatisasi reaksi channel WA</p></div>
+                    <div class="t-icon bg-green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    </div>
+                    <h4>WA Auto</h4>
                 </div>
+
+                <!-- NETFLIX GENERATOR -->
                 <div class="tool-card press" data-category="utility" onclick="openTool('netflix')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5.398 2.272v18.785l4.055.566v-10.11l4.927 10.592 4.231.734V2.272h-3.933v10.58L9.553 2.272H5.398z"/></svg></div>
-                    <div class="t-info"><h4>Netflix VIP Gen</h4><p>Generate akun Netflix premium</p></div>
+                    <div class="t-icon bg-red" style="background:#ff0000; color:#fff;">
+                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" width="24" height="24">
+                            <path d="M5.398 2.272v18.785l4.055.566v-10.11l4.927 10.592 4.231.734V2.272h-3.933v10.58L9.553 2.272H5.398z"/>
+                        </svg>
+                    </div>
+                    <h4>Netflix VIP</h4>
                 </div>
+
+                <!-- WEBBUILDER GENERATOR -->
                 <div class="tool-card press" data-category="utility" onclick="openTool('webbuilder')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-                    <div class="t-info"><h4>WebBuilder</h4><p>Generate source code website</p></div>
+                    <div class="t-icon bg-blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
+                    <h4>WebBuilder</h4>
                 </div>
+
+                <!-- CF-SOURCE SCRAPER -->
                 <div class="tool-card press" data-category="utility" onclick="openTool('cfsource')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-                    <div class="t-info"><h4>CF Source</h4><p>Bypass Cloudflare scraper</p></div>
+                    <div class="t-icon bg-purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h4>CF Source</h4>
                 </div>
+
+                <!-- FAKE DANA GENERATOR -->
                 <div class="tool-card press" data-category="utility" onclick="openTool('fakedana')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></div>
-                    <div class="t-info"><h4>Fake DANA</h4><p>Buat gambar saldo DANA palsu</p></div>
+                    <div class="t-icon bg-cyan">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+                    </div>
+                    <h4>Fake DANA</h4>
                 </div>
+
+                <!-- ZENKAI CINEMA -->
                 <div class="tool-card press" data-category="utility" onclick="openTool('cinema')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h20M2 15h20"/></svg></div>
-                    <div class="t-info"><h4>Zenkai Cinema</h4><p>Nonton drama china (Dracinema)</p></div>
+                    <div class="t-icon bg-red">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h20M2 15h20"/></svg>
+                    </div>
+                    <h4>Cinema</h4>
                 </div>
+
+                <!-- AI VIDEO GENERATOR -->
                 <div class="tool-card press" data-category="utility" onclick="openTool('vidgen')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
-                    <div class="t-info"><h4>AI Video Gen</h4><p>Buat video dari teks</p></div>
+                    <div class="t-icon bg-purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                    </div>
+                    <h4>AI Video</h4>
                 </div>
 
-                <div class="list-divider"><span>Segera Hadir</span></div>
+                <!-- TERABOX DL -->
+                <div class="tool-card press" data-category="downloader" onclick="openTool('terabox')" role="button" tabindex="0">
+                    <div class="t-icon bg-blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </div>
+                    <h4>Terabox</h4>
+                </div>
 
-                <div class="tool-card press soon" data-category="stalker" onclick="openTool('stalkmlbb')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-                    <div class="t-info"><h4>Stalk MLBB</h4></div>
-                </div>
-                <div class="tool-card press soon" data-category="stalker" onclick="openTool('stalkpubg')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
-                    <div class="t-info"><h4>Stalk PUBG</h4></div>
-                </div>
-                <div class="tool-card press soon" data-category="stalker" onclick="openTool('stalkcodm')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
-                    <div class="t-info"><h4>Stalk CODM</h4></div>
-                </div>
-                <div class="tool-card press soon" data-category="stalker" onclick="openTool('stalkgenshin')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
-                    <div class="t-info"><h4>Stalk Genshin</h4></div>
-                </div>
-                <div class="tool-card press soon" data-category="downloader" onclick="openTool('twitter')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M20 4L4 20"/></svg></div>
-                    <div class="t-info"><h4>Twitter DL</h4></div>
-                </div>
-                <div class="tool-card press soon" data-category="utility" onclick="openTool('imghd')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 23 18 1 18 1 6"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-                    <div class="t-info"><h4>Image HD+</h4></div>
-                </div>
+                <div class="coming-soon-divider"><span>Coming Soon</span></div>
+
+                <!-- COMING SOON -->
+                <div class="tool-card press" data-category="stalker" onclick="openTool('stalkmlbb')" role="button" tabindex="0"><div class="t-icon bg-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>Stalk MLBB</h4></div>
+                
+                <div class="tool-card press" data-category="stalker" onclick="openTool('stalkpubg')" role="button" tabindex="0"><div class="t-icon bg-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk PUBG</h4></div>
+                
+                <div class="tool-card press" data-category="stalker" onclick="openTool('stalkcodm')" role="button" tabindex="0"><div class="t-icon bg-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk CODM</h4></div>
+                
+                <div class="tool-card press" data-category="stalker" onclick="openTool('stalkgenshin')" role="button" tabindex="0"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><h4>Stalk Genshin</h4></div>
+
+                <div class="tool-card press" data-category="downloader" onclick="openTool('twitter')" role="button" tabindex="0"><div class="t-icon bg-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M20 4L4 20"/></svg></div><h4>Twitter DL</h4></div>
+                
+                <div class="tool-card press" data-category="utility" onclick="openTool('imghd')" role="button" tabindex="0"><div class="t-icon bg-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 23 18 1 18 1 6"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><h4>Image HD+</h4></div>
             </div>
         </div>
+        <div class="credit-text">Dibuat oleh <b>Andika T.M</b></div>
     </main>
 
-    <!-- HALAMAN FUN -->
+    <!-- ========================================= -->
+    <!-- 5. HALAMAN FUN                            -->
+    <!-- ========================================= -->
     <main id="page-fun" class="page">
-        <header class="top-header">
+        <header class="header-box">
             <div class="logo-area">
-                <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-                <div class="logo-text"><h1>Fitur Ekstra</h1></div>
+                <div class="logo-icon" style="background:#a855f7; color:#fff;" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+                <div class="logo-text"><h1>Zenkai Fun</h1><p class="version">Bypass &amp; Tools</p></div>
             </div>
         </header>
-        
-        <div class="welcome-section" style="padding-bottom: 10px;">
-            <h2>Akses Cepat</h2>
-            <p>Kumpulan utilitas premium dan bypass.</p>
+
+        <div class="welcome-box" style="text-align:center; padding:25px 15px;">
+            <h2 style="font-size:24px; margin-bottom:10px;">Fitur Sultan</h2>
+            <p style="font-size:12px; opacity:0.8;">Bypass link iklan dan ambil aplikasi premium secara instan. Tanpa ribet, tanpa bayar.</p>
         </div>
 
-        <div class="catalog-section">
-            <div class="tool-list">
+        <div class="tools-section">
+            <div class="grid-tools">
+                <!-- LINKVERTISE BYPASS -->
                 <div class="tool-card press" onclick="openTool('linkvertise')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
-                    <div class="t-info"><h4>Bypass Shortlink</h4><p>Tembus link iklan (Linkvertise dll)</p></div>
+                    <div class="t-icon bg-purple" style="width:60px; height:60px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    </div>
+                    <h4 style="font-size:11px; margin-top:5px;">Bypass Link</h4>
                 </div>
+
+                <!-- ALIGHT MOTION -->
                 <div class="tool-card press" onclick="openTool('alightmotion')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-                    <div class="t-info"><h4>Alight Motion Premium</h4><p>Bypass akun AM via Email</p></div>
+                    <div class="t-icon bg-blue" style="width:60px; height:60px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h4 style="font-size:11px; margin-top:5px;">Alight Motion</h4>
                 </div>
+
+                <!-- GEMINI PLUS -->
                 <div class="tool-card press" onclick="openTool('ai-chat')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-                    <div class="t-info"><h4>Gemini Plus (12 Bulan)</h4><p>Klaim akses Google Gemini Pro</p></div>
+                    <div class="t-icon bg-cyan" style="width:60px; height:60px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <h4 style="font-size:11px; margin-top:5px;">Gemini Plus</h4>
                 </div>
+
+                <!-- AI IMAGE -->
                 <div class="tool-card press" onclick="openTool('ai-image')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-                    <div class="t-info"><h4>AI Image Generator</h4><p>Buat gambar dari teks</p></div>
+                    <div class="t-icon bg-purple" style="width:60px; height:60px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                    <h4 style="font-size:11px; margin-top:5px;">AI Image</h4>
                 </div>
+
+                <!-- AI IMAGE EDITOR V2 -->
                 <div class="tool-card press" onclick="openTool('aiedit')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-                    <div class="t-info"><h4>AI Image Editor V2</h4><p>Edit gambar tanpa sensor (GPT-Image)</p></div>
+                    <div class="t-icon bg-purple" style="width:60px; height:60px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;" aria-hidden="true">
+                            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                        </svg>
+                    </div>
+                    <h4 style="font-size:11px; margin-top:5px;">AI Editor v2</h4>
                 </div>
+
+                <!-- NOTRACK AI CHAT -->
                 <div class="tool-card press" onclick="openTool('notrack-chat')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
-                    <div class="t-info"><h4>NoTrack AI Chat</h4><p>Chat AI uncensored + Vision</p></div>
+                    <div class="t-icon bg-pink" style="width:60px; height:60px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:28px; height:28px;" aria-hidden="true">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                            <path d="M8 10h.01M12 10h.01M16 10h.01"/>
+                        </svg>
+                    </div>
+                    <h4 style="font-size:11px; margin-top:5px;">NoTrack AI</h4>
                 </div>
             </div>
         </div>
+        <div class="credit-text" style="margin-top:30px;">Powered by <b>Zenkai Tools</b></div>
     </main>
     
-    <!-- HALAMAN OWNER -->
+    <!-- ========================================= -->
+    <!-- 5b. HALAMAN OWNER (PANEL)                 -->
+    <!-- ========================================= -->
     <main id="page-owner" class="page">
-        <header class="top-header">
+        <header class="header-box">
             <div class="logo-area">
-                <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-                <div class="logo-text"><h1>Owner Panel</h1></div>
-            </div>
-        </header>
-        <div class="catalog-section">
-            <div id="owner-page-content" style="padding:10px;"></div>
-        </div>
-    </main>
-
-    <!-- HALAMAN SETTING -->
-    <main id="page-setting" class="page">
-        <header class="top-header">
-            <div class="logo-area">
-                <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-                <div class="logo-text"><h1>Pengaturan</h1></div>
-            </div>
-        </header>
-        
-        <div class="settings-group">
-            <h3 class="group-title">Tampilan</h3>
-            <div class="setting-row">
-                <span>Mode Hemat Baterai</span>
-                <label class="switch">
-                    <input type="checkbox" id="toggle-anim" onchange="toggleAnimation(this)">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-                <div style="display:flex; justify-content:space-between; width:100%;">
-                    <span>Volume Musik</span>
-                    <span id="vol-label" class="text-accent">50%</span>
+                <div class="logo-icon" style="background:#ff3333; color:#fff;" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
-                <input type="range" id="vol-slider" min="0" max="100" value="50" oninput="ubahVolume(this.value)" style="width:100%;">
+                <div class="logo-text"><h1>OWNER PANEL</h1><p class="version">Akses Penuh</p></div>
             </div>
-        </div>
+        </header>
 
-        <div class="settings-group">
-            <h3 class="group-title">Tindakan</h3>
-            <div class="setting-action" onclick="toggleMusic()">
-                <span>Putar / Jeda Musik</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-            <div class="setting-action" onclick="forceCekUpdate()">
-                <span>Periksa Pembaruan</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-            <div class="setting-action" onclick="resetData()">
-                <span style="color: #FF5555;">Hapus Cache Web</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="#FF5555" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-        </div>
-        
-        <div class="settings-group">
-            <h3 class="group-title">Tentang</h3>
-            <div class="setting-row"><span>Versi Aplikasi</span><span>2.2.0</span></div>
-            <div class="setting-row"><span>Pengembang</span><span>Andika T.M</span></div>
-            <div class="setting-action" onclick="window.open('https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H', '_blank')">
-                <span>Hubungi Developer</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <div class="tools-section">
+            <div id="owner-page-content" style="padding:10px;">
+                <!-- Konten akan diisi oleh JavaScript -->
             </div>
         </div>
     </main>
 
-    <!-- HALAMAN INFO -->
-    <main id="page-info" class="page">
-        <header class="top-header">
+    <!-- ========================================= -->
+    <!-- 6. HALAMAN SETTING & LOGOUT (BARU)        -->
+    <!-- ========================================= -->
+    <main id="page-setting" class="page">
+        <header class="header-box">
             <div class="logo-area">
-                <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
-                <div class="logo-text"><h1>Informasi</h1></div>
+                <div class="logo-icon" style="background:var(--primary)" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </div>
+                <div class="logo-text"><h1>PENGATURAN</h1></div>
             </div>
         </header>
 
-        <div class="info-content">
-            <h2>Zenkai Tools</h2>
-            <p>Aplikasi web utilitas yang menyediakan berbagai alat bantu (downloader, generator, stalker) secara gratis tanpa perlu instalasi.</p>
-            
-            <div class="info-stats">
-                <div class="stat-row"><span>Total Alat</span><b id="info-total-tools">30+</b></div>
-                <div class="stat-row"><span>Status Server</span><b class="text-success">Normal</b></div>
+        <!-- Tema -->
+        <div class="tools-section" style="margin-bottom:15px;">
+            <h3 style="margin-bottom:15px; font-family:var(--font-head);">Pilih Tema</h3>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <button class="action-btn press" onclick="setTheme('comic')" style="background:#ff007f; color:#fff;">Comic (Warna Cerah)</button>
+                <button class="action-btn press" onclick="setTheme('cyber')" style="background:#09090b; color:#00ffcc; border-color:#00ffcc;">Cyberpunk (Gelap)</button>
+                <button class="action-btn press" onclick="setTheme('minimal')" style="background:#f9f9f9; color:#1a1a1a;">Minimalist (Putih)</button>
             </div>
-
-            <h3>Catatan Pembaruan (v2.2)</h3>
-            <ul class="update-list">
-                <li>Penambahan AI Image Editor & NoTrack Chat</li>
-                <li>Pembaruan antarmuka (UI) baru</li>
-                <li>Perbaikan bug pada pemutar video Cinema</li>
-            </ul>
-
-            <h3>Panduan Penggunaan</h3>
-            <p>Pilih alat dari katalog. Masukkan URL atau teks yang diminta. Tunggu proses selesai, lalu simpan hasilnya. Alat dengan label VIP memerlukan kode aktivasi.</p>
-
-            <h3>Penafian</h3>
-            <p>Zenkai Tools tidak berafiliasi dengan platform pihak ketiga (TikTok, Instagram, dll). Pengguna bertanggung jawab penuh atas data yang diproses dan penggunaan hasil dari alat ini.</p>
         </div>
+
+        <!-- Fitur Tambahan (BARU & BANYAK) -->
+        <div class="tools-section" style="margin-bottom:15px;">
+            <h3 style="margin-bottom:15px; font-family:var(--font-head);">Pengaturan Lanjutan</h3>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                
+                <!-- Toggle Animasi -->
+                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--card-bg); padding:12px; border-radius:8px; border:2px solid var(--border);">
+                    <span style="font-size:12px; font-weight:bold;">Matikan Animasi (Hemat Baterai)</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-anim" onchange="toggleAnimation(this)">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <!-- Volume Musik -->
+                <div style="background:var(--card-bg); padding:12px; border-radius:8px; border:2px solid var(--border);">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <span style="font-size:12px; font-weight:bold;">Volume Musik</span>
+                        <span id="vol-label" style="font-size:12px; font-weight:bold; color:var(--primary);">50%</span>
+                    </div>
+                    <input type="range" id="vol-slider" min="0" max="100" value="50" oninput="ubahVolume(this.value)" style="width:100%; accent-color:var(--primary);">
+                </div>
+
+                <button class="action-btn press" onclick="toggleMusic()" style="background:var(--bg); color:var(--text); border-color:var(--border);">Nyalakan/Matikan Musik</button>
+                <button class="action-btn press" onclick="forceCekUpdate()" style="background:#3b82f6; color:#fff;">Cek Update Terbaru</button>
+                <button class="action-btn press" onclick="resetData()" style="background:#ff3333; color:#fff;">Hapus Cache Web</button>
+            </div>
+        </div>
+
+        <!-- Tentang Developer -->
+        <div class="tools-section">
+            <h3 style="margin-bottom:15px; font-family:var(--font-head);">Tentang Developer</h3>
+            <p style="font-size:12px; line-height:1.6; opacity:0.8; margin-bottom:15px;">Halo! Zenkai Tools ini dibuat dan dikembangkan oleh <b>Andika T.M</b>. Jika ada saran atau bug, silakan hubungi lewat WhatsApp Channel di bawah ini.</p>
+            <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer" class="action-btn press" style="text-decoration:none; display:block; text-align:center; background:#25D366; color:#fff; border-color:#1e9e4b;">Hubungi Developer</a>
+            <p style="text-align:center; font-size:10px; opacity:0.5; margin-top:15px;">Versi Aplikasi: 2.2.0 (Stable)</p>
+        </div>
+    </main>
+
+    <!-- ========================================= -->
+    <!-- 7. HALAMAN INFO (BARU & BANYAK)           -->
+    <!-- ========================================= -->
+    <main id="page-info" class="page">
+        <header class="header-box">
+            <div class="logo-area">
+                <div class="logo-icon" style="background:var(--primary); color:#fff;" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+                <div class="logo-text"><h1>INFO APLIKASI</h1></div>
+            </div>
+        </header>
+
+        <!-- Info Umum & Statistik -->
+        <div class="tools-section" style="padding:20px; margin-bottom:15px;">
+            <h2 style="font-family:var(--font-head); color:var(--primary); font-size:24px; margin-bottom:10px;">Zenkai Tools v2.2</h2>
+            <p style="line-height:1.6; opacity:0.8; font-size:13px; margin-bottom:15px;">Aplikasi utilitas serba-serbi dengan antarmuka tebal, tegas, dan futuristik. Ringan, responsif, dan siap pakai di HP maupun PC tanpa install.</p>
+            
+            <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; border-top:2px dashed var(--border); padding-top:15px;">
+                <div style="display:flex; justify-content:space-between;"><span>Versi:</span> <b>2.2.0 (Stable)</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>Developer:</span> <b>Andika T.M</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>Total Tools:</span> <b id="info-total-tools">30+</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>Framework:</span> <b>Vanilla JS</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>Status:</span> <b style="color:#27ae60;">Online</b></div>
+            </div>
+        </div>
+
+        <!-- Update Terbaru -->
+        <div class="tools-section" style="padding:20px; margin-bottom:15px; background:rgba(0,255,204,0.05); border-color:var(--primary);">
+            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px; color:var(--primary);"> Update Terbaru (v2.2)</h3>
+            <ul style="font-size:11px; line-height:1.8; opacity:0.9; margin:0; padding-left:15px;">
+                <li>Fitur Baru: <b>AI Image Editor v2</b> (Uncensored)</li>
+                <li>Fitur Baru: <b>NoTrack AI Chat</b> (Uncensored + Vision)</li>
+                <li>Fitur v2.0: <b>Zenkai Cinema</b> (Drama China)</li>
+                <li>Fitur v2.0: <b>AI Video Generator</b></li>
+                <li>Fitur v2.0: <b>Terabox Downloader</b></li>
+            </ul>
+        </div>
+
+        <!-- Tutorial Singkat -->
+        <div class="tools-section" style="padding:20px; margin-bottom:15px;">
+            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;"> Panduan Singkat</h3>
+            <p style="font-size:11px; line-height:1.6; opacity:0.8; margin-bottom:5px;">
+                1. Pilih tool dari grid di halaman <b>Tools</b>.<br>
+                2. Masukkan URL/Teks yang diminta.<br>
+                3. Tunggu proses selesai, lalu simpan hasilnya.<br>
+                4. Tool dengan label <b>VIP</b> butuh kode aktivasi.
+            </p>
+        </div>
+
+        <!-- Penafian (Disclaimer) -->
+        <div class="tools-section" style="padding:20px; margin-bottom:15px;">
+            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px; color:#ff3333;">Penafian (Disclaimer)</h3>
+            <p style="font-size:11px; line-height:1.6; opacity:0.8; margin-bottom:10px;">
+                Zenkai Tools tidak berafiliasi dengan TikTok, Instagram, Facebook, Pinterest, atau Roblox. Segala konten yang diunduh melalui tool ini adalah tanggung jawab pengguna. Mohon gunakan dengan bijak dan hormati hak cipta.
+            </p>
+            <div style="background:rgba(255, 51, 51, 0.1); border-left:3px solid #ff3333; padding:10px;">
+                <p style="font-size:11px; line-height:1.6; color:#ff9999; margin:0;">
+                    <b>Penting:</b> Pengguna bertanggung jawab penuh atas data yang dimasukkan. Kami tidak menyimpan data sensitif Anda dan tidak bertanggung jawab atas penyalahgunaan fitur.
+                </p>
+            </div>
+        </div>
+
+        <div class="tools-section" style="padding:20px;">
+            <h3 style="font-family:var(--font-head); font-size:16px; margin-bottom:10px;">Special Thanks</h3>
+            <p style="font-size:11px; line-height:1.6; opacity:0.7;">Terima kasih yang sebesar-besarnya kepada seluruh pengguna setia <b>Zenkai Tools</b>. Tanpa kalian, project ini nggak akan berkembang sampai sejauh ini. Tetap semangat, jangan lupa istirahat, dan gunakan tools ini dengan bijak!</p>
+        </div>
+        
+        <div class="credit-text" style="margin-top:20px;">&copy; 2026 Zenkai Tools v2.2. All rights reserved.</div>
     </main>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchPage('tools', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            <span>Alat</span>
+    <!-- ========================================= -->
+    <!-- 8. NAVIGASI BAWAH (FLOATING)              -->
+    <!-- ========================================= -->
+    <nav class="bottom-nav" role="navigation" aria-label="Navigasi utama">
+        <button class="nav-item active press" onclick="switchPage('tools', this)" aria-label="Tools">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Tools</span>
         </button>
-        <button class="nav-item" onclick="switchPage('fun', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-            <span>Ekstra</span>
+        <button class="nav-item press" onclick="switchPage('fun', this)" aria-label="Fun">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg><span>Fun</span>
         </button>
-        <button class="nav-item" onclick="switchPage('setting', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            <span>Setelan</span>
+        <button class="nav-item press" onclick="switchPage('setting', this)" aria-label="Setting">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Setting</span>
         </button>
-        <button class="nav-item" onclick="switchPage('info', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <span>Info</span>
+        <button class="nav-item press" onclick="switchPage('info', this)" aria-label="Info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>Info</span>
         </button>
         
-        <button id="nav-owner" class="nav-item" onclick="switchPage('owner', this)" style="display:none;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span>Owner</span>
+        <!-- TOMBOL OWNER -->
+        <button id="nav-owner" class="nav-item press" onclick="switchPage('owner', this)" aria-label="Owner" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Owner</span>
         </button>
     </nav>
 
-    <!-- MODAL BOTTOM SHEET -->
-    <div class="bottom-sheet-overlay" id="tool-modal" onclick="closeModalOnOverlay(event)" role="dialog" aria-modal="true">
+    <!-- ========================================= -->
+    <!-- 9. MODAL BOTTOM SHEET (UNTUK TOOLS)       -->
+    <!-- ========================================= -->
+    <div class="bottom-sheet-overlay" id="tool-modal" onclick="closeModalOnOverlay(event)" role="dialog" aria-modal="true" aria-label="Tool panel">
         <div class="bottom-sheet-content" id="modal-content"></div>
     </div>
 
-    <!-- ALERT MODAL -->
-    <div id="custom-alert" class="custom-alert">
-        <div class="alert-box">
-            <h3 id="alert-title">Pemberitahuan</h3>
-            <p id="alert-msg"></p>
-            <div id="alert-btns" class="alert-btns"></div>
+    <!-- CUSTOM MODAL NOTIFIKASI -->
+    <div id="custom-alert" style="position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:1000001; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(5px);">
+        <div style="background:var(--card-bg); border:3px solid var(--border); border-radius:12px; padding:25px; width:100%; max-width:320px; text-align:center; box-shadow:var(--shadow);">
+            <h3 id="alert-title" style="font-family:var(--font-head); color:var(--primary); font-size:20px; margin-bottom:10px;">Pemberitahuan</h3>
+            <p id="alert-msg" style="font-size:13px; line-height:1.5; margin-bottom:20px;"></p>
+            <div id="alert-btns" style="display:flex; gap:10px;"></div>
         </div>
     </div>
-    
     <script src="script.js" defer></script>
 </body>
 </html>
