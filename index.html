@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="description" content="Zenkai Tools — Kumpulan utilitas, downloader, dan generator dalam satu tempat.">
-    <meta name="theme-color" content="#1C1E22">
+    <meta name="theme-color" content="#0E0F12">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Zenkai Tools</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="cyber">
 
-    <!-- 1. SPLASH SCREEN -->
     <div id="auth-gate" class="splash-screen">
         <video id="welcome-video" autoplay muted playsinline class="splash-video">
             <source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/69f209fc07b94f9b2a09e6b5e1b1b1cf52e89f86/0a220ffe6ffe05c3243dfef08d96253b_720w.mp4" type="video/mp4">
@@ -30,7 +29,6 @@
         </div>
     </div>
 
-    <!-- 2. MAINTENANCE -->
     <div id="maintenance-screen" class="maintenance-screen">
         <div class="maintenance-content">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="icon-lg"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
@@ -39,12 +37,10 @@
         </div>
     </div>
     
-    <!-- 3. BROADCAST BANNER -->
     <div id="broadcast-banner" class="broadcast-banner" style="display:none;"><span id="broadcast-text"></span></div>
 
     <a href="#page-tools" class="skip-link">Lewati ke konten utama</a>
 
-    <!-- 4. POPUP WHATSAPP -->
     <div class="modal-overlay" id="wa-popup" role="dialog" aria-modal="true">
         <div class="modal-box">
             <button class="modal-close btn-icon" onclick="closeWaPopup()" aria-label="Tutup">
@@ -58,7 +54,6 @@
         </div>
     </div>
 
-    <!-- 5. MUSIK WIDGET -->
     <div class="music-widget" role="group" aria-label="Pemutar musik">
         <button onclick="prevSong()" class="btn-icon" aria-label="Sebelumnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>
         <button onclick="toggleMusic()" id="btn-play" class="btn-icon btn-play" aria-label="Putar">
@@ -72,7 +67,6 @@
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
     <div class="app-container">
-    <!-- HALAMAN UTAMA (TOOLS) -->
     <main id="page-tools" class="page active">
         <header class="top-header">
             <div class="logo-area">
@@ -81,7 +75,7 @@
                 </div>
                 <div class="logo-text">
                     <h1>Zenkai</h1>
-                    <span>v2.2.0</span>
+                    <span>Tools v3</span>
                 </div>
             </div>
             <button onclick="openTool('vip')" class="btn-vip">
@@ -106,7 +100,7 @@
                 <div class="banner-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
                 <div class="banner-text">
                     <h3>Baca Komik</h3>
-                    <p>Manga & Manhwa Bahasa Indonesia</p>
+                    <p>Manga & manhwa sub Indo, update tiap hari</p>
                 </div>
                 <svg class="banner-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
@@ -114,26 +108,26 @@
             <div class="banner-item" onclick="openTool('support')">
                 <div class="banner-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
                 <div class="banner-text">
-                    <h3>Dukungan Server</h3>
-                    <p>Bantu biaya operasional API</p>
+                    <h3>Traktir Server</h3>
+                    <p>Biaya API kami ditanggung lo — bantu seiklasnya</p>
                 </div>
                 <svg class="banner-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
         </div>
 
         <div class="welcome-section">
-            <h2>Halo, <span id="welcome-username">User</span></h2>
-            <p>Akses berbagai utilitas, downloader, dan generator gratis di sini.</p>
+            <h2>Yo, <span id="welcome-username">User</span>!</h2>
+            <p>Semua yang lo butuhin buat download, cek, dan generate—dalam satu tempat. Nggak ribet, nggak beriklan.</p>
             <div class="stat-grid">
-                <div class="stat-item"><b id="total-tools-count">30+</b><span>Alat</span></div>
-                <div class="stat-item"><b>24/7</b><span>Online</span></div>
-                <div class="stat-item"><b>Bebas</b><span>Iklan</span></div>
+                <div class="stat-item"><b id="total-tools-count">30+</b><span>Alat Siap</span></div>
+                <div class="stat-item"><b>Live</b><span>Server</span></div>
+                <div class="stat-item"><b>Gratis</b><span>Selamanya</span></div>
             </div>
         </div>
 
         <div class="catalog-section">
             <div class="section-header">
-                <h3>Katalog Alat</h3>
+                <h3>Katalog</h3>
                 <div class="search-box">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     <input type="text" id="search-tools" placeholder="Cari alat..." aria-label="Cari alat">
@@ -147,211 +141,204 @@
                 <button class="cat-btn" onclick="filterCategory('utility', this)">Utility</button>
             </div>
 
-            <!-- LIST TOOLS (Menyesuaikan ID/Class script.js) -->
             <div class="tool-list">
-                <!-- DOWNLOADER -->
                 <div class="tool-card press" data-category="downloader" onclick="openTool('tiktok')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17V4l10-1v13"/><circle cx="6" cy="17" r="3"/><circle cx="16" cy="16" r="3"/></svg></div>
                     <div class="t-info"><h4>TikTok Downloader</h4><p>Unduh video tanpa watermark</p></div>
                 </div>
                 <div class="tool-card press" data-category="downloader" onclick="openTool('instagram')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg></div>
                     <div class="t-info"><h4>Instagram Downloader</h4><p>Unduh foto & video post/reels</p></div>
                 </div>
                 <div class="tool-card press" data-category="downloader" onclick="openTool('facebook')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h-2.5A4.5 4.5 0 0 0 8 7.5V10H5v4h3v7h4v-7h3l1-4h-4V7.5A.5.5 0 0 1 12.5 7H15z"/></svg></div>
                     <div class="t-info"><h4>Facebook Downloader</h4><p>Unduh video publik Facebook</p></div>
                 </div>
                 <div class="tool-card press" data-category="downloader" onclick="openTool('pinterest')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10 5.52 0 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6c-3.31 0-6 2.69-6 6 0 2.21 1.21 4.15 3 5.19V18h2v-1.81c1.79-1.04 3-2.98 3-5.19 0-3.31-2.69-6-6-6z"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 20l3-8"/><path d="M12 14a4 4 0 1 1 4-4c0 3-2 5-4 5"/></svg></div>
                     <div class="t-info"><h4>Pinterest Downloader</h4><p>Unduh gambar & video Pinterest</p></div>
                 </div>
                 <div class="tool-card press" data-category="downloader" onclick="openTool('youtube')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2C5.12 19.5 12 19.5 12 19.5s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 11.75a29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="4"/><polygon points="10 9 16 12 10 15 10 9"/></svg></div>
                     <div class="t-info"><h4>YouTube Downloader</h4><p>Unduh audio & video YouTube</p></div>
                 </div>
                 <div class="tool-card press" data-category="downloader" onclick="openTool('terabox')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5-9 5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></div>
                     <div class="t-info"><h4>Terabox Downloader</h4><p>Unduh file dari tautan Terabox</p></div>
                 </div>
 
-                <!-- STALKER -->
                 <div class="tool-card press" data-category="stalker" onclick="openTool('stalktt')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="4"/><path d="M2 21c0-4 3.5-7 8-7 2 0 3.8.7 5.2 1.8"/><circle cx="18" cy="18" r="3"/><path d="M18 16v-1"/></svg></div>
                     <div class="t-info"><h4>Stalk TikTok</h4><p>Cek statistik akun publik</p></div>
                 </div>
                 <div class="tool-card press" data-category="stalker" onclick="openTool('stalkroblox')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" transform="rotate(8 12 12)"/><path d="M9 10l3 3 3-3"/></svg></div>
                     <div class="t-info"><h4>Stalk Roblox</h4><p>Lacak profil pemain Roblox</p></div>
                 </div>
 
-                <!-- UTILITY -->
                 <div class="tool-card press" data-category="utility" onclick="openTool('qr')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="3" y="15" width="6" height="6"/><path d="M15 15h3v3M18 21h3M21 15v3"/></svg></div>
                     <div class="t-info"><h4>QR Code Generator</h4><p>Ubah teks/tautan menjadi QR</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('imgtojpg')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
                     <div class="t-info"><h4>Konversi ke JPG</h4><p>Ubah format gambar ke JPG</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('username')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.9 7.9"/></svg></div>
                     <div class="t-info"><h4>Username Generator</h4><p>Buat ide nama pengguna unik</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('artinama')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 5v14"/><path d="M15 5v14"/><path d="M4 19h16"/></svg></div>
                     <div class="t-info"><h4>Arti Nama</h4><p>Cari makna nama (Primbon)</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('password')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1"/></svg></div>
                     <div class="t-info"><h4>Password Generator</h4><p>Buat sandi acak yang aman</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('zodiak')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="1.5"/><circle cx="18" cy="8" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="17" cy="17" r="1.5"/><path d="M6 6l6 6 6-4M8 18l4-6"/></svg></div>
                     <div class="t-info"><h4>Cek Zodiak</h4><p>Ketahui zodiak dari tanggal lahir</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('base64')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4L3 12l5 8"/><path d="M16 4l5 8-5 8"/><path d="M14 4l-4 16"/></svg></div>
                     <div class="t-info"><h4>Base64 Converter</h4><p>Encode & decode format Base64</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('umur')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/><circle cx="12" cy="16" r="1.5"/></svg></div>
                     <div class="t-info"><h4>Hitung Umur</h4><p>Ketahui usia berdasarkan tanggal</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('tempmail')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7 10-7"/></svg></div>
                     <div class="t-info"><h4>Temp Mail</h4><p>Buat email sementara</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('nik')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2.5"/><path d="M14 10h5M14 14h5M4 17c.5-2 2-3 4-3s3.5 1 4 3"/></svg></div>
                     <div class="t-info"><h4>NIK Parser</h4><p>Bongkar data dari NIK KTP</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('spotify')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 15c2-2 6-2 8 0"/><path d="M8 11c3-2.5 8-2 10 1"/><path d="M8 7c4-3 10-2 12 2"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V8M8 18V6M12 18V10M16 18V4M20 18v-6"/></svg></div>
                     <div class="t-info"><h4>Spotify Downloader</h4><p>Unduh lagu Spotify ke MP3</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('iplookup')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
                     <div class="t-info"><h4>IP Lookup</h4><p>Lacak informasi IP publik</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('removebg')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l6-8 4 5 3-4 5 7z"/><circle cx="9" cy="8" r="2"/><path d="M2 2l20 20" stroke-dasharray="2 3"/></svg></div>
                     <div class="t-info"><h4>Remove Background</h4><p>Hapus latar belakang gambar</p></div>
                 </div>
-                
                 <div class="tool-card press" data-category="utility" onclick="openTool('spamotp')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V10M10 20V4M15 20V12M20 20V7"/><circle cx="5" cy="10" r="1"/><circle cx="10" cy="4" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="20" cy="7" r="1"/></svg></div>
                     <div class="t-info"><h4>Spam OTP</h4><p>Kirim OTP massal (Uji coba)</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('wa-bot')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z"/><circle cx="12" cy="12" r="2.5"/><path d="M12 9.5V7"/></svg></div>
                     <div class="t-info"><h4>WA Automator</h4><p>Otomatisasi reaksi channel WA</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('netflix')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5.398 2.272v18.785l4.055.566v-10.11l4.927 10.592 4.231.734V2.272h-3.933v10.58L9.553 2.272H5.398z"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18l4 .5V11l4 9 4 .5V3"/><path d="M6 3h4l4 8"/></svg></div>
                     <div class="t-info"><h4>Netflix VIP Gen</h4><p>Generate akun Netflix premium</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('webbuilder')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><path d="M13 17h8M17 13v8"/></svg></div>
                     <div class="t-info"><h4>WebBuilder</h4><p>Generate source code website</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('cfsource')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16a4 4 0 1 1 1-7.9A5 5 0 0 1 17 9a3.5 3.5 0 0 1 1 6.8"/><path d="M9 15l-2 2 2 2M15 15l2 2-2 2M13 14l-2 6"/></svg></div>
                     <div class="t-info"><h4>CF Source</h4><p>Bypass Cloudflare scraper</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('fakedana')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z"/><circle cx="16" cy="13" r="2"/><path d="M3 8l9 5 9-5"/></svg></div>
                     <div class="t-info"><h4>Fake DANA</h4><p>Buat gambar saldo DANA palsu</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('cinema')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h20M2 15h20"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-3a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3"/><path d="M3 14l2 5h14l2-5"/><circle cx="12" cy="6" r="2"/></svg></div>
                     <div class="t-info"><h4>Zenkai Cinema</h4><p>Nonton drama china (Dracinema)</p></div>
                 </div>
                 <div class="tool-card press" data-category="utility" onclick="openTool('vidgen')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><polygon points="10 10 15 12 10 14 10 10"/><path d="M6 3v3M18 3v3"/></svg></div>
                     <div class="t-info"><h4>AI Video Gen</h4><p>Buat video dari teks</p></div>
                 </div>
 
                 <div class="list-divider"><span>Segera Hadir</span></div>
 
                 <div class="tool-card press soon" data-category="stalker" onclick="openTool('stalkmlbb')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l14 16M19 4L5 20"/><path d="M8 4h8M8 20h8"/></svg></div>
                     <div class="t-info"><h4>Stalk MLBB</h4></div>
                 </div>
                 <div class="tool-card press soon" data-category="stalker" onclick="openTool('stalkpubg')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
                     <div class="t-info"><h4>Stalk PUBG</h4></div>
                 </div>
                 <div class="tool-card press soon" data-category="stalker" onclick="openTool('stalkcodm')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="6"/><path d="M12 3v4M9 3h6M18 8l2-2"/></svg></div>
                     <div class="t-info"><h4>Stalk CODM</h4></div>
                 </div>
                 <div class="tool-card press soon" data-category="stalker" onclick="openTool('stalkgenshin')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2 8 8 2-8 2-2 8-2-8-8-2 8-2z"/></svg></div>
                     <div class="t-info"><h4>Stalk Genshin</h4></div>
                 </div>
                 <div class="tool-card press soon" data-category="downloader" onclick="openTool('twitter')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M20 4L4 20"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 9-7 7h3l6-6 4 6h3l-7-10 6-6h-3l-5 5-3-5z"/></svg></div>
                     <div class="t-info"><h4>Twitter DL</h4></div>
                 </div>
                 <div class="tool-card press soon" data-category="utility" onclick="openTool('imghd')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 23 18 1 18 1 6"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/><path d="M17 12l2 2-2 2"/></svg></div>
                     <div class="t-info"><h4>Image HD+</h4></div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- HALAMAN FUN -->
     <main id="page-fun" class="page">
         <header class="top-header">
             <div class="logo-area">
                 <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-                <div class="logo-text"><h1>Fitur Ekstra</h1></div>
+                <div class="logo-text"><h1>Fitur Ekstra</h1><span>Premium</span></div>
             </div>
         </header>
         
         <div class="welcome-section" style="padding-bottom: 10px;">
-            <h2>Akses Cepat</h2>
-            <p>Kumpulan utilitas premium dan bypass.</p>
+            <h2>Akses <span>Cepat</span></h2>
+            <p>Kumpulan utilitas premium, bypass, dan AI yang nggak ada di katalog utama.</p>
         </div>
 
         <div class="catalog-section">
             <div class="tool-list">
                 <div class="tool-card press" onclick="openTool('linkvertise')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/><path d="M9 15l6-6"/></svg></div>
                     <div class="t-info"><h4>Bypass Shortlink</h4><p>Tembus link iklan (Linkvertise dll)</p></div>
                 </div>
                 <div class="tool-card press" onclick="openTool('alightmotion')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M17 9l4-2v10l-4-2"/><path d="M7 10v4"/><path d="M11 10l-2 4"/></svg></div>
                     <div class="t-info"><h4>Alight Motion Premium</h4><p>Bypass akun AM via Email</p></div>
                 </div>
                 <div class="tool-card press" onclick="openTool('ai-chat')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M19 15l1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/></svg></div>
                     <div class="t-info"><h4>Gemini Plus (12 Bulan)</h4><p>Klaim akses Google Gemini Pro</p></div>
                 </div>
                 <div class="tool-card press" onclick="openTool('ai-image')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 10 10 0 0 0-10-10z"/><path d="M12 6a6 6 0 0 0 0 12 3 3 0 0 0 0-6 3 3 0 0 1 0-6"/></svg></div>
                     <div class="t-info"><h4>AI Image Generator</h4><p>Buat gambar dari teks</p></div>
                 </div>
                 <div class="tool-card press" onclick="openTool('aiedit')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4l5 5-11 11H4v-5z"/><path d="M13 6l5 5"/><path d="M19 2l1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/></svg></div>
                     <div class="t-info"><h4>AI Image Editor V2</h4><p>Edit gambar tanpa sensor (GPT-Image)</p></div>
                 </div>
                 <div class="tool-card press" onclick="openTool('notrack-chat')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 18 0 9 9 0 0 1-9 9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M3 21v-4"/></svg></div>
                     <div class="t-info"><h4>NoTrack AI Chat</h4><p>Chat AI uncensored + Vision</p></div>
                 </div>
             </div>
         </div>
     </main>
     
-    <!-- HALAMAN OWNER -->
     <main id="page-owner" class="page">
         <header class="top-header">
             <div class="logo-area">
                 <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-                <div class="logo-text"><h1>Owner Panel</h1></div>
+                <div class="logo-text"><h1>Owner Panel</h1><span>Admin</span></div>
             </div>
         </header>
         <div class="catalog-section">
@@ -359,12 +346,11 @@
         </div>
     </main>
 
-    <!-- HALAMAN SETTING -->
     <main id="page-setting" class="page">
         <header class="top-header">
             <div class="logo-area">
                 <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-                <div class="logo-text"><h1>Pengaturan</h1></div>
+                <div class="logo-text"><h1>Pengaturan</h1><span>Preferensi</span></div>
             </div>
         </header>
         
@@ -397,14 +383,14 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
             <div class="setting-action" onclick="resetData()">
-                <span style="color: #FF5555;">Hapus Cache Web</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="#FF5555" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                <span style="color: var(--danger);">Hapus Cache Web</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
         </div>
         
         <div class="settings-group">
             <h3 class="group-title">Tentang</h3>
-            <div class="setting-row"><span>Versi Aplikasi</span><span>2.2.0</span></div>
+            <div class="setting-row"><span>Versi Aplikasi</span><span>3.0.0</span></div>
             <div class="setting-row"><span>Pengembang</span><span>Andika T.M</span></div>
             <div class="setting-action" onclick="window.open('https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H', '_blank')">
                 <span>Hubungi Developer</span>
@@ -413,12 +399,11 @@
         </div>
     </main>
 
-    <!-- HALAMAN INFO -->
     <main id="page-info" class="page">
         <header class="top-header">
             <div class="logo-area">
                 <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
-                <div class="logo-text"><h1>Informasi</h1></div>
+                <div class="logo-text"><h1>Informasi</h1><span>About</span></div>
             </div>
         </header>
 
@@ -431,11 +416,12 @@
                 <div class="stat-row"><span>Status Server</span><b class="text-success">Normal</b></div>
             </div>
 
-            <h3>Catatan Pembaruan (v2.2)</h3>
+            <h3>Catatan Pembaruan (v3.0)</h3>
             <ul class="update-list">
-                <li>Penambahan AI Image Editor & NoTrack Chat</li>
-                <li>Pembaruan antarmuka (UI) baru</li>
-                <li>Perbaikan bug pada pemutar video Cinema</li>
+                <li>Redesign total UI — "Ink & Circuit" theme</li>
+                <li>Ikon baru yang membedakan tiap tool</li>
+                <li>Palet warna kategori lebih hidup</li>
+                <li>Perbaikan bug token CSS & tema</li>
             </ul>
 
             <h3>Panduan Penggunaan</h3>
@@ -447,7 +433,6 @@
     </main>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="switchPage('tools', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -472,12 +457,10 @@
         </button>
     </nav>
 
-    <!-- MODAL BOTTOM SHEET -->
     <div class="bottom-sheet-overlay" id="tool-modal" onclick="closeModalOnOverlay(event)" role="dialog" aria-modal="true">
         <div class="bottom-sheet-content" id="modal-content"></div>
     </div>
 
-    <!-- ALERT MODAL -->
     <div id="custom-alert" class="custom-alert">
         <div class="alert-box">
             <h3 id="alert-title">Pemberitahuan</h3>

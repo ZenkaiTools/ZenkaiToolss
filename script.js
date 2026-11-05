@@ -1,8 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // =========================================
-    // 1. KONFIGURASI & HELPERS
-    // =========================================
     const SUPA_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
     const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
@@ -47,11 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
         buttons.forEach(btn => {
             const b = document.createElement('button');
             b.innerText = btn.label;
-            // Penyesuaian styling tombol alert dengan CSS baru
-            b.style.cssText = `flex:1; padding:10px; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-weight:600; cursor:pointer; font-family:var(--font-body); font-size:14px;`;
             b.style.background = btn.type === 'primary' ? 'var(--accent)' : 'var(--bg-base)';
-            b.style.color = btn.type === 'primary' ? 'var(--bg-base)' : 'var(--text-primary)';
-            if(btn.type !== 'primary') b.style.borderColor = 'var(--border-color)';
+            b.style.color = btn.type === 'primary' ? 'var(--accent-ink)' : 'var(--text-primary)';
+            b.style.border = btn.type === 'primary' ? 'none' : '1px solid var(--border-strong)';
             b.setAttribute('onclick', btn.action);
             btnContainer.appendChild(b);
         });
@@ -59,9 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         alertEl.style.display = 'flex';
     };
 
-    // =========================================
-    // 2. SPLASH SCREEN VIDEO & AUDIO
-    // =========================================
     const welcomeVideo = document.getElementById('welcome-video');
     const authGate = document.getElementById('auth-gate');
 
@@ -75,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             authGate.style.transition = 'opacity 300ms ease';
             setTimeout(() => {
                 authGate.style.display = 'none';
+                authGate.remove();
                 document.body.style.overflow = '';
             }, 300);
         }
@@ -97,9 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // =========================================
-    // 3. POPUP WHATSAPP CHANNEL
-    // =========================================
     const waPopup = document.getElementById('wa-popup');
 
     window.closeWaPopup = () => {
@@ -118,9 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // =========================================
-    // 4. TEMA, NAVIGASI & SETTINGS
-    // =========================================
     const welcome = document.getElementById('welcome-username');
     if (welcome) welcome.innerText = 'User';
 
@@ -129,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navOwner) navOwner.style.display = 'flex';
     }
 
-    // Set tema default (karena CSS baru cuma punya 1 tema, ini opsional)
     const savedTheme = localStorage.getItem('zenkai_theme') || 'cyber';
     document.body.setAttribute('data-theme', savedTheme);
 
@@ -149,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         if (btn) btn.classList.add('active');
-        
+
         window.scrollTo({ top: 0, behavior: isReducedMotion() ? 'auto' : 'smooth' });
     };
 
@@ -201,9 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const volLabel = document.getElementById('vol-label');
     if (volLabel) volLabel.innerText = savedVol + '%';
 
-    // =========================================
-    // 5. DEVICE, BATERAI, JAM & HITUNG TOOLS
-    // =========================================
     function updateTime() {
         const now = new Date();
         const c = document.getElementById('clock-now');
@@ -217,14 +200,14 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.forEach(c => {
             if (!c.classList.contains('soon')) count++;
         });
-        
+
         let rounded = Math.floor(count / 5) * 5;
         if (rounded === 0 && count > 0) rounded = count;
         const finalText = rounded + '+';
-        
+
         const elWelcome = document.getElementById('total-tools-count');
         if (elWelcome) elWelcome.innerText = finalText;
-        
+
         const elInfo = document.getElementById('info-total-tools');
         if (elInfo) elInfo.innerText = finalText;
     }, 500);
@@ -251,9 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (bEl) bEl.innerText = 'N/A';
     }
 
-    // =========================================
-    // 6. MUSIK WIDGET
-    // =========================================
     const bgm = document.getElementById('bgm');
     const icPlay = document.getElementById('ic-play');
     const icPause = document.getElementById('ic-pause');
@@ -335,9 +315,6 @@ document.addEventListener('DOMContentLoaded', () => {
         location.reload();
     };
 
-    // =========================================
-    // 7. MODAL BOTTOM SHEET & SEARCH
-    // =========================================
     const modal = document.getElementById('tool-modal');
     const modalContent = document.getElementById('modal-content');
 
@@ -388,10 +365,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (card) card.classList.add('soon');
     });
 
-    // =========================================
-    // 8. SISTEM SETTINGS, MAINTENANCE & OWNER
-    // =========================================
     async function fetchSettings() {
+        if (document.hidden) return;
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -402,6 +377,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {}
     }
     setInterval(fetchSettings, 60000);
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) fetchSettings();
+    });
     fetchSettings();
 
     function applySettings(setting) {
@@ -437,39 +415,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const dTools = setting.disabled_tools ? setting.disabled_tools.split(',') : [];
         window.currentDisabledTools = dTools;
-
         window.currentVipTools = setting.vip_tools ? setting.vip_tools.split(',') : [];
 
         document.querySelectorAll('.tool-card').forEach(c => {
-    const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
-    if (!m) return;
-    const toolName = m[1];
-    
-    // Hapus badge maintenance lama jika ada
-    const oldBadge = c.querySelector('.badge-maintenance');
-    if (oldBadge) oldBadge.remove();
+            const m = (c.getAttribute('onclick')||'').match(/openTool\('(.*?)'\)/);
+            if (!m) return;
+            const toolName = m[1];
 
-    if (dTools.includes(toolName)) {
-        c.classList.add('maintenance-mode');
-        // Paksa inject badge merah ke dalam HTML
-        const badge = document.createElement('div');
-        badge.className = 'badge-maintenance';
-        badge.innerText = 'MAINTENANCE';
-       
-        
-        // Masukkan ke dalam .t-info (di bawah judul H4)
-        const infoDiv = c.querySelector('.t-info');
-        if (infoDiv) infoDiv.appendChild(badge);
-    } else {
-        c.classList.remove('maintenance-mode');
-    }
+            const oldBadge = c.querySelector('.badge-maintenance');
+            if (oldBadge) oldBadge.remove();
+
+            if (dTools.includes(toolName)) {
+                c.classList.add('maintenance-mode');
+                const badge = document.createElement('div');
+                badge.className = 'badge-maintenance';
+                badge.innerText = 'MAINTENANCE';
+                const infoDiv = c.querySelector('.t-info');
+                if (infoDiv) infoDiv.appendChild(badge);
+            } else {
+                c.classList.remove('maintenance-mode');
+            }
 
             if (window.currentVipTools.includes(toolName)) {
                 if (!c.querySelector('.vip-badge')) {
                     const badge = document.createElement('span');
                     badge.className = 'vip-badge';
                     badge.innerText = 'VIP';
-                    badge.style.cssText = 'display:inline-block; font-size:10px; background:var(--accent); color:#000; padding:2px 6px; border-radius:4px; margin-left:6px; font-weight:bold; font-family:var(--font-body);';
                     c.querySelector('.t-info h4').appendChild(badge);
                 }
             } else {
@@ -493,7 +464,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // LOGIN OWNER
     let clicks = 0;
     document.querySelector('.logo-area')?.addEventListener('click', () => {
         clicks++; setTimeout(() => { clicks = 0; }, 1000);
@@ -507,7 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="modal-box">
                     <h2>Akses Owner</h2>
                     <p>Masukkan passcode untuk melanjutkan.</p>
-                    <input type="password" id="owner-pass" placeholder="Passcode" style="width:100%; padding:12px; margin-bottom:15px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-base); color:var(--text-primary); text-align:center;">
+                    <input type="password" id="owner-pass" placeholder="Passcode" style="text-align:center;">
                     <div style="display:flex; gap:10px;">
                         <button onclick="document.getElementById('owner-modal').remove()" class="btn btn-ghost" style="flex:1;">Batal</button>
                         <button onclick="verifikasiOwner()" class="btn btn-primary" style="flex:1;">Masuk</button>
@@ -562,9 +532,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // =========================================
-    // PANEL OWNER UI (TAB SYSTEM & RAPI)
-    // =========================================
     window.tampilkanPanelRahasia = async () => {
         const container = document.getElementById('owner-page-content');
         if (!container) return;
@@ -579,7 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const disabledPagesArr = set.disabled_pages ? set.disabled_pages.split(',') : [];
         const disabledToolsArr = set.disabled_tools ? set.disabled_tools.split(',') : [];
         const vipToolsArr = set.vip_tools ? set.vip_tools.split(',') : [];
-        
+
         const listTools = [];
         document.querySelectorAll('.tool-card').forEach(card => {
             const onclickAttr = card.getAttribute('onclick') || '';
@@ -593,50 +560,50 @@ document.addEventListener('DOMContentLoaded', () => {
         const listPages = ['fun', 'setting', 'info'];
 
         let toolsHtml = listTools.map(t => `
-            <div style="background:var(--bg-base); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); display:flex; flex-direction:column; gap:8px;">
-                <span style="font-size:12px; font-weight:700; color:var(--text-primary);">${t.toUpperCase()}</span>
+            <div class="own-tool-item">
+                <span class="own-tool-name">${t.toUpperCase()}</span>
                 <div style="display:flex; gap:12px;">
-                    <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
-                        <input type="checkbox" class="tool-chk" value="${t}" ${disabledToolsArr.includes(t) ? 'checked' : ''} style="accent-color:var(--accent);"> Off
+                    <label class="own-check">
+                        <input type="checkbox" class="tool-chk" value="${t}" ${disabledToolsArr.includes(t) ? 'checked' : ''}> Off
                     </label>
-                    <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer; color:var(--accent);">
-                        <input type="checkbox" class="vip-chk" value="${t}" ${vipToolsArr.includes(t) ? 'checked' : ''} style="accent-color:var(--accent);"> VIP
+                    <label class="own-check" style="color:var(--accent);">
+                        <input type="checkbox" class="vip-chk" value="${t}" ${vipToolsArr.includes(t) ? 'checked' : ''}> VIP
                     </label>
                 </div>
             </div>
         `).join('');
 
         let pagesHtml = listPages.map(p => `
-            <label style="display:flex; align-items:center; justify-content:space-between; background:var(--bg-base); padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); cursor:pointer; font-size:12px; font-weight:bold;">
+            <label class="own-page-check">
                 <span>${p.toUpperCase()}</span>
-                <input type="checkbox" class="page-chk" value="${p}" ${disabledPagesArr.includes(p) ? 'checked' : ''} style="width:16px; height:16px; accent-color:var(--accent); cursor:pointer;">
+                <input type="checkbox" class="page-chk" value="${p}" ${disabledPagesArr.includes(p) ? 'checked' : ''}>
             </label>
         `).join('');
 
         container.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:15px;">
-                <div style="display:flex; gap:5px; background:var(--bg-surface); padding:5px; border-radius:var(--radius-sm); border:1px solid var(--border-color); overflow-x:auto; scrollbar-width:none;">
-                    <button class="own-tab active" onclick="switchOwnerTab('tab-umum', this)" style="flex:1; padding:8px; border-radius:4px; font-size:12px; font-weight:bold; border:none; background:var(--text-primary); color:var(--bg-base); white-space:nowrap;">Umum</button>
-                    <button class="own-tab" onclick="switchOwnerTab('tab-vip', this)" style="flex:1; padding:8px; border-radius:4px; font-size:12px; font-weight:bold; border:none; background:transparent; color:var(--text-secondary); white-space:nowrap;">VIP</button>
-                    <button class="own-tab" onclick="switchOwnerTab('tab-tools', this)" style="flex:1; padding:8px; border-radius:4px; font-size:12px; font-weight:bold; border:none; background:transparent; color:var(--text-secondary); white-space:nowrap;">Alat</button>
-                    <button class="own-tab" onclick="switchOwnerTab('tab-pages', this)" style="flex:1; padding:8px; border-radius:4px; font-size:12px; font-weight:bold; border:none; background:transparent; color:var(--text-secondary); white-space:nowrap;">Halaman</button>
+                <div class="own-tabs">
+                    <button class="own-tab active" onclick="switchOwnerTab('tab-umum', this)">Umum</button>
+                    <button class="own-tab" onclick="switchOwnerTab('tab-vip', this)">VIP</button>
+                    <button class="own-tab" onclick="switchOwnerTab('tab-tools', this)">Alat</button>
+                    <button class="own-tab" onclick="switchOwnerTab('tab-pages', this)">Halaman</button>
                 </div>
 
-                <div id="tab-umum" class="own-content" style="display:block; background:var(--bg-surface); padding:15px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
-                    <h3 style="font-size:16px; margin-bottom:12px;">Pengaturan Umum</h3>
-                    <label style="font-size:12px; color:var(--text-secondary);">Judul Web</label>
-                    <input type="text" id="own-title" value="${escapeHTML(set.site_title || 'ZenkaiTools')}" style="width:100%; padding:10px; margin-top:5px; margin-bottom:15px; border:1px solid var(--border-color); border-radius:var(--radius-sm); background:var(--bg-base); color:var(--text-primary); font-size:14px;">
-                    
-                    <label style="font-size:12px; color:var(--text-secondary);">Broadcast Banner</label>
-                    <input type="text" id="own-broadcast" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan" style="width:100%; padding:10px; margin-top:5px; margin-bottom:15px; border:1px solid var(--border-color); border-radius:var(--radius-sm); background:var(--bg-base); color:var(--text-primary); font-size:14px;">
-                    
-                    <label style="font-size:12px; color:var(--text-secondary); display:block;">Limit Gemini (Per Hari)</label>
-                    <input type="number" id="own-gemini-limit" value="${set.gemini_limit || 1}" min="1" style="width:100%; padding:10px; margin-top:5px; margin-bottom:15px; border:1px solid var(--border-color); border-radius:var(--radius-sm); background:var(--bg-base); color:var(--text-primary); font-size:14px;">
+                <div id="tab-umum" class="own-content" style="display:block;">
+                    <h3>Pengaturan Umum</h3>
+                    <label class="own-label">Judul Web</label>
+                    <input type="text" id="own-title" class="own-input" value="${escapeHTML(set.site_title || 'ZenkaiTools')}">
 
-                    <div style="background:rgba(239, 68, 68, 0.1); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--danger); margin-top:10px;">
+                    <label class="own-label">Broadcast Banner</label>
+                    <input type="text" id="own-broadcast" class="own-input" value="${escapeHTML(set.broadcast_text || '')}" placeholder="Kosongkan untuk mematikan">
+
+                    <label class="own-label">Limit Gemini (Per Hari)</label>
+                    <input type="number" id="own-gemini-limit" class="own-input" value="${set.gemini_limit || 1}" min="1">
+
+                    <div class="own-danger-box">
                         <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
                             <div>
-                                <b style="font-size:14px; color:var(--danger); display:block;">Mode Maintenance</b>
+                                <b style="font-size:14px; display:block;">Mode Maintenance</b>
                                 <span style="font-size:12px; color:var(--text-secondary);">Kunci semua akses web.</span>
                             </div>
                             <input type="checkbox" id="own-mt" ${set.is_maintenance ? 'checked' : ''} style="width:20px; height:20px; accent-color:var(--danger); cursor:pointer;">
@@ -644,21 +611,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
 
-                <div id="tab-vip" class="own-content" style="display:none; background:var(--bg-surface); padding:15px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
-                    <h3 style="font-size:16px; color:var(--accent); margin-bottom:12px;">Manajemen VIP</h3>
+                <div id="tab-vip" class="own-content" style="display:none;">
+                    <h3 style="color:var(--accent);">Manajemen VIP</h3>
                     <p style="font-size:12px; color:var(--text-secondary); margin-bottom:10px;">Klik untuk reset kode VIP biar bisa dipakai ulang.</p>
                     <button class="btn btn-ghost" onclick="loadVipCodes()" style="margin-bottom:10px; font-size:14px;">Muat Daftar Kode VIP</button>
                     <div id="vip-list-container" style="max-height: 250px; overflow-y: auto;"></div>
                 </div>
 
-                <div id="tab-tools" class="own-content" style="display:none; background:var(--bg-surface); padding:15px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
-                    <h3 style="font-size:16px; margin-bottom:12px;">Nonaktifkan & VIP Alat</h3>
+                <div id="tab-tools" class="own-content" style="display:none;">
+                    <h3>Nonaktifkan & VIP Alat</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${toolsHtml}</div>
                 </div>
 
-                <div id="tab-pages" class="own-content" style="display:none; background:var(--bg-surface); padding:15px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
-                    <h3 style="font-size:16px; margin-bottom:12px;">Kunci Halaman</h3>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">${pagesHtml}</div>
+                <div id="tab-pages" class="own-content" style="display:none;">
+                    <h3>Kunci Halaman</h3>
+                    <div class="own-pages-grid">${pagesHtml}</div>
                 </div>
 
                 <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px; margin-bottom:20px;">
@@ -671,30 +638,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.switchOwnerTab = (tabId, btn) => {
         document.querySelectorAll('.own-content').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('.own-tab').forEach(el => {
-            el.style.background = 'transparent';
-            el.style.color = 'var(--text-secondary)';
-        });
+        document.querySelectorAll('.own-tab').forEach(el => el.classList.remove('active'));
         document.getElementById(tabId).style.display = 'block';
-        btn.style.background = 'var(--text-primary)';
-        btn.style.color = 'var(--bg-base)';
+        btn.classList.add('active');
     };
 
     window.loadVipCodes = async () => {
         const container = document.getElementById('vip-list-container');
         if (!container) return;
         container.innerHTML = '<div class="loader"></div>';
-        
+
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'list_vip_codes', owner_token: localStorage.getItem(OWNER_TOKEN_KEY) })
             });
             const result = await res.json();
-            
+
             if (!result.status) throw new Error(result.message || 'Gagal memuat');
             const data = result.data || [];
-            
+
             let html = `<button onclick="generateVipCode(event)" class="btn btn-primary" style="font-size:14px; margin-bottom:15px;">Buat Kode VIP Baru</button>`;
 
             if (data.length === 0) {
@@ -702,26 +665,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 container.innerHTML = html;
                 return;
             }
-            
+
             data.forEach(v => {
                 const badge = v.is_used ? 'TERPAKAI' : 'TERSEDIA';
                 const date = v.used_at ? new Date(v.used_at).toLocaleString('id-ID') : '-';
-                
+                const badgeColor = v.is_used ? 'rgba(255, 61, 110, 0.2)' : 'rgba(61, 224, 160, 0.2)';
+                const badgeText = v.is_used ? 'var(--danger)' : 'var(--success)';
+
                 html += `
-                    <div style="background: var(--bg-base); border: 1px solid var(--border-color); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 8px;">
+                    <div class="vip-code-item">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                            <b style="font-family:monospace; font-size:14px;">${escapeHTML(v.code)}</b>
-                            <span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:${v.is_used ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)'}; color:${v.is_used ? 'var(--danger)' : 'var(--success)'};">${badge}</span>
+                            <b class="vip-code-val">${escapeHTML(v.code)}</b>
+                            <span style="font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; background:${badgeColor}; color:${badgeText}; letter-spacing:0.05em;">${badge}</span>
                         </div>
                         ${v.is_used ? `<p style="font-size:11px; color:var(--text-secondary); margin-bottom:8px;">Dipakai: ${escapeHTML(date)}</p>` : ''}
                         <div style="display:flex; gap:6px;">
-                            <button onclick="copyToClipboard('${escapeHTML(v.code)}')" class="btn btn-ghost" style="flex:1; padding:6px; font-size:12px; border-radius:4px;">Salin</button>
-                            ${v.is_used ? `<button onclick="resetVipCode(${Number(v.id)})" class="btn" style="flex:1; padding:6px; font-size:12px; background:var(--danger); color:#fff; border-radius:4px;">Reset</button>` : ''}
+                            <button data-copy-code="${escapeHTML(v.code)}" class="btn btn-ghost btn-copy-vip" style="flex:1; padding:6px; font-size:12px;">Salin</button>
+                            ${v.is_used ? `<button data-reset-id="${Number(v.id)}" class="btn btn-reset-vip" style="flex:1; padding:6px; font-size:12px; background:var(--danger); color:#fff;">Reset</button>` : ''}
                         </div>
                     </div>
                 `;
             });
             container.innerHTML = html;
+
+            container.querySelectorAll('.btn-copy-vip').forEach(btn => {
+                btn.addEventListener('click', () => window.copyToClipboard(btn.dataset.copyCode));
+            });
+            container.querySelectorAll('.btn-reset-vip').forEach(btn => {
+                btn.addEventListener('click', () => window.resetVipCode(Number(btn.dataset.resetId)));
+            });
         } catch(e) {
             container.innerHTML = `<p style="font-size:12px; color:var(--danger);">Error: ${escapeHTML(e.message)}</p>`;
         }
@@ -846,7 +818,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // FITUR FAVORIT
     window.toggleFavorit = (title, slug, cover) => {
         let favorit = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
         const index = favorit.findIndex(f => f.slug === slug);
@@ -865,9 +836,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return favorit.some(f => f.slug === slug);
     };
 
-    // =========================================
-    // 9. FUNGSI OPEN TOOL
-    // =========================================
     window.openTool = (tool) => {
         if (!modal || !modalContent) return;
 
@@ -915,9 +883,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // =========================================
-        // FITUR SUPPORT (DONASI)
-        // =========================================
         else if (tool === 'support') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -940,9 +905,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         }
-        // =========================================
-        // FITUR VIP
-        // =========================================
         else if (tool === 'vip') {
             const isVip = localStorage.getItem('zenkai_vip') === 'true';
             const vipUntil = localStorage.getItem('zenkai_vip_until');
@@ -962,7 +924,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>${isVipFinal ? 'Status VIP' : 'Paket VIP'}</h3>
-                
+
                 ${isVipFinal ? `
                     <div style="background: var(--bg-surface); border: 1px solid var(--accent); padding: 20px; border-radius: var(--radius-md); text-align: center; margin-bottom: 20px;">
                         <h4 style="font-size: 20px; color: var(--accent); margin: 0;">VIP AKTIF</h4>
@@ -974,7 +936,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="desc-text" style="text-align: left; margin-bottom: 15px;">
                         Buka akses tanpa batas ke semua fitur premium Zenkai Tools.
                     </div>
-                    
+
                     <div style="background: var(--bg-surface); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 15px;">
                         <table style="width:100%; border-collapse: collapse; font-size: 14px;">
                             <tr style="border-bottom: 1px solid var(--border-color);">
@@ -1015,15 +977,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span style="font-size:15px; font-weight:700; color:var(--accent);">Rp 20.000</span>
                         </div>
                     </div>
-                    
+
                     <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" class="btn btn-primary" style="text-decoration: none; margin-bottom:15px;">Bayar via Sociabuzz</a>
-                    
+
                     <p style="font-size: 13px; text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
                         Setelah bayar, kirim bukti ke WhatsApp Admin:<br>
                         <a href="https://wa.me/6285352831643" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">085352831643</a><br>
                         untuk dapet kode VIP.
                     </p>
-                    
+
                     <input type="text" id="vip-code-input" placeholder="Masukkan Kode VIP (ZENKAI-XXXX)" style="text-align:center; text-transform:uppercase;">
                     <button class="btn btn-primary" onclick="aktivasiVip()">Tukar Kode</button>
                     <div id="vip-activation-res" style="margin-top: 15px;"></div>
@@ -1044,7 +1006,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ action: 'activate', code: code })
                     });
                     const data = await res.json();
-                    
+
                     if (!data.status) {
                         setBtnLoading(btn, false, 'Tukar Kode');
                         return resBox.innerHTML = `<p class="error-msg" style="font-size:13px;">Gagal: ${escapeHTML(data.message)}</p>`;
@@ -1062,9 +1024,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
         }
-        // =========================================
-        // FITUR GEMINI PLUS
-        // =========================================
         else if (tool === 'ai-chat') {
             const limit = window.geminiLimit || 1;
 
@@ -1072,7 +1031,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${closeSvg}
                 <h3>Gemini Plus</h3>
                 <span class="desc-text">Limit Harian Email: <b>${limit}x</b></span>
-                
+
                 <div style="text-align:left; font-size:14px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
                     <b style="color:var(--text-primary);">Tutorial:</b><br>
                     1. Masukkan Email Google aktif.<br>
@@ -1107,7 +1066,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSend.onclick = async () => {
                 const email = emailInput.value.trim();
                 if (!email) return showToast('Masukkan email dulu!');
-                
+
                 setBtnLoading(btnSend, true, 'Mengirim OTP...');
                 resBox.style.display = 'block';
                 resBox.innerHTML = '<div class="loader"></div>';
@@ -1118,7 +1077,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ action: 'send', email: email })
                     });
                     const data = await res.json();
-                    
+
                     if (!data.status) throw new Error(data.message || 'Gagal mengirim OTP');
 
                     stepEmail.style.display = 'none';
@@ -1135,7 +1094,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const email = emailInput.value.trim();
                 const otp = otpInput.value.trim();
                 if (!otp || otp.length < 6) return showToast('Masukkan 6 digit OTP!');
-                
+
                 setBtnLoading(btnClaim, true, 'Memverifikasi...');
                 resBox.style.display = 'block';
                 resBox.innerHTML = '<div class="loader"></div>';
@@ -1146,7 +1105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ action: 'claim', email: email, otp: otp })
                     });
                     const data = await res.json();
-                    
+
                     if (!data.status) throw new Error(data.message || 'Gagal klaim');
 
                     const offerLink = data.result?.offerLink || '#';
@@ -1156,7 +1115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     resBox.innerHTML = `
                         <div style="text-align:left;">
                             <p class="success-msg" style="font-size:14px; margin-bottom:15px;">Berhasil Diklaim</p>
-                            
+
                             <p style="font-size:13px; margin-bottom:5px; font-weight:bold;">Panduan:</p>
                             <p style="font-size:13px; color:var(--text-secondary); margin-bottom:15px;">${escapeHTML(guideText)}</p>
 
@@ -1172,9 +1131,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btnClaim, false, 'Klaim Akses');
             };
         }
-        // =========================================
-        // FITUR SPAM OTP
-        // =========================================
         else if (tool === 'spamotp') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1190,7 +1146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nomor = document.getElementById('spam-nomor').value.trim();
                 const box = document.getElementById('spam-res');
                 if (!nomor) return showToast('Masukkan nomor dulu!');
-                
+
                 setBtnLoading(btn, true, 'Memproses...');
                 box.style.display = 'block';
                 box.innerHTML = '<div class="loader"></div>';
@@ -1201,7 +1157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ nomor: nomor })
                     });
                     const data = await res.json();
-                    
+
                     if (!data.status) throw new Error(data.message || 'Gagal');
 
                     const r = data.result;
@@ -1209,7 +1165,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     html += `<p style="color:var(--success); font-weight:bold; margin-bottom:10px;">Selesai dalam ${r.time_elapsed_seconds}s</p>`;
                     html += `<p>Target: <b>${escapeHTML(r.target)}</b></p>`;
                     html += `<p>Berhasil: <b style="color:var(--success);">${r.success}</b> | Gagal: <b style="color:var(--danger);">${r.failed}</b></p>`;
-                    
+
                     if (r.delivered_list.length > 0) {
                         html += `<p style="margin-top:10px; font-weight:bold; color:var(--success);">OTP MASUK:</p>`;
                         r.delivered_list.forEach(item => {
@@ -1225,15 +1181,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Proses');
             };
         }
-        // =========================================
-        // FITUR WHATSAPP BOT
-        // =========================================
         else if (tool === 'wa-bot') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>WA Automator</h3>
                 <span class="desc-text">Otomatisasi Reaksi & Polling Channel WhatsApp.</span>
-                
+
                 <div style="display:flex; gap:10px; margin-bottom:15px;">
                     <button id="tab-react" onclick="switchWaTab('react')" class="btn btn-primary" style="flex:1; margin:0; padding:10px; font-size:14px;">Auto React</button>
                     <button id="tab-vote" onclick="switchWaTab('vote')" class="btn btn-ghost" style="flex:1; margin:0; padding:10px; font-size:14px;">Auto Vote</button>
@@ -1290,7 +1243,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ action: 'react', url: url, reaction: reaction })
                     });
                     const data = await res.json();
-                    
+
                     if (data.status === false || !data.result) {
                         throw new Error(data.message || 'Gagal mengirim reaksi');
                     }
@@ -1326,7 +1279,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ action: 'votech', url: url, pesan: pesan })
                     });
                     const data = await res.json();
-                    
+
                     if (data.status === false || !data.result) {
                         throw new Error(data.message || 'Gagal mengirim vote');
                     }
@@ -1347,9 +1300,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btnVote, false, 'Kirim Vote');
             };
         }
-        // =========================================
-        // FITUR NETFLIX GENERATOR
-        // =========================================
         else if (tool === 'netflix') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1364,9 +1314,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     4. Jika gagal, coba opsi Buka di Desktop.<br>
                     5. Nikmati filmnya.
                 </div>
-                
+
                 <button class="btn btn-primary" id="btn-nf">Generate Akun</button>
-                
+
                 <div id="nf-res" style="display:none; margin-top:15px; text-align:left; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
             `;
 
@@ -1383,14 +1333,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         method: 'POST', headers: { 'Content-Type': 'application/json' }
                     });
                     const data = await res.json();
-                    
+
                     if (data.status === false || !data.data) {
                         throw new Error(data.message || 'Kuota habis atau API down.');
                     }
 
                     const d = data.data;
                     const details = d.details;
-                    
+
                     box.innerHTML = `
                         <div style="text-align:center; margin-bottom:15px;">
                             <h3 style="font-size:20px; margin:0;">Netflix Premium</h3>
@@ -1411,8 +1361,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <a href="${escapeHTML(d.links.tv)}" target="_blank" class="btn btn-ghost" style="text-decoration:none; margin-bottom:0;">Buka di Smart TV</a>
                         </div>
 
-                        <button class="btn btn-ghost" onclick="copyToClipboard('${escapeHTML(d.raw_url)}')" style="margin-top:15px; margin-bottom:0;">Salin Link Utama</button>
+                        <button class="btn btn-ghost" id="btn-copy-nf-raw" style="margin-top:15px; margin-bottom:0;">Salin Link Utama</button>
                     `;
+                    const copyBtn = document.getElementById('btn-copy-nf-raw');
+                    if (copyBtn) copyBtn.addEventListener('click', () => window.copyToClipboard(d.raw_url));
                     showToast('Akun Berhasil Digenerate');
                 } catch (e) {
                     box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
@@ -1420,45 +1372,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Generate Akun');
             };
         }
-        // =========================================
-        // FITUR WEBBUILDER
-        // =========================================
         else if (tool === 'webbuilder') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>WebBuilder</h3>
                 <span class="desc-text">Generate Source Code Website (Portfolio / Downloader)</span>
-                
+
                 <div style="text-align:left; font-size:14px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
                     1. Pilih Tipe Website.<br>
                     2. Pilih Tema.<br>
                     3. Klik Generate, lalu download ZIP.
                 </div>
 
-                <div class="custom-select-wrapper" style="position:relative; margin-bottom:10px;">
-                    <div class="custom-select" id="custom-wb-type" onclick="toggleCustomSelect('custom-wb-type')" style="padding:12px; border:1px solid var(--border-color); border-radius:var(--radius-sm); background:var(--bg-base); cursor:pointer;">
-                        <div class="custom-select-trigger" style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="custom-select-wrapper">
+                    <div class="custom-select" id="custom-wb-type" onclick="toggleCustomSelect('custom-wb-type')">
+                        <div class="custom-select-trigger">
                             <span>Portfolio</span>
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </div>
                     </div>
-                    <div class="custom-options" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:var(--radius-sm); z-index:10; margin-top:4px; overflow:hidden;">
-                        <div class="custom-option active" data-value="portfolio" onclick="selectCustomOption('custom-wb-type', 'portfolio', 'Portfolio')" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">Portfolio</div>
-                        <div class="custom-option" data-value="downloader" onclick="selectCustomOption('custom-wb-type', 'downloader', 'Downloader')" style="padding:12px; cursor:pointer;">Downloader</div>
+                    <div class="custom-options">
+                        <div class="custom-option active" data-value="portfolio" onclick="selectCustomOption('custom-wb-type', 'portfolio', 'Portfolio')">Portfolio</div>
+                        <div class="custom-option" data-value="downloader" onclick="selectCustomOption('custom-wb-type', 'downloader', 'Downloader')">Downloader</div>
                     </div>
                 </div>
 
-                <div class="custom-select-wrapper" style="position:relative; margin-bottom:15px;">
-                    <div class="custom-select" id="custom-wb-theme" onclick="toggleCustomSelect('custom-wb-theme')" style="padding:12px; border:1px solid var(--border-color); border-radius:var(--radius-sm); background:var(--bg-base); cursor:pointer;">
-                        <div class="custom-select-trigger" style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="custom-select-wrapper">
+                    <div class="custom-select" id="custom-wb-theme" onclick="toggleCustomSelect('custom-wb-theme')">
+                        <div class="custom-select-trigger">
                             <span>Tema 1 - Midnight</span>
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </div>
                     </div>
-                    <div class="custom-options" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:var(--radius-sm); z-index:10; margin-top:4px; overflow:hidden;">
-                        <div class="custom-option active" data-value="1" onclick="selectCustomOption('custom-wb-theme', '1', 'Tema 1 - Midnight')" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">Tema 1 - Midnight</div>
-                        <div class="custom-option" data-value="2" onclick="selectCustomOption('custom-wb-theme', '2', 'Tema 2 - Neon')" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">Tema 2 - Neon</div>
-                        <div class="custom-option" data-value="3" onclick="selectCustomOption('custom-wb-theme', '3', 'Tema 3 - Minimalist')" style="padding:12px; cursor:pointer;">Tema 3 - Minimalist</div>
+                    <div class="custom-options">
+                        <div class="custom-option active" data-value="1" onclick="selectCustomOption('custom-wb-theme', '1', 'Tema 1 - Midnight')">Tema 1 - Midnight</div>
+                        <div class="custom-option" data-value="2" onclick="selectCustomOption('custom-wb-theme', '2', 'Tema 2 - Neon')">Tema 2 - Neon</div>
+                        <div class="custom-option" data-value="3" onclick="selectCustomOption('custom-wb-theme', '3', 'Tema 3 - Minimalist')">Tema 3 - Minimalist</div>
                     </div>
                 </div>
 
@@ -1481,18 +1430,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.nextElementSibling.style.display = 'none';
             };
 
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.custom-select-wrapper')) {
-                    document.querySelectorAll('.custom-options').forEach(o => o.style.display = 'none');
-                }
-            });
+            if (!window.__wbOutsideClickBound) {
+                window.__wbOutsideClickBound = true;
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.custom-select-wrapper')) {
+                        document.querySelectorAll('.custom-options').forEach(o => o.style.display = 'none');
+                    }
+                });
+            }
 
             const btn = document.getElementById('btn-wb');
             btn.onclick = async () => {
                 const type = document.getElementById('custom-wb-type').dataset.value || 'portfolio';
                 const theme = document.getElementById('custom-wb-theme').dataset.value || '1';
                 const box = document.getElementById('wb-res');
-                
+
                 setBtnLoading(btn, true, 'Membangun...');
                 box.style.display = 'block';
                 box.innerHTML = '<div class="loader"></div>';
@@ -1503,7 +1455,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ type: type, theme: theme })
                     });
                     const data = await res.json();
-                    
+
                     if (data.status === false || !data.result) throw new Error(data.message || 'Gagal generate');
 
                     const r = data.result;
@@ -1523,15 +1475,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Generate');
             };
         }
-        // =========================================
-        // FITUR CF-SOURCE
-        // =========================================
         else if (tool === 'cfsource') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>CF-Source Scraper</h3>
                 <span class="desc-text">Bypass Cloudflare & ambil Source Code HTML.</span>
-                
+
                 <div style="text-align:left; font-size:14px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--danger); line-height:1.6; color:var(--text-secondary);">
                     <b style="color:var(--danger);">Peringatan:</b><br>
                     Tool ini hanya untuk riset keamanan & edukasi. Dilarang menggunakan untuk mencuri data atau meretas situs!
@@ -1539,7 +1488,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <input type="text" id="cf-url" placeholder="Masukkan URL Website (cth: https://example.com)">
                 <button class="btn btn-primary" id="btn-cf">Scrape</button>
-                
+
                 <div id="cf-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
             `;
 
@@ -1548,7 +1497,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const url = document.getElementById('cf-url').value.trim();
                 const box = document.getElementById('cf-res');
                 if (!url) return showToast('Masukkan URL dulu!');
-                
+
                 setBtnLoading(btn, true, 'Scraping...');
                 box.style.display = 'block';
                 box.innerHTML = '<div class="loader"></div>';
@@ -1559,20 +1508,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ url: url })
                     });
                     const data = await res.json();
-                    
+
                     if (data.status === false || !data.data) throw new Error(data.message || 'Gagal Scrape');
 
                     const htmlCode = data.data.html;
-                    
+
                     box.innerHTML = `
                         <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Berhasil Scrape</p>
                         <textarea id="cf-code" readonly style="width:100%; height:200px; background:var(--bg-base); color:var(--text-primary); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:10px; font-family:monospace; font-size:12px; resize:vertical; outline:none; margin-bottom:10px;">${escapeHTML(htmlCode)}</textarea>
                         <div style="display:flex; gap:10px;">
-                            <button class="btn btn-primary" onclick="copyToClipboard(document.getElementById('cf-code').value)" style="flex:1; margin:0;">Copy Code</button>
+                            <button class="btn btn-primary" id="btn-copy-cf" style="flex:1; margin:0;">Copy Code</button>
                             <a id="dl-html" class="btn btn-ghost" style="flex:1; margin:0; text-decoration:none;">Save HTML</a>
                         </div>
                     `;
-                    
+
+                    document.getElementById('btn-copy-cf').addEventListener('click', () => {
+                        const codeEl = document.getElementById('cf-code');
+                        window.copyToClipboard(codeEl.value);
+                    });
+
                     const blob = new Blob([htmlCode], { type: 'text/html' });
                     const urlBlob = URL.createObjectURL(blob);
                     document.getElementById('dl-html').href = urlBlob;
@@ -1585,15 +1539,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Scrape');
             };
         }
-        // =========================================
-        // FITUR FAKE DANA
-        // =========================================
         else if (tool === 'fakedana') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Fake Saldo DANA</h3>
                 <span class="desc-text">Bikin gambar SS saldo DANA buat prank temen lu!</span>
-                
+
                 <div style="text-align:left; font-size:14px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
                     1. Masukkan nominal (tanpa titik/koma, misal: 1000000).<br>
                     2. Klik Generate.<br>
@@ -1603,7 +1554,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <input type="number" id="dana-nominal" placeholder="Masukkan Nominal (cth: 1000000)" inputmode="numeric">
                 <button class="btn btn-primary" id="btn-dana">Generate</button>
-                
+
                 <div id="dana-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
             `;
 
@@ -1612,7 +1563,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nominal = document.getElementById('dana-nominal').value.trim();
                 const box = document.getElementById('dana-res');
                 if (!nominal) return showToast('Masukkan nominal!');
-                
+
                 setBtnLoading(btn, true, 'Memproses...');
                 box.style.display = 'block';
                 box.innerHTML = '<div class="loader"></div>';
@@ -1622,9 +1573,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ nominal: nominal })
                     });
-                    
+
                     if (!res.ok) throw new Error('Gagal memproses gambar');
-                    
+
                     const contentType = res.headers.get('content-type') || '';
                     if (!contentType.includes('image/')) {
                         let errMsg = 'Gagal memproses gambar';
@@ -1634,7 +1585,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const blob = await res.blob();
                     const imgUrl = URL.createObjectURL(blob);
-                    
+
                     box.innerHTML = `
                         <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Berhasil Dibuat</p>
                         <img src="${imgUrl}" style="width:100%; max-width:300px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
@@ -1647,9 +1598,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Generate');
             };
         }
-        // =========================================
-        // FITUR ZENKAI CINEMA
-        // =========================================
         else if (tool === 'cinema') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1697,9 +1645,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 let html = '';
-                arr.forEach(d => {
+                arr.forEach((d, idx) => {
                     html += `
-                        <div onclick="bukaDetailCinema('${escapeHTML(d.slug)}', '${escapeHTML(d.title || d.name)}', '${escapeHTML(d.cover || '')}')" style="width: calc(33.33% - 7px); cursor:pointer; display:flex; flex-direction:column; gap:5px;">
+                        <div data-cinema-idx="${idx}" data-slug="${escapeHTML(d.slug)}" data-title="${escapeHTML(d.title || d.name)}" data-cover="${escapeHTML(d.cover || '')}" class="cinema-card" style="width: calc(33.33% - 7px); cursor:pointer; display:flex; flex-direction:column; gap:5px;">
                             <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border-color); background:var(--bg-surface);">
                                 ${d.cover ? `<img src="${escapeHTML(d.cover)}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">` : ''}
                             </div>
@@ -1708,6 +1656,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 });
                 el.innerHTML = html;
+
+                el.querySelectorAll('.cinema-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        window.bukaDetailCinema(card.dataset.slug, card.dataset.title, card.dataset.cover);
+                    });
+                });
             };
 
             const loadCinemaHome = async () => {
@@ -1729,7 +1683,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.bukaDetailCinema = async (slug, title, cover) => {
                 const box = document.getElementById('cinema-res');
                 const searchBox = document.getElementById('cinema-search-res');
-                
+
                 if (box) box.innerHTML = '<div class="loader"></div>';
                 if (searchBox) searchBox.innerHTML = '<div class="loader"></div>';
 
@@ -1754,7 +1708,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                         <h4 style="text-align:left; font-size:14px; font-weight:700; margin-bottom:10px; border-bottom:1px solid var(--border-color); padding-bottom:8px;">Daftar Episode (${episodes.length})</h4>
-                        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;">
+                        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;" class="cinema-episode-list">
                     `;
 
                     if (episodes.length === 0) {
@@ -1762,16 +1716,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         episodes.forEach(ep => {
                             html += `
-                                <div onclick="tontonCinema('${escapeHTML(ep.url)}', '${escapeHTML(title)} - ${escapeHTML(ep.title)}')" style="background:var(--bg-surface); border:1px solid var(--border-color); padding:8px; border-radius:4px; text-align:center; cursor:pointer; font-size:13px; font-weight:500; transition:background 150ms;">
+                                <div data-ep-url="${escapeHTML(ep.url)}" data-ep-title="${escapeHTML(title)} - ${escapeHTML(ep.title)}" class="cinema-episode" style="background:var(--bg-surface); border:1px solid var(--border-color); padding:8px; border-radius:4px; text-align:center; cursor:pointer; font-size:13px; font-weight:500; transition:background 150ms;">
                                     ${ep.number}
                                 </div>
                             `;
                         });
                     }
                     html += `</div>`;
-                    
-                    if (box && box.style.display !== 'none') box.innerHTML = html;
-                    if (searchBox && searchBox.style.display !== 'none') searchBox.innerHTML = html;
+
+                    const activeBox = (searchBox && searchBox.style.display !== 'none') ? searchBox : box;
+                    if (activeBox) activeBox.innerHTML = html;
+
+                    activeBox.querySelectorAll('.cinema-episode').forEach(el => {
+                        el.addEventListener('click', () => window.tontonCinema(el.dataset.epUrl, el.dataset.epTitle));
+                    });
 
                 } catch(e) {
                     const msg = `<p class="error-msg" style="width:100%;">Gagal: ${escapeHTML(e.message)}</p>`;
@@ -1784,17 +1742,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const box = document.getElementById('cinema-res');
                 const searchBox = document.getElementById('cinema-search-res');
                 const activeBox = (searchBox && searchBox.style.display !== 'none') ? searchBox : box;
-                
+
                 activeBox.innerHTML = '<div class="loader"></div><p style="font-size:13px; text-align:center; color:var(--text-secondary); margin-top:10px;">Menyiapkan video...</p>';
                 try {
                     const fullUrl = url.startsWith('http') ? url : `https://dracinema.com${url}`;
-                    
+
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-cinema`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ action: 'stream', url: fullUrl })
                     });
                     const data = await res.json();
-                    
+
                     let videoHtml = '';
                     if (data.status && data.result && data.result.videoSources && data.result.videoSources.length > 0) {
                         const vidUrl = data.result.videoSources[0].url || data.result.videoSources[0];
@@ -1809,10 +1767,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     activeBox.innerHTML = `
-                        <button onclick="openTool('cinema')" class="btn btn-ghost" style="font-size:13px; padding:8px; margin-bottom:15px;">Kembali</button>
+                        <button id="btn-cinema-back" class="btn btn-ghost" style="font-size:13px; padding:8px; margin-bottom:15px;">Kembali</button>
                         <h4 style="font-size:15px; font-weight:700; margin-bottom:10px; text-align:center;">${escapeHTML(title)}</h4>
                         ${videoHtml}
                     `;
+                    const backBtn = document.getElementById('btn-cinema-back');
+                    if (backBtn) backBtn.addEventListener('click', () => window.openTool('cinema'));
                 } catch(e) {
                     activeBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
@@ -1820,7 +1780,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const btnSearch = document.getElementById('btn-cinema-search');
             const inputSearch = document.getElementById('cinema-q');
-            
+
             btnSearch.onclick = async () => {
                 const q = inputSearch.value.trim();
                 if (!q) return showToast('Masukkan judul!');
@@ -1841,22 +1801,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             loadCinemaHome();
         }
-        // =========================================
-        // FITUR AI VIDEO GENERATOR
-        // =========================================
         else if (tool === 'vidgen') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>AI Video Generator</h3>
                 <span class="desc-text">Buat video dari teks (Text-to-Video AI)</span>
-                
+
                 <div style="text-align:left; font-size:14px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
                     Gunakan Bahasa Inggris untuk hasil yang lebih baik.<br>
                     Rasio 9:16 untuk TikTok/Reels, 16:9 untuk YouTube.
                 </div>
 
                 <textarea id="vid-prompt" placeholder="Contoh: A futuristic city with flying cars at night, cinematic..." rows="3"></textarea>
-                
+
                 <select id="vid-ratio" style="width:100%; padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-base); color:var(--text-primary); margin-bottom:15px; font-family:var(--font-body); font-size:14px; outline:none;">
                     <option value="9:16">9:16 (TikTok/Reels)</option>
                     <option value="16:9">16:9 (YouTube)</option>
@@ -1864,7 +1821,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </select>
 
                 <button class="btn btn-primary" id="btn-vidgen">Generate Video</button>
-                
+
                 <div id="vid-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
             `;
 
@@ -1874,7 +1831,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const ratio = document.getElementById('vid-ratio').value;
                 const box = document.getElementById('vid-res');
                 if (!prompt) return showToast('Masukkan prompt dulu!');
-                
+
                 setBtnLoading(btn, true, 'Membuat Video...');
                 box.style.display = 'block';
                 box.innerHTML = '<div class="loader"></div>';
@@ -1885,7 +1842,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ prompt: prompt, ratio: ratio })
                     });
                     const data = await res.json();
-                    
+
                     if (data.status === false || !data.data || !data.data.url) {
                         throw new Error(data.message || 'Gagal generate video.');
                     }
@@ -1903,18 +1860,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Generate Video');
             };
         }
-        // =========================================
-        // FITUR TERABOX DOWNLOADER
-        // =========================================
         else if (tool === 'terabox') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Terabox Downloader</h3>
                 <span class="desc-text">Download file dari Terabox tanpa install aplikasi</span>
-                
+
                 <input type="text" id="terabox-url" placeholder="Paste link Terabox...">
                 <button class="btn btn-primary" id="btn-terabox">Ambil File</button>
-                
+
                 <div id="terabox-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
             `;
 
@@ -1923,10 +1877,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const url = document.getElementById('terabox-url').value.trim();
                 const box = document.getElementById('terabox-res');
                 if (!url) return showToast('Masukkan link Terabox!');
-                
+
                 setBtnLoading(btn, true, 'Memproses...');
                 box.style.display = 'block';
-                
+
                 let timerCount = 0;
                 box.innerHTML = `
                     <div class="loader"></div>
@@ -1939,11 +1893,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     const timerEl = document.getElementById('tb-timer');
                     const statusEl = document.getElementById('tb-status');
                     if (timerEl) timerEl.innerText = timerCount;
-                    
+
                     if (timerCount === 5 && statusEl) statusEl.innerText = "Membaca link Terabox...";
                     if (timerCount === 15 && statusEl) statusEl.innerText = "Mengambil data dari server...";
                     if (timerCount === 30 && statusEl) statusEl.innerText = "Hampir selesai...";
                 }, 1000);
+                window.activeTimerInterval = timerInterval;
 
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-terabox`, {
@@ -1952,12 +1907,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     const data = await res.json();
                     clearInterval(timerInterval);
-                    
+                    window.activeTimerInterval = null;
+
                     const files = data.data?.response || data.result?.response || [];
                     if (files.length === 0) throw new Error('File tidak ditemukan atau link invalid.');
 
                     let html = `<p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Ditemukan ${files.length} File</p>`;
-                    
+
                     files.forEach((f, i) => {
                         html += `
                             <div style="background:var(--bg-base); border:1px solid var(--border-color); padding:12px; border-radius:var(--radius-sm); margin-bottom:10px; text-align:left;">
@@ -1975,28 +1931,26 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         `;
                     });
-                    
+
                     box.innerHTML = html;
                     showToast('File Berhasil Diambil');
                 } catch (e) {
                     clearInterval(timerInterval);
+                    window.activeTimerInterval = null;
                     box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
                 setBtnLoading(btn, false, 'Ambil File');
             };
         }
-        // =========================================
-        // FITUR BYPASS LINK
-        // =========================================
         else if (tool === 'linkvertise') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Bypass Link</h3>
                 <span class="desc-text">Tembus Shortlink (Linkvertise, Bicolink, SFL, dll)</span>
-                
+
                 <input type="text" id="bypass-url" placeholder="Paste link shortlink di sini...">
                 <button class="btn btn-primary" id="btn-bypass">Bypass</button>
-                
+
                 <div id="bypass-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
             `;
 
@@ -2005,7 +1959,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const url = document.getElementById('bypass-url').value.trim();
                 const box = document.getElementById('bypass-res');
                 if (!url) return showToast('Masukkan link dulu!');
-                
+
                 setBtnLoading(btn, true, 'Memproses...');
                 box.style.display = 'block';
                 box.innerHTML = '<div class="loader"></div>';
@@ -2016,7 +1970,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ url: url })
                     });
                     const data = await res.json();
-                    
+
                     if (data.status === false || !data.result) {
                         throw new Error(data.message || 'Gagal bypass. Link mungkin tidak didukung.');
                     }
@@ -2026,19 +1980,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div style="text-align:left; font-size:14px;">
                             <p style="color:var(--success); font-weight:bold; margin-bottom:10px;">Berhasil di-Bypass</p>
                             <p style="color:var(--text-secondary); margin-bottom:5px;">Platform: <b>${escapeHTML(r.platform)}</b></p>
-                            
+
                             <div style="background:var(--bg-base); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:15px; margin-top:10px;">
                                 <p style="font-size:12px; color:var(--text-secondary); margin-bottom:2px;">Link Asli:</p>
                                 <p style="word-break:break-all; font-size:13px; margin-bottom:10px;">${escapeHTML(r.original_url)}</p>
-                                
+
                                 <p style="font-size:12px; color:var(--text-secondary); margin-bottom:2px;">Link Hasil Bypass:</p>
                                 <p style="word-break:break-all; font-size:13px; color:var(--accent); font-weight:bold;">${escapeHTML(r.bypassed_url)}</p>
                             </div>
                         </div>
 
                         <a href="${escapeHTML(r.bypassed_url)}" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:10px;">Buka Link</a>
-                        <button class="btn btn-ghost" onclick="copyToClipboard('${escapeHTML(r.bypassed_url)}')" style="margin-bottom:0;">Salin Link</button>
+                        <button class="btn btn-ghost" id="btn-copy-bypass" style="margin-bottom:0;">Salin Link</button>
                     `;
+                    const copyBtn = document.getElementById('btn-copy-bypass');
+                    if (copyBtn) copyBtn.addEventListener('click', () => window.copyToClipboard(r.bypassed_url));
                     showToast('Link Berhasil Di-bypass');
                 } catch (e) {
                     box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
@@ -2046,9 +2002,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Bypass');
             };
         }
-        // =========================================
-        // FITUR ARTINAMA
-        // =========================================
         else if (tool === 'artinama') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -2063,7 +2016,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nama = document.getElementById('nama-in').value.trim();
                 const box = document.getElementById('nama-res');
                 if (!nama) return showToast('Masukkan nama!');
-                
+
                 setBtnLoading(btn, true, 'Mencari...');
                 box.style.display = 'block';
                 box.innerHTML = '<div class="loader"></div>';
@@ -2074,7 +2027,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ nama: nama })
                     });
                     const data = await res.json();
-                    
+
                     if (data.status === false || !data.data) throw new Error(data.message || 'Nama tidak ditemukan');
 
                     box.innerHTML = `
@@ -2090,17 +2043,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Cari');
             };
         }
-        // =========================================
-        // FITUR YOUTUBE
-        // =========================================
         else if (tool === 'youtube') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>YouTube Downloader</h3>
                 <span class="desc-text">Download video atau audio dari YouTube.</span>
-                
+
                 <input type="text" id="yt-url" placeholder="Paste link YouTube...">
-                
+
                 <div style="display:flex; gap:10px; margin-bottom:15px;">
                     <button id="btn-type-mp3" onclick="pilihTipeYt('mp3')" class="btn btn-primary" style="flex:1; margin:0; padding:10px; font-size:14px;">MP3</button>
                     <button id="btn-type-mp4" onclick="pilihTipeYt('mp4')" class="btn btn-ghost" style="flex:1; margin:0; padding:10px; font-size:14px;">MP4</button>
@@ -2110,7 +2060,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div id="yt-result" style="margin-top:15px;"></div>
             `;
 
-            let tipeTerpilih = 'mp3'; 
+            let tipeTerpilih = 'mp3';
             window.pilihTipeYt = (tipe) => {
                 tipeTerpilih = tipe;
                 const btnMp3 = document.getElementById('btn-type-mp3');
@@ -2164,16 +2114,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Proses');
             };
         }
-        // =========================================
-        // FITUR KOMIK
-        // =========================================
         else if (tool === 'komik') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <div style="background:var(--bg-base); min-height: 100vh; padding-bottom: 20px;">
                     <div style="display:flex; align-items:center; justify-content:space-between; padding: 0 15px; margin-bottom: 15px; margin-top: 5px;">
                         <div style="display:flex; align-items:center; gap:10px;">
-                            <div style="background:var(--accent); color:#000; padding:6px; border-radius:6px; font-weight:900; font-size:18px;">Z</div>
+                            <div style="background:var(--accent); color:var(--accent-ink); padding:6px; border-radius:6px; font-weight:900; font-size:18px; font-family:var(--font-display);">Z</div>
                             <div>
                                 <h3 style="color:var(--text-primary); font-size:20px; margin:0;">Zenkai Comics</h3>
                                 <p style="font-size:11px; color:var(--text-secondary); margin:0; font-weight:500;">BACA KOMIK GRATIS</p>
@@ -2196,20 +2143,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div style="position:relative; margin-bottom:20px; padding: 0 15px;">
                         <input type="text" id="komik-q" placeholder="Cari judul manga, manhwa..." style="width:100%; padding:12px 14px; border:1px solid var(--border-color); border-radius:var(--radius-sm); background:var(--bg-surface); color:var(--text-primary); font-size:14px; outline:none;">
                     </div>
-                    
+
                     <div id="komik-res" style="padding: 0 15px;"></div>
-                    
+
                     <div id="komik-load-more" style="display:none; text-align:center; padding: 20px 0;">
                         <div class="loader"></div>
                     </div>
                 </div>
             `;
-            
+
             const input = document.getElementById('komik-q');
             const box = document.getElementById('komik-res');
             const loadMoreEl = document.getElementById('komik-load-more');
-            
-            let currentTab = 'terbaru'; 
+
+            let currentTab = 'terbaru';
             let currentPage = 1;
             let isLoading = false;
             let hasMore = true;
@@ -2229,14 +2176,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (t.includes('manhua')) return { label: 'MANHUA', color: '#EF4444' };
                     if (t.includes('manga')) return { label: 'MANGA', color: '#3B82F6' };
                 }
-                
+
                 const t = (titleString || '').toLowerCase();
                 const manhwaKeywords = ['manager kim', 'youngest', 'bloodthirsty', 'heavenly', 'northern', 'shepherd', 'reborn as', 'awakening', 'lookism', 'temporarily', 'fostering', 'grand duke', 'hunared', 'regression', 'regressor', 'player', 'tower', 'guild', 'hunter', 'princess'];
                 const manhuaKeywords = ['martial', 'immortal', 'cultivation', 'sovereign', 'god', 'technique', 'senki', 'jinx', 'demonic', 'magic', 'sword', 'hundred', 'academic', 'system', 'villain', 'master', 'class', 'transition', 'flame', 'global'];
 
                 for (const kw of manhwaKeywords) if (t.includes(kw)) return { label: 'MANHWA', color: 'var(--accent)' };
                 for (const kw of manhuaKeywords) if (t.includes(kw)) return { label: 'MANHUA', color: '#EF4444' };
-                
+
                 return { label: 'MANGA', color: '#3B82F6' };
             };
 
@@ -2263,7 +2210,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentTab === 'favorit' && !query) {
                     loadMoreEl.style.display = 'none';
                     const favoritList = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
-                    
+
                     if (favoritList.length === 0) {
                         box.innerHTML = `
                             <div style="text-align:center; padding: 40px 20px;">
@@ -2274,7 +2221,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         let htmlFav = `<h4 style="font-size:15px; margin-bottom:15px; font-weight:700; color:var(--text-primary);">Daftar Favorit Kamu</h4>`;
                         htmlFav += `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;">`;
-                        
+
                         favoritList.forEach(f => {
                             const tipe = getTipeKomik(f.type || '', f.title);
                             htmlFav += `
@@ -2291,7 +2238,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         box.innerHTML = htmlFav;
 
                         box.querySelectorAll('.fav-item-detail').forEach(el => {
-                            el.addEventListener('click', () => bukaDetail(el.dataset.title, el.dataset.slug));
+                            el.addEventListener('click', () => window.bukaDetail(el.dataset.title, el.dataset.slug));
                         });
                     }
                     isLoading = false;
@@ -2303,9 +2250,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (query) {
                         bodyData = { action: 'search', q: query, page: currentPage };
                     } else {
-                        bodyData = { 
+                        bodyData = {
                             action: currentTab === 'terbaru' ? 'latest' : 'daftar',
-                            page: currentPage 
+                            page: currentPage
                         };
                     }
 
@@ -2314,7 +2261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify(bodyData)
                     });
                     const data = await res.json();
-                    const komikList = data.results || []; 
+                    const komikList = data.results || [];
 
                     if (komikList.length === 0) {
                         hasMore = false;
@@ -2331,7 +2278,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         historyHtml = `
                             <div style="margin-bottom: 25px;">
                                 <h4 style="font-size:14px; margin-bottom:12px; font-weight:700; color:var(--text-primary);">Lanjut Baca</h4>
-                                <div style="background:var(--bg-surface); border:1px solid var(--accent); padding:15px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:space-between; cursor:pointer;" onclick="bacaKomik('${h.comicTitle.replace(/'/g, "\\'")}', '${h.slug}')">
+                                <div class="history-card" data-title="${escapeHTML(h.comicTitle)}" data-slug="${escapeHTML(h.slug)}" style="background:var(--bg-surface); border:1px solid var(--accent); padding:15px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
                                     <div style="display:flex; align-items:center; gap:12px;">
                                         <div style="background:var(--bg-base); color:var(--accent); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -2364,36 +2311,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     let html = '';
+                    let gridContainerId = 'komik-grid-container';
                     if (currentPage === 1) {
-                        html = historyHtml + titleSection + `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;" id="komik-grid-container">`;
-                    } else {
-                        html = `<div style="display:contents;" id="komik-grid-container">`;
+                        html = historyHtml + titleSection + `<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px 10px;" id="${gridContainerId}">`;
                     }
-                    
+
                     komikList.forEach(manga => {
                         const title = (manga.title || 'Tanpa Judul').replace(/^Komik\s+/i, '');
                         const cover = manga.cover || 'https://via.placeholder.com/150';
-                        const slug = manga.slug; 
+                        const slug = manga.slug;
                         const tipe = getTipeKomik(manga.type, title);
-                        
+
                         html += `
                             <div class="komik-card-jere" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" style="cursor:pointer; display:flex; flex-direction:column; gap:8px;">
                                 <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:var(--radius-sm); overflow:hidden; background:var(--bg-surface); border:1px solid var(--border-color);">
-                                    <img src="${cover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                                    <img src="${cover}" referrerpolicy="no-referrer" style="width:100%; height:100%; object-fit:cover;" loading="lazy" onerror="this.style.display='none'">
                                     <span style="position:absolute; top:0; left:0; font-size:9px; font-weight:700; background:${tipe.color}; color:#000; padding:2px 6px; border-radius:0 0 6px 0;">${tipe.label}</span>
                                 </div>
                                 <h4 style="font-size:12px; font-weight:500; color:var(--text-primary); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin:0;">${escapeHTML(title)}</h4>
                             </div>
                         `;
                     });
-                    
+
                     if (currentPage === 1) {
                         html += `</div>`;
                         box.innerHTML = html;
+
+                        const historyEl = box.querySelector('.history-card');
+                        if (historyEl) {
+                            historyEl.addEventListener('click', () => {
+                                window.bacaKomik(historyEl.dataset.title, historyEl.dataset.slug);
+                            });
+                        }
                     } else {
-                        html += `</div>`;
-                        const gridContainer = document.getElementById('komik-grid-container');
-                        if(gridContainer) {
+                        const gridContainer = document.getElementById(gridContainerId);
+                        if (gridContainer) {
                             const tempDiv = document.createElement('div');
                             tempDiv.innerHTML = html;
                             const newItems = tempDiv.querySelectorAll('.komik-card-jere');
@@ -2402,9 +2354,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     box.querySelectorAll('.komik-card-jere').forEach(el => {
-                        const newEl = el.cloneNode(true);
-                        el.parentNode.replaceChild(newEl, el);
-                        newEl.addEventListener('click', () => bukaDetail(newEl.dataset.title, newEl.dataset.slug));
+                        if (el.dataset.bound === '1') return;
+                        el.dataset.bound = '1';
+                        el.addEventListener('click', () => window.bukaDetail(el.dataset.title, el.dataset.slug));
                     });
 
                     if (data.hasNext === false || komikList.length < 10) {
@@ -2412,11 +2364,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         loadMoreEl.style.display = 'none';
                     } else {
                         currentPage++;
-                        loadMoreEl.style.display = 'none'; 
+                        loadMoreEl.style.display = 'none';
                     }
 
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
                 isLoading = false;
             };
@@ -2432,13 +2384,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
+            if (window.__komikScrollHandler && window.__komikScrollTarget) {
+                window.__komikScrollTarget.removeEventListener('scroll', window.__komikScrollHandler);
+            }
             const modalBody = document.querySelector('.bottom-sheet-content');
             if (modalBody) {
-                modalBody.removeEventListener('scroll', handleScroll);
+                window.__komikScrollHandler = handleScroll;
+                window.__komikScrollTarget = modalBody;
                 modalBody.addEventListener('scroll', handleScroll);
             }
 
-            const bukaDetail = async (title, slug) => {
+            window.bukaDetail = async (title, slug) => {
                 box.innerHTML = '<div class="loader"></div>';
 
                 try {
@@ -2447,17 +2403,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ action: 'detail', slug: slug })
                     });
                     const data = await res.json();
-                    
+
                     if (!data.status) throw new Error('Gagal mengambil detail');
                     const detail = data.result || data.data;
                     const tipe = getTipeKomik(detail.type, title);
-                    
+
                     if (detail.type) {
                         let typeCache = JSON.parse(localStorage.getItem('zenkai_type_cache') || '{}');
                         typeCache[title] = detail.type;
                         localStorage.setItem('zenkai_type_cache', JSON.stringify(typeCache));
                     }
-                    
+
                     let chapters = [];
                     if (detail.chapters && detail.chapters.length > 0) {
                         chapters = detail.chapters.map(ch => ({
@@ -2473,7 +2429,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             return { title: ch, slug: `${slug}-chapter-${num.replace('.', '-')}`, date: '' };
                         });
                     }
-                    
+
                     chapters.sort((a, b) => {
                         const numA = parseFloat(a.title.replace(/[^0-9.]/g, ''));
                         const numB = parseFloat(b.title.replace(/[^0-9.]/g, ''));
@@ -2498,7 +2454,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="btn-back btn btn-ghost" style="width:40px; height:40px; padding:0; border-radius:50%; margin-bottom:20px;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
                         </button>
-                        
+
                         <div style="display:flex; gap:15px; margin-bottom:20px;">
                             <div style="position:relative;">
                                 <img src="${detail.cover || detail.thumbnail || 'https://via.placeholder.com/150'}" style="width:110px; height:150px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
@@ -2507,7 +2463,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
                                 <h3 style="font-size:18px; margin:0 0 5px 0; line-height:1.2;">${escapeHTML(title)}</h3>
                                 <p style="font-size:12px; color:var(--accent); font-weight:700; margin:0 0 15px 0;">Status: ${escapeHTML(detail.status || 'Berjalan')}</p>
-                                
+
                                 <button class="btn-fav btn btn-ghost" data-title="${escapeHTML(title)}" data-slug="${escapeHTML(slug)}" data-cover="${escapeHTML(detail.cover || '')}" style="align-self:flex-start; padding:8px 16px; border-radius:20px; font-size:12px; ${isFav ? 'color:var(--accent); border-color:var(--accent);' : ''}">
                                     ${isFav ? 'Tersimpan' : '+ Favorit'}
                                 </button>
@@ -2549,36 +2505,36 @@ document.addEventListener('DOMContentLoaded', () => {
                         hasMore = true;
                         loadKatalog(input.value.trim());
                     });
-                    
+
                     const btnFav = box.querySelector('.btn-fav');
                     btnFav.addEventListener('click', function() {
                         const t = this.dataset.title;
                         const s = this.dataset.slug;
                         const c = this.dataset.cover;
                         toggleFavorit(t, s, c);
-                        
+
                         const isNowFav = cekFavorit(s);
                         this.style.color = isNowFav ? 'var(--accent)' : 'var(--text-primary)';
-                        this.style.borderColor = isNowFav ? 'var(--accent)' : 'var(--border-color)';
+                        this.style.borderColor = isNowFav ? 'var(--accent)' : 'var(--border-strong)';
                         this.innerText = isNowFav ? 'Tersimpan' : '+ Favorit';
                     });
 
                     const btnLanjut = box.querySelector('.btn-lanjut');
                     if (btnLanjut) {
-                        btnLanjut.addEventListener('click', () => bacaKomik(btnLanjut.dataset.title, btnLanjut.dataset.slug));
+                        btnLanjut.addEventListener('click', () => window.bacaKomik(btnLanjut.dataset.title, btnLanjut.dataset.slug));
                     }
 
                     box.querySelectorAll('.chapter-item').forEach(el => {
-                        el.addEventListener('click', () => bacaKomik(el.dataset.title, el.dataset.slug));
+                        el.addEventListener('click', () => window.bacaKomik(el.dataset.title, el.dataset.slug));
                     });
 
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal memuat detail: ${escapeHTML(e.message)}</p>`; 
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal memuat detail: ${escapeHTML(e.message)}</p>`;
                 }
             };
 
-            loadKatalog(''); 
-            
+            loadKatalog('');
+
             let timeout = null;
             input.addEventListener('input', (e) => {
                 clearTimeout(timeout);
@@ -2997,9 +2953,9 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
         else if (tool === 'zodiak') {
-            let tgls = ''; for (let i = 1; i <= 31; i++) tgls += `<div onclick="setZ('tgl',${i},this)" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">${i}</div>`;
+            let tgls = ''; for (let i = 1; i <= 31; i++) tgls += `<div data-z-tgl="${i}" class="z-tgl-item" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">${i}</div>`;
             let blns = ''; const b = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
-            b.forEach((nm, i) => blns += `<div onclick="setZ('bln',${i+1},this)" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">${nm}</div>`);
+            b.forEach((nm, i) => blns += `<div data-z-bln="${i+1}" data-z-bln-label="${nm}" class="z-bln-item" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">${nm}</div>`);
 
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -3025,12 +2981,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 const el = document.getElementById('list-' + t);
                 el.style.display = el.style.display === 'none' ? 'block' : 'none';
             };
-            window.setZ = (t, v, el) => {
-                if (t === 'tgl') { window.zTgl = v; document.getElementById('btn-tgl').innerText = v; }
-                if (t === 'bln') { window.zBln = v; document.getElementById('btn-bln').innerText = el.innerText; }
-                document.getElementById('list-tgl').style.display = 'none';
-                document.getElementById('list-bln').style.display = 'none';
-            };
+            document.querySelectorAll('.z-tgl-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    window.zTgl = Number(el.dataset.zTgl);
+                    document.getElementById('btn-tgl').innerText = el.dataset.zTgl;
+                    document.getElementById('list-tgl').style.display = 'none';
+                    document.getElementById('list-bln').style.display = 'none';
+                });
+            });
+            document.querySelectorAll('.z-bln-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    window.zBln = Number(el.dataset.zBln);
+                    document.getElementById('btn-bln').innerText = el.dataset.zBlnLabel;
+                    document.getElementById('list-tgl').style.display = 'none';
+                    document.getElementById('list-bln').style.display = 'none';
+                });
+            });
             window.cekZodiak = () => {
                 if (!window.zTgl || !window.zBln) return showToast('Pilih dulu!');
                 const t = window.zTgl, bl = window.zBln;
@@ -3382,15 +3348,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Generate Gambar');
             };
         }
-        // =========================================
-        // FITUR AI IMAGE EDITOR V2
-        // =========================================
         else if (tool === 'aiedit') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>AI Image Editor</h3>
                 <span class="desc-text">Edit gambar pakai AI (GPT-Image). Tanpa batasan prompt!</span>
-                
+
                 <div style="display:flex; gap:10px; margin-bottom:15px;">
                     <button id="tab-ai-upload" onclick="switchAiTab('upload')" class="btn btn-primary" style="flex:1; margin:0; padding:10px; font-size:14px;">Upload</button>
                     <button id="tab-ai-url" onclick="switchAiTab('url')" class="btn btn-ghost" style="flex:1; margin:0; padding:10px; font-size:14px;">URL</button>
@@ -3400,7 +3363,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div id="area-ai-url" style="display:none;"><input type="text" id="ai-edit-url" placeholder="Paste URL gambar (https://...)"></div>
 
                 <textarea id="ai-edit-prompt" rows="2" placeholder="Ketik instruksi edit... (Wajib)"></textarea>
-                
+
                 <div style="display:flex; gap:10px; margin-bottom:15px; background:var(--bg-surface); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
                     <label style="flex:1; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;">
                         <input type="radio" name="ai-output" value="json" checked style="accent-color:var(--accent);"> Link (JSON)
@@ -3471,10 +3434,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Proses Edit');
             };
         }
-
-        // =========================================
-        // FITUR NOTRACK AI CHAT
-        // =========================================
         else if (tool === 'notrack-chat') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -3500,7 +3459,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const addMessage = (text, isUser) => {
                 const div = document.createElement('div');
-                div.style.cssText = `align-self: ${isUser ? 'flex-end' : 'flex-start'}; background: ${isUser ? 'var(--accent)' : 'var(--bg-base)'}; color: ${isUser ? '#000' : 'var(--text-primary)'}; padding: 10px 14px; border-radius: 12px; border-bottom-${isUser ? 'right' : 'left'}-radius: 2px; font-size: 14px; max-width: 85%; border: 1px solid var(--border-color); line-height: 1.5; white-space: pre-wrap;`;
+                div.style.cssText = `align-self: ${isUser ? 'flex-end' : 'flex-start'}; background: ${isUser ? 'var(--accent)' : 'var(--bg-base)'}; color: ${isUser ? 'var(--accent-ink)' : 'var(--text-primary)'}; padding: 10px 14px; border-radius: 12px; border-bottom-${isUser ? 'right' : 'left'}-radius: 2px; font-size: 14px; max-width: 85%; border: 1px solid var(--border-color); line-height: 1.5; white-space: pre-wrap;`;
                 div.innerText = text;
                 chatBox.appendChild(div);
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -3538,7 +3497,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ prompt: prompt, sessionId: ntSessionId, chatId: ntChatId, file_base64: fileBase64 })
                     });
                     const data = await res.json();
-                    
+
                     loadingDiv.remove();
                     if (data.status === false) throw new Error(data.message || 'Gagal');
 
@@ -3555,7 +3514,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Kirim Pesan');
             };
         }
-
         else {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -3566,27 +3524,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // =========================================
-    // FUNGSI BACA KOMIK (WEBTOON READER)
-    // =========================================
     window.bacaKomik = async (title, slug) => {
         const box = document.getElementById('komik-res');
         box.innerHTML = '<div class="loader"></div>';
-        
+
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-komik-jere`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'stream', slug: slug })
             });
             const data = await res.json();
-            
+
             let images = [];
             if (data.result?.pages?.length > 0) {
                 images = data.result.pages.map(p => p.url || p);
             } else if (data.result?.images) {
                 images = data.result.images;
             }
-            
+
             if (images.length === 0) throw new Error('Gambar tidak ditemukan.');
 
             const chapterTitle = data.result?.chapterTitle || title;
@@ -3613,51 +3568,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="reader-container" style="background:#000; padding:0; margin:0; display:flex; flex-direction:column;">
             `;
-            
+
             images.forEach(imgUrl => {
                 const proxiedImg = `https://wsrv.nl/?url=${encodeURIComponent(imgUrl)}`;
                 html += `<img src="${proxiedImg}" referrerpolicy="no-referrer" loading="lazy" onerror="this.style.display='none'" style="width:100%; display:block; margin:0; padding:0; max-width:100%; object-fit:contain;">`;
             });
-            
+
             html += `</div>`;
 
             html += `
                 <div style="display:flex; gap:10px; padding:15px 15px 5px 15px; background:var(--bg-base);">
-                    <button class="btn btn-ghost btn-prev-next" data-slug="${escapeHTML(prevSlug || '')}" data-title="${escapeHTML(title)}" ${!prevSlug ? 'disabled' : ''} 
+                    <button class="btn btn-ghost btn-prev-next" data-slug="${escapeHTML(prevSlug || '')}" data-title="${escapeHTML(title)}" ${!prevSlug ? 'disabled' : ''}
                         style="flex:1; padding:12px; opacity:${!prevSlug ? '0.4' : '1'};">
                         Prev
                     </button>
-                    <button class="btn btn-primary btn-prev-next" data-slug="${escapeHTML(nextSlug || '')}" data-title="${escapeHTML(title)}" ${!nextSlug ? 'disabled' : ''} 
+                    <button class="btn btn-primary btn-prev-next" data-slug="${escapeHTML(nextSlug || '')}" data-title="${escapeHTML(title)}" ${!nextSlug ? 'disabled' : ''}
                         style="flex:1; padding:12px; opacity:${!nextSlug ? '0.4' : '1'};">
                         Next
                     </button>
                 </div>
                 <button class="btn btn-ghost btn-back-katalog" style="color:var(--danger); border-color:var(--danger); margin: 0 15px 20px 15px; width:calc(100% - 30px);">Kembali ke Katalog</button>
             `;
-            
+
             box.innerHTML = html;
             window.scrollTo({ top: 0, behavior: 'auto' });
 
             box.querySelector('.btn-back-reader').addEventListener('click', () => openTool('komik'));
             box.querySelector('.btn-daftar-reader').addEventListener('click', () => openTool('komik'));
             box.querySelector('.btn-back-katalog').addEventListener('click', () => openTool('komik'));
-            
+
             box.querySelectorAll('.btn-prev-next').forEach(btn => {
                 if(!btn.disabled) {
                     btn.addEventListener('click', () => {
-                        bacaKomik(btn.dataset.title, btn.dataset.slug);
+                        window.bacaKomik(btn.dataset.title, btn.dataset.slug);
                     });
                 }
             });
 
-        } catch (e) { 
+        } catch (e) {
             box.innerHTML = `
                 <div style="text-align:center; padding: 20px;">
                     <p class="error-msg">${escapeHTML(e.message)}</p>
                     <button class="btn btn-primary" onclick="openTool('komik')" style="margin-top:15px;">Kembali</button>
                 </div>
-            `; 
+            `;
         }
     };
 
-}); // <- PENUTUP DOMContentLoaded, JANGAN DIHAPUS
+});
