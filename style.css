@@ -455,7 +455,10 @@ input[type=range]::-webkit-slider-runnable-track {
 
 .loader {
     width: 28px; height: 28px; border: 2.5px solid var(--border-color);
-    border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 20px auto;
+    border-top-color: var(--accent); border-radius: 50%; 
+    animation: spin 0.8s linear infinite !important; 
+    margin: 20px auto;
+    will-change: transform; /* Biar GPU HP lu yang muter, bukan CPU */
 }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
