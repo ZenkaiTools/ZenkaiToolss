@@ -12,9 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const setBtnLoading = (btn, loading, label = 'Proses') => {
         if (!btn) return;
+        if (!btn.dataset.originalLabel) btn.dataset.originalLabel = label;
         btn.disabled = loading;
         btn.classList.toggle('loading', loading);
-        btn.innerText = loading ? 'Memproses...' : label;
+        btn.innerText = loading ? 'Memproses...' : (btn.dataset.originalLabel || label);
     };
 
     const isReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -130,6 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = document.getElementById('page-' + pageId);
         if (!target || current === target) return;
 
+        if (modal && modal.classList.contains('active')) closeModal();
+
         if (current) current.classList.remove('active');
         target.classList.add('active');
 
@@ -142,10 +145,17 @@ document.addEventListener('DOMContentLoaded', () => {
     window.filterCategory = (category, btn) => {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
         if (btn) btn.classList.add('active');
+
+        let visibleCount = 0;
         document.querySelectorAll('.tool-card').forEach(card => {
             const cat = card.getAttribute('data-category');
             const show = category === 'all' || !cat || cat === category;
             card.style.display = show ? 'flex' : 'none';
+            if (show) visibleCount++;
+        });
+
+        document.querySelectorAll('.list-divider').forEach(divider => {
+            divider.style.display = (category !== 'all') ? 'none' : 'flex';
         });
     };
 
@@ -321,7 +331,15 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeModal = () => {
         if (!modal) return;
         modal.classList.remove('active');
-        if (window.activeTimerInterval) clearInterval(window.activeTimerInterval);
+        if (window.activeTimerInterval) {
+            clearInterval(window.activeTimerInterval);
+            window.activeTimerInterval = null;
+        }
+        if (window.__komikScrollHandler && window.__komikScrollTarget) {
+            window.__komikScrollTarget.removeEventListener('scroll', window.__komikScrollHandler);
+            window.__komikScrollHandler = null;
+            window.__komikScrollTarget = null;
+        }
         setTimeout(() => { if (modalContent) modalContent.innerHTML = ''; }, 300);
     };
     window.closeModalOnOverlay = (e) => {
@@ -356,6 +374,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const titleEl = card.querySelector('h4');
                 const title = titleEl ? titleEl.innerText.toLowerCase() : '';
                 card.style.display = title.includes(term) ? 'flex' : 'none';
+            });
+            document.querySelectorAll('.list-divider').forEach(divider => {
+                divider.style.display = 'none';
             });
         });
     }
@@ -3424,10 +3445,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     let finalImageUrl = (data.type === 'json') ? data.data.result : data.data;
                     if (!finalImageUrl) throw new Error('Gagal mendapatkan gambar');
 
+                    const safeUrl = escapeHTML(finalImageUrl);
+
                     box.innerHTML = `
                         <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Berhasil Diedit</p>
-                        <img src="${finalImageUrl}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
-                        <a href="${finalImageUrl}" download="aiedit-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download / Buka</a>
+                        <img src="${safeUrl}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
+                        <a href="${safeUrl}" download="aiedit-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download / Buka</a>
                     `;
                     showToast('Gambar Berhasil Diedit');
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
@@ -3514,94 +3537,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Kirim Pesan');
             };
         }
-        else if (tool === 'bug-wa') {
-    // Cek Status dari Owner
-    const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
-    const isMaintenance = (window.currentDisabledTools || []).includes('bug-wa');
-    const isVipOnly = (window.currentVipTools || []).includes('bug-wa');
-    
-    const isVip = localStorage.getItem('zenkai_vip') === 'true';
-    const vipUntil = localStorage.getItem('zenkai_vip_until');
-    const isVipValid = isVip && vipUntil && new Date(vipUntil) > new Date();
-
-    // 1. Kalau Owner matiin fitur ini (Maintenance)
-    if (isMaintenance && !isOwner) {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3 style="color:var(--danger);">Fitur Maintenance</h3>
-            <span class="desc-text">Fitur ini sedang dinonaktifkan sementara oleh Owner.</span>
-            <button class="btn btn-primary" onclick="openTool('bug-wa')">Cek Ulang</button>
-        `;
-        return;
-    }
-
-    // 2. Kalau Owner jadihin fitur ini VIP Only, dan user bukan VIP
-    if (isVipOnly && !isVipValid && !isOwner) {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <div style="text-align:center; padding: 20px 0;">
-                <h3 style="font-size: 22px; color: var(--danger); margin-bottom: 10px;">Akses VIP Terkunci</h3>
-                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 25px;">Fitur ini dijadikan VIP Only oleh Owner.</p>
-                <button class="btn btn-primary" onclick="openTool('vip')">Lihat Paket VIP</button>
-            </div>
-        `;
-        return;
-    }
-
-    // 3. Tampilkan UI Tool
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3 style="color:var(--danger);">☠️ WA Bug Exploit</h3>
-        <span class="desc-text">Gunakan dengan risiko sendiri.</span>
-
-        <div style="text-align:left; font-size:12px; background:rgba(255, 61, 110, 0.1); padding:12px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--danger); color:var(--text-secondary);">
-            <b>Note:</b> Proses mungkin memakan waktu 30-60 detik (membangunkan server). Jangan tutup modal ini!
-        </div>
-
-        <select id="bug-action" style="width:100%; padding:12px; margin-bottom:15px; background:var(--bg-base); color:white; border:1px solid var(--border-color); border-radius:var(--radius-sm);">
-            <option value="freeze_droid">Freeze Android</option>
-            <option value="crash_ios">Crash iOS</option>
-            <option value="spam_call">Spam Call</option>
-            <option value="crash_group">Crash Group</option>
-        </select>
-
-        <input type="text" id="bug-target" placeholder="No. WA (628xxx) / Link Grup (chat.whatsapp.com/...)" inputmode="text">
-
-        <button class="btn btn-primary" id="btn-exec-bug" style="background:var(--danger); color:white; border:none; margin-top:10px;">Luncurkan Serangan</button>
-
-        <div id="bug-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
-    `;
-
-    const btnExec = document.getElementById('btn-exec-bug');
-    
-    btnExec.onclick = async () => {
-        const action = document.getElementById('bug-action').value;
-        const target = document.getElementById('bug-target').value.trim();
-        const box = document.getElementById('bug-res');
-
-        if (!target) return showToast('Masukkan target!');
-
-        setBtnLoading(btnExec, true, 'Menyerang...');
-        box.style.display = 'block';
-        box.innerHTML = '<div class="loader"></div><p style="font-size:12px; margin-top:10px; color:var(--text-secondary);">Membangunkan server...</p>';
-
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-bug-wa`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: action, target: target })
-            });
-            const data = await res.json();
-
-            if (!data.status) throw new Error(data.error);
-
-            box.innerHTML = `<p class="success-msg" style="font-size:13px;">Serangan Terkirim!<br><span style="font-size:11px; font-weight:normal;">Respon: ${escapeHTML(data.message)}</span></p>`;
-            showToast('Bug berhasil dikirim ke target!');
-        } catch (e) {
-            box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
-        }
-        setBtnLoading(btnExec, false, 'Luncurkan Serangan');
-    };
-}
         else {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -3679,7 +3614,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             box.innerHTML = html;
-            window.scrollTo({ top: 0, behavior: 'auto' });
+
+            const scrollContainer = document.querySelector('.bottom-sheet-content');
+            if (scrollContainer) scrollContainer.scrollTop = 0;
 
             box.querySelector('.btn-back-reader').addEventListener('click', () => openTool('komik'));
             box.querySelector('.btn-daftar-reader').addEventListener('click', () => openTool('komik'));
