@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.aktifkanSuara = () => {
         if (welcomeVideo) {
             welcomeVideo.muted = false;
-            welcomeVideo.play();
+            welcomeVideo.play().catch(() => {});
         }
         const btn = document.getElementById('btn-unmute');
         if (btn) btn.style.display = 'none';
@@ -259,7 +259,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.loadSong = (index) => {
         currentSong = index;
-        if (bgm) bgm.src = playlist[index].src;
+        if (bgm) {
+            bgm.src = playlist[index].src;
+            const savedV = localStorage.getItem('zenkai_volume') || '50';
+            bgm.volume = savedV / 100;
+        }
     };
 
     window.toggleMusic = () => {
@@ -1011,6 +1015,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="btn btn-primary" onclick="aktivasiVip()">Tukar Kode</button>
                     <div id="vip-activation-res" style="margin-top: 15px;"></div>
                 `}
+
             `;
 
             window.aktivasiVip = async () => {
@@ -2582,10 +2587,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const box = document.getElementById('tt-result');
                 if (!url) return showToast('Masukkan link dulu!');
                 if (!/tiktok\.com|vt\.tiktok\.com/i.test(url)) return showToast('Link harus dari TikTok!');
-                
+
                 setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
-                
+
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -2602,7 +2607,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <video style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);" src="${escapeHTML(vid)}" controls></video>
                         <button class="btn btn-primary" id="btn-save-tt">Simpan ke Galeri</button>
                     `;
-                    
+
                     document.getElementById('btn-save-tt').onclick = async () => {
                         const saveBtn = document.getElementById('btn-save-tt');
                         setBtnLoading(saveBtn, true, 'Menyimpan...');
@@ -2622,8 +2627,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         } catch (e) { showToast('Gagal simpan, coba lagi.'); }
                         setBtnLoading(saveBtn, false, 'Simpan ke Galeri');
                     };
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
                 setBtnLoading(btn, false, 'Proses');
             };
@@ -2642,10 +2647,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const url = document.getElementById('ig-url').value.trim();
                 const box = document.getElementById('ig-result');
                 if (!url) return showToast('Masukkan link dulu!');
-                
+
                 setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
-                
+
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-instagram`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -2657,7 +2662,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     let htmlContent = '';
                     const mediaArray = data.result?.media || data.media || [];
-                    
+
                     if (mediaArray.length === 0) throw new Error('Media tidak ditemukan');
 
                     mediaArray.forEach((media, index) => {
@@ -2675,8 +2680,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                     box.innerHTML = htmlContent;
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
                 setBtnLoading(btn, false, 'Ambil Media');
             };
@@ -2920,11 +2925,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const zone = document.getElementById('ml-zone').value.trim();
                 const box = document.getElementById('ml-res');
                 if (!id || !zone) return showToast('Isi ID dan Zone!');
-                
+
                 box.style.display = 'block';
                 setBtnLoading(btn, true, 'Cari');
                 box.innerHTML = '<div class="loader"></div>';
-                
+
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools-v2`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -2934,7 +2939,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (!data.status) throw new Error(data.message || 'Akun tidak ditemukan');
                     const d = data.result;
-                    
+
                     box.innerHTML = `
                         <div style="font-size:14px; line-height:1.6;">
                             <b>Nickname:</b> ${escapeHTML(d.nickname)}<br>
@@ -2944,8 +2949,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <b>Status:</b> ${escapeHTML(d.account_status)}
                         </div>
                     `;
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
                 setBtnLoading(btn, false, 'Cari');
             };
@@ -2963,7 +2968,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     4. Balik ke web, <b>Paste</b> link tadi di bawah.<br>
                     5. Klik <b>Aktifkan Premium</b>. Akun lu langsung Premium!
                 </div>
-                
+
                 <div id="am-step-1">
                     <input type="email" id="am-email" placeholder="Ketik email aktif lu...">
                     <button class="btn btn-primary" id="btn-am-send">Kirim Link</button>
@@ -2976,7 +2981,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div id="am-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
             `;
-            
+
             const btnSend = document.getElementById('btn-am-send');
             const btnVerif = document.getElementById('btn-am-verif');
             const box = document.getElementById('am-res');
@@ -2989,7 +2994,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 box.style.display = 'block';
                 setBtnLoading(btnSend, true, 'Mengirim...');
                 box.innerHTML = '<div class="loader"></div>';
-                
+
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools-v2`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -2997,7 +3002,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     const data = await res.json();
                     if (!data.status) throw new Error(data.message || 'Gagal');
-                    
+
                     step1.style.display = 'none';
                     step2.style.display = 'block';
                     box.innerHTML = `<p class="success-msg">Link terkirim ke <b>${escapeHTML(email)}</b>.<br>Buka Gmail, JANGAN DIKLIK. Copy link-nya, lalu paste di kolom atas.</p>`;
@@ -3012,7 +3017,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 box.style.display = 'block';
                 setBtnLoading(btnVerif, true, 'Memverifikasi...');
                 box.innerHTML = '<div class="loader"></div>';
-                
+
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools-v2`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -3020,7 +3025,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     const data = await res.json();
                     if (!data.status) throw new Error(data.message || 'Gagal verifikasi');
-                    
+
                     box.innerHTML = `<p class="success-msg">Verifikasi Berhasil!<br>Akun <b>${escapeHTML(email)}</b> sudah menjadi <b>${escapeHTML(data.result?.status || 'Premium')}</b>.</p>`;
                     showToast('Akun Premium Aktif!');
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
@@ -3058,13 +3063,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!fileInput.files[0]) return showToast('Pilih gambar dulu!');
 
                 const imageBase64 = await new Promise((resolve) => {
-                    const reader = new FileReader(); 
-                    reader.onload = (e) => resolve(e.target.result); 
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
                     reader.readAsDataURL(fileInput.files[0]);
                 });
 
                 setBtnLoading(btn, true, 'Memproses AI...');
-                box.style.display = 'block'; 
+                box.style.display = 'block';
                 box.innerHTML = '<div class="loader"></div><p style="font-size:13px; color:var(--text-secondary); margin-top:10px;">Tunggu 10-30 detik...</p>';
 
                 try {
@@ -3073,7 +3078,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ prompt: prompt, image_base64: imageBase64, output_type: 'image' })
                     });
                     const data = await res.json();
-                    
+
                     if (data.status === false) throw new Error(data.message || 'Gagal');
 
                     let finalImageUrl = data.data?.result || data.data || data.image_url;
@@ -3087,8 +3092,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <a href="${safeUrl}" download="aiedit-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download / Buka</a>
                     `;
                     showToast('Gambar Berhasil Diedit');
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                 }
                 setBtnLoading(btn, false, 'Proses Edit');
             };
@@ -3177,7 +3182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
             const isMaintenance = (window.currentDisabledTools || []).includes('bug-wa');
             const isVipOnly = (window.currentVipTools || []).includes('bug-wa');
-            
+
             const isVip = localStorage.getItem('zenkai_vip') === 'true';
             const vipUntil = localStorage.getItem('zenkai_vip_until');
             const isVipValid = isVip && vipUntil && new Date(vipUntil) > new Date();
@@ -3228,7 +3233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             const btnExec = document.getElementById('btn-exec-bug');
-            
+
             btnExec.onclick = async () => {
                 const action = document.getElementById('bug-action').value;
                 const target = document.getElementById('bug-target').value.trim();
@@ -3401,7 +3406,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${closeSvg}
                 <h3>Remove Background</h3>
                 <span class="desc-text">Upload gambar untuk dihapus background-nya secara otomatis.</span>
-                <input type="file" id="rb-file" accept="image/*">
+                <input type="file" id="rb-file" accept="image/*" style="display:none;" onchange="document.getElementById('rb-file-label').innerText = this.files[0] ? this.files[0].name : 'Pilih Gambar...';">
+                <button onclick="document.getElementById('rb-file').click()" class="btn btn-ghost" style="width:100%; border-style:dashed; height:60px; flex-direction:column; gap:5px; margin-bottom:15px;">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span id="rb-file-label" style="font-size:13px; font-weight:normal;">Pilih Gambar...</span>
+                </button>
                 <button class="btn btn-primary" id="btn-rb">Proses Gambar</button>
                 <div id="rb-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
             `;
@@ -3444,6 +3453,480 @@ document.addEventListener('DOMContentLoaded', () => {
                     box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
                     setBtnLoading(btn, false, 'Proses Gambar');
                 }
+            };
+        }
+        else if (tool === 'qr') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>QR Code Generator</h3>
+                <span class="desc-text">Ubah teks atau tautan jadi QR code.</span>
+                <input type="text" id="qr-text" placeholder="Masukkan teks atau URL...">
+                <button class="btn btn-primary" id="btn-qr">Generate QR</button>
+                <div id="qr-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+
+            const btn = document.getElementById('btn-qr');
+            btn.onclick = () => {
+                const text = document.getElementById('qr-text').value.trim();
+                const box = document.getElementById('qr-res');
+                if (!text) return showToast('Masukkan teks dulu!');
+
+                box.style.display = 'block';
+                const encoded = encodeURIComponent(text);
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encoded}`;
+
+                box.innerHTML = `
+                    <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">QR Code Berhasil Dibuat</p>
+                    <img src="${qrUrl}" style="width:100%; max-width:250px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px; background:#fff; padding:8px;">
+                    <a href="${qrUrl}" download="qrcode-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download QR</a>
+                `;
+                showToast('QR Code Berhasil Dibuat');
+            };
+        }
+        else if (tool === 'imgtojpg') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Konversi ke JPG</h3>
+                <span class="desc-text">Ubah format gambar (PNG, WEBP, dll) ke JPG.</span>
+                <input type="file" id="jpg-file" accept="image/*" style="display:none;" onchange="document.getElementById('jpg-file-label').innerText = this.files[0] ? this.files[0].name : 'Pilih Gambar...';">
+                <button onclick="document.getElementById('jpg-file').click()" class="btn btn-ghost" style="width:100%; border-style:dashed; height:60px; flex-direction:column; gap:5px; margin-bottom:15px;">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span id="jpg-file-label" style="font-size:13px; font-weight:normal;">Pilih Gambar...</span>
+                </button>
+                <button class="btn btn-primary" id="btn-jpg">Konversi ke JPG</button>
+                <div id="jpg-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+
+            const btn = document.getElementById('btn-jpg');
+            btn.onclick = () => {
+                const fileInput = document.getElementById('jpg-file');
+                const file = fileInput.files[0];
+                const box = document.getElementById('jpg-res');
+                if (!file) return showToast('Pilih gambar dulu!');
+
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = '#fff';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0);
+                        const jpgUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+                        box.innerHTML = `
+                            <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Konversi Berhasil</p>
+                            <img src="${jpgUrl}" style="width:100%; max-width:300px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
+                            <a href="${jpgUrl}" download="converted-${Date.now()}.jpg" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download JPG</a>
+                        `;
+                        showToast('Gambar Berhasil Dikonversi');
+                    };
+                    img.onerror = () => { box.innerHTML = `<p class="error-msg">Gagal membaca gambar</p>`; };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+        else if (tool === 'username') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Username Generator</h3>
+                <span class="desc-text">Buat ide nama pengguna unik.</span>
+                <input type="text" id="un-base" placeholder="Nama dasar (cth: budi)...">
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <button id="un-style-1" onclick="pilihStyleUn('1')" class="btn btn-primary" style="flex:1; margin:0; padding:10px; font-size:13px;">Estetik</button>
+                    <button id="un-style-2" onclick="pilihStyleUn('2')" class="btn btn-ghost" style="flex:1; margin:0; padding:10px; font-size:13px;">Keren</button>
+                    <button id="un-style-3" onclick="pilihStyleUn('3')" class="btn btn-ghost" style="flex:1; margin:0; padding:10px; font-size:13px;">Lucu</button>
+                </div>
+                <button class="btn btn-primary" id="btn-un">Generate</button>
+                <div id="un-res" style="display:none; margin-top:15px; border:1px solid var(--border-color); padding:10px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+
+            let styleUn = '1';
+            window.pilihStyleUn = (s) => {
+                styleUn = s;
+                [1,2,3].forEach(i => {
+                    const b = document.getElementById('un-style-' + i);
+                    if (i == s) { b.className = 'btn btn-primary'; b.style.cssText = 'flex:1; margin:0; padding:10px; font-size:13px;'; }
+                    else { b.className = 'btn btn-ghost'; b.style.cssText = 'flex:1; margin:0; padding:10px; font-size:13px;'; }
+                });
+            };
+
+            const btn = document.getElementById('btn-un');
+            btn.onclick = () => {
+                const base = document.getElementById('un-base').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+                const box = document.getElementById('un-res');
+                if (!base) return showToast('Masukkan nama dasar!');
+
+                const suffixes = {
+                    '1': ['_', '.', 'xx', 'official', 'real', 'id', 'my'],
+                    '2': ['gaming', 'pro', 'king', 'lord', 'dark', 'x', 'sniper'],
+                    '3': ['uwu', 'cute', 'cat', 'boba', 'mochi', 'pink', 'kawaii']
+                };
+                const list = [];
+                const suf = suffixes[styleUn];
+                for (let i = 0; i < 8; i++) {
+                    const s = suf[Math.floor(Math.random() * suf.length)];
+                    const n = Math.floor(Math.random() * 999);
+                    list.push(`${base}${s}${n}`);
+                }
+
+                box.style.display = 'block';
+                box.innerHTML = list.map(u => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-bottom:1px solid var(--border-color);">
+                        <span style="font-size:14px; font-family:monospace;">${escapeHTML(u)}</span>
+                        <button class="btn-copy-un" data-copy="${escapeHTML(u)}" style="background:var(--accent-soft); color:var(--accent); padding:4px 10px; border-radius:4px; font-size:11px; font-weight:700;">Salin</button>
+                    </div>
+                `).join('');
+
+                box.querySelectorAll('.btn-copy-un').forEach(b => {
+                    b.addEventListener('click', () => window.copyToClipboard(b.dataset.copy));
+                });
+                showToast('Username berhasil digenerate');
+            };
+        }
+        else if (tool === 'password') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Password Generator</h3>
+                <span class="desc-text">Buat sandi acak yang kuat & aman.</span>
+
+                <label style="font-size:13px; color:var(--text-secondary); display:block; margin-bottom:8px;">Panjang Password: <b id="pw-len-label" class="text-accent">16</b></label>
+                <input type="range" id="pw-len" min="6" max="64" value="16" oninput="document.getElementById('pw-len-label').innerText = this.value" style="width:100%; margin-bottom:20px;">
+
+                <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:15px;">
+                    <label style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); cursor:pointer;">
+                        <span style="font-size:14px;">Huruf Besar (A-Z)</span>
+                        <input type="checkbox" id="pw-upper" checked style="width:18px; height:18px; accent-color:var(--accent);">
+                    </label>
+                    <label style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); cursor:pointer;">
+                        <span style="font-size:14px;">Huruf Kecil (a-z)</span>
+                        <input type="checkbox" id="pw-lower" checked style="width:18px; height:18px; accent-color:var(--accent);">
+                    </label>
+                    <label style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); cursor:pointer;">
+                        <span style="font-size:14px;">Angka (0-9)</span>
+                        <input type="checkbox" id="pw-num" checked style="width:18px; height:18px; accent-color:var(--accent);">
+                    </label>
+                    <label style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); cursor:pointer;">
+                        <span style="font-size:14px;">Simbol (!@#$)</span>
+                        <input type="checkbox" id="pw-sym" style="width:18px; height:18px; accent-color:var(--accent);">
+                    </label>
+                </div>
+
+                <button class="btn btn-primary" id="btn-pw">Generate Password</button>
+                <div id="pw-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+
+            const btn = document.getElementById('btn-pw');
+            btn.onclick = () => {
+                const len = parseInt(document.getElementById('pw-len').value);
+                const useUpper = document.getElementById('pw-upper').checked;
+                const useLower = document.getElementById('pw-lower').checked;
+                const useNum = document.getElementById('pw-num').checked;
+                const useSym = document.getElementById('pw-sym').checked;
+                const box = document.getElementById('pw-res');
+
+                let chars = '';
+                if (useUpper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                if (useLower) chars += 'abcdefghijklmnopqrstuvwxyz';
+                if (useNum) chars += '0123456789';
+                if (useSym) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+                if (!chars) return showToast('Pilih minimal 1 jenis karakter!');
+
+                let pwd = '';
+                const arr = new Uint32Array(len);
+                crypto.getRandomValues(arr);
+                for (let i = 0; i < len; i++) {
+                    pwd += chars[arr[i] % chars.length];
+                }
+
+                box.style.display = 'block';
+                box.innerHTML = `
+                    <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Password Berhasil Dibuat</p>
+                    <div style="background:var(--bg-base); padding:15px; border-radius:var(--radius-sm); border:1px solid var(--accent); margin-bottom:10px; word-break:break-all; font-family:monospace; font-size:15px; font-weight:700; color:var(--accent);">${escapeHTML(pwd)}</div>
+                    <button class="btn btn-primary" id="btn-copy-pw" style="margin-bottom:0;">Salin Password</button>
+                `;
+                document.getElementById('btn-copy-pw').addEventListener('click', () => window.copyToClipboard(pwd));
+                showToast('Password berhasil dibuat');
+            };
+        }
+        else if (tool === 'zodiak') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Cek Zodiak</h3>
+                <span class="desc-text">Ketahui zodiak berdasarkan tanggal lahir.</span>
+                <input type="date" id="zod-date">
+                <button class="btn btn-primary" id="btn-zod">Cek Zodiak</button>
+                <div id="zod-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:20px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+
+            const zodiakData = [
+                { name: 'Capricorn', icon: '♑', start: [12,22], end: [1,19], desc: 'Disiplin, ambisius, dan bertanggung jawab.' },
+                { name: 'Aquarius', icon: '♒', start: [1,20], end: [2,18], desc: 'Inovatif, independen, dan visioner.' },
+                { name: 'Pisces', icon: '♓', start: [2,19], end: [3,20], desc: 'Empatik, artistik, dan intuitif.' },
+                { name: 'Aries', icon: '♈', start: [3,21], end: [4,19], desc: 'Berani, energik, dan kompetitif.' },
+                { name: 'Taurus', icon: '♉', start: [4,20], end: [5,20], desc: 'Sabar, setia, dan praktis.' },
+                { name: 'Gemini', icon: '♊', start: [5,21], end: [6,20], desc: 'Komunikatif, adaptif, dan ingin tahu.' },
+                { name: 'Cancer', icon: '♋', start: [6,21], end: [7,22], desc: 'Penyayang, protektif, dan emosional.' },
+                { name: 'Leo', icon: '♌', start: [7,23], end: [8,22], desc: 'Karismatik, percaya diri, dan murah hati.' },
+                { name: 'Virgo', icon: '♍', start: [8,23], end: [9,22], desc: 'Analitis, perfeksionis, dan teliti.' },
+                { name: 'Libra', icon: '♎', start: [9,23], end: [10,22], desc: 'Seimbang, diplomatis, dan sosial.' },
+                { name: 'Scorpio', icon: '♏', start: [10,23], end: [11,21], desc: 'Intens, misterius, dan bersemangat.' },
+                { name: 'Sagittarius', icon: '♐', start: [11,22], end: [12,21], desc: 'Petualang, optimis, dan bebas.' }
+            ];
+
+            const btn = document.getElementById('btn-zod');
+            btn.onclick = () => {
+                const dateVal = document.getElementById('zod-date').value;
+                const box = document.getElementById('zod-res');
+                if (!dateVal) return showToast('Pilih tanggal lahir!');
+
+                const d = new Date(dateVal);
+                const month = d.getMonth() + 1;
+                const day = d.getDate();
+
+                let found = null;
+                for (const z of zodiakData) {
+                    const [sm, sd] = z.start;
+                    const [em, ed] = z.end;
+                    if (sm <= em) {
+                        if ((month === sm && day >= sd) || (month === em && day <= ed) || (month > sm && month < em)) {
+                            found = z; break;
+                        }
+                    } else {
+                        if ((month === sm && day >= sd) || (month === em && day <= ed) || month > sm || month < em) {
+                            found = z; break;
+                        }
+                    }
+                }
+
+                if (!found) found = zodiakData[0];
+
+                box.style.display = 'block';
+                box.innerHTML = `
+                    <div style="font-size:60px; color:var(--accent); line-height:1; margin-bottom:10px;">${found.icon}</div>
+                    <h4 style="font-size:22px; color:var(--accent); margin-bottom:8px;">${found.name}</h4>
+                    <p style="font-size:13px; color:var(--text-secondary); line-height:1.6; margin:0;">${found.desc}</p>
+                `;
+                showToast(`Zodiak kamu: ${found.name}`);
+            };
+        }
+        else if (tool === 'base64') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Base64 Converter</h3>
+                <span class="desc-text">Encode & decode format Base64.</span>
+
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <button id="b64-enc" onclick="switchB64('encode')" class="btn btn-primary" style="flex:1; margin:0; padding:10px; font-size:13px;">Encode</button>
+                    <button id="b64-dec" onclick="switchB64('decode')" class="btn btn-ghost" style="flex:1; margin:0; padding:10px; font-size:13px;">Decode</button>
+                </div>
+
+                <textarea id="b64-input" rows="4" placeholder="Masukkan teks..."></textarea>
+                <button class="btn btn-primary" id="btn-b64">Proses</button>
+                <div id="b64-res" style="display:none; margin-top:15px; text-align:left; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+
+            let b64Mode = 'encode';
+            window.switchB64 = (mode) => {
+                b64Mode = mode;
+                const eBtn = document.getElementById('b64-enc');
+                const dBtn = document.getElementById('b64-dec');
+                if (mode === 'encode') {
+                    eBtn.className = 'btn btn-primary'; eBtn.style.cssText = 'flex:1; margin:0; padding:10px; font-size:13px;';
+                    dBtn.className = 'btn btn-ghost'; dBtn.style.cssText = 'flex:1; margin:0; padding:10px; font-size:13px;';
+                } else {
+                    dBtn.className = 'btn btn-primary'; dBtn.style.cssText = 'flex:1; margin:0; padding:10px; font-size:13px;';
+                    eBtn.className = 'btn btn-ghost'; eBtn.style.cssText = 'flex:1; margin:0; padding:10px; font-size:13px;';
+                }
+            };
+
+            const btn = document.getElementById('btn-b64');
+            btn.onclick = () => {
+                const input = document.getElementById('b64-input').value;
+                const box = document.getElementById('b64-res');
+                if (!input) return showToast('Masukkan teks dulu!');
+
+                try {
+                    let result;
+                    if (b64Mode === 'encode') {
+                        result = btoa(unescape(encodeURIComponent(input)));
+                    } else {
+                        result = decodeURIComponent(escape(atob(input.trim())));
+                    }
+
+                    box.style.display = 'block';
+                    box.innerHTML = `
+                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">${b64Mode === 'encode' ? 'Encode' : 'Decode'} Berhasil</p>
+                        <div style="background:var(--bg-base); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); word-break:break-all; font-family:monospace; font-size:13px; line-height:1.5; margin-bottom:10px;">${escapeHTML(result)}</div>
+                        <button class="btn btn-ghost" id="btn-copy-b64" style="margin-bottom:0;">Salin Hasil</button>
+                    `;
+                    document.getElementById('btn-copy-b64').addEventListener('click', () => window.copyToClipboard(result));
+                    showToast('Berhasil diproses');
+                } catch (e) {
+                    box.style.display = 'block';
+                    box.innerHTML = `<p class="error-msg">Gagal: ${b64Mode === 'decode' ? 'Format Base64 tidak valid' : e.message}</p>`;
+                }
+            };
+        }
+        else if (tool === 'umur') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Hitung Umur</h3>
+                <span class="desc-text">Ketahui usia detail berdasarkan tanggal lahir.</span>
+                <input type="date" id="umur-date">
+                <button class="btn btn-primary" id="btn-umur">Hitung Umur</button>
+                <div id="umur-res" style="display:none; margin-top:15px; text-align:left; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+
+            const btn = document.getElementById('btn-umur');
+            btn.onclick = () => {
+                const dateVal = document.getElementById('umur-date').value;
+                const box = document.getElementById('umur-res');
+                if (!dateVal) return showToast('Pilih tanggal lahir!');
+
+                const birth = new Date(dateVal);
+                const now = new Date();
+
+                if (birth > now) return showToast('Tanggal lahir tidak valid!');
+
+                let years = now.getFullYear() - birth.getFullYear();
+                let months = now.getMonth() - birth.getMonth();
+                let days = now.getDate() - birth.getDate();
+
+                if (days < 0) {
+                    months--;
+                    const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                    days += lastMonth.getDate();
+                }
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+
+                const totalDays = Math.floor((now - birth) / (1000 * 60 * 60 * 24));
+                const totalWeeks = Math.floor(totalDays / 7);
+                const totalMonths = years * 12 + months;
+                const totalHours = totalDays * 24;
+                const nextBirthday = new Date(now.getFullYear(), birth.getMonth(), birth.getDate());
+                if (nextBirthday < now) nextBirthday.setFullYear(now.getFullYear() + 1);
+                const daysToBirthday = Math.ceil((nextBirthday - now) / (1000 * 60 * 60 * 24));
+
+                box.style.display = 'block';
+                box.innerHTML = `
+                    <div style="text-align:center; margin-bottom:15px;">
+                        <div style="font-size:36px; color:var(--accent); font-weight:800; line-height:1; font-family:var(--font-display);">${years}</div>
+                        <div style="font-size:11px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.1em; font-weight:700; margin-top:4px;">Tahun</div>
+                    </div>
+                    <div style="background:var(--bg-base); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-size:14px; line-height:1.8;">
+                        <b>Umur Lengkap:</b> ${years} tahun, ${months} bulan, ${days} hari<br>
+                        <b>Total Bulan:</b> ${totalMonths.toLocaleString('id-ID')} bulan<br>
+                        <b>Total Minggu:</b> ${totalWeeks.toLocaleString('id-ID')} minggu<br>
+                        <b>Total Hari:</b> ${totalDays.toLocaleString('id-ID')} hari<br>
+                        <b>Total Jam:</b> ${totalHours.toLocaleString('id-ID')} jam
+                    </div>
+                    <div style="background:var(--accent-soft); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--accent); margin-top:10px; text-align:center;">
+                        <div style="font-size:12px; color:var(--text-secondary); margin-bottom:2px;">Menuju ulang tahun berikutnya</div>
+                        <div style="font-size:18px; font-weight:800; color:var(--accent);">${daysToBirthday} hari lagi</div>
+                    </div>
+                `;
+                showToast('Umur berhasil dihitung');
+            };
+        }
+        else if (tool === 'ai-image') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>AI Image Generator</h3>
+                <span class="desc-text">Buat gambar dari deskripsi teks.</span>
+
+                <div style="text-align:left; font-size:14px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+                    Gunakan Bahasa Inggris untuk hasil terbaik. Contoh:<br>
+                    <i>"a cat astronaut floating in space, cinematic lighting"</i>
+                </div>
+
+                <textarea id="ai-img-prompt" rows="3" placeholder="Deskripsikan gambar yang mau dibuat..."></textarea>
+
+                <div class="custom-select-wrapper">
+                    <div class="custom-select" id="custom-ai-img-ratio" onclick="toggleCustomSelect('custom-ai-img-ratio')">
+                        <div class="custom-select-trigger">
+                            <span>1:1 (Square)</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option active" data-value="1:1" onclick="selectCustomOption('custom-ai-img-ratio', '1:1', '1:1 (Square)')">1:1 (Square)</div>
+                        <div class="custom-option" data-value="16:9" onclick="selectCustomOption('custom-ai-img-ratio', '16:9', '16:9 (Landscape)')">16:9 (Landscape)</div>
+                        <div class="custom-option" data-value="9:16" onclick="selectCustomOption('custom-ai-img-ratio', '9:16', '9:16 (Portrait)')">9:16 (Portrait)</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="btn-ai-img">Generate Gambar</button>
+                <div id="ai-img-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+
+            window.toggleCustomSelect = (id) => {
+                const el = document.getElementById(id);
+                const opts = el.nextElementSibling;
+                const isActive = opts.style.display === 'block';
+                document.querySelectorAll('.custom-options').forEach(o => o.style.display = 'none');
+                if (!isActive) opts.style.display = 'block';
+            };
+
+            window.selectCustomOption = (id, value, label) => {
+                const el = document.getElementById(id);
+                el.querySelector('.custom-select-trigger span').innerText = label;
+                el.dataset.value = value;
+                el.nextElementSibling.style.display = 'none';
+            };
+
+            if (!window.__aiImgOutsideClickBound) {
+                window.__aiImgOutsideClickBound = true;
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.custom-select-wrapper')) {
+                        document.querySelectorAll('.custom-options').forEach(o => o.style.display = 'none');
+                    }
+                });
+            }
+
+            const btn = document.getElementById('btn-ai-img');
+            btn.onclick = async () => {
+                const prompt = document.getElementById('ai-img-prompt').value.trim();
+                const ratio = document.getElementById('custom-ai-img-ratio').dataset.value || '1:1';
+                const box = document.getElementById('ai-img-res');
+                if (!prompt) return showToast('Masukkan deskripsi dulu!');
+
+                setBtnLoading(btn, true, 'Membuat Gambar...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div><p style="font-size:13px; color:var(--text-secondary); margin-top:10px;">Tunggu 10-30 detik...</p>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-aiimage`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt, ratio: ratio })
+                    });
+                    const data = await res.json();
+                    if (data.status === false) throw new Error(data.message || 'Gagal generate');
+
+                    const imgUrl = data.data?.url || data.data?.result || data.image_url || data.data;
+                    if (!imgUrl || typeof imgUrl !== 'string') throw new Error('Gagal mendapatkan gambar');
+
+                    box.innerHTML = `
+                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Gambar Berhasil Dibuat</p>
+                        <img src="${escapeHTML(imgUrl)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
+                        <a href="${escapeHTML(imgUrl)}" download="ai-image-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download Gambar</a>
+                    `;
+                    showToast('Gambar Berhasil Dibuat');
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btn, false, 'Generate Gambar');
             };
         }
         else {
