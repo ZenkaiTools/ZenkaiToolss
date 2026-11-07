@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /page-owner
+
+Sitemap: https://https://www.zenkaitools.my.id//sitemap.xml
