@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
 
-    const COMING_SOON_TOOLS = ['stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
+    const COMING_SOON_TOOLS = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
 
     const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -12,10 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const setBtnLoading = (btn, loading, label = 'Proses') => {
         if (!btn) return;
-        if (!btn.dataset.originalLabel) btn.dataset.originalLabel = label;
         btn.disabled = loading;
         btn.classList.toggle('loading', loading);
-        btn.innerText = loading ? 'Memproses...' : (btn.dataset.originalLabel || label);
+        btn.innerText = loading ? 'Memproses...' : label;
     };
 
     const isReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -131,8 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = document.getElementById('page-' + pageId);
         if (!target || current === target) return;
 
-        if (modal && modal.classList.contains('active')) closeModal();
-
         if (current) current.classList.remove('active');
         target.classList.add('active');
 
@@ -145,17 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.filterCategory = (category, btn) => {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
         if (btn) btn.classList.add('active');
-
-        let visibleCount = 0;
         document.querySelectorAll('.tool-card').forEach(card => {
             const cat = card.getAttribute('data-category');
             const show = category === 'all' || !cat || cat === category;
             card.style.display = show ? 'flex' : 'none';
-            if (show) visibleCount++;
-        });
-
-        document.querySelectorAll('.list-divider').forEach(divider => {
-            divider.style.display = (category !== 'all') ? 'none' : 'flex';
         });
     };
 
@@ -331,15 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeModal = () => {
         if (!modal) return;
         modal.classList.remove('active');
-        if (window.activeTimerInterval) {
-            clearInterval(window.activeTimerInterval);
-            window.activeTimerInterval = null;
-        }
-        if (window.__komikScrollHandler && window.__komikScrollTarget) {
-            window.__komikScrollTarget.removeEventListener('scroll', window.__komikScrollHandler);
-            window.__komikScrollHandler = null;
-            window.__komikScrollTarget = null;
-        }
+        if (window.activeTimerInterval) clearInterval(window.activeTimerInterval);
         setTimeout(() => { if (modalContent) modalContent.innerHTML = ''; }, 300);
     };
     window.closeModalOnOverlay = (e) => {
@@ -374,9 +356,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const titleEl = card.querySelector('h4');
                 const title = titleEl ? titleEl.innerText.toLowerCase() : '';
                 card.style.display = title.includes(term) ? 'flex' : 'none';
-            });
-            document.querySelectorAll('.list-divider').forEach(divider => {
-                divider.style.display = 'none';
             });
         });
     }
@@ -2582,36 +2561,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 const box = document.getElementById('tt-result');
                 if (!url) return showToast('Masukkan link dulu!');
                 if (!/tiktok\.com|vt\.tiktok\.com/i.test(url)) return showToast('Link harus dari TikTok!');
-                
                 setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
-                
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tiktok`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url: url })
+                        body: JSON.stringify({ action: 'tiktok', url: url })
                     });
                     const data = await res.json();
-
-                    if (data.status === false) throw new Error(data.message || 'Gagal mengambil data');
-
-                    const noWmLink = data.links?.find(l => l.label === 'No Watermark');
-                    const vidUrl = noWmLink ? noWmLink.url : data.links?.[0]?.url;
-
-                    if (!vidUrl) throw new Error('Link video tidak ditemukan');
-
+                    if (data.code !== 0) throw new Error('Gagal mengambil video');
+                    const vid = data.data.hdplay || data.data.play;
                     box.innerHTML = `
-                        <video style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);" src="${escapeHTML(vidUrl)}" controls></video>
+                        <video style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);" src="${escapeHTML(vid)}" controls></video>
                         <button class="btn btn-primary" id="btn-save-tt">Simpan ke Galeri</button>
                     `;
-                    
                     document.getElementById('btn-save-tt').onclick = async () => {
                         const saveBtn = document.getElementById('btn-save-tt');
                         setBtnLoading(saveBtn, true, 'Menyimpan...');
                         try {
                             const dlRes = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
                                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ download_url: vidUrl })
+                                body: JSON.stringify({ download_url: vid })
                             });
                             if (!dlRes.ok) throw new Error('Gagal download');
                             const blob = await dlRes.blob();
@@ -2620,15 +2590,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             a.download = `tt-${Date.now()}.mp4`;
                             a.click();
                             setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-                            showToast('Video Tersimpan');
-                        } catch (e) { 
-                            showToast('Gagal simpan, coba lagi.'); 
-                        }
+                            showToast('Tersimpan');
+                        } catch (e) { showToast('Gagal simpan, coba lagi.'); }
                         setBtnLoading(saveBtn, false, 'Simpan ke Galeri');
                     };
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
-                }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Proses');
             };
         }
@@ -2646,166 +2612,740 @@ document.addEventListener('DOMContentLoaded', () => {
                 const url = document.getElementById('ig-url').value.trim();
                 const box = document.getElementById('ig-result');
                 if (!url) return showToast('Masukkan link dulu!');
-                
                 setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
-                
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools-v2`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-instagram`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'instagram', url: url })
+                        body: JSON.stringify({ url: url })
                     });
                     const data = await res.json();
 
-                    if (data.status === false) throw new Error(data.message || 'Postingan tidak ditemukan');
-
-                    const urls = data.result?.urls || [];
-                    if (urls.length === 0) throw new Error('Media tidak ditemukan');
+                    if (!data.status) throw new Error(data.message || 'Postingan tidak ditemukan');
 
                     let htmlContent = '';
-                    urls.forEach((mediaUrl, index) => {
-                        const isVideo = mediaUrl.includes('.mp4');
-                        if (isVideo) {
+                    const mediaArray = data.result?.media || data.media || [];
+                    mediaArray.forEach((media, index) => {
+                        if (media.type === 'video') {
                             htmlContent += `
-                                <video style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);" src="${escapeHTML(mediaUrl)}" controls></video>
-                                <a href="${escapeHTML(mediaUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Video ${index+1}</a>
+                                <video style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);" src="${escapeHTML(media.url)}" controls></video>
+                                <a href="${escapeHTML(media.url)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
                             `;
                         } else {
                             htmlContent += `
-                                <img src="${escapeHTML(mediaUrl)}" style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);">
-                                <a href="${escapeHTML(mediaUrl)}" target="_blank" class="btn btn-primary" style="margin-bottom:15px; text-decoration:none; font-size:13px;">Download Foto ${index+1}</a>
+                                <img src="${escapeHTML(media.url)}" style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);">
+                                <a href="${escapeHTML(media.url)}" target="_blank" class="btn btn-primary" style="margin-bottom:15px; text-decoration:none; font-size:13px;">Download Foto ${index+1}</a>
                             `;
                         }
                     });
 
+                    if (htmlContent === '') throw new Error('Media tidak ditemukan');
                     box.innerHTML = htmlContent;
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
-                }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Ambil Media');
             };
         }
-        else if (tool === 'stalkmlbb') {
+        else if (tool === 'facebook') {
             modalContent.innerHTML = `
                 ${closeSvg}
-                <h3>Stalk MLBB</h3>
-                <span class="desc-text">Lacak profil Mobile Legends.</span>
-                <input type="number" id="ml-id" placeholder="User ID (cth: 134972929)">
-                <input type="number" id="ml-zone" placeholder="Zone ID (cth: 2687)">
-                <button class="btn btn-primary" id="btn-ml">Cari</button>
-                <div id="ml-res" style="display:none; margin-top:15px; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); text-align:left; background:var(--bg-surface);"></div>
+                <h3>Facebook DL</h3>
+                <span class="desc-text">Download video dari Facebook.</span>
+                <input type="text" id="fb-url" placeholder="Paste link Facebook...">
+                <button class="btn btn-primary" id="btn-dl-fb">Ambil Video</button>
+                <div id="fb-result" style="margin-top:15px;"></div>
             `;
-            const btn = document.getElementById('btn-ml');
+            const btn = document.getElementById('btn-dl-fb');
             btn.onclick = async () => {
-                const id = document.getElementById('ml-id').value.trim();
-                const zone = document.getElementById('ml-zone').value.trim();
-                const box = document.getElementById('ml-res');
-                if (!id || !zone) return showToast('Isi ID dan Zone!');
-                
-                box.style.display = 'block';
-                setBtnLoading(btn, true, 'Cari');
+                const url = document.getElementById('fb-url').value.trim();
+                const box = document.getElementById('fb-result');
+                if (!url) return showToast('Masukkan link dulu!');
+                setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
-                
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools-v2`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-api`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'stalk_mlbb', id: id, zone: zone })
+                        body: JSON.stringify({
+                            provider: 'sairi',
+                            endpoint: 'download/facebook',
+                            params: { url: url }
+                        })
                     });
                     const data = await res.json();
 
-                    if (!data.status) throw new Error(data.message || 'Akun tidak ditemukan');
-                    const d = data.result;
-                    
+                    if (!data.status) throw new Error(data.message || 'Video tidak ditemukan');
+
+                    const vidUrl = data.result.hd || data.result.video;
                     box.innerHTML = `
-                        <div style="font-size:14px; line-height:1.6;">
-                            <b>Nickname:</b> ${escapeHTML(d.nickname)}<br>
-                            <b>ID:</b> ${escapeHTML(d.id)}<br>
-                            <b>Zone:</b> ${escapeHTML(d.zone)}<br>
-                            <b>Region:</b> ${escapeHTML(d.region)}<br>
-                            <b>Status:</b> ${escapeHTML(d.account_status)}
+                        <video style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);" src="${escapeHTML(vidUrl)}" controls></video>
+                        <a href="${escapeHTML(vidUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Ambil Video');
+            };
+        }
+        else if (tool === 'pinterest') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Pinterest DL</h3>
+                <span class="desc-text">Pilih mau download video atau gambarnya.</span>
+                <input type="text" id="pin-url" placeholder="Paste link Pinterest (pin.it/...)">
+                <button class="btn btn-primary" id="btn-pin">Ambil Media</button>
+                <div id="pin-res" style="display:none; margin-top:15px; text-align:center;"></div>
+            `;
+            const btn = document.getElementById('btn-pin');
+            let currentVideoUrl = "";
+            let currentImageUrl = "";
+            btn.onclick = async () => {
+                const url = document.getElementById('pin-url').value.trim();
+                const box = document.getElementById('pin-res');
+                if (!url) return showToast('Masukkan link!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Mengambil...');
+                box.innerHTML = '<div class="loader"></div>';
+                currentVideoUrl = "";
+                currentImageUrl = "";
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: url })
+                    });
+                    const data = await res.json();
+                    if (data.status === false || data.error) throw new Error(data.error || 'Konten tidak ditemukan');
+                    const pinDataObj = data.data?.d1?.data?.v3GetPinQueryv2?.data || data.data?.d2?.data?.v3GetPinQueryv2?.data;
+                    if (!pinDataObj) throw new Error('Struktur data tidak dikenali');
+                    if (pinDataObj.videos) {
+                        if (pinDataObj.videos.videoList?.v720P?.url) currentVideoUrl = pinDataObj.videos.videoList.v720P.url;
+                        else if (pinDataObj.videos.videoUrls && Array.isArray(pinDataObj.videos.videoUrls)) {
+                            const mp4Url = pinDataObj.videos.videoUrls.find(u => u.includes('.mp4'));
+                            if (mp4Url) currentVideoUrl = mp4Url;
+                        }
+                    }
+                    if (pinDataObj.images_orig?.url) currentImageUrl = pinDataObj.images_orig.url;
+                    else if (pinDataObj.images_736x?.url) currentImageUrl = pinDataObj.images_736x.url;
+                    let htmlContent = '';
+                    if (currentVideoUrl) htmlContent += `<video src="${escapeHTML(currentVideoUrl)}" controls style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom: 15px;"></video>`;
+                    else if (currentImageUrl) htmlContent += `<img src="${escapeHTML(currentImageUrl)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom: 15px;">`;
+                    htmlContent += `
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button class="btn btn-primary" id="btn-dl-vid" style="margin-bottom:0;">Download Video</button>
+                            <button class="btn btn-ghost" id="btn-dl-img" style="margin-bottom:0;">Download Gambar</button>
                         </div>
                     `;
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
-                }
+                    box.innerHTML = htmlContent;
+                    document.getElementById('btn-dl-vid').onclick = async (e) => {
+                        if (!currentVideoUrl) return showToast('Link ini tidak memiliki video.');
+                        const saveBtn = e.target;
+                        setBtnLoading(saveBtn, true, 'Menyimpan...');
+                        try {
+                            const dlRes = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ download_url: currentVideoUrl })
+                            });
+                            if (!dlRes.ok) throw new Error('Gagal');
+                            const blob = await dlRes.blob();
+                            const a = document.createElement('a');
+                            a.href = URL.createObjectURL(blob);
+                            a.download = `pin-vid-${Date.now()}.mp4`;
+                            a.click();
+                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                            showToast('Video Tersimpan');
+                        } catch (error) { showToast('Gagal simpan video.'); }
+                        setBtnLoading(saveBtn, false, 'Download Video');
+                    };
+                    document.getElementById('btn-dl-img').onclick = async (e) => {
+                        if (!currentImageUrl) return showToast('Gambar tidak ditemukan.');
+                        const saveBtn = e.target;
+                        setBtnLoading(saveBtn, true, 'Menyimpan...');
+                        try {
+                            const dlRes = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ download_url: currentImageUrl })
+                            });
+                            if (!dlRes.ok) throw new Error('Gagal');
+                            const blob = await dlRes.blob();
+                            const a = document.createElement('a');
+                            a.href = URL.createObjectURL(blob);
+                            a.download = `pin-img-${Date.now()}.jpg`;
+                            a.click();
+                            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+                            showToast('Gambar Tersimpan');
+                        } catch (error) { showToast('Gagal simpan gambar.'); }
+                        setBtnLoading(saveBtn, false, 'Download Gambar');
+                    };
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Ambil Media');
+            };
+        }
+        else if (tool === 'stalktt') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Stalk TikTok</h3>
+                <span class="desc-text">Cek statistik akun TikTok.</span>
+                <input type="text" id="stalktt-user" placeholder="Username (tanpa @)">
+                <button class="btn btn-primary" id="btn-stt">Cari</button>
+                <div id="stalktt-res" style="display:none; margin-top:15px; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); text-align:left; background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-stt');
+            btn.onclick = async () => {
+                const user = document.getElementById('stalktt-user').value.trim();
+                const box = document.getElementById('stalktt-res');
+                if (!user) return showToast('Masukkan username!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Cari');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tiktok`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: user })
+                    });
+                    const data = await res.json();
+                    if (!data.status || !data.result) throw new Error('Akun tidak ditemukan atau private');
+                    const d = data.result;
+                    box.innerHTML = `
+                        <div style="text-align:center; margin-bottom:15px;">
+                            <img src="${escapeHTML(d.avatar.medium)}" style="width:80px; height:80px; border-radius:50%; border:1px solid var(--border-color); object-fit:cover;">
+                        </div>
+                        <div style="font-size:14px; line-height:1.6;">
+                            <b>Username:</b> @${escapeHTML(d.username)}<br>
+                            <b>Nama:</b> ${escapeHTML(d.nickname)}<br>
+                            <b>Bio:</b> ${escapeHTML(d.bio || '-')}<br>
+                            <b>Region:</b> ${escapeHTML(d.region || 'Tidak diketahui')}<br>
+                            <hr style="border:none; border-top:1px solid var(--border-color); margin:10px 0;">
+                            <b>Followers:</b> ${escapeHTML(d.stats.followers.toLocaleString())}<br>
+                            <b>Following:</b> ${escapeHTML(d.stats.following.toLocaleString())}<br>
+                            <b>Likes:</b> ${escapeHTML(d.stats.likes.toLocaleString())}<br>
+                            <b>Video:</b> ${escapeHTML(d.stats.videos.toLocaleString())}<br>
+                            <b>Status:</b> ${d.private_account ? 'Private' : 'Public'}
+                        </div>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Cari');
+            };
+        }
+        else if (tool === 'stalkroblox') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Stalk Roblox</h3>
+                <span class="desc-text">Lacak profil Roblox player lain.</span>
+                <input type="text" id="stalkrbx-user" placeholder="Username Roblox">
+                <button class="btn btn-primary" id="btn-srbx">Cari</button>
+                <div id="stalkrbx-res" style="display:none; margin-top:15px; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); text-align:left; background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-srbx');
+            btn.onclick = async () => {
+                const user = document.getElementById('stalkrbx-user').value.trim();
+                const box = document.getElementById('stalkrbx-res');
+                if (!user) return showToast('Masukkan username!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Cari');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-roblox`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: user })
+                    });
+                    const data = await res.json();
+                    if (!data.status || !data.data) throw new Error(data.error || 'Akun tidak ditemukan');
+                    const d = data.data;
+                    const tglDibuat = new Date(d.created).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+                    box.innerHTML = `
+                        <div style="text-align:center; margin-bottom:15px;">
+                            <img src="${escapeHTML(d.avatar)}" style="width:100px; height:100px; border-radius:50%; border:1px solid var(--border-color); object-fit:cover;">
+                        </div>
+                        <div style="font-size:14px; line-height:1.6;">
+                            <b>Username:</b> @${escapeHTML(d.username)}<br>
+                            <b>Display Name:</b> ${escapeHTML(d.display_name)}<br>
+                            <b>Bio:</b> ${escapeHTML(d.description || '-')}<br>
+                            <b>Dibuat:</b> ${tglDibuat}<br>
+                            <hr style="border:none; border-top:1px solid var(--border-color); margin:10px 0;">
+                            <b>Friends:</b> ${escapeHTML(d.stats.friends.toLocaleString())}<br>
+                            <b>Followers:</b> ${escapeHTML(d.stats.followers.toLocaleString())}<br>
+                            <b>Following:</b> ${escapeHTML(d.stats.following.toLocaleString())}<br>
+                            <b>Status:</b> ${d.is_banned ? 'Banned' : (d.verified ? 'Verified' : 'Normal')}
+                        </div>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Cari');
+            };
+        }
+        else if (tool === 'qr') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>QR Code</h3>
+                <span class="desc-text">Ubah teks atau tautan menjadi gambar QR Code.</span>
+                <input type="text" id="qr-text" placeholder="Teks/Link..." value="ZenkaiTools">
+                <button class="btn btn-primary" id="btn-qr">Generate QR</button>
+                <div style="text-align:center; margin-top:15px;"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ZenkaiTools" style="max-width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color);"></div>
+            `;
+            document.getElementById('btn-qr').onclick = () => {
+                const txt = document.getElementById('qr-text').value || "ZenkaiTools";
+                document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(txt)}`;
+            };
+        }
+        else if (tool === 'imgtojpg') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Image to JPG</h3>
+                <span class="desc-text">Ubah format gambar (PNG/WebP) jadi JPG.</span>
+                <input type="file" id="jpg-in" accept="image/*">
+                <div id="jpg-res" style="display:none; text-align:center;">
+                    <img id="jpg-preview" style="max-width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
+                    <a id="jpg-dl" class="btn btn-primary" download="gambar.jpg" style="text-decoration:none;">Download JPG</a>
+                </div>
+            `;
+            document.getElementById('jpg-in').onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width; canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+                        document.getElementById('jpg-res').style.display = 'block';
+                        document.getElementById('jpg-preview').src = dataUrl;
+                        document.getElementById('jpg-dl').href = dataUrl;
+                    };
+                    img.src = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+        else if (tool === 'username') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Username Gen</h3>
+                <span class="desc-text">Bingung cari username? Generate aja di sini.</span>
+                <input type="text" id="user-name" placeholder="Nama kamu (cth: andika)">
+                <button class="btn btn-primary" id="btn-user">Generate</button>
+                <div id="user-res" style="display:none; text-align:center; font-size:18px; font-weight:bold; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); margin-top:15px; background:var(--bg-surface);"></div>
+            `;
+            document.getElementById('btn-user').onclick = () => {
+                const name = document.getElementById('user-name').value.trim() || "user";
+                const rand = Math.floor(Math.random() * 9999);
+                const suffix = Math.random() > 0.5 ? "._" : "_";
+                const b = document.getElementById('user-res');
+                b.style.display = 'block';
+                b.innerHTML = `@${escapeHTML(name)}${suffix}${rand}`;
+            };
+        }
+        else if (tool === 'password') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Password Gen</h3>
+                <span class="desc-text">Buat password acak 16 karakter yang susah ditebak.</span>
+                <button class="btn btn-primary" id="btn-pass">Generate Password</button>
+                <div id="pass-res" style="display:none; font-size:20px; font-weight:800; color:var(--accent); text-align:center; margin-top:15px; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); word-break:break-all; background:var(--bg-surface);"></div>
+            `;
+            document.getElementById('btn-pass').onclick = () => {
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+                let pass = "";
+                const arr = new Uint32Array(16);
+                crypto.getRandomValues(arr);
+                for (let i = 0; i < 16; i++) pass += chars.charAt(arr[i] % chars.length);
+                const b = document.getElementById('pass-res');
+                b.style.display = 'block'; b.innerText = pass;
+            };
+        }
+        else if (tool === 'zodiak') {
+            let tgls = ''; for (let i = 1; i <= 31; i++) tgls += `<div data-z-tgl="${i}" class="z-tgl-item" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">${i}</div>`;
+            let blns = ''; const b = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
+            b.forEach((nm, i) => blns += `<div data-z-bln="${i+1}" data-z-bln-label="${nm}" class="z-bln-item" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">${nm}</div>`);
+
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Cek Zodiak</h3>
+                <span class="desc-text">Pilih tanggal lahir, langsung ketahuan zodiaknya.</span>
+                <div style="display:flex; gap:10px; margin-bottom:15px; justify-content:center;">
+                    <div style="flex:1; position:relative;">
+                        <button class="btn btn-ghost" onclick="toggleList('tgl')" id="btn-tgl" style="margin-bottom:0;">Tgl</button>
+                        <div id="list-tgl" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:var(--radius-sm); max-height:150px; overflow-y:auto; z-index:10; margin-top:5px;">${tgls}</div>
+                    </div>
+                    <div style="flex:2; position:relative;">
+                        <button class="btn btn-ghost" onclick="toggleList('bln')" id="btn-bln" style="margin-bottom:0;">Bulan</button>
+                        <div id="list-bln" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:var(--radius-sm); max-height:150px; overflow-y:auto; z-index:10; margin-top:5px;">${blns}</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="cekZodiak()">Cek Sekarang</button>
+                <div id="z-res" style="display:none; text-align:center; font-size:20px; margin-top:15px; font-weight:bold;"></div>
+            `;
+            window.zTgl = null; window.zBln = null;
+            window.toggleList = (t) => {
+                document.getElementById('list-tgl').style.display = 'none';
+                document.getElementById('list-bln').style.display = 'none';
+                const el = document.getElementById('list-' + t);
+                el.style.display = el.style.display === 'none' ? 'block' : 'none';
+            };
+            document.querySelectorAll('.z-tgl-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    window.zTgl = Number(el.dataset.zTgl);
+                    document.getElementById('btn-tgl').innerText = el.dataset.zTgl;
+                    document.getElementById('list-tgl').style.display = 'none';
+                    document.getElementById('list-bln').style.display = 'none';
+                });
+            });
+            document.querySelectorAll('.z-bln-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    window.zBln = Number(el.dataset.zBln);
+                    document.getElementById('btn-bln').innerText = el.dataset.zBlnLabel;
+                    document.getElementById('list-tgl').style.display = 'none';
+                    document.getElementById('list-bln').style.display = 'none';
+                });
+            });
+            window.cekZodiak = () => {
+                if (!window.zTgl || !window.zBln) return showToast('Pilih dulu!');
+                const t = window.zTgl, bl = window.zBln;
+                const maxDays = [31,29,31,30,31,30,31,31,30,31,30,31][bl-1];
+                if (t > maxDays) return showToast(`Tanggal ${t} tidak valid untuk bulan ini!`);
+
+                let z = "";
+                if ((bl == 1 && t >= 20) || (bl == 2 && t <= 18)) z = "Aquarius ♒";
+                else if ((bl == 2 && t >= 19) || (bl == 3 && t <= 20)) z = "Pisces ♓";
+                else if ((bl == 3 && t >= 21) || (bl == 4 && t <= 19)) z = "Aries ♈";
+                else if ((bl == 4 && t >= 20) || (bl == 5 && t <= 20)) z = "Taurus ♉";
+                else if ((bl == 5 && t >= 21) || (bl == 6 && t <= 20)) z = "Gemini ♊";
+                else if ((bl == 6 && t >= 21) || (bl == 7 && t <= 22)) z = "Cancer ♋";
+                else if ((bl == 7 && t >= 23) || (bl == 8 && t <= 22)) z = "Leo ♌";
+                else if ((bl == 8 && t >= 23) || (bl == 9 && t <= 22)) z = "Virgo ♍";
+                else if ((bl == 9 && t >= 23) || (bl == 10 && t <= 22)) z = "Libra ♎";
+                else if ((bl == 10 && t >= 23) || (bl == 11 && t <= 21)) z = "Scorpio ♏";
+                else if ((bl == 11 && t >= 22) || (bl == 12 && t <= 21)) z = "Sagittarius ♐";
+                else z = "Capricorn ♑";
+
+                const res = document.getElementById('z-res');
+                res.style.display = 'block';
+                res.innerHTML = `Zodiak: <b style="color:var(--accent); font-size:24px; display:block;">${z}</b>`;
+            };
+        }
+        else if (tool === 'base64') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Base64</h3>
+                <span class="desc-text">Encode teks, atau decode balik ke teks asli.</span>
+                <textarea id="b64-in" rows="3" placeholder="Teks..."></textarea>
+                <div style="display:flex;gap:10px; justify-content:center;">
+                    <button class="btn btn-primary" id="btn-enc" style="flex:1;">Encode</button>
+                    <button class="btn btn-ghost" id="btn-dec" style="flex:1;">Decode</button>
+                </div>
+                <div id="b64-res" style="display:none; margin-top:15px; word-break:break-all; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            const doB64 = (type) => {
+                const v = document.getElementById('b64-in').value;
+                const b = document.getElementById('b64-res');
+                if (!v) return showToast('Isi teks!');
+                b.style.display = 'block';
+                try {
+                    if (type === 'enc') {
+                        const bytes = new TextEncoder().encode(v);
+                        let bin = '';
+                        bytes.forEach(x => bin += String.fromCharCode(x));
+                        b.innerText = btoa(bin);
+                    } else {
+                        const bin = atob(v);
+                        const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+                        b.innerText = new TextDecoder().decode(bytes);
+                    }
+                } catch (e) { b.innerText = 'Gagal memproses.'; }
+            };
+            document.getElementById('btn-enc').onclick = () => doB64('enc');
+            document.getElementById('btn-dec').onclick = () => doB64('dec');
+        }
+        else if (tool === 'umur') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Hitung Umur</h3>
+                <span class="desc-text">Hitung umur berdasarkan tanggal lahir.</span>
+                <input type="date" id="umur-in">
+                <button class="btn btn-primary" id="btn-umur">Hitung</button>
+                <div id="umur-res" style="display:none; margin-top:15px; text-align:center; font-size:18px; font-weight:bold; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            document.getElementById('btn-umur').onclick = () => {
+                const v = document.getElementById('umur-in').value;
+                if (!v) return showToast('Pilih tanggal!');
+                const tglLahir = new Date(v);
+                const hariIni = new Date();
+                let umur = hariIni.getFullYear() - tglLahir.getFullYear();
+                const m = hariIni.getMonth() - tglLahir.getMonth();
+                if (m < 0 || (m === 0 && hariIni.getDate() < tglLahir.getDate())) { umur--; }
+                const b = document.getElementById('umur-res');
+                b.style.display = 'block'; b.innerText = `Umur Lo: ${umur} Tahun`;
             };
         }
         else if (tool === 'alightmotion') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Alight Motion</h3>
-                <span class="desc-text">Bypass akun Premium Alight Motion.</span>
+                <span class="desc-text">Bypass akun Premium Alight Motion secara gratis.</span>
                 <div style="text-align:left; font-size:14px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
                     <b style="color:var(--text-primary);">Tutorial:</b><br>
-                    1. Masukkan email aktif, klik <b>Kirim Link</b>.<br>
-                    2. Cek Inbox/Spam Gmail.<br>
-                    3. ⚠️ <b>JANGAN DI-KLIK LINK-NYA!</b> Tekan & tahan link, lalu pilih <b>Copy Link</b>.<br>
-                    4. Balik ke web, <b>Paste</b> link tadi di bawah.<br>
-                    5. Klik <b>Aktifkan Premium</b>. Akun lu langsung Premium!
+                    1. Buka Aplikasi Alight Motion.<br>
+                    2. Login pakai Email atau Google.<br>
+                    3. Masukkan email yang sama di bawah.<br>
+                    4. Generate & cek Inbox/Spam.<br>
+                    5. Klik link verifikasi.
                 </div>
-                
-                <div id="am-step-1">
-                    <input type="email" id="am-email" placeholder="Ketik email aktif lu...">
-                    <button class="btn btn-primary" id="btn-am-send">Kirim Link</button>
-                </div>
-
-                <div id="am-step-2" style="display:none;">
-                    <input type="text" id="am-link" placeholder="Paste link verifikasi dari Gmail di sini...">
-                    <button class="btn btn-primary" id="btn-am-verif">Aktifkan Premium</button>
-                </div>
-
+                <input type="email" id="am-email" placeholder="Ketik email aktif lu...">
+                <button class="btn btn-primary" id="btn-am">Generate Link</button>
                 <div id="am-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
             `;
-            
-            const btnSend = document.getElementById('btn-am-send');
-            const btnVerif = document.getElementById('btn-am-verif');
-            const box = document.getElementById('am-res');
-            const step1 = document.getElementById('am-step-1');
-            const step2 = document.getElementById('am-step-2');
-
-            btnSend.onclick = async () => {
+            const btn = document.getElementById('btn-am');
+            btn.onclick = async () => {
                 const email = document.getElementById('am-email').value.trim();
+                const box = document.getElementById('am-res');
                 if (!email) return showToast('Masukkan email dulu!');
                 box.style.display = 'block';
-                setBtnLoading(btnSend, true, 'Mengirim...');
+                setBtnLoading(btn, true, 'Generate Link');
                 box.innerHTML = '<div class="loader"></div>';
-                
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools-v2`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/amprem`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'am_send', email: email })
+                        body: JSON.stringify({ email: email })
+                    });
+                    const data = await res.json();
+                    if (data.status === false || data.error) throw new Error(data.message || 'Gagal');
+                    box.innerHTML = `<p class="success-msg">Berhasil Terkirim!<br><span style="font-size:13px; font-weight:normal;">Cek Inbox/Spam di <b>${escapeHTML(email)}</b>.</span></p>`;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Generate Link');
+            };
+        }
+        else if (tool === 'tempmail') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Temp Mail</h3>
+                <span class="desc-text">Bikin email sementara (dummy) buat verifikasi.</span>
+                <button class="btn btn-primary" id="btn-tm">Buat Email</button>
+                <div id="tm-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-tm');
+            btn.onclick = async () => {
+                const box = document.getElementById('tm-res');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Buat Email');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ path: 'tempmail_create', params: {} })
                     });
                     const data = await res.json();
                     if (!data.status) throw new Error(data.message || 'Gagal');
-                    
-                    step1.style.display = 'none';
-                    step2.style.display = 'block';
-                    box.innerHTML = `<p class="success-msg">Link terkirim ke <b>${escapeHTML(email)}</b>.<br>Buka Gmail, JANGAN DIKLIK. Copy link-nya, lalu paste di kolom atas.</p>`;
+                    box.innerHTML = `<p style="font-size:14px; margin-bottom:10px;">Email Lu:</p><b style="font-size:16px; color:var(--accent); word-break:break-all;">${escapeHTML(data.result.email)}</b><br><p style="font-size:13px; color:var(--text-secondary); margin-top:5px;">(Token: ${escapeHTML(data.result.token)})</p>`;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-                setBtnLoading(btnSend, false, 'Kirim Link');
+                setBtnLoading(btn, false, 'Buat Email');
             };
-
-            btnVerif.onclick = async () => {
-                const email = document.getElementById('am-email').value.trim();
-                const link = document.getElementById('am-link').value.trim();
-                if (!link) return showToast('Paste link verifikasi dulu!');
+        }
+        else if (tool === 'nik') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>NIK Parser</h3>
+                <span class="desc-text">Bongkar data dari NIK KTP.</span>
+                <input type="text" id="nik-input" placeholder="Masukkan 16 digit NIK..." inputmode="numeric" maxlength="16">
+                <button class="btn btn-primary" id="btn-nik">Lacak NIK</button>
+                <div id="nik-res" style="display:none; margin-top:15px; text-align:left; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); font-size:14px; line-height:1.6; background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-nik');
+            btn.onclick = async () => {
+                const nik = document.getElementById('nik-input').value.trim();
+                const box = document.getElementById('nik-res');
+                if (!nik) return showToast('Masukkan NIK!');
+                if (!/^\d{16}$/.test(nik)) return showToast('NIK harus 16 digit angka!');
                 box.style.display = 'block';
-                setBtnLoading(btnVerif, true, 'Memverifikasi...');
+                setBtnLoading(btn, true, 'Lacak NIK');
                 box.innerHTML = '<div class="loader"></div>';
-                
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools-v2`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'am_verif', email: email, link: link })
+                        body: JSON.stringify({ path: 'nik', params: { nik: nik } })
                     });
                     const data = await res.json();
-                    if (!data.status) throw new Error(data.message || 'Gagal verifikasi');
-                    
-                    box.innerHTML = `<p class="success-msg">Verifikasi Berhasil!<br>Akun <b>${escapeHTML(email)}</b> sudah menjadi <b>${escapeHTML(data.result?.status || 'Premium')}</b>.</p>`;
-                    showToast('Akun Premium Aktif!');
+                    if (!data.status) throw new Error(data.error || 'NIK tidak valid');
+                    const d = data.data.data;
+                    box.innerHTML = `
+                        <b>NIK:</b> ${escapeHTML(d.nik || nik)}<br>
+                        <b>Provinsi:</b> ${escapeHTML(d.provinsi || '-')}<br>
+                        <b>Kabupaten:</b> ${escapeHTML(d.kabupaten || '-')}<br>
+                        <b>Kecamatan:</b> ${escapeHTML(d.kecamatan || '-')}<br>
+                        <b>Kelamin:</b> ${escapeHTML(d.kelamin || '-')}<br>
+                        <b>Tgl Lahir:</b> ${escapeHTML(d.tempat_lahir || '-')}<br>
+                        <b>Zodiak:</b> ${escapeHTML(d.zodiak || '-')}<br>
+                        <b>Usia:</b> ${escapeHTML(d.usia || '-')}
+                    `;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-                setBtnLoading(btnVerif, false, 'Aktifkan Premium');
+                setBtnLoading(btn, false, 'Lacak NIK');
+            };
+        }
+        else if (tool === 'spotify') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Spotify DL</h3>
+                <span class="desc-text">Download lagu dari Spotify jadi MP3.</span>
+                <input type="text" id="sp-url" placeholder="Paste link Spotify...">
+                <button class="btn btn-primary" id="btn-sp">Download</button>
+                <div id="sp-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-sp');
+            btn.onclick = async () => {
+                const url = document.getElementById('sp-url').value.trim();
+                const box = document.getElementById('sp-res');
+                if (!url) return showToast('Masukkan link!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Download');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ path: 'spotify', params: { url: url } })
+                    });
+                    const data = await res.json();
+                    if (!data.status) throw new Error(data.message || 'Gagal');
+                    const s = data.data;
+                    box.innerHTML = `
+                        <img src="${escapeHTML(s.cover)}" style="width:100px; height:100px; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);">
+                        <b style="font-size:14px;">${escapeHTML(s.title)}</b><br>
+                        <p style="font-size:13px; color:var(--text-secondary);">${escapeHTML(s.artist)} • ${escapeHTML(s.album || '-')}</p>
+                        <audio src="${escapeHTML(s.download_mp3)}" controls style="width:100%; margin-top:10px;"></audio>
+                        <a href="${escapeHTML(s.download_mp3)}" class="btn btn-primary" style="margin-top:10px; display:block; text-decoration:none;" download>Simpan MP3</a>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Download');
+            };
+        }
+        else if (tool === 'iplookup') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>IP Lookup Pro</h3>
+                <span class="desc-text">Lacak IP publik via Server Zenkai.</span>
+                <input type="text" id="ip-input" placeholder="Cth: 8.8.8.8">
+                <button class="btn btn-primary" id="btn-ip">Lacak</button>
+                <div id="ip-res" style="display:none; margin-top:15px; text-align:left; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); font-size:14px; line-height:1.6; background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-ip');
+            btn.onclick = async () => {
+                const ip = document.getElementById('ip-input').value.trim();
+                const box = document.getElementById('ip-res');
+                if (!ip) return showToast('Masukkan IP!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Lacak');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ path: 'iplookup', params: { ip: ip } })
+                    });
+                    const data = await res.json();
+                    if (!data.status) throw new Error(data.message || 'Gagal');
+                    const r = data.result;
+                    box.innerHTML = `
+                        <b>IP:</b> ${escapeHTML(r.ip)}<br>
+                        <b>Kota:</b> ${escapeHTML(r.city || '-')}<br>
+                        <b>Provinsi:</b> ${escapeHTML(r.region_name || '-')}<br>
+                        <b>Negara:</b> ${escapeHTML(r.country || '-')} (${escapeHTML(r.country_code || '-')})<br>
+                        <b>ISP:</b> ${escapeHTML(r.isp || '-')}<br>
+                        <b>Org:</b> ${escapeHTML(r.org || '-')}
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Lacak');
+            };
+        }
+        else if (tool === 'removebg') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Remove Background</h3>
+                <span class="desc-text">Upload gambar untuk dihapus background-nya secara otomatis.</span>
+                <input type="file" id="rb-file" accept="image/*">
+                <button class="btn btn-primary" id="btn-rb">Proses Gambar</button>
+                <div id="rb-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-rb');
+            btn.onclick = async () => {
+                const fileInput = document.getElementById('rb-file');
+                const file = fileInput.files[0];
+                const box = document.getElementById('rb-res');
+
+                if (!file) return showToast('Pilih gambar dulu!');
+
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Mengunggah...');
+                box.innerHTML = '<div class="loader"></div>';
+
+                try {
+                    const reader = new FileReader();
+                    reader.onload = async (e) => {
+                        const base64Image = e.target.result;
+
+                        try {
+                            const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools`, {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ path: 'removebg', params: { image: base64Image } })
+                            });
+                            const data = await res.json();
+                            if (!data.status) throw new Error(data.message || 'Gagal memproses gambar');
+
+                            box.innerHTML = `
+                                <img src="${escapeHTML(data.image_url)}" style="max-width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);">
+                                <a href="${escapeHTML(data.image_url)}" target="_blank" rel="noopener" class="btn btn-primary" style="display:block; text-decoration:none;">Buka Gambar HD</a>
+                            `;
+                        } catch (err) {
+                            box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(err.message)}</p>`;
+                        }
+                        setBtnLoading(btn, false, 'Proses Gambar');
+                    };
+                    reader.readAsDataURL(file);
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                    setBtnLoading(btn, false, 'Proses Gambar');
+                }
+            };
+        }
+        else if (tool === 'ai-image') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>AI Image</h3>
+                <span class="desc-text">Buat gambar dari teks (Gunakan Bahasa Inggris).</span>
+                <input type="text" id="ai-img-prompt" placeholder="Cth: cute orange cat, digital art">
+                <button class="btn btn-primary" id="btn-ai-img">Generate Gambar</button>
+                <div id="ai-img-res" style="display:none; margin-top:15px; text-align:center;"></div>
+            `;
+            const btn = document.getElementById('btn-ai-img');
+            btn.onclick = async () => {
+                const prompt = document.getElementById('ai-img-prompt').value.trim();
+                const box = document.getElementById('ai-img-res');
+                if (!prompt) return showToast('Ketik deskripsi gambar!');
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Membuat...');
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/chat-ai`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt, type: 'image' })
+                    });
+
+                    if (!res.ok) {
+                        let errMsg = `HTTP ${res.status}`;
+                        try { const j = await res.json(); errMsg = j.message || errMsg; } catch {}
+                        throw new Error(errMsg);
+                    }
+
+                    const contentType = res.headers.get('content-type') || '';
+                    if (contentType.includes('image/')) {
+                        const blob = await res.blob();
+                        const imgUrl = URL.createObjectURL(blob);
+                        box.innerHTML = `<img src="${imgUrl}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color);" onload="URL.revokeObjectURL(this.src)">`;
+                    } else {
+                        const data = await res.json();
+                        if (data.image_url) {
+                            box.innerHTML = `<img src="${escapeHTML(data.image_url)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color);">`;
+                        } else {
+                            throw new Error(data.message || 'Gagal membuat gambar');
+                        }
+                    }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Generate Gambar');
             };
         }
         else if (tool === 'aiedit') {
@@ -2814,63 +3354,83 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>AI Image Editor</h3>
                 <span class="desc-text">Edit gambar pakai AI (GPT-Image). Tanpa batasan prompt!</span>
 
-                <div style="margin-bottom:15px;">
-                    <input type="file" id="ai-edit-file" accept="image/*" style="display:none;" onchange="document.getElementById('file-name-label').innerText = this.files[0] ? this.files[0].name : 'Pilih Gambar...';">
-                    <button onclick="document.getElementById('ai-edit-file').click()" class="btn btn-ghost" style="width:100%; border-style:dashed; height:60px; flex-direction:column; gap:5px;">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                        <span id="file-name-label" style="font-size:13px; font-weight:normal;">Pilih Gambar...</span>
-                    </button>
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <button id="tab-ai-upload" onclick="switchAiTab('upload')" class="btn btn-primary" style="flex:1; margin:0; padding:10px; font-size:14px;">Upload</button>
+                    <button id="tab-ai-url" onclick="switchAiTab('url')" class="btn btn-ghost" style="flex:1; margin:0; padding:10px; font-size:14px;">URL</button>
                 </div>
 
+                <div id="area-ai-upload"><input type="file" id="ai-edit-file" accept="image/*"></div>
+                <div id="area-ai-url" style="display:none;"><input type="text" id="ai-edit-url" placeholder="Paste URL gambar (https://...)"></div>
+
                 <textarea id="ai-edit-prompt" rows="2" placeholder="Ketik instruksi edit... (Wajib)"></textarea>
+
+                <div style="display:flex; gap:10px; margin-bottom:15px; background:var(--bg-surface); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+                    <label style="flex:1; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="ai-output" value="json" checked style="accent-color:var(--accent);"> Link (JSON)
+                    </label>
+                    <label style="flex:1; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="ai-output" value="image" style="accent-color:var(--accent);"> File Gambar
+                    </label>
+                </div>
 
                 <button class="btn btn-primary" id="btn-ai-edit">Proses Edit</button>
                 <div id="ai-edit-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
                 <p style="font-size:12px; color:var(--danger); text-align:center; margin-top:15px;">Dilarang mengedit foto orang lain tanpa izin!</p>
             `;
 
+            window.switchAiTab = (tab) => {
+                const btnU = document.getElementById('tab-ai-upload'), btnR = document.getElementById('tab-ai-url');
+                const areaU = document.getElementById('area-ai-upload'), areaR = document.getElementById('area-ai-url');
+                if (tab === 'upload') {
+                    btnU.className = 'btn btn-primary'; btnU.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
+                    btnR.className = 'btn btn-ghost'; btnR.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
+                    areaU.style.display = 'block'; areaR.style.display = 'none';
+                } else {
+                    btnR.className = 'btn btn-primary'; btnR.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
+                    btnU.className = 'btn btn-ghost'; btnU.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
+                    areaU.style.display = 'none'; areaR.style.display = 'block';
+                }
+            };
+
             const btn = document.getElementById('btn-ai-edit');
             btn.onclick = async () => {
                 const prompt = document.getElementById('ai-edit-prompt').value.trim();
                 const fileInput = document.getElementById('ai-edit-file');
+                const urlInput = document.getElementById('ai-edit-url').value.trim();
                 const box = document.getElementById('ai-edit-res');
+                const isUploadTab = document.getElementById('area-ai-upload').style.display !== 'none';
+                const outputType = document.querySelector('input[name="ai-output"]:checked').value;
 
                 if (!prompt) return showToast('Masukkan instruksi edit!');
-                if (!fileInput.files[0]) return showToast('Pilih gambar dulu!');
-
-                const imageBase64 = await new Promise((resolve) => {
-                    const reader = new FileReader(); 
-                    reader.onload = (e) => resolve(e.target.result); 
-                    reader.readAsDataURL(fileInput.files[0]);
-                });
+                let imageBase64 = null;
+                if (isUploadTab) {
+                    if (!fileInput.files[0]) return showToast('Pilih gambar dulu!');
+                    imageBase64 = await new Promise((resolve) => {
+                        const reader = new FileReader(); reader.onload = (e) => resolve(e.target.result); reader.readAsDataURL(fileInput.files[0]);
+                    });
+                } else { if (!urlInput) return showToast('Masukkan URL gambar!'); }
 
                 setBtnLoading(btn, true, 'Memproses AI...');
-                box.style.display = 'block'; 
-                box.innerHTML = '<div class="loader"></div><p style="font-size:13px; color:var(--text-secondary); margin-top:10px;">Tunggu 10-30 detik...</p>';
+                box.style.display = 'block'; box.innerHTML = '<div class="loader"></div><p style="font-size:13px; color:var(--text-secondary); margin-top:10px;">Tunggu 10-30 detik...</p>';
 
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-aiedit`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: prompt, image_base64: imageBase64, output_type: 'image' })
+                        body: JSON.stringify({ prompt: prompt, image_base64: imageBase64, image_url: isUploadTab ? null : urlInput, output_type: outputType })
                     });
                     const data = await res.json();
-                    
                     if (data.status === false) throw new Error(data.message || 'Gagal');
 
-                    let finalImageUrl = data.data?.result || data.data || data.image_url;
+                    let finalImageUrl = (data.type === 'json') ? data.data.result : data.data;
                     if (!finalImageUrl) throw new Error('Gagal mendapatkan gambar');
-
-                    const safeUrl = escapeHTML(finalImageUrl);
 
                     box.innerHTML = `
                         <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Berhasil Diedit</p>
-                        <img src="${safeUrl}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
-                        <a href="${safeUrl}" download="aiedit-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download / Buka</a>
+                        <img src="${finalImageUrl}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
+                        <a href="${finalImageUrl}" download="aiedit-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download / Buka</a>
                     `;
                     showToast('Gambar Berhasil Diedit');
-                } catch (e) { 
-                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
-                }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
                 setBtnLoading(btn, false, 'Proses Edit');
             };
         }
@@ -3119,9 +3679,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             box.innerHTML = html;
-
-            const scrollContainer = document.querySelector('.bottom-sheet-content');
-            if (scrollContainer) scrollContainer.scrollTop = 0;
+            window.scrollTo({ top: 0, behavior: 'auto' });
 
             box.querySelector('.btn-back-reader').addEventListener('click', () => openTool('komik'));
             box.querySelector('.btn-daftar-reader').addEventListener('click', () => openTool('komik'));
