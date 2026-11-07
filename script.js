@@ -3075,7 +3075,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-aiedit`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: prompt, image_base64: imageBase64, output_type: 'image' })
+                        body: JSON.stringify({ prompt: prompt, image_base64: imageBase64, output_type: 'json' })
                     });
                     const data = await res.json();
 
@@ -3219,7 +3219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <select id="bug-action" style="width:100%; padding:12px; margin-bottom:15px; background:var(--bg-base); color:white; border:1px solid var(--border-color); border-radius:var(--radius-sm);">
-                    <option value="freeze_droid">Freeze Android</option>
+                    <option v">Freeze Android</option>
                     <option value="crash_ios">Crash iOS</option>
                     <option value="spam_call">Spam Call</option>
                     <option value="crash_group">Crash Group</option>
