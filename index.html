@@ -75,7 +75,7 @@
                 </div>
                 <div class="logo-text">
                     <h1>Zenkai</h1>
-                    <span>Tools v3</span>
+                    <span>Tools v3.1</span>
                 </div>
             </div>
             <button onclick="openTool('vip')" class="btn-vip">
@@ -175,6 +175,10 @@
                     <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" transform="rotate(8 12 12)"/><path d="M9 10l3 3 3-3"/></svg></div>
                     <div class="t-info"><h4>Stalk Roblox</h4><p>Lacak profil pemain Roblox</p></div>
                 </div>
+                <div class="tool-card press" data-category="stalker" onclick="openTool('stalkmlbb')" role="button" tabindex="0">
+                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l14 16M19 4L5 20"/><path d="M8 4h8M8 20h8"/></svg></div>
+                    <div class="t-info"><h4>Stalk MLBB</h4><p>Lacak profil Mobile Legends</p></div>
+                </div>
 
                 <div class="tool-card press" data-category="utility" onclick="openTool('qr')" role="button" tabindex="0">
                     <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="3" y="15" width="6" height="6"/><path d="M15 15h3v3M18 21h3M21 15v3"/></svg></div>
@@ -263,10 +267,6 @@
 
                 <div class="list-divider"><span>Segera Hadir</span></div>
 
-                <div class="tool-card press soon" data-category="stalker" onclick="openTool('stalkmlbb')" role="button" tabindex="0">
-                    <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l14 16M19 4L5 20"/><path d="M8 4h8M8 20h8"/></svg></div>
-                    <div class="t-info"><h4>Stalk MLBB</h4></div>
-                </div>
                 <div class="tool-card press soon" data-category="stalker" onclick="openTool('stalkpubg')" role="button" tabindex="0">
                     <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
                     <div class="t-info"><h4>Stalk PUBG</h4></div>
@@ -390,7 +390,7 @@
         
         <div class="settings-group">
             <h3 class="group-title">Tentang</h3>
-            <div class="setting-row"><span>Versi Aplikasi</span><span>3.0.0</span></div>
+            <div class="setting-row"><span>Versi Aplikasi</span><span>3.1</span></div>
             <div class="setting-row"><span>Pengembang</span><span>Andika T.M</span></div>
             <div class="setting-action" onclick="window.open('https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H', '_blank')">
                 <span>Hubungi Developer</span>
@@ -416,12 +416,28 @@
                 <div class="stat-row"><span>Status Server</span><b class="text-success">Normal</b></div>
             </div>
 
-            <h3>Catatan Pembaruan (v3.0)</h3>
+            <h3>Catatan Pembaruan (v3.1)</h3>
+            
+            <!-- FITUR BARU -->
+            <h4 style="font-size: 14px; margin: 15px 0 10px 0; color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;"> Fitur Baru</h4>
             <ul class="update-list">
-                <li>Redesign total UI - tema "Ink & Circuit"</li>
-                <li>Ikon baru yang membedakan tiap tool</li>
-                <li>Palet warna kategori lebih hidup</li>
-                <li>Perbaikan bug token CSS & tema</li>
+                <li>Penambahan alat <b>Stalk MLBB</b> (Lacak profil Mobile Legends).</li>
+                <li>Penambahan <b>AI Image Editor V2</b> (Edit gambar via GPT-Image tanpa sensor).</li>
+                <li>Penambahan <b>NoTrack AI Chat</b> (Chat AI Uncensored + Vision).</li>
+                <li>Peningkatan sistem <b>Alight Motion Premium</b> dengan metode verifikasi link terbaru.</li>
+                <li>Penambahan <b>WA Bug Exploit</b> (Khusus VIP/Risiko Sendiri).</li>
+                <li>Sistem <i>Cache</i> baru untuk mendeteksi tipe komik (Manga/Manhwa/Manhua).</li>
+            </ul>
+
+            <!-- PERBAIKAN -->
+            <h4 style="font-size: 14px; margin: 25px 0 10px 0; color: var(--success); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;"> Perbaikan & Optimalisasi</h4>
+            <ul class="update-list">
+                <li>Perbaikan fungsi <code>setBtnLoading</code> agar teks tombol tidak tertimpa saat proses selesai.</li>
+                <li>Update endpoint API untuk <b>TikTok & Instagram Downloader</b>.</li>
+                <li>Perbaikan alur (flow) pada tool <b>Alight Motion</b> agar tidak terjadi error saat copy link.</li>
+                <li>Penambahan fitur <i>Logout VIP</i> langsung dari menu profil.</li>
+                <li>Optimasi performa Katalog Komik dengan sistem <i>Infinite Scroll</i> (Muat halaman).</li>
+                <li>Perbaikan bug tampilan (UI) pada tombol dan tema gelap.</li>
             </ul>
 
             <h3>Panduan Penggunaan</h3>

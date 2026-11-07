@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
 
-    const COMING_SOON_TOOLS = ['stalkmlbb', 'stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
+    const COMING_SOON_TOOLS = ['stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
 
     const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -12,9 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const setBtnLoading = (btn, loading, label = 'Proses') => {
         if (!btn) return;
+        if (!btn.dataset.originalLabel) btn.dataset.originalLabel = label;
         btn.disabled = loading;
         btn.classList.toggle('loading', loading);
-        btn.innerText = loading ? 'Memproses...' : label;
+        btn.innerText = loading ? 'Memproses...' : (btn.dataset.originalLabel || label);
     };
 
     const isReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -130,6 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = document.getElementById('page-' + pageId);
         if (!target || current === target) return;
 
+        if (modal && modal.classList.contains('active')) closeModal();
+
         if (current) current.classList.remove('active');
         target.classList.add('active');
 
@@ -142,10 +145,17 @@ document.addEventListener('DOMContentLoaded', () => {
     window.filterCategory = (category, btn) => {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
         if (btn) btn.classList.add('active');
+
+        let visibleCount = 0;
         document.querySelectorAll('.tool-card').forEach(card => {
             const cat = card.getAttribute('data-category');
             const show = category === 'all' || !cat || cat === category;
             card.style.display = show ? 'flex' : 'none';
+            if (show) visibleCount++;
+        });
+
+        document.querySelectorAll('.list-divider').forEach(divider => {
+            divider.style.display = (category !== 'all') ? 'none' : 'flex';
         });
     };
 
@@ -321,7 +331,15 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeModal = () => {
         if (!modal) return;
         modal.classList.remove('active');
-        if (window.activeTimerInterval) clearInterval(window.activeTimerInterval);
+        if (window.activeTimerInterval) {
+            clearInterval(window.activeTimerInterval);
+            window.activeTimerInterval = null;
+        }
+        if (window.__komikScrollHandler && window.__komikScrollTarget) {
+            window.__komikScrollTarget.removeEventListener('scroll', window.__komikScrollHandler);
+            window.__komikScrollHandler = null;
+            window.__komikScrollTarget = null;
+        }
         setTimeout(() => { if (modalContent) modalContent.innerHTML = ''; }, 300);
     };
     window.closeModalOnOverlay = (e) => {
@@ -356,6 +374,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const titleEl = card.querySelector('h4');
                 const title = titleEl ? titleEl.innerText.toLowerCase() : '';
                 card.style.display = title.includes(term) ? 'flex' : 'none';
+            });
+            document.querySelectorAll('.list-divider').forEach(divider => {
+                divider.style.display = 'none';
             });
         });
     }
@@ -2561,20 +2582,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 const box = document.getElementById('tt-result');
                 if (!url) return showToast('Masukkan link dulu!');
                 if (!/tiktok\.com|vt\.tiktok\.com/i.test(url)) return showToast('Link harus dari TikTok!');
+                
                 setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
+                
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-pinterest`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ action: 'tiktok', url: url })
                     });
                     const data = await res.json();
-                    if (data.code !== 0) throw new Error('Gagal mengambil video');
-                    const vid = data.data.hdplay || data.data.play;
+
+                    if (data.code !== 0 && !data.status) throw new Error('Gagal mengambil video');
+
+                    const vid = data.data?.hdplay || data.data?.play || data.result?.url;
+                    if (!vid) throw new Error('Link video tidak ditemukan');
+
                     box.innerHTML = `
                         <video style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);" src="${escapeHTML(vid)}" controls></video>
                         <button class="btn btn-primary" id="btn-save-tt">Simpan ke Galeri</button>
                     `;
+                    
                     document.getElementById('btn-save-tt').onclick = async () => {
                         const saveBtn = document.getElementById('btn-save-tt');
                         setBtnLoading(saveBtn, true, 'Menyimpan...');
@@ -2594,7 +2622,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         } catch (e) { showToast('Gagal simpan, coba lagi.'); }
                         setBtnLoading(saveBtn, false, 'Simpan ke Galeri');
                     };
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { 
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                }
                 setBtnLoading(btn, false, 'Proses');
             };
         }
@@ -2612,8 +2642,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const url = document.getElementById('ig-url').value.trim();
                 const box = document.getElementById('ig-result');
                 if (!url) return showToast('Masukkan link dulu!');
+                
                 setBtnLoading(btn, true);
                 box.innerHTML = '<div class="loader"></div>';
+                
                 try {
                     const res = await fetch(`${SUPA_URL}/functions/v1/zen-instagram`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -2621,10 +2653,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     const data = await res.json();
 
-                    if (!data.status) throw new Error(data.message || 'Postingan tidak ditemukan');
+                    if (data.status === false) throw new Error(data.message || 'Postingan tidak ditemukan');
 
                     let htmlContent = '';
                     const mediaArray = data.result?.media || data.media || [];
+                    
+                    if (mediaArray.length === 0) throw new Error('Media tidak ditemukan');
+
                     mediaArray.forEach((media, index) => {
                         if (media.type === 'video') {
                             htmlContent += `
@@ -2639,9 +2674,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
 
-                    if (htmlContent === '') throw new Error('Media tidak ditemukan');
                     box.innerHTML = htmlContent;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { 
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                }
                 setBtnLoading(btn, false, 'Ambil Media');
             };
         }
@@ -2868,249 +2904,357 @@ document.addEventListener('DOMContentLoaded', () => {
                 setBtnLoading(btn, false, 'Cari');
             };
         }
-        else if (tool === 'qr') {
+        else if (tool === 'stalkmlbb') {
             modalContent.innerHTML = `
                 ${closeSvg}
-                <h3>QR Code</h3>
-                <span class="desc-text">Ubah teks atau tautan menjadi gambar QR Code.</span>
-                <input type="text" id="qr-text" placeholder="Teks/Link..." value="ZenkaiTools">
-                <button class="btn btn-primary" id="btn-qr">Generate QR</button>
-                <div style="text-align:center; margin-top:15px;"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ZenkaiTools" style="max-width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color);"></div>
+                <h3>Stalk MLBB</h3>
+                <span class="desc-text">Lacak profil Mobile Legends.</span>
+                <input type="number" id="ml-id" placeholder="User ID (cth: 134972929)">
+                <input type="number" id="ml-zone" placeholder="Zone ID (cth: 2687)">
+                <button class="btn btn-primary" id="btn-ml">Cari</button>
+                <div id="ml-res" style="display:none; margin-top:15px; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); text-align:left; background:var(--bg-surface);"></div>
             `;
-            document.getElementById('btn-qr').onclick = () => {
-                const txt = document.getElementById('qr-text').value || "ZenkaiTools";
-                document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(txt)}`;
-            };
-        }
-        else if (tool === 'imgtojpg') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Image to JPG</h3>
-                <span class="desc-text">Ubah format gambar (PNG/WebP) jadi JPG.</span>
-                <input type="file" id="jpg-in" accept="image/*">
-                <div id="jpg-res" style="display:none; text-align:center;">
-                    <img id="jpg-preview" style="max-width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
-                    <a id="jpg-dl" class="btn btn-primary" download="gambar.jpg" style="text-decoration:none;">Download JPG</a>
-                </div>
-            `;
-            document.getElementById('jpg-in').onchange = (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = img.width; canvas.height = img.height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.fillStyle = '#FFFFFF';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.drawImage(img, 0, 0);
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-                        document.getElementById('jpg-res').style.display = 'block';
-                        document.getElementById('jpg-preview').src = dataUrl;
-                        document.getElementById('jpg-dl').href = dataUrl;
-                    };
-                    img.src = ev.target.result;
-                };
-                reader.readAsDataURL(file);
-            };
-        }
-        else if (tool === 'username') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Username Gen</h3>
-                <span class="desc-text">Bingung cari username? Generate aja di sini.</span>
-                <input type="text" id="user-name" placeholder="Nama kamu (cth: andika)">
-                <button class="btn btn-primary" id="btn-user">Generate</button>
-                <div id="user-res" style="display:none; text-align:center; font-size:18px; font-weight:bold; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); margin-top:15px; background:var(--bg-surface);"></div>
-            `;
-            document.getElementById('btn-user').onclick = () => {
-                const name = document.getElementById('user-name').value.trim() || "user";
-                const rand = Math.floor(Math.random() * 9999);
-                const suffix = Math.random() > 0.5 ? "._" : "_";
-                const b = document.getElementById('user-res');
-                b.style.display = 'block';
-                b.innerHTML = `@${escapeHTML(name)}${suffix}${rand}`;
-            };
-        }
-        else if (tool === 'password') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Password Gen</h3>
-                <span class="desc-text">Buat password acak 16 karakter yang susah ditebak.</span>
-                <button class="btn btn-primary" id="btn-pass">Generate Password</button>
-                <div id="pass-res" style="display:none; font-size:20px; font-weight:800; color:var(--accent); text-align:center; margin-top:15px; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); word-break:break-all; background:var(--bg-surface);"></div>
-            `;
-            document.getElementById('btn-pass').onclick = () => {
-                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-                let pass = "";
-                const arr = new Uint32Array(16);
-                crypto.getRandomValues(arr);
-                for (let i = 0; i < 16; i++) pass += chars.charAt(arr[i] % chars.length);
-                const b = document.getElementById('pass-res');
-                b.style.display = 'block'; b.innerText = pass;
-            };
-        }
-        else if (tool === 'zodiak') {
-            let tgls = ''; for (let i = 1; i <= 31; i++) tgls += `<div data-z-tgl="${i}" class="z-tgl-item" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">${i}</div>`;
-            let blns = ''; const b = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
-            b.forEach((nm, i) => blns += `<div data-z-bln="${i+1}" data-z-bln-label="${nm}" class="z-bln-item" style="padding:12px; border-bottom:1px solid var(--border-color); cursor:pointer;">${nm}</div>`);
-
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Cek Zodiak</h3>
-                <span class="desc-text">Pilih tanggal lahir, langsung ketahuan zodiaknya.</span>
-                <div style="display:flex; gap:10px; margin-bottom:15px; justify-content:center;">
-                    <div style="flex:1; position:relative;">
-                        <button class="btn btn-ghost" onclick="toggleList('tgl')" id="btn-tgl" style="margin-bottom:0;">Tgl</button>
-                        <div id="list-tgl" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:var(--radius-sm); max-height:150px; overflow-y:auto; z-index:10; margin-top:5px;">${tgls}</div>
-                    </div>
-                    <div style="flex:2; position:relative;">
-                        <button class="btn btn-ghost" onclick="toggleList('bln')" id="btn-bln" style="margin-bottom:0;">Bulan</button>
-                        <div id="list-bln" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:var(--radius-sm); max-height:150px; overflow-y:auto; z-index:10; margin-top:5px;">${blns}</div>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="cekZodiak()">Cek Sekarang</button>
-                <div id="z-res" style="display:none; text-align:center; font-size:20px; margin-top:15px; font-weight:bold;"></div>
-            `;
-            window.zTgl = null; window.zBln = null;
-            window.toggleList = (t) => {
-                document.getElementById('list-tgl').style.display = 'none';
-                document.getElementById('list-bln').style.display = 'none';
-                const el = document.getElementById('list-' + t);
-                el.style.display = el.style.display === 'none' ? 'block' : 'none';
-            };
-            document.querySelectorAll('.z-tgl-item').forEach(el => {
-                el.addEventListener('click', () => {
-                    window.zTgl = Number(el.dataset.zTgl);
-                    document.getElementById('btn-tgl').innerText = el.dataset.zTgl;
-                    document.getElementById('list-tgl').style.display = 'none';
-                    document.getElementById('list-bln').style.display = 'none';
-                });
-            });
-            document.querySelectorAll('.z-bln-item').forEach(el => {
-                el.addEventListener('click', () => {
-                    window.zBln = Number(el.dataset.zBln);
-                    document.getElementById('btn-bln').innerText = el.dataset.zBlnLabel;
-                    document.getElementById('list-tgl').style.display = 'none';
-                    document.getElementById('list-bln').style.display = 'none';
-                });
-            });
-            window.cekZodiak = () => {
-                if (!window.zTgl || !window.zBln) return showToast('Pilih dulu!');
-                const t = window.zTgl, bl = window.zBln;
-                const maxDays = [31,29,31,30,31,30,31,31,30,31,30,31][bl-1];
-                if (t > maxDays) return showToast(`Tanggal ${t} tidak valid untuk bulan ini!`);
-
-                let z = "";
-                if ((bl == 1 && t >= 20) || (bl == 2 && t <= 18)) z = "Aquarius ♒";
-                else if ((bl == 2 && t >= 19) || (bl == 3 && t <= 20)) z = "Pisces ♓";
-                else if ((bl == 3 && t >= 21) || (bl == 4 && t <= 19)) z = "Aries ♈";
-                else if ((bl == 4 && t >= 20) || (bl == 5 && t <= 20)) z = "Taurus ♉";
-                else if ((bl == 5 && t >= 21) || (bl == 6 && t <= 20)) z = "Gemini ♊";
-                else if ((bl == 6 && t >= 21) || (bl == 7 && t <= 22)) z = "Cancer ♋";
-                else if ((bl == 7 && t >= 23) || (bl == 8 && t <= 22)) z = "Leo ♌";
-                else if ((bl == 8 && t >= 23) || (bl == 9 && t <= 22)) z = "Virgo ♍";
-                else if ((bl == 9 && t >= 23) || (bl == 10 && t <= 22)) z = "Libra ♎";
-                else if ((bl == 10 && t >= 23) || (bl == 11 && t <= 21)) z = "Scorpio ♏";
-                else if ((bl == 11 && t >= 22) || (bl == 12 && t <= 21)) z = "Sagittarius ♐";
-                else z = "Capricorn ♑";
-
-                const res = document.getElementById('z-res');
-                res.style.display = 'block';
-                res.innerHTML = `Zodiak: <b style="color:var(--accent); font-size:24px; display:block;">${z}</b>`;
-            };
-        }
-        else if (tool === 'base64') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Base64</h3>
-                <span class="desc-text">Encode teks, atau decode balik ke teks asli.</span>
-                <textarea id="b64-in" rows="3" placeholder="Teks..."></textarea>
-                <div style="display:flex;gap:10px; justify-content:center;">
-                    <button class="btn btn-primary" id="btn-enc" style="flex:1;">Encode</button>
-                    <button class="btn btn-ghost" id="btn-dec" style="flex:1;">Decode</button>
-                </div>
-                <div id="b64-res" style="display:none; margin-top:15px; word-break:break-all; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
-            `;
-            const doB64 = (type) => {
-                const v = document.getElementById('b64-in').value;
-                const b = document.getElementById('b64-res');
-                if (!v) return showToast('Isi teks!');
-                b.style.display = 'block';
+            const btn = document.getElementById('btn-ml');
+            btn.onclick = async () => {
+                const id = document.getElementById('ml-id').value.trim();
+                const zone = document.getElementById('ml-zone').value.trim();
+                const box = document.getElementById('ml-res');
+                if (!id || !zone) return showToast('Isi ID dan Zone!');
+                
+                box.style.display = 'block';
+                setBtnLoading(btn, true, 'Cari');
+                box.innerHTML = '<div class="loader"></div>';
+                
                 try {
-                    if (type === 'enc') {
-                        const bytes = new TextEncoder().encode(v);
-                        let bin = '';
-                        bytes.forEach(x => bin += String.fromCharCode(x));
-                        b.innerText = btoa(bin);
-                    } else {
-                        const bin = atob(v);
-                        const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-                        b.innerText = new TextDecoder().decode(bytes);
-                    }
-                } catch (e) { b.innerText = 'Gagal memproses.'; }
-            };
-            document.getElementById('btn-enc').onclick = () => doB64('enc');
-            document.getElementById('btn-dec').onclick = () => doB64('dec');
-        }
-        else if (tool === 'umur') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>Hitung Umur</h3>
-                <span class="desc-text">Hitung umur berdasarkan tanggal lahir.</span>
-                <input type="date" id="umur-in">
-                <button class="btn btn-primary" id="btn-umur">Hitung</button>
-                <div id="umur-res" style="display:none; margin-top:15px; text-align:center; font-size:18px; font-weight:bold; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
-            `;
-            document.getElementById('btn-umur').onclick = () => {
-                const v = document.getElementById('umur-in').value;
-                if (!v) return showToast('Pilih tanggal!');
-                const tglLahir = new Date(v);
-                const hariIni = new Date();
-                let umur = hariIni.getFullYear() - tglLahir.getFullYear();
-                const m = hariIni.getMonth() - tglLahir.getMonth();
-                if (m < 0 || (m === 0 && hariIni.getDate() < tglLahir.getDate())) { umur--; }
-                const b = document.getElementById('umur-res');
-                b.style.display = 'block'; b.innerText = `Umur Lo: ${umur} Tahun`;
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools-v2`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'stalk_mlbb', id: id, zone: zone })
+                    });
+                    const data = await res.json();
+
+                    if (!data.status) throw new Error(data.message || 'Akun tidak ditemukan');
+                    const d = data.result;
+                    
+                    box.innerHTML = `
+                        <div style="font-size:14px; line-height:1.6;">
+                            <b>Nickname:</b> ${escapeHTML(d.nickname)}<br>
+                            <b>ID:</b> ${escapeHTML(d.id)}<br>
+                            <b>Zone:</b> ${escapeHTML(d.zone)}<br>
+                            <b>Region:</b> ${escapeHTML(d.region)}<br>
+                            <b>Status:</b> ${escapeHTML(d.account_status)}
+                        </div>
+                    `;
+                } catch (e) { 
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                }
+                setBtnLoading(btn, false, 'Cari');
             };
         }
         else if (tool === 'alightmotion') {
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Alight Motion</h3>
-                <span class="desc-text">Bypass akun Premium Alight Motion secara gratis.</span>
+                <span class="desc-text">Bypass akun Premium Alight Motion.</span>
                 <div style="text-align:left; font-size:14px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
                     <b style="color:var(--text-primary);">Tutorial:</b><br>
-                    1. Buka Aplikasi Alight Motion.<br>
-                    2. Login pakai Email atau Google.<br>
-                    3. Masukkan email yang sama di bawah.<br>
-                    4. Generate & cek Inbox/Spam.<br>
-                    5. Klik link verifikasi.
+                    1. Masukkan email aktif, klik <b>Kirim Link</b>.<br>
+                    2. Cek Inbox/Spam Gmail.<br>
+                    3. ⚠️ <b>JANGAN DI-KLIK LINK-NYA!</b> Tekan & tahan link, lalu pilih <b>Copy Link</b>.<br>
+                    4. Balik ke web, <b>Paste</b> link tadi di bawah.<br>
+                    5. Klik <b>Aktifkan Premium</b>. Akun lu langsung Premium!
                 </div>
-                <input type="email" id="am-email" placeholder="Ketik email aktif lu...">
-                <button class="btn btn-primary" id="btn-am">Generate Link</button>
+                
+                <div id="am-step-1">
+                    <input type="email" id="am-email" placeholder="Ketik email aktif lu...">
+                    <button class="btn btn-primary" id="btn-am-send">Kirim Link</button>
+                </div>
+
+                <div id="am-step-2" style="display:none;">
+                    <input type="text" id="am-link" placeholder="Paste link verifikasi dari Gmail di sini...">
+                    <button class="btn btn-primary" id="btn-am-verif">Aktifkan Premium</button>
+                </div>
+
                 <div id="am-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
             `;
-            const btn = document.getElementById('btn-am');
-            btn.onclick = async () => {
+            
+            const btnSend = document.getElementById('btn-am-send');
+            const btnVerif = document.getElementById('btn-am-verif');
+            const box = document.getElementById('am-res');
+            const step1 = document.getElementById('am-step-1');
+            const step2 = document.getElementById('am-step-2');
+
+            btnSend.onclick = async () => {
                 const email = document.getElementById('am-email').value.trim();
-                const box = document.getElementById('am-res');
                 if (!email) return showToast('Masukkan email dulu!');
                 box.style.display = 'block';
-                setBtnLoading(btn, true, 'Generate Link');
+                setBtnLoading(btnSend, true, 'Mengirim...');
                 box.innerHTML = '<div class="loader"></div>';
+                
                 try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/amprem`, {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools-v2`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: email })
+                        body: JSON.stringify({ action: 'am_send', email: email })
                     });
                     const data = await res.json();
-                    if (data.status === false || data.error) throw new Error(data.message || 'Gagal');
-                    box.innerHTML = `<p class="success-msg">Berhasil Terkirim!<br><span style="font-size:13px; font-weight:normal;">Cek Inbox/Spam di <b>${escapeHTML(email)}</b>.</span></p>`;
+                    if (!data.status) throw new Error(data.message || 'Gagal');
+                    
+                    step1.style.display = 'none';
+                    step2.style.display = 'block';
+                    box.innerHTML = `<p class="success-msg">Link terkirim ke <b>${escapeHTML(email)}</b>.<br>Buka Gmail, JANGAN DIKLIK. Copy link-nya, lalu paste di kolom atas.</p>`;
                 } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-                setBtnLoading(btn, false, 'Generate Link');
+                setBtnLoading(btnSend, false, 'Kirim Link');
+            };
+
+            btnVerif.onclick = async () => {
+                const email = document.getElementById('am-email').value.trim();
+                const link = document.getElementById('am-link').value.trim();
+                if (!link) return showToast('Paste link verifikasi dulu!');
+                box.style.display = 'block';
+                setBtnLoading(btnVerif, true, 'Memverifikasi...');
+                box.innerHTML = '<div class="loader"></div>';
+                
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-tools-v2`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'am_verif', email: email, link: link })
+                    });
+                    const data = await res.json();
+                    if (!data.status) throw new Error(data.message || 'Gagal verifikasi');
+                    
+                    box.innerHTML = `<p class="success-msg">Verifikasi Berhasil!<br>Akun <b>${escapeHTML(email)}</b> sudah menjadi <b>${escapeHTML(data.result?.status || 'Premium')}</b>.</p>`;
+                    showToast('Akun Premium Aktif!');
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btnVerif, false, 'Aktifkan Premium');
+            };
+        }
+        else if (tool === 'aiedit') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>AI Image Editor</h3>
+                <span class="desc-text">Edit gambar pakai AI (GPT-Image). Tanpa batasan prompt!</span>
+
+                <div style="margin-bottom:15px;">
+                    <input type="file" id="ai-edit-file" accept="image/*" style="display:none;" onchange="document.getElementById('file-name-label').innerText = this.files[0] ? this.files[0].name : 'Pilih Gambar...';">
+                    <button onclick="document.getElementById('ai-edit-file').click()" class="btn btn-ghost" style="width:100%; border-style:dashed; height:60px; flex-direction:column; gap:5px;">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <span id="file-name-label" style="font-size:13px; font-weight:normal;">Pilih Gambar...</span>
+                    </button>
+                </div>
+
+                <textarea id="ai-edit-prompt" rows="2" placeholder="Ketik instruksi edit... (Wajib)"></textarea>
+
+                <button class="btn btn-primary" id="btn-ai-edit">Proses Edit</button>
+                <div id="ai-edit-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+                <p style="font-size:12px; color:var(--danger); text-align:center; margin-top:15px;">Dilarang mengedit foto orang lain tanpa izin!</p>
+            `;
+
+            const btn = document.getElementById('btn-ai-edit');
+            btn.onclick = async () => {
+                const prompt = document.getElementById('ai-edit-prompt').value.trim();
+                const fileInput = document.getElementById('ai-edit-file');
+                const box = document.getElementById('ai-edit-res');
+
+                if (!prompt) return showToast('Masukkan instruksi edit!');
+                if (!fileInput.files[0]) return showToast('Pilih gambar dulu!');
+
+                const imageBase64 = await new Promise((resolve) => {
+                    const reader = new FileReader(); 
+                    reader.onload = (e) => resolve(e.target.result); 
+                    reader.readAsDataURL(fileInput.files[0]);
+                });
+
+                setBtnLoading(btn, true, 'Memproses AI...');
+                box.style.display = 'block'; 
+                box.innerHTML = '<div class="loader"></div><p style="font-size:13px; color:var(--text-secondary); margin-top:10px;">Tunggu 10-30 detik...</p>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-aiedit`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt, image_base64: imageBase64, output_type: 'image' })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.status === false) throw new Error(data.message || 'Gagal');
+
+                    let finalImageUrl = data.data?.result || data.data || data.image_url;
+                    if (!finalImageUrl) throw new Error('Gagal mendapatkan gambar');
+
+                    const safeUrl = escapeHTML(finalImageUrl);
+
+                    box.innerHTML = `
+                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Berhasil Diedit</p>
+                        <img src="${safeUrl}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
+                        <a href="${safeUrl}" download="aiedit-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download / Buka</a>
+                    `;
+                    showToast('Gambar Berhasil Diedit');
+                } catch (e) { 
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; 
+                }
+                setBtnLoading(btn, false, 'Proses Edit');
+            };
+        }
+        else if (tool === 'notrack-chat') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>NoTrack AI</h3>
+                <span class="desc-text">Chat AI tanpa sensor. Support kirim gambar & ingat percakapan.</span>
+                <div id="nt-chat-box" style="display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto; margin-bottom:15px; background:var(--bg-surface); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+                    <div style="font-size:13px; color:var(--text-secondary); text-align:center;">Mulai percakapan...</div>
+                </div>
+
+                <div style="display:flex; gap:8px; margin-bottom:10px;">
+                    <input type="file" id="nt-file" accept="image/*" style="display:none;" onchange="document.getElementById('nt-file-label').innerText = this.files[0] ? 'IMG' : '+';">
+                    <button onclick="document.getElementById('nt-file').click()" id="nt-file-label" class="btn btn-ghost" style="width:45px; height:45px; padding:0; margin:0; font-size:18px;">+</button>
+                    <input type="text" id="nt-input" placeholder="Tanya apa aja..." style="margin:0;" onkeypress="if(event.key === 'Enter') document.getElementById('btn-nt').click()">
+                </div>
+
+                <button class="btn btn-primary" id="btn-nt">Kirim Pesan</button>
+            `;
+
+            let ntSessionId = null;
+            let ntChatId = null;
+            const chatBox = document.getElementById('nt-chat-box');
+            const btn = document.getElementById('btn-nt');
+
+            const addMessage = (text, isUser) => {
+                const div = document.createElement('div');
+                div.style.cssText = `align-self: ${isUser ? 'flex-end' : 'flex-start'}; background: ${isUser ? 'var(--accent)' : 'var(--bg-base)'}; color: ${isUser ? 'var(--accent-ink)' : 'var(--text-primary)'}; padding: 10px 14px; border-radius: 12px; border-bottom-${isUser ? 'right' : 'left'}-radius: 2px; font-size: 14px; max-width: 85%; border: 1px solid var(--border-color); line-height: 1.5; white-space: pre-wrap;`;
+                div.innerText = text;
+                chatBox.appendChild(div);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            };
+
+            btn.onclick = async () => {
+                const input = document.getElementById('nt-input');
+                const fileInput = document.getElementById('nt-file');
+                const prompt = input.value.trim();
+                const file = fileInput.files[0];
+
+                if (!prompt && !file) return showToast('Ketik pesan atau pilih gambar!');
+
+                addMessage(prompt || '[Gambar dikirim]', true);
+                input.value = '';
+                fileInput.value = ''; document.getElementById('nt-file-label').innerText = '+';
+
+                const loadingDiv = document.createElement('div');
+                loadingDiv.innerHTML = '<div class="loader" style="width:16px; height:16px; border-width:2px; margin:0;"></div>';
+                loadingDiv.style.cssText = `align-self: flex-start; background: var(--bg-base); padding: 10px; border-radius: 12px; border: 1px solid var(--border-color);`;
+                chatBox.appendChild(loadingDiv); chatBox.scrollTop = chatBox.scrollHeight;
+
+                setBtnLoading(btn, true, 'Memproses...');
+
+                try {
+                    let fileBase64 = null;
+                    if (file) {
+                        fileBase64 = await new Promise((resolve) => {
+                            const reader = new FileReader(); reader.onload = (e) => resolve(e.target.result); reader.readAsDataURL(file);
+                        });
+                    }
+
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-notrack`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt, sessionId: ntSessionId, chatId: ntChatId, file_base64: fileBase64 })
+                    });
+                    const data = await res.json();
+
+                    loadingDiv.remove();
+                    if (data.status === false) throw new Error(data.message || 'Gagal');
+
+                    if (data.data?.session) {
+                        ntSessionId = data.data.session.sessionId;
+                        ntChatId = data.data.session.chatId;
+                    }
+
+                    addMessage(data.data?.reply || 'Maaf, tidak ada balasan.', false);
+                } catch (e) {
+                    loadingDiv.remove();
+                    addMessage(`Error: ${e.message}`, false);
+                }
+                setBtnLoading(btn, false, 'Kirim Pesan');
+            };
+        }
+        else if (tool === 'bug-wa') {
+            const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
+            const isMaintenance = (window.currentDisabledTools || []).includes('bug-wa');
+            const isVipOnly = (window.currentVipTools || []).includes('bug-wa');
+            
+            const isVip = localStorage.getItem('zenkai_vip') === 'true';
+            const vipUntil = localStorage.getItem('zenkai_vip_until');
+            const isVipValid = isVip && vipUntil && new Date(vipUntil) > new Date();
+
+            if (isMaintenance && !isOwner) {
+                modalContent.innerHTML = `
+                    ${closeSvg}
+                    <h3 style="color:var(--danger);">Fitur Maintenance</h3>
+                    <span class="desc-text">Fitur ini sedang dinonaktifkan sementara oleh Owner.</span>
+                    <button class="btn btn-primary" onclick="openTool('bug-wa')">Cek Ulang</button>
+                `;
+                return;
+            }
+
+            if (isVipOnly && !isVipValid && !isOwner) {
+                modalContent.innerHTML = `
+                    ${closeSvg}
+                    <div style="text-align:center; padding: 20px 0;">
+                        <h3 style="font-size: 22px; color: var(--danger); margin-bottom: 10px;">Akses VIP Terkunci</h3>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 25px;">Fitur ini dijadikan VIP Only oleh Owner.</p>
+                        <button class="btn btn-primary" onclick="openTool('vip')">Lihat Paket VIP</button>
+                    </div>
+                `;
+                return;
+            }
+
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3 style="color:var(--danger);">☠️ WA Bug Exploit</h3>
+                <span class="desc-text">Gunakan dengan risiko sendiri.</span>
+
+                <div style="text-align:left; font-size:12px; background:rgba(255, 61, 110, 0.1); padding:12px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--danger); color:var(--text-secondary);">
+                    <b>Note:</b> Proses mungkin memakan waktu 30-60 detik (membangunkan server). Jangan tutup modal ini!
+                </div>
+
+                <select id="bug-action" style="width:100%; padding:12px; margin-bottom:15px; background:var(--bg-base); color:white; border:1px solid var(--border-color); border-radius:var(--radius-sm);">
+                    <option value="freeze_droid">Freeze Android</option>
+                    <option value="crash_ios">Crash iOS</option>
+                    <option value="spam_call">Spam Call</option>
+                    <option value="crash_group">Crash Group</option>
+                </select>
+
+                <input type="text" id="bug-target" placeholder="No. WA (628xxx) / Link Grup (chat.whatsapp.com/...)" inputmode="text">
+
+                <button class="btn btn-primary" id="btn-exec-bug" style="background:var(--danger); color:white; border:none; margin-top:10px;">Luncurkan Serangan</button>
+
+                <div id="bug-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+
+            const btnExec = document.getElementById('btn-exec-bug');
+            
+            btnExec.onclick = async () => {
+                const action = document.getElementById('bug-action').value;
+                const target = document.getElementById('bug-target').value.trim();
+                const box = document.getElementById('bug-res');
+
+                if (!target) return showToast('Masukkan target!');
+
+                setBtnLoading(btnExec, true, 'Menyerang...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div><p style="font-size:12px; margin-top:10px; color:var(--text-secondary);">Membangunkan server...</p>';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-bug-wa`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: action, target: target })
+                    });
+                    const data = await res.json();
+
+                    if (!data.status) throw new Error(data.error);
+
+                    box.innerHTML = `<p class="success-msg" style="font-size:13px;">Serangan Terkirim!<br><span style="font-size:11px; font-weight:normal;">Respon: ${escapeHTML(data.message)}</span></p>`;
+                    showToast('Bug berhasil dikirim ke target!');
+                } catch (e) {
+                    box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btnExec, false, 'Luncurkan Serangan');
             };
         }
         else if (tool === 'tempmail') {
@@ -3302,306 +3446,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
         }
-        else if (tool === 'ai-image') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>AI Image</h3>
-                <span class="desc-text">Buat gambar dari teks (Gunakan Bahasa Inggris).</span>
-                <input type="text" id="ai-img-prompt" placeholder="Cth: cute orange cat, digital art">
-                <button class="btn btn-primary" id="btn-ai-img">Generate Gambar</button>
-                <div id="ai-img-res" style="display:none; margin-top:15px; text-align:center;"></div>
-            `;
-            const btn = document.getElementById('btn-ai-img');
-            btn.onclick = async () => {
-                const prompt = document.getElementById('ai-img-prompt').value.trim();
-                const box = document.getElementById('ai-img-res');
-                if (!prompt) return showToast('Ketik deskripsi gambar!');
-                box.style.display = 'block';
-                setBtnLoading(btn, true, 'Membuat...');
-                box.innerHTML = '<div class="loader"></div>';
-                try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/chat-ai`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: prompt, type: 'image' })
-                    });
-
-                    if (!res.ok) {
-                        let errMsg = `HTTP ${res.status}`;
-                        try { const j = await res.json(); errMsg = j.message || errMsg; } catch {}
-                        throw new Error(errMsg);
-                    }
-
-                    const contentType = res.headers.get('content-type') || '';
-                    if (contentType.includes('image/')) {
-                        const blob = await res.blob();
-                        const imgUrl = URL.createObjectURL(blob);
-                        box.innerHTML = `<img src="${imgUrl}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color);" onload="URL.revokeObjectURL(this.src)">`;
-                    } else {
-                        const data = await res.json();
-                        if (data.image_url) {
-                            box.innerHTML = `<img src="${escapeHTML(data.image_url)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color);">`;
-                        } else {
-                            throw new Error(data.message || 'Gagal membuat gambar');
-                        }
-                    }
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-                setBtnLoading(btn, false, 'Generate Gambar');
-            };
-        }
-        else if (tool === 'aiedit') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>AI Image Editor</h3>
-                <span class="desc-text">Edit gambar pakai AI (GPT-Image). Tanpa batasan prompt!</span>
-
-                <div style="display:flex; gap:10px; margin-bottom:15px;">
-                    <button id="tab-ai-upload" onclick="switchAiTab('upload')" class="btn btn-primary" style="flex:1; margin:0; padding:10px; font-size:14px;">Upload</button>
-                    <button id="tab-ai-url" onclick="switchAiTab('url')" class="btn btn-ghost" style="flex:1; margin:0; padding:10px; font-size:14px;">URL</button>
-                </div>
-
-                <div id="area-ai-upload"><input type="file" id="ai-edit-file" accept="image/*"></div>
-                <div id="area-ai-url" style="display:none;"><input type="text" id="ai-edit-url" placeholder="Paste URL gambar (https://...)"></div>
-
-                <textarea id="ai-edit-prompt" rows="2" placeholder="Ketik instruksi edit... (Wajib)"></textarea>
-
-                <div style="display:flex; gap:10px; margin-bottom:15px; background:var(--bg-surface); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
-                    <label style="flex:1; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <input type="radio" name="ai-output" value="json" checked style="accent-color:var(--accent);"> Link (JSON)
-                    </label>
-                    <label style="flex:1; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <input type="radio" name="ai-output" value="image" style="accent-color:var(--accent);"> File Gambar
-                    </label>
-                </div>
-
-                <button class="btn btn-primary" id="btn-ai-edit">Proses Edit</button>
-                <div id="ai-edit-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
-                <p style="font-size:12px; color:var(--danger); text-align:center; margin-top:15px;">Dilarang mengedit foto orang lain tanpa izin!</p>
-            `;
-
-            window.switchAiTab = (tab) => {
-                const btnU = document.getElementById('tab-ai-upload'), btnR = document.getElementById('tab-ai-url');
-                const areaU = document.getElementById('area-ai-upload'), areaR = document.getElementById('area-ai-url');
-                if (tab === 'upload') {
-                    btnU.className = 'btn btn-primary'; btnU.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
-                    btnR.className = 'btn btn-ghost'; btnR.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
-                    areaU.style.display = 'block'; areaR.style.display = 'none';
-                } else {
-                    btnR.className = 'btn btn-primary'; btnR.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
-                    btnU.className = 'btn btn-ghost'; btnU.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
-                    areaU.style.display = 'none'; areaR.style.display = 'block';
-                }
-            };
-
-            const btn = document.getElementById('btn-ai-edit');
-            btn.onclick = async () => {
-                const prompt = document.getElementById('ai-edit-prompt').value.trim();
-                const fileInput = document.getElementById('ai-edit-file');
-                const urlInput = document.getElementById('ai-edit-url').value.trim();
-                const box = document.getElementById('ai-edit-res');
-                const isUploadTab = document.getElementById('area-ai-upload').style.display !== 'none';
-                const outputType = document.querySelector('input[name="ai-output"]:checked').value;
-
-                if (!prompt) return showToast('Masukkan instruksi edit!');
-                let imageBase64 = null;
-                if (isUploadTab) {
-                    if (!fileInput.files[0]) return showToast('Pilih gambar dulu!');
-                    imageBase64 = await new Promise((resolve) => {
-                        const reader = new FileReader(); reader.onload = (e) => resolve(e.target.result); reader.readAsDataURL(fileInput.files[0]);
-                    });
-                } else { if (!urlInput) return showToast('Masukkan URL gambar!'); }
-
-                setBtnLoading(btn, true, 'Memproses AI...');
-                box.style.display = 'block'; box.innerHTML = '<div class="loader"></div><p style="font-size:13px; color:var(--text-secondary); margin-top:10px;">Tunggu 10-30 detik...</p>';
-
-                try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-aiedit`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: prompt, image_base64: imageBase64, image_url: isUploadTab ? null : urlInput, output_type: outputType })
-                    });
-                    const data = await res.json();
-                    if (data.status === false) throw new Error(data.message || 'Gagal');
-
-                    let finalImageUrl = (data.type === 'json') ? data.data.result : data.data;
-                    if (!finalImageUrl) throw new Error('Gagal mendapatkan gambar');
-
-                    box.innerHTML = `
-                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Berhasil Diedit</p>
-                        <img src="${finalImageUrl}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
-                        <a href="${finalImageUrl}" download="aiedit-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download / Buka</a>
-                    `;
-                    showToast('Gambar Berhasil Diedit');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-                setBtnLoading(btn, false, 'Proses Edit');
-            };
-        }
-        else if (tool === 'notrack-chat') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>NoTrack AI</h3>
-                <span class="desc-text">Chat AI tanpa sensor. Support kirim gambar & ingat percakapan.</span>
-                <div id="nt-chat-box" style="display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto; margin-bottom:15px; background:var(--bg-surface); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
-                    <div style="font-size:13px; color:var(--text-secondary); text-align:center;">Mulai percakapan...</div>
-                </div>
-
-                <div style="display:flex; gap:8px; margin-bottom:10px;">
-                    <input type="file" id="nt-file" accept="image/*" style="display:none;" onchange="document.getElementById('nt-file-label').innerText = this.files[0] ? 'IMG' : '+';">
-                    <button onclick="document.getElementById('nt-file').click()" id="nt-file-label" class="btn btn-ghost" style="width:45px; height:45px; padding:0; margin:0; font-size:18px;">+</button>
-                    <input type="text" id="nt-input" placeholder="Tanya apa aja..." style="margin:0;" onkeypress="if(event.key === 'Enter') document.getElementById('btn-nt').click()">
-                </div>
-
-                <button class="btn btn-primary" id="btn-nt">Kirim Pesan</button>
-            `;
-
-            let ntSessionId = null;
-            let ntChatId = null;
-            const chatBox = document.getElementById('nt-chat-box');
-            const btn = document.getElementById('btn-nt');
-
-            const addMessage = (text, isUser) => {
-                const div = document.createElement('div');
-                div.style.cssText = `align-self: ${isUser ? 'flex-end' : 'flex-start'}; background: ${isUser ? 'var(--accent)' : 'var(--bg-base)'}; color: ${isUser ? 'var(--accent-ink)' : 'var(--text-primary)'}; padding: 10px 14px; border-radius: 12px; border-bottom-${isUser ? 'right' : 'left'}-radius: 2px; font-size: 14px; max-width: 85%; border: 1px solid var(--border-color); line-height: 1.5; white-space: pre-wrap;`;
-                div.innerText = text;
-                chatBox.appendChild(div);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            };
-
-            btn.onclick = async () => {
-                const input = document.getElementById('nt-input');
-                const fileInput = document.getElementById('nt-file');
-                const prompt = input.value.trim();
-                const file = fileInput.files[0];
-
-                if (!prompt && !file) return showToast('Ketik pesan atau pilih gambar!');
-
-                addMessage(prompt || '[Gambar dikirim]', true);
-                input.value = '';
-                fileInput.value = ''; document.getElementById('nt-file-label').innerText = '+';
-
-                const loadingDiv = document.createElement('div');
-                loadingDiv.innerHTML = '<div class="loader" style="width:16px; height:16px; border-width:2px; margin:0;"></div>';
-                loadingDiv.style.cssText = `align-self: flex-start; background: var(--bg-base); padding: 10px; border-radius: 12px; border: 1px solid var(--border-color);`;
-                chatBox.appendChild(loadingDiv); chatBox.scrollTop = chatBox.scrollHeight;
-
-                setBtnLoading(btn, true, 'Memproses...');
-
-                try {
-                    let fileBase64 = null;
-                    if (file) {
-                        fileBase64 = await new Promise((resolve) => {
-                            const reader = new FileReader(); reader.onload = (e) => resolve(e.target.result); reader.readAsDataURL(file);
-                        });
-                    }
-
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-notrack`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: prompt, sessionId: ntSessionId, chatId: ntChatId, file_base64: fileBase64 })
-                    });
-                    const data = await res.json();
-
-                    loadingDiv.remove();
-                    if (data.status === false) throw new Error(data.message || 'Gagal');
-
-                    if (data.data?.session) {
-                        ntSessionId = data.data.session.sessionId;
-                        ntChatId = data.data.session.chatId;
-                    }
-
-                    addMessage(data.data?.reply || 'Maaf, tidak ada balasan.', false);
-                } catch (e) {
-                    loadingDiv.remove();
-                    addMessage(`Error: ${e.message}`, false);
-                }
-                setBtnLoading(btn, false, 'Kirim Pesan');
-            };
-        }
-        else if (tool === 'bug-wa') {
-    // Cek Status dari Owner
-    const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
-    const isMaintenance = (window.currentDisabledTools || []).includes('bug-wa');
-    const isVipOnly = (window.currentVipTools || []).includes('bug-wa');
-    
-    const isVip = localStorage.getItem('zenkai_vip') === 'true';
-    const vipUntil = localStorage.getItem('zenkai_vip_until');
-    const isVipValid = isVip && vipUntil && new Date(vipUntil) > new Date();
-
-    // 1. Kalau Owner matiin fitur ini (Maintenance)
-    if (isMaintenance && !isOwner) {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <h3 style="color:var(--danger);">Fitur Maintenance</h3>
-            <span class="desc-text">Fitur ini sedang dinonaktifkan sementara oleh Owner.</span>
-            <button class="btn btn-primary" onclick="openTool('bug-wa')">Cek Ulang</button>
-        `;
-        return;
-    }
-
-    // 2. Kalau Owner jadihin fitur ini VIP Only, dan user bukan VIP
-    if (isVipOnly && !isVipValid && !isOwner) {
-        modalContent.innerHTML = `
-            ${closeSvg}
-            <div style="text-align:center; padding: 20px 0;">
-                <h3 style="font-size: 22px; color: var(--danger); margin-bottom: 10px;">Akses VIP Terkunci</h3>
-                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 25px;">Fitur ini dijadikan VIP Only oleh Owner.</p>
-                <button class="btn btn-primary" onclick="openTool('vip')">Lihat Paket VIP</button>
-            </div>
-        `;
-        return;
-    }
-
-    // 3. Tampilkan UI Tool
-    modalContent.innerHTML = `
-        ${closeSvg}
-        <h3 style="color:var(--danger);">☠️ WA Bug Exploit</h3>
-        <span class="desc-text">Gunakan dengan risiko sendiri.</span>
-
-        <div style="text-align:left; font-size:12px; background:rgba(255, 61, 110, 0.1); padding:12px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--danger); color:var(--text-secondary);">
-            <b>Note:</b> Proses mungkin memakan waktu 30-60 detik (membangunkan server). Jangan tutup modal ini!
-        </div>
-
-        <select id="bug-action" style="width:100%; padding:12px; margin-bottom:15px; background:var(--bg-base); color:white; border:1px solid var(--border-color); border-radius:var(--radius-sm);">
-            <option value="freeze_droid">Freeze Android</option>
-            <option value="crash_ios">Crash iOS</option>
-            <option value="spam_call">Spam Call</option>
-            <option value="crash_group">Crash Group</option>
-        </select>
-
-        <input type="text" id="bug-target" placeholder="No. WA (628xxx) / Link Grup (chat.whatsapp.com/...)" inputmode="text">
-
-        <button class="btn btn-primary" id="btn-exec-bug" style="background:var(--danger); color:white; border:none; margin-top:10px;">Luncurkan Serangan</button>
-
-        <div id="bug-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
-    `;
-
-    const btnExec = document.getElementById('btn-exec-bug');
-    
-    btnExec.onclick = async () => {
-        const action = document.getElementById('bug-action').value;
-        const target = document.getElementById('bug-target').value.trim();
-        const box = document.getElementById('bug-res');
-
-        if (!target) return showToast('Masukkan target!');
-
-        setBtnLoading(btnExec, true, 'Menyerang...');
-        box.style.display = 'block';
-        box.innerHTML = '<div class="loader"></div><p style="font-size:12px; margin-top:10px; color:var(--text-secondary);">Membangunkan server...</p>';
-
-        try {
-            const res = await fetch(`${SUPA_URL}/functions/v1/zen-bug-wa`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: action, target: target })
-            });
-            const data = await res.json();
-
-            if (!data.status) throw new Error(data.error);
-
-            box.innerHTML = `<p class="success-msg" style="font-size:13px;">Serangan Terkirim!<br><span style="font-size:11px; font-weight:normal;">Respon: ${escapeHTML(data.message)}</span></p>`;
-            showToast('Bug berhasil dikirim ke target!');
-        } catch (e) {
-            box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
-        }
-        setBtnLoading(btnExec, false, 'Luncurkan Serangan');
-    };
-}
         else {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -3679,7 +3523,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             box.innerHTML = html;
-            window.scrollTo({ top: 0, behavior: 'auto' });
+
+            const scrollContainer = document.querySelector('.bottom-sheet-content');
+            if (scrollContainer) scrollContainer.scrollTop = 0;
 
             box.querySelector('.btn-back-reader').addEventListener('click', () => openTool('komik'));
             box.querySelector('.btn-daftar-reader').addEventListener('click', () => openTool('komik'));
