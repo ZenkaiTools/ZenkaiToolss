@@ -2127,113 +2127,121 @@ if (ms) {
     };
 }
         else if (tool === 'ailivephoto') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>AI Live Photo</h3>
-                <span class="desc-text">Ubah foto diam menjadi video (Live Photo).</span>
-                
-                <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
-                    <b style="color:var(--text-primary);">Tutorial:</b><br>
-                    1. Pilih foto yang mau digerakkan.<br>
-                    2. Pilih efek gerakan.<br>
-                    3. Klik <b>Generate Video</b> dan tunggu.
-                </div>
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <h3>AI Live Photo</h3>
+        <span class="desc-text">Ubah foto diam menjadi video (Live Photo).</span>
+        <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+            <b style="color:var(--text-primary);">Tutorial:</b><br>
+            1. Pilih foto yang mau digerakkan.<br>
+            2. Pilih efek gerakan.<br>
+            3. Klik <b>Generate Video</b> dan tunggu.
+        </div>
+        <input type="file" id="lp-file" accept="image/*" style="display:none;" onchange="document.getElementById('lp-file-label').innerText = this.files[0] ? this.files[0].name : 'Pilih Gambar...';">
+        <button onclick="document.getElementById('lp-file').click()" class="btn btn-ghost" style="width:100%; border-style:dashed; height:60px; flex-direction:column; gap:5px; margin-bottom:15px;">
+            <span id="lp-file-label" style="font-size:13px; font-weight:normal;">Pilih Gambar...</span>
+        </button>
+        <select id="lp-motion" style="margin-bottom:15px;">
+            <option value="portrait">Portrait (Wajah)</option>
+            <option value="natural">Natural</option>
+            <option value="cinematic">Cinematic</option>
+            <option value="anime">Anime</option>
+            <option value="landscape">Landscape</option>
+        </select>
+        <button class="btn btn-primary" id="btn-lp">Generate Video</button>
+        <div id="lp-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+    `;
+    const btn = document.getElementById('btn-lp');
+    btn.onclick = async () => {
+        const file = document.getElementById('lp-file').files[0];
+        const motion = document.getElementById('lp-motion').value;
+        const box = document.getElementById('lp-res');
+        if (!file) return showToast('Pilih gambar dulu!');
+        setBtnLoading(btn, true, 'Memproses...');
+        box.style.display = 'block';
+        box.innerHTML = '<div class="loader"></div>';
 
-                <input type="file" id="lp-file" accept="image/*" style="display:none;" onchange="document.getElementById('lp-file-label').innerText = this.files[0] ? this.files[0].name : 'Pilih Gambar...';">
-                <button onclick="document.getElementById('lp-file').click()" class="btn btn-ghost" style="width:100%; border-style:dashed; height:60px; flex-direction:column; gap:5px; margin-bottom:15px;">
-                    <span id="lp-file-label" style="font-size:13px; font-weight:normal;">Pilih Gambar...</span>
-                </button>
-                
-                <select id="lp-motion" style="margin-bottom:15px;">
-                    <option value="portrait">Portrait (Wajah)</option>
-                    <option value="natural">Natural</option>
-                    <option value="cinematic">Cinematic</option>
-                    <option value="anime">Anime</option>
-                    <option value="landscape">Landscape</option>
-                </select>
-                <button class="btn btn-primary" id="btn-lp">Generate Video</button>
-                <div id="lp-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+        // Ubah file ke Base64 dulu
+        const base64Data = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(file);
+        });
+
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'livephoto', image_base64: base64Data, motion: motion })
+            });
+            const data = await res.json();
+            if (!data.status && !data.media) throw new Error(data.message || 'Gagal generate video');
+            const vidUrl = data.url || data.data?.url || data.blobUrl;
+            if (!vidUrl) throw new Error('Link video tidak ditemukan');
+            box.innerHTML = `
+                <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Video Berhasil Dibuat</p>
+                <video src="${escapeHTML(vidUrl)}" controls style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px;"></video>
+                <a href="${escapeHTML(vidUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
             `;
-            const btn = document.getElementById('btn-lp');
-            btn.onclick = async () => {
-                const file = document.getElementById('lp-file').files[0];
-                const motion = document.getElementById('lp-motion').value;
-                const box = document.getElementById('lp-res');
-                if (!file) return showToast('Pilih gambar dulu!');
-                setBtnLoading(btn, true, 'Memproses...');
-                box.style.display = 'block';
-                box.innerHTML = '<div class="loader"></div>';
-                try {
-                    const formData = new FormData();
-                    formData.append('action', 'livephoto');
-                    formData.append('file', file);
-                    formData.append('motion', motion);
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, { method: 'POST', body: formData });
-                    const data = await res.json();
-                    if (!data.media && !data.status) throw new Error(data.message || 'Gagal generate video');
-                    const vidUrl = data.data?.url || data.url || data.blobUrl || data.result?.url || data.data?.blobUrl; 
-                    if (!vidUrl) throw new Error('Link video tidak ditemukan');
-                    box.innerHTML = `
-                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Video Berhasil Dibuat</p>
-                        <video src="${escapeHTML(vidUrl)}" controls style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px;"></video>
-                        <a href="${escapeHTML(vidUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
-                    `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-                setBtnLoading(btn, false, 'Generate Video');
-            };
-        }
+        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+        setBtnLoading(btn, false, 'Generate Video');
+    };
+}
         else if (tool === 'aitocartoon') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>AI To Cartoon</h3>
-                <span class="desc-text">Ubah fotomu menjadi bergaya kartun.</span>
-                
-                <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
-                    <b style="color:var(--text-primary);">Tutorial:</b><br>
-                    1. Pilih foto yang mau diubah.<br>
-                    2. Pilih gaya (Cartoon / Anime).<br>
-                    3. Klik <b>Proses Kartun</b> dan tunggu hasilnya.
-                </div>
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <h3>AI To Cartoon</h3>
+        <span class="desc-text">Ubah fotomu menjadi bergaya kartun.</span>
+        <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+            <b style="color:var(--text-primary);">Tutorial:</b><br>
+            1. Pilih foto yang mau diubah.<br>
+            2. Pilih gaya (Cartoon / Anime).<br>
+            3. Klik <b>Proses Kartun</b> dan tunggu hasilnya.
+        </div>
+        <input type="file" id="cart-file" accept="image/*" style="display:none;" onchange="document.getElementById('cart-file-label').innerText = this.files[0] ? this.files[0].name : 'Pilih Gambar...';">
+        <button onclick="document.getElementById('cart-file').click()" class="btn btn-ghost" style="width:100%; border-style:dashed; height:60px; flex-direction:column; gap:5px; margin-bottom:15px;">
+            <span id="cart-file-label" style="font-size:13px; font-weight:normal;">Pilih Gambar...</span>
+        </button>
+        <select id="cart-style" style="margin-bottom:15px;">
+            <option value="cartoon">Cartoon</option>
+            <option value="anime">Anime</option>
+        </select>
+        <button class="btn btn-primary" id="btn-cart">Proses Kartun</button>
+        <div id="cart-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+    `;
+    const btn = document.getElementById('btn-cart');
+    btn.onclick = async () => {
+        const file = document.getElementById('cart-file').files[0];
+        const style = document.getElementById('cart-style').value;
+        const box = document.getElementById('cart-res');
+        if (!file) return showToast('Pilih gambar dulu!');
+        setBtnLoading(btn, true, 'Memproses...');
+        box.style.display = 'block';
+        box.innerHTML = '<div class="loader"></div>';
 
-                <input type="file" id="cart-file" accept="image/*" style="display:none;" onchange="document.getElementById('cart-file-label').innerText = this.files[0] ? this.files[0].name : 'Pilih Gambar...';">
-                <button onclick="document.getElementById('cart-file').click()" class="btn btn-ghost" style="width:100%; border-style:dashed; height:60px; flex-direction:column; gap:5px; margin-bottom:15px;">
-                    <span id="cart-file-label" style="font-size:13px; font-weight:normal;">Pilih Gambar...</span>
-                </button>
-                <select id="cart-style" style="margin-bottom:15px;">
-                    <option value="cartoon">Cartoon</option>
-                    <option value="anime">Anime</option>
-                </select>
-                <button class="btn btn-primary" id="btn-cart">Proses Kartun</button>
-                <div id="cart-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+        const base64Data = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(file);
+        });
+
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'tocartoon', image_base64: base64Data, style: style })
+            });
+            const data = await res.json();
+            if (!data.status && !data.media) throw new Error(data.message || 'Gagal');
+            const imgUrl = data.url || data.data?.url || data.blobUrl;
+            if (!imgUrl) throw new Error('Link gambar tidak ditemukan');
+            box.innerHTML = `
+                <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Gambar Berhasil Dibuat</p>
+                <img src="${escapeHTML(imgUrl)}" style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px;">
+                <a href="${escapeHTML(imgUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Gambar</a>
             `;
-            const btn = document.getElementById('btn-cart');
-            btn.onclick = async () => {
-                const file = document.getElementById('cart-file').files[0];
-                const style = document.getElementById('cart-style').value;
-                const box = document.getElementById('cart-res');
-                if (!file) return showToast('Pilih gambar dulu!');
-                setBtnLoading(btn, true, 'Memproses...');
-                box.style.display = 'block';
-                box.innerHTML = '<div class="loader"></div>';
-                try {
-                    const formData = new FormData();
-                    formData.append('action', 'tocartoon');
-                    formData.append('file', file);
-                    formData.append('style', style);
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, { method: 'POST', body: formData });
-                    const data = await res.json();
-                    if (!data.media && !data.status) throw new Error(data.message || 'Gagal');
-                    const imgUrl = data.data?.url || data.url || data.blobUrl || data.result?.url || data.data?.blobUrl;
-                    if (!imgUrl) throw new Error('Link gambar tidak ditemukan');
-                    box.innerHTML = `
-                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Gambar Berhasil Dibuat</p>
-                        <img src="${escapeHTML(imgUrl)}" style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px;">
-                        <a href="${escapeHTML(imgUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Gambar</a>
-                    `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-                setBtnLoading(btn, false, 'Proses Kartun');
-            };
-        }
+        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+        setBtnLoading(btn, false, 'Proses Kartun');
+    };
+}
         else if (tool === 'fakelobbyff') {
             modalContent.innerHTML = `
                 ${closeSvg}
