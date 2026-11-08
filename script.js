@@ -82,12 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.handleGoogleCredential = (response) => {
         const credential = response.credential;
         if (!turnstileToken) {
-            // Kalau token Cloudflare belum masuk (walau udah centang hijau)
             pendingGoogleCredential = credential;
             const statusEl = document.getElementById('login-status');
             if (statusEl) statusEl.innerText = 'Menunggu sistem Cloudflare memproses token...';
             
-            // Coba ambil token paksa dari widget Cloudflare
             if (window.turnstile) {
                 const widget = document.querySelector('.cf-turnstile');
                 if (widget) {
@@ -128,12 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 loginAt: Date.now()
             }));
 
+            updateLoginUI(); // <--- Langsung munculin foto profil
+
             if(statusEl) statusEl.innerText = 'Berhasil! Sebentar...';
             setTimeout(() => {
                 const gate = document.getElementById('login-gate');
                 if (gate) gate.remove();
                 document.body.style.overflow = '';
-                updateLoginUI();
                 showToast(`Selamat datang, ${data.user.name || data.user.email}!`);
                 setTimeout(showWaPopupOnce, 1500);
             }, 600);
@@ -162,35 +161,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateLoginUI() {
         const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
-        const btnVip = document.querySelector('.btn-vip');
-        if (!btnVip) return;
+        const container = document.getElementById('user-profile-container');
+        if (!container) return;
 
-        let loginBtn = document.getElementById('btn-login-header');
         if (user) {
-            if (loginBtn) loginBtn.remove();
-            if (!document.getElementById('header-avatar')) {
-                const img = document.createElement('img');
-                img.id = 'header-avatar';
-                img.src = user.picture || '';
-                img.title = user.email + ' (klik untuk logout)';
-                img.style.cssText = 'width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);cursor:pointer;margin-right:8px;object-fit:cover;';
-                img.onclick = () => {
-                    if (confirm(`Logout dari ${user.email}?`)) {
-                        localStorage.removeItem('zenkai_user');
-                        location.reload();
-                    }
-                };
-                btnVip.parentNode.insertBefore(img, btnVip);
-            }
-        } else if (!loginBtn) {
-            loginBtn = document.createElement('button');
-            loginBtn.id = 'btn-login-header';
-            loginBtn.className = 'btn-vip';
-            loginBtn.innerText = 'Masuk';
-            loginBtn.onclick = () => location.reload();
-            btnVip.parentNode.insertBefore(loginBtn, btnVip);
+            container.innerHTML = `
+                <img src="${user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'U')}" 
+                     title="Buka Profil"
+                     onclick="bukaProfil()"
+                     style="width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--accent); cursor: pointer; object-fit: cover;">
+            `;
+        } else {
+            container.innerHTML = '';
         }
     }
+
+    window.bukaProfil = () => {
+        const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
+        if (!user) return;
+
+        const modal = document.getElementById('tool-modal');
+        const modalContent = document.getElementById('modal-content');
+
+        modalContent.innerHTML = `
+            ${closeSvg}
+            <div style="text-align: center; padding: 10px 0;">
+                <img src="${user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'U')}" 
+                     style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); margin-bottom: 15px; object-fit: cover;">
+                
+                <h3 style="font-size: 20px; margin-bottom: 5px;">${escapeHTML(user.name || 'Pengguna')}</h3>
+                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 25px;">${escapeHTML(user.email)}</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button onclick="window.closeModal(); openTool('vip')" class="btn btn-primary" style="margin-bottom: 0;">Cek Status VIP</button>
+                    <button onclick="logoutUser()" class="btn btn-ghost" style="color: var(--danger); border-color: var(--danger); margin-bottom: 0;">Logout Akun</button>
+                </div>
+            </div>
+        `;
+        
+        modal.classList.add('active');
+    };
+
+    window.logoutUser = () => {
+        if (confirm("Yakin mau logout dari akun ini?")) {
+            localStorage.removeItem('zenkai_user');
+            window.closeModal();
+            location.reload();
+        }
+    };
 
     function tampilkanLoginGate() {
         const gate = document.getElementById('login-gate');
@@ -530,7 +548,7 @@ if (!ALLOWED.includes(pageId)) return;
 
         if (setting.is_maintenance && !isOwner) {
             const ms = document.getElementById('maintenance-screen');
-            if (ms) ms.style.display = 'flex';
+            if (ms) ms.style.setProperty('display', 'flex', 'important'); // Paksa munculin
         } else {
             const ms = document.getElementById('maintenance-screen');
             if (ms) ms.style.display = 'none';
