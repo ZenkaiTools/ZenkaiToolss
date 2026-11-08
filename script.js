@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
             b.style.color = btn.type === 'primary' ? 'var(--accent-ink)' : 'var(--text-primary)';
             b.style.border = btn.type === 'primary' ? 'none' : '1px solid var(--border-strong)';
             b.addEventListener('click', () => {
-                // Action string dipertahankan agar kompatibel
                 try { (new Function(btn.action))(); } catch (e) { console.error(e); }
             });
             btnContainer.appendChild(b);
@@ -60,18 +59,153 @@ document.addEventListener('DOMContentLoaded', () => {
         alertEl.style.display = 'flex';
     };
 
-    /* === 4. Splash gate === */
+    /* === 4. Splash gate & LOGIN GATE === */
     const welcomeVideo = document.getElementById('welcome-video');
     const authGate = document.getElementById('auth-gate');
+
+    let turnstileToken = null;
+    let pendingGoogleCredential = null;
+
+    window.onTurnstileSuccess = (token) => {
+        turnstileToken = token;
+        if (pendingGoogleCredential) {
+            kirimLogin(pendingGoogleCredential);
+            pendingGoogleCredential = null;
+        }
+    };
+    window.onTurnstileExpired = () => { turnstileToken = null; };
+    window.onTurnstileError = () => {
+        const el = document.getElementById('login-status');
+        if (el) el.innerText = 'Verifikasi gagal dimuat. Refresh halaman.';
+    };
+
+    window.handleGoogleCredential = (response) => {
+        const credential = response.credential;
+        if (!turnstileToken) {
+            pendingGoogleCredential = credential;
+            const statusEl = document.getElementById('login-status');
+            if (statusEl) statusEl.innerText = 'Selesaikan verifikasi keamanan dulu...';
+            return;
+        }
+        kirimLogin(credential);
+    };
+
+    async function kirimLogin(googleJwt) {
+        const statusEl = document.getElementById('login-status');
+        if(statusEl) statusEl.innerText = 'Memverifikasi akun...';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    credential: googleJwt,
+                    turnstile_token: turnstileToken
+                })
+            });
+            const data = await res.json();
+            if (!data.status) throw new Error(data.message || 'Login gagal');
+
+            localStorage.setItem('zenkai_user', JSON.stringify({
+                email: data.user.email,
+                name: data.user.name,
+                picture: data.user.picture,
+                sub: data.user.sub,
+                loginAt: Date.now()
+            }));
+
+            if(statusEl) statusEl.innerText = 'Berhasil! Sebentar...';
+            setTimeout(() => {
+                const gate = document.getElementById('login-gate');
+                if (gate) gate.remove();
+                document.body.style.overflow = '';
+                updateLoginUI();
+                showToast(`Selamat datang, ${data.user.name || data.user.email}!`);
+                setTimeout(showWaPopupOnce, 1500);
+            }, 600);
+        } catch (e) {
+            if(statusEl) statusEl.innerText = 'Gagal: ' + e.message;
+            if (window.turnstile) window.turnstile.reset();
+            turnstileToken = null;
+        }
+    }
+
+    function renderGoogleButton() {
+        if (!window.google?.accounts?.id) {
+            setTimeout(renderGoogleButton, 300);
+            return;
+        }
+        google.accounts.id.initialize({
+            client_id: '1038480550156-ol0s4bpdn10i5gl5kgvn385491j8p589.apps.googleusercontent.com', // Client ID kamu
+            callback: window.handleGoogleCredential,
+            auto_select: false
+        });
+        google.accounts.id.renderButton(
+            document.getElementById('google-btn-container'),
+            { theme: 'filled_black', size: 'large', width: 300, text: 'signin_with', shape: 'pill' }
+        );
+    }
+
+    function updateLoginUI() {
+        const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
+        const btnVip = document.querySelector('.btn-vip');
+        if (!btnVip) return;
+
+        let loginBtn = document.getElementById('btn-login-header');
+        if (user) {
+            if (loginBtn) loginBtn.remove();
+            if (!document.getElementById('header-avatar')) {
+                const img = document.createElement('img');
+                img.id = 'header-avatar';
+                img.src = user.picture || '';
+                img.title = user.email + ' (klik untuk logout)';
+                img.style.cssText = 'width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);cursor:pointer;margin-right:8px;object-fit:cover;';
+                img.onclick = () => {
+                    if (confirm(`Logout dari ${user.email}?`)) {
+                        localStorage.removeItem('zenkai_user');
+                        location.reload();
+                    }
+                };
+                btnVip.parentNode.insertBefore(img, btnVip);
+            }
+        } else if (!loginBtn) {
+            loginBtn = document.createElement('button');
+            loginBtn.id = 'btn-login-header';
+            loginBtn.className = 'btn-vip';
+            loginBtn.innerText = 'Masuk';
+            loginBtn.onclick = () => location.reload();
+            btnVip.parentNode.insertBefore(loginBtn, btnVip);
+        }
+    }
+
+    function tampilkanLoginGate() {
+        const gate = document.getElementById('login-gate');
+        if (!gate) return;
+
+        const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
+        if (user && user.email) {
+            gate.remove();
+            updateLoginUI();
+            setTimeout(showWaPopupOnce, 1500);
+            return;
+        }
+
+        gate.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        renderGoogleButton();
+    }
 
     window.masukKeWeb = () => {
         if (welcomeVideo) { welcomeVideo.pause(); welcomeVideo.muted = true; }
         if (authGate) {
             authGate.style.opacity = '0';
             authGate.style.transition = 'opacity 300ms ease';
-            setTimeout(() => { authGate.style.display = 'none'; authGate.remove(); document.body.style.overflow = ''; }, 300);
+            setTimeout(() => {
+                authGate.style.display = 'none';
+                authGate.remove();
+                document.body.style.overflow = '';
+                tampilkanLoginGate();
+            }, 300);
         }
-        setTimeout(showWaPopupOnce, 1500);
     };
 
     window.aktifkanSuara = () => {
@@ -89,6 +223,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeWaPopup = () => { if (waPopup) waPopup.classList.remove('active'); };
     function showWaPopupOnce() { if (waPopup) waPopup.classList.add('active'); }
     if (waPopup) waPopup.addEventListener('click', (e) => { if (e.target.id === 'wa-popup') window.closeWaPopup(); });
+
+    // Panggil updateLoginUI saat start
+    updateLoginUI();
 
     /* === 5. Tema & volume === */
     const savedTheme = localStorage.getItem('zenkai_theme') || 'cyber';

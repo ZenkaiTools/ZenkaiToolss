@@ -31,6 +31,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 
+    <!-- Script Resmi Google & Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <link rel="stylesheet" href="style.css">
 
     <script type="application/ld+json">
@@ -82,6 +86,68 @@
                 <button onclick="aktifkanSuara()" id="btn-unmute" class="btn btn-ghost">Nyalakan Suara</button>
                 <button onclick="masukKeWeb()" class="btn btn-ghost splash-skip">Lewati</button>
             </div>
+        </div>
+    </div>
+
+    <!-- LOGIN GATE -->
+    <div id="login-gate" class="login-gate" style="display:none;">
+        <div class="login-gate-card">
+
+            <div class="login-gate-logo">
+                <div class="logo-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+                <div>
+                    <p class="logo-title">Zenkai Tools</p>
+                    <span class="login-gate-sub">Akses Terverifikasi</span>
+                </div>
+            </div>
+
+            <h1 class="login-gate-title">Sebelum Masuk, Verifikasi Dulu</h1>
+
+            <div class="login-gate-text">
+                <p>Masuk dengan <b>Login Resmi Google</b> — sistem autentikasi asli dari Google (Google Identity Services), bukan login buatan kami.</p>
+
+                <p>Kami tahu Zenkai Tools masih terbilang baru, dan <b>wajar kalau kamu belum sepenuhnya percaya</b>. Karena itu kami pakai login resmi Google — supaya kamu bisa lihat sendiri bahwa password kamu tidak pernah lewat tangan kami.</p>
+
+                <p>Kalau masih ragu, <b>silakan pakai akun Gmail kecil / akun cadangan</b> kamu. Tidak masalah sama sekali. Yang penting kamu bisa masuk dan pakai tool-nya.</p>
+
+                <ul class="login-gate-list">
+                    <li>Password Google kamu <b>tidak pernah</b> melewati server Zenkai.</li>
+                    <li>Kami hanya menerima <b>email</b> dan <b>nama tampilan</b> dari Google.</li>
+                    <li>Tanpa password baru, tanpa OTP, tanpa email verifikasi.</li>
+                </ul>
+
+                <p>Ditambah lagi, kami pasang <b>Cloudflare Turnstile</b> — verifikasi keamanan yang sama dipakai jutaan situs besar di dunia, untuk memastikan yang masuk benar-benar manusia, bukan bot.</p>
+
+                <p class="login-gate-trust">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-3px;margin-right:4px;">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Login Resmi dari <b>Google</b> &amp; <b>Cloudflare</b> — standar keamanan global.
+                </p>
+
+                <p class="login-gate-note">
+                    <b>Catatan:</b> Login cukup <b>sekali per perangkat</b>. Setelah masuk, kamu bebas pakai semua tool tanpa login ulang. Kalau mau logout, klik avatar di pojok kanan atas.
+                </p>
+            </div>
+
+            <div class="login-gate-turnstile">
+                <div class="cf-turnstile"
+                     data-sitekey="0x4AAAAAAF4cYQJ-uGK_l4B2"
+                     data-theme="dark"
+                     data-callback="onTurnstileSuccess"
+                     data-expired-callback="onTurnstileExpired"
+                     data-error-callback="onTurnstileError"></div>
+            </div>
+
+            <div id="google-btn-container" class="login-gate-google"></div>
+
+            <div id="login-status" class="login-gate-status"></div>
+
+            <p class="login-gate-footer">
+                Dengan masuk, kamu setuju pada
+                <a href="#" onclick="switchPage('syarat', null); return false;">Syarat</a> dan
+                <a href="#" onclick="switchPage('privasi', null); return false;">Kebijakan Privasi</a>.
+            </p>
         </div>
     </div>
 
@@ -533,7 +599,7 @@
                 <li>Saluran: <a href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer">Saluran WhatsApp</a></li>
             </ul>
             <h3>Waktu respons</h3>
-            <p>Biasanya dibalas dalam 1�2 hari kerja. Sertakan screenshot dan langkah reproduksi bug agar lebih cepat ditangani.</p>
+            <p>Biasanya dibalas dalam 1–2 hari kerja. Sertakan screenshot dan langkah reproduksi bug agar lebih cepat ditangani.</p>
         </div>
     </main>
 
