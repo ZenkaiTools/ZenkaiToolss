@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 loginAt: Date.now()
             }));
 
-            updateLoginUI(); // <--- Langsung munculin foto profil
+            updateLoginUI();
 
             if(statusEl) statusEl.innerText = 'Berhasil! Sebentar...';
             setTimeout(() => {
@@ -549,7 +549,6 @@ if (!ALLOWED.includes(pageId)) return;
         const ms = document.getElementById('maintenance-screen');
 if (ms) {
     if (setting.is_maintenance && !isOwner) {
-        // Tampilkan layar maintenance dan isi teksnya
         ms.innerHTML = `
             <div class="maintenance-content">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="icon-lg" aria-hidden="true"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
@@ -557,11 +556,10 @@ if (ms) {
                 <p>Sistem sedang diperbarui. Silakan kembali beberapa saat lagi.</p>
             </div>
         `;
-        ms.style.setProperty('display', 'flex', 'important'); // Paksa muncul
+        ms.style.setProperty('display', 'flex', 'important');
     } else {
-        // Sembunyikan dan kosongkan layar maintenance
         ms.innerHTML = ''; 
-        ms.style.setProperty('display', 'none', 'important'); // Paksa sembunyi
+        ms.style.setProperty('display', 'none', 'important');
     }
 }
 
@@ -1034,7 +1032,6 @@ if (ms) {
             return;
         }
 
-        /* ---- Alat-alat ---- */
         if (tool === 'support') {
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1128,7 +1125,6 @@ if (ms) {
             };
         }
         else if (tool === 'ai-chat') {
-            /* ... (kode asli dipertahankan penuh, identik dengan versi sebelumnya) ... */
             const limit = window.geminiLimit || 1;
             modalContent.innerHTML = `
                 ${closeSvg}
@@ -1347,7 +1343,6 @@ if (ms) {
             };
         }
         else if (tool === 'netflix') {
-            /* identik dengan versi asli */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Netflix Generator</h3>
@@ -1403,7 +1398,6 @@ if (ms) {
             };
         }
         else if (tool === 'webbuilder') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>WebBuilder</h3>
@@ -1482,7 +1476,6 @@ if (ms) {
             };
         }
         else if (tool === 'cfsource') {
-            /* identik, escapeHTML sudah diterapkan */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>CF-Source Scraper</h3>
@@ -1532,7 +1525,6 @@ if (ms) {
             };
         }
         else if (tool === 'fakedana') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Fake Saldo DANA</h3>
@@ -1574,7 +1566,6 @@ if (ms) {
             };
         }
         else if (tool === 'cinema') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Zenkai Cinema</h3>
@@ -1741,7 +1732,6 @@ if (ms) {
             loadCinemaHome();
         }
         else if (tool === 'vidgen') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>AI Video Generator</h3>
@@ -1786,7 +1776,6 @@ if (ms) {
             };
         }
         else if (tool === 'terabox') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Terabox Downloader</h3>
@@ -1852,7 +1841,6 @@ if (ms) {
             };
         }
         else if (tool === 'linkvertise') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Bypass Link</h3>
@@ -1899,7 +1887,6 @@ if (ms) {
             };
         }
         else if (tool === 'artinama') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Arti Nama</h3>
@@ -1935,7 +1922,6 @@ if (ms) {
             };
         }
         else if (tool === 'youtube') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>YouTube Downloader</h3>
@@ -1994,8 +1980,419 @@ if (ms) {
                 setBtnLoading(btn, false, 'Proses');
             };
         }
+        else if (tool === 'aimusic') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>AI Music Generator</h3>
+                <span class="desc-text">Buat lagu AI dengan vokal & lirik.</span>
+                
+                <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+                    <b style="color:var(--text-primary);">Tutorial:</b><br>
+                    1. Isi tema lagu, genre, dan judul.<br>
+                    2. Klik <b>Generate Lagu</b>.<br>
+                    3. Tunggu sampai muncul <b>Task ID</b>.<br>
+                    4. Salin Task ID, lalu paste ke kolom <b>Cek Status</b>.<br>
+                    5. Klik <b>Cek Status Lagu</b>. Audio akan muncul jika sudah jadi.
+                </div>
+                
+                <div id="music-form">
+                    <label class="own-label">Prompt / Tema Lagu</label>
+                    <textarea id="music-prompt" rows="2" placeholder="Cth: Lagu pop ceria tentang persahabatan..."></textarea>
+                    <label class="own-label">Style / Genre</label>
+                    <input type="text" id="music-style" placeholder="Cth: Pop, Rock, EDM..." value="Pop">
+                    <label class="own-label">Judul (Opsional)</label>
+                    <input type="text" id="music-title" placeholder="Judul lagu...">
+                    <label style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); cursor:pointer; margin-bottom:15px;">
+                        <span style="font-size:14px;">Hanya Instrumen</span>
+                        <input type="checkbox" id="music-instrumental" style="width:18px; height:18px; accent-color:var(--accent);">
+                    </label>
+                    <button class="btn btn-primary" id="btn-gen-music">Generate Lagu</button>
+                </div>
+                
+                <div id="music-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+                
+                <div id="music-status-area" style="display:none; margin-top:15px; border-top:1px dashed var(--border-color); padding-top:15px;">
+                    <label class="own-label">Cek Status (Task ID)</label>
+                    <input type="text" id="music-taskid-input" placeholder="Paste Task ID di sini...">
+                    <button class="btn btn-ghost" id="btn-check-music">Cek Status Lagu</button>
+                    <div id="music-status-res" style="margin-top:15px; text-align:center;"></div>
+                </div>
+            `;
+            const btnGen = document.getElementById('btn-gen-music');
+            const btnCheck = document.getElementById('btn-check-music');
+            const boxRes = document.getElementById('music-res');
+            const areaStatus = document.getElementById('music-status-area');
+            const boxStatus = document.getElementById('music-status-res');
+
+            btnGen.onclick = async () => {
+                const prompt = document.getElementById('music-prompt').value.trim();
+                const style = document.getElementById('music-style').value.trim();
+                const title = document.getElementById('music-title').value.trim();
+                const instrumental = document.getElementById('music-instrumental').checked;
+                if (!prompt) return showToast('Masukkan prompt lagu!');
+                if (!style) return showToast('Masukkan style/genre!');
+                
+                setBtnLoading(btnGen, true, 'Memproses...');
+                boxRes.style.display = 'block';
+                boxRes.innerHTML = '<div class="loader"></div><p style="font-size:13px; margin-top:10px;">Memasukkan ke antrean AI...</p>';
+                areaStatus.style.display = 'none';
+
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'music_gen', prompt, style, title, instrumental })
+                    });
+                    const data = await res.json();
+                    if (!data.status || !data.result || !data.result.task_id) throw new Error(data.message || 'Gagal generate');
+                    
+                    boxRes.innerHTML = `
+                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Berhasil Masuk Antrean!</p>
+                        <p style="font-size:13px; margin-bottom:5px;">Task ID kamu:</p>
+                        <div style="background:var(--bg-base); padding:10px; border-radius:var(--radius-sm); border:1px dashed var(--accent); font-family:monospace; font-size:14px; font-weight:bold; word-break:break-all; margin-bottom:10px;">${escapeHTML(data.result.task_id)}</div>
+                        <p style="font-size:12px; color:var(--text-secondary);">Salin Task ID di atas, lalu paste ke kolom di bawah.</p>
+                    `;
+                    areaStatus.style.display = 'block';
+                } catch (e) {
+                    boxRes.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btnGen, false, 'Generate Lagu');
+            };
+
+            btnCheck.onclick = async () => {
+                const taskId = document.getElementById('music-taskid-input').value.trim();
+                if (!taskId) return showToast('Paste Task ID dulu!');
+                
+                setBtnLoading(btnCheck, true, 'Mengecek...');
+                boxStatus.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'music_status', task_id: taskId })
+                    });
+                    const data = await res.json();
+                    if (!data.status || !data.result) throw new Error(data.message || 'Gagal cek status');
+                    
+                    const r = data.result;
+                    if (r.status_ai === 'SUCCESS') {
+                        boxStatus.innerHTML = `
+                            <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Lagu Berhasil Dibuat!</p>
+                            <img src="${escapeHTML(r.image)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:15px;">
+                            <h4 style="font-size:16px; margin-bottom:5px;">${escapeHTML(r.title)}</h4>
+                            <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Style: ${escapeHTML(r.style)}</p>
+                            <audio src="${escapeHTML(r.audio)}" controls style="width:100%; margin-bottom:15px;"></audio>
+                            <div style="text-align:left; background:var(--bg-base); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:15px; max-height:150px; overflow-y:auto;">
+                                <p style="font-size:12px; font-weight:bold; margin-bottom:5px;">Lirik:</p>
+                                <p style="font-size:12px; white-space:pre-wrap; color:var(--text-secondary); line-height:1.5;">${escapeHTML(r.lyrics || 'Instrumen')}</p>
+                            </div>
+                            <a href="${escapeHTML(r.audio)}" download="lagu-${Date.now()}.mp3" class="btn btn-primary" style="text-decoration:none;">Download MP3</a>
+                        `;
+                    } else {
+                        boxStatus.innerHTML = `
+                            <p style="color:var(--accent); font-weight:bold; margin-bottom:5px; font-size:14px;">Status: ${escapeHTML(r.status_ai)}</p>
+                            <p style="font-size:13px; color:var(--text-secondary);">${escapeHTML(r.message || 'Sedang diproses...')}</p>
+                        `;
+                    }
+                } catch (e) {
+                    boxStatus.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+                }
+                setBtnLoading(btnCheck, false, 'Cek Status Lagu');
+            };
+        }
+        else if (tool === 'ailivephoto') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>AI Live Photo</h3>
+                <span class="desc-text">Ubah foto diam menjadi video (Live Photo).</span>
+                
+                <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+                    <b style="color:var(--text-primary);">Tutorial:</b><br>
+                    1. Pilih foto yang mau digerakkan.<br>
+                    2. Pilih efek gerakan.<br>
+                    3. Klik <b>Generate Video</b> dan tunggu.
+                </div>
+
+                <input type="file" id="lp-file" accept="image/*" style="display:none;" onchange="document.getElementById('lp-file-label').innerText = this.files[0] ? this.files[0].name : 'Pilih Gambar...';">
+                <button onclick="document.getElementById('lp-file').click()" class="btn btn-ghost" style="width:100%; border-style:dashed; height:60px; flex-direction:column; gap:5px; margin-bottom:15px;">
+                    <span id="lp-file-label" style="font-size:13px; font-weight:normal;">Pilih Gambar...</span>
+                </button>
+                
+                <select id="lp-motion" style="margin-bottom:15px;">
+                    <option value="portrait">Portrait (Wajah)</option>
+                    <option value="natural">Natural</option>
+                    <option value="cinematic">Cinematic</option>
+                    <option value="anime">Anime</option>
+                    <option value="landscape">Landscape</option>
+                </select>
+                <button class="btn btn-primary" id="btn-lp">Generate Video</button>
+                <div id="lp-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-lp');
+            btn.onclick = async () => {
+                const file = document.getElementById('lp-file').files[0];
+                const motion = document.getElementById('lp-motion').value;
+                const box = document.getElementById('lp-res');
+                if (!file) return showToast('Pilih gambar dulu!');
+                setBtnLoading(btn, true, 'Memproses...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const formData = new FormData();
+                    formData.append('action', 'livephoto');
+                    formData.append('file', file);
+                    formData.append('motion', motion);
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, { method: 'POST', body: formData });
+                    const data = await res.json();
+                    if (!data.media && !data.status) throw new Error(data.message || 'Gagal generate video');
+                    const vidUrl = data.data?.url || data.url || data.blobUrl || data.result?.url || data.data?.blobUrl; 
+                    if (!vidUrl) throw new Error('Link video tidak ditemukan');
+                    box.innerHTML = `
+                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Video Berhasil Dibuat</p>
+                        <video src="${escapeHTML(vidUrl)}" controls style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px;"></video>
+                        <a href="${escapeHTML(vidUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Generate Video');
+            };
+        }
+        else if (tool === 'aitocartoon') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>AI To Cartoon</h3>
+                <span class="desc-text">Ubah fotomu menjadi bergaya kartun.</span>
+                
+                <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+                    <b style="color:var(--text-primary);">Tutorial:</b><br>
+                    1. Pilih foto yang mau diubah.<br>
+                    2. Pilih gaya (Cartoon / Anime).<br>
+                    3. Klik <b>Proses Kartun</b> dan tunggu hasilnya.
+                </div>
+
+                <input type="file" id="cart-file" accept="image/*" style="display:none;" onchange="document.getElementById('cart-file-label').innerText = this.files[0] ? this.files[0].name : 'Pilih Gambar...';">
+                <button onclick="document.getElementById('cart-file').click()" class="btn btn-ghost" style="width:100%; border-style:dashed; height:60px; flex-direction:column; gap:5px; margin-bottom:15px;">
+                    <span id="cart-file-label" style="font-size:13px; font-weight:normal;">Pilih Gambar...</span>
+                </button>
+                <select id="cart-style" style="margin-bottom:15px;">
+                    <option value="cartoon">Cartoon</option>
+                    <option value="anime">Anime</option>
+                </select>
+                <button class="btn btn-primary" id="btn-cart">Proses Kartun</button>
+                <div id="cart-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-cart');
+            btn.onclick = async () => {
+                const file = document.getElementById('cart-file').files[0];
+                const style = document.getElementById('cart-style').value;
+                const box = document.getElementById('cart-res');
+                if (!file) return showToast('Pilih gambar dulu!');
+                setBtnLoading(btn, true, 'Memproses...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const formData = new FormData();
+                    formData.append('action', 'tocartoon');
+                    formData.append('file', file);
+                    formData.append('style', style);
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, { method: 'POST', body: formData });
+                    const data = await res.json();
+                    if (!data.media && !data.status) throw new Error(data.message || 'Gagal');
+                    const imgUrl = data.data?.url || data.url || data.blobUrl || data.result?.url || data.data?.blobUrl;
+                    if (!imgUrl) throw new Error('Link gambar tidak ditemukan');
+                    box.innerHTML = `
+                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Gambar Berhasil Dibuat</p>
+                        <img src="${escapeHTML(imgUrl)}" style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px;">
+                        <a href="${escapeHTML(imgUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Gambar</a>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Proses Kartun');
+            };
+        }
+        else if (tool === 'fakelobbyff') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Fake Lobby FF</h3>
+                <span class="desc-text">Bikin gambar prank Lobby Free Fire.</span>
+                
+                <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+                    <b style="color:var(--text-primary);">Tutorial:</b><br>
+                    1. Masukkan nama player (maks 15 huruf).<br>
+                    2. Klik <b>Generate Lobby</b>.<br>
+                    3. Gambar siap di-download.
+                </div>
+
+                <input type="text" id="ff-nama" placeholder="Masukkan nama player..." maxlength="15">
+                <button class="btn btn-primary" id="btn-ff">Generate Lobby</button>
+                <div id="ff-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-ff');
+            btn.onclick = async () => {
+                const nama = document.getElementById('ff-nama').value.trim();
+                const box = document.getElementById('ff-res');
+                if (!nama) return showToast('Masukkan nama player!');
+                setBtnLoading(btn, true, 'Memproses...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'fakelobbyff', nama })
+                    });
+                    const data = await res.json();
+                    if (!data.media && !data.status) throw new Error(data.message || 'Gagal');
+                    const imgUrl = data.data?.url || data.url || data.blobUrl || data.result?.url || data.data?.blobUrl;
+                    if (!imgUrl) throw new Error('Link gambar tidak ditemukan');
+                    box.innerHTML = `
+                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Lobby Berhasil Dibuat</p>
+                        <img src="${escapeHTML(imgUrl)}" style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px;">
+                        <a href="${escapeHTML(imgUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Gambar</a>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Generate Lobby');
+            };
+        }
+        else if (tool === 'buildmlbb') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Build MLBB</h3>
+                <span class="desc-text">Rekomendasi build item, spell, dan counter hero.</span>
+                
+                <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+                    <b style="color:var(--text-primary);">Tutorial:</b><br>
+                    1. Ketik nama hero (cth: layla, fanny).<br>
+                    2. Klik <b>Cari Build</b>.<br>
+                    3. Lihat rekomendasi item & counter.
+                </div>
+
+                <input type="text" id="mlbb-hero" placeholder="Nama hero...">
+                <button class="btn btn-primary" id="btn-mlbb">Cari Build</button>
+                <div id="mlbb-res" style="display:none; margin-top:15px; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-mlbb');
+            btn.onclick = async () => {
+                const hero = document.getElementById('mlbb-hero').value.trim();
+                const box = document.getElementById('mlbb-res');
+                if (!hero) return showToast('Masukkan nama hero!');
+                setBtnLoading(btn, true, 'Mencari...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'build_mlbb', hero })
+                    });
+                    const data = await res.json();
+                    if (!data.status || !data.result) throw new Error(data.message || 'Hero tidak ditemukan');
+                    const r = data.result;
+                    
+                    let itemsHtml = '';
+                    if (r.build && r.build.items) {
+                        r.build.items.forEach(item => {
+                            itemsHtml += `
+                                <div style="display:flex; flex-direction:column; align-items:center; width:50px;">
+                                    <img src="${escapeHTML(item.image)}" style="width:40px; height:40px; border-radius:6px; border:1px solid var(--border-color); margin-bottom:4px;">
+                                    <span style="font-size:9px; text-align:center; color:var(--text-secondary); line-height:1.1;">${escapeHTML(item.name)}</span>
+                                </div>
+                            `;
+                        });
+                    }
+                    let counterHtml = '';
+                    if (r.counter_heroes) {
+                        r.counter_heroes.forEach(c => {
+                            counterHtml += `
+                                <div style="display:flex; align-items:center; gap:10px; background:var(--bg-base); padding:8px; border-radius:6px; border:1px solid var(--border-color); margin-bottom:5px;">
+                                    <img src="${escapeHTML(c.hero_image)}" style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
+                                    <div style="flex:1;">
+                                        <p style="font-size:12px; font-weight:bold; margin:0;">${escapeHTML(c.hero_name)}</p>
+                                    </div>
+                                    <span style="font-size:11px; color:var(--danger); font-weight:bold;">Skor: ${escapeHTML(c.score)}</span>
+                                </div>
+                            `;
+                        });
+                    }
+                    box.innerHTML = `
+                        <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px; text-align:left;">
+                            <img src="${escapeHTML(r.hero_image)}" style="width:70px; height:70px; border-radius:10px; border:1px solid var(--border-color); object-fit:cover;">
+                            <div>
+                                <h4 style="font-size:18px; margin:0 0 4px 0;">${escapeHTML(r.hero_name)}</h4>
+                                <p style="font-size:11px; color:var(--accent); font-weight:bold; margin:0;">Tier ${escapeHTML(r.tier)} | ${escapeHTML(r.roles.join(', '))}</p>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align:left; background:var(--bg-base); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:15px;">
+                            <p style="font-size:12px; margin-bottom:8px;"><b>Spell:</b> ${escapeHTML(r.build.spell)}</p>
+                            <p style="font-size:12px; margin-bottom:8px;"><b>Emblem:</b> ${escapeHTML(r.build.emblem)}</p>
+                            <p style="font-size:12px; margin-bottom:8px;"><b>Item Build:</b></p>
+                            <div style="display:flex; gap:8px; flex-wrap:wrap;">${itemsHtml}</div>
+                        </div>
+
+                        <h4 style="text-align:left; font-size:14px; margin-bottom:10px;">Counter Hero:</h4>
+                        <div style="text-align:left;">${counterHtml}</div>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Cari Build');
+            };
+        }
+        else if (tool === 'ceksekolah') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>Cek Sekolah</h3>
+                <span class="desc-text">Cari data sekolah (Dapodik) & foto satelit.</span>
+                
+                <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+                    <b style="color:var(--text-primary);">Tutorial:</b><br>
+                    1. Masukkan nama sekolah atau NPSN.<br>
+                    2. Klik <b>Cari Sekolah</b>.<br>
+                    3. Lihat info lengkap & peta satelit.
+                </div>
+
+                <input type="text" id="skul-q" placeholder="Nama sekolah / wilayah...">
+                <input type="text" id="skul-npsn" placeholder="Atau masukkan NPSN (opsional)..." inputmode="numeric">
+                <button class="btn btn-primary" id="btn-skul">Cari Sekolah</button>
+                <div id="skul-res" style="display:none; margin-top:15px; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            const btn = document.getElementById('btn-skul');
+            btn.onclick = async () => {
+                const q = document.getElementById('skul-q').value.trim();
+                const npsn = document.getElementById('skul-npsn').value.trim();
+                const box = document.getElementById('skul-res');
+                if (!q && !npsn) return showToast('Masukkan nama sekolah atau NPSN!');
+                setBtnLoading(btn, true, 'Mencari...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'cek_sekolah', q, npsn })
+                    });
+                    const data = await res.json();
+                    if (!data.status || !data.result) throw new Error(data.message || 'Sekolah tidak ditemukan');
+                    const r = data.result;
+                    const id = r.identitas;
+
+                    box.innerHTML = `
+                        <div style="text-align:center; margin-bottom:15px;">
+                            <h4 style="font-size:18px; margin:0 0 5px 0;">${escapeHTML(id.nama)}</h4>
+                            <p style="font-size:12px; color:var(--accent); font-weight:bold; margin:0;">NPSN: ${escapeHTML(id.npsn)} | Akreditasi ${escapeHTML(id.akreditasi)}</p>
+                        </div>
+                        
+                        ${r.preview_gambar?.satelit_hd ? `<img src="${escapeHTML(r.preview_gambar.satelit_hd)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:15px;">` : ''}
+
+                        <div style="text-align:left; background:var(--bg-base); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:15px; font-size:13px; line-height:1.6;">
+                            <p style="margin-bottom:5px;"><b>Kepala Sekolah:</b> ${escapeHTML(r.kepala_sekolah.nama)}</p>
+                            <p style="margin-bottom:5px;"><b>Alamat:</b> ${escapeHTML(r.lokasi.alamat_jalan)}, ${escapeHTML(r.lokasi.desa_kelurahan)}, ${escapeHTML(r.lokasi.kecamatan)}, ${escapeHTML(r.lokasi.kabupaten_kota)}</p>
+                            <p style="margin-bottom:5px;"><b>Siswa:</b> ${Number(r.siswa.total_pd).toLocaleString('id-ID')} (L: ${r.siswa.laki_laki} | P: ${r.siswa.perempuan})</p>
+                            <p style="margin-bottom:5px;"><b>Guru:</b> ${r.ptk_dan_tendik.guru} | <b>Tenaga Kependidikan:</b> ${r.ptk_dan_tendik.tenaga_kependidikan}</p>
+                        </div>
+
+                        <div style="display:flex; gap:10px;">
+                            <a href="${escapeHTML(r.preview_gambar.google_maps)}" target="_blank" class="btn btn-ghost" style="flex:1; text-decoration:none; margin-bottom:0;">Buka Maps</a>
+                            <a href="${escapeHTML(r.preview_gambar.street_view)}" target="_blank" class="btn btn-primary" style="flex:1; text-decoration:none; margin-bottom:0;">Street View</a>
+                        </div>
+                    `;
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Cari Sekolah');
+            };
+        }
         else if (tool === 'komik') {
-            /* ---- (kode komik asli dipertahankan, hanya escapeHTML diperluas) ---- */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <div style="background:var(--bg-base); min-height: 100vh; padding-bottom: 20px;">
@@ -2291,7 +2688,6 @@ if (ms) {
             });
         }
         else if (tool === 'tiktok') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>TikTok DL</h3>
@@ -2343,7 +2739,6 @@ if (ms) {
             };
         }
         else if (tool === 'instagram') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Instagram DL</h3>
@@ -2388,7 +2783,6 @@ if (ms) {
             };
         }
         else if (tool === 'facebook') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Facebook DL</h3>
@@ -2421,7 +2815,6 @@ if (ms) {
             };
         }
         else if (tool === 'pinterest') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Pinterest DL</h3>
@@ -2504,7 +2897,6 @@ if (ms) {
             };
         }
         else if (tool === 'stalktt') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Stalk TikTok</h3>
@@ -2549,7 +2941,6 @@ if (ms) {
             };
         }
         else if (tool === 'stalkroblox') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Stalk Roblox</h3>
@@ -2594,7 +2985,6 @@ if (ms) {
             };
         }
         else if (tool === 'stalkmlbb') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Stalk MLBB</h3>
@@ -2635,7 +3025,6 @@ if (ms) {
             };
         }
         else if (tool === 'alightmotion') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Alight Motion</h3>
@@ -2702,7 +3091,6 @@ if (ms) {
             };
         }
         else if (tool === 'aiedit') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>AI Image Editor</h3>
@@ -2755,7 +3143,6 @@ if (ms) {
             };
         }
         else if (tool === 'notrack-chat') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>NoTrack AI</h3>
@@ -2815,7 +3202,6 @@ if (ms) {
             };
         }
         else if (tool === 'bug-wa') {
-            /* identik */
             const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
             const isMaintenance = (window.currentDisabledTools || []).includes('bug-wa');
             const isVipOnly = (window.currentVipTools || []).includes('bug-wa');
@@ -2868,7 +3254,6 @@ if (ms) {
             };
         }
         else if (tool === 'tempmail') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Temp Mail</h3>
@@ -2895,7 +3280,6 @@ if (ms) {
             };
         }
         else if (tool === 'nik') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>NIK Parser</h3>
@@ -2936,7 +3320,6 @@ if (ms) {
             };
         }
         else if (tool === 'spotify') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Spotify DL</h3>
@@ -2973,7 +3356,6 @@ if (ms) {
             };
         }
         else if (tool === 'iplookup') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>IP Lookup Pro</h3>
@@ -3011,7 +3393,6 @@ if (ms) {
             };
         }
         else if (tool === 'removebg') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Remove Background</h3>
@@ -3056,7 +3437,6 @@ if (ms) {
             };
         }
         else if (tool === 'qr') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>QR Code Generator</h3>
@@ -3082,7 +3462,6 @@ if (ms) {
             };
         }
         else if (tool === 'imgtojpg') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Konversi ke JPG</h3>
@@ -3127,7 +3506,6 @@ if (ms) {
             };
         }
         else if (tool === 'username') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Username Generator</h3>
@@ -3176,7 +3554,6 @@ if (ms) {
             };
         }
         else if (tool === 'password') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Password Generator</h3>
@@ -3221,7 +3598,6 @@ if (ms) {
             };
         }
         else if (tool === 'zodiak') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Cek Zodiak</h3>
@@ -3269,7 +3645,6 @@ if (ms) {
             };
         }
         else if (tool === 'base64') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Base64 Converter</h3>
@@ -3314,7 +3689,6 @@ if (ms) {
             };
         }
         else if (tool === 'umur') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>Hitung Umur</h3>
@@ -3364,7 +3738,6 @@ if (ms) {
             };
         }
         else if (tool === 'ai-image') {
-            /* identik */
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>AI Image Generator</h3>
@@ -3444,7 +3817,6 @@ if (ms) {
     };
 
     window.bacaKomik = async (title, slug) => {
-        /* identik */
         const box = document.getElementById('komik-res');
         if (!box) return;
         box.innerHTML = '<div class="loader"></div>';
