@@ -101,32 +101,34 @@
                 </div>
             </div>
 
-            <h1 class="login-gate-title">Sebelum Masuk, Verifikasi Dulu</h1>
+            <h1 class="login-gate-title">Selamat Datang di Zenkai</h1>
 
             <div class="login-gate-text">
-                <p>Masuk dengan <b>Login Resmi Google</b> — sistem autentikasi asli dari Google (Google Identity Services), bukan login buatan kami.</p>
+                <p>Kami sadar Zenkai Tools masih web baru, dan wajar banget kalau kamu ragu atau takut ini cuma link penipuan (phishing).</p>
 
-                <p>Kami tahu Zenkai Tools masih terbilang baru, dan <b>wajar kalau kamu belum sepenuhnya percaya</b>. Karena itu kami pakai login resmi Google — supaya kamu bisa lihat sendiri bahwa password kamu tidak pernah lewat tangan kami.</p>
+                <p>Tapi kami jamin <b>100% ini bukan phishing</b>. Kenapa? Karena <b>di web kami, kamu sama sekali tidak perlu mengetik password</b>.</p>
 
-                <p>Kalau masih ragu, <b>silakan pakai akun Gmail kecil / akun cadangan</b> kamu. Tidak masalah sama sekali. Yang penting kamu bisa masuk dan pakai tool-nya.</p>
-
+                <p>Sistem ini memakai <b>Login Resmi Google</b>. Cara kerjanya:</p>
+                
                 <ul class="login-gate-list">
-                    <li>Password Google kamu <b>tidak pernah</b> melewati server Zenkai.</li>
-                    <li>Kami hanya menerima <b>email</b> dan <b>nama tampilan</b> dari Google.</li>
-                    <li>Tanpa password baru, tanpa OTP, tanpa email verifikasi.</li>
+                    <li>Kamu cuma klik tombol Google di bawah.</li>
+                    <li>Kamu akan diarahkan ke halaman resmi Google (atau muncul pop-up Google asli).</li>
+                    <li>Kamu tinggal <b>pilih akun</b> dan klik izinkan.</li>
                 </ul>
 
-                <p>Ditambah lagi, kami pasang <b>Cloudflare Turnstile</b> — verifikasi keamanan yang sama dipakai jutaan situs besar di dunia, untuk memastikan yang masuk benar-benar manusia, bukan bot.</p>
+                <p>Password kamu hanya diketik (jika diminta) <b>di dalam sistem Google</b>, bukan di web kami. Server Zenkai tidak akan pernah melihat atau menyimpan passwordmu. Kami hanya menerima <b>email</b> dan <b>nama</b> kamu.</p>
+
+                <p><b>Masih ragu?</b> Silakan pakai <b>akun Gmail kecil / cadangan</b> kamu. Tidak masalah sama sekali. Yang penting kamu nyaman mencoba web ini.</p>
 
                 <p class="login-gate-trust">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-3px;margin-right:4px;">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     </svg>
-                    Login Resmi dari <b>Google</b> &amp; <b>Cloudflare</b> — standar keamanan global.
+                    Login Resmi &amp; Terenkripsi oleh <b>Google</b> &amp; <b>Cloudflare</b>.
                 </p>
 
                 <p class="login-gate-note">
-                    <b>Catatan:</b> Login cukup <b>sekali per perangkat</b>. Setelah masuk, kamu bebas pakai semua tool tanpa login ulang. Kalau mau logout, klik avatar di pojok kanan atas.
+                    <b>Privasi:</b> Login hanya butuh sekali per perangkat. Kami tidak pernah menyimpan password atau data sensitifmu.
                 </p>
             </div>
 
@@ -144,9 +146,9 @@
             <div id="login-status" class="login-gate-status"></div>
 
             <p class="login-gate-footer">
-                Dengan masuk, kamu setuju pada
-                <a href="#" onclick="switchPage('syarat', null); return false;">Syarat</a> dan
-                <a href="#" onclick="switchPage('privasi', null); return false;">Kebijakan Privasi</a>.
+                Dengan melanjutkan, kamu menyetujui
+                <a href="#" onclick="switchPage('syarat', null); return false;">Syarat Layanan</a> dan
+                <a href="#" onclick="switchPage('privasi', null); return false;">Kebijakan Privasi</a> kami.
             </p>
         </div>
     </div>
