@@ -149,7 +149,8 @@
         </div>
     </div>
 
-    <div id="maintenance-screen" class="maintenance-screen">
+    <!-- MAINTENANCE SCREEN (Disembunyikan dari bot/AI pakai display:none) -->
+    <div id="maintenance-screen" class="maintenance-screen" style="display: none !important;">
         <div class="maintenance-content">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="icon-lg" aria-hidden="true"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             <h2>Sedang Perawatan</h2>
@@ -196,10 +197,15 @@
                     <span>Tools v3.1</span>
                 </div>
             </div>
-            <button onclick="openTool('vip')" class="btn-vip">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                VIP
-            </button>
+            
+            <!-- WADAH PROFIL & TOMBOL VIP -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div id="user-profile-container"></div> 
+                <button onclick="openTool('vip')" class="btn-vip">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    VIP
+                </button>
+            </div>
         </header>
 
         <div class="hero-section">
