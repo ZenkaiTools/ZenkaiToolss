@@ -104,21 +104,17 @@
             <h1 class="login-gate-title">Selamat Datang di Zenkai</h1>
 
             <div class="login-gate-text">
-                <p>Kami sadar Zenkai Tools masih web baru, dan wajar banget kalau kamu ragu atau takut ini cuma link penipuan (phishing).</p>
+                <p>Untuk mencegah serangan bot dan menjaga kestabilan server, kami menerapkan verifikasi akses menggunakan <b>Login Resmi Google</b>.</p>
 
-                <p>Tapi kami jamin <b>100% ini bukan phishing</b>. Kenapa? Karena <b>di web kami, kamu sama sekali tidak perlu mengetik password</b>.</p>
+                <p><b>Kenapa ini 100% Aman?</b><br>Karena kamu <b>tidak perlu mengetik password di web ini</b>. Kamu hanya akan diarahkan ke jendela resmi Google untuk memilih akun.</p>
 
-                <p>Sistem ini memakai <b>Login Resmi Google</b>. Cara kerjanya:</p>
-                
                 <ul class="login-gate-list">
-                    <li>Kamu cuma klik tombol Google di bawah.</li>
-                    <li>Kamu akan diarahkan ke halaman resmi Google (atau muncul pop-up Google asli).</li>
-                    <li>Kamu tinggal <b>pilih akun</b> dan klik izinkan.</li>
+                    <li>Server Zenkai <b>tidak pernah</b> melihat passwordmu.</li>
+                    <li>Kami hanya menerima <b>email</b> dan <b>nama</b>.</li>
+                    <li>Bebas dari link phishing (penipuan).</li>
                 </ul>
 
-                <p>Password kamu hanya diketik (jika diminta) <b>di dalam sistem Google</b>, bukan di web kami. Server Zenkai tidak akan pernah melihat atau menyimpan passwordmu. Kami hanya menerima <b>email</b> dan <b>nama</b> kamu.</p>
-
-                <p><b>Masih ragu?</b> Silakan pakai <b>akun Gmail kecil / cadangan</b> kamu. Tidak masalah sama sekali. Yang penting kamu nyaman mencoba web ini.</p>
+                <p>Kalau kamu masih ragu karena web ini masih baru, silakan pakai <b>akun Gmail kecil / cadangan</b> kamu. Tidak masalah sama sekali.</p>
 
                 <p class="login-gate-trust">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-3px;margin-right:4px;">
@@ -128,7 +124,7 @@
                 </p>
 
                 <p class="login-gate-note">
-                    <b>Privasi:</b> Login hanya butuh sekali per perangkat. Kami tidak pernah menyimpan password atau data sensitifmu.
+                    <b>Privasi:</b> Login cukup sekali per perangkat. Kami tidak menyimpan data sensitif apa pun.
                 </p>
             </div>
 
@@ -147,8 +143,8 @@
 
             <p class="login-gate-footer">
                 Dengan melanjutkan, kamu menyetujui
-                <a href="#" onclick="switchPage('syarat', null); return false;">Syarat Layanan</a> dan
-                <a href="#" onclick="switchPage('privasi', null); return false;">Kebijakan Privasi</a> kami.
+                <a href="#" onclick="bukaHalamanDariLogin('syarat'); return false;">Syarat Layanan</a> dan
+                <a href="#" onclick="bukaHalamanDariLogin('privasi'); return false;">Kebijakan Privasi</a> kami.
             </p>
         </div>
     </div>
@@ -243,7 +239,7 @@
             <p>Semua kebutuhan download, cek, dan generate dalam satu tempat. Tanpa iklan pop-up.</p>
             <div class="stat-grid">
                 <div class="stat-item"><b id="total-tools-count">30+</b><span>Alat Aktif</span></div>
-                <div class="stat-item"><b id="stat-active-tools">-</b><span>Tanpa Login</span></div>
+                <div class="stat-item"><b>Aman</b><span>Terverifikasi</span></div>
                 <div class="stat-item"><b>Gratis</b><span>Fitur Dasar</span></div>
             </div>
         </div>
@@ -532,7 +528,7 @@
 
         <div class="info-content">
             <h2>Tentang Zenkai Tools</h2>
-            <p>Aplikasi web utilitas yang menyediakan alat bantu (downloader, generator, stalker) gratis tanpa instalasi. Dibuat untuk kebutuhan harian: menyimpan video, membuat QR, mengubah format gambar, dan sejenisnya.</p>
+            <p>Aplikasi web utilitas yang menyediakan alat bantu (downloader, generator, stalker) gratis tanpa instalasi. Pengguna diwajibkan Login menggunakan akun Google untuk mencegah serangan bot dan spam.</p>
 
             <div class="info-stats">
                 <div class="stat-row"><span>Total Alat</span><b id="info-total-tools">30+</b></div>
@@ -560,7 +556,7 @@
             </ul>
 
             <h3>Panduan Penggunaan</h3>
-            <p>Pilih alat dari katalog. Masukkan URL atau teks yang diminta. Tunggu proses selesai, lalu simpan hasilnya. Alat berlabel VIP butuh kode aktivasi.</p>
+            <p>Login menggunakan Google. Setelah masuk, pilih alat dari katalog. Masukkan URL atau teks yang diminta. Tunggu proses selesai, lalu simpan hasilnya. Alat berlabel VIP butuh kode aktivasi.</p>
 
             <h3>Penafian</h3>
             <p>Zenkai Tools tidak berafiliasi dengan platform pihak ketiga (TikTok, Instagram, dll). Pengguna bertanggung jawab penuh atas data yang diproses dan penggunaan hasil dari alat ini.</p>
@@ -613,13 +609,18 @@
             </div>
         </header>
         <div class="info-content">
+            <button data-kembali-login class="btn btn-primary" style="margin-bottom: 20px; width: auto; padding: 10px 20px; display: flex; gap: 8px; align-items: center;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Kembali ke Login
+            </button>
+
             <h1>Kebijakan Privasi</h1>
-            <p>Ringkasan: Zenkai Tools tidak meminta akun, tidak memasang iklan pop-up, dan hanya memproses data yang kamu kirim ke endpoint alat tertentu.</p>
+            <p>Ringkasan: Zenkai Tools mewajibkan verifikasi akun (Login Google) untuk keamanan, tidak memasang iklan pop-up, dan hanya memproses data yang kamu kirim ke endpoint alat tertentu.</p>
             <h3>Data yang diproses</h3>
             <ul class="update-list">
                 <li>URL atau teks yang kamu tempel ke kolom alat (dikirim ke server kami untuk diproses).</li>
                 <li>Preferensi lokal (tema, volume) disimpan di localStorage browser kamu.</li>
-                <li>Tidak ada akun wajib, tidak ada pelacakan lintas situs oleh kami.</li>
+                <li>Akun wajib untuk verifikasi keamanan (mencegah spam), tanpa pelacakan lintas situs oleh kami.</li>
             </ul>
             <h3>Pihak ketiga</h3>
             <p>Beberapa alat memanggil API pihak ketiga (Supabase, YouTube, dsb). Data yang diproses tunduk pada kebijakan privasi masing-masing layanan.</p>
@@ -636,8 +637,13 @@
             </div>
         </header>
         <div class="info-content">
+            <button data-kembali-login class="btn btn-primary" style="margin-bottom: 20px; width: auto; padding: 10px 20px; display: flex; gap: 8px; align-items: center;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Kembali ke Login
+            </button>
+
             <h1>Syarat Penggunaan</h1>
-            <p>Dengan memakai Zenkai Tools, kamu setuju dengan ketentuan berikut.</p>
+            <p>Dengan memakai Zenkai Tools dan melakukan Login, kamu setuju dengan ketentuan berikut.</p>
             <h3>Penggunaan yang diizinkan</h3>
             <ul class="update-list">
                 <li>Mengunduh konten yang kamu miliki haknya atau yang diizinkan oleh platform sumber.</li>

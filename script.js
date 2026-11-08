@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         google.accounts.id.initialize({
-            client_id: '1038480550156-ol0s4bpdn10i5gl5kgvn385491j8p589.apps.googleusercontent.com', // Client ID kamu
+            client_id: '1038480550156-ol0s4bpdn10i5gl5kgvn385491j8p589.apps.googleusercontent.com',
             callback: window.handleGoogleCredential,
             auto_select: false
         });
@@ -224,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function showWaPopupOnce() { if (waPopup) waPopup.classList.add('active'); }
     if (waPopup) waPopup.addEventListener('click', (e) => { if (e.target.id === 'wa-popup') window.closeWaPopup(); });
 
-    // Panggil updateLoginUI saat start
     updateLoginUI();
 
     /* === 5. Tema & volume === */
@@ -3451,5 +3450,23 @@ if (!ALLOWED.includes(pageId)) return;
             box.innerHTML = `<div style="text-align:center; padding: 20px;"><p class="error-msg">${escapeHTML(e.message)}</p><button class="btn btn-primary" onclick="openTool('komik')" style="margin-top:15px;">Kembali</button></div>`;
         }
     };
+
+    /* === FITUR KEMBALI KE LOGIN DARI HALAMAN SYARAT/PRIVASI === */
+    window.bukaHalamanDariLogin = (halaman) => {
+        const gate = document.getElementById('login-gate');
+        if (gate) gate.style.display = 'none';
+        window.switchPage(halaman, null);
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    };
+
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('[data-kembali-login]')) {
+            e.preventDefault();
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const gate = document.getElementById('login-gate');
+            if (gate) gate.style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+    });
 
 });
