@@ -1981,123 +1981,151 @@ if (ms) {
             };
         }
         else if (tool === 'aimusic') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>AI Music Generator</h3>
-                <span class="desc-text">Buat lagu AI dengan vokal & lirik.</span>
-                
-                <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
-                    <b style="color:var(--text-primary);">Tutorial:</b><br>
-                    1. Isi tema lagu, genre, dan judul.<br>
-                    2. Klik <b>Generate Lagu</b>.<br>
-                    3. Tunggu sampai muncul <b>Task ID</b>.<br>
-                    4. Salin Task ID, lalu paste ke kolom <b>Cek Status</b>.<br>
-                    5. Klik <b>Cek Status Lagu</b>. Audio akan muncul jika sudah jadi.
-                </div>
-                
-                <div id="music-form">
-                    <label class="own-label">Prompt / Tema Lagu</label>
-                    <textarea id="music-prompt" rows="2" placeholder="Cth: Lagu pop ceria tentang persahabatan..."></textarea>
-                    <label class="own-label">Style / Genre</label>
-                    <input type="text" id="music-style" placeholder="Cth: Pop, Rock, EDM..." value="Pop">
-                    <label class="own-label">Judul (Opsional)</label>
-                    <input type="text" id="music-title" placeholder="Judul lagu...">
-                    <label style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); cursor:pointer; margin-bottom:15px;">
-                        <span style="font-size:14px;">Hanya Instrumen</span>
-                        <input type="checkbox" id="music-instrumental" style="width:18px; height:18px; accent-color:var(--accent);">
-                    </label>
-                    <button class="btn btn-primary" id="btn-gen-music">Generate Lagu</button>
-                </div>
-                
-                <div id="music-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
-                
-                <div id="music-status-area" style="display:none; margin-top:15px; border-top:1px dashed var(--border-color); padding-top:15px;">
-                    <label class="own-label">Cek Status (Task ID)</label>
-                    <input type="text" id="music-taskid-input" placeholder="Paste Task ID di sini...">
-                    <button class="btn btn-ghost" id="btn-check-music">Cek Status Lagu</button>
-                    <div id="music-status-res" style="margin-top:15px; text-align:center;"></div>
-                </div>
-            `;
-            const btnGen = document.getElementById('btn-gen-music');
-            const btnCheck = document.getElementById('btn-check-music');
-            const boxRes = document.getElementById('music-res');
-            const areaStatus = document.getElementById('music-status-area');
-            const boxStatus = document.getElementById('music-status-res');
+    modalContent.innerHTML = `
+        ${closeSvg}
+        <h3>AI Music Generator</h3>
+        <span class="desc-text">Buat lagu AI atau cek status lagu yang sedang diproses.</span>
+        
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <button id="tab-mus-gen" onclick="switchMusTab('gen')" class="btn btn-primary" style="flex:1; margin:0; padding:10px; font-size:14px;">Generate Lagu</button>
+            <button id="tab-mus-check" onclick="switchMusTab('check')" class="btn btn-ghost" style="flex:1; margin:0; padding:10px; font-size:14px;">Cek Status</button>
+        </div>
 
-            btnGen.onclick = async () => {
-                const prompt = document.getElementById('music-prompt').value.trim();
-                const style = document.getElementById('music-style').value.trim();
-                const title = document.getElementById('music-title').value.trim();
-                const instrumental = document.getElementById('music-instrumental').checked;
-                if (!prompt) return showToast('Masukkan prompt lagu!');
-                if (!style) return showToast('Masukkan style/genre!');
-                
-                setBtnLoading(btnGen, true, 'Memproses...');
-                boxRes.style.display = 'block';
-                boxRes.innerHTML = '<div class="loader"></div><p style="font-size:13px; margin-top:10px;">Memasukkan ke antrean AI...</p>';
-                areaStatus.style.display = 'none';
+        <!-- AREA GENERATE -->
+        <div id="area-mus-gen">
+            <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+                <b style="color:var(--text-primary);">Tutorial:</b><br>
+                1. Isi tema lagu, genre, dan judul (opsional).<br>
+                2. Klik <b>Generate Lagu</b>.<br>
+                3. Tunggu sampai muncul <b>Task ID</b>.<br>
+                4. Salin Task ID, lalu pindah ke tab <b>Cek Status</b>.
+            </div>
+            
+            <label class="own-label">Prompt / Tema Lagu</label>
+            <textarea id="music-prompt" rows="2" placeholder="Cth: Lagu pop ceria tentang persahabatan..."></textarea>
+            <label class="own-label">Style / Genre</label>
+            <input type="text" id="music-style" placeholder="Cth: Pop, Rock, EDM..." value="Pop">
+            <label class="own-label">Judul (Opsional)</label>
+            <input type="text" id="music-title" placeholder="Judul lagu...">
+            <label style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-surface); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-color); cursor:pointer; margin-bottom:15px;">
+                <span style="font-size:14px;">Hanya Instrumen</span>
+                <input type="checkbox" id="music-instrumental" style="width:18px; height:18px; accent-color:var(--accent);">
+            </label>
+            <button class="btn btn-primary" id="btn-gen-music">Generate Lagu</button>
+            <div id="music-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+        </div>
 
-                try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'music_gen', prompt, style, title, instrumental })
-                    });
-                    const data = await res.json();
-                    if (!data.status || !data.result || !data.result.task_id) throw new Error(data.message || 'Gagal generate');
-                    
-                    boxRes.innerHTML = `
-                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Berhasil Masuk Antrean!</p>
-                        <p style="font-size:13px; margin-bottom:5px;">Task ID kamu:</p>
-                        <div style="background:var(--bg-base); padding:10px; border-radius:var(--radius-sm); border:1px dashed var(--accent); font-family:monospace; font-size:14px; font-weight:bold; word-break:break-all; margin-bottom:10px;">${escapeHTML(data.result.task_id)}</div>
-                        <p style="font-size:12px; color:var(--text-secondary);">Salin Task ID di atas, lalu paste ke kolom di bawah.</p>
-                    `;
-                    areaStatus.style.display = 'block';
-                } catch (e) {
-                    boxRes.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
-                }
-                setBtnLoading(btnGen, false, 'Generate Lagu');
-            };
+        <!-- AREA CEK STATUS -->
+        <div id="area-mus-check" style="display:none;">
+            <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
+                <b style="color:var(--text-primary);">Cek Status Lagu:</b><br>
+                Paste <b>Task ID</b> yang kamu dapat dari tab Generate, lalu klik tombol di bawah.
+            </div>
+            <label class="own-label">Task ID Lagu</label>
+            <input type="text" id="music-taskid-input" placeholder="Cth: track_1794164...">
+            <button class="btn btn-primary" id="btn-check-music">Cek Status Sekarang</button>
+            <div id="music-status-res" style="margin-top:15px; text-align:center;"></div>
+        </div>
+    `;
 
-            btnCheck.onclick = async () => {
-                const taskId = document.getElementById('music-taskid-input').value.trim();
-                if (!taskId) return showToast('Paste Task ID dulu!');
-                
-                setBtnLoading(btnCheck, true, 'Mengecek...');
-                boxStatus.innerHTML = '<div class="loader"></div>';
-                try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action: 'music_status', task_id: taskId })
-                    });
-                    const data = await res.json();
-                    if (!data.status || !data.result) throw new Error(data.message || 'Gagal cek status');
-                    
-                    const r = data.result;
-                    if (r.status_ai === 'SUCCESS') {
-                        boxStatus.innerHTML = `
-                            <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Lagu Berhasil Dibuat!</p>
-                            <img src="${escapeHTML(r.image)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:15px;">
-                            <h4 style="font-size:16px; margin-bottom:5px;">${escapeHTML(r.title)}</h4>
-                            <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Style: ${escapeHTML(r.style)}</p>
-                            <audio src="${escapeHTML(r.audio)}" controls style="width:100%; margin-bottom:15px;"></audio>
-                            <div style="text-align:left; background:var(--bg-base); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:15px; max-height:150px; overflow-y:auto;">
-                                <p style="font-size:12px; font-weight:bold; margin-bottom:5px;">Lirik:</p>
-                                <p style="font-size:12px; white-space:pre-wrap; color:var(--text-secondary); line-height:1.5;">${escapeHTML(r.lyrics || 'Instrumen')}</p>
-                            </div>
-                            <a href="${escapeHTML(r.audio)}" download="lagu-${Date.now()}.mp3" class="btn btn-primary" style="text-decoration:none;">Download MP3</a>
-                        `;
-                    } else {
-                        boxStatus.innerHTML = `
-                            <p style="color:var(--accent); font-weight:bold; margin-bottom:5px; font-size:14px;">Status: ${escapeHTML(r.status_ai)}</p>
-                            <p style="font-size:13px; color:var(--text-secondary);">${escapeHTML(r.message || 'Sedang diproses...')}</p>
-                        `;
-                    }
-                } catch (e) {
-                    boxStatus.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
-                }
-                setBtnLoading(btnCheck, false, 'Cek Status Lagu');
-            };
+    window.switchMusTab = (tab) => {
+        const btnGen = document.getElementById('tab-mus-gen');
+        const btnCheck = document.getElementById('tab-mus-check');
+        const areaGen = document.getElementById('area-mus-gen');
+        const areaCheck = document.getElementById('area-mus-check');
+        
+        if (tab === 'gen') {
+            btnGen.className = 'btn btn-primary'; btnGen.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
+            btnCheck.className = 'btn btn-ghost'; btnCheck.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
+            areaGen.style.display = 'block'; areaCheck.style.display = 'none';
+        } else {
+            btnCheck.className = 'btn btn-primary'; btnCheck.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
+            btnGen.className = 'btn btn-ghost'; btnGen.style.cssText = 'flex:1; margin:0; padding:10px; font-size:14px;';
+            areaGen.style.display = 'none'; areaCheck.style.display = 'block';
         }
+    };
+
+    const btnGen = document.getElementById('btn-gen-music');
+    const btnCheck = document.getElementById('btn-check-music');
+    const boxRes = document.getElementById('music-res');
+    const boxStatus = document.getElementById('music-status-res');
+
+    btnGen.onclick = async () => {
+        const prompt = document.getElementById('music-prompt').value.trim();
+        const style = document.getElementById('music-style').value.trim();
+        const title = document.getElementById('music-title').value.trim();
+        const instrumental = document.getElementById('music-instrumental').checked;
+        
+        if (!prompt) return showToast('Masukkan prompt lagu!');
+        if (!style) return showToast('Masukkan style/genre!');
+        
+        setBtnLoading(btnGen, true, 'Memproses...');
+        boxRes.style.display = 'block';
+        boxRes.innerHTML = '<div class="loader"></div><p style="font-size:13px; margin-top:10px;">Memasukkan ke antrean AI...</p>';
+
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'music_gen', prompt, style, title, instrumental })
+            });
+            const data = await res.json();
+            if (!data.status || !data.result || !data.result.task_id) throw new Error(data.message || 'Gagal generate');
+            
+            boxRes.innerHTML = `
+                <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Berhasil Masuk Antrean!</p>
+                <p style="font-size:13px; margin-bottom:5px;">Task ID kamu:</p>
+                <div style="background:var(--bg-base); padding:10px; border-radius:var(--radius-sm); border:1px dashed var(--accent); font-family:monospace; font-size:14px; font-weight:bold; word-break:break-all; margin-bottom:10px;">${escapeHTML(data.result.task_id)}</div>
+                <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Salin Task ID di atas, lalu pindah ke tab <b>Cek Status</b> untuk melihat hasilnya.</p>
+                <button class="btn btn-primary" onclick="switchMusTab('check'); document.getElementById('music-taskid-input').value='${escapeHTML(data.result.task_id)}'">Pindah ke Cek Status</button>
+            `;
+        } catch (e) {
+            boxRes.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+        }
+        setBtnLoading(btnGen, false, 'Generate Lagu');
+    };
+
+    btnCheck.onclick = async () => {
+        const taskId = document.getElementById('music-taskid-input').value.trim();
+        if (!taskId) return showToast('Paste Task ID dulu!');
+        
+        setBtnLoading(btnCheck, true, 'Mengecek...');
+        boxStatus.innerHTML = '<div class="loader"></div>';
+        try {
+            const res = await fetch(`${SUPA_URL}/functions/v1/zen-zen`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'music_status', task_id: taskId })
+            });
+            const data = await res.json();
+            if (!data.status || !data.result) throw new Error(data.message || 'Gagal cek status');
+            
+            const r = data.result;
+            if (r.status_ai === 'SUCCESS') {
+                boxStatus.innerHTML = `
+                    <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Lagu Berhasil Dibuat!</p>
+                    <img src="${escapeHTML(r.image)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:15px;">
+                    <h4 style="font-size:16px; margin-bottom:5px;">${escapeHTML(r.title)}</h4>
+                    <p style="font-size:12px; color:var(--text-secondary); margin-bottom:15px;">Style: ${escapeHTML(r.style)}</p>
+                    <audio src="${escapeHTML(r.audio)}" controls style="width:100%; margin-bottom:15px;"></audio>
+                    <div style="text-align:left; background:var(--bg-base); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:15px; max-height:150px; overflow-y:auto;">
+                        <p style="font-size:12px; font-weight:bold; margin-bottom:5px;">Lirik:</p>
+                        <p style="font-size:12px; white-space:pre-wrap; color:var(--text-secondary); line-height:1.5;">${escapeHTML(r.lyrics || 'Instrumen')}</p>
+                    </div>
+                    <a href="${escapeHTML(r.audio)}" download="lagu-${Date.now()}.mp3" class="btn btn-primary" style="text-decoration:none;">Download MP3</a>
+                `;
+            } else {
+                boxStatus.innerHTML = `
+                    <div style="background:var(--bg-surface); border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm);">
+                        <p style="color:var(--accent); font-weight:bold; margin-bottom:5px; font-size:14px;">Status: ${escapeHTML(r.status_ai)}</p>
+                        <p style="font-size:13px; color:var(--text-secondary);">${escapeHTML(r.message || 'Sedang diproses...')}</p>
+                    </div>
+                `;
+            }
+        } catch (e) {
+            boxStatus.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+        }
+        setBtnLoading(btnCheck, false, 'Cek Status Sekarang');
+    };
+}
         else if (tool === 'ailivephoto') {
             modalContent.innerHTML = `
                 ${closeSvg}
