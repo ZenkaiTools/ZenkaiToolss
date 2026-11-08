@@ -546,13 +546,24 @@ if (!ALLOWED.includes(pageId)) return;
         const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
         window.geminiLimit = setting.gemini_limit || 1;
 
-        if (setting.is_maintenance && !isOwner) {
-            const ms = document.getElementById('maintenance-screen');
-            if (ms) ms.style.setProperty('display', 'flex', 'important'); // Paksa munculin
-        } else {
-            const ms = document.getElementById('maintenance-screen');
-            if (ms) ms.style.display = 'none';
-        }
+        const ms = document.getElementById('maintenance-screen');
+if (ms) {
+    if (setting.is_maintenance && !isOwner) {
+        // Tampilkan layar maintenance dan isi teksnya
+        ms.innerHTML = `
+            <div class="maintenance-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="icon-lg" aria-hidden="true"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <h2>Sedang Perawatan</h2>
+                <p>Sistem sedang diperbarui. Silakan kembali beberapa saat lagi.</p>
+            </div>
+        `;
+        ms.style.setProperty('display', 'flex', 'important'); // Paksa muncul
+    } else {
+        // Sembunyikan dan kosongkan layar maintenance
+        ms.innerHTML = ''; 
+        ms.style.setProperty('display', 'none', 'important'); // Paksa sembunyi
+    }
+}
 
         if (setting.site_title) {
             const t = document.querySelector('.logo-text .logo-title');
