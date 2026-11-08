@@ -82,9 +82,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.handleGoogleCredential = (response) => {
         const credential = response.credential;
         if (!turnstileToken) {
+            // Kalau token Cloudflare belum masuk (walau udah centang hijau)
             pendingGoogleCredential = credential;
             const statusEl = document.getElementById('login-status');
-            if (statusEl) statusEl.innerText = 'Selesaikan verifikasi keamanan dulu...';
+            if (statusEl) statusEl.innerText = 'Menunggu sistem Cloudflare memproses token...';
+            
+            // Coba ambil token paksa dari widget Cloudflare
+            if (window.turnstile) {
+                const widget = document.querySelector('.cf-turnstile');
+                if (widget) {
+                    const currentToken = window.turnstile.getResponse(widget);
+                    if (currentToken) {
+                        turnstileToken = currentToken;
+                        kirimLogin(pendingGoogleCredential);
+                        pendingGoogleCredential = null;
+                        return;
+                    }
+                }
+            }
             return;
         }
         kirimLogin(credential);
