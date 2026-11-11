@@ -773,3 +773,20 @@ iframe[src*="netlify.com"] {
     opacity: 0 !important;
     pointer-events: none !important;
 }
+
+/* Trik Brutal Sembunyikan Badge Netlify */
+body > div:last-of-type:not(.app-container):not(.bottom-nav):not(.bottom-sheet-overlay):not(.custom-alert):not(.toast-container):not(.music-widget):not(#login-gate):not(#auth-gate):not(#maintenance-screen):not(#broadcast-banner):not(#wa-popup) {
+    display: none !important;
+}
+
+/* Atau target langsung iframe yang biasanya dipakai Netlify */
+iframe[title="Netlify"], 
+iframe[src*="netlify"],
+#netlify-badge,
+.netlify-badge {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: -9999 !important;
+}
