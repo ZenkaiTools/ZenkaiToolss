@@ -790,3 +790,16 @@ iframe[src*="netlify"],
     pointer-events: none !important;
     z-index: -9999 !important;
 }
+
+/* Trik Paling Brutal */
+a[href*="netlify"][target="_blank"],
+a[href*="app.netlify.com"],
+div[style*="position: fixed"][style*="bottom: 0"],
+iframe {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    pointer-events: none !important;
+}
