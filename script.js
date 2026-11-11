@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* === 1. Konfigurasi === */
-    const SUPA_URL = 'https://chcfvbqyygtkfcvhywoa.supabase.co';
-    const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2Z2YnF5eWd0a2Zjdmh5d29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjYxNDAsImV4cCI6MjEwNjQ0MjE0MH0.VjsHm2lIVs--biNLF-ku6K3AyIbUVXylyFY77xjaajM';
+    const SUPA_URL = 'https://dygfnoaixaeyoaomhiqn.supabase.co';
+const SUPA_KEY = 'sb_publishable_57o2eN5SyklPPVwP_QF4nQ_kkRvQnKw';
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
     const COMING_SOON_TOOLS = ['stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
 
