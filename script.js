@@ -638,7 +638,7 @@ if (ms) {
 
     /* === 15. Owner gate === */
     let clicks = 0;
-    document.querySelector('.logo-area')?.addEventListener('click', () => {
+    document.querySelector('.top-header .logo-text')?.addEventListener('click', () => {
         clicks++; setTimeout(() => { clicks = 0; }, 1000);
         if (clicks === 5) { clicks = 0; bukaPintuRahasia(); }
     });
