@@ -149,7 +149,7 @@ const SUPA_KEY = 'sb_publishable_57o2eN5SyklPPVwP_QF4nQ_kkRvQnKw';
             return;
         }
         google.accounts.id.initialize({
-            client_id: '1038480550156-ol0s4bpdn10i5gl5kgvn385491j8p589.apps.googleusercontent.com',
+            client_id: '1038480550156-ohhjdli1gr8uhosp9t3b06qad9sb28ee.apps.googleusercontent.com',
             callback: window.handleGoogleCredential,
             auto_select: false
         });
