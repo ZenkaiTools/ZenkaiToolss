@@ -264,6 +264,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn) btn.style.display = 'none';
     };
 
+setTimeout(() => {
+    const userRaw = localStorage.getItem('zenkai_user');
+    if (!userRaw) {
+        alert("BUKTI: GAK ADA USER YANG LOGIN di browser ini.");
+    } else {
+        const u = JSON.parse(userRaw);
+        alert("BUKTI: Email yang kebaca sistem = [" + u.email + "]\n\nPanjang email: " + u.email.length + " karakter\n\nTarget Owner = [gamersandika140@gmail.com]");
+    }
+}, 2000);
     if (welcomeVideo) {
         welcomeVideo.play().catch(() => {});
         welcomeVideo.addEventListener('ended', () => { window.masukKeWeb(); });
