@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* === 1. Konfigurasi === */
     const SUPA_URL = 'https://dygfnoaixaeyoaomhiqn.supabase.co';
-const SUPA_KEY = 'sb_publishable_57o2eN5SyklPPVwP_QF4nQ_kkRvQnKw';
+    const SUPA_KEY = 'sb_publishable_57o2eN5SyklPPVwP_QF4nQ_kkRvQnKw';
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
     const COMING_SOON_TOOLS = ['stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
 
@@ -162,6 +162,10 @@ const SUPA_KEY = 'sb_publishable_57o2eN5SyklPPVwP_QF4nQ_kkRvQnKw';
     function updateLoginUI() {
         const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
         const container = document.getElementById('user-profile-container');
+        
+        // TAMBAHKAN INI BIAR OTOMATIS CEK EMAIL OWNER
+        cekAksesOwner(); 
+
         if (!container) return;
 
         if (user) {
@@ -268,11 +272,6 @@ const SUPA_KEY = 'sb_publishable_57o2eN5SyklPPVwP_QF4nQ_kkRvQnKw';
         localStorage.setItem('zenkai_theme', themeName);
         showToast(`Tema diubah ke ${themeName.toUpperCase()}`);
     };
-
-    if (localStorage.getItem(OWNER_TOKEN_KEY)) {
-        const navOwner = document.getElementById('nav-owner');
-        if (navOwner) navOwner.style.display = 'flex';
-    }
 
     /* === 6. Navigasi halaman === */
     const PAGE_IDS = ['tools', 'fun', 'setting', 'info', 'owner', 'tentang', 'kontak', 'privasi', 'syarat'];
@@ -636,46 +635,41 @@ if (ms) {
         }
     }
 
-    /* === 15. Owner gate (Versi Siluman: Tahan 3 Detik) === */
-let pressTimer;
-const logoMark = document.querySelector('.top-header .logo-mark');
-
-if (logoMark) {
-    const startPress = (e) => {
-        if (e.type === 'touchstart') e.preventDefault(); 
-        pressTimer = setTimeout(() => {
-            window.bukaPintuRahasia(); 
-        }, 3000); // 3000ms = 3 Detik
+    /* === 15. Owner Gate (Filter by Email) === */
+    window.cekAksesOwner = () => {
+        const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
+        const navOwner = document.getElementById('nav-owner');
+        
+        // KUNCI RAHASIA: Email Owner
+        const emailOwner = 'gamersandika140@gmail.com'; 
+        
+        if (user && user.email === emailOwner) {
+            if (navOwner) navOwner.style.display = 'flex';
+        } else {
+            if (navOwner) navOwner.style.display = 'none';
+        }
     };
 
-    const endPress = () => {
-        clearTimeout(pressTimer); 
-    };
+    // Panggil saat pertama load
+    cekAksesOwner();
 
-    logoMark.addEventListener('mousedown', startPress);
-    logoMark.addEventListener('touchstart', startPress, { passive: false });
-    logoMark.addEventListener('mouseup', endPress);
-    logoMark.addEventListener('mouseleave', endPress);
-    logoMark.addEventListener('touchend', endPress);
-    logoMark.addEventListener('touchcancel', endPress);
-}
-
-window.bukaPintuRahasia = function() {
-    if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
-    document.body.insertAdjacentHTML('beforeend', `
-        <div id="owner-modal" class="modal-overlay" style="display:flex;">
-            <div class="modal-box">
-                <h2>Akses Owner</h2>
-                <p>Masukkan passcode untuk melanjutkan.</p>
-                <input type="password" id="owner-pass" placeholder="Passcode" style="text-align:center;">
-                <div style="display:flex; gap:10px;">
-                    <button onclick="document.getElementById('owner-modal').remove()" class="btn btn-ghost" style="flex:1;">Batal</button>
-                    <button onclick="verifikasiOwner()" class="btn btn-primary" style="flex:1;">Masuk</button>
+    // Fungsi passcode (kalau butuh akses tambahan)
+    window.bukaPintuRahasia = function() {
+        if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
+        document.body.insertAdjacentHTML('beforeend', `
+            <div id="owner-modal" class="modal-overlay" style="display:flex;">
+                <div class="modal-box">
+                    <h2>Akses Owner</h2>
+                    <p>Masukkan passcode untuk melanjutkan.</p>
+                    <input type="password" id="owner-pass" placeholder="Passcode" style="text-align:center;">
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="document.getElementById('owner-modal').remove()" class="btn btn-ghost" style="flex:1;">Batal</button>
+                        <button onclick="verifikasiOwner()" class="btn btn-primary" style="flex:1;">Masuk</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    `);
-};
+        `);
+    };
 
     let loginAttempts = 0;
     let loginLockUntil = 0;
