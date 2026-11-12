@@ -636,29 +636,46 @@ if (ms) {
         }
     }
 
-    /* === 15. Owner gate === */
-    let clicks = 0;
-    document.querySelector('.top-header .logo-text')?.addEventListener('click', () => {
-        clicks++; setTimeout(() => { clicks = 0; }, 1000);
-        if (clicks === 5) { clicks = 0; bukaPintuRahasia(); }
-    });
+    /* === 15. Owner gate (Versi Siluman: Tahan 3 Detik) === */
+let pressTimer;
+const logoMark = document.querySelector('.top-header .logo-mark');
 
-    function bukaPintuRahasia() {
-        if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
-        document.body.insertAdjacentHTML('beforeend', `
-            <div id="owner-modal" class="modal-overlay" style="display:flex;">
-                <div class="modal-box">
-                    <h2>Akses Owner</h2>
-                    <p>Masukkan passcode untuk melanjutkan.</p>
-                    <input type="password" id="owner-pass" placeholder="Passcode" style="text-align:center;">
-                    <div style="display:flex; gap:10px;">
-                        <button onclick="document.getElementById('owner-modal').remove()" class="btn btn-ghost" style="flex:1;">Batal</button>
-                        <button onclick="verifikasiOwner()" class="btn btn-primary" style="flex:1;">Masuk</button>
-                    </div>
+if (logoMark) {
+    const startPress = (e) => {
+        if (e.type === 'touchstart') e.preventDefault(); 
+        pressTimer = setTimeout(() => {
+            window.bukaPintuRahasia(); 
+        }, 3000); // 3000ms = 3 Detik
+    };
+
+    const endPress = () => {
+        clearTimeout(pressTimer); 
+    };
+
+    logoMark.addEventListener('mousedown', startPress);
+    logoMark.addEventListener('touchstart', startPress, { passive: false });
+    logoMark.addEventListener('mouseup', endPress);
+    logoMark.addEventListener('mouseleave', endPress);
+    logoMark.addEventListener('touchend', endPress);
+    logoMark.addEventListener('touchcancel', endPress);
+}
+
+window.bukaPintuRahasia = function() {
+    if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
+    document.body.insertAdjacentHTML('beforeend', `
+        <div id="owner-modal" class="modal-overlay" style="display:flex;">
+            <div class="modal-box">
+                <h2>Akses Owner</h2>
+                <p>Masukkan passcode untuk melanjutkan.</p>
+                <input type="password" id="owner-pass" placeholder="Passcode" style="text-align:center;">
+                <div style="display:flex; gap:10px;">
+                    <button onclick="document.getElementById('owner-modal').remove()" class="btn btn-ghost" style="flex:1;">Batal</button>
+                    <button onclick="verifikasiOwner()" class="btn btn-primary" style="flex:1;">Masuk</button>
                 </div>
             </div>
-        `);
-    }
+        </div>
+    `);
+};
 
     let loginAttempts = 0;
     let loginLockUntil = 0;
