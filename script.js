@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
     const COMING_SOON_TOOLS = ['stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
 
+    // KUNCI RAHASIA: Email Owner
+    const EMAIL_OWNER = 'gamersandika140@gmail.com';
+
     /* === 2. Utilitas === */
     const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -57,6 +60,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         alertEl.style.display = 'flex';
+    };
+
+    // FUNGSI CEK OWNER DIPINDAH KE ATAS BIAR GAK ERROR SAAT DIPANGGIL
+    window.cekAksesOwner = () => {
+        const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
+        const navOwner = document.getElementById('nav-owner');
+        if (user && user.email === EMAIL_OWNER) {
+            if (navOwner) navOwner.style.display = 'flex';
+        } else {
+            if (navOwner) navOwner.style.display = 'none';
+        }
     };
 
     /* === 4. Splash gate & LOGIN GATE === */
@@ -163,8 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
         const container = document.getElementById('user-profile-container');
         
-        // TAMBAHKAN INI BIAR OTOMATIS CEK EMAIL OWNER
-        cekAksesOwner(); 
+        cekAksesOwner(); // Fungsi ini udah aman dipanggil di sini
 
         if (!container) return;
 
@@ -635,25 +648,9 @@ if (ms) {
         }
     }
 
-    /* === 15. Owner Gate (Filter by Email) === */
-    window.cekAksesOwner = () => {
-        const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
-        const navOwner = document.getElementById('nav-owner');
-        
-        // KUNCI RAHASIA: Email Owner
-        const emailOwner = 'gamersandika140@gmail.com'; 
-        
-        if (user && user.email === emailOwner) {
-            if (navOwner) navOwner.style.display = 'flex';
-        } else {
-            if (navOwner) navOwner.style.display = 'none';
-        }
-    };
+    let loginAttempts = 0;
+    let loginLockUntil = 0;
 
-    // Panggil saat pertama load
-    cekAksesOwner();
-
-    // Fungsi passcode (kalau butuh akses tambahan)
     window.bukaPintuRahasia = function() {
         if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
         document.body.insertAdjacentHTML('beforeend', `
@@ -670,9 +667,6 @@ if (ms) {
             </div>
         `);
     };
-
-    let loginAttempts = 0;
-    let loginLockUntil = 0;
 
     window.verifikasiOwner = async () => {
         const now = Date.now();
@@ -2002,7 +1996,6 @@ if (ms) {
             <button id="tab-mus-check" onclick="switchMusTab('check')" class="btn btn-ghost" style="flex:1; margin:0; padding:10px; font-size:14px;">Cek Status</button>
         </div>
 
-        <!-- AREA GENERATE -->
         <div id="area-mus-gen">
             <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
                 <b style="color:var(--text-primary);">Tutorial:</b><br>
@@ -2026,7 +2019,6 @@ if (ms) {
             <div id="music-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
         </div>
 
-        <!-- AREA CEK STATUS -->
         <div id="area-mus-check" style="display:none;">
             <div style="text-align:left; font-size:13px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">
                 <b style="color:var(--text-primary);">Cek Status Lagu:</b><br>
@@ -2172,7 +2164,6 @@ if (ms) {
         box.style.display = 'block';
         box.innerHTML = '<div class="loader"></div>';
 
-        // Ubah file ke Base64 dulu
         const base64Data = await new Promise((resolve) => {
             const reader = new FileReader();
             reader.onload = (e) => resolve(e.target.result);
@@ -3914,7 +3905,6 @@ if (ms) {
         }
     };
 
-    /* === FITUR KEMBALI KE LOGIN DARI HALAMAN SYARAT/PRIVASI === */
     window.bukaHalamanDariLogin = (halaman) => {
         const gate = document.getElementById('login-gate');
         if (gate) gate.style.display = 'none';
