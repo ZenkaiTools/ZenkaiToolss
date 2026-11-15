@@ -764,7 +764,6 @@ if (!ALLOWED.includes(pageId)) return;
     const existingToken = localStorage.getItem(OWNER_TOKEN_KEY);
     if (!existingToken) {
         window.bukaPintuRahasia();
-        container.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-secondary);">Silakan masukkan password owner.</div>';
         return;
     }
     
