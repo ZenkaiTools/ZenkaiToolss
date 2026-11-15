@@ -697,7 +697,12 @@ if (!ALLOWED.includes(pageId)) return;
     let loginLockUntil = 0;
 
     window.bukaPintuRahasia = function() {
-        if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
+    if (document.getElementById('owner-modal')) document.getElementById('owner-modal').remove();
+    
+    // TAMBAHKAN DUA BARIS INI:
+    const existingModal = document.getElementById('tool-modal');
+    if (existingModal) existingModal.classList.remove('active');
+
         document.body.insertAdjacentHTML('beforeend', `
             <div id="owner-modal" class="modal-overlay" style="display:flex;">
                 <div class="modal-box">
