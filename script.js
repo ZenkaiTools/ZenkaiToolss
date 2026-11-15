@@ -43,12 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const fn = u.slice(ZEN_FN.length).split('?')[0]; 
         const headers = new Headers(init.headers || {}); 
         const s = zenGetSession(); 
-        if (s && fn !== 'zen-login' && fn !== 'zen-owner') { 
-            headers.set('x-zen-session', s.token); 
-            if (s.gw) headers.set('Authorization', 'Bearer ' + s.gw); 
-        } 
+        if (s && fn !== 'zen-login') { 
+    headers.set('x-zen-session', s.token); 
+    if (s.gw) headers.set('Authorization', 'Bearer ' + s.gw); 
+} 
         const res = await _zenFetch(input, { ...init, headers }); 
-        if (res.status === 401 && fn !== 'zen-login' && fn !== 'zen-owner' && !sessionStorage.getItem('zen_401')) { 
+        if (res.status === 401 && fn !== 'zen-login' && !sessionStorage.getItem('zen_401')) { 
             sessionStorage.setItem('zen_401', '1'); 
             zenClearSession(); 
             localStorage.removeItem('zenkai_user'); 
