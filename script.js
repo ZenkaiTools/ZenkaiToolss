@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const fn = u.slice(ZEN_FN.length).split('?')[0]; 
         const headers = new Headers(init.headers || {}); 
         const s = zenGetSession(); 
-        if (s && fn !== 'zen-login') { 
+        if (s && fn !== 'zen-login' && fn !== 'zen-owner') { 
             headers.set('x-zen-session', s.token); 
             if (s.gw) headers.set('Authorization', 'Bearer ' + s.gw); 
         } 
@@ -754,6 +754,14 @@ if (!ALLOWED.includes(pageId)) return;
     window.tampilkanPanelRahasia = async () => {
     const container = document.getElementById('owner-page-content');
     if (!container) return;
+
+    // CEK: Kalau belum punya token, munculin popup password
+    const existingToken = localStorage.getItem(OWNER_TOKEN_KEY);
+    if (!existingToken) {
+        window.bukaPintuRahasia();
+        container.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-secondary);">Silakan masukkan password owner.</div>';
+        return;
+    }
     
     // Cek apakah user punya akses
     const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
