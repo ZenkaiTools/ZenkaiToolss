@@ -1066,3 +1066,86 @@ body.is-locked .music-widget {
 #screen-login .login-card {
     margin: auto;
 }
+
+/* =========================================
+   LOGIN v3.6.2: kompak, muat satu layar, tanpa scroll
+   (scroll tetap jadi cadangan untuk layar sangat pendek)
+   ========================================= */
+#screen-login {
+    position: fixed; inset: 0; z-index: 9000;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+    overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    background:
+        radial-gradient(120% 60% at 50% -10%, rgba(255,122,69,.22) 0%, transparent 60%),
+        radial-gradient(80% 50% at 100% 100%, rgba(255,122,69,.08) 0%, transparent 60%),
+        #0E0F12;
+}
+.lg-card {
+    width: 100%; max-width: 420px; margin: auto;
+    padding: clamp(14px, 2.6vh, 24px) 16px;
+    background: linear-gradient(180deg, #1b1d24 0%, #14151a 100%);
+    border: 1px solid #2c2f38; border-radius: 22px;
+    box-shadow: 0 24px 70px rgba(0,0,0,.6), 0 0 0 1px rgba(255,122,69,.08) inset;
+    animation: loginPop .4s cubic-bezier(.2,.9,.3,1.2);
+}
+.lg-brand { display: flex; align-items: center; gap: 10px; margin-bottom: clamp(8px, 1.8vh, 16px); }
+.lg-logo {
+    width: 34px; height: 34px; border-radius: 10px; flex: none;
+    display: grid; place-items: center; color: #1a0e07;
+    background: linear-gradient(135deg, #FF7A45, #FF9F6E);
+    box-shadow: 0 6px 18px rgba(255,122,69,.35);
+}
+.lg-logo svg { width: 18px; height: 18px; }
+.lg-brand-name { font-weight: 700; font-size: 15px; color: #fff; }
+.lg-badge {
+    margin-left: auto; font-size: 11px; font-weight: 700; color: #3ddc97;
+    background: rgba(61,220,151,.12); border: 1px solid rgba(61,220,151,.35);
+    padding: 3px 9px; border-radius: 999px;
+}
+.lg-title { font-size: clamp(22px, 6.4vw, 27px); line-height: 1.12; color: #fff; margin-bottom: 6px; }
+.lg-title span { color: #FF7A45; }
+.lg-sub { font-size: 13px; line-height: 1.45; color: var(--text-secondary); margin-bottom: clamp(10px, 2vh, 16px); }
+
+.lg-google { display: flex; justify-content: center; margin: 0; min-height: 44px; }
+.lg-google > div { max-width: 100%; }
+.lg-turnstile { display: flex; justify-content: center; }
+.lg-turnstile:empty { display: none; }
+.lg-turnstile .cf-turnstile { margin-top: 8px; }
+
+.lg-divider { display: flex; align-items: center; gap: 10px; margin: clamp(8px, 1.8vh, 14px) 0; color: var(--text-secondary); font-size: 12px; }
+.lg-divider::before, .lg-divider::after { content: ""; flex: 1; height: 1px; background: #2c2f38; }
+
+.lg-email { display: flex; flex-direction: column; gap: 8px; }
+.lg-email input {
+    width: 100%; height: 46px; padding: 0 14px; font-size: 14px;
+    color: var(--text-primary); background: #0d0e11;
+    border: 1px solid #2c2f38; border-radius: 12px; outline: none; margin: 0;
+}
+.lg-email input:focus { border-color: #FF7A45; box-shadow: 0 0 0 3px rgba(255,122,69,.18); }
+.lg-email .btn { width: 100%; height: 46px; margin: 0; border-radius: 12px; box-shadow: 0 8px 22px rgba(255,122,69,.25); }
+.lg-back { width: 100%; margin: 10px 0 0; font-size: 13px; }
+
+.lg-trust {
+    list-style: none; margin: clamp(10px, 2vh, 16px) 0 0; padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 8px;
+    background: rgba(255,255,255,.03); border: 1px solid #25272f; border-radius: 14px;
+}
+.lg-trust li { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; line-height: 1.4; color: var(--text-secondary); }
+.lg-trust b { color: var(--text-primary); font-weight: 700; }
+.lg-ico {
+    flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center;
+    color: #FF7A45; background: rgba(255,122,69,.12);
+}
+.lg-ico svg { width: 14px; height: 14px; }
+
+.lg-status { min-height: 0; margin-top: 8px; font-size: 12px; text-align: center; color: var(--text-secondary); }
+.lg-status:empty { display: none; }
+.lg-footer { margin-top: clamp(8px, 1.6vh, 14px); font-size: 11px; line-height: 1.5; text-align: center; color: var(--text-secondary); }
+.lg-footer a { color: #FF7A45; }
+
+@media (max-height: 640px) {
+    .lg-sub { display: none; }
+    .lg-trust li:nth-child(2) { display: none; }
+}
