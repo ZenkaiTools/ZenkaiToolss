@@ -115,6 +115,16 @@
                     <div id="google-btn-container"></div>
                 </div>
 
+                <!-- Verifikasi manusia Cloudflare (wajib untuk login Google) -->
+                <div class="login-turnstile-live" style="display:flex; justify-content:center; margin: 14px 0;">
+                    <div class="cf-turnstile"
+                         data-sitekey="0x4AAAAAAF4cYQJ-uGK_l4B2"
+                         data-theme="dark"
+                         data-callback="onTurnstileSuccess"
+                         data-expired-callback="onTurnstileExpired"
+                         data-error-callback="onTurnstileError"></div>
+                </div>
+
                 <div class="login-divider">
                     <span>atau pakai email</span>
                 </div>
@@ -749,6 +759,6 @@
 
     </div> <!-- END OF SCREEN APP -->
 
-    <script src="script.js?v=3.5.5" defer></script>
+    <script src="script.js?v=3.6.0" defer></script>
 </body>
 </html>

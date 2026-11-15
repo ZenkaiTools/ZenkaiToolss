@@ -2,7 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const SUPA_URL = 'https://dygfnoaixaeyoaomhiqn.supabase.co';
     const SUPA_KEY = 'sb_publishable_57o2eN5SyklPPVwP_QF4nQ_kkRvQnKw';
-    const supabaseClient = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    let supabaseClient = null;
+    try {
+        supabaseClient = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    } catch (e) {
+        console.error('Supabase SDK gagal dimuat:', e);
+    }
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
     const COMING_SOON_TOOLS = ['stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
     const EMAIL_OWNER = 'gamersandika140@gmail.com';
@@ -325,6 +330,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        if (!supabaseClient) {
+            if (statusEl) statusEl.innerText = 'Layanan login email belum siap. Refresh halaman.';
+            return;
+        }
         setBtnLoading(btn, true, 'Kirim Kode Login');
         if (statusEl) statusEl.innerText = 'Mengirim kode ke email kamu...';
         try {
@@ -362,6 +371,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        if (!supabaseClient) {
+            if (statusEl) statusEl.innerText = 'Layanan login email belum siap. Refresh halaman.';
+            return;
+        }
         setBtnLoading(btn, true, 'Verifikasi & Masuk');
         if (statusEl) statusEl.innerText = 'Memverifikasi kode...';
         try {
@@ -3924,6 +3937,75 @@ if (!ALLOWED.includes(pageId)) return;
                     </div>
                 `;
                 showToast('Umur berhasil dihitung');
+            };
+        }
+        else if (tool === 'ai-image') {
+            modalContent.innerHTML = `
+                ${closeSvg}
+                <h3>AI Image Generator</h3>
+                <span class="desc-text">Buat gambar dari deskripsi teks.</span>
+                <div style="text-align:left; font-size:14px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">Gunakan Bahasa Inggris untuk hasil terbaik. Contoh:<br><i>"a cat astronaut floating in space, cinematic lighting"</i></div>
+                <textarea id="ai-img-prompt" rows="3" placeholder="Deskripsikan gambar yang mau dibuat..."></textarea>
+                <div class="custom-select-wrapper">
+                    <div class="custom-select" id="custom-ai-img-ratio" onclick="toggleCustomSelect('custom-ai-img-ratio')">
+                        <div class="custom-select-trigger"><span>1:1 (Square)</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option active" data-value="1:1" onclick="selectCustomOption('custom-ai-img-ratio', '1:1', '1:1 (Square)')">1:1 (Square)</div>
+                        <div class="custom-option" data-value="16:9" onclick="selectCustomOption('custom-ai-img-ratio', '16:9', '16:9 (Landscape)')">16:9 (Landscape)</div>
+                        <div class="custom-option" data-value="9:16" onclick="selectCustomOption('custom-ai-img-ratio', '9:16', '9:16 (Portrait)')">9:16 (Portrait)</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="btn-ai-img">Generate Gambar</button>
+                <div id="ai-img-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
+            `;
+            window.toggleCustomSelect = (id) => {
+                const el = document.getElementById(id);
+                const opts = el.nextElementSibling;
+                const isActive = opts.style.display === 'block';
+                document.querySelectorAll('.custom-options').forEach(o => o.style.display = 'none');
+                if (!isActive) opts.style.display = 'block';
+            };
+            window.selectCustomOption = (id, value, label) => {
+                const el = document.getElementById(id);
+                el.querySelector('.custom-select-trigger span').innerText = label;
+                el.dataset.value = value;
+                el.nextElementSibling.style.display = 'none';
+            };
+            if (!window.__aiImgOutsideClickBound) {
+                window.__aiImgOutsideClickBound = true;
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.custom-select-wrapper')) {
+                        document.querySelectorAll('.custom-options').forEach(o => o.style.display = 'none');
+                    }
+                });
+            }
+            const btn = document.getElementById('btn-ai-img');
+            btn.onclick = async () => {
+                const prompt = document.getElementById('ai-img-prompt').value.trim();
+                const ratio = document.getElementById('custom-ai-img-ratio').dataset.value || '1:1';
+                const box = document.getElementById('ai-img-res');
+                if (!prompt) return showToast('Masukkan deskripsi dulu!');
+                setBtnLoading(btn, true, 'Membuat Gambar...');
+                box.style.display = 'block';
+                box.innerHTML = '<div class="loader"></div><p style="font-size:13px; color:var(--text-secondary); margin-top:10px;">Tunggu 10-30 detik...</p>';
+                try {
+                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-aiimage`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt, ratio: ratio })
+                    });
+                    const data = await res.json();
+                    if (data.status === false) throw new Error(data.message || 'Gagal generate');
+                    const imgUrl = data.data?.url || data.data?.result || data.image_url || data.data;
+                    if (!imgUrl || typeof imgUrl !== 'string') throw new Error('Gagal mendapatkan gambar');
+                    box.innerHTML = `
+                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Gambar Berhasil Dibuat</p>
+                        <img src="${escapeHTML(imgUrl)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
+                        <a href="${escapeHTML(imgUrl)}" download="ai-image-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download Gambar</a>
+                    `;
+                    showToast('Gambar Berhasil Dibuat');
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                setBtnLoading(btn, false, 'Generate Gambar');
             };
         }
         else {
