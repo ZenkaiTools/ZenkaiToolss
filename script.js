@@ -300,7 +300,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (el) el.style.display = (key === name) ? display : 'none';
         });
         document.body.classList.toggle('is-locked', name === 'login');
-        document.body.style.overflow = (name === 'login' || name === 'splash') ? 'hidden' : '';
+        // Kunci scroll hanya di splash (layar penuh). Layar login harus bisa di-scroll.
+        document.body.style.overflow = (name === 'splash') ? 'hidden' : '';
         window.scrollTo(0, 0);
     };
 
