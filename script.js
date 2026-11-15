@@ -759,13 +759,6 @@ if (!ALLOWED.includes(pageId)) return;
     window.tampilkanPanelRahasia = async () => {
     const container = document.getElementById('owner-page-content');
     if (!container) return;
-
-    // CEK: Kalau belum punya token, munculin popup password
-    const existingToken = localStorage.getItem(OWNER_TOKEN_KEY);
-    if (!existingToken) {
-        window.bukaPintuRahasia();
-        return;
-    }
     
     // Cek apakah user punya akses
     const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
