@@ -113,12 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
         const navOwner = document.getElementById('nav-owner');
         
-        if (user && user.email === EMAIL_OWNER) {
-            if (navOwner) navOwner.style.display = 'flex';
-        } else {
-            if (navOwner) navOwner.style.display = 'none';
+            if (user && user.email === EMAIL_OWNER) {
+        if (navOwner) navOwner.style.display = 'flex';
+        // OTOMATIS TAMPILKAN PANEL OWNER SETELAH DATA SETTINGS SIAP
+        if (typeof window.tampilkanPanelRahasia === 'function') {
+            window.tampilkanPanelRahasia();
         }
-    };
+    } else {
+        if (navOwner) navOwner.style.display = 'none';
+    }
+};
 
     const welcomeVideo = document.getElementById('welcome-video');
     const authGate = document.getElementById('auth-gate');
@@ -519,7 +523,7 @@ if (!ALLOWED.includes(pageId)) return;
     window.resetData = () => {
         window.tampilkanAlert(
             "Hapus Cache",
-            "Yakin mau hapus cache dan muat ulang web? Tema & login owner tetap tersimpan.",
+            "Yakin mau hapus cache dan muat ulang web? Tema tetap tersimpan.",
             [
                 { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
                 { label: "Hapus", action: "window.hapusCacheAman()", type: "primary" }
@@ -748,9 +752,17 @@ if (!ALLOWED.includes(pageId)) return;
     };
 
     window.tampilkanPanelRahasia = async () => {
-        const container = document.getElementById('owner-page-content');
-        if (!container) return;
-        container.innerHTML = '<div class="loader"></div>';
+    const container = document.getElementById('owner-page-content');
+    if (!container) return;
+    
+    // Cek apakah user punya akses
+    const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
+    if (!user || user.email !== EMAIL_OWNER) {
+        container.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-secondary);">Akses ditolak. Khusus Owner.</div>`;
+        return;
+    }
+
+    container.innerHTML = '<div class="loader"></div>';
         let set = { site_title: '', broadcast_text: '', is_maintenance: false, disabled_pages: '', disabled_tools: '', vip_tools: '', gemini_limit: 1 };
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'get_settings' }) });
