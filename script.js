@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const SUPA_URL = 'https://dygfnoaixaeyoaomhiqn.supabase.co';
     const SUPA_KEY = 'sb_publishable_57o2eN5SyklPPVwP_QF4nQ_kkRvQnKw';
+    const supabaseClient = window.supabase.createClient(SUPA_URL, SUPA_KEY);
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
     const COMING_SOON_TOOLS = ['stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
     const EMAIL_OWNER = 'gamersandika140@gmail.com';
@@ -125,7 +126,23 @@ document.addEventListener('DOMContentLoaded', () => {
 };
 
     const welcomeVideo = document.getElementById('welcome-video');
-    const authGate = document.getElementById('auth-gate');
+
+    // Navigasi tiga layar: splash, login, dan aplikasi.
+    window.showScreen = (name) => {
+        const screens = {
+            splash: document.getElementById('screen-splash'),
+            login: document.getElementById('screen-login'),
+            app: document.getElementById('screen-app')
+        };
+        Object.entries(screens).forEach(([screenName, element]) => {
+            if (!element) return;
+            element.style.display = screenName === name
+                ? (screenName === 'app' ? 'block' : 'flex')
+                : 'none';
+        });
+        document.body.classList.toggle('is-locked', name === 'login');
+        document.body.style.overflow = name === 'login' ? 'hidden' : '';
+    };
 
     let turnstileToken = null;
     let pendingGoogleCredential = null;
@@ -196,9 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if(statusEl) statusEl.innerText = 'Berhasil! Sebentar...';
             setTimeout(() => {
-                const gate = document.getElementById('login-gate');
-                if (gate) gate.remove();
-                document.body.style.overflow = '';
+                window.showScreen('app');
                 showToast(`Selamat datang, ${data.user.name || data.user.email}!`);
                 setTimeout(showWaPopupOnce, 1500);
             }, 600);
@@ -273,8 +288,13 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.add('active');
     };
 
-    window.logoutUser = () => {
+    window.logoutUser = async () => {
         if (confirm("Yakin mau logout dari akun ini?")) {
+            try {
+                await supabaseClient.auth.signOut();
+            } catch (e) {
+                console.warn('Supabase signOut gagal:', e);
+            }
             zenClearSession();
             localStorage.removeItem('zenkai_vip');
             localStorage.removeItem('zenkai_vip_until');
@@ -284,34 +304,113 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    function tampilkanLoginGate() {
-        const gate = document.getElementById('login-gate');
-        if (!gate) return;
+    window.kirimEmailOTP = async () => {
+        const emailInput = document.getElementById('login-email-input');
+        const email = (emailInput?.value || '').trim();
+        if (!email) return showToast('Masukkan alamat email terlebih dahulu.');
+
+        const btn = document.getElementById('btn-send-otp');
+        setBtnLoading(btn, true, 'Kirim OTP');
+        try {
+            const { error } = await supabaseClient.auth.signInWithOtp({
+                email,
+                options: { shouldCreateUser: true }
+            });
+            if (error) throw error;
+
+            const mainView = document.getElementById('login-view-main');
+            const otpView = document.getElementById('login-view-otp');
+            const target = document.getElementById('otp-target-email');
+            if (target) target.textContent = email;
+            if (mainView) mainView.style.display = 'none';
+            if (otpView) otpView.style.display = 'block';
+            showToast('Kode OTP telah dikirim ke email Anda.');
+        } catch (e) {
+            showToast('Gagal mengirim OTP: ' + (e.message || 'Kesalahan tidak diketahui'));
+        } finally {
+            setBtnLoading(btn, false, 'Kirim OTP');
+        }
+    };
+
+    window.verifikasiOTP = async () => {
+        const email = (document.getElementById('login-email-input')?.value || '').trim();
+        const token = (document.getElementById('login-otp-input')?.value || '').trim();
+        if (!email || !token) return showToast('Masukkan email dan kode OTP.');
+
+        const btn = document.getElementById('btn-verify-otp');
+        setBtnLoading(btn, true, 'Verifikasi');
+        try {
+            const { data, error } = await supabaseClient.auth.verifyOtp({
+                email,
+                token,
+                type: 'email'
+            });
+            if (error) throw error;
+            if (!data?.user?.email) throw new Error('Data pengguna tidak ditemukan.');
+
+            localStorage.setItem('zenkai_user', JSON.stringify({
+                email: data.user.email,
+                name: data.user.user_metadata?.full_name || data.user.user_metadata?.name || data.user.email,
+                picture: data.user.user_metadata?.avatar_url || null,
+                sub: data.user.id,
+                loginAt: Date.now()
+            }));
+
+            const loginRes = await fetch(`${SUPA_URL}/functions/v1/zen-login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'email_login', email: data.user.email })
+            });
+            const loginData = await loginRes.json();
+            if (!loginRes.ok || loginData.status === false) {
+                throw new Error(loginData.message || 'Gagal membuat sesi aplikasi.');
+            }
+
+            const sessionToken = loginRes.headers.get('x-zen-session') ||
+                loginData.token || loginData.session?.token;
+            if (!sessionToken) throw new Error('Token sesi aplikasi tidak diterima.');
+
+            zenSetSession({
+                ...loginData,
+                token: sessionToken,
+                expires_at: loginData.expires_at || loginData.session?.expires_at
+            });
+
+            updateLoginUI();
+            window.showScreen('app');
+            showToast(`Selamat datang, ${data.user.email}!`);
+            setTimeout(showWaPopupOnce, 1500);
+        } catch (e) {
+            showToast('Verifikasi gagal: ' + (e.message || 'Kesalahan tidak diketahui'));
+        } finally {
+            setBtnLoading(btn, false, 'Verifikasi');
+        }
+    };
+
+    window.kembaliKeLogin = () => {
+        const otpView = document.getElementById('login-view-otp');
+        const mainView = document.getElementById('login-view-main');
+        const otpInput = document.getElementById('login-otp-input');
+        if (otpView) otpView.style.display = 'none';
+        if (mainView) mainView.style.display = 'block';
+        if (otpInput) otpInput.value = '';
+    };
+
+    window.masukKeWeb = () => {
+        if (welcomeVideo) {
+            welcomeVideo.pause();
+            welcomeVideo.muted = true;
+            welcomeVideo.currentTime = 0;
+        }
 
         const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
         if (user && user.email && zenGetSession()) {
-            gate.remove();
+            window.showScreen('app');
             updateLoginUI();
             setTimeout(showWaPopupOnce, 1500);
-            return;
-        }
-
-        gate.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        renderGoogleButton();
-    }
-
-    window.masukKeWeb = () => {
-        if (welcomeVideo) { welcomeVideo.pause(); welcomeVideo.muted = true; }
-        if (authGate) {
-            authGate.style.opacity = '0';
-            authGate.style.transition = 'opacity 300ms ease';
-            setTimeout(() => {
-                authGate.style.display = 'none';
-                authGate.remove();
-                document.body.style.overflow = '';
-                tampilkanLoginGate();
-            }, 300);
+        } else {
+            window.showScreen('login');
+            renderGoogleButton();
         }
     };
 
@@ -3883,8 +3982,7 @@ if (!ALLOWED.includes(pageId)) return;
     };
 
     window.bukaHalamanDariLogin = (halaman) => {
-        const gate = document.getElementById('login-gate');
-        if (gate) gate.style.display = 'none';
+        window.showScreen('app');
         window.switchPage(halaman, null);
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     };
@@ -3893,8 +3991,7 @@ if (!ALLOWED.includes(pageId)) return;
         if (e.target.closest('[data-kembali-login]')) {
             e.preventDefault();
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const gate = document.getElementById('login-gate');
-            if (gate) gate.style.display = 'flex';
+            window.showScreen('login');
             window.scrollTo(0, 0);
         }
     });
