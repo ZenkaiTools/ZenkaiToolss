@@ -390,24 +390,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const userEmail = data.user.email || email;
             const meta = data.user.user_metadata || {};
 
-            // Minta session Zenkai dari edge function
+            // Minta session Zenkai dari edge function.
+            // Bukti OTP lolos = access_token Supabase, diverifikasi ulang oleh server.
+            const accessToken = data.session && data.session.access_token;
+            if (!accessToken) throw new Error('Sesi email tidak ditemukan.');
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'email_login', email: userEmail })
+                body: JSON.stringify({ action: 'email_login', email: userEmail, access_token: accessToken })
             });
             const sess = await res.json();
             if (!sess.status) throw new Error(sess.message || 'Login gagal');
 
             zenSetSession(sess);
 
+            const su = sess.user || {};
             localStorage.setItem('zenkai_user', JSON.stringify({
-                email: userEmail,
-                name: meta.full_name || meta.name || (sess.user && sess.user.name) || userEmail.split('@')[0],
-                picture: meta.avatar_url || meta.picture || (sess.user && sess.user.picture) || null,
-                sub: data.user.id,
+                email: su.email || userEmail,
+                name: su.name || meta.full_name || meta.name || userEmail.split('@')[0],
+                picture: su.picture || meta.avatar_url || meta.picture || null,
+                sub: su.sub || data.user.id,
                 loginAt: Date.now()
             }));
+
+            // Session Supabase sudah tidak dipakai lagi, bersihkan.
+            try { await supabaseClient.auth.signOut(); } catch (e) {}
 
             updateLoginUI();
             if (statusEl) statusEl.innerText = 'Berhasil! Sebentar...';

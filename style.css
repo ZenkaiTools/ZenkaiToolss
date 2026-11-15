@@ -775,7 +775,7 @@ iframe[src*="netlify.com"] {
 }
 
 /* Trik Brutal Sembunyikan Badge Netlify */
-body > div:last-of-type:not(.app-container):not(.bottom-nav):not(.bottom-sheet-overlay):not(.custom-alert):not(.toast-container):not(.music-widget):not(#login-gate):not(#auth-gate):not(#maintenance-screen):not(#broadcast-banner):not(#wa-popup) {
+body > div:last-of-type:not(.app-container):not(.bottom-nav):not(.bottom-sheet-overlay):not(.custom-alert):not(.toast-container):not(.music-widget):not(#login-gate):not(#auth-gate):not(.screen):not(#maintenance-screen):not(#broadcast-banner):not(#wa-popup) {
     display: none !important;
 }
 
