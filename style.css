@@ -1146,6 +1146,15 @@ body.is-locked .music-widget {
 .lg-footer a { color: #FF7A45; }
 
 @media (max-height: 640px) {
-    .lg-sub { display: none; }
+    #login-view-main .lg-sub { display: none; }
     .lg-trust li:nth-child(2) { display: none; }
 }
+
+/* Catatan cek spam di layar OTP */
+.lg-tip {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin: 0 0 12px; padding: 10px 12px;
+    font-size: 12px; line-height: 1.5; color: var(--text-secondary);
+    background: rgba(255,122,69,.08); border: 1px solid rgba(255,122,69,.35); border-radius: 14px;
+}
+.lg-tip b { color: var(--text-primary); font-weight: 700; }

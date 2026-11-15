@@ -36,7 +36,7 @@
     <!-- Supabase JS SDK ditambahkan di sini untuk urusan OTP -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <link rel="stylesheet" href="style.css?v=3.6.2">
+    <link rel="stylesheet" href="style.css?v=3.6.3">
 
     <script type="application/ld+json">
     {
@@ -153,7 +153,12 @@
             <!-- LAYAR INPUT OTP -->
             <div id="login-view-otp" style="display: none;">
                 <h1 class="lg-title">Cek Email Kamu! <span class="lg-emoji">📩</span></h1>
-                <p class="lg-sub">Kode masuk dikirim ke <b id="otp-target-email" style="color: var(--text-primary);"></b>. Belum masuk? Cek folder Spam atau tunggu 1 menit.</p>
+                <p class="lg-sub">Kode masuk sudah dikirim ke <b id="otp-target-email" style="color: var(--text-primary);"></b>.</p>
+
+                <div class="lg-tip">
+                    <span class="lg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+                    <span><b>Kodenya nggak ada di Kotak Masuk?</b> Cek folder <b>Spam</b> atau <b>Promosi</b>. Email dari website baru sering dianggap mencurigakan oleh Gmail, padahal aman. Kalau ketemu, tekan <b>"Bukan spam"</b>. Belum ada juga? Tunggu 1 menit.</span>
+                </div>
 
                 <div class="lg-email">
                     <input type="text" id="login-otp-input" placeholder="Masukkan kode di sini" maxlength="8" autocomplete="one-time-code" inputmode="numeric">
