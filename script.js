@@ -1,15 +1,63 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    /* === 1. Konfigurasi === */
     const SUPA_URL = 'https://dygfnoaixaeyoaomhiqn.supabase.co';
     const SUPA_KEY = 'sb_publishable_57o2eN5SyklPPVwP_QF4nQ_kkRvQnKw';
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
     const COMING_SOON_TOOLS = ['stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
-
-    // KUNCI RAHASIA: Email Owner
     const EMAIL_OWNER = 'gamersandika140@gmail.com';
 
-    /* === 2. Utilitas === */
+    const ZEN_SESSION_KEY = 'zenkai_session'; 
+    function zenGetSession() { 
+        try { 
+            const s = JSON.parse(localStorage.getItem(ZEN_SESSION_KEY) || 'null'); 
+            if (s && s.token && s.exp * 1000 > Date.now() + 60000) return s; 
+        } catch (e) {} 
+        return null; 
+    } 
+    function zenSetSession(d) { 
+        localStorage.setItem(ZEN_SESSION_KEY, JSON.stringify({ token: d.token, gw: d.gw || null, exp: d.expires_at, vip: !!d.vip })); 
+        sessionStorage.removeItem('zen_401'); 
+    } 
+    function zenClearSession() { 
+        localStorage.removeItem(ZEN_SESSION_KEY); 
+    } 
+    window.zenIsVip = () => { 
+        const s = zenGetSession(); 
+        return !!(s && s.vip); 
+    }; 
+    async function zenRefresh(force) { 
+        const s = zenGetSession(); 
+        if (!s) return; 
+        if (!force && s.exp * 1000 - Date.now() > 2 * 86400000) return; 
+        try { 
+            const r = await fetch(`${SUPA_URL}/functions/v1/zen-login`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-zen-session': s.token }, body: JSON.stringify({ action: 'refresh' }) }); 
+            const d = await r.json(); 
+            if (d.status) zenSetSession(d); 
+        } catch (e) {} 
+    } 
+    const _zenFetch = window.fetch.bind(window); 
+    const ZEN_FN = `${SUPA_URL}/functions/v1/`; 
+    window.fetch = async (input, init = {}) => { 
+        const u = typeof input === 'string' ? input : ((input && input.url) || ''); 
+        if (!u.startsWith(ZEN_FN)) return _zenFetch(input, init); 
+        const fn = u.slice(ZEN_FN.length).split('?')[0]; 
+        const headers = new Headers(init.headers || {}); 
+        const s = zenGetSession(); 
+        if (s && fn !== 'zen-login') { 
+            headers.set('x-zen-session', s.token); 
+            if (s.gw) headers.set('Authorization', 'Bearer ' + s.gw); 
+        } 
+        const res = await _zenFetch(input, { ...init, headers }); 
+        if (res.status === 401 && fn !== 'zen-login' && fn !== 'zen-owner' && !sessionStorage.getItem('zen_401')) { 
+            sessionStorage.setItem('zen_401', '1'); 
+            zenClearSession(); 
+            localStorage.removeItem('zenkai_user'); 
+            location.reload(); 
+        } 
+        return res; 
+    }; 
+    zenRefresh(false);
+
     const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     }[c]));
@@ -24,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const isReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* === 3. Toast & alert === */
     window.showToast = (msg) => {
         const c = document.getElementById('toast-container');
         if (!c) return;
@@ -62,10 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
         alertEl.style.display = 'flex';
     };
 
-    // FUNGSI CEK OWNER DIPINDAH KE ATAS BIAR GAK ERROR SAAT DIPANGGIL
     window.cekAksesOwner = () => {
         const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
         const navOwner = document.getElementById('nav-owner');
+        
         if (user && user.email === EMAIL_OWNER) {
             if (navOwner) navOwner.style.display = 'flex';
         } else {
@@ -73,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    /* === 4. Splash gate & LOGIN GATE === */
     const welcomeVideo = document.getElementById('welcome-video');
     const authGate = document.getElementById('auth-gate');
 
@@ -132,6 +178,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (!data.status) throw new Error(data.message || 'Login gagal');
 
+            zenSetSession(data);
+
             localStorage.setItem('zenkai_user', JSON.stringify({
                 email: data.user.email,
                 name: data.user.name,
@@ -177,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
         const container = document.getElementById('user-profile-container');
         
-        cekAksesOwner(); // Fungsi ini udah aman dipanggil di sini
+        cekAksesOwner();
 
         if (!container) return;
 
@@ -192,6 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
             container.innerHTML = '';
         }
     }
+
+    setTimeout(updateLoginUI, 100);
 
     window.bukaProfil = () => {
         const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
@@ -221,6 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.logoutUser = () => {
         if (confirm("Yakin mau logout dari akun ini?")) {
+            zenClearSession();
+            localStorage.removeItem('zenkai_vip');
+            localStorage.removeItem('zenkai_vip_until');
             localStorage.removeItem('zenkai_user');
             window.closeModal();
             location.reload();
@@ -232,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!gate) return;
 
         const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
-        if (user && user.email) {
+        if (user && user.email && zenGetSession()) {
             gate.remove();
             updateLoginUI();
             setTimeout(showWaPopupOnce, 1500);
@@ -264,15 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn) btn.style.display = 'none';
     };
 
-setTimeout(() => {
-    const userRaw = localStorage.getItem('zenkai_user');
-    if (!userRaw) {
-        alert("BUKTI: GAK ADA USER YANG LOGIN di browser ini.");
-    } else {
-        const u = JSON.parse(userRaw);
-        alert("BUKTI: Email yang kebaca sistem = [" + u.email + "]\n\nPanjang email: " + u.email.length + " karakter\n\nTarget Owner = [gamersandika140@gmail.com]");
-    }
-}, 2000);
     if (welcomeVideo) {
         welcomeVideo.play().catch(() => {});
         welcomeVideo.addEventListener('ended', () => { window.masukKeWeb(); });
@@ -283,9 +327,6 @@ setTimeout(() => {
     function showWaPopupOnce() { if (waPopup) waPopup.classList.add('active'); }
     if (waPopup) waPopup.addEventListener('click', (e) => { if (e.target.id === 'wa-popup') window.closeWaPopup(); });
 
-    updateLoginUI();
-
-    /* === 5. Tema & volume === */
     const savedTheme = localStorage.getItem('zenkai_theme') || 'cyber';
     document.body.setAttribute('data-theme', savedTheme);
 
@@ -295,7 +336,6 @@ setTimeout(() => {
         showToast(`Tema diubah ke ${themeName.toUpperCase()}`);
     };
 
-    /* === 6. Navigasi halaman === */
     const PAGE_IDS = ['tools', 'fun', 'setting', 'info', 'owner', 'tentang', 'kontak', 'privasi', 'syarat'];
     window.switchPage = (pageId, btn) => {
     	const ALLOWED = ['tools','fun','setting','info','owner','tentang','kontak','privasi','syarat'];
@@ -312,7 +352,6 @@ if (!ALLOWED.includes(pageId)) return;
         window.scrollTo({ top: 0, behavior: isReducedMotion() ? 'auto' : 'smooth' });
     };
 
-    /* === 7. Filter & search === */
     window.filterCategory = (category, btn) => {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
         if (btn) btn.classList.add('active');
@@ -344,7 +383,6 @@ if (!ALLOWED.includes(pageId)) return;
         });
     }
 
-    /* === 8. Reduce motion & volume === */
     window.toggleAnimation = (checkbox) => {
         if (checkbox.checked) {
             document.body.classList.add('reduce-motion');
@@ -381,7 +419,6 @@ if (!ALLOWED.includes(pageId)) return;
     const volLabel = document.getElementById('vol-label');
     if (volLabel) volLabel.innerText = savedVol + '%';
 
-    /* === 9. Jam & device info === */
     function updateTime() {
         const now = new Date();
         const c = document.getElementById('clock-now');
@@ -409,7 +446,6 @@ if (!ALLOWED.includes(pageId)) return;
         if (bEl) bEl.innerText = 'N/A';
     }
 
-    /* === 10. Hitungan alat dinamis === */
     setTimeout(() => {
         const cards = document.querySelectorAll('.tool-list .tool-card');
         let count = 0;
@@ -425,7 +461,6 @@ if (!ALLOWED.includes(pageId)) return;
         if (elActive) elActive.innerText = String(count);
     }, 500);
 
-    /* === 11. Musik === */
     const bgm = document.getElementById('bgm');
     const icPlay = document.getElementById('ic-play');
     const icPause = document.getElementById('ic-pause');
@@ -481,7 +516,6 @@ if (!ALLOWED.includes(pageId)) return;
 
     if (bgm) { bgm.onended = () => { if (isPlaying) window.nextSong(); }; window.loadSong(0); }
 
-    /* === 12. Cache reset === */
     window.resetData = () => {
         window.tampilkanAlert(
             "Hapus Cache",
@@ -509,7 +543,6 @@ if (!ALLOWED.includes(pageId)) return;
         location.reload();
     };
 
-    /* === 13. Modal dasar === */
     const modal = document.getElementById('tool-modal');
     const modalContent = document.getElementById('modal-content');
 
@@ -541,7 +574,6 @@ if (!ALLOWED.includes(pageId)) return;
         }
     });
 
-    /* === 14. Coming soon & settings fetch === */
     COMING_SOON_TOOLS.forEach(toolName => {
         const card = document.querySelector(`.tool-card[onclick="openTool('${toolName}'); return false;"]`) ||
                      document.querySelector(`.tool-card[onclick="openTool('${toolName}')"]`);
@@ -568,21 +600,21 @@ if (!ALLOWED.includes(pageId)) return;
         window.geminiLimit = setting.gemini_limit || 1;
 
         const ms = document.getElementById('maintenance-screen');
-if (ms) {
-    if (setting.is_maintenance && !isOwner) {
-        ms.innerHTML = `
-            <div class="maintenance-content">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="icon-lg" aria-hidden="true"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                <h2>Sedang Perawatan</h2>
-                <p>Sistem sedang diperbarui. Silakan kembali beberapa saat lagi.</p>
-            </div>
-        `;
-        ms.style.setProperty('display', 'flex', 'important');
-    } else {
-        ms.innerHTML = ''; 
-        ms.style.setProperty('display', 'none', 'important');
-    }
-}
+        if (ms) {
+            if (setting.is_maintenance && !isOwner) {
+                ms.innerHTML = `
+                    <div class="maintenance-content">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="icon-lg" aria-hidden="true"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <h2>Sedang Perawatan</h2>
+                        <p>Sistem sedang diperbarui. Silakan kembali beberapa saat lagi.</p>
+                    </div>
+                `;
+                ms.style.setProperty('display', 'flex', 'important');
+            } else {
+                ms.innerHTML = ''; 
+                ms.style.setProperty('display', 'none', 'important');
+            }
+        }
 
         if (setting.site_title) {
             const t = document.querySelector('.logo-text .logo-title');
@@ -715,7 +747,6 @@ if (ms) {
         } catch(e) { showToast("Error koneksi ke server."); }
     };
 
-    /* === 16. Owner panel === */
     window.tampilkanPanelRahasia = async () => {
         const container = document.getElementById('owner-page-content');
         if (!container) return;
@@ -986,7 +1017,6 @@ if (ms) {
         } catch(e) { showToast("Error koneksi."); }
     };
 
-    /* === 17. Favorit komik === */
     window.toggleFavorit = (title, slug, cover) => {
         let favorit = JSON.parse(localStorage.getItem('zenkai_favorit') || '[]');
         const index = favorit.findIndex(f => f.slug === slug);
@@ -1000,7 +1030,6 @@ if (ms) {
         return favorit.some(f => f.slug === slug);
     };
 
-    /* === 18. Open tool router === */
     window.openTool = (tool) => {
         if (!modal || !modalContent) return;
 
@@ -1017,9 +1046,7 @@ if (ms) {
         }
 
         const vipTools = window.currentVipTools || [];
-        const isVip = localStorage.getItem('zenkai_vip') === 'true';
-        const vipUntil = localStorage.getItem('zenkai_vip_until');
-        const isVipValid = isVip && vipUntil && new Date(vipUntil) > new Date();
+        const isVipValid = zenIsVip();
 
         if (vipTools.includes(tool) && !isVipValid) {
             modal.classList.add('active');
@@ -1061,18 +1088,13 @@ if (ms) {
             `;
         }
         else if (tool === 'vip') {
-            const isVip2 = localStorage.getItem('zenkai_vip') === 'true';
+            const isVipFinal = zenIsVip();
             const vipUntil2 = localStorage.getItem('zenkai_vip_until');
             let daysLeft = 0;
-            if (isVip2 && vipUntil2) {
+            if (isVipFinal && vipUntil2) {
                 const diff = new Date(vipUntil2) - new Date();
                 daysLeft = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
-                if (daysLeft <= 0) {
-                    localStorage.removeItem('zenkai_vip');
-                    localStorage.removeItem('zenkai_vip_until');
-                }
             }
-            const isVipFinal = localStorage.getItem('zenkai_vip') === 'true';
             modalContent.innerHTML = `
                 ${closeSvg}
                 <h3>${isVipFinal ? 'Status VIP' : 'Paket VIP'}</h3>
@@ -1081,8 +1103,8 @@ if (ms) {
                         <h4 style="font-size: 20px; color: var(--accent); margin: 0;">VIP AKTIF</h4>
                         <p style="font-size: 14px; color: var(--text-primary); margin-top: 5px;">Sisa Waktu: ${daysLeft} Hari Lagi</p>
                     </div>
-                    <p style="text-align:center; font-size:13px; color: var(--text-secondary); margin-bottom:20px;">Berakhir: ${new Date(vipUntil2).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                    <button class="btn btn-ghost" onclick="localStorage.removeItem('zenkai_vip'); localStorage.removeItem('zenkai_vip_until'); closeModal(); showToast('Status VIP dicabut.');" style="color: var(--danger); border-color: var(--danger);">Logout VIP</button>
+                    <p style="text-align:center; font-size:13px; color: var(--text-secondary); margin-bottom:20px;">Berakhir: ${vipUntil2 ? new Date(vipUntil2).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-'}</p>
+                    <button class="btn btn-ghost" onclick="localStorage.removeItem('zenkai_vip_until'); zenClearSession(); closeModal(); showToast('Status VIP dicabut.');" style="color: var(--danger); border-color: var(--danger);">Logout VIP</button>
                 ` : `
                     <div class="desc-text" style="text-align: left; margin-bottom: 15px;">Buka akses tanpa batas ke semua fitur premium Zenkai Tools.</div>
                     <div style="background: var(--bg-surface); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 15px;">
@@ -1127,9 +1149,9 @@ if (ms) {
                         setBtnLoading(btn, false, 'Tukar Kode');
                         return resBox.innerHTML = `<p class="error-msg" style="font-size:13px;">Gagal: ${escapeHTML(data.message)}</p>`;
                     }
-                    localStorage.setItem('zenkai_vip', 'true');
                     localStorage.setItem('zenkai_vip_until', data.expiry);
                     localStorage.removeItem('zenkai_gemini_vip_usage');
+                    await zenRefresh(true);
                     window.closeModal();
                     showToast('VIP Aktif.');
                 } catch (e) {
@@ -3252,9 +3274,7 @@ if (ms) {
             const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
             const isMaintenance = (window.currentDisabledTools || []).includes('bug-wa');
             const isVipOnly = (window.currentVipTools || []).includes('bug-wa');
-            const isVip = localStorage.getItem('zenkai_vip') === 'true';
-            const vipUntil = localStorage.getItem('zenkai_vip_until');
-            const isVipValid = isVip && vipUntil && new Date(vipUntil) > new Date();
+            const isVipValid = zenIsVip();
             if (isMaintenance && !isOwner) {
                 modalContent.innerHTML = `${closeSvg}<h3 style="color:var(--danger);">Fitur Maintenance</h3><span class="desc-text">Fitur ini sedang dinonaktifkan sementara oleh Owner.</span><button class="btn btn-primary" onclick="openTool('bug-wa')">Cek Ulang</button>`;
                 return;
@@ -3782,75 +3802,6 @@ if (ms) {
                     </div>
                 `;
                 showToast('Umur berhasil dihitung');
-            };
-        }
-        else if (tool === 'ai-image') {
-            modalContent.innerHTML = `
-                ${closeSvg}
-                <h3>AI Image Generator</h3>
-                <span class="desc-text">Buat gambar dari deskripsi teks.</span>
-                <div style="text-align:left; font-size:14px; background:var(--bg-surface); padding:16px; border-radius:var(--radius-sm); margin-bottom:15px; border:1px solid var(--border-color); line-height:1.6; color:var(--text-secondary);">Gunakan Bahasa Inggris untuk hasil terbaik. Contoh:<br><i>"a cat astronaut floating in space, cinematic lighting"</i></div>
-                <textarea id="ai-img-prompt" rows="3" placeholder="Deskripsikan gambar yang mau dibuat..."></textarea>
-                <div class="custom-select-wrapper">
-                    <div class="custom-select" id="custom-ai-img-ratio" onclick="toggleCustomSelect('custom-ai-img-ratio')">
-                        <div class="custom-select-trigger"><span>1:1 (Square)</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
-                    </div>
-                    <div class="custom-options">
-                        <div class="custom-option active" data-value="1:1" onclick="selectCustomOption('custom-ai-img-ratio', '1:1', '1:1 (Square)')">1:1 (Square)</div>
-                        <div class="custom-option" data-value="16:9" onclick="selectCustomOption('custom-ai-img-ratio', '16:9', '16:9 (Landscape)')">16:9 (Landscape)</div>
-                        <div class="custom-option" data-value="9:16" onclick="selectCustomOption('custom-ai-img-ratio', '9:16', '9:16 (Portrait)')">9:16 (Portrait)</div>
-                    </div>
-                </div>
-                <button class="btn btn-primary" id="btn-ai-img">Generate Gambar</button>
-                <div id="ai-img-res" style="display:none; margin-top:15px; text-align:center; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-sm); background:var(--bg-surface);"></div>
-            `;
-            window.toggleCustomSelect = (id) => {
-                const el = document.getElementById(id);
-                const opts = el.nextElementSibling;
-                const isActive = opts.style.display === 'block';
-                document.querySelectorAll('.custom-options').forEach(o => o.style.display = 'none');
-                if (!isActive) opts.style.display = 'block';
-            };
-            window.selectCustomOption = (id, value, label) => {
-                const el = document.getElementById(id);
-                el.querySelector('.custom-select-trigger span').innerText = label;
-                el.dataset.value = value;
-                el.nextElementSibling.style.display = 'none';
-            };
-            if (!window.__aiImgOutsideClickBound) {
-                window.__aiImgOutsideClickBound = true;
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.custom-select-wrapper')) {
-                        document.querySelectorAll('.custom-options').forEach(o => o.style.display = 'none');
-                    }
-                });
-            }
-            const btn = document.getElementById('btn-ai-img');
-            btn.onclick = async () => {
-                const prompt = document.getElementById('ai-img-prompt').value.trim();
-                const ratio = document.getElementById('custom-ai-img-ratio').dataset.value || '1:1';
-                const box = document.getElementById('ai-img-res');
-                if (!prompt) return showToast('Masukkan deskripsi dulu!');
-                setBtnLoading(btn, true, 'Membuat Gambar...');
-                box.style.display = 'block';
-                box.innerHTML = '<div class="loader"></div><p style="font-size:13px; color:var(--text-secondary); margin-top:10px;">Tunggu 10-30 detik...</p>';
-                try {
-                    const res = await fetch(`${SUPA_URL}/functions/v1/zen-aiimage`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: prompt, ratio: ratio })
-                    });
-                    const data = await res.json();
-                    if (data.status === false) throw new Error(data.message || 'Gagal generate');
-                    const imgUrl = data.data?.url || data.data?.result || data.image_url || data.data;
-                    if (!imgUrl || typeof imgUrl !== 'string') throw new Error('Gagal mendapatkan gambar');
-                    box.innerHTML = `
-                        <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Gambar Berhasil Dibuat</p>
-                        <img src="${escapeHTML(imgUrl)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
-                        <a href="${escapeHTML(imgUrl)}" download="ai-image-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download Gambar</a>
-                    `;
-                    showToast('Gambar Berhasil Dibuat');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
-                setBtnLoading(btn, false, 'Generate Gambar');
             };
         }
         else {
