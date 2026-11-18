@@ -1158,3 +1158,10 @@ body.is-locked .music-widget {
     background: rgba(255,122,69,.08); border: 1px solid rgba(255,122,69,.35); border-radius: 14px;
 }
 .lg-tip b { color: var(--text-primary); font-weight: 700; }
+
+/* Perbaikan aksesibilitas: fokus keyboard terlihat, tap di HP tanpa kilatan abu-abu */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button, a, .tool-card { -webkit-tap-highlight-color: transparent; }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

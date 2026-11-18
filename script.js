@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const OWNER_TOKEN_KEY = 'zenkai_owner_token';
     const COMING_SOON_TOOLS = ['stalkpubg', 'stalkcodm', 'stalkgenshin', 'twitter', 'imghd'];
-    const EMAIL_OWNER = 'gamersandika140@gmail.com';
 
     const ZEN_SESSION_KEY = 'zenkai_session'; 
     function zenGetSession() { 
@@ -68,6 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     }[c]));
 
+
+    // Pesan error dari server/jaringan disaring dulu: yang teknis diganti kalimat biasa.
+    const friendlyError = (x) => {
+        const m = String((x && x.message) ?? x ?? '').trim();
+        if (/failed to fetch|networkerror|load failed|network request/i.test(m)) return 'Koneksi bermasalah. Cek internetmu lalu coba lagi.';
+        if (!m || m.length > 140 || /HTTP \d{3}|status code|SyntaxError|Unexpected token|JSON|TypeError|ReferenceError|undefined|\bnull\b|stack|supabase|postgres|sql|jwt|\bat \w+/i.test(m)) return 'Ada kendala di server. Coba lagi sebentar.';
+        return m;
+    };
+
     const setBtnLoading = (btn, loading, label = 'Proses') => {
         if (!btn) return;
         if (!btn.dataset.originalLabel) btn.dataset.originalLabel = label;
@@ -107,7 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
             b.style.color = btn.type === 'primary' ? 'var(--accent-ink)' : 'var(--text-primary)';
             b.style.border = btn.type === 'primary' ? 'none' : '1px solid var(--border-strong)';
             b.addEventListener('click', () => {
-                try { (new Function(btn.action))(); } catch (e) { console.error(e); }
+                if (typeof btn.onClick === 'function') btn.onClick();
+                document.getElementById('custom-alert').style.display = 'none';
             });
             btnContainer.appendChild(b);
         });
@@ -119,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
         const navOwner = document.getElementById('nav-owner');
         
-            if (user && user.email === EMAIL_OWNER) {
+            if (sessionStorage.getItem(OWNER_TOKEN_KEY)) {
         if (navOwner) navOwner.style.display = 'flex';
         // OTOMATIS TAMPILKAN PANEL OWNER SETELAH DATA SETTINGS SIAP
         if (typeof window.tampilkanPanelRahasia === 'function') {
@@ -206,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(showWaPopupOnce, 1500);
             }, 600);
         } catch (e) {
-            if(statusEl) statusEl.innerText = 'Gagal: ' + e.message;
+            if(statusEl) statusEl.innerText = 'Gagal: ' + friendlyError(e);
             if (window.turnstile) window.turnstile.reset();
             turnstileToken = null;
         }
@@ -238,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (user) {
             container.innerHTML = `
-                <img src="${user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'U')}" 
+                <img src="${escapeHTML(user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'U'))}" 
                      title="Buka Profil"
                      onclick="bukaProfil()"
                      style="width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--accent); cursor: pointer; object-fit: cover;">
@@ -260,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalContent.innerHTML = `
             ${closeSvg}
             <div style="text-align: center; padding: 10px 0;">
-                <img src="${user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'U')}" 
+                <img src="${escapeHTML(user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'U'))}" 
                      style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); margin-bottom: 15px; object-fit: cover;">
                 
                 <h3 style="font-size: 20px; margin-bottom: 5px;">${escapeHTML(user.name || 'Pengguna')}</h3>
@@ -352,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (target) target.innerText = email;
             if (statusEl) statusEl.innerText = '';
         } catch (e) {
-            if (statusEl) statusEl.innerText = 'Gagal kirim kode: ' + (e.message || e);
+            if (statusEl) statusEl.innerText = 'Gagal kirim kode: ' + (friendlyError(e) || e);
         } finally {
             setBtnLoading(btn, false, 'Kirim Kode Login');
         }
@@ -424,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(showWaPopupOnce, 1500);
             }, 400);
         } catch (e) {
-            if (statusEl) statusEl.innerText = 'Gagal: ' + (e.message || e);
+            if (statusEl) statusEl.innerText = 'Gagal: ' + (friendlyError(e) || e);
         } finally {
             setBtnLoading(btn, false, 'Verifikasi & Masuk');
         }
@@ -651,8 +660,8 @@ if (!ALLOWED.includes(pageId)) return;
             "Hapus Cache",
             "Yakin mau hapus cache dan muat ulang web? Tema tetap tersimpan.",
             [
-                { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-                { label: "Hapus", action: "window.hapusCacheAman()", type: "primary" }
+                { label: "Batal", onClick: () => {}, type: "cancel" },
+                { label: "Hapus", onClick: () => window.hapusCacheAman(), type: "primary" }
             ]
         );
     };
@@ -660,14 +669,14 @@ if (!ALLOWED.includes(pageId)) return;
     window.hapusCacheAman = () => {
         const keep = {
             zenkai_theme: localStorage.getItem('zenkai_theme'),
-            zenkai_owner_token: localStorage.getItem(OWNER_TOKEN_KEY),
+            zenkai_owner_token: sessionStorage.getItem(OWNER_TOKEN_KEY),
             zenkai_volume: localStorage.getItem('zenkai_volume'),
             zenkai_reduce_motion: localStorage.getItem('zenkai_reduce_motion')
         };
         sessionStorage.clear();
         localStorage.clear();
         if (keep.zenkai_theme) localStorage.setItem('zenkai_theme', keep.zenkai_theme);
-        if (keep.zenkai_owner_token) localStorage.setItem(OWNER_TOKEN_KEY, keep.zenkai_owner_token);
+        if (keep.zenkai_owner_token) sessionStorage.setItem(OWNER_TOKEN_KEY, keep.zenkai_owner_token);
         if (keep.zenkai_volume) localStorage.setItem('zenkai_volume', keep.zenkai_volume);
         if (keep.zenkai_reduce_motion) localStorage.setItem('zenkai_reduce_motion', keep.zenkai_reduce_motion);
         location.reload();
@@ -726,7 +735,7 @@ if (!ALLOWED.includes(pageId)) return;
     fetchSettings();
 
     function applySettings(setting) {
-        const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
+        const isOwner = !!sessionStorage.getItem(OWNER_TOKEN_KEY);
         window.geminiLimit = setting.gemini_limit || 1;
 
         const ms = document.getElementById('maintenance-screen');
@@ -860,7 +869,7 @@ if (!ALLOWED.includes(pageId)) return;
             const data = await res.json();
             if (data.status && data.owner_token) {
                 loginAttempts = 0;
-                localStorage.setItem(OWNER_TOKEN_KEY, data.owner_token);
+                sessionStorage.setItem(OWNER_TOKEN_KEY, data.owner_token);
                 document.getElementById('owner-modal')?.remove();
                 showToast("Akses Owner Diberikan");
                 const navOwner = document.getElementById('nav-owner');
@@ -888,7 +897,7 @@ if (!ALLOWED.includes(pageId)) return;
     
     // Cek apakah user punya akses
     const user = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
-    if (!user || user.email !== EMAIL_OWNER) {
+    if (!sessionStorage.getItem(OWNER_TOKEN_KEY)) {
         container.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-secondary);">Akses ditolak. Khusus Owner.</div>`;
         return;
     }
@@ -1009,7 +1018,7 @@ if (!ALLOWED.includes(pageId)) return;
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'list_vip_codes', owner_token: localStorage.getItem(OWNER_TOKEN_KEY) })
+                body: JSON.stringify({ action: 'list_vip_codes', owner_token: sessionStorage.getItem(OWNER_TOKEN_KEY) })
             });
             const result = await res.json();
             if (!result.status) throw new Error(result.message || 'Gagal memuat');
@@ -1051,7 +1060,7 @@ if (!ALLOWED.includes(pageId)) return;
                 btn.addEventListener('click', () => window.resetVipCode(Number(btn.dataset.resetId)));
             });
         } catch(e) {
-            container.innerHTML = `<p style="font-size:12px; color:var(--danger);">Error: ${escapeHTML(e.message)}</p>`;
+            container.innerHTML = `<p style="font-size:12px; color:var(--danger);">Error: ${escapeHTML(friendlyError(e))}</p>`;
         }
     };
 
@@ -1062,7 +1071,7 @@ if (!ALLOWED.includes(pageId)) return;
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'create_vip_code', owner_token: localStorage.getItem(OWNER_TOKEN_KEY) })
+                body: JSON.stringify({ action: 'create_vip_code', owner_token: sessionStorage.getItem(OWNER_TOKEN_KEY) })
             });
             const data = await res.json();
             if (!data.status) throw new Error(data.message);
@@ -1088,8 +1097,8 @@ if (!ALLOWED.includes(pageId)) return;
 
     window.resetVipCode = (id) => {
         window.tampilkanAlert("Reset Kode VIP", "Yakin mau reset kode ini? Kode bisa dipakai lagi.", [
-            { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-            { label: "Reset", action: `window.eksekusiResetVip(${Number(id)})`, type: "primary" }
+            { label: "Batal", onClick: () => {}, type: "cancel" },
+            { label: "Reset", onClick: () => window.eksekusiResetVip(Number(id)), type: "primary" }
         ]);
     };
 
@@ -1098,7 +1107,7 @@ if (!ALLOWED.includes(pageId)) return;
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'reset_vip_code', owner_token: localStorage.getItem(OWNER_TOKEN_KEY), id })
+                body: JSON.stringify({ action: 'reset_vip_code', owner_token: sessionStorage.getItem(OWNER_TOKEN_KEY), id })
             });
             const data = await res.json();
             if (!data.status) throw new Error(data.message || 'Gagal reset');
@@ -1118,7 +1127,7 @@ if (!ALLOWED.includes(pageId)) return;
 
         const payload = {
             action: 'update_settings',
-            owner_token: localStorage.getItem(OWNER_TOKEN_KEY),
+            owner_token: sessionStorage.getItem(OWNER_TOKEN_KEY),
             site_title: document.getElementById('own-title').value,
             broadcast_text: document.getElementById('own-broadcast').value,
             disabled_pages: checkedPages,
@@ -1142,8 +1151,8 @@ if (!ALLOWED.includes(pageId)) return;
 
     window.forceRefreshUser = async () => {
         window.tampilkanAlert("Paksa Refresh", "Yakin mau maksa semua user buat refresh?", [
-            { label: "Batal", action: "document.getElementById('custom-alert').style.display='none'", type: "cancel" },
-            { label: "Lanjut", action: "window.eksekusiForceRefresh()", type: "primary" }
+            { label: "Batal", onClick: () => {}, type: "cancel" },
+            { label: "Lanjut", onClick: () => window.eksekusiForceRefresh(), type: "primary" }
         ]);
     };
 
@@ -1152,7 +1161,7 @@ if (!ALLOWED.includes(pageId)) return;
         try {
             const res = await fetch(`${SUPA_URL}/functions/v1/zen-owner`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'force_refresh', owner_token: localStorage.getItem(OWNER_TOKEN_KEY) })
+                body: JSON.stringify({ action: 'force_refresh', owner_token: sessionStorage.getItem(OWNER_TOKEN_KEY) })
             });
             const data = await res.json();
             if (data.status) showToast("Sinyal Refresh terkirim");
@@ -1268,8 +1277,8 @@ if (!ALLOWED.includes(pageId)) return;
                         <div style="background:var(--bg-surface); border:1px solid var(--border-color); padding:12px; border-radius:var(--radius-sm); display:flex; justify-content:space-between; align-items:center;"><span style="font-size:14px; font-weight:500;">20 Hari</span><span style="font-size:15px; font-weight:700; color:var(--accent);">Rp 15.000</span></div>
                         <div style="background:var(--bg-surface); border:1px solid var(--accent); padding:12px; border-radius:var(--radius-sm); display:flex; justify-content:space-between; align-items:center;"><span style="font-size:14px; font-weight:500;">30 Hari (Paling Laris)</span><span style="font-size:15px; font-weight:700; color:var(--accent);">Rp 20.000</span></div>
                     </div>
-                    <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" class="btn btn-primary" style="text-decoration: none; margin-bottom:15px;">Bayar via Sociabuzz</a>
-                    <p style="font-size: 13px; text-align: center; margin-bottom: 15px; color: var(--text-secondary);">Setelah bayar, kirim bukti ke WhatsApp Admin:<br><a href="https://wa.me/6285352831643" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">085352831643</a><br>untuk dapet kode VIP.</p>
+                    <a href="https://sociabuzz.com/zenkai72/tribe" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration: none; margin-bottom:15px;">Bayar via Sociabuzz</a>
+                    <p style="font-size: 13px; text-align: center; margin-bottom: 15px; color: var(--text-secondary);">Setelah bayar, kirim bukti ke WhatsApp Admin:<br><a href="https://wa.me/6285352831643" target="_blank" rel="noopener noreferrer" style="color:var(--accent); font-weight:bold; text-decoration:none;">085352831643</a><br>untuk dapet kode VIP.</p>
                     <input type="text" id="vip-code-input" placeholder="Masukkan Kode VIP (ZENKAI-XXXX)" style="text-align:center; text-transform:uppercase;">
                     <button class="btn btn-primary" onclick="aktivasiVip()">Tukar Kode</button>
                     <div id="vip-activation-res" style="margin-top: 15px;"></div>
@@ -1290,7 +1299,7 @@ if (!ALLOWED.includes(pageId)) return;
                     const data = await res.json();
                     if (!data.status) {
                         setBtnLoading(btn, false, 'Tukar Kode');
-                        return resBox.innerHTML = `<p class="error-msg" style="font-size:13px;">Gagal: ${escapeHTML(data.message)}</p>`;
+                        return resBox.innerHTML = `<p class="error-msg" style="font-size:13px;">Gagal: ${escapeHTML(friendlyError(data.message))}</p>`;
                     }
                     localStorage.setItem('zenkai_vip_until', data.expiry);
                     localStorage.removeItem('zenkai_gemini_vip_usage');
@@ -1299,7 +1308,7 @@ if (!ALLOWED.includes(pageId)) return;
                     showToast('VIP Aktif.');
                 } catch (e) {
                     setBtnLoading(btn, false, 'Tukar Kode');
-                    resBox.innerHTML = `<p class="error-msg" style="font-size:13px;">Error: ${escapeHTML(e.message)}</p>`;
+                    resBox.innerHTML = `<p class="error-msg" style="font-size:13px;">Error: ${escapeHTML(friendlyError(e))}</p>`;
                 }
             };
         }
@@ -1352,7 +1361,7 @@ if (!ALLOWED.includes(pageId)) return;
                     stepOtp.style.display = 'block';
                     resBox.innerHTML = `<p class="success-msg" style="font-size:14px;">OTP Terkirim!<br><span style="font-weight:normal;">Cek Inbox/Spam email <b>${escapeHTML(email)}</b>.</span></p>`;
                     showToast('Kode OTP Terkirim');
-                } catch (e) { resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btnSend, false, 'Kirim Kode OTP');
             };
             btnClaim.onclick = async () => {
@@ -1377,11 +1386,11 @@ if (!ALLOWED.includes(pageId)) return;
                             <p class="success-msg" style="font-size:14px; margin-bottom:15px;">Berhasil Diklaim</p>
                             <p style="font-size:13px; margin-bottom:5px; font-weight:bold;">Panduan:</p>
                             <p style="font-size:13px; color:var(--text-secondary); margin-bottom:15px;">${escapeHTML(guideText)}</p>
-                            <a href="${escapeHTML(offerLink)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Buka Link Offer</a>
+                            <a href="${escapeHTML(offerLink)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none;">Buka Link Offer</a>
                         </div>
                     `;
                     showToast('Akses Gemini Plus Berhasil');
-                } catch (e) { resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btnClaim, false, 'Klaim Akses');
             };
         }
@@ -1423,7 +1432,7 @@ if (!ALLOWED.includes(pageId)) return;
                     html += `</div>`;
                     box.innerHTML = html;
                     showToast('Proses Selesai');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Proses');
             };
         }
@@ -1484,12 +1493,12 @@ if (!ALLOWED.includes(pageId)) return;
                     resBox.innerHTML = `
                         <div style="text-align:left; font-size:14px;">
                             <p style="color:var(--success); font-weight:bold; margin-bottom:5px;">Reaksi Terkirim</p>
-                            <p>Target: <a href="${escapeHTML(r.target)}" target="_blank" style="color:var(--accent); word-break:break-all;">${escapeHTML(r.target)}</a></p>
+                            <p>Target: <a href="${escapeHTML(r.target)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent); word-break:break-all;">${escapeHTML(r.target)}</a></p>
                             <p>Emoji: <b>${escapeHTML(r.reaction)}</b></p>
                         </div>
                     `;
                     showToast('Reaksi Berhasil');
-                } catch (e) { resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btnReact, false, 'Kirim Reaksi');
             };
             btnVote.onclick = async () => {
@@ -1517,7 +1526,7 @@ if (!ALLOWED.includes(pageId)) return;
                         </div>
                     `;
                     showToast('Vote Berhasil');
-                } catch (e) { resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { resBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btnVote, false, 'Kirim Vote');
             };
         }
@@ -1563,16 +1572,16 @@ if (!ALLOWED.includes(pageId)) return;
                         </div>
                         <p style="font-size:14px; font-weight:bold; margin-bottom:8px;">Pilih Link Auto-Login:</p>
                         <div style="display:flex; flex-direction:column; gap:8px;">
-                            <a href="${escapeHTML(d.links.desktop)}" target="_blank" class="btn btn-ghost" style="text-decoration:none; margin-bottom:0;">Buka di Desktop</a>
-                            <a href="${escapeHTML(d.links.mobile)}" target="_blank" class="btn btn-ghost" style="text-decoration:none; margin-bottom:0;">Buka di HP</a>
-                            <a href="${escapeHTML(d.links.tv)}" target="_blank" class="btn btn-ghost" style="text-decoration:none; margin-bottom:0;">Buka di Smart TV</a>
+                            <a href="${escapeHTML(d.links.desktop)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="text-decoration:none; margin-bottom:0;">Buka di Desktop</a>
+                            <a href="${escapeHTML(d.links.mobile)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="text-decoration:none; margin-bottom:0;">Buka di HP</a>
+                            <a href="${escapeHTML(d.links.tv)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="text-decoration:none; margin-bottom:0;">Buka di Smart TV</a>
                         </div>
                         <button class="btn btn-ghost" id="btn-copy-nf-raw" style="margin-top:15px; margin-bottom:0;">Salin Link Utama</button>
                     `;
                     const copyBtn = document.getElementById('btn-copy-nf-raw');
                     if (copyBtn) copyBtn.addEventListener('click', () => window.copyToClipboard(d.raw_url));
                     showToast('Akun Berhasil Digenerate');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Generate Akun');
             };
         }
@@ -1647,10 +1656,10 @@ if (!ALLOWED.includes(pageId)) return;
                             <p>Total File: ${Number(r.total_files) || 0}</p>
                             <p style="font-size:12px; color:var(--text-secondary); margin-top:5px;">${escapeHTML(r.note)}</p>
                         </div>
-                        <a href="${escapeHTML(r.download_url)}" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-top:10px; margin-bottom:0;">Download Source (ZIP)</a>
+                        <a href="${escapeHTML(r.download_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none; margin-top:10px; margin-bottom:0;">Download Source (ZIP)</a>
                     `;
                     showToast('Website Berhasil Digenerate');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Generate');
             };
         }
@@ -1699,7 +1708,7 @@ if (!ALLOWED.includes(pageId)) return;
                     document.getElementById('dl-html').href = urlBlob;
                     document.getElementById('dl-html').download = `scraped-${Date.now()}.html`;
                     showToast('Scrape Berhasil');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Scrape');
             };
         }
@@ -1740,7 +1749,7 @@ if (!ALLOWED.includes(pageId)) return;
                         <a href="${imgUrl}" download="fake-dana-${nominal}.png" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download Gambar</a>
                     `;
                     showToast('Gambar Berhasil Dibuat');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Generate');
             };
         }
@@ -1810,7 +1819,7 @@ if (!ALLOWED.includes(pageId)) return;
                     const data = await res.json();
                     if (!data.status || !data.result) throw new Error('Gagal memuat');
                     renderCinemaCards(data.result.movies || data.result.dramas || [], 'cinema-res');
-                } catch (e) { box.innerHTML = `<p class="error-msg" style="width:100%;">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg" style="width:100%;">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
             };
             window.bukaDetailCinema = async (slug, title, cover) => {
                 const box = document.getElementById('cinema-res');
@@ -1852,7 +1861,7 @@ if (!ALLOWED.includes(pageId)) return;
                         el.addEventListener('click', () => window.tontonCinema(el.dataset.epUrl, el.dataset.epTitle));
                     });
                 } catch(e) {
-                    const msg = `<p class="error-msg" style="width:100%;">Gagal: ${escapeHTML(e.message)}</p>`;
+                    const msg = `<p class="error-msg" style="width:100%;">Gagal: ${escapeHTML(friendlyError(e))}</p>`;
                     if (box && box.style.display !== 'none') box.innerHTML = msg;
                     if (searchBox && searchBox.style.display !== 'none') searchBox.innerHTML = msg;
                 }
@@ -1878,7 +1887,7 @@ if (!ALLOWED.includes(pageId)) return;
                         videoHtml = `
                             <div style="background:var(--bg-surface); border:1px solid var(--danger); padding:15px; border-radius:var(--radius-sm); text-align:center;">
                                 <p style="font-size:14px; margin-bottom:15px; color:var(--text-primary);">Server tidak menyediakan link video langsung.</p>
-                                <a href="${escapeHTML(fullUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Tonton di Web Asli</a>
+                                <a href="${escapeHTML(fullUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Tonton di Web Asli</a>
                             </div>
                         `;
                     }
@@ -1889,7 +1898,7 @@ if (!ALLOWED.includes(pageId)) return;
                     `;
                     const backBtn = document.getElementById('btn-cinema-back');
                     if (backBtn) backBtn.addEventListener('click', () => window.openTool('cinema'));
-                } catch(e) { activeBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch(e) { activeBox.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
             };
             const btnSearch = document.getElementById('btn-cinema-search');
             const inputSearch = document.getElementById('cinema-q');
@@ -1906,7 +1915,7 @@ if (!ALLOWED.includes(pageId)) return;
                     const data = await res.json();
                     if (!data.status || !data.result) throw new Error('Gagal mencari');
                     renderCinemaCards(data.result || [], 'cinema-search-res');
-                } catch(e) { box.innerHTML = `<p class="error-msg" style="width:100%;">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch(e) { box.innerHTML = `<p class="error-msg" style="width:100%;">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
             };
             loadCinemaHome();
         }
@@ -1947,10 +1956,10 @@ if (!ALLOWED.includes(pageId)) return;
                     box.innerHTML = `
                         <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Video Berhasil Dibuat</p>
                         <video src="${escapeHTML(vidUrl)}" controls style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;"></video>
-                        <a href="${escapeHTML(vidUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download Video</a>
+                        <a href="${escapeHTML(vidUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download Video</a>
                     `;
                     showToast('Video Berhasil Digenerate');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Generate Video');
             };
         }
@@ -2007,15 +2016,15 @@ if (!ALLOWED.includes(pageId)) return;
                                     </div>
                                 </div>
                                 <div style="display:flex; gap:8px;">
-                                    ${f.fast_stream_url ? `<a href="${escapeHTML(f.fast_stream_url)}" target="_blank" class="btn btn-ghost" style="flex:1; font-size:13px; padding:8px; margin:0; text-decoration:none;">Stream</a>` : ''}
-                                    <a href="${escapeHTML(f.download_url)}" target="_blank" class="btn btn-primary" style="flex:1; font-size:13px; padding:8px; margin:0; text-decoration:none;">Download</a>
+                                    ${f.fast_stream_url ? `<a href="${escapeHTML(f.fast_stream_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="flex:1; font-size:13px; padding:8px; margin:0; text-decoration:none;">Stream</a>` : ''}
+                                    <a href="${escapeHTML(f.download_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex:1; font-size:13px; padding:8px; margin:0; text-decoration:none;">Download</a>
                                 </div>
                             </div>
                         `;
                     });
                     box.innerHTML = html;
                     showToast('File Berhasil Diambil');
-                } catch (e) { clearInterval(timerInterval); window.activeTimerInterval = null; box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { clearInterval(timerInterval); window.activeTimerInterval = null; box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Ambil File');
             };
         }
@@ -2055,13 +2064,13 @@ if (!ALLOWED.includes(pageId)) return;
                                 <p style="word-break:break-all; font-size:13px; color:var(--accent); font-weight:bold;">${escapeHTML(r.bypassed_url)}</p>
                             </div>
                         </div>
-                        <a href="${escapeHTML(r.bypassed_url)}" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:10px;">Buka Link</a>
+                        <a href="${escapeHTML(r.bypassed_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none; margin-bottom:10px;">Buka Link</a>
                         <button class="btn btn-ghost" id="btn-copy-bypass" style="margin-bottom:0;">Salin Link</button>
                     `;
                     const copyBtn = document.getElementById('btn-copy-bypass');
                     if (copyBtn) copyBtn.addEventListener('click', () => window.copyToClipboard(r.bypassed_url));
                     showToast('Link Berhasil Di-bypass');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Bypass');
             };
         }
@@ -2096,7 +2105,7 @@ if (!ALLOWED.includes(pageId)) return;
                         <p style="font-size:12px; color:var(--text-secondary); font-style:italic;">${escapeHTML(data.data.catatan)}</p>
                     `;
                     showToast('Arti nama ditemukan');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Cari');
             };
         }
@@ -2146,16 +2155,16 @@ if (!ALLOWED.includes(pageId)) return;
                             <img src="${escapeHTML(r.thumbnail)}" style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);">
                             <b style="font-size:14px;">${escapeHTML(r.title)}</b><br>
                             <audio src="${escapeHTML(r.download)}" controls style="width:100%; margin-top:10px;"></audio>
-                            <a href="${escapeHTML(r.download)}" target="_blank" class="btn btn-primary" style="margin-top:10px; text-decoration:none;">Simpan MP3</a>
+                            <a href="${escapeHTML(r.download)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-top:10px; text-decoration:none;">Simpan MP3</a>
                         `;
                     } else {
                         box.innerHTML = `
                             <video src="${escapeHTML(r.download)}" controls style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);"></video>
                             <b style="font-size:14px;">${escapeHTML(r.title)}</b><br>
-                            <a href="${escapeHTML(r.download)}" target="_blank" class="btn btn-primary" style="margin-top:10px; text-decoration:none;">Simpan MP4</a>
+                            <a href="${escapeHTML(r.download)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-top:10px; text-decoration:none;">Simpan MP4</a>
                         `;
                     }
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Proses');
             };
         }
@@ -2256,7 +2265,7 @@ if (!ALLOWED.includes(pageId)) return;
                 <button class="btn btn-primary" onclick="switchMusTab('check'); document.getElementById('music-taskid-input').value='${escapeHTML(data.result.task_id)}'">Pindah ke Cek Status</button>
             `;
         } catch (e) {
-            boxRes.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+            boxRes.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`;
         }
         setBtnLoading(btnGen, false, 'Generate Lagu');
     };
@@ -2298,7 +2307,7 @@ if (!ALLOWED.includes(pageId)) return;
                 `;
             }
         } catch (e) {
-            boxStatus.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`;
+            boxStatus.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`;
         }
         setBtnLoading(btnCheck, false, 'Cek Status Sekarang');
     };
@@ -2356,9 +2365,9 @@ if (!ALLOWED.includes(pageId)) return;
             box.innerHTML = `
                 <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Video Berhasil Dibuat</p>
                 <video src="${escapeHTML(vidUrl)}" controls style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px;"></video>
-                <a href="${escapeHTML(vidUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
+                <a href="${escapeHTML(vidUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
             `;
-        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
         setBtnLoading(btn, false, 'Generate Video');
     };
 }
@@ -2412,9 +2421,9 @@ if (!ALLOWED.includes(pageId)) return;
             box.innerHTML = `
                 <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Gambar Berhasil Dibuat</p>
                 <img src="${escapeHTML(imgUrl)}" style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px;">
-                <a href="${escapeHTML(imgUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Gambar</a>
+                <a href="${escapeHTML(imgUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none;">Download Gambar</a>
             `;
-        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+        } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
         setBtnLoading(btn, false, 'Proses Kartun');
     };
 }
@@ -2455,9 +2464,9 @@ if (!ALLOWED.includes(pageId)) return;
                     box.innerHTML = `
                         <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Lobby Berhasil Dibuat</p>
                         <img src="${escapeHTML(imgUrl)}" style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px;">
-                        <a href="${escapeHTML(imgUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Gambar</a>
+                        <a href="${escapeHTML(imgUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none;">Download Gambar</a>
                     `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Generate Lobby');
             };
         }
@@ -2539,7 +2548,7 @@ if (!ALLOWED.includes(pageId)) return;
                         <h4 style="text-align:left; font-size:14px; margin-bottom:10px;">Counter Hero:</h4>
                         <div style="text-align:left;">${counterHtml}</div>
                     `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Cari Build');
             };
         }
@@ -2596,11 +2605,11 @@ if (!ALLOWED.includes(pageId)) return;
                         </div>
 
                         <div style="display:flex; gap:10px;">
-                            <a href="${escapeHTML(r.preview_gambar.google_maps)}" target="_blank" class="btn btn-ghost" style="flex:1; text-decoration:none; margin-bottom:0;">Buka Maps</a>
-                            <a href="${escapeHTML(r.preview_gambar.street_view)}" target="_blank" class="btn btn-primary" style="flex:1; text-decoration:none; margin-bottom:0;">Street View</a>
+                            <a href="${escapeHTML(r.preview_gambar.google_maps)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="flex:1; text-decoration:none; margin-bottom:0;">Buka Maps</a>
+                            <a href="${escapeHTML(r.preview_gambar.street_view)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex:1; text-decoration:none; margin-bottom:0;">Street View</a>
                         </div>
                     `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Cari Sekolah');
             };
         }
@@ -2778,7 +2787,7 @@ if (!ALLOWED.includes(pageId)) return;
                     });
                     if (data.hasNext === false || komikList.length < 10) { hasMore = false; loadMoreEl.style.display = 'none'; }
                     else { currentPage++; loadMoreEl.style.display = 'none'; }
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 isLoading = false;
             };
 
@@ -2889,7 +2898,7 @@ if (!ALLOWED.includes(pageId)) return;
                     box.querySelectorAll('.chapter-item').forEach(el => {
                         el.addEventListener('click', () => window.bacaKomik(el.dataset.title, el.dataset.slug));
                     });
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal memuat detail: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal memuat detail: ${escapeHTML(friendlyError(e))}</p>`; }
             };
 
             loadKatalog('');
@@ -2946,7 +2955,7 @@ if (!ALLOWED.includes(pageId)) return;
                         } catch (e) { showToast('Gagal simpan, coba lagi.'); }
                         setBtnLoading(saveBtn, false, 'Simpan ke Galeri');
                     };
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Proses');
             };
         }
@@ -2980,17 +2989,17 @@ if (!ALLOWED.includes(pageId)) return;
                         if (media.type === 'video') {
                             htmlContent += `
                                 <video style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);" src="${escapeHTML(media.url)}" controls></video>
-                                <a href="${escapeHTML(media.url)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
+                                <a href="${escapeHTML(media.url)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
                             `;
                         } else {
                             htmlContent += `
                                 <img src="${escapeHTML(media.url)}" style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);">
-                                <a href="${escapeHTML(media.url)}" target="_blank" class="btn btn-primary" style="margin-bottom:15px; text-decoration:none; font-size:13px;">Download Foto ${index+1}</a>
+                                <a href="${escapeHTML(media.url)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-bottom:15px; text-decoration:none; font-size:13px;">Download Foto ${index+1}</a>
                             `;
                         }
                     });
                     box.innerHTML = htmlContent;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Ambil Media');
             };
         }
@@ -3020,9 +3029,9 @@ if (!ALLOWED.includes(pageId)) return;
                     const vidUrl = data.result.hd || data.result.video;
                     box.innerHTML = `
                         <video style="width:100%; border-radius:var(--radius-sm); margin-bottom:10px; border:1px solid var(--border-color);" src="${escapeHTML(vidUrl)}" controls></video>
-                        <a href="${escapeHTML(vidUrl)}" target="_blank" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
+                        <a href="${escapeHTML(vidUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none;">Download Video</a>
                     `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Ambil Video');
             };
         }
@@ -3104,7 +3113,7 @@ if (!ALLOWED.includes(pageId)) return;
                         } catch (error) { showToast('Gagal simpan gambar.'); }
                         setBtnLoading(saveBtn, false, 'Download Gambar');
                     };
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Ambil Media');
             };
         }
@@ -3148,7 +3157,7 @@ if (!ALLOWED.includes(pageId)) return;
                             <b>Status:</b> ${d.private_account ? 'Private' : 'Public'}
                         </div>
                     `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Cari');
             };
         }
@@ -3192,7 +3201,7 @@ if (!ALLOWED.includes(pageId)) return;
                             <b>Status:</b> ${d.is_banned ? 'Banned' : (d.verified ? 'Verified' : 'Normal')}
                         </div>
                     `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Cari');
             };
         }
@@ -3232,7 +3241,7 @@ if (!ALLOWED.includes(pageId)) return;
                             <b>Status:</b> ${escapeHTML(d.account_status)}
                         </div>
                     `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Cari');
             };
         }
@@ -3279,7 +3288,7 @@ if (!ALLOWED.includes(pageId)) return;
                     if (!data.status) throw new Error(data.message || 'Gagal');
                     step1.style.display = 'none'; step2.style.display = 'block';
                     box.innerHTML = `<p class="success-msg">Link terkirim ke <b>${escapeHTML(email)}</b>.<br>Buka Gmail, JANGAN DIKLIK. Copy link-nya, lalu paste di kolom atas.</p>`;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btnSend, false, 'Kirim Link');
             };
             btnVerif.onclick = async () => {
@@ -3298,7 +3307,7 @@ if (!ALLOWED.includes(pageId)) return;
                     if (!data.status) throw new Error(data.message || 'Gagal verifikasi');
                     box.innerHTML = `<p class="success-msg">Verifikasi Berhasil!<br>Akun <b>${escapeHTML(email)}</b> sudah menjadi <b>${escapeHTML(data.result?.status || 'Premium')}</b>.</p>`;
                     showToast('Akun Premium Aktif!');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btnVerif, false, 'Aktifkan Premium');
             };
         }
@@ -3347,10 +3356,10 @@ if (!ALLOWED.includes(pageId)) return;
                     box.innerHTML = `
                         <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Berhasil Diedit</p>
                         <img src="${safeUrl}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
-                        <a href="${safeUrl}" download="aiedit-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download / Buka</a>
+                        <a href="${safeUrl}" download="aiedit-${Date.now()}.png" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download / Buka</a>
                     `;
                     showToast('Gambar Berhasil Diedit');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Proses Edit');
             };
         }
@@ -3409,12 +3418,12 @@ if (!ALLOWED.includes(pageId)) return;
                     if (data.status === false) throw new Error(data.message || 'Gagal');
                     if (data.data?.session) { ntSessionId = data.data.session.sessionId; ntChatId = data.data.session.chatId; }
                     addMessage(data.data?.reply || 'Maaf, tidak ada balasan.', false);
-                } catch (e) { loadingDiv.remove(); addMessage(`Error: ${e.message}`, false); }
+                } catch (e) { loadingDiv.remove(); addMessage(`Error: ${friendlyError(e)}`, false); }
                 setBtnLoading(btn, false, 'Kirim Pesan');
             };
         }
         else if (tool === 'bug-wa') {
-            const isOwner = !!localStorage.getItem(OWNER_TOKEN_KEY);
+            const isOwner = !!sessionStorage.getItem(OWNER_TOKEN_KEY);
             const isMaintenance = (window.currentDisabledTools || []).includes('bug-wa');
             const isVipOnly = (window.currentVipTools || []).includes('bug-wa');
             const isVipValid = zenIsVip();
@@ -3457,9 +3466,9 @@ if (!ALLOWED.includes(pageId)) return;
                     });
                     const data = await res.json();
                     if (!data.status) throw new Error(data.error);
-                    box.innerHTML = `<p class="success-msg" style="font-size:13px;">Serangan Terkirim!<br><span style="font-size:11px; font-weight:normal;">Respon: ${escapeHTML(data.message)}</span></p>`;
+                    box.innerHTML = `<p class="success-msg" style="font-size:13px;">Serangan Terkirim!<br><span style="font-size:11px; font-weight:normal;">Respon: ${escapeHTML(friendlyError(data.message))}</span></p>`;
                     showToast('Bug berhasil dikirim ke target!');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btnExec, false, 'Luncurkan Serangan');
             };
         }
@@ -3485,7 +3494,7 @@ if (!ALLOWED.includes(pageId)) return;
                     const data = await res.json();
                     if (!data.status) throw new Error(data.message || 'Gagal');
                     box.innerHTML = `<p style="font-size:14px; margin-bottom:10px;">Email Lu:</p><b style="font-size:16px; color:var(--accent); word-break:break-all;">${escapeHTML(data.result.email)}</b><br><p style="font-size:13px; color:var(--text-secondary); margin-top:5px;">(Token: ${escapeHTML(data.result.token)})</p>`;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Buat Email');
             };
         }
@@ -3525,7 +3534,7 @@ if (!ALLOWED.includes(pageId)) return;
                         <b>Zodiak:</b> ${escapeHTML(d.zodiak || '-')}<br>
                         <b>Usia:</b> ${escapeHTML(d.usia || '-')}
                     `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Lacak NIK');
             };
         }
@@ -3561,7 +3570,7 @@ if (!ALLOWED.includes(pageId)) return;
                         <audio src="${escapeHTML(s.download_mp3)}" controls style="width:100%; margin-top:10px;"></audio>
                         <a href="${escapeHTML(s.download_mp3)}" class="btn btn-primary" style="margin-top:10px; display:block; text-decoration:none;" download>Simpan MP3</a>
                     `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Download');
             };
         }
@@ -3598,7 +3607,7 @@ if (!ALLOWED.includes(pageId)) return;
                         <b>ISP:</b> ${escapeHTML(r.isp || '-')}<br>
                         <b>Org:</b> ${escapeHTML(r.org || '-')}
                     `;
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Lacak');
             };
         }
@@ -3643,7 +3652,7 @@ if (!ALLOWED.includes(pageId)) return;
                         setBtnLoading(btn, false, 'Proses Gambar');
                     };
                     reader.readAsDataURL(file);
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; setBtnLoading(btn, false, 'Proses Gambar'); }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; setBtnLoading(btn, false, 'Proses Gambar'); }
             };
         }
         else if (tool === 'qr') {
@@ -3666,7 +3675,7 @@ if (!ALLOWED.includes(pageId)) return;
                 box.innerHTML = `
                     <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">QR Code Berhasil Dibuat</p>
                     <img src="${qrUrl}" style="width:100%; max-width:250px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px; background:#fff; padding:8px;">
-                    <a href="${qrUrl}" download="qrcode-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download QR</a>
+                    <a href="${qrUrl}" download="qrcode-${Date.now()}.png" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download QR</a>
                 `;
                 showToast('QR Code Berhasil Dibuat');
             };
@@ -3894,7 +3903,7 @@ if (!ALLOWED.includes(pageId)) return;
                     showToast('Berhasil diproses');
                 } catch (e) {
                     box.style.display = 'block';
-                    box.innerHTML = `<p class="error-msg">Gagal: ${b64Mode === 'decode' ? 'Format Base64 tidak valid' : escapeHTML(e.message)}</p>`;
+                    box.innerHTML = `<p class="error-msg">Gagal: ${b64Mode === 'decode' ? 'Format Base64 tidak valid' : escapeHTML(friendlyError(e))}</p>`;
                 }
             };
         }
@@ -4009,10 +4018,10 @@ if (!ALLOWED.includes(pageId)) return;
                     box.innerHTML = `
                         <p style="color:var(--success); font-weight:bold; margin-bottom:10px; font-size:14px;">Gambar Berhasil Dibuat</p>
                         <img src="${escapeHTML(imgUrl)}" style="width:100%; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:10px;">
-                        <a href="${escapeHTML(imgUrl)}" download="ai-image-${Date.now()}.png" target="_blank" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download Gambar</a>
+                        <a href="${escapeHTML(imgUrl)}" download="ai-image-${Date.now()}.png" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none; margin-bottom:0;">Download Gambar</a>
                     `;
                     showToast('Gambar Berhasil Dibuat');
-                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(e.message)}</p>`; }
+                } catch (e) { box.innerHTML = `<p class="error-msg">Gagal: ${escapeHTML(friendlyError(e))}</p>`; }
                 setBtnLoading(btn, false, 'Generate Gambar');
             };
         }
@@ -4073,7 +4082,7 @@ if (!ALLOWED.includes(pageId)) return;
                 if(!btn.disabled) btn.addEventListener('click', () => { window.bacaKomik(btn.dataset.title, btn.dataset.slug); });
             });
         } catch (e) {
-            box.innerHTML = `<div style="text-align:center; padding: 20px;"><p class="error-msg">${escapeHTML(e.message)}</p><button class="btn btn-primary" onclick="openTool('komik')" style="margin-top:15px;">Kembali</button></div>`;
+            box.innerHTML = `<div style="text-align:center; padding: 20px;"><p class="error-msg">${escapeHTML(friendlyError(e))}</p><button class="btn btn-primary" onclick="openTool('komik')" style="margin-top:15px;">Kembali</button></div>`;
         }
     };
 
@@ -4100,3 +4109,18 @@ if (!ALLOWED.includes(pageId)) return;
     });
 
 });
+
+// Pintu owner: ketuk logo di header 5 kali dalam 3 detik, lalu masukkan passcode.
+// Siapa yang boleh jadi owner ditentukan server (zen-owner), bukan data di browser.
+(() => {
+    let taps = [];
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#page-tools .logo-mark, .logo-mark')) return;
+        const now = Date.now();
+        taps = taps.filter(t => now - t < 3000).concat(now);
+        if (taps.length >= 5) {
+            taps = [];
+            if (typeof window.bukaPintuRahasia === 'function') window.bukaPintuRahasia();
+        }
+    });
+})();
