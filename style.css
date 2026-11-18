@@ -265,7 +265,7 @@ body.is-locked .app-container,body.is-locked .bottom-nav,body.is-locked .site-fo
 
 /* sembunyikan badge hosting saja (tidak menyentuh iframe Turnstile / tombol Google) */
 #netlify-badge,.netlify-badge,iframe[title="Netlify"],iframe[src*="netlify"],a[href*="netlify.com"][target="_blank"],a[href*="app.netlify.com"]{display:none!important}
-body>div:last-of-type:not(.app-container):not(.bottom-nav):not(.bottom-sheet-overlay):not(.custom-alert):not(.toast-container):not(.music-widget):not(#login-gate):not(#auth-gate):not(.screen):not(#maintenance-screen):not(#broadcast-banner):not(#wa-popup){display:none!important}
+body>div:last-of-type:not(.modal-overlay):not(#owner-modal):not(.app-container):not(.bottom-nav):not(.bottom-sheet-overlay):not(.custom-alert):not(.toast-container):not(.music-widget):not(#login-gate):not(#auth-gate):not(.screen):not(#maintenance-screen):not(#broadcast-banner):not(#wa-popup){display:none!important}
 
 /* v5.1 */
 .hero-section{margin-bottom:16px}
