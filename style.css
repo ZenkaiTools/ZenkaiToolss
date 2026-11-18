@@ -263,14 +263,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 body.legal-only .bottom-nav,body.legal-only .site-footer,body.legal-only .music-widget{display:none!important}
 body.is-locked .app-container,body.is-locked .bottom-nav,body.is-locked .site-footer,body.is-locked .music-widget{display:none!important}
 
-/* sembunyikan badge hosting saja (tidak menyentuh iframe Turnstile / tombol Google) */
-#netlify-badge,.netlify-badge,iframe[title="Netlify"],iframe[src*="netlify"],a[href*="netlify.com"][target="_blank"],a[href*="app.netlify.com"]{display:none!important}
-body>div:last-of-type:not(.modal-overlay):not(#owner-modal):not(.app-container):not(.bottom-nav):not(.bottom-sheet-overlay):not(.custom-alert):not(.toast-container):not(.music-widget):not(#login-gate):not(#auth-gate):not(.screen):not(#maintenance-screen):not(#broadcast-banner):not(#wa-popup){display:none!important}
-
 /* v5.1 */
 .hero-section{margin-bottom:16px}
-.hero-section .device-info{position:absolute;top:12px;left:14px;z-index:2;color:rgba(234,240,238,.9);font-size:12px;font-weight:600}
-.hero-section .device-info .info-item{border-left-color:rgba(234,240,238,.35)}
 .modal-box input{margin-bottom:14px}
 .gate-note{display:flex;gap:14px;align-items:flex-start;margin:22px 0 0;padding:16px;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:14px}
 .gate-note-ico{width:40px;height:40px;flex-shrink:0}
@@ -281,3 +275,11 @@ body>div:last-of-type:not(.modal-overlay):not(#owner-modal):not(.app-container):
 .gate-note h2{font-size:18px;line-height:1.25;margin-bottom:6px}
 .gate-note p{font-size:14px;line-height:1.65;color:var(--text-secondary);margin:0 0 8px}
 .gate-note .sign{font-size:13px;color:var(--text-muted)}
+
+/* v5.3 */
+.hero-video-wrapper{height:170px;margin-bottom:14px}
+.hero-video-wrapper::after{background:linear-gradient(180deg,transparent 65%,rgba(15,30,36,.55))}
+.hero-copy{position:static;margin-bottom:10px}
+.hero-copy h1{font-size:23px;line-height:1.2}
+.hero-section .device-info{position:static;font-size:12px;color:var(--text-muted)}
+.logo-area{touch-action:manipulation;-webkit-user-select:none;user-select:none}
