@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="Zenkai Tools: downloader TikTok, Instagram, YouTube, QR Code, Base64, password generator, dan utilitas online gratis tanpa iklan.">
-    <meta name="theme-color" content="#0E0F12">
+    <meta name="theme-color" content="#0F1E24">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -25,18 +25,18 @@
     <meta name="twitter:description" content="Downloader TikTok, Instagram, YouTube, QR Code, Base64, password generator. Gratis, tanpa iklan pop-up.">
     <meta name="twitter:image" content="https://www.zenkaitools.my.id/assets/og-cover.png">
 
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23FF7A45'/%3E%3Cpath d='M13 4L5 14h6l-1 6 8-10h-6z' fill='%231A0E07'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M12 2h24l12 22-12 22H12L0 24z' fill='%23F2C94C'/%3E%3Cpath d='M16 15h16L16 33h16' fill='none' stroke='%231C1704' stroke-width='4.5'/%3E%3C/svg%3E">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Young+Serif&display=swap">
 
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <!-- Supabase JS SDK ditambahkan di sini untuk urusan OTP -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <link rel="stylesheet" href="style.css?v=4.0">
+    <link rel="stylesheet" href="style.css?v=5.0">
 
     <script type="application/ld+json">
     {
@@ -85,9 +85,10 @@
         <div class="splash-overlay"></div>
         <div class="splash-content">
             <p class="splash-title">Zenkai Tools</p>
+            <p class="splash-tag">Perkakas web harian, dirakit di Tebo.</p>
             <div class="splash-actions">
-                <button onclick="masukKeWeb()" class="btn btn-primary">Mulai Gunakan</button>
-                <button onclick="aktifkanSuara()" id="btn-unmute" class="btn btn-ghost">Nyalakan Suara</button>
+                <button onclick="masukKeWeb()" class="btn btn-primary">Mulai</button>
+                <button onclick="aktifkanSuara()" id="btn-unmute" class="btn btn-ghost">Nyalakan suara</button>
                 <button onclick="masukKeWeb()" class="btn btn-ghost splash-skip">Lewati</button>
             </div>
         </div>
@@ -96,28 +97,32 @@
     <!-- ========================================== -->
     <!-- SCREEN 2: LOGIN SCREEN (GOOGLE + EMAIL OTP)-->
     <!-- ========================================== -->
-    <div id="screen-login" class="screen login-screen" style="display: none;">
-        <div class="lg-card">
-
-            <div class="lg-brand">
-                <div class="lg-logo">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                </div>
-                <span class="lg-brand-name">Zenkai Tools</span>
-                <span class="lg-badge">Akses Aman</span>
-            </div>
+    <div id="screen-login" class="screen" style="display: none;">
+        <div class="gate">
+            <svg class="gate-art" viewBox="0 0 360 150" role="img" aria-label="Pintu rolling bengkel yang terangkat setengah, lampu menyala di dalam">
+                <rect class="wall" width="360" height="150"/>
+                <rect class="hole" x="70" y="26" width="220" height="112"/>
+                <path class="glow" d="M70 138V60l60-34h100l60 34v78z"/>
+                <path class="tool" d="M150 128l50-50m-8-18a14 14 0 0 1 20 20l-8-4-6 6 4 8a14 14 0 0 1-20-20"/>
+                <path class="tool" d="M236 112l12-7 12 7v14l-12 7-12-7z"/>
+                <rect class="slat" x="70" y="26" width="220" height="12"/>
+                <rect class="slat" x="70" y="42" width="220" height="12"/>
+                <rect class="slat" x="70" y="58" width="220" height="12"/>
+                <rect class="lip" x="70" y="74" width="220" height="5"/>
+                <line class="floor" x1="0" y1="139" x2="360" y2="139"/>
+            </svg>
+            <div class="gate-body">
 
             <!-- LAYAR LOGIN UTAMA -->
             <div id="login-view-main">
-                <h1 class="lg-title">Mau masuk pakai apa?<br><span>Bebas.</span></h1>
-                <p class="lg-sub">Pilih Google biar cepat, atau pakai email.</p>
+                <h1 class="gate-title">Masuk dulu, ya.</h1>
+                <p class="gate-sub">Pilih Google kalau mau cepat, atau pakai email. Dua-duanya sama saja.</p>
 
-                <div class="login-google-container lg-google">
+                <div class="login-google-container gate-google">
                     <div id="google-btn-container"></div>
                 </div>
 
-                <!-- Verifikasi manusia Cloudflare (wajib untuk login Google) -->
-                <div class="lg-turnstile">
+                <div class="gate-turnstile">
                     <div class="cf-turnstile"
                          data-sitekey="0x4AAAAAAF4cYQJ-uGK_l4B2"
                          data-theme="dark"
@@ -126,54 +131,44 @@
                          data-error-callback="onTurnstileError"></div>
                 </div>
 
-                <div class="lg-divider"><span>atau pakai email</span></div>
+                <div class="gate-or"><span>atau lewat email</span></div>
 
-                <div class="lg-email">
-                    <input type="email" id="login-email-input" placeholder="Ketik email kamu..." autocomplete="email">
-                    <button onclick="kirimEmailOTP()" id="btn-send-otp" class="btn btn-primary">Kirim Kode Login</button>
+                <div class="gate-form">
+                    <input type="email" id="login-email-input" placeholder="alamat@email.com" autocomplete="email">
+                    <button onclick="kirimEmailOTP()" id="btn-send-otp" class="btn btn-primary">Kirim kode masuk</button>
                 </div>
 
-                <ul class="lg-trust">
-                    <li>
-                        <span class="lg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
-                        <span><b>Nggak minta password.</b> Server cuma lihat nama &amp; email kamu.</span>
-                    </li>
-                    <li>
-                        <span class="lg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
-                        <span><b>Masih ragu?</b> Pakai Gmail cadangan, nggak masalah.</span>
-                    </li>
-                    <li>
-                        <span class="lg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></span>
-                        <span><b>Kenapa harus login?</b> Biar bot spam keblokir &amp; server tetap gratis.</span>
-                    </li>
-                </ul>
+                <p class="gate-note">
+                    Pintu ini cuma saya pasang buat menahan bot spam. <b>Saya tidak minta password</b>, dan yang tersimpan hanya nama serta email akunmu. Masih ragu? Pakai Gmail cadangan juga tidak apa-apa. Dengan begini server tetap gratis dan tidak habis dipakai bot.
+                    <em>Andika, yang bikin</em>
+                </p>
             </div>
 
             <!-- LAYAR INPUT OTP -->
             <div id="login-view-otp" style="display: none;">
-                <h1 class="lg-title">Cek Email Kamu! <span class="lg-emoji">📩</span></h1>
-                <p class="lg-sub">Kode masuk sudah dikirim ke <b id="otp-target-email" style="color: var(--text-primary);"></b>.</p>
+                <h1 class="gate-title">Kodenya sudah jalan.</h1>
+                <p class="gate-sub">Kami kirim ke <b id="otp-target-email" style="color: var(--text-primary);"></b>. Ketik kodenya di bawah.</p>
 
-                <div class="lg-tip">
-                    <span class="lg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
-                    <span><b>Kodenya nggak ada di Kotak Masuk?</b> Cek folder <b>Spam</b> atau <b>Promosi</b>. Email dari website baru sering dianggap mencurigakan oleh Gmail, padahal aman. Kalau ketemu, tekan <b>"Bukan spam"</b>. Belum ada juga? Tunggu 1 menit.</span>
+                <div class="gate-tip">
+                    <b>Belum muncul di kotak masuk?</b> Intip folder <b>Spam</b> atau <b>Promosi</b>. Email dari situs baru memang sering nyasar ke sana, padahal aman. Kalau ketemu, tandai <b>"Bukan spam"</b>. Kosong sampai semenit? Kembali dan kirim ulang.
                 </div>
 
-                <div class="lg-email">
-                    <input type="text" id="login-otp-input" placeholder="Masukkan kode di sini" maxlength="8" autocomplete="one-time-code" inputmode="numeric">
-                    <button onclick="verifikasiOTP()" id="btn-verify-otp" class="btn btn-primary">Verifikasi &amp; Masuk</button>
+                <div class="gate-form">
+                    <input type="text" id="login-otp-input" placeholder="Kode dari email" maxlength="8" autocomplete="one-time-code" inputmode="numeric">
+                    <button onclick="verifikasiOTP()" id="btn-verify-otp" class="btn btn-primary">Masuk</button>
                 </div>
 
-                <button onclick="kembaliKeLogin()" class="btn btn-ghost lg-back">&larr; Kembali ke Login</button>
+                <button onclick="kembaliKeLogin()" class="btn btn-ghost gate-back">Kembali</button>
             </div>
 
-            <div id="login-status" class="login-status lg-status"></div>
+            <div id="login-status" class="login-status"></div>
 
-            <p class="lg-footer">
-                Dengan lanjut, kamu setuju dengan
-                <a href="#" onclick="bukaHalamanDariLogin('syarat'); return false;">Syarat Layanan</a> &amp;
+            <p class="gate-foot">
+                Lanjut berarti kamu setuju dengan
+                <a href="#" onclick="bukaHalamanDariLogin('syarat'); return false;">Syarat Layanan</a> dan
                 <a href="#" onclick="bukaHalamanDariLogin('privasi'); return false;">Kebijakan Privasi</a>.
             </p>
+            </div>
         </div>
     </div>
 
@@ -215,11 +210,11 @@
                 <header class="top-header">
                     <div class="logo-area">
                         <div class="logo-mark" aria-hidden="true" style="cursor: pointer;">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h12L6 19h12"/></svg>
                         </div>
                         <div class="logo-text">
                             <p class="logo-title">Zenkai</p>
-                            <span>Tools v4.0</span>
+                            <span>versi 4.0</span>
                         </div>
                     </div>
                     
@@ -265,21 +260,21 @@
                 </div>
 
                 <div class="welcome-section">
-                    <h1>Alat online gratis: downloader, QR, dan utilitas harian</h1>
-                    <p>Semua kebutuhan download, cek, dan generate dalam satu tempat. Tanpa iklan pop-up.</p>
+                    <h1>Downloader, QR, dan perkakas harian di satu tempat</h1>
+                    <p>Tempel tautan, tunggu sebentar, hasilnya langsung bisa disimpan. Tanpa iklan pop-up.</p>
                     <div class="stat-grid">
-                        <div class="stat-item"><b id="total-tools-count">30+</b><span>Alat Aktif</span></div>
-                        <div class="stat-item"><b>Aman</b><span>Terverifikasi</span></div>
-                        <div class="stat-item"><b>Gratis</b><span>Fitur Dasar</span></div>
+                        <div class="stat-item"><b id="total-tools-count">30+</b><span>alat aktif</span></div>
+                        <div class="stat-item"><b>0</b><span>iklan pop-up</span></div>
+                        <div class="stat-item"><b>Gratis</b><span>fitur dasar</span></div>
                     </div>
                 </div>
 
                 <div class="catalog-section">
                     <div class="section-header">
-                        <h2>Katalog Alat</h2>
+                        <h2>Katalog alat</h2>
                         <div class="search-box">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                            <input type="text" id="search-tools" placeholder="Cari alat..." aria-label="Cari alat">
+                            <input type="text" id="search-tools" placeholder="Cari alat" aria-label="Cari alat">
                         </div>
                     </div>
 
@@ -438,7 +433,7 @@
                             <div class="t-info"><h3>Cek Sekolah</h3><p>Dapodik & Satelit</p></div>
                         </a>
 
-                        <div class="list-divider"><span>Segera Hadir</span></div>
+                        <div class="list-divider"><span>Menyusul</span></div>
 
                         <a class="tool-card press soon" data-category="stalker" href="#" onclick="openTool('stalkpubg'); return false;" role="button" tabindex="0">
                             <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
@@ -467,13 +462,13 @@
             <main id="page-fun" class="page">
                 <header class="top-header">
                     <div class="logo-area">
-                        <div class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+                        <div class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 5h12L6 19h12"/></svg></div>
                         <div class="logo-text"><p class="logo-title">Fitur Ekstra</p><span>Premium</span></div>
                     </div>
                 </header>
 
                 <div class="welcome-section">
-                    <h2>Akses Cepat</h2>
+                    <h2>Akses cepat</h2>
                     <p>Utilitas premium, bypass, dan AI yang tidak ada di katalog utama.</p>
                 </div>
 
@@ -581,7 +576,7 @@
 
                 <div class="info-content">
                     <h2>Tentang Zenkai Tools</h2>
-                    <p>Aplikasi web utilitas yang menyediakan alat bantu (downloader, generator, stalker) gratis tanpa instalasi. Pengguna diwajibkan Login menggunakan akun Google atau Email untuk mencegah serangan bot dan spam.</p>
+                    <p>Kumpulan alat web yang bisa langsung dipakai tanpa instal: downloader, generator, dan beberapa alat cek akun. Kamu perlu masuk dengan Google atau email, semata-mata supaya bot spam tidak ikut memakai server.</p>
 
                     <div class="info-stats">
                         <div class="stat-row"><span>Total Alat</span><b id="info-total-tools">30+</b></div>
@@ -727,7 +722,7 @@
 
         <footer class="site-footer">
             <div class="site-footer-inner">
-                <p class="site-footer-brand"><b>Zenkai Tools</b> - dibuat oleh Andika T.M.</p>
+                <p class="site-footer-brand"><b>Zenkai Tools</b>, dirakit oleh Andika T.M. di Tebo, Jambi.</p>
                 <nav class="site-footer-nav" aria-label="Tautan footer">
                     <a href="#" onclick="switchPage('tentang', null); return false;">Tentang</a>
                     <a href="#" onclick="switchPage('kontak', null); return false;">Kontak</a>
