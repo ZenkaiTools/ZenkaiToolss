@@ -857,6 +857,11 @@ if (!ALLOWED.includes(pageId)) return;
                 </div>
             </div>
         `);
+        const _ip = document.getElementById('owner-pass');
+        if (_ip) {
+            _ip.focus();
+            _ip.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') window.verifikasiOwner(); });
+        }
     };
 
     window.verifikasiOwner = async () => {

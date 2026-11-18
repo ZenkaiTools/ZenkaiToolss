@@ -99,7 +99,7 @@ input[type=file]{display:none}
 .banner-text p{font-size:12.5px;line-height:1.4;color:var(--text-muted)}
 .banner-arrow{position:absolute;top:14px;right:12px;width:16px;height:16px;color:var(--text-muted)}
 .hero-section{margin-bottom:var(--space-md)}
-.hero-video-wrapper{position:relative;height:200px;border-radius:16px;overflow:hidden;background:var(--bg-surface);margin-bottom:10px}
+.hero-video-wrapper{position:relative;height:184px;border-radius:16px;overflow:hidden;background:var(--bg-surface);margin-bottom:10px}
 .hero-video-wrapper video{width:100%;height:100%;object-fit:cover;opacity:.75}
 .hero-video-wrapper::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,30,36,.1) 10%,rgba(15,30,36,.92));pointer-events:none}
 .hero-copy{position:absolute;left:16px;right:16px;bottom:14px;z-index:2}
@@ -254,9 +254,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .gate-form{display:flex;flex-direction:column;gap:10px}
 .gate-form input{height:48px;padding:0 14px}
 .gate-back{margin-top:10px}
-.gate-note{margin:22px 0 0;padding:2px 0 2px 14px;border-left:3px solid var(--accent);font-size:14px;line-height:1.65;color:var(--text-secondary)}
-.gate-note b{color:var(--text-primary)}
-.gate-note em{display:block;margin-top:6px;font-family:var(--font-display);font-style:normal;color:var(--text-primary)}
 .gate-tip{margin:0 0 14px;padding:12px 14px;border:1px dashed var(--border-strong);border-radius:var(--radius-sm);font-size:14px;line-height:1.6;color:var(--text-secondary)}
 .gate-tip b{color:var(--text-primary)}
 .login-status{margin-top:12px;font-size:14px;text-align:center;color:var(--accent)}
@@ -269,3 +266,18 @@ body.is-locked .app-container,body.is-locked .bottom-nav,body.is-locked .site-fo
 /* sembunyikan badge hosting saja (tidak menyentuh iframe Turnstile / tombol Google) */
 #netlify-badge,.netlify-badge,iframe[title="Netlify"],iframe[src*="netlify"],a[href*="netlify.com"][target="_blank"],a[href*="app.netlify.com"]{display:none!important}
 body>div:last-of-type:not(.app-container):not(.bottom-nav):not(.bottom-sheet-overlay):not(.custom-alert):not(.toast-container):not(.music-widget):not(#login-gate):not(#auth-gate):not(.screen):not(#maintenance-screen):not(#broadcast-banner):not(#wa-popup){display:none!important}
+
+/* v5.1 */
+.hero-section{margin-bottom:16px}
+.hero-section .device-info{position:absolute;top:12px;left:14px;z-index:2;color:rgba(234,240,238,.9);font-size:12px;font-weight:600}
+.hero-section .device-info .info-item{border-left-color:rgba(234,240,238,.35)}
+.modal-box input{margin-bottom:14px}
+.gate-note{display:flex;gap:14px;align-items:flex-start;margin:22px 0 0;padding:16px;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:14px}
+.gate-note-ico{width:40px;height:40px;flex-shrink:0}
+.gate-note-ico .hexf{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2;stroke-linejoin:round}
+.gate-note-ico .lk{fill:var(--accent)}
+.gate-note-ico .sh{fill:none;stroke:var(--accent);stroke-width:2.6}
+.gate-note-ico .kh{fill:var(--bg-surface)}
+.gate-note h2{font-size:18px;line-height:1.25;margin-bottom:6px}
+.gate-note p{font-size:14px;line-height:1.65;color:var(--text-secondary);margin:0 0 8px}
+.gate-note .sign{font-size:13px;color:var(--text-muted)}
