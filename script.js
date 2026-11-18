@@ -309,6 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (el) el.style.display = (key === name) ? display : 'none';
         });
         document.body.classList.toggle('is-locked', name === 'login');
+        document.body.classList.remove('legal-only');
         // Kunci scroll hanya di splash (layar penuh). Layar login harus bisa di-scroll.
         document.body.style.overflow = (name === 'splash') ? 'hidden' : '';
         window.scrollTo(0, 0);
@@ -479,6 +480,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.switchPage = (pageId, btn) => {
     	const ALLOWED = ['tools','fun','setting','info','owner','tentang','kontak','privasi','syarat'];
 if (!ALLOWED.includes(pageId)) return;
+        {
+            const _u = JSON.parse(localStorage.getItem('zenkai_user') || 'null');
+            const _login = !!(_u && _u.email && zenGetSession());
+            if (!_login && pageId !== 'syarat' && pageId !== 'privasi') { showScreen('login'); renderGoogleButton(); return; }
+        }
         const current = document.querySelector('.page.active');
         const target = document.getElementById('page-' + pageId);
         if (!target || current === target) return;
@@ -4087,7 +4093,9 @@ if (!ALLOWED.includes(pageId)) return;
     };
 
     window.bukaHalamanDariLogin = (halaman) => {
+        if (halaman !== 'syarat' && halaman !== 'privasi') return;
         showScreen('app');
+        document.body.classList.add('legal-only');
         window.switchPage(halaman, null);
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     };

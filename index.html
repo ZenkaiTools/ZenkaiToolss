@@ -85,7 +85,7 @@
         <div class="splash-overlay"></div>
         <div class="splash-content">
             <p class="splash-title">Zenkai Tools</p>
-            <p class="splash-tag">Perkakas web harian, dirakit di Tebo.</p>
+            <p class="splash-tag">Perkakas web untuk keperluan harian.</p>
             <div class="splash-actions">
                 <button onclick="masukKeWeb()" class="btn btn-primary">Mulai</button>
                 <button onclick="aktifkanSuara()" id="btn-unmute" class="btn btn-ghost">Nyalakan suara</button>
@@ -193,14 +193,6 @@
             </div>
         </div>
 
-        <div class="music-widget" role="group" aria-label="Pemutar musik">
-            <button onclick="prevSong()" class="btn-icon" aria-label="Sebelumnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>
-            <button onclick="toggleMusic()" id="btn-play" class="btn-icon btn-play" aria-label="Putar">
-                <svg id="ic-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                <svg id="ic-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-            </button>
-            <button onclick="nextSong()" class="btn-icon" aria-label="Berikutnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg></button>
-        </div>
         <audio id="bgm"></audio>
 
         <div id="toast-container" class="toast-container" aria-live="polite"></div>
@@ -214,7 +206,7 @@
                         </div>
                         <div class="logo-text">
                             <p class="logo-title">Zenkai</p>
-                            <span>versi 4.0</span>
+                            <span>versi 5.0</span>
                         </div>
                     </div>
                     
@@ -227,64 +219,28 @@
                     </div>
                 </header>
 
-                <div class="hero-section">
-                    <div class="hero-video-wrapper">
-                        <video autoplay loop muted playsinline preload="none" width="480" height="150">
-                            <source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/main/ff159444c39001329443bf9fbc846fcc_720w.mp4" type="video/mp4">
-                        </video>
+                <div class="finder">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="search-tools" placeholder="Cari alat" aria-label="Cari alat">
                     </div>
-                    <div class="device-info">
-                        <div class="info-item"><span id="device-name">Memuat...</span></div>
-                        <div class="info-item"><span id="battery-level">--%</span></div>
-                        <div class="info-item"><span id="clock-now">--:--</span></div>
-                    </div>
-                </div>
-
-                <div class="banner-list">
-                    <a class="banner-item" id="tool-komik" href="#" onclick="openTool('komik'); return false;">
-                        <div class="banner-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-                        <div class="banner-text">
-                            <h3>Baca Komik</h3>
-                            <p>Manga & manhwa sub Indo, update harian</p>
-                        </div>
-                        <svg class="banner-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-                    </a>
-                    <a class="banner-item" href="#" onclick="openTool('support'); return false;">
-                        <div class="banner-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
-                        <div class="banner-text">
-                            <h3>Traktir Server</h3>
-                            <p>Bantu biaya API dan hosting bulanan</p>
-                        </div>
-                        <svg class="banner-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-                    </a>
-                </div>
-
-                <div class="welcome-section">
-                    <h1>Downloader, QR, dan perkakas harian di satu tempat</h1>
-                    <p>Tempel tautan, tunggu sebentar, hasilnya langsung bisa disimpan. Tanpa iklan pop-up.</p>
-                    <div class="stat-grid">
-                        <div class="stat-item"><b id="total-tools-count">30+</b><span>alat aktif</span></div>
-                        <div class="stat-item"><b>0</b><span>iklan pop-up</span></div>
-                        <div class="stat-item"><b>Gratis</b><span>fitur dasar</span></div>
-                    </div>
+                    <div class="music-widget" role="group" aria-label="Pemutar musik">
+            <button onclick="prevSong()" class="btn-icon" aria-label="Sebelumnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>
+            <button onclick="toggleMusic()" id="btn-play" class="btn-icon btn-play" aria-label="Putar">
+                <svg id="ic-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <svg id="ic-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            </button>
+            <button onclick="nextSong()" class="btn-icon" aria-label="Berikutnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg></button>
+        </div>
                 </div>
 
                 <div class="catalog-section">
-                    <div class="section-header">
-                        <h2>Katalog alat</h2>
-                        <div class="search-box">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                            <input type="text" id="search-tools" placeholder="Cari alat" aria-label="Cari alat">
-                        </div>
-                    </div>
-
                     <div class="category-tabs">
                         <button class="cat-btn active" onclick="filterCategory('all', this)">Semua</button>
                         <button class="cat-btn" onclick="filterCategory('downloader', this)">Downloader</button>
                         <button class="cat-btn" onclick="filterCategory('stalker', this)">Stalker</button>
                         <button class="cat-btn" onclick="filterCategory('utility', this)">Utility</button>
                     </div>
-
                     <div class="tool-list">
                         <a class="tool-card press" data-category="downloader" href="#" onclick="openTool('tiktok'); return false;" role="button" tabindex="0">
                             <div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17V4l10-1v13"/><circle cx="6" cy="17" r="3"/><circle cx="16" cy="16" r="3"/></svg></div>
@@ -457,6 +413,50 @@
                         </a>
                     </div>
                 </div>
+
+                <div class="banner-list">
+                    <a class="banner-item" id="tool-komik" href="#" onclick="openTool('komik'); return false;">
+                        <div class="banner-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+                        <div class="banner-text">
+                            <h3>Baca Komik</h3>
+                            <p>Manga & manhwa sub Indo, update harian</p>
+                        </div>
+                        <svg class="banner-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                    <a class="banner-item" href="#" onclick="openTool('support'); return false;">
+                        <div class="banner-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
+                        <div class="banner-text">
+                            <h3>Traktir Server</h3>
+                            <p>Bantu biaya API dan hosting bulanan</p>
+                        </div>
+                        <svg class="banner-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                </div>
+
+                <section class="hero-section">
+                    <div class="hero-video-wrapper">
+                        <video autoplay loop muted playsinline preload="none" width="480" height="150">
+                            <source src="https://raw.githubusercontent.com/ZenkaiTools/ZenkaiToolss/main/ff159444c39001329443bf9fbc846fcc_720w.mp4" type="video/mp4">
+                        </video>
+                        <div class="hero-copy">
+                            <h1>Downloader, QR, dan perkakas harian di satu tempat</h1>
+                            <p>Tempel tautan, tunggu sebentar, hasilnya langsung bisa disimpan. Tanpa iklan pop-up.</p>
+                        </div>
+                    </div>
+                    <div class="device-info">
+                        <div class="info-item"><span id="device-name">Memuat...</span></div>
+                        <div class="info-item"><span id="battery-level">--%</span></div>
+                        <div class="info-item"><span id="clock-now">--:--</span></div>
+                    </div>
+                </section>
+
+                <div class="welcome-section">
+                    <div class="stat-grid">
+                        <div class="stat-item"><b id="total-tools-count">30+</b><span>alat aktif</span></div>
+                        <div class="stat-item"><b>0</b><span>iklan pop-up</span></div>
+                        <div class="stat-item"><b>Gratis</b><span>fitur dasar</span></div>
+                    </div>
+                </div>
             </main>
 
             <main id="page-fun" class="page">
@@ -557,7 +557,7 @@
 
                 <section class="settings-group">
                     <h2 class="group-title">Tentang</h2>
-                    <div class="setting-row"><span>Versi Aplikasi</span><span>4.0</span></div>
+                    <div class="setting-row"><span>Versi Aplikasi</span><span>5.0</span></div>
                     <div class="setting-row"><span>Pengembang</span><span>Andika T.M</span></div>
                     <a class="setting-action" href="https://whatsapp.com/channel/0029VbDH9Vv3WHTXkPU0LG3H" target="_blank" rel="noopener noreferrer">
                         <span>Hubungi Developer</span>
@@ -583,7 +583,24 @@
                         <div class="stat-row"><span>Status Server</span><b class="text-success">Online</b></div>
                     </div>
 
-                    <h3>Catatan Pembaruan (v4.0)</h3>
+                    <h3>Catatan Pembaruan (v5.0)</h3>
+
+                    <h4 class="update-heading update-heading--new">Tampilan Baru</h4>
+                    <ul class="update-list">
+                        <li>Antarmuka dirancang ulang dari nol: warna, huruf, dan susunan halaman semuanya baru.</li>
+                        <li>Daftar alat tampil 3 kolom dengan ikon segi enam, jadi lebih banyak alat terlihat tanpa banyak menggulir.</li>
+                        <li>Pencarian dipindah ke bagian paling atas, dan pemutar musik ikut di sebelahnya sehingga tidak lagi menutupi konten.</li>
+                        <li>Menu bawah kini berbentuk dok melayang dengan penanda tab yang jelas.</li>
+                        <li>Layar pembuka dan layar login ditulis ulang, termasuk catatan keamanan di halaman login.</li>
+                    </ul>
+
+                    <h4 class="update-heading update-heading--fix">Perbaikan</h4>
+                    <ul class="update-list">
+                        <li>Halaman Syarat Layanan dan Kebijakan Privasi yang dibuka dari layar login tidak lagi bisa dipakai untuk menembus ke menu Alat tanpa login.</li>
+                        <li>Aturan tampilan yang tadinya bisa menyembunyikan kotak verifikasi Cloudflare dan tombol Google dipersempit supaya hanya mengenai badge hosting.</li>
+                    </ul>
+
+                    <h3>Catatan Pembaruan Sebelumnya (v4.0)</h3>
 
                     <h4 class="update-heading update-heading--fix">Perbaikan & Optimalisasi</h4>
                     <ul class="update-list">
@@ -722,7 +739,7 @@
 
         <footer class="site-footer">
             <div class="site-footer-inner">
-                <p class="site-footer-brand"><b>Zenkai Tools</b>, dirakit oleh Andika T.M. di Tebo, Jambi.</p>
+                <p class="site-footer-brand"><b>Zenkai Tools</b>, dirakit oleh Andika T.M.</p>
                 <nav class="site-footer-nav" aria-label="Tautan footer">
                     <a href="#" onclick="switchPage('tentang', null); return false;">Tentang</a>
                     <a href="#" onclick="switchPage('kontak', null); return false;">Kontak</a>
@@ -769,6 +786,6 @@
 
     </div> <!-- END OF SCREEN APP -->
 
-    <script src="script.js?v=4.0" defer></script>
+    <script src="script.js?v=5.0" defer></script>
 </body>
 </html>
